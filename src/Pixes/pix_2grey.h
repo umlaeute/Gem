@@ -33,41 +33,41 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_2grey : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_2grey, GemPixObj);
+  CPPEXTERN_HEADER(pix_2grey, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_2grey();
+  //////////
+  // Constructor
+  pix_2grey();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_2grey();
+  //////////
+  // Destructor
+  virtual ~pix_2grey();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 #ifdef __MMX__
 # ifndef __APPLE__
-        virtual void 	processRGBAMMX(imageStruct &image);
+  virtual void    processRGBAMMX(imageStruct &image);
 # endif
-        virtual void 	processYUVMMX(imageStruct &image);
+  virtual void    processYUVMMX(imageStruct &image);
 #endif
 #ifdef __SSE2__
-        virtual void 	processYUVSSE2(imageStruct &image);
+  virtual void    processYUVSSE2(imageStruct &image);
 #endif
 #ifdef __VEC__
-        virtual void 	processRGBAAltivec(imageStruct &image);
-        virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void    processRGBAAltivec(imageStruct &image);
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
 
-    	//////////
-    	// Do the processing - this is a no-op
-    	virtual void 	processGrayImage(imageStruct &image) { }
+  //////////
+  // Do the processing - this is a no-op
+  virtual void    processGrayImage(imageStruct &image) { }
 };
 
-#endif	// for header file
+#endif  // for header file

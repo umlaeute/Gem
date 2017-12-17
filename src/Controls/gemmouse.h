@@ -33,69 +33,70 @@ enum t_mousescale { NONE, WIDTH, HEIGHT, BOTH };
 
 class GEM_EXTERN gemmouse : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemmouse, CPPExtern);
+  CPPEXTERN_HEADER(gemmouse, CPPExtern);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   gemmouse(int,t_atom*);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemmouse();
+  //////////
+  // Destructor
+  virtual ~gemmouse();
 
-        //////////
-        // mouse motion
-        void            mouseMotion(int x, int y);
+  //////////
+  // mouse motion
+  void            mouseMotion(int x, int y);
 
-        //////////
-        // mouse button
-        void            mouseButton(int which, int state, int x, int y);
+  //////////
+  // mouse button
+  void            mouseButton(int which, int state, int x, int y);
 
-        //////////
-        // mouse button
-        void		mouseWheel(int axis, int value);
+  //////////
+  // mouse button
+  void            mouseWheel(int axis, int value);
 
-        //////////
-        // The xpos outlet
-        t_outlet    	*m_outXPos;
+  //////////
+  // The xpos outlet
+  t_outlet        *m_outXPos;
 
-        //////////
-        // The ypos outlet
-        t_outlet    	*m_outYPos;
+  //////////
+  // The ypos outlet
+  t_outlet        *m_outYPos;
 
-        //////////
-        // The left button outlet
-        t_outlet    	*m_outLBut;
+  //////////
+  // The left button outlet
+  t_outlet        *m_outLBut;
 
-        //////////
-        // The middle outlet
-        t_outlet    	*m_outMBut;
+  //////////
+  // The middle outlet
+  t_outlet        *m_outMBut;
 
-        //////////
-        // The right outlet
-        t_outlet    	*m_outRBut;
+  //////////
+  // The right outlet
+  t_outlet        *m_outRBut;
 
-        //////////
-        // coordinate-scales
-        // if !=0, the mouse-coordinate is scaled to 0..m_scale
-        // if ==0, the mouse-coordinate is scaled to 0..windowsize
-        t_float m_scaleX, m_scaleY;
+  //////////
+  // coordinate-scales
+  // if !=0, the mouse-coordinate is scaled to 0..m_scale
+  // if ==0, the mouse-coordinate is scaled to 0..windowsize
+  t_float m_scaleX, m_scaleY;
 
-        //////////
-        // should Y we scaled separately or like X ?
-        t_mousescale m_scaleMode;
+  //////////
+  // should Y we scaled separately or like X ?
+  t_mousescale m_scaleMode;
 
-    private:
+private:
 
-        //////////
-        // Static member functions
-        static void     mouseMotionCallback(int x, int y, void *data);
-        static void     mouseButtonCallback(int which, int state, int x, int y, void *data);
-        static void	mouseWheelCallback(int axis, int value, void *data);
+  //////////
+  // Static member functions
+  static void     mouseMotionCallback(int x, int y, void *data);
+  static void     mouseButtonCallback(int which, int state, int x, int y,
+                                      void *data);
+  static void     mouseWheelCallback(int axis, int value, void *data);
 };
 
 #endif  // for header file

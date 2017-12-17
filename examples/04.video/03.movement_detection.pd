@@ -12,8 +12,8 @@
 #X obj 201 434 cube 0.5;
 #X obj 227 304 * 8;
 #X obj 227 326 - 4;
-#X obj 280 304 * 8;
-#X obj 280 326 - 4;
+#X obj 280 304 * -8;
+#X obj 280 326 + 4;
 #X obj 339 325 * 2;
 #X obj 44 117 pix_video;
 #X text 57 40 a very simple movement detector;

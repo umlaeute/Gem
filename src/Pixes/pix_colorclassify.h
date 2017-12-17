@@ -58,27 +58,27 @@ AUTHOR
 -----------------------------------------------------------------*/
 class pix_colorclassify : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_colorclassify, GemPixObj);
+  CPPEXTERN_HEADER(pix_colorclassify, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_colorclassify();
+  //////////
+  // Constructor
+  pix_colorclassify();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_colorclassify();
+  //////////
+  // Destructor
+  virtual ~pix_colorclassify();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-      // virtual void 	processGrayImage(imageStruct &image);
-    	// virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  // virtual void   processGrayImage(imageStruct &image);
+  // virtual void         processYUVImage(imageStruct &image);
 
-    private:
+private:
 };
 
-#endif	// for header file
+#endif  // for header file

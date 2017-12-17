@@ -30,9 +30,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugins::imagesaver {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT imageSGI : public gem::plugins::imageloader,
+  public gem::plugins::imagesaver
+{
+public:
 
   //////////
   // Constructor
@@ -41,21 +46,31 @@ class GEM_EXPORT imageSGI : public gem::plugins::imageloader, public gem::plugin
 
   //////////
   // read an image
-  virtual bool load(std::string filename, imageStruct&result, gem::Properties&props);
+  virtual bool load(std::string filename, imageStruct&result,
+                    gem::Properties&props);
   //////////
   // write an image
-  virtual bool          save(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+  virtual bool          save(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props);
   //////////
   // estimate, how well we could save this image
-  virtual float estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props);
+  virtual float estimateSave(const imageStruct&img,
+                             const std::string&filename, const std::string&mimetype,
+                             const gem::Properties&props);
 
 
   // this is always threadable
-  virtual bool isThreadable(void) { return true; }
-  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props);
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
+  virtual void getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                    gem::Properties&props);
 
 
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

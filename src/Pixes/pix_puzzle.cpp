@@ -54,8 +54,12 @@ pix_puzzle :: pix_puzzle() :
 /////////////////////////////////////////////////////////
 pix_puzzle :: ~pix_puzzle()
 {
-  if (blockoffset) delete [] blockoffset;
-  if (blockpos)    delete [] blockpos;
+  if (blockoffset) {
+    delete [] blockoffset;
+  }
+  if (blockpos) {
+    delete [] blockpos;
+  }
   myImage.clear();
 }
 
@@ -67,8 +71,12 @@ pix_puzzle :: ~pix_puzzle()
 void pix_puzzle :: makePuzzleBlocks(int xsize, int ysize, int csize)
 {
   int i, x, y;
-  if (blockoffset) delete [] blockoffset;
-  if (blockpos)    delete [] blockpos;
+  if (blockoffset) {
+    delete [] blockoffset;
+  }
+  if (blockpos) {
+    delete [] blockpos;
+  }
 
   blockxsize = xsize / blockw;
   blockysize = ysize / blockh;
@@ -83,27 +91,32 @@ void pix_puzzle :: makePuzzleBlocks(int xsize, int ysize, int csize)
   blockpos = new int[blocknum];
 
   for(y=0; y<blockh; y++)
-    for(x=0; x<blockw; x++) blockoffset[y*blockw+x] = (y*blockysize*xsize + x*blockxsize)*csize;
-  for(i=0; i<blocknum; i++) blockpos[i] = i;
+    for(x=0; x<blockw; x++) {
+      blockoffset[y*blockw+x] = (y*blockysize*xsize + x*blockxsize)*csize;
+    }
+  for(i=0; i<blocknum; i++) {
+    blockpos[i] = i;
+  }
 }
 
 void pix_puzzle :: shuffle()
 {
-  int i, a, b, c;
-
-  if (!blockpos) return;
-  if (blocknum == 1){
+  if (!blockpos) {
+    return;
+  }
+  if (blocknum == 1) {
     blockpos[0]=0;
     return; /* nothing to be done for us here */
   }
 
-  for(i=0; i<20*blockw; i++) {
+  for(int i=0; i<20*blockw; i++) {
     /* the number of shuffling times is a rule of thumb. */
-    a = fastrand()%(blocknum-1);
-    b = fastrand()%(blocknum-1);
-    if(a == b)
+    int a = fastrand()%(blocknum-1);
+    int b = fastrand()%(blocknum-1);
+    if(a == b) {
       b = (b+1)%(blocknum-1);
-    c = blockpos[a];
+    }
+    int c = blockpos[a];
     blockpos[a] = blockpos[b];
     blockpos[b] = c;
   }
@@ -129,9 +142,15 @@ void pix_puzzle :: sizeMess(int width, int height)
 /////////////////////////////////////////////////////////
 void pix_puzzle :: moveMess(int direction)
 {
-  if (!blockpos)return;
-  if (direction==5)m_game=!m_game;
-  if (!m_game)return;
+  if (!blockpos) {
+    return;
+  }
+  if (direction==5) {
+    m_game=!m_game;
+  }
+  if (!m_game) {
+    return;
+  }
   int nextpos, tmp;
 
   int x = spacepos % blockw;
@@ -153,10 +172,18 @@ void pix_puzzle :: moveMess(int direction)
     break;
   }
 
-  if (x<0)x=0;
-  if (x>=blockw)x=blockw-1;
-  if (y<0)y=0;
-  if (y>=blockh)y=blockh-1;
+  if (x<0) {
+    x=0;
+  }
+  if (x>=blockw) {
+    x=blockw-1;
+  }
+  if (y<0) {
+    y=0;
+  }
+  if (y>=blockh) {
+    y=blockh-1;
+  }
 
   nextpos=y*blockw + x;
   tmp = blockpos[spacepos];
@@ -179,7 +206,9 @@ void pix_puzzle :: processImage(imageStruct &image)
   int x, y, xx, yy, i;
   unsigned char *p, *q;
 
-  if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
+  if (m_force
+      || (myImage.xsize*myImage.ysize*myImage.csize !=
+          image.xsize*image.ysize*image.csize)) {
     myImage.clear();
     m_force = false;
 
@@ -200,25 +229,26 @@ void pix_puzzle :: processImage(imageStruct &image)
   dest = myImage.data;
 
   i=0;
-  for (y=0; y<blockh; y++){
+  for (y=0; y<blockh; y++) {
     for(x=0; x<blockw; x++) {
       p = &src[blockoffset[blockpos[i]]];
       q = &dest[blockoffset[i]];
-      if(m_game && spacepos == i) { // leave one rectangle blank (for the puzzle game)
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = 0;
-	  }
-	  q += image.xsize*image.csize;
-	}
+      if(m_game && spacepos ==
+          i) { // leave one rectangle blank (for the puzzle game)
+        for(yy=0; yy<blockysize; yy++) {
+          for(xx=0; xx<blockxsize*image.csize; xx++) {
+            q[xx] = 0;
+          }
+          q += image.xsize*image.csize;
+        }
       } else {
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = p[xx];
-	  }
-	  q += image.xsize*image.csize;
-	  p += image.xsize*image.csize;
-	}
+        for(yy=0; yy<blockysize; yy++) {
+          for(xx=0; xx<blockxsize*image.csize; xx++) {
+            q[xx] = p[xx];
+          }
+          q += image.xsize*image.csize;
+          p += image.xsize*image.csize;
+        }
       }
       i++;
     }
@@ -230,7 +260,7 @@ void pix_puzzle :: processImage(imageStruct &image)
   if(marginw) {
     for(y=0; y<blockh*blockysize; y++) {
       for(x=0; x<marginw; x++) {
-	*q++ = *p++;
+        *q++ = *p++;
       }
       p += image.xsize - marginw;
       q += image.xsize - marginw;
@@ -258,7 +288,9 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
   int x, y, xx, yy, i;
   unsigned char *p, *q;
 
-  if (m_force || (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize)){
+  if (m_force
+      || (myImage.xsize*myImage.ysize*myImage.csize !=
+          image.xsize*image.ysize*image.csize)) {
     myImage.clear();
     m_force = false;
 
@@ -278,25 +310,26 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
   dest = myImage.data;
 
   i=0;
-  for (y=0; y<blockh; y++){
+  for (y=0; y<blockh; y++) {
     for(x=0; x<blockw; x++) {
       p = &src[blockoffset[blockpos[i]]];
       q = &dest[blockoffset[i]];
-      if(m_game && spacepos == i) { // leave one rectangle blank (for the puzzle game)
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = 0;
-	  }
-	  q += image.xsize*image.csize;
-	}
+      if(m_game && spacepos ==
+          i) { // leave one rectangle blank (for the puzzle game)
+        for(yy=0; yy<blockysize; yy++) {
+          for(xx=0; xx<blockxsize*image.csize; xx++) {
+            q[xx] = 0;
+          }
+          q += image.xsize*image.csize;
+        }
       } else {
-	for(yy=0; yy<blockysize; yy++) {
-	  for(xx=0; xx<blockxsize*image.csize; xx++) {
-	    q[xx] = p[xx];
-	  }
-	  q += image.xsize*image.csize;
-	  p += image.xsize*image.csize;
-	}
+        for(yy=0; yy<blockysize; yy++) {
+          for(xx=0; xx<blockxsize*image.csize; xx++) {
+            q[xx] = p[xx];
+          }
+          q += image.xsize*image.csize;
+          p += image.xsize*image.csize;
+        }
       }
       i++;
     }
@@ -308,7 +341,7 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
   if(marginw) {
     for(y=0; y<blockh*blockysize; y++) {
       for(x=0; x<marginw; x++) {
-	*q++ = *p++;
+        *q++ = *p++;
       }
       p += image.xsize - marginw;
       q += image.xsize - marginw;
@@ -330,12 +363,15 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_puzzle :: obj_setupCallback(t_class *classPtr)
 {
-  class_addbang(classPtr, reinterpret_cast<t_method>(&pix_puzzle::bangMessCallback));
+  class_addbang(classPtr,
+                reinterpret_cast<t_method>(&pix_puzzle::bangMessCallback));
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::sizeMessCallback),
-  		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_puzzle::moveMessCallback),
-  		  gensym("move"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_puzzle::sizeMessCallback),
+                  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_puzzle::moveMessCallback),
+                  gensym("move"), A_FLOAT, A_NULL);
 }
 
 void pix_puzzle :: bangMessCallback(void *data)
@@ -343,7 +379,8 @@ void pix_puzzle :: bangMessCallback(void *data)
   GetMyClass(data)->shuffle();
 }
 
-void pix_puzzle :: sizeMessCallback(void *data, t_float width, t_float height)
+void pix_puzzle :: sizeMessCallback(void *data, t_float width,
+                                    t_float height)
 {
   GetMyClass(data)->sizeMess((int)width, (int)height);
 }

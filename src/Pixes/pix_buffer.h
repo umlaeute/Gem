@@ -36,16 +36,23 @@ LOG
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem {
-  namespace plugins {class imagesaver;};
-  namespace RTE     {class Outlet;};
+namespace gem
+{
+namespace plugins
+{
+class imagesaver;
+};
+namespace RTE
+{
+class Outlet;
+};
 };
 
 class GEM_EXTERN pix_buffer : public CPPExtern
 {
   CPPEXTERN_HEADER(pix_buffer, CPPExtern);
 
- public:
+public:
 
   //////////
   // Constructor
@@ -74,7 +81,7 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   virtual void clearProperties( void );
   virtual void setProperties( t_symbol*, int, t_atom*);
 
- protected:
+protected:
   imageStruct    *m_buffer;
   unsigned int m_numframes;
   t_symbol *m_bindname;
@@ -85,4 +92,4 @@ class GEM_EXTERN pix_buffer : public CPPExtern
   gem::RTE::Outlet*m_outlet;
 };
 
-#endif	// for header file
+#endif  // for header file

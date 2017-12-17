@@ -134,21 +134,21 @@ LOG
 # endif /* GNUC */
 
 
-  void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
-							unsigned char *pixels);
-  void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
-							 unsigned char *pixels);
-  void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
-							unsigned char *pixels);
-  void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
-							 unsigned char *pixels);
-  void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
-                              unsigned char *pixels);
-  void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
-                              unsigned char *data, int xsize, int ysize);
+void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
+                          unsigned char *pixels);
+void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
+                           unsigned char *pixels);
+void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
+                          unsigned char *pixels);
+void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
+                           unsigned char *pixels);
+void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
+                            unsigned char *pixels);
+void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
+                            unsigned char *data, int xsize, int ysize);
 # ifndef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-  void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
-                              const unsigned char *gem_image, int xsize, int ysize);
+void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
+                            const unsigned char *gem_image, int xsize, int ysize);
 # endif
 #endif /* AltiVec */
 

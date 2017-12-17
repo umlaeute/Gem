@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(square, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 square :: square(t_floatarg size)
-        : GemShape(size)
+  : GemShape(size)
 { }
 
 /////////////////////////////////////////////////////////
@@ -45,19 +45,22 @@ square :: ~square()
 /////////////////////////////////////////////////////////
 void square :: renderShape(GemState *state)
 {
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_QUADS;
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    if (m_drawType == GL_LINE_LOOP)
-        glLineWidth(m_linewidth);
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_QUADS;
+  }
+  glNormal3f(0.0f, 0.0f, 1.0f);
+  if (m_drawType == GL_LINE_LOOP) {
+    glLineWidth(m_linewidth);
+  }
 
-    glBegin(m_drawType);
+  glBegin(m_drawType);
 
-    SetVertex(state, -m_size,  -m_size, 0.0f,0.,0.,0);
-    SetVertex(state, m_size,  -m_size, 0.0f,1.,0.,1);
-    SetVertex(state, m_size,  m_size, 0.0f,1.,1.,2);
-    SetVertex(state, -m_size,  m_size, 0.0f,0.,1.,3);
+  SetVertex(state, -m_size,  -m_size, 0.0f,0.,0.,0);
+  SetVertex(state, m_size,  -m_size, 0.0f,1.,0.,1);
+  SetVertex(state, m_size,  m_size, 0.0f,1.,1.,2);
+  SetVertex(state, -m_size,  m_size, 0.0f,0.,1.,3);
 
-    glEnd();
+  glEnd();
 }
 
-void square :: obj_setupCallback(t_class *classPtr){}
+void square :: obj_setupCallback(t_class *classPtr) {}

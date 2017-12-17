@@ -52,7 +52,7 @@ filmAVFoundation::~filmAVFoundation(void) {
 // open
 //
 /////////////////////////////////////////////////////////
-bool filmAVFoundation::open(const std::string filename, const gem::Properties &props) {
+bool filmAVFoundation::open(const std::string &filename, const gem::Properties &props) {
   if(filename.empty()) {
     return false;
   }

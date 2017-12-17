@@ -27,12 +27,13 @@ CPPEXTERN_NEW_WITH_ONE_ARG(alpha, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 alpha :: alpha(t_floatarg fun)
-       : m_alphaState(1),
-	 m_alphaTest(1),
-	 m_depthtest(1)
+  : m_alphaState(1),
+    m_alphaTest(1),
+    m_depthtest(1)
 {
   funMess(static_cast<int>(fun));
-  m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("function"));
+  m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("function"));
 }
 
 /////////////////////////////////////////////////////////
@@ -53,10 +54,11 @@ void alpha :: render(GemState *)
   if (m_alphaState)    {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, m_function);
-    if (!m_depthtest)
+    if (!m_depthtest) {
       glDepthMask(GL_FALSE);  // turn off depth test for transparent objects
+    }
 
-    if (m_alphaTest)		{
+    if (m_alphaTest)            {
       glEnable(GL_ALPHA_TEST);
       glAlphaFunc(GL_GREATER, 0.f);
     }
@@ -69,15 +71,16 @@ void alpha :: render(GemState *)
 /////////////////////////////////////////////////////////
 void alpha :: postrender(GemState *)
 {
-  if (m_alphaState)
-    {
-      glDisable(GL_BLEND);
-      if (!m_depthtest)
-	glDepthMask(GL_TRUE);
-
-      if (m_alphaTest)
-	glDisable(GL_ALPHA_TEST);
+  if (m_alphaState) {
+    glDisable(GL_BLEND);
+    if (!m_depthtest) {
+      glDepthMask(GL_TRUE);
     }
+
+    if (m_alphaTest) {
+      glDisable(GL_ALPHA_TEST);
+    }
+  }
 
 }
 /////////////////////////////////////////////////////////
@@ -86,8 +89,8 @@ void alpha :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void alpha :: alphaMess(int alphaState)
 {
-    m_alphaState = alphaState;
-    setModified();
+  m_alphaState = alphaState;
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // funMess
@@ -95,7 +98,7 @@ void alpha :: alphaMess(int alphaState)
 /////////////////////////////////////////////////////////
 void alpha :: funMess(int fun)
 {
-  switch(fun){
+  switch(fun) {
   case 1:
     m_function=GL_ONE;
     break;
@@ -153,8 +156,8 @@ void alpha :: funMess(int fun)
   case 19:
     m_function=GL_ONE_MINUS_SRC1_ALPHA;
     break;
-   default:
-     m_function=GL_ONE_MINUS_SRC_ALPHA;
+  default:
+    m_function=GL_ONE_MINUS_SRC_ALPHA;
   }
   setModified();
 }
@@ -164,8 +167,8 @@ void alpha :: funMess(int fun)
 /////////////////////////////////////////////////////////
 void alpha :: testMess(int alphaTest)
 {
-    m_alphaTest = alphaTest;
-    setModified();
+  m_alphaTest = alphaTest;
+  setModified();
 }
 /////////////////////////////////////////////////////////
 // depthtestMess
@@ -173,8 +176,8 @@ void alpha :: testMess(int alphaTest)
 /////////////////////////////////////////////////////////
 void alpha :: depthtestMess(int i)
 {
-    m_depthtest = i;
-    setModified();
+  m_depthtest = i;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -183,8 +186,8 @@ void alpha :: depthtestMess(int i)
 /////////////////////////////////////////////////////////
 void alpha :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "float"   , alphaMess    , int);
-  CPPEXTERN_MSG1(classPtr, "test"    , testMess     , int);
-  CPPEXTERN_MSG1(classPtr, "function", funMess      , int);
-  CPPEXTERN_MSG1(classPtr, "auto"    , depthtestMess, int);
+  CPPEXTERN_MSG1(classPtr, "float", alphaMess, int);
+  CPPEXTERN_MSG1(classPtr, "test", testMess, int);
+  CPPEXTERN_MSG1(classPtr, "function", funMess, int);
+  CPPEXTERN_MSG1(classPtr, "auto", depthtestMess, int);
 }

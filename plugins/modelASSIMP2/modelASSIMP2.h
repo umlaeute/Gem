@@ -84,7 +84,8 @@ protected:
 
   bool m_useMaterial;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords,
+      m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 
@@ -94,4 +95,4 @@ protected:
 };
 }; // namespace gem::plugins
 
-#endif	// for header file
+#endif  // for header file

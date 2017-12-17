@@ -2,7 +2,7 @@
  * GEM - Graphics Environment for Multimedia
  *
  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- *	zmoelnig@iem.kug.ac.at
+ *      zmoelnig@iem.kug.ac.at
  *  For information on usage and redistribution, and for a DISCLAIMER
  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
  *
@@ -19,7 +19,7 @@
   CLASS
   GEMglGetFloatv
   KEYWORDS
-  openGL	0
+  openGL        0
   DESCRIPTION
   wrapper for the openGL-function
   "glGetFloatv( GLenum pname, GLfloat *params)"
@@ -29,28 +29,28 @@ class GEM_EXTERN GEMglGetFloatv : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglGetFloatv, GemGLBase);
 
-    public:
+public:
   // Constructor
-  GEMglGetFloatv (int,t_atom*);	// CON
- protected:
+  GEMglGetFloatv (int,t_atom*); // CON
+protected:
   // Destructor
   virtual ~GEMglGetFloatv ();
   // check extensions
   virtual bool isRunnable(void);
 
   // Do the rendering
-  virtual void	render (GemState *state);
+  virtual void  render (GemState *state);
   // variable
   GLenum pname;
-  virtual void	pnameMess(t_atom);	// FUN
+  virtual void  pnameMess(t_atom);      // FUN
 
   t_atom m_alist[16];
 
- private:
+private:
   // we need one inlet
   t_inlet *m_inlet;
   // The outlet
-  t_outlet    	*m_outlet;
+  t_outlet      *m_outlet;
 
   // static member functions
   static void    pnameMessCallback (void*,t_symbol*,int,t_atom*);

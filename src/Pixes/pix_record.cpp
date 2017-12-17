@@ -15,13 +15,15 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record);
 
-class pix_record :: PIMPL {
+class pix_record :: PIMPL
+{
 public:
   PIMPL(void) {};
   ~PIMPL(void) {};
 
   struct codechandle {
-    codechandle(gem::plugins::record*h, const std::string c):handle(h), codec(c) {}
+    codechandle(gem::plugins::record*h, const std::string&c):handle(h),
+      codec(c) {}
 
     gem::plugins::record*handle;
     std::string codec;
@@ -29,7 +31,8 @@ public:
   std::map<std::string, std::vector<codechandle> >m_codechandle;
   std::vector<std::string>m_codecs;
 
-  void addCodecHandle(gem::plugins::record*handle, const std::string codec) {
+  void addCodecHandle(gem::plugins::record*handle, const std::string&codec)
+  {
 #ifdef __GNUC__
 # warning better handling of duplicate codecs
 #endif
@@ -37,30 +40,34 @@ public:
     m_codechandle[codec].push_back(codechandle(handle, codec));
     m_codecs.push_back(codec);
   }
-  void clearCodecHandle(void) {
+  void clearCodecHandle(void)
+  {
     m_codecs.clear();
     m_codechandle.clear();
   }
 
-  static gem::any atom2any(t_atom*ap) {
+  static gem::any atom2any(t_atom*ap)
+  {
     gem::any result;
     if(ap) {
       switch(ap->a_type) {
       case A_FLOAT:
-	result=atom_getfloat(ap);
-	break;
+        result=atom_getfloat(ap);
+        break;
       case A_SYMBOL:
-	result=atom_getsymbol(ap)->s_name;
-	break;
+        result=atom_getsymbol(ap)->s_name;
+        break;
       default:
-	result=ap->a_w.w_gpointer;
+        result=ap->a_w.w_gpointer;
       }
     }
     return result;
   }
   static void addProperties(gem::Properties&props, int argc, t_atom*argv)
   {
-    if(!argc)return;
+    if(!argc) {
+      return;
+    }
 
     if(argv->a_type != A_SYMBOL) {
       ::error("no key given...");
@@ -68,7 +75,8 @@ public:
     }
     std::string key=std::string(atom_getsymbol(argv)->s_name);
     std::vector<gem::any> values;
-    argc--; argv++;
+    argc--;
+    argv++;
     while(argc-->0) {
       values.push_back(atom2any(argv++));
     }
@@ -79,12 +87,11 @@ public:
     case 1:
       props.set(key, values[0]);
       break;
-    case 0:
-      {
-	gem::any dummy;
-	props.set(key, dummy);
-      }
-      break;
+    case 0: {
+      gem::any dummy;
+      props.set(key, dummy);
+    }
+    break;
     }
   }
 
@@ -107,7 +114,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
   m_handle(NULL),
   m_pimpl(new PIMPL())
 {
-  if (argc != 0){
+  if (argc != 0) {
     error("ignoring arugments");
   }
   m_outNumFrames = outlet_new(this->x_obj, 0);
@@ -124,11 +131,15 @@ pix_record :: pix_record(int argc, t_atom *argv):
 /////////////////////////////////////////////////////////
 pix_record :: ~pix_record()
 {
-  if(m_handle)delete m_handle;
+  if(m_handle) {
+    delete m_handle;
+  }
   outlet_free(m_outNumFrames);
   outlet_free(m_outInfo);
 
-  if(m_pimpl)delete m_pimpl;
+  if(m_pimpl) {
+    delete m_pimpl;
+  }
 }
 
 
@@ -136,7 +147,8 @@ pix_record :: ~pix_record()
 // add backends
 //
 /////////////////////////////////////////////////////////
-bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
+bool pix_record :: addHandle( std::vector<std::string>available,
+                              std::string ID)
 {
   unsigned int i=0;
   int count=0;
@@ -178,7 +190,8 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
       m_ids.push_back(key);
       m_allhandles.push_back(handle);
       count++;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1, key.c_str(), handle);
+      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1,
+              key.c_str(), handle);
     }
   }
 
@@ -190,7 +203,9 @@ bool pix_record :: addHandle( std::vector<std::string>available, std::string ID)
 //
 void pix_record :: startRecording()
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
   if(m_filename.empty()) {
     error("start recording requested with no prior open");
@@ -219,7 +234,9 @@ void pix_record :: startRecording()
 //
 void pix_record :: stopRecording()
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
   if(m_recording) {
     m_handle->stop();
@@ -238,18 +255,22 @@ void pix_record :: stopRecording()
 /////////////////////////////////////////////////////////
 void pix_record :: render(GemState *state)
 {
-  if(!m_handle || !m_recording)return;
-
-  //check if state exists
-  if(!state)return;
-  pixBlock*img=NULL;
-  state->get(GemState::_PIX, img);
-
-  if(!img || !img->image.data){
+  if(!m_handle || !m_recording) {
     return;
   }
 
-  if(m_banged||m_automatic){
+  //check if state exists
+  if(!state) {
+    return;
+  }
+  pixBlock*img=NULL;
+  state->get(GemState::_PIX, img);
+
+  if(!img || !img->image.data) {
+    return;
+  }
+
+  if(m_banged||m_automatic) {
     //      if(m_maxFrames != 0 && m_currentFrame >= m_maxFrames) m_recordStop = 1;
     bool success=m_handle->write(&img->image);
     m_banged=false;
@@ -269,13 +290,15 @@ void pix_record :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_record :: enumPropertiesMess()
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
   gem::Properties props;
-  if(!m_handle->enumProperties(props))
+  if(!m_handle->enumProperties(props)) {
     return;
+  }
 
-  int ac=0;
   t_atom ap[3];
   std::vector<std::string>keys=props.keys();
 
@@ -284,7 +307,7 @@ void pix_record :: enumPropertiesMess()
 
   unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
-    ac=2;
+    int ac=2;
     std::string key=keys[i];
     SETSYMBOL(ap+0, gensym(key.c_str()));
     switch(props.type(key)) {
@@ -296,20 +319,20 @@ void pix_record :: enumPropertiesMess()
       SETSYMBOL(ap+1, gensym("Float"));
       /* LATER: get and show ranges */
       if(props.get(key, d)) {
-	ac=3;
-	SETFLOAT(ap+2, d);
+        ac=3;
+        SETFLOAT(ap+2, d);
       }
     }
-      break;
+    break;
     case gem::Properties::STRING: {
       SETSYMBOL(ap+1, gensym("Symbol"));
       std::string s;
       if(props.get(key, s)) {
-	ac=3;
-	SETSYMBOL(ap+2, gensym(s.c_str()));
+        ac=3;
+        SETSYMBOL(ap+2, gensym(s.c_str()));
       }
     }
-      break;
+    break;
     default:
       SETSYMBOL(ap+1, gensym("unknown"));
       break;
@@ -335,9 +358,11 @@ void pix_record :: clearPropertiesMess()
 /////////////////////////////////////////////////////////
 void pix_record :: dialogMess()
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
-  if(!m_handle->dialog()){
+  if(!m_handle->dialog()) {
     error("unable to open settings dialog");
   }
 }
@@ -349,7 +374,7 @@ void pix_record :: recordMess(bool on)
 {
   if (on) {
     startRecording();
-  }else{
+  } else {
     stopRecording();
   }
 }
@@ -360,7 +385,9 @@ void pix_record :: recordMess(bool on)
 /////////////////////////////////////////////////////////
 void pix_record :: getCodecList()
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
   std::vector<std::string>codecs=m_handle->getCodecs();
 
@@ -370,7 +397,8 @@ void pix_record :: getCodecList()
     const std::string descr=m_handle->getCodecDescription(codecname);
     t_atom ap[3];
 
-    verbose(2, "codec%d: '%s': %s", i, codecname.c_str(), (descr.empty()?"":descr.c_str()));
+    verbose(2, "codec%d: '%s': %s", i, codecname.c_str(),
+            (descr.empty()?"":descr.c_str()));
     SETFLOAT (ap+0, static_cast<t_float>(i));
     SETSYMBOL(ap+1, gensym(codecname.c_str()));
     SETSYMBOL(ap+2, gensym(descr.c_str()));
@@ -385,7 +413,9 @@ void pix_record :: getCodecList()
 /////////////////////////////////////////////////////////
 void pix_record :: codecMess(t_atom *argv)
 {
-  if(!m_handle)return;
+  if(!m_handle) {
+    return;
+  }
 
 #ifdef __GNUC__
 #warning codecMess is a mess
@@ -410,9 +440,9 @@ void pix_record :: codecMess(t_atom *argv)
   } else if (A_FLOAT==argv->a_type) {
     int id=atom_getint(argv);
     std::vector<std::string>codecs=m_handle->getCodecs();
-    if(id>0 && ((unsigned int)id)<codecs.size())
+    if(id>0 && ((unsigned int)id)<codecs.size()) {
       sid=codecs[id];
-    else {
+    } else {
       error("invalid codec# %d (0..%d)", id, codecs.size());
       return;
     }
@@ -431,7 +461,7 @@ void pix_record :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
   /* LATER let the record()-handles chose whether they accept an open request
    * and then try other handles (if available)
-   * this would allow to use this object for streaming, virtual output devices,...
+   * this would allow us to use this object for streaming, virtual output devices,...
    */
   if(argc) {
     m_filename=std::string(atom_getsymbol(argv)->s_name);
@@ -451,8 +481,9 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
   CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_record::codecMessCallback),
-		  gensym("codec"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_record::codecMessCallback),
+                  gensym("codec"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertiesMess);
@@ -471,8 +502,10 @@ void pix_record :: autoMess(bool on)
   m_automatic=on;
 }
 
-void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc,
+                                     t_atom *argv)
 {
-  if(argc)
+  if(argc) {
     GetMyClass(data)->codecMess(argv);
+  }
 }

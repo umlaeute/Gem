@@ -28,10 +28,11 @@ CPPEXTERN_NEW(pix_zoom);
 /////////////////////////////////////////////////////////
 pix_zoom :: pix_zoom()
 {
-    zoomMess(1, 1);
+  zoomMess(1, 1);
 
-    // create the new inlet
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("zoom"));
+  // create the new inlet
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("zoom"));
 }
 
 /////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ pix_zoom :: ~pix_zoom()
 /////////////////////////////////////////////////////////
 void pix_zoom :: render(GemState *)
 {
-    glPixelZoom(m_xZoom, m_yZoom);
+  glPixelZoom(m_xZoom, m_yZoom);
 }
 
 /////////////////////////////////////////////////////////
@@ -56,7 +57,7 @@ void pix_zoom :: render(GemState *)
 /////////////////////////////////////////////////////////
 void pix_zoom :: postrender(GemState *)
 {
-    glPixelZoom(1.0, 1.0);
+  glPixelZoom(1.0, 1.0);
 }
 
 /////////////////////////////////////////////////////////
@@ -65,9 +66,9 @@ void pix_zoom :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void pix_zoom :: zoomMess(float xZoom, float yZoom)
 {
-    m_xZoom = xZoom;
-    m_yZoom = yZoom;
-    setModified();
+  m_xZoom = xZoom;
+  m_yZoom = yZoom;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -76,10 +77,11 @@ void pix_zoom :: zoomMess(float xZoom, float yZoom)
 /////////////////////////////////////////////////////////
 void pix_zoom :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
-    	    gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
+                  gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
 }
 void pix_zoom :: zoomMessCallback(void *data, t_float xMag, t_float yMag)
 {
-    GetMyClass(data)->zoomMess((float)xMag, (float)yMag);
+  GetMyClass(data)->zoomMess((float)xMag, (float)yMag);
 }

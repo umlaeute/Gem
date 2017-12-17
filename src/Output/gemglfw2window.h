@@ -55,13 +55,13 @@ class GEM_EXTERN gemglfw2window : public GemWindow
 {
   CPPEXTERN_HEADER(gemglfw2window, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglfw2window(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -76,7 +76,7 @@ class GEM_EXTERN gemglfw2window : public GemWindow
   virtual void  bufferMess(int buf);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string s);
+  virtual void titleMess(const std::string&s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
@@ -87,7 +87,7 @@ class GEM_EXTERN gemglfw2window : public GemWindow
   virtual bool create (void);
   virtual void destroy(void);
 
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
@@ -103,7 +103,7 @@ class GEM_EXTERN gemglfw2window : public GemWindow
   void glprofileMess(int, int);
   unsigned int m_profile_major, m_profile_minor;
 
- private:
+private:
 
   //////////
   // glfw callbacks

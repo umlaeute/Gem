@@ -33,16 +33,16 @@ using namespace MagickLib;
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageMAGICK :: load(std::string filename, imageStruct&result,
+                         gem::Properties&props)
 {
   Magick::Image image;
   try {
-    ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
     // Read a file into image object
     try {
       image.read( filename );
-    } catch (Magick::Warning e) {
-      verbose(1, "magick loading problem: %s", e.what());
+    } catch (Magick::Warning&e) {
+      verbose(0, "[GEM:imageMAGICK] loading problem: %s", e.what());
     }
 
     result.xsize=static_cast<GLint>(image.columns());
@@ -61,16 +61,18 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
 #endif
                   Magick::CharPixel,
                   reinterpret_cast<void*>(result.data));
-    } catch (Magick::Warning e) {
-      verbose(1, "magick decoding problem: %s", e.what());
+    } catch (Magick::Warning&e) {
+      verbose(0, "[GEM:imageMAGICK] decoding problem: %s", e.what());
     }
-  }catch( Magick::Exception e )  {
-    verbose(1, "magick loading image failed with: %s", e.what());
+  } catch (Magick::Exception&e)  {
+    verbose(0, "[GEM:imageMAGICK] loading image failed with: %s", e.what());
     return false;
   }
   return true;
 }
-bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
+                       const std::string&mimetype, const gem::Properties&props)
+{
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
 
@@ -101,8 +103,9 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
 #endif
     break;
   }
-  try{
-    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel, pImage->data);
+  try {
+    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel,
+                         pImage->data);
     // since openGL is upside down
     if(!pImage->upsidedown) {
       mimage.flip();
@@ -118,18 +121,24 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     try {
       // finally convert and export
       mimage.write(filename);
-    } catch (Magick::Warning e) {
-      verbose(1, "magick saving problem: %s", e.what());
+    } catch (Magick::Warning&e) {
+      verbose(0, "[GEM:imageMAGICK] saving problem: %s", e.what());
     }
 
-  } catch (Magick::Exception e){
-    error("%s", e.what());
-    if(pImage!=&image)delete pImage; pImage=NULL;
+  } catch (Magick::Exception&e) {
+    verbose(0, "[GEM:imageMAGICK] %s", e.what());
+    if(pImage!=&image) {
+      delete pImage;
+    }
+    pImage=NULL;
     return false;
   } catch (...) {
-      error("imageMAGICK:: uncaught exception!");
-      return false;
+    verbose(0, "[GEM:imageMAGICK] uncaught exception!");
+    return false;
   }
-  if(pImage!=&image)delete pImage; pImage=NULL;
+  if(pImage!=&image) {
+    delete pImage;
+  }
+  pImage=NULL;
   return true;
 }

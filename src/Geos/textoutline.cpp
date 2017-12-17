@@ -33,16 +33,25 @@ CPPEXTERN_NEW_WITH_GIMME(textoutline);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 textoutline :: textoutline(int argc, t_atom *argv)
-  : TextBase(argc, argv) {
+  : TextBase(argc, argv)
+{
   fontNameMess(DEFAULT_FONT);
 }
-textoutline :: ~textoutline() {
-  if(m_font)delete m_font;m_font=NULL;
+textoutline :: ~textoutline()
+{
+  if(m_font) {
+    delete m_font;
+  }
+  m_font=NULL;
 }
-FTFont *textoutline :: makeFont(const char*fontfile){
-  if(m_font)delete m_font; m_font=NULL;
+FTFont *textoutline :: makeFont(const char*fontfile)
+{
+  if(m_font) {
+    delete m_font;
+  }
+  m_font=NULL;
   m_font =  new FTGLOutlineFont(fontfile);
-  if (m_font->Error()){
+  if (m_font->Error()) {
     delete m_font;
     m_font = NULL;
   }

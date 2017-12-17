@@ -32,34 +32,34 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_grid : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_grid, GemBase);
+  CPPEXTERN_HEADER(vertex_grid, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   vertex_grid(t_floatarg w, t_floatarg h);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_grid(void);
+  //////////
+  // Destructor
+  virtual ~vertex_grid(void);
 
-        int	m_x,m_y,m_oldx,m_oldy;
-        float	m_spacex, m_spacey;
-        float 	maxX,maxY;
-        float 	ratioX, ratioY;
-        float	*m_ColorArray;
-        float	*m_VertexArray;
-        float	*m_TexCoordArray;
+  int     m_x,m_y,m_oldx,m_oldy;
+  float   m_spacex, m_spacey;
+  float   maxX,maxY;
+  float   ratioX, ratioY;
+  float   *m_ColorArray;
+  float   *m_VertexArray;
+  float   *m_TexCoordArray;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-        static void 	sizeMessCallback(void *data, t_float x, t_float y);
-        static void 	spacingMessCallback(void *data, t_float x, t_float y);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
+  static void     sizeMessCallback(void *data, t_float x, t_float y);
+  static void     spacingMessCallback(void *data, t_float x, t_float y);
 
 };
 
-#endif	// for header file
+#endif  // for header file

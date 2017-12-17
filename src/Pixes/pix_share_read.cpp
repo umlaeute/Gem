@@ -16,7 +16,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_share_read);
 
 
 pix_share_read :: pix_share_read(int argc, t_atom*argv)
- : pix_share_write(argc,argv)
+  : pix_share_write(argc,argv)
 {}
 
 pix_share_read :: ~pix_share_read()
@@ -28,16 +28,16 @@ pix_share_read :: ~pix_share_read()
 void pix_share_read :: render(GemState *state)
 {
 #ifndef _WIN32
-  if(shm_id>0){
+  if(shm_id>0) {
 #else
-  if(m_MapFile){
+  if(m_MapFile) {
 #endif /* _WIN32 */
     if (shm_addr) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;
       unsigned char* data=shm_addr+sizeof(t_pixshare_header);
       int csize=pix.image.setCsizeByFormat(h->format);
       int imgsize=csize*h->xsize*h->ysize;
-      if(imgsize){
+      if(imgsize) {
         pix.image.xsize=h->xsize;
         pix.image.ysize=h->ysize;
         pix.image.reallocate();
@@ -48,12 +48,11 @@ void pix_share_read :: render(GemState *state)
         pix.newimage = true;
         state->set(GemState::_PIX, &pix);
       }
-    }
-    else{
+    } else {
       error("no shmaddr");
       t_atom atom;
-	  SETFLOAT(&atom, -1);
-	  outlet_anything(m_outlet, gensym("error"), 1, &atom);
+      SETFLOAT(&atom, -1);
+      outlet_anything(m_outlet, gensym("error"), 1, &atom);
     }
   }
 }

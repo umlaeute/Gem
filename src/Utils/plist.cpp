@@ -19,14 +19,14 @@
 void
 free_plist(plist_ptr *p)
 {
-   plist_ptr aux;
+  plist_ptr aux;
 
-   aux = *p;
-   while (aux != NULL) {
-      aux = (*p)->next;
-      free(*p);
-      *p = aux;
-   }
+  aux = *p;
+  while (aux != NULL) {
+    aux = (*p)->next;
+    free(*p);
+    *p = aux;
+  }
 }
 
 
@@ -36,17 +36,18 @@ free_plist(plist_ptr *p)
 int
 PrependPList(plist_ptr *head, int x, int y)
 {
-   plist_ptr pnew;
+  plist_ptr pnew;
 
-   pnew = Allocpoint();
-   if (pnew == NULL)
-      return 0;
-   pnew->x = x;
-   pnew->y = y;
+  pnew = Allocpoint();
+  if (pnew == NULL) {
+    return 0;
+  }
+  pnew->x = x;
+  pnew->y = y;
 
-   pnew->next = *head;
-   *head = pnew;
-   return 1;
+  pnew->next = *head;
+  *head = pnew;
+  return 1;
 }
 
 /*
@@ -56,115 +57,120 @@ PrependPList(plist_ptr *head, int x, int y)
 plist_ptr
 append_plist(plist_ptr *lst, int x, int y)
 {
-   plist_ptr p, paux, prev=NULL;
+  plist_ptr p, paux, prev=NULL;
 
-   p=*lst;
+  p=*lst;
 
-   while (p != NULL) {
-      prev = p;
-      p = p->next;
-   }
+  while (p != NULL) {
+    prev = p;
+    p = p->next;
+  }
 
-   paux = Allocpoint();
-   if (!paux)
-      return NULL;
+  paux = Allocpoint();
+  if (!paux) {
+    return NULL;
+  }
 
-   paux->x = x;
-   paux->y = y;
+  paux->x = x;
+  paux->y = y;
 
-   if (prev != NULL)
-      prev->next = paux;
-   else  /* list was intitially empty */
-      *lst = paux;
+  if (prev != NULL) {
+    prev->next = paux;
+  } else { /* list was intitially empty */
+    *lst = paux;
+  }
 
 
-   paux->next = NULL;
+  paux->next = NULL;
 
-   return paux;
+  return paux;
 }
 
 void
 print_plist(plist_ptr p)
 {
-   printf("\n--------------------\n");
-   while (p != NULL) {
-      printf("%d %d\n", p->x, p->y);
-      p = p->next;
-   }
-   printf("---------END--------\n");
+  printf("\n--------------------\n");
+  while (p != NULL) {
+    printf("%d %d\n", p->x, p->y);
+    p = p->next;
+  }
+  printf("---------END--------\n");
 }
 
 void
 print_list(list *p)
 {
-   printf("\n-------LIST---------\n");
-   while (isnt_empty_list(p)) {
-      printf("%d\n", p->val);
-      p = p->next;
-   }
-   printf("--------END---------\n");
+  printf("\n-------LIST---------\n");
+  while (isnt_empty_list(p)) {
+    printf("%d\n", p->val);
+    p = p->next;
+  }
+  printf("--------END---------\n");
 }
 
 //-----------------------------------------------------------------------------
 void
 free_list(list **l)
 {
-   list *aux;
-   while (isnt_empty_list(*l)) {
-      aux = *l;
-      *l = next_list_node(*l);
-      free(aux);
-   }
-   *l = NULL;
+  while (isnt_empty_list(*l)) {
+    list *aux = *l;
+    *l = next_list_node(*l);
+    free(aux);
+  }
+  *l = NULL;
 }
 
 int
 list_append(list **lst, int val)
 {
-   const char *fname="list_append";
-   list *pnode, *last=*lst;
+  const char *fname="list_append";
+  list *pnode, *last=*lst;
 
-   ANIMAL_MALLOC_OBJECT(pnode, list, fname,false);
-   pnode->val = val;
+  ANIMAL_MALLOC_OBJECT(pnode, list, fname,false);
+  pnode->val = val;
 
-   if (last) {
-      while (last->next)
-         last = last->next;
-      pnode->next = last->next;
-      last->next  = pnode;
-   } else {
-      pnode->next = NULL;
-      *lst = pnode;
-   }
-   return true;
+  if (last) {
+    while (last->next) {
+      last = last->next;
+    }
+    pnode->next = last->next;
+    last->next  = pnode;
+  } else {
+    pnode->next = NULL;
+    *lst = pnode;
+  }
+  return true;
 }
 
 int
 list_prepend(list **lst, int val)
 {
-   list *node;
+  list *node;
 
-   node = (list *) malloc(sizeof(list));
-   if (!node) return false;
-   node->val = val;
-   node->next = *lst;
-   *lst = node;
-   return true;
+  node = (list *) malloc(sizeof(list));
+  if (!node) {
+    return false;
+  }
+  node->val = val;
+  node->next = *lst;
+  *lst = node;
+  return true;
 }
 
 int
 list_remove_head(list **lst, int *val)
 {
-   int elem;
-   list *aux;
+  int elem;
+  list *aux;
 
-   if (is_empty_list(*lst))
-      return false;
+  if (is_empty_list(*lst)) {
+    return false;
+  }
 
-   aux  = *lst;
-   *lst = next_list_node(aux);
-   elem = get_list_point(aux);
-   free(aux);
-   *val = elem;
-   return true;
+  aux  = *lst;
+  *lst = next_list_node(aux);
+  elem = get_list_point(aux);
+  free(aux);
+  *val = elem;
+  return true;
 }

@@ -46,7 +46,8 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 {
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
-  size_t dataSize = reference.xsize * reference.xsize * reference.ysize * reference.csize * sizeof(unsigned char);
+  size_t dataSize = reference.xsize * reference.xsize * reference.ysize *
+                    reference.csize * sizeof(unsigned char);
   bool refresh=
     (reference.xsize != buffer.xsize) ||
     (reference.ysize != buffer.ysize) ||
@@ -76,17 +77,17 @@ CPPEXTERN_NEW(pix_rtx);
 /////////////////////////////////////////////////////////
 pix_rtx :: pix_rtx()
 {
-   imageStruct image;
+  imageStruct image;
 
-   image.xsize  = image.ysize = 64;
-   image.setCsizeByFormat(GL_RGBA_GEM);
+  image.xsize  = image.ysize = 64;
+  image.setCsizeByFormat(GL_RGBA_GEM);
 
-   refresh_buffer(image, buffer);
+  refresh_buffer(image, buffer);
 
-   bufcount  = 0;
-   mode = true;
+  bufcount  = 0;
+  mode = true;
 
-   set_buffer=true;
+  set_buffer=true;
 }
 
 /////////////////////////////////////////////////////////
@@ -110,85 +111,88 @@ void pix_rtx :: processImage(imageStruct &image)
     return;
   }
 
-   size_t pixsize = image.ysize * image.xsize;
-   int cols=image.xsize, c=0, c1=0;
-   int rows=image.ysize, r=0;
+  size_t pixsize = image.ysize * image.xsize;
+  int cols=image.xsize, c=0, c1=0;
+  int rows=image.ysize, r=0;
 
-   unsigned char *pixels = image.data;
-   unsigned char *wp;			// write pointer
-   unsigned char *rp;			// read pointer
+  unsigned char *pixels = image.data;
+  unsigned char *wp;                   // write pointer
+  unsigned char *rp;                   // read pointer
 
-   // first copy the pixels into our buffer
-   if (!set_buffer) {
-     wp = buffer.data + pixsize * buffer.csize * bufcount;
-     memcpy(wp, pixels, pixsize * buffer.csize * sizeof(unsigned char));
-   } else {
-     // fill the buffer with the current frame
-     // this might be useful to prevent the black screen in the beginning.
-     // "set" message
-     c=cols;
-     size_t imagesize=pixsize * buffer.csize * sizeof(unsigned char);
-	 while (c--) {
-       wp = buffer.data + imagesize * c;
-       memcpy(wp, pixels, imagesize);
-     }
-	 c = 0;
-     set_buffer=false;
-   }
+  // first copy the pixels into our buffer
+  if (!set_buffer) {
+    wp = buffer.data + pixsize * buffer.csize * bufcount;
+    memcpy(wp, pixels, pixsize * buffer.csize * sizeof(unsigned char));
+  } else {
+    // fill the buffer with the current frame
+    // this might be useful to prevent the black screen in the beginning.
+    // "set" message
+    c=cols;
+    size_t imagesize=pixsize * buffer.csize * sizeof(unsigned char);
+    while (c--) {
+      wp = buffer.data + imagesize * c;
+      memcpy(wp, pixels, imagesize);
+    }
+    c = 0;
+    set_buffer=false;
+  }
 
-   // then copy the buffer rtx-transformed back to the pixels
-   switch(image.csize){
-   case 1: // Grey
-     while (c < cols) {
-       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
-       while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+  // then copy the buffer rtx-transformed back to the pixels
+  switch(image.csize) {
+  case 1: // Grey
+    while (c < cols) {
+      c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+      while (r < rows) {
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
+        pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 *pixels   = *rp;
-	 r++;
-       }
-       r=0;
-       c++;
-     }
-     break;
-   case 2: // YUV
-     while (c < cols) {
-       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
-       while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+        *pixels   = *rp;
+        r++;
+      }
+      r=0;
+      c++;
+    }
+    break;
+  case 2: // YUV
+    while (c < cols) {
+      c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+      while (r < rows) {
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
+        pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 pixels[0]  = rp[0];
-	 pixels[1]  = rp[1];
-	 r++;
-       }
-       r=0;
-       c++;
-     }
-     break;
-   case 4: // RGBA
-     while (c < cols) {
-       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
-       while (r < rows) {
-	 rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c + buffer.xsize * r + (bufcount - c + cols) % cols );
-	 pixels = image.data + image.csize * (image.xsize * r + cols - c1);
+        pixels[0]  = rp[0];
+        pixels[1]  = rp[1];
+        r++;
+      }
+      r=0;
+      c++;
+    }
+    break;
+  case 4: // RGBA
+    while (c < cols) {
+      c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
+      while (r < rows) {
+        rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
+                                           buffer.xsize * r + (bufcount - c + cols) % cols );
+        pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
-	 pixels[chRed]   = rp[chRed];
-	 pixels[chBlue]  = rp[chBlue];
-	 pixels[chGreen] = rp[chGreen];
-	 pixels[chAlpha] = rp[chAlpha];
+        pixels[chRed]   = rp[chRed];
+        pixels[chBlue]  = rp[chBlue];
+        pixels[chGreen] = rp[chGreen];
+        pixels[chAlpha] = rp[chAlpha];
 
-	 r++;
-       }
-       r=0;
-       c++;
-     }
-     break;
-   }
+        r++;
+      }
+      r=0;
+      c++;
+    }
+    break;
+  }
 
-   bufcount++;
-   bufcount%=image.xsize;
+  bufcount++;
+  bufcount%=image.xsize;
 }
 
 /////////////////////////////////////////////////////////
@@ -197,9 +201,9 @@ void pix_rtx :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_rtx :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "mode" , modeMess, int);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
   CPPEXTERN_MSG0(classPtr, "clear", clearMess);
-  CPPEXTERN_MSG0(classPtr, "set"  , setMess);
+  CPPEXTERN_MSG0(classPtr, "set", setMess);
 }
 void pix_rtx :: modeMess(int newmode)
 {

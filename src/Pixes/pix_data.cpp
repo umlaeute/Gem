@@ -31,15 +31,17 @@ CPPEXTERN_NEW(pix_data);
 pix_data :: pix_data() :
   m_quality(0)
 {
-    // create the new inlet for the X position
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("xPos"));
-    // create the new inlet for the Y position
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("yPos"));
+  // create the new inlet for the X position
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("xPos"));
+  // create the new inlet for the Y position
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("yPos"));
 
-    m_colorOut = outlet_new(this->x_obj, 0);
-    m_grayOut = outlet_new(this->x_obj, 0);
+  m_colorOut = outlet_new(this->x_obj, 0);
+  m_grayOut = outlet_new(this->x_obj, 0);
 
-    m_position[0] = m_position[1] = 0.f;
+  m_position[0] = m_position[1] = 0.f;
 }
 
 /////////////////////////////////////////////////////////
@@ -48,8 +50,8 @@ pix_data :: pix_data() :
 /////////////////////////////////////////////////////////
 pix_data :: ~pix_data()
 {
-	outlet_free(m_colorOut);
-	outlet_free(m_grayOut);
+  outlet_free(m_colorOut);
+  outlet_free(m_grayOut);
 }
 
 /////////////////////////////////////////////////////////
@@ -59,8 +61,9 @@ pix_data :: ~pix_data()
 void pix_data :: trigger()
 {
   // if we don't have a "right hand" image, then just return
-  if (!m_pixRight || !m_pixRight->image.data)
+  if (!m_pixRight || !m_pixRight->image.data) {
     return;
+  }
 
   t_float red, green, blue, alpha, grey;
 
@@ -71,8 +74,18 @@ void pix_data :: trigger()
   t_float fxPos = m_position[0] * maxX;
   t_float fyPos = m_position[1] * maxY;
 
-  if(fxPos<0)fxPos=0; if(fxPos>=maxX-1)fxPos=maxX-1;
-  if(fyPos<0)fyPos=0; if(fyPos>=maxY-1)fyPos=maxY-1;
+  if(fxPos<0) {
+    fxPos=0;
+  }
+  if(fxPos>=maxX-1) {
+    fxPos=maxX-1;
+  }
+  if(fyPos<0) {
+    fyPos=0;
+  }
+  if(fyPos>=maxY-1) {
+    fyPos=maxY-1;
+  }
 
   int ixPos0 = 0+static_cast<int>(fxPos);
   int iyPos0 = 0+static_cast<int>(fyPos);
@@ -82,18 +95,26 @@ void pix_data :: trigger()
     int ixPos1 = 1+static_cast<int>(fxPos);
     int iyPos1 = 1+static_cast<int>(fyPos);
 
-    if(ixPos1>=maxX-1)ixPos1=ixPos0;
-    if(iyPos1>=maxY-1)iyPos1=iyPos0;
+    if(ixPos1>=maxX-1) {
+      ixPos1=ixPos0;
+    }
+    if(iyPos1>=maxY-1) {
+      iyPos1=iyPos0;
+    }
 
     t_float xFrac = fxPos - ixPos0;
     t_float yFrac = fyPos - iyPos0;
 
     unsigned char r[2][2], g[2][2], b[2][2], a[2][2], G[2][2];
 
-    m_pixRight->image.getRGB(ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0], &a[0][0]);
-    m_pixRight->image.getRGB(ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0], &a[1][0]);
-    m_pixRight->image.getRGB(ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1], &a[0][1]);
-    m_pixRight->image.getRGB(ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1], &a[1][1]);
+    m_pixRight->image.getRGB(ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0],
+                             &a[0][0]);
+    m_pixRight->image.getRGB(ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0],
+                             &a[1][0]);
+    m_pixRight->image.getRGB(ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1],
+                             &a[0][1]);
+    m_pixRight->image.getRGB(ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1],
+                             &a[1][1]);
 
     m_pixRight->image.getGrey(ixPos0, iyPos0, &G[0][0]);
     m_pixRight->image.getGrey(ixPos1, iyPos0, &G[1][0]);
@@ -112,7 +133,7 @@ void pix_data :: trigger()
     alpha = BILIN4(a) / 255.;
     grey  = BILIN4(G) / 255.;
   }
-    break;
+  break;
   case 0: {
     unsigned char r, g, b, a, G;
     m_pixRight->image.getRGB(ixPos0, iyPos0, &r, &g, &b, &a);
@@ -125,7 +146,7 @@ void pix_data :: trigger()
     alpha = NONLIN(a) / 255.;
     grey  = NONLIN(G) / 255.;
   }
-    break;
+  break;
   }
 
   t_atom atom[4];
@@ -138,16 +159,21 @@ void pix_data :: trigger()
   outlet_list(m_colorOut, gensym("list"), 4, atom);
 }
 
-void pix_data :: xPos(t_float f) {
+void pix_data :: xPos(t_float f)
+{
   m_position[0]=FLOAT_CLAMP(f);
 }
-void pix_data :: yPos(t_float f) {
+void pix_data :: yPos(t_float f)
+{
   m_position[1]=FLOAT_CLAMP(f);
 }
-void pix_data :: qualityMess(int q) {
-  if(q>=0)
+void pix_data :: qualityMess(int q)
+{
+  if(q>=0) {
     m_quality=q;
-  else error("qualiy must be 0|1");
+  } else {
+    error("qualiy must be 0|1");
+  }
 
 }
 

@@ -60,8 +60,8 @@ REGISTER_IMAGESAVERFACTORY("QT", imageQT);
 #if defined __APPLE__
 static OSStatus
 FSPathMakeFSSpec(
-                 const UInt8 *path,
-                 FSSpec *spec)
+  const UInt8 *path,
+  FSSpec *spec)
 {
   OSStatus   result;
   FSRef      ref;
@@ -78,9 +78,9 @@ FSPathMakeFSSpec(
   result = FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, spec, NULL);
   require_noerr(result, FSGetCatalogInfo);
 
- FSGetCatalogInfo:
- FSPathMakeRef:
- BadParameter:
+FSGetCatalogInfo:
+FSPathMakeRef:
+BadParameter:
 
   return ( result );
 }
@@ -88,22 +88,22 @@ FSPathMakeFSSpec(
 #elif defined _WIN32
 static OSStatus
 FSPathMakeFSSpec(
-		 const UInt8 *path,
-		 FSSpec *spec)
+  const UInt8 *path,
+  FSSpec *spec)
 {
-    char filename[QT_MAX_FILENAMELENGTH];
-    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
-    FILE*fil=NULL;
+  char filename[QT_MAX_FILENAMELENGTH];
+  UInt8*filename8=reinterpret_cast<UInt8*>(filename);
+  FILE*fil=NULL;
 
-    snprintf(filename, QT_MAX_FILENAMELENGTH, "%s", path);
-    c2pstr(filename);
-    OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
-    if (err != noErr && err != -37){
-      error("GEM: recordQT: error %d in FSMakeFSSpec()", err);
-    } else {
-        err = noErr;
-    }
-    return err;
+  snprintf(filename, QT_MAX_FILENAMELENGTH, "%s", path);
+  c2pstr(filename);
+  OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
+  if (err != noErr && err != -37) {
+    verbose(0, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
+  } else {
+    err = noErr;
+  }
+  return err;
 }
 #endif
 
@@ -111,10 +111,11 @@ FSPathMakeFSSpec(
 // Simple memory allocation wrapper
 static void* MemAlloc(unsigned long memsize)
 {
-  if(memsize <= 0)
+  if(memsize < 1) {
     return NULL;
-  else
+  } else {
     return (malloc(memsize));
+  }
 }
 
 static unsigned char* CStringToPString(char *string)
@@ -122,8 +123,9 @@ static unsigned char* CStringToPString(char *string)
   unsigned char *newString = (unsigned char*)MemAlloc(strlen(string) + 1);
   size_t i = 0;
 
-  for(i = 0; i < strlen(string); i++)
+  for(i = 0; i < strlen(string); i++) {
     newString[i+1] = string[i];
+  }
 
   newString[0] = i;
 
@@ -131,7 +133,8 @@ static unsigned char* CStringToPString(char *string)
 }
 
 
-static void InvertGLImage( unsigned char *imageData, unsigned char * outData, long imageSize, long rowBytes )
+static void InvertGLImage( unsigned char *imageData,
+                           unsigned char * outData, long imageSize, long rowBytes )
 {
   long i, j;
   // This is not an optimized routine!
@@ -139,14 +142,16 @@ static void InvertGLImage( unsigned char *imageData, unsigned char * outData, lo
   // FIXXME use a flip function in GemPixUtils for this
 
   // Copy rows into tmp buffer one at a time, reversing their order
-  for (i = 0, j = imageSize - rowBytes; i < imageSize; i += rowBytes, j -= rowBytes) {
+  for (i = 0, j = imageSize - rowBytes; i < imageSize;
+       i += rowBytes, j -= rowBytes) {
     memcpy( &outData[j], &imageData[i], static_cast<size_t>(rowBytes) );
   }
 }
 
 static std::map<std::string, OSType> s_mime2type;
 
-static bool mime2type(const std::string&mimetype, OSType&filetype) {
+static bool mime2type(const std::string&mimetype, OSType&filetype)
+{
   static bool done=false;
   if(!done) {
     done=true;
@@ -216,7 +221,7 @@ imageQT :: imageQT(void)
   if(firsttime) {
 #ifdef _WIN32
     // Initialize QuickTime Media Layer
-    OSErr		err = noErr;
+    OSErr               err = noErr;
     if ((err = InitializeQTML(0))) {
       throw(GemException("unable to initialize QuickTime"));
     }
@@ -224,15 +229,13 @@ imageQT :: imageQT(void)
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
     }
-    verbose(1, "imageQT: QT init done");
+    verbose(1, "[GEM:imageQT] QT init done");
 #endif // WINDOWS
     firsttime=false;
   }
-  //post("imageQT");
 }
 imageQT :: ~imageQT(void)
 {
-  //post("~imageQT");
 }
 
 /////////////////////////////////////////////////////////
@@ -240,14 +243,21 @@ imageQT :: ~imageQT(void)
 //
 /////////////////////////////////////////////////////////
 
-static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&result)
+static bool QuickTimeImage2mem(GraphicsImportComponent inImporter,
+                               imageStruct&result)
 {
   Rect      r;
-  if (::GraphicsImportGetNaturalBounds(inImporter, &r)) return NULL;   //get an image size
+  if (::GraphicsImportGetNaturalBounds(inImporter, &r)) {
+    return NULL;  //get an image size
+  }
   ::OffsetRect(&r, -r.left, -r.top);
-  if (::GraphicsImportSetBoundsRect(inImporter, &r)) return NULL;
+  if (::GraphicsImportSetBoundsRect(inImporter, &r)) {
+    return NULL;
+  }
   ImageDescriptionHandle imageDescH = NULL;
-  if (::GraphicsImportGetImageDescription(inImporter, &imageDescH)) return NULL;
+  if (::GraphicsImportGetImageDescription(inImporter, &imageDescH)) {
+    return NULL;
+  }
 
   result.xsize   = (*imageDescH)->width;
   result.ysize   = (*imageDescH)->height;
@@ -276,11 +286,10 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   imageDescH = NULL;
   result.reallocate();
 
-#ifdef __DEBUG__
-  post("QuickTimeImage2mem() : allocate %d bytes", result.xsize*result.ysize*result.csize);
-#endif
+  verbose(1, "[GEM:imageQT] QuickTimeImage2mem() allocate %d bytes",
+          result.xsize*result.ysize*result.csize);
   if (result.data == NULL) {
-    error("Can't allocate memory for an image.");
+    verbose(0, "[GEM:imageQT] Can't allocate memory for an image.");
     return false;
   }
 
@@ -295,7 +304,7 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
                                  result.data,
                                  static_cast<long>(result.xsize * result.csize));
   if (err) {
-    error("Can't create QTNewWorld");
+    verbose(0, "[GEM:imageQT] Can't create QTNewWorld");
   }
 
   ::GraphicsImportSetGWorld(inImporter, gw, NULL);
@@ -306,25 +315,29 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter, imageStruct&r
   return true;
 }
 
-bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageQT :: load(std::string filename, imageStruct&result,
+                     gem::Properties&props)
 {
   OSErr            err;
   GraphicsImportComponent    importer = NULL;
 
-  ::verbose(2, "reading '%s' with QuickTime", filename.c_str());
+  ::verbose(1, "[GEM:imageQT] reading '%s' with QuickTime",
+            filename.c_str());
   std::string myfilename=filename;
   // does the file even exist?
   if (!filename.empty()) {
     FSSpec   spec;
-    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>(myfilename.c_str()), &spec);
+    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>
+                              (myfilename.c_str()), &spec);
     if (err) {
-      error("GemImageLoad: Unable to find file: %s", filename.c_str());
-      error("parID : %d", spec.parID);
+      verbose(0, "[GEM:imageQT] Unable to find file: %s", filename.c_str());
+      verbose(1, "[GEM:imageQT] parID : %d", spec.parID);
       return false;
     }
     err = ::GetGraphicsImporterForFile(&spec, &importer);
     if (err) {
-      error("GemImageLoad: Unable to import image '%s'", filename.c_str());
+      verbose(0, "[GEM:imageQT] GemImageLoad: Unable to import image '%s'",
+              filename.c_str());
       return false;
     }
   }
@@ -335,43 +348,49 @@ bool imageQT :: load(std::string filename, imageStruct&result, gem::Properties&p
   return ret;
 }
 
-static bool touch(std::string filename) {
+static bool touch(const std::string&filename)
+{
 #ifdef __APPLE__
   int fd;
   fd = open(filename.c_str(), O_CREAT | O_RDWR, 0600);
-  if (fd < 0)
+  if (fd < 0) {
     return false;
+  }
   write(fd, " ", 1);
   close(fd);
 
   return true;
 #elif defined _WIN32
   FILE*outfile=fopen(filename.c_str(), "");
-  if(NULL==outfile)
-      return false;
+  if(NULL==outfile) {
+    return false;
+  }
   fclose(outfile);
   return true;
 #endif
-    return false;
+  return false;
 }
 
-bool imageQT::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  OSErr			err=noErr;
-  ComponentResult		cErr 	= 0;
+bool imageQT::save(const imageStruct&constimage,
+                   const std::string&filename, const std::string&mimetype,
+                   const gem::Properties&props)
+{
+  OSErr                 err=noErr;
+  ComponentResult               cErr    = 0;
 
-  GWorldPtr 			img	= NULL;
-  GraphicsExportComponent 	geComp 	= NULL;
-  Rect			r;
+  GWorldPtr                     img     = NULL;
+  GraphicsExportComponent       geComp  = NULL;
+  Rect                  r;
 
-  FSSpec			spec;
+  FSSpec                        spec;
 
-  OSType			osFileType=kQTFileTypeTIFF;
+  OSType                        osFileType=kQTFileTypeTIFF;
   mime2type(mimetype, osFileType);
   std::string myfilename=filename.c_str();
 
   const UInt8*filename8=reinterpret_cast<const UInt8*>(myfilename.c_str());
 #if defined __APPLE__
-  FSRef			ref;
+  FSRef                 ref;
   err = ::FSPathMakeRef(filename8, &ref, NULL );
 
   if (err == fnfErr) {
@@ -381,28 +400,31 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   }
 
   if (err != noErr) {
-    verbose(1, "ERROR: %d in FSPathMakeRef()", err);
+    verbose(1, "[GEM:imageQT] error#%d in FSPathMakeRef()", err);
   }
 
-  err = ::FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &spec, NULL);
+  err = ::FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &spec,
+                           NULL);
 
   if (err != noErr)  {
-    verbose(1, "ERROR: %d in FSGetCatalogInfo()", err);
+    verbose(1, "[GEM:imageQT] error#%d in FSGetCatalogInfo()", err);
   }
 
-  err = FSMakeFSSpec(spec.vRefNum, spec.parID, filename8, &spec);  //this always gives an error -37 ???
+  err = FSMakeFSSpec(spec.vRefNum, spec.parID, filename8,
+                     &spec);  //this always gives an error -37 ???
 
 #elif defined _WIN32
   touch(myfilename);
   err = FSMakeFSSpec (0, 0L, filename8, &spec);
 #endif
-  if (err != noErr && err != -37){
-    verbose(1, "GEM: imageQT: error %d in FSMakeFSSpec()", err);
+  if (err != noErr && err != -37) {
+    verbose(1, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
   }
 
-  err = OpenADefaultComponent(GraphicsExporterComponentType, osFileType, &geComp);
+  err = OpenADefaultComponent(GraphicsExporterComponentType, osFileType,
+                              &geComp);
   if (err != noErr)  {
-    error("ERROR: %d in OpenADefaultComponent()", err);
+    verbose(0, "[GEM:imageQT] error#%d in OpenADefaultComponent()", err);
     return false; // FIXME:
   }
 
@@ -425,7 +447,7 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   }
 
   err = QTNewGWorldFromPtr(&img,
-                           IMAGEQT_RGBA_PIXELFORMAT,			   //k32RGBAPixelFormat,
+                           IMAGEQT_RGBA_PIXELFORMAT,                       //k32RGBAPixelFormat,
                            &r, NULL, NULL, 0,
                            (data?data:rgbaimg.data),
                            static_cast<long>(rgbaimg.xsize * rgbaimg.csize));
@@ -434,24 +456,32 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // i don't know, whether quicktime still needs the buffer...
 
   if (err != noErr) {
-    error("ERROR: %d in QTNewGWorldFromPtr()", err);
-    if(data)delete[]data;
+    verbose(0, "[GEM:imageQT] error#%d in QTNewGWorldFromPtr()", err);
+    if(data) {
+      delete[]data;
+    }
     return false; // FIXME:
   }
 
   // Set the input GWorld for the exporter
   cErr = GraphicsExportSetInputGWorld(geComp, img);
   if (cErr != noErr)  {
-    error("ERROR: %d in GraphicsExportSetInputGWorld()", cErr);
-    if(data)delete[]data;
+    verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetInputGWorld()",
+            cErr);
+    if(data) {
+      delete[]data;
+    }
     return false; // FIXME:
   }
 
   // Set the output file to our FSSpec
   cErr = GraphicsExportSetOutputFile(geComp, &spec);
   if (cErr != noErr) {
-    error("ERROR: %i in GraphicsExportSetOutputFile()", cErr);
-    if(data)delete[]data;
+    verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetOutputFile()",
+            cErr);
+    if(data) {
+      delete[]data;
+    }
     return false; // FIXME:
   }
 
@@ -471,8 +501,11 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   if(props.get("quality", d)) {
     // <0 = minqality
     // >=100 = lossless
-    if(d<0.)d=0.;
-    else if(d>100.)d=100.;
+    if(d<0.) {
+      d=0.;
+    } else if(d>100.) {
+      d=100.;
+    }
 
     CodecQ maxQ=codecLosslessQuality;
     double maxQ_d=(double)maxQ;
@@ -486,35 +519,47 @@ bool imageQT::save(const imageStruct&constimage, const std::string&filename, con
   // Export it
   cErr = GraphicsExportDoExport(geComp, NULL);
   if (cErr != noErr) {
-    error("ERROR: %i in GraphicsExportDoExport()", cErr);
-    if(data)delete[]data;
+    verbose(0, "[GEM:imageQT] ERROR: %i in GraphicsExportDoExport()", cErr);
+    if(data) {
+      delete[]data;
+    }
     return false; // FIXME:
   }
 
   // finally, close the component
-  if (geComp != NULL)
+  if (geComp != NULL) {
     CloseComponent(geComp);
+  }
 
-  if(data)delete[]data;
+  if(data) {
+    delete[]data;
+  }
   return true;
 }
 
 
-float imageQT::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+float imageQT::estimateSave(const imageStruct&img,
+                            const std::string&filename, const std::string&mimetype,
+                            const gem::Properties&props)
+{
   float result=0.;
 
-  OSType			filetype; // just a dummy
-  if(mime2type(mimetype, filetype))
+  OSType                        filetype; // just a dummy
+  if(mime2type(mimetype, filetype)) {
     result+=100.;
+  }
 
   // LATER check some properties....
-  if(gem::Properties::UNSET != props.type("quality"))
+  if(gem::Properties::UNSET != props.type("quality")) {
     result += 1.;
+  }
 
   return result;
 }
 
-void imageQT::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+void imageQT::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                   gem::Properties&props)
+{
   mimetypes.clear();
   props.clear();
 

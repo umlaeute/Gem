@@ -29,7 +29,7 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_movement
 //
@@ -46,10 +46,15 @@ pix_movement :: pix_movement(t_floatarg f)
   buffer2.setCsizeByFormat(GL_LUMINANCE);
   buffer2.reallocate();
 
-  if(f<=0.)f=0.5;
-  if(f>1.f)f=1.0;
+  if(f<=0.) {
+    f=0.5;
+  }
+  if(f>1.f) {
+    f=1.0;
+  }
   threshold = (unsigned char)(255*f);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("thresh"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("thresh"));
 }
 
 /////////////////////////////////////////////////////////
@@ -72,7 +77,9 @@ void pix_movement :: processRGBAImage(imageStruct &image)
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
-  if(doclear) buffer.setWhite();
+  if(doclear) {
+    buffer.setWhite();
+  }
 
   int pixsize = image.ysize * image.xsize;
 
@@ -82,7 +89,8 @@ void pix_movement :: processRGBAImage(imageStruct &image)
   while(pixsize--) {
     //    unsigned char grey = (unsigned char)(rp[chRed] * 0.3086f + rp[chGreen] * 0.6094f + rp[chBlue] * 0.0820f);
     //   rp[chAlpha] = 255*(fabs((unsigned char)grey-*wp)>threshold);
-    unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN+rp[chBlue]*RGB2GRAY_BLUE)>>8;
+    unsigned char grey = (rp[chRed]*RGB2GRAY_RED+rp[chGreen]*RGB2GRAY_GREEN
+                          +rp[chBlue]*RGB2GRAY_BLUE)>>8;
     rp[chAlpha] = 255*(abs(grey-*wp)>threshold);
     *wp++=(unsigned char)grey;
     rp+=4;
@@ -95,7 +103,9 @@ void pix_movement :: processYUVImage(imageStruct &image)
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
-  if(doclear)buffer.setWhite();
+  if(doclear) {
+    buffer.setWhite();
+  }
 
   int pixsize = image.ysize * image.xsize;
 
@@ -135,121 +145,127 @@ void pix_movement :: processYUVImage(imageStruct &image)
 #ifdef __VEC__
 void pix_movement :: processYUVAltivec(imageStruct &image)
 {
-    if (image.xsize*image.ysize != buffer.xsize*buffer.ysize){
-        buffer.xsize = image.xsize;
-        buffer.ysize = image.ysize;
-        buffer.reallocate(buffer.xsize*buffer.ysize*2);
-    }
-    int pixsize = image.ysize * image.xsize/8;
+  if (image.xsize*image.ysize != buffer.xsize*buffer.ysize) {
+    buffer.xsize = image.xsize;
+    buffer.ysize = image.ysize;
+    buffer.reallocate(buffer.xsize*buffer.ysize*2);
+  }
+  int pixsize = image.ysize * image.xsize/8;
 
-    union{
-        signed short  c[8];
-        vector signed short  v;
-    }shortBuffer;
+  union {
+    signed short  c[8];
+    vector signed short  v;
+  } shortBuffer;
 
-    union{
-        unsigned short  c[8];
-        vector unsigned short  v;
-    }ushortBuffer;
+  union {
+    unsigned short  c[8];
+    vector unsigned short  v;
+  } ushortBuffer;
 
-    int i;
+  int i;
 
-    vector signed short thresh;
-    shortBuffer.c[0] = threshold;
-    thresh = shortBuffer.v;
-    thresh = (vector signed short)vec_splat(thresh,0);
+  vector signed short thresh;
+  shortBuffer.c[0] = threshold;
+  thresh = shortBuffer.v;
+  thresh = (vector signed short)vec_splat(thresh,0);
 
-    vector unsigned char *rp = (vector unsigned char *) image.data; // read pointer
-    vector unsigned char *wp = (vector unsigned char *) buffer.data; // write pointer to the copy
-    vector unsigned char grey0,grey1;
-    vector unsigned char one = vec_splat_u8(1);
-    vector unsigned short Y0,Ywp0,hiImage0,loImage0;
-    vector unsigned short Y1,Ywp1,hiImage1,loImage1;
-    vector unsigned short UVwp0,UVwp1;
-    vector signed short temp0,temp1;
+  vector unsigned char *rp = (vector unsigned char *)
+                             image.data; // read pointer
+  vector unsigned char *wp = (vector unsigned char *)
+                             buffer.data; // write pointer to the copy
+  vector unsigned char grey0,grey1;
+  vector unsigned char one = vec_splat_u8(1);
+  vector unsigned short Y0,Ywp0,hiImage0,loImage0;
+  vector unsigned short Y1,Ywp1,hiImage1,loImage1;
+  vector unsigned short UVwp0,UVwp1;
+  vector signed short temp0,temp1;
 
-    ushortBuffer.c[0]=127;
-    vector unsigned short UV0= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
-    vector unsigned short UV1= (vector unsigned short)vec_splat(ushortBuffer.v, 0);
+  ushortBuffer.c[0]=127;
+  vector unsigned short UV0= (vector unsigned short)vec_splat(ushortBuffer.v,
+                             0);
+  vector unsigned short UV1= (vector unsigned short)vec_splat(ushortBuffer.v,
+                             0);
 
 #ifndef PPC970
-    //setup the cache prefetch -- A MUST!!!
-    UInt32 prefetchSize = GetPrefetchConstant( 16, 0, 256 );
-    vec_dst( rp, prefetchSize, 0 );
-    vec_dst( wp, prefetchSize, 1 );
+  //setup the cache prefetch -- A MUST!!!
+  UInt32 prefetchSize = GetPrefetchConstant( 16, 0, 256 );
+  vec_dst( rp, prefetchSize, 0 );
+  vec_dst( wp, prefetchSize, 1 );
 #endif
 
-    int j = 16;
+  int j = 16;
 
-    pixsize/=2;
-    for (i=0; i < pixsize; i++) {
+  pixsize/=2;
+  for (i=0; i < pixsize; i++) {
 # ifndef PPC970
-        //setup the cache prefetch -- A MUST!!!
-        UInt32 prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
-        vec_dst( rp, prefetchSize, 0 );
-        vec_dst( wp, prefetchSize, 1 );
-        vec_dst( rp+16, prefetchSize, 2 );
-        vec_dst( wp+16, prefetchSize, 3 );
+    //setup the cache prefetch -- A MUST!!!
+    UInt32 prefetchSize = GetPrefetchConstant( j, 0, j * 16 );
+    vec_dst( rp, prefetchSize, 0 );
+    vec_dst( wp, prefetchSize, 1 );
+    vec_dst( rp+16, prefetchSize, 2 );
+    vec_dst( wp+16, prefetchSize, 3 );
 # endif
 
-        grey0 = rp[0];
-        grey1 = rp[1];
+    grey0 = rp[0];
+    grey1 = rp[1];
 
 //      rp[Y0]=255*(abs(grey0-*wp)>thresh);
 
 //      UV0= (vector unsigned short)vec_mule(grey0,one);
-        Y0 = (vector unsigned short)vec_mulo(grey0,one);
+    Y0 = (vector unsigned short)vec_mulo(grey0,one);
 
 //      UV1= (vector unsigned short)vec_mule(grey1,one);
-        Y1 = (vector unsigned short)vec_mulo(grey1,one);
+    Y1 = (vector unsigned short)vec_mulo(grey1,one);
 
-        //wp is actually 1/2 the size of the image because it is only Y??
+    //wp is actually 1/2 the size of the image because it is only Y??
 
-        //here the full U Y V Y is stored
+    //here the full U Y V Y is stored
 //      UVwp0= (vector unsigned short)vec_mule(wp[0],one);
-        Ywp0 = (vector unsigned short)vec_mulo(wp[0],one);
+    Ywp0 = (vector unsigned short)vec_mulo(wp[0],one);
 
 //      UVwp1= (vector unsigned short)vec_mule(wp[1],one);
-        Ywp1 = (vector unsigned short)vec_mulo(wp[1],one);
+    Ywp1 = (vector unsigned short)vec_mulo(wp[1],one);
 
-        //store the current pixels as the history for next time
-        wp[0]=grey0;
-        wp++;
-        wp[0]=grey1;
-        wp++;
+    //store the current pixels as the history for next time
+    wp[0]=grey0;
+    wp++;
+    wp[0]=grey1;
+    wp++;
 
-        temp0 = vec_abs(vec_sub((vector signed short)Y0,(vector signed short)Ywp0));
-        Y0 = (vector unsigned short)vec_cmpgt(temp0,thresh);
+    temp0 = vec_abs(vec_sub((vector signed short)Y0,
+                            (vector signed short)Ywp0));
+    Y0 = (vector unsigned short)vec_cmpgt(temp0,thresh);
 
-        temp1 = vec_abs(vec_sub((vector signed short)Y1,(vector signed short)Ywp1));
-        Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
+    temp1 = vec_abs(vec_sub((vector signed short)Y1,
+                            (vector signed short)Ywp1));
+    Y1 = (vector unsigned short)vec_cmpgt(temp1,thresh);
 
-        hiImage0 = vec_mergeh(UV0,Y0);
-        loImage0 = vec_mergel(UV0,Y0);
+    hiImage0 = vec_mergeh(UV0,Y0);
+    loImage0 = vec_mergel(UV0,Y0);
 
-        hiImage1 = vec_mergeh(UV1,Y1);
-        loImage1 = vec_mergel(UV1,Y1);
+    hiImage1 = vec_mergeh(UV1,Y1);
+    loImage1 = vec_mergel(UV1,Y1);
 
-        grey0 = vec_packsu(hiImage0,loImage0);
-        grey1 = vec_packsu(hiImage1,loImage1);
+    grey0 = vec_packsu(hiImage0,loImage0);
+    grey1 = vec_packsu(hiImage1,loImage1);
 
-        rp[0]=grey0;
-        rp++;
-        rp[0]=grey1;
-        rp++;
-       // grey = rp[0];
-       // rp[Y1]=255*(abs(grey-*wp)>thresh);
-       // *wp++=grey;
+    rp[0]=grey0;
+    rp++;
+    rp[0]=grey1;
+    rp++;
+    // grey = rp[0];
+    // rp[Y1]=255*(abs(grey-*wp)>thresh);
+    // *wp++=grey;
 
-       // rp+=4;
-       // rp++;
-    }
+    // rp+=4;
+    // rp++;
+  }
 
 # ifndef PPC970
-    vec_dss(0);
-    vec_dss(1);
-    vec_dss(2);
-    vec_dss(3);
+  vec_dss(0);
+  vec_dss(1);
+  vec_dss(2);
+  vec_dss(3);
 # endif
 }
 #endif /* __VEC__ */
@@ -263,7 +279,9 @@ void pix_movement :: processGrayImage(imageStruct &image)
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
-  if(doclear) buffer.setWhite();
+  if(doclear) {
+    buffer.setWhite();
+  }
   buffer2.xsize = image.xsize;
   buffer2.ysize = image.ysize;
   buffer2.reallocate();
@@ -290,7 +308,9 @@ void pix_movement :: processGrayMMX(imageStruct &image)
   buffer.xsize = image.xsize;
   buffer.ysize = image.ysize;
   buffer.reallocate();
-  if(doclear) buffer.setWhite();
+  if(doclear) {
+    buffer.setWhite();
+  }
   buffer2.xsize = image.xsize;
   buffer2.ysize = image.ysize;
   buffer2.reallocate();
@@ -342,9 +362,11 @@ void pix_movement :: processGrayMMX(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_movement :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
                   gensym("threshold"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_movement::threshMessCallback),
                   gensym("thresh"), A_FLOAT, A_NULL);
 }
 void pix_movement :: threshMessCallback(void *data, t_float newmode)

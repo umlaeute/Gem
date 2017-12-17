@@ -8,11 +8,11 @@
 //
 // object by cyrille.henry@la-kitchen.fr
 // This primitive create a kind of cilender with paramettre :
-//		Diameter of the 1st circle (1st base of the object)
-//		Diameter of the 2nd circle
-//		X, Y, Z displacement between the 2 circle
-//		X, Y rotation of the 1st circle
-//		X, Y rotation of the 2nd circle
+//              Diameter of the 1st circle (1st base of the object)
+//              Diameter of the 2nd circle
+//              X, Y, Z displacement between the 2 circle
+//              X, Y rotation of the 1st circle
+//              X, Y rotation of the 2nd circle
 //
 // Implementation file
 //
@@ -32,7 +32,7 @@
 
 const float tube::TWO_PI = 8.f * atan(1.);
 
-/* only gcc allows to allocate arrays of non-constant length, like:
+/* only gcc allows one to allocate arrays of non-constant length, like:
  *   int i;
  *   float array[i];
  * other compilers will need to know the array-size at runtime!
@@ -41,7 +41,8 @@ const float tube::TWO_PI = 8.f * atan(1.);
 # define TUBE_NUMPTS 80
 #endif
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg,
+                             A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -51,7 +52,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(tube, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOA
 // Constructor
 //
 /////////////////////////////////////////////////////////
-tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg order_in)
+tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height,
+             t_floatarg order_in)
   : GemShape(size),
     m_cos(NULL), m_sin(NULL),
     m_size2(size2), m_inlet2(NULL),
@@ -64,10 +66,16 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
     cos_rotY2(1.0),   sin_rotY2(0.0), m_inletrotY2(NULL),
     order(80)
 {
-  if (m_size2 == 0.f) m_size2 = 1.f;
-  if (m_size == 0.f)  m_size = 1.f;
+  if (m_size2 == 0.f) {
+    m_size2 = 1.f;
+  }
+  if (m_size == 0.f) {
+    m_size = 1.f;
+  }
 
-  if(order_in<1.f)order_in=80.f;
+  if(order_in<1.f) {
+    order_in=80.f;
+  }
   order=static_cast<int>(order_in)-1; // make sure they are different
   slicesMess(static_cast<int>(order_in));
 
@@ -95,7 +103,8 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height, t_floatarg or
 // Destructor
 //
 /////////////////////////////////////////////////////////
-tube :: ~tube(void){
+tube :: ~tube(void)
+{
   inlet_free(m_inlet2);
   inlet_free(m_inlethigh);
   inlet_free(m_inletTX);
@@ -110,7 +119,8 @@ tube :: ~tube(void){
 // renderShape
 //
 /////////////////////////////////////////////////////////
-void tube :: renderShape(GemState *state){
+void tube :: renderShape(GemState *state)
+{
 #ifdef __GNUC__
   GLfloat vectors1[order+3][3];
   GLfloat vectors2[order+3][3];
@@ -123,7 +133,9 @@ void tube :: renderShape(GemState *state){
 
   int n;
 
-  if(m_drawType==GL_DEFAULT_GEM)m_drawType=GL_TRIANGLE_STRIP;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_TRIANGLE_STRIP;
+  }
 
 
   for (n = 0; n < order ; n++)    {
@@ -137,12 +149,16 @@ void tube :: renderShape(GemState *state){
     vectors2[n][2] = 0.0;
 
     // rotation des vecteurs en x
-    vectors_tmp    = cos_rotX1 * vectors1[n][1]; // - sin(m_rotX1) * vectors1[n][2];
-    vectors1[n][2] = sin_rotX1 * vectors1[n][1]; // + cos(m_rotX1) * vectors1[n][2];
+    vectors_tmp    = cos_rotX1 *
+                     vectors1[n][1]; // - sin(m_rotX1) * vectors1[n][2];
+    vectors1[n][2] = sin_rotX1 *
+                     vectors1[n][1]; // + cos(m_rotX1) * vectors1[n][2];
     vectors1[n][1] = vectors_tmp;
 
-    vectors_tmp    = cos_rotX2 * vectors2[n][1]; // - sin(m_rotX2) * vectors2[n][2];
-    vectors2[n][2] = sin_rotX2 * vectors2[n][1]; // + cos(m_rotX2) * vectors2[n][2];
+    vectors_tmp    = cos_rotX2 *
+                     vectors2[n][1]; // - sin(m_rotX2) * vectors2[n][2];
+    vectors2[n][2] = sin_rotX2 *
+                     vectors2[n][1]; // + cos(m_rotX2) * vectors2[n][2];
     vectors2[n][1] = vectors_tmp;
 
     // rotation des vecteurs en y
@@ -189,13 +205,13 @@ void tube :: renderShape(GemState *state){
     GLfloat ysize0 = 0.0;
     GLfloat ysize1 = 1.0;
 
-    if (GemShape::m_texNum>=3){
+    if (GemShape::m_texNum>=3) {
       xsize =  GemShape::m_texCoords[1].s;
       ysize0 = GemShape::m_texCoords[2].t;
       ysize1 = GemShape::m_texCoords[1].t;
     }
 
-    for (n = 1; n < order + 2 ; n++)	{
+    for (n = 1; n < order + 2 ; n++)    {
       Matrix::generateNormal(vectors1[n-1], vectors2[n], vectors1[n+1], normal);
       glNormal3fv(normal);
       glTexCoord2f( 1.*xsize*(n-1)/order, ysize0 );
@@ -222,40 +238,48 @@ void tube :: renderShape(GemState *state){
   glLineWidth(1.0);
 }
 
-void tube :: sizeMess2(float size2){
+void tube :: sizeMess2(float size2)
+{
   m_size2 = size2;
   setModified();
 }
 
-void tube :: highMess(float high){
+void tube :: highMess(float high)
+{
   m_high = high;
   setModified();
 }
 
-void tube :: TXMess(float TX){
+void tube :: TXMess(float TX)
+{
   m_TX = TX;
   setModified();
 }
-void tube :: TYMess(float TY){
+void tube :: TYMess(float TY)
+{
   m_TY = TY;
   setModified();
 }
-void tube :: rotX1Mess(float rotX1){
+void tube :: rotX1Mess(float rotX1)
+{
   cos_rotX1 = cos(rotX1/360 * TWO_PI);
   sin_rotX1 = sin(rotX1/360 * TWO_PI);
   setModified();
 }
-void tube :: rotX2Mess(float rotX2){
+void tube :: rotX2Mess(float rotX2)
+{
   cos_rotX2 = cos(rotX2/360 * TWO_PI);
   sin_rotX2 = sin(rotX2/360 * TWO_PI);
   setModified();
 }
-void tube :: rotY1Mess(float rotY1){
+void tube :: rotY1Mess(float rotY1)
+{
   cos_rotY1 = cos(rotY1/360 * TWO_PI );
   sin_rotY1 = sin(rotY1/360 * TWO_PI);
   setModified();
 }
-void tube :: rotY2Mess(float rotY2){
+void tube :: rotY2Mess(float rotY2)
+{
   cos_rotY2 = cos(rotY2/360 * TWO_PI);
   sin_rotY2 = sin(rotY2/360 * TWO_PI);
   setModified();
@@ -264,22 +288,31 @@ void tube :: rotY2Mess(float rotY2){
 // slicesMess
 //
 /////////////////////////////////////////////////////////
-void tube :: slicesMess(int slices){
+void tube :: slicesMess(int slices)
+{
 #ifndef __GNUC__
-  if(slices>TUBE_NUMPTS){
+  if(slices>TUBE_NUMPTS) {
     error("number of slices (%d) clamped to %d", slices, TUBE_NUMPTS);
     slices=TUBE_NUMPTS;
   }
 #endif
 
-  if(slices==order)return;
+  if(slices==order) {
+    return;
+  }
 
   order=slices;
 
-  if (order < 1) order = 1;
+  if (order < 1) {
+    order = 1;
+  }
 
-  if(m_cos)delete[]m_cos;
-  if(m_sin)delete[]m_sin;
+  if(m_cos) {
+    delete[]m_cos;
+  }
+  if(m_sin) {
+    delete[]m_sin;
+  }
 
 #ifndef __GNUC__
   m_cos = new GLfloat[TUBE_NUMPTS];
@@ -289,11 +322,10 @@ void tube :: slicesMess(int slices){
   m_sin = new GLfloat[order];
 #endif
 
-  for(int i=0; i<order; i++)
-    {
-      m_cos[i] = cos(TWO_PI * 1. * i / order);
-      m_sin[i] = sin(TWO_PI * 1. * i / order);
-    }
+  for(int i=0; i<order; i++) {
+    m_cos[i] = cos(TWO_PI * 1. * i / order);
+    m_sin[i] = sin(TWO_PI * 1. * i / order);
+  }
 
   setModified();
 }
@@ -302,7 +334,8 @@ void tube :: slicesMess(int slices){
 // static member function
 //
 /////////////////////////////////////////////////////////
-void tube :: obj_setupCallback(t_class *classPtr){
+void tube :: obj_setupCallback(t_class *classPtr)
+{
   CPPEXTERN_MSG1(classPtr, "size2", sizeMess2, float);
   CPPEXTERN_MSG1(classPtr, "high", highMess, float);
 

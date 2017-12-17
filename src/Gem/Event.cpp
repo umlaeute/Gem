@@ -24,11 +24,11 @@
 // The callbacks
 //
 /////////////////////////////////////////////////////////
-struct CallbackList{
-    CallbackList() : data(NULL), func(NULL), next(NULL) {}
-    void *data;
-    void *func;
-    CallbackList *next;
+struct CallbackList {
+  CallbackList() : data(NULL), func(NULL), next(NULL) {}
+  void *data;
+  void *func;
+  CallbackList *next;
 };
 
 static CallbackList *s_motionList = NULL;
@@ -43,46 +43,41 @@ static CallbackList *s_resizeList = NULL;
 /////////////////////////////////////////////////////////
 GEM_EXTERN void setMotionCallback(MOTION_CB callback, void *data)
 {
-    CallbackList *newCallback = new CallbackList;
-    newCallback->data = data;
-    newCallback->func = (void *)callback;
+  CallbackList *newCallback = new CallbackList;
+  newCallback->data = data;
+  newCallback->func = (void *)callback;
 
-    if (!s_motionList)
-        s_motionList = newCallback;
-    else
-    {
-        CallbackList *theList = s_motionList;
-        while(theList->next)
-            theList = theList->next;
-        theList->next = newCallback;
+  if (!s_motionList) {
+    s_motionList = newCallback;
+  } else {
+    CallbackList *theList = s_motionList;
+    while(theList->next) {
+      theList = theList->next;
     }
+    theList->next = newCallback;
+  }
 }
 GEM_EXTERN void removeMotionCallback(MOTION_CB callback, void *data)
 {
-    CallbackList *theList = s_motionList;
-    if (!theList)
+  CallbackList *theList = s_motionList;
+  if (!theList) {
+    return;
+  } else if (theList->func == (void *)callback &&
+             theList->data == data) {
+    s_motionList = theList->next;
+    delete theList;
+  } else {
+    while(theList->next) {
+      if (theList->next->func == (void *)callback &&
+          theList->next->data == data) {
+        CallbackList *holder = theList->next;
+        theList->next = holder->next;
+        delete holder;
         return;
-    else if (theList->func == (void *)callback &&
-             theList->data == data)
-    {
-        s_motionList = theList->next;
-        delete theList;
+      }
+      theList = theList->next;
     }
-    else
-    {
-        while(theList->next)
-        {
-            if (theList->next->func == (void *)callback &&
-                theList->next->data == data)
-            {
-                CallbackList *holder = theList->next;
-                theList->next = holder->next;
-                delete holder;
-                return;
-            }
-            theList = theList->next;
-        }
-    }
+  }
 }
 /////////////////////////////////////////////////////////
 // Button callbacks
@@ -90,47 +85,42 @@ GEM_EXTERN void removeMotionCallback(MOTION_CB callback, void *data)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void setButtonCallback(BUTTON_CB callback, void *data)
 {
-    CallbackList *newCallback = new CallbackList;
+  CallbackList *newCallback = new CallbackList;
 
-    newCallback->data = data;
-    newCallback->func = (void *)callback;
+  newCallback->data = data;
+  newCallback->func = (void *)callback;
 
-    if (!s_buttonList)
-        s_buttonList = newCallback;
-    else
-    {
-        CallbackList *theList = s_buttonList;
-        while(theList->next)
-            theList = theList->next;
-        theList->next = newCallback;
+  if (!s_buttonList) {
+    s_buttonList = newCallback;
+  } else {
+    CallbackList *theList = s_buttonList;
+    while(theList->next) {
+      theList = theList->next;
     }
+    theList->next = newCallback;
+  }
 }
 GEM_EXTERN void removeButtonCallback(BUTTON_CB callback, void *data)
 {
-    CallbackList *theList = s_buttonList;
-    if (!theList)
+  CallbackList *theList = s_buttonList;
+  if (!theList) {
+    return;
+  } else if (theList->func == (void *)callback &&
+             theList->data == data) {
+    s_buttonList = theList->next;
+    delete theList;
+  } else {
+    while(theList->next) {
+      if (theList->next->func == (void *)callback &&
+          theList->next->data == data) {
+        CallbackList *holder = theList->next;
+        theList->next = holder->next;
+        delete holder;
         return;
-    else if (theList->func == (void *)callback &&
-             theList->data == data)
-    {
-        s_buttonList = theList->next;
-        delete theList;
+      }
+      theList = theList->next;
     }
-    else
-    {
-        while(theList->next)
-        {
-            if (theList->next->func == (void *)callback &&
-                theList->next->data == data)
-            {
-                CallbackList *holder = theList->next;
-                theList->next = holder->next;
-                delete holder;
-                return;
-            }
-            theList = theList->next;
-        }
-    }
+  }
 }
 /////////////////////////////////////////////////////////
 // Wheel callbacks
@@ -138,46 +128,41 @@ GEM_EXTERN void removeButtonCallback(BUTTON_CB callback, void *data)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void setWheelCallback(WHEEL_CB callback, void *data)
 {
-    CallbackList *newCallback = new CallbackList;
-    newCallback->data = data;
-    newCallback->func = (void *)callback;
+  CallbackList *newCallback = new CallbackList;
+  newCallback->data = data;
+  newCallback->func = (void *)callback;
 
-    if (!s_wheelList)
-        s_wheelList = newCallback;
-    else
-    {
-        CallbackList *theList = s_wheelList;
-        while(theList->next)
-            theList = theList->next;
-        theList->next = newCallback;
+  if (!s_wheelList) {
+    s_wheelList = newCallback;
+  } else {
+    CallbackList *theList = s_wheelList;
+    while(theList->next) {
+      theList = theList->next;
     }
+    theList->next = newCallback;
+  }
 }
 GEM_EXTERN void removeWheelCallback(WHEEL_CB callback, void *data)
 {
-    CallbackList *theList = s_wheelList;
-    if (!theList)
+  CallbackList *theList = s_wheelList;
+  if (!theList) {
+    return;
+  } else if (theList->func == (void *)callback &&
+             theList->data == data) {
+    s_wheelList = theList->next;
+    delete theList;
+  } else {
+    while(theList->next) {
+      if (theList->next->func == (void *)callback &&
+          theList->next->data == data) {
+        CallbackList *holder = theList->next;
+        theList->next = holder->next;
+        delete holder;
         return;
-    else if (theList->func == (void *)callback &&
-             theList->data == data)
-    {
-        s_wheelList = theList->next;
-        delete theList;
+      }
+      theList = theList->next;
     }
-    else
-    {
-        while(theList->next)
-        {
-            if (theList->next->func == (void *)callback &&
-                theList->next->data == data)
-            {
-                CallbackList *holder = theList->next;
-                theList->next = holder->next;
-                delete holder;
-                return;
-            }
-            theList = theList->next;
-        }
-    }
+  }
 }
 /////////////////////////////////////////////////////////
 // Keyboard callbacks
@@ -185,46 +170,41 @@ GEM_EXTERN void removeWheelCallback(WHEEL_CB callback, void *data)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void setKeyboardCallback(KEYBOARD_CB callback, void *data)
 {
-    CallbackList *newCallback = new CallbackList;
-    newCallback->data = data;
-    newCallback->func = (void *)callback;
+  CallbackList *newCallback = new CallbackList;
+  newCallback->data = data;
+  newCallback->func = (void *)callback;
 
-    if (!s_keyboardList)
-        s_keyboardList = newCallback;
-    else
-    {
-        CallbackList *theList = s_keyboardList;
-        while(theList->next)
-            theList = theList->next;
-        theList->next = newCallback;
+  if (!s_keyboardList) {
+    s_keyboardList = newCallback;
+  } else {
+    CallbackList *theList = s_keyboardList;
+    while(theList->next) {
+      theList = theList->next;
     }
+    theList->next = newCallback;
+  }
 }
 GEM_EXTERN void removeKeyboardCallback(KEYBOARD_CB callback, void *data)
 {
-    CallbackList *theList = s_keyboardList;
-    if (!theList)
+  CallbackList *theList = s_keyboardList;
+  if (!theList) {
+    return;
+  } else if (theList->func == (void *)callback &&
+             theList->data == data) {
+    s_keyboardList = theList->next;
+    delete theList;
+  } else {
+    while(theList->next) {
+      if (theList->next->func == (void *)callback &&
+          theList->next->data == data) {
+        CallbackList *holder = theList->next;
+        theList->next = holder->next;
+        delete holder;
         return;
-    else if (theList->func == (void *)callback &&
-             theList->data == data)
-    {
-        s_keyboardList = theList->next;
-        delete theList;
+      }
+      theList = theList->next;
     }
-    else
-    {
-        while(theList->next)
-        {
-            if (theList->next->func == (void *)callback &&
-                theList->next->data == data)
-            {
-                CallbackList *holder = theList->next;
-                theList->next = holder->next;
-                delete holder;
-                return;
-            }
-            theList = theList->next;
-        }
-    }
+  }
 }
 /////////////////////////////////////////////////////////
 // Resize callbacks
@@ -232,46 +212,41 @@ GEM_EXTERN void removeKeyboardCallback(KEYBOARD_CB callback, void *data)
 /////////////////////////////////////////////////////////
 GEM_EXTERN void setResizeCallback(RESIZE_CB callback, void *data)
 {
-    CallbackList *newCallback = new CallbackList;
-    newCallback->data = data;
-    newCallback->func = (void *)callback;
+  CallbackList *newCallback = new CallbackList;
+  newCallback->data = data;
+  newCallback->func = (void *)callback;
 
-    if (!s_resizeList)
-        s_resizeList = newCallback;
-    else
-    {
-        CallbackList *theList = s_resizeList;
-        while(theList->next)
-            theList = theList->next;
-        theList->next = newCallback;
+  if (!s_resizeList) {
+    s_resizeList = newCallback;
+  } else {
+    CallbackList *theList = s_resizeList;
+    while(theList->next) {
+      theList = theList->next;
     }
+    theList->next = newCallback;
+  }
 }
 GEM_EXTERN void removeResizeCallback(RESIZE_CB callback, void *data)
 {
-    CallbackList *theList = s_resizeList;
-    if (!theList)
+  CallbackList *theList = s_resizeList;
+  if (!theList) {
+    return;
+  } else if (theList->func == (void *)callback &&
+             theList->data == data) {
+    s_resizeList = theList->next;
+    delete theList;
+  } else {
+    while(theList->next) {
+      if (theList->next->func == (void *)callback &&
+          theList->next->data == data) {
+        CallbackList *holder = theList->next;
+        theList->next = holder->next;
+        delete holder;
         return;
-    else if (theList->func == (void *)callback &&
-             theList->data == data)
-    {
-        s_resizeList = theList->next;
-        delete theList;
+      }
+      theList = theList->next;
     }
-    else
-    {
-        while(theList->next)
-        {
-            if (theList->next->func == (void *)callback &&
-                theList->next->data == data)
-            {
-                CallbackList *holder = theList->next;
-                theList->next = holder->next;
-                delete holder;
-                return;
-            }
-            theList = theList->next;
-        }
-    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -299,7 +274,7 @@ typedef struct _event_queue_item {
   int which;
 } gem_event_queue_item_t;
 
-typedef struct _gem_event_queue_t{
+typedef struct _gem_event_queue_t {
   gem_event_queue_item_t*first;
   gem_event_queue_item_t*last;
   t_clock *clock;
@@ -308,7 +283,8 @@ typedef struct _gem_event_queue_t{
 
 gem_event_queue_t*event_queue = NULL;
 
-static gem_event_queue_item_t* createEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which)
+static gem_event_queue_item_t* createEvent(gem_event_t type, char*string,
+    int x, int y, int state, int axis, int value, int which)
 {
   gem_event_queue_item_t*ret=new gem_event_queue_item_t;
   ret->type=type;
@@ -323,7 +299,8 @@ static gem_event_queue_item_t* createEvent(gem_event_t type, char*string, int x,
 
   return ret;
 }
-static void deleteEvent( gem_event_queue_item_t* event) {
+static void deleteEvent( gem_event_queue_item_t* event)
+{
   if(event == event_queue->first) {
     event_queue->first=event->next;
   }
@@ -347,14 +324,17 @@ static void deleteEvent( gem_event_queue_item_t* event) {
 
 static void eventClock(void *x);
 
-static void addEvent(gem_event_t type, char*string, int x, int y, int state, int axis, int value, int which) {
+static void addEvent(gem_event_t type, char*string, int x, int y,
+                     int state, int axis, int value, int which)
+{
   if (NULL==event_queue) {
     event_queue=new gem_event_queue_t;
     event_queue->first=NULL;
     event_queue->last =NULL;
     event_queue->clock=clock_new(NULL, reinterpret_cast<t_method>(eventClock));
   }
-  gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis, value, which);
+  gem_event_queue_item_t*item=createEvent(type, string, x, y, state, axis,
+                                          value, which);
   if(NULL==event_queue->first) {
     event_queue->first=item;
   }
@@ -366,7 +346,8 @@ static void addEvent(gem_event_t type, char*string, int x, int y, int state, int
   clock_delay(event_queue->clock, 0);
 }
 
-static void dequeueEvents(void) {
+static void dequeueEvents(void)
+{
   CallbackList *theList=NULL;
   if (NULL==event_queue) {
     error("dequeue NULL queue");
@@ -382,50 +363,47 @@ static void dequeueEvents(void) {
     switch(events->type) {
     case( MOTION):
       theList = s_motionList;
-      while(theList)
-        {
-          MOTION_CB callback = (MOTION_CB)theList->func;
-          (*callback)(events->x, events->y, theList->data);
-          theList = theList->next;
-        }
+      while(theList) {
+        MOTION_CB callback = (MOTION_CB)theList->func;
+        (*callback)(events->x, events->y, theList->data);
+        theList = theList->next;
+      }
       break;
     case( BUTTON):
       theList = s_buttonList;
-      while(theList)
-        {
-          BUTTON_CB callback = (BUTTON_CB)theList->func;
-          (*callback)(events->which, events->state, events->x, events->y, theList->data);
-          theList = theList->next;
-        }
+      while(theList) {
+        BUTTON_CB callback = (BUTTON_CB)theList->func;
+        (*callback)(events->which, events->state, events->x, events->y,
+                    theList->data);
+        theList = theList->next;
+      }
       break;
     case( WHEEL):
       theList = s_wheelList;
-      while(theList)
-        {
-          WHEEL_CB callback = (WHEEL_CB)theList->func;
-          (*callback)(events->axis, events->value, theList->data);
-          theList = theList->next;
-        }
+      while(theList) {
+        WHEEL_CB callback = (WHEEL_CB)theList->func;
+        (*callback)(events->axis, events->value, theList->data);
+        theList = theList->next;
+      }
       break;
     case( KEYBOARD):
       theList = s_keyboardList;
-      while(theList)
-        {
-          KEYBOARD_CB callback = (KEYBOARD_CB)theList->func;
-          (*callback)(events->string, events->value, events->state, theList->data);
-          theList = theList->next;
-        }
+      while(theList) {
+        KEYBOARD_CB callback = (KEYBOARD_CB)theList->func;
+        (*callback)(events->string, events->value, events->state, theList->data);
+        theList = theList->next;
+      }
       break;
     case( RESIZE):
       theList = s_resizeList;
-      while(theList)
-        {
-          RESIZE_CB callback = (RESIZE_CB)theList->func;
-          (*callback)(events->x, events->y, theList->data);
-          theList = theList->next;
-        }
+      while(theList) {
+        RESIZE_CB callback = (RESIZE_CB)theList->func;
+        (*callback)(events->x, events->y, theList->data);
+        theList = theList->next;
+      }
       break;
-	default: break;
+    default:
+      break;
     }
 
     gem_event_queue_item_t*old = events;

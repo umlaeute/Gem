@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Starting point for a particle system
+        Starting point for a particle system
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,45 +21,45 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_head
+        part_head
 
-	Starting point for a particle system
+        Starting point for a particle system
 
 DESCRIPTION
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_head : public partlib_base
 {
-    CPPEXTERN_HEADER(part_head, partlib_base);
+  CPPEXTERN_HEADER(part_head, partlib_base);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	part_head(t_floatarg priority);
+  //////////
+  // Constructor
+  part_head(t_floatarg priority);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~part_head(void);
+  //////////
+  // Destructor
+  virtual ~part_head(void);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    	//////////
-    	// The speed of the particle system
-    	void	    	speedMess(float speed);
-
-
-      //////////
-      // The particle group
-      int				m_particleGroup;
+  //////////
+  // The speed of the particle system
+  void            speedMess(float speed);
 
 
-    	//////////
-    	// The speed of the object
-      float	    	m_speed;
+  //////////
+  // The particle group
+  int                               m_particleGroup;
+
+
+  //////////
+  // The speed of the object
+  float             m_speed;
 };
 
-#endif	// for header file
+#endif  // for header file

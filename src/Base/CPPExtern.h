@@ -24,8 +24,9 @@ LOG
 class CPPExtern;
 
 /* forward declaration of a generic exception handler for GemExceptions */
-namespace gem {
-  GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
+namespace gem
+{
+GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
 };
 
 /*-----------------------------------------------------------------
@@ -43,15 +44,14 @@ DESCRIPTION
     the vtable.
 
 -----------------------------------------------------------------*/
-struct GEM_EXTERN Obj_header
-{
-    	//////////
-    	// The obligatory object header
-    	t_object    	    pd_obj;
+struct GEM_EXTERN Obj_header {
+  //////////
+  // The obligatory object header
+  t_object            pd_obj;
 
-    	//////////
-    	// Our data structure
-        CPPExtern           *data;
+  //////////
+  // Our data structure
+  CPPExtern           *data;
 
   // This has a dummy arg so that NT won't complain
   void *operator new(size_t, void *location, void *dummy);
@@ -89,69 +89,74 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN CPPExtern
 {
-    public:
+public:
 
-        //////////
-        // Constructor
-    	CPPExtern(void);
+  //////////
+  // Constructor
+  CPPExtern(void);
 
-        //////////
-        // The Pd header
-        t_object          *x_obj;
+  //////////
+  // The Pd header
+  t_object          *x_obj;
 
-    	//////////
-    	// Destructor
-    	virtual ~CPPExtern(void) = 0;
+  //////////
+  // Destructor
+  virtual ~CPPExtern(void) = 0;
 
-        //////////
-        // Get the object's canvas
-        const t_canvas            *getCanvas(void) const       { return(m_canvas); }
+  //////////
+  // Get the object's canvas
+  const t_canvas            *getCanvas(void) const
+  {
+    return(m_canvas);
+  }
 
-        //////////
-        // This is a holder - don't touch it
-        static t_object     *m_holder;
+  //////////
+  // This is a holder - don't touch it
+  static t_object     *m_holder;
 
-        //////////
-        // my name
-        static char          *m_holdname;
-        t_symbol             *m_objectname;
+  //////////
+  // my name
+  static char          *m_holdname;
+  t_symbol             *m_objectname;
 
-    protected:
+protected:
 
-    	//////////
-    	// Creation callback
-    	static void 	real_obj_setupCallback(t_class *) {}
+  //////////
+  // Creation callback
+  static void     real_obj_setupCallback(t_class *) {}
 
-	///////////
-	// called directly before the destructor
-	// normally you should not override this (use the dtor!)
-	// if you do override this, make sure that you call the parent as well
-	virtual void beforeDeletion();
+  ///////////
+  // called directly before the destructor
+  // normally you should not override this (use the dtor!)
+  // if you do override this, make sure that you call the parent as well
+  virtual void beforeDeletion();
 
-    private:
+private:
 
-      //////////
-      // The canvas that the object is in
-      t_canvas            *m_canvas;
+  //////////
+  // The canvas that the object is in
+  t_canvas            *m_canvas;
 
- public:
-      // these call pd's print-functions, and eventually prepend the object's name
-      void            startpost(const char*format, ...) const;
-      void            post(const char*format, ...) const;
-      void            endpost(void) const;
-      void            verbose(const int level, const char*format, ...) const;
-      void            error(const char*format, ...) const; /* internally uses pd_error() */
+public:
+  // these call pd's print-functions, and eventually prepend the object's name
+  void            startpost(const char*format, ...) const;
+  void            post(const char*format, ...) const;
+  void            endpost(void) const;
+  void            verbose(const int level, const char*format, ...) const;
+  void            error(const char*format,
+                        ...) const; /* internally uses pd_error() */
 
-      // searches for a file based on the parent abstraction's path
-      // wraps open_via_path() and canvas_makefilename()
-      // the full filename is returned
-      // if the file does not exist, it is constructed
-      std::string findFile(const std::string filename, const std::string ext) const;
-      std::string findFile(const std::string filename) const;
+  // searches for a file based on the parent abstraction's path
+  // wraps open_via_path() and canvas_makefilename()
+  // the full filename is returned
+  // if the file does not exist, it is constructed
+  std::string findFile(const std::string&filename,
+                       const std::string&ext) const;
+  std::string findFile(const std::string&filename) const;
 
- private:
-	mutable bool m_endpost; /* internal state for startpost/post/endpost */
-	static bool checkGemVersion(const int major, const int minor);
+private:
+  mutable bool m_endpost; /* internal state for startpost/post/endpost */
+  static bool checkGemVersion(const int major, const int minor);
   CPPExtern(const CPPExtern&);
   virtual CPPExtern&operator=(const CPPExtern&);
 };
@@ -160,17 +165,17 @@ class GEM_EXTERN CPPExtern
 // This should be used in the header
 ////////////////////////////////////////
 
-#define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)    	    	\
-public:     	    	    	    	    	    	    	\
-static void obj_freeCallback(void *data)    	    	    	\
-{ CPPExtern *mydata = ((Obj_header *)data)->data;		\
-  GetMyClass(data)->beforeDeletion();				\
-  delete mydata;						\
-  ((Obj_header *)data)->Obj_header::~Obj_header(); }   	    	\
-static void real_obj_setupCallback(t_class *classPtr)  	    	\
-{ PARENT_CLASS::real_obj_setupCallback(classPtr);    	    	\
-  NEW_CLASS::obj_setupCallback(classPtr); }  	    	    	\
-private:    	    	    	    	    	    	    	\
+#define CPPEXTERN_HEADER(NEW_CLASS, PARENT_CLASS)               \
+public:                                                         \
+static void obj_freeCallback(void *data)                        \
+{ CPPExtern *mydata = ((Obj_header *)data)->data;               \
+  GetMyClass(data)->beforeDeletion();                           \
+  delete mydata;                                                \
+  ((Obj_header *)data)->Obj_header::~Obj_header(); }            \
+static void real_obj_setupCallback(t_class *classPtr)           \
+{ PARENT_CLASS::real_obj_setupCallback(classPtr);               \
+  NEW_CLASS::obj_setupCallback(classPtr); }                     \
+private:                                                        \
 static inline NEW_CLASS *GetMyClass(void *data) {return((NEW_CLASS *)((Obj_header *)data)->data);} \
 static void obj_setupCallback(t_class *classPtr);
 
@@ -182,7 +187,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // NO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW(NEW_CLASS)    	    	     \
+#define CPPEXTERN_NEW(NEW_CLASS)                     \
   REAL_NEW__CLASS(NEW_CLASS);                    \
   static void* create_ ## NEW_CLASS (void)       \
     REAL_NEW__CREATE1(NEW_CLASS)                 \
@@ -207,7 +212,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // GIMME ARGUMENT
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)  	    	    	\
+#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)                     \
   REAL_NEW__CLASS(NEW_CLASS);                    \
   static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) \
     REAL_NEW__CREATE1(NEW_CLASS)                 \
@@ -220,7 +225,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // TWO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)	\
+#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)     \
   REAL_NEW__CLASS(NEW_CLASS);                     \
   static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2) \
     REAL_NEW__CREATE1(NEW_CLASS)           \
@@ -233,7 +238,7 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // THREE ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE)	\
+#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE) \
   REAL_NEW__CLASS(NEW_CLASS);                        \
   static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3)  \
     REAL_NEW__CREATE1(NEW_CLASS)                    \
@@ -338,11 +343,11 @@ static void obj_setupCallback(t_class *classPtr);
 # else
 #  define POST_AUTOREGISTER(NEW_CLASS)
 # endif
-# define AUTO_REGISTER_CLASS(NEW_CLASS)			\
-  class NEW_CLASS ## _cppclass {					\
-  public:								\
+# define AUTO_REGISTER_CLASS(NEW_CLASS)                 \
+  class NEW_CLASS ## _cppclass {                                        \
+  public:                                                               \
   NEW_CLASS ## _cppclass(void) {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _setup(); } \
-};									\
+};                                                                      \
   static NEW_CLASS ## _cppclass NEW_CLASS ## _instance
 #endif
 
@@ -358,7 +363,7 @@ static void obj_setupCallback(t_class *classPtr);
 #  define SET_HELPSYMBOL(NEW_CLASS)                                     \
   class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE #NEW_CLASS))
 # else
-#  define SET_HELPSYMBOL(NEW_CLASS)				\
+#  define SET_HELPSYMBOL(NEW_CLASS)                             \
     class_sethelpsymbol(NEW_CLASS ## _class, gensym(HELPSYMBOL_BASE HELPSYMBOL))
 # endif
 
@@ -376,4 +381,4 @@ static void obj_setupCallback(t_class *classPtr);
 // macros for boilerplate code to object messages
 #include "RTE/MessageCallbacks.h"
 
-#endif	// for header file
+#endif  // for header file

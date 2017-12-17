@@ -29,33 +29,33 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN gemkeyboard : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemkeyboard, CPPExtern);
+  CPPEXTERN_HEADER(gemkeyboard, CPPExtern);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-        gemkeyboard();
+  //////////
+  // Constructor
+  gemkeyboard();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemkeyboard();
+  //////////
+  // Destructor
+  virtual ~gemkeyboard();
 
-        //////////
-        // keyboard-button
-        void            KeyBoardPressed(int val, int state);
+  //////////
+  // keyboard-button
+  void            KeyBoardPressed(int val, int state);
 
-        //////////
-        // The key-val outlet
-        t_outlet    	*m_outKeyVal;
+  //////////
+  // The key-val outlet
+  t_outlet        *m_outKeyVal;
 
-    private:
+private:
 
-        //////////
-        // Static member functions
-        static void     keyboardCallback(char *w, int x, int y, void *data);
+  //////////
+  // Static member functions
+  static void     keyboardCallback(char *w, int x, int y, void *data);
 };
 
 #endif  // for header file

@@ -35,12 +35,6 @@ libplugins_la_SOURCES= \
         video.h
 
 libplugins_la_SOURCES+= \
-        imageBase.cpp \
-        imageBase.h \
-        filmBase.cpp \
-        filmBase.h \
-        recordBase.cpp \
-        recordBase.h \
         videoBase.cpp \
         videoBase.h
 

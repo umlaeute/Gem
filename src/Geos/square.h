@@ -32,24 +32,24 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN square : public GemShape
 {
-    CPPEXTERN_HEADER(square, GemShape);
+  CPPEXTERN_HEADER(square, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	square(t_floatarg size);
+  //////////
+  // Constructor
+  square(t_floatarg size);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~square();
+  //////////
+  // Destructor
+  virtual ~square();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    renderShape(GemState *state);
 
 };
 
-#endif	// for header file
+#endif  // for header file

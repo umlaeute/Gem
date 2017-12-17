@@ -26,14 +26,16 @@
 # define snprintf _snprintf
 #endif
 
-class gem::RTE::Symbol::PIMPL {
+class gem::RTE::Symbol::PIMPL
+{
 public:
   const t_symbol*sym;
 
   PIMPL(void) : sym(NULL)
   {
   }
-  ~PIMPL(void) {
+  ~PIMPL(void)
+  {
   }
 };
 
@@ -70,19 +72,24 @@ gem::RTE::Symbol :: ~Symbol(void)
   delete m_pimpl;
 }
 
-gem::RTE::Symbol&gem::RTE::Symbol::operator=(const std::string&name) {
+gem::RTE::Symbol&gem::RTE::Symbol::operator=(const std::string&name)
+{
   m_pimpl->sym=gensym(name.c_str());
   return (*this);
 }
-gem::RTE::Symbol&gem::RTE::Symbol::operator=(const gem::RTE::Symbol&Sym) {
+gem::RTE::Symbol&gem::RTE::Symbol::operator=(const gem::RTE::Symbol&Sym)
+{
   m_pimpl->sym=Sym.m_pimpl->sym;
   return (*this);
 }
-gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name) {
+gem::RTE::Symbol&gem::RTE::Symbol::operator=(const t_symbol*name)
+{
   m_pimpl->sym=name;
   return (*this);
 }
-gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_atom*argv) {
+gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc,
+    const t_atom*argv)
+{
   char buf[MAXPDSTRING];
   std::string name;
   bool firsttime=true;
@@ -98,8 +105,9 @@ gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_at
     } else {
       atomname=std::string(atom_getsymbol(arg)->s_name);
     }
-    if(!firsttime)
+    if(!firsttime) {
       name+=" ";
+    }
     firsttime=false;
     name+=atomname;
   }
@@ -108,11 +116,14 @@ gem::RTE::Symbol&gem::RTE::Symbol::setSymbol(const unsigned int argc, const t_at
   return (*this);
 }
 
-t_symbol*gem::RTE::Symbol::getRTESymbol(void) const {
+t_symbol*gem::RTE::Symbol::getRTESymbol(void) const
+{
   return (t_symbol*)(m_pimpl->sym);
 }
-std::string gem::RTE::Symbol::getString(void) const {
-  if(m_pimpl->sym)
+std::string gem::RTE::Symbol::getString(void) const
+{
+  if(m_pimpl->sym) {
     return std::string(m_pimpl->sym->s_name);
+  }
   return std::string();
 }

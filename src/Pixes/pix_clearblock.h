@@ -35,13 +35,13 @@ class GEM_EXTERN pix_clearblock : public GemBase
 {
   CPPEXTERN_HEADER(pix_clearblock, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_clearblock();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -49,21 +49,21 @@ class GEM_EXTERN pix_clearblock : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // After the rendering
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
-  virtual void	startRendering();
+  virtual void  startRendering();
 
   //////////
-  virtual void	stopRendering();
+  virtual void  stopRendering();
 
   //////////
   // The old cache
-  GemCache    	*m_oldcache;
+  GemCache      *m_oldcache;
 };
 
-#endif	// for header file
+#endif  // for header file

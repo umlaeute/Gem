@@ -35,47 +35,47 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ambientRGB : public GemBase
 {
-    CPPEXTERN_HEADER(ambientRGB, GemBase);
+  CPPEXTERN_HEADER(ambientRGB, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	ambientRGB(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  ambientRGB(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~ambientRGB();
+  //////////
+  // Destructor
+  virtual ~ambientRGB();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on the color material
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The translation vector (r, g, b, a)
-    	float	    	m_vector[4];
+  //////////
+  // The translation vector (r, g, b, a)
+  float           m_vector[4];
 
-    	//////////
-    	// R value changed
-    	void	    	rMess(float val);
+  //////////
+  // R value changed
+  void            rMess(float val);
 
-    	//////////
-    	// G value changed
-    	void	    	gMess(float val);
+  //////////
+  // G value changed
+  void            gMess(float val);
 
-    	//////////
-    	// B value changed
-    	void	    	bMess(float val);
+  //////////
+  // B value changed
+  void            bMess(float val);
 
-    	//////////
-    	// A value changed
-    	void	    	aMess(float val);
+  //////////
+  // A value changed
+  void            aMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

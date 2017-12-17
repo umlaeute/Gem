@@ -21,7 +21,7 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemcocoawindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -30,7 +30,7 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
 
   virtual bool create(void);
   virtual void destroy(void);
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   // check whether we have a window and if so, make it current
@@ -42,16 +42,16 @@ class GEM_EXTERN gemcocoawindow : public GemWindow
   virtual void dispatch(void);
   void dispatchEvent(NSEvent*);
 
-  virtual void              titleMess(std::string s);
+  virtual void              titleMess(const std::string&s);
   virtual void dimensionsMess(unsigned int width, unsigned int height);
   virtual void             offsetMess(int x, int y);
   virtual void         fullscreenMess(int on);
   virtual void             cursorMess(bool on);
   virtual void            menubarMess(int value);
-  void		         move(void); // apply dimen/offset to current window
-  void		        moved(void); // window dimen/offset changed
+  void                   move(void); // apply dimen/offset to current window
+  void                  moved(void); // window dimen/offset changed
 
- private:
+private:
   class PIMPL;
   PIMPL*m_pimpl;
   friend class PIMPL;

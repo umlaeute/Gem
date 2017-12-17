@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Matrix class
+        Matrix class
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -63,14 +63,14 @@ LOG
 
 inline double fast_sqrt(double x)
 {
-	register double est = __frsqrte(x);
-	return x * 0.5 * est * __fnmsub(est * est, x, 3.0);
+  register double est = __frsqrte(x);
+  return x * 0.5 * est * __fnmsub(est * est, x, 3.0);
 }
 
 inline float fast_sqrtf(float x)
 {
-	register float est = (float)__frsqrte(x);
-	return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
+  register float est = (float)__frsqrte(x);
+  return x * 0.5f * est * __fnmsubs(est * est, x, 3.0f);
 }
 #endif /* __ppc__ */
 
@@ -82,4 +82,4 @@ inline float fast_sqrtf(float x)
 #endif /* _WIN32 */
 
 
-#endif	// for header file
+#endif  // for header file

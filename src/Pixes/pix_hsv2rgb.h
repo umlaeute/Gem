@@ -35,13 +35,13 @@ class GEM_EXTERN pix_hsv2rgb : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_hsv2rgb, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_hsv2rgb();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -49,7 +49,7 @@ class GEM_EXTERN pix_hsv2rgb : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -33,30 +33,48 @@ CPPEXTERN_NEW_WITH_GIMME(text3d);
 /////////////////////////////////////////////////////////
 #ifdef FTGL
 text3d :: text3d(int argc, t_atom *argv)
-: TextBase(argc, argv), m_antialias(true),
-  m_aafont(NULL), m_pyfont(NULL)
+  : TextBase(argc, argv), m_antialias(true),
+    m_aafont(NULL), m_pyfont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
 }
-text3d :: ~text3d() {
-  if(m_aafont)delete m_aafont;m_aafont=NULL;
-  if(m_pyfont)delete m_pyfont;m_pyfont=NULL;
+text3d :: ~text3d()
+{
+  if(m_aafont) {
+    delete m_aafont;
+  }
+  m_aafont=NULL;
+  if(m_pyfont) {
+    delete m_pyfont;
+  }
+  m_pyfont=NULL;
   m_font=NULL;
 }
 
-FTFont *text3d :: selectFont(void){
-  if(m_antialias && NULL!=m_aafont)
+FTFont *text3d :: selectFont(void)
+{
+  if(m_antialias && NULL!=m_aafont) {
     return m_aafont;
-  if(!m_antialias && NULL!=m_pyfont)
+  }
+  if(!m_antialias && NULL!=m_pyfont) {
     return m_pyfont;
+  }
 
-  if(m_pyfont)
+  if(m_pyfont) {
     return m_pyfont;
+  }
   return m_aafont;
 }
-FTFont *text3d :: makeFont(const char*fontfile){
-  if(m_aafont)delete m_aafont;m_aafont=NULL;
-  if(m_pyfont)delete m_pyfont;m_pyfont=NULL;
+FTFont *text3d :: makeFont(const char*fontfile)
+{
+  if(m_aafont) {
+    delete m_aafont;
+  }
+  m_aafont=NULL;
+  if(m_pyfont) {
+    delete m_pyfont;
+  }
+  m_pyfont=NULL;
   m_font=NULL;
   // TextureFont looks nicer, but does not allow for texturing
   m_aafont =  new FTGLTextureFont(fontfile);
@@ -65,29 +83,38 @@ FTFont *text3d :: makeFont(const char*fontfile){
     m_aafont = NULL;
   }
   m_pyfont =  new FTGLPolygonFont(fontfile);
-  if (m_pyfont && m_pyfont->Error()){
+  if (m_pyfont && m_pyfont->Error()) {
     delete m_pyfont;
     m_pyfont = NULL;
   }
   return selectFont();
 }
-void text3d :: setFontSize(){
-  if (!m_font)return;
+void text3d :: setFontSize()
+{
+  if (!m_font) {
+    return;
+  }
 
   int fs=static_cast<int>(m_fontSize*m_precision);
-  if(fs<0)fs=-fs;
+  if(fs<0) {
+    fs=-fs;
+  }
 
   if (m_pyfont) {
-    if (! m_pyfont->FaceSize(fs) )
+    if (! m_pyfont->FaceSize(fs) ) {
       error("unable to set fontsize!");
-    if(m_pyfont->Error())
+    }
+    if(m_pyfont->Error()) {
       error("error setting fontsize");
+    }
   }
   if (m_aafont) {
-    if (! m_aafont->FaceSize(fs) )
+    if (! m_aafont->FaceSize(fs) ) {
       error("unable to set antialiased-fontfize!");
-    if(m_aafont->Error())
+    }
+    if(m_aafont->Error()) {
       error("error setting aa-fontsize");
+    }
   }
   m_font=selectFont();
 

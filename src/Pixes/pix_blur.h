@@ -33,13 +33,13 @@ class GEM_EXTERN pix_blur : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_blur, GemPixObj);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_blur(void);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -47,20 +47,19 @@ class GEM_EXTERN pix_blur : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processGrayImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 #ifdef __VEC__
-  virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void  processYUVAltivec(imageStruct &image);
 #endif /* __VEC__ */
 
   unsigned int  *saved;
   void blurMess(float value);
-  float		m_blurf;
-  int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
+  float         m_blurf;
+  int           m_blurH,m_blurW,m_blurSize,m_blurBpp;
 
   t_inlet         *inletBlur;
 };
 
 #endif
-

@@ -18,7 +18,8 @@
 
 CPPEXTERN_NEW(pix_test);
 
-namespace {
+namespace
+{
 static unsigned char bars_RGBA[][3] = {
   // R , G  , B
   {0xFF,0xFF,0xFF}, // white
@@ -42,133 +43,152 @@ static unsigned char bars_YUV[][3] = {
   {0x10,0x80,0x80}, // black
 };
 
-  static volatile unsigned char getRandom(void) {
-    static unsigned int random_nextseed = 1489853723;
-    random_nextseed = random_nextseed * 435898247 + 938284281;
-    return (random_nextseed % 0xFF);
+static volatile unsigned char getRandom(void)
+{
+  static unsigned int random_nextseed = 1489853723;
+  random_nextseed = random_nextseed * 435898247 + 938284281;
+  return (random_nextseed % 0xFF);
+}
+
+static void makeSMPTE_RGBA(unsigned int rows, unsigned int cols,
+                           unsigned char*DATA, float scale)
+{
+  unsigned char*data=DATA;
+  unsigned int r,c;
+  unsigned int row0, row1;
+
+  row0=0;
+  row1=rows*2/3;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      unsigned int idx=c*7/cols;
+      data[chRed  ]=bars_RGBA[idx][0]*scale;
+      data[chGreen]=bars_RGBA[idx][1]*scale;
+      data[chBlue ]=bars_RGBA[idx][2]*scale;
+      data[chAlpha]=0xFF;
+      data+=4;
+    }
   }
-
-  static void makeSMPTE_RGBA(unsigned int rows, unsigned int cols, unsigned char*DATA, float scale) {
-    unsigned char*data=DATA;
-    unsigned int r,c;
-    unsigned int row0, row1;
-
-    row0=0; row1=rows*2/3;
-    for(r=row0; r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	unsigned int idx=c*7/cols;
-	data[chRed  ]=bars_RGBA[idx][0]*scale;
-	data[chGreen]=bars_RGBA[idx][1]*scale;
-	data[chBlue ]=bars_RGBA[idx][2]*scale;
-	data[chAlpha]=0xFF;
-	data+=4;
-      }
-    }
-    row0=r; row1=rows*3/4;
-    for(r=row0; r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	unsigned int grey=c*255/cols;
-	data[chRed  ]=grey;
-	data[chGreen]=grey;
-	data[chBlue ]=grey;
-	data[chAlpha]=0xFF;
-	data+=4;
-      }
-    }
-    row0=r; row1=rows*5/6;
-    for(r=row0;r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	unsigned int grey=255-c*255/cols;
-	data[chRed  ]=grey;
-	data[chGreen]=grey;
-	data[chBlue ]=grey;
-	data[chAlpha]=0xFF;
-	data+=4;
-      }
-    }
-    row0=r; row1=rows;
-    for(r=0; r<(row1-row0)*cols; r++) {
-      unsigned char grey=getRandom();
+  row0=r;
+  row1=rows*3/4;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      unsigned int grey=c*255/cols;
       data[chRed  ]=grey;
       data[chGreen]=grey;
       data[chBlue ]=grey;
       data[chAlpha]=0xFF;
-	data+=4;
+      data+=4;
     }
   }
-  void makeSMPTE_YUV(unsigned int rows, unsigned int cols, unsigned char*DATA, float scale) {
-    unsigned char*data=DATA;
-    unsigned int r,c;
-    unsigned int row0, row1;
-    unsigned int halfcols=cols>>1;
+  row0=r;
+  row1=rows*5/6;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      unsigned int grey=255-c*255/cols;
+      data[chRed  ]=grey;
+      data[chGreen]=grey;
+      data[chBlue ]=grey;
+      data[chAlpha]=0xFF;
+      data+=4;
+    }
+  }
+  row0=r;
+  row1=rows;
+  for(r=0; r<(row1-row0)*cols; r++) {
+    unsigned char grey=getRandom();
+    data[chRed  ]=grey;
+    data[chGreen]=grey;
+    data[chBlue ]=grey;
+    data[chAlpha]=0xFF;
+    data+=4;
+  }
+}
+void makeSMPTE_YUV(unsigned int rows, unsigned int cols,
+                   unsigned char*DATA, float scale)
+{
+  unsigned char*data=DATA;
+  unsigned int r,c;
+  unsigned int row0, row1;
+  unsigned int halfcols=cols>>1;
 
-    row0=0; row1=rows*2/3;
-    for(r=row0; r<row1; r++) {
-      data=DATA+r*cols*2;
-      for(c=0; c<halfcols; c++) {
-	unsigned int idx=c*7/halfcols;
-	data[chY0]=data[chY1]=bars_YUV[idx][0]*scale;
-	data[chU ]=bars_YUV[idx][1];
-	data[chV ]=bars_YUV[idx][2];
-	data+=4;
-      }
-    }
-    row0=r; row1=rows*3/4;
-    for(r=row0; r<row1; r++) {
-      data=DATA+r*cols*2;
-      for(c=0; c<cols; c++) {
-	unsigned int grey=c*255/cols;
-	data[chY0]=grey;
-	data[chU ]=0x80;
-	data+=2;
-      }
-    }
-    row0=r; row1=rows*5/6;
-    for(r=row0;r<row1; r++) {
-      data=DATA+r*cols*2;
-      for(c=0; c<cols; c++) {
-	unsigned int grey=255-c*255/cols;
-	data[chY0]=grey;
-	data[chU ]=0x80;
-	data+=2;
-      }
-    }
-    row0=r; row1=rows;
+  row0=0;
+  row1=rows*2/3;
+  for(r=row0; r<row1; r++) {
     data=DATA+r*cols*2;
-    for(r=0; r<(row1-row0)*cols; r++) {
-      unsigned char grey=getRandom();
-      data[chY0]=getRandom();
+    for(c=0; c<halfcols; c++) {
+      unsigned int idx=c*7/halfcols;
+      data[chY0]=data[chY1]=bars_YUV[idx][0]*scale;
+      data[chU ]=bars_YUV[idx][1];
+      data[chV ]=bars_YUV[idx][2];
+      data+=4;
+    }
+  }
+  row0=r;
+  row1=rows*3/4;
+  for(r=row0; r<row1; r++) {
+    data=DATA+r*cols*2;
+    for(c=0; c<cols; c++) {
+      unsigned int grey=c*255/cols;
+      data[chY0]=grey;
       data[chU ]=0x80;
       data+=2;
     }
   }
-  void makeSMPTE_Grey(unsigned int rows, unsigned int cols, unsigned char*data, float scale) {
-    unsigned int r,c;
-    unsigned int row0, row1;
-
-    row0=0; row1=rows*2/3;
-    for(r=row0; r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	*data++=bars_YUV[c*7/cols][0]*scale;
-      }
-    }
-    row0=r; row1=rows*3/4;
-    for(r=row0; r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	*data++=c*255/cols;
-      }
-    }
-    row0=r; row1=rows*5/6;
-    for(r=row0;r<row1; r++) {
-      for(c=0; c<cols; c++) {
-	*data++=255-c*255/cols;
-      }
-    }
-    row0=r; row1=rows;
-    for(r=0; r<(row1-row0)*cols; r++) {
-      *data++=getRandom();
+  row0=r;
+  row1=rows*5/6;
+  for(r=row0; r<row1; r++) {
+    data=DATA+r*cols*2;
+    for(c=0; c<cols; c++) {
+      unsigned int grey=255-c*255/cols;
+      data[chY0]=grey;
+      data[chU ]=0x80;
+      data+=2;
     }
   }
+  row0=r;
+  row1=rows;
+  data=DATA+r*cols*2;
+  for(r=0; r<(row1-row0)*cols; r++) {
+    unsigned char grey=getRandom();
+    data[chY0]=getRandom();
+    data[chU ]=0x80;
+    data+=2;
+  }
+}
+void makeSMPTE_Grey(unsigned int rows, unsigned int cols,
+                    unsigned char*data, float scale)
+{
+  unsigned int r,c;
+  unsigned int row0, row1;
+
+  row0=0;
+  row1=rows*2/3;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      *data++=bars_YUV[c*7/cols][0]*scale;
+    }
+  }
+  row0=r;
+  row1=rows*3/4;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      *data++=c*255/cols;
+    }
+  }
+  row0=r;
+  row1=rows*5/6;
+  for(r=row0; r<row1; r++) {
+    for(c=0; c<cols; c++) {
+      *data++=255-c*255/cols;
+    }
+  }
+  row0=r;
+  row1=rows;
+  for(r=0; r<(row1-row0)*cols; r++) {
+    *data++=getRandom();
+  }
+}
 };
 
 /////////////////////////////////////////////////////////
@@ -204,15 +224,18 @@ void pix_test :: render(GemState*state)
   int cols=m_pix.image.ysize;
   int datasize;
   unsigned char* data=m_pix.image.data;
-  switch (m_pix.image.format){
+  switch (m_pix.image.format) {
   case GL_RGBA_GEM:
-    makeSMPTE_RGBA(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_RGBA(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                   scale);
     break;
   case GL_YUV422_GEM:
-    makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                  scale);
     break;
   case GL_LUMINANCE:
-    makeSMPTE_Grey(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data, scale);
+    makeSMPTE_Grey(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
+                   scale);
     break;
   }
   //post("image=%d\tfilm=%d", m_pix.newimage,m_pix.newfilm);
@@ -233,14 +256,22 @@ void pix_test :: csMess(std::string cs)
 {
   GLenum fmt=GL_RGBA_GEM;
   char c=0;
-  if(cs.size()>0)
+  if(cs.size()>0) {
     c=tolower(cs[0]);
+  }
   switch(c) {
-  case 'r': fmt=GL_RGBA_GEM;  break;
-  case 'y': fmt=GL_YUV422_GEM;break;
-  case 'g': fmt=GL_LUMINANCE; break;
+  case 'r':
+    fmt=GL_RGBA_GEM;
+    break;
+  case 'y':
+    fmt=GL_YUV422_GEM;
+    break;
+  case 'g':
+    fmt=GL_LUMINANCE;
+    break;
   default:
-    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'", cs.c_str());
+    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",
+          cs.c_str());
     return;
   }
   m_pix.image.setCsizeByFormat(fmt);

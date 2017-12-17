@@ -32,31 +32,31 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN circle : public GemShape
 {
-    CPPEXTERN_HEADER(circle, GemShape);
+  CPPEXTERN_HEADER(circle, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-        circle(t_floatarg size);
+  //////////
+  // Constructor
+  circle(t_floatarg size);
 
-    protected:
+protected:
 
-        //////////
-        // Destructor
-        virtual ~circle();
+  //////////
+  // Destructor
+  virtual ~circle();
 
-        //////////
-        // Do the renderShapeing
-        virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the renderShapeing
+  virtual void    renderShape(GemState *state);
 
-        //////////
-        // cos lookup table
-        static GLfloat *m_cos;
+  //////////
+  // cos lookup table
+  static GLfloat *m_cos;
 
-        //////////
-        // sin lookup table
-        static GLfloat *m_sin;
+  //////////
+  // sin lookup table
+  static GLfloat *m_sin;
 };
 
-#endif	// for header file
+#endif  // for header file

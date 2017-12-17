@@ -27,60 +27,60 @@ CLASS
 
 DESCRIPTION
 
-	Notice that even though imageVert is derived from GemPixObj, we
-		still override a lot of the virtual functions...including
-		render.
+        Notice that even though imageVert is derived from GemPixObj, we
+                still override a lot of the virtual functions...including
+                render.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN imageVert : public GemPixObj
 {
-    CPPEXTERN_HEADER(imageVert, GemPixObj);
+  CPPEXTERN_HEADER(imageVert, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	imageVert();
+  //////////
+  // Constructor
+  imageVert();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~imageVert();
+  //////////
+  // Destructor
+  virtual ~imageVert();
 
-    	//////////
-    	// This is a dummy function for us
-    	virtual void 	processImage(imageStruct &) { }
+  //////////
+  // This is a dummy function for us
+  virtual void    processImage(imageStruct &) { }
 
-    	//////////
-    	// Do the processing for an RGBA image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processRGBAPix(imageStruct &image, int texture);
+  //////////
+  // Do the processing for an RGBA image
+  // [in] image - The image to use
+  // [in] texture - Is texture mapping turned on?
+  virtual void    processRGBAPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the processing for gray8 image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processGrayPix(imageStruct &image, int texture);
+  //////////
+  // Do the processing for gray8 image
+  // [in] image - The image to use
+  // [in] texture - Is texture mapping turned on?
+  virtual void    processGrayPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the processing for YUV image
-		// [in] image - The image to use
-		// [in] texture - Is texture mapping turned on?
-    	virtual void 	processYUVPix(imageStruct &image, int texture);
+  //////////
+  // Do the processing for YUV image
+  // [in] image - The image to use
+  // [in] texture - Is texture mapping turned on?
+  virtual void    processYUVPix(imageStruct &image, int texture);
 
-    	//////////
-    	// Do the rendering.
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering.
+  virtual void    render(GemState *state);
 
-        //////////
-        // The display list
-        GLuint          m_dispList;
+  //////////
+  // The display list
+  GLuint          m_dispList;
 
-        //////////
-        // Do we need to rebuild the display list?
-        int             m_rebuildList;
+  //////////
+  // Do we need to rebuild the display list?
+  int             m_rebuildList;
 };
 
-#endif	// for header file
+#endif  // for header file

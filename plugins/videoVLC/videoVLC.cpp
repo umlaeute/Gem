@@ -40,9 +40,10 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("vlc", videoVLC);
 
-namespace {
-  static const char*  format_string="RV32";
-  static const GLenum format_enum  = GL_RGBA_GEM;
+namespace
+{
+static const char*  format_string="RV32";
+static const GLenum format_enum  = GL_RGBA_GEM;
 };
 
 videoVLC::videoVLC(void) :
@@ -59,9 +60,11 @@ videoVLC::videoVLC(void) :
   resize(64,64,0);
 }
 
-videoVLC::~videoVLC(void) {
-  if(m_instance)
+videoVLC::~videoVLC(void)
+{
+  if(m_instance) {
     libvlc_release(m_instance);
+  }
 
   if(&m_pixBlock.image == m_convertImg) {
     m_convertImg=0;
@@ -70,29 +73,38 @@ videoVLC::~videoVLC(void) {
     m_convertImg=0;
   }
 }
-void videoVLC::close(void) {
-  if(m_mediaplayer)
+void videoVLC::close(void)
+{
+  if(m_mediaplayer) {
     libvlc_media_player_release(m_mediaplayer);
+  }
   m_mediaplayer=NULL;
 }
 
-bool videoVLC::open(gem::Properties&props) {
-  if(m_mediaplayer)close();
+bool videoVLC::open(gem::Properties&props)
+{
+  if(m_mediaplayer) {
+    close();
+  }
   m_pixBlock.image.xsize=0;
   m_pixBlock.image.ysize=0;
 
   setProperties(props);
 
 
-  if(m_devname.empty())
+  if(m_devname.empty()) {
     return false;
+  }
 
-  libvlc_media_t*media = libvlc_media_new_location (m_instance, m_devname.c_str());
-  if(!media)
+  libvlc_media_t*media = libvlc_media_new_location (m_instance,
+                         m_devname.c_str());
+  if(!media) {
     media = libvlc_media_new_path (m_instance, m_devname.c_str());
+  }
 
-  if(!media)
+  if(!media) {
     return false;
+  }
 
   char buf[MAXVLCSTRING];
 
@@ -113,11 +125,13 @@ bool videoVLC::open(gem::Properties&props) {
     buf[0]=0;
     if(0) {}
     else if("width"==key) {
-      if(props.get(key, d)&&(d>0))
+      if(props.get(key, d)&&(d>0)) {
         w=d;
+      }
     } else if("height"==key) {
-      if(props.get(key, d)&&(d>0))
+      if(props.get(key, d)&&(d>0)) {
         h=d;
+      }
     } else {
       gem::Properties::PropertyType type = props.type(key);
       switch(type) {
@@ -140,7 +154,6 @@ bool videoVLC::open(gem::Properties&props) {
       }
       if(0!=buf[0]) {
         buf[MAXVLCSTRING-1]=0;
-        //post("vlc-option: '%s'", buf);
         libvlc_media_add_option(media,buf);
       }
     }
@@ -154,43 +167,50 @@ bool videoVLC::open(gem::Properties&props) {
 
   /* helper classes to register callbacks */
   struct _callbackObj {
-    static void*lock(void*opaque, void**plane ) {
+    static void*lock(void*opaque, void**plane )
+    {
       videoVLC*obj=(videoVLC*)opaque;
-      if(obj)
-	return obj->lockFrame(plane);
+      if(obj) {
+        return obj->lockFrame(plane);
+      }
       return NULL;
     }
-    static void unlock(void*opaque, void*picture, void*const*plane) {
-      //  post(" unlockCB: %p", opaque);
+    static void unlock(void*opaque, void*picture, void*const*plane)
+    {
       videoVLC*obj=(videoVLC*)opaque;
-      if(obj)
-	obj->unlockFrame(picture, plane);
+      if(obj) {
+        obj->unlockFrame(picture, plane);
+      }
     }
-    static void display(void*opaque, void*picture) {
-      //  post("displayCB: %p -> %p", opaque, picture);
+    static void display(void*opaque, void*picture)
+    {
       videoVLC*obj=(videoVLC*)opaque;
     }
-    _callbackObj(videoVLC*data) {
+    _callbackObj(videoVLC*data)
+    {
       libvlc_video_set_callbacks(data->m_mediaplayer,
-				 lock,
-				 unlock,
-				 NULL,
-				 data);
+                                 lock,
+                                 unlock,
+                                 NULL,
+                                 data);
     }
   };
   struct _formatCallbackObj {
-    static unsigned format(void**opaque, char *chroma, unsigned *width, unsigned *height, unsigned *pitches, unsigned *lines)
+    static unsigned format(void**opaque, char *chroma, unsigned *width,
+                           unsigned *height, unsigned *pitches, unsigned *lines)
     {
       videoVLC**objptr=(videoVLC**)opaque;
-      if(objptr && *objptr)
-	return (*objptr)->setFormat(chroma, *width, *height, *pitches, *lines);
+      if(objptr && *objptr) {
+        return (*objptr)->setFormat(chroma, *width, *height, *pitches, *lines);
+      }
       return 0;
     }
-    _formatCallbackObj(videoVLC*data) {
+    _formatCallbackObj(videoVLC*data)
+    {
       libvlc_video_set_format_callbacks(data->m_mediaplayer,
-					format,
-					NULL
-					);
+                                        format,
+                                        NULL
+                                       );
 
     }
   };
@@ -201,40 +221,48 @@ bool videoVLC::open(gem::Properties&props) {
   return true;
 }
 
-pixBlock*videoVLC::getFrame(void) {
+pixBlock*videoVLC::getFrame(void)
+{
   LOCK(m_mutex);
   return &m_pixBlock;
 }
 
-void videoVLC::releaseFrame(void) {
-  //  post("release frame");
+void videoVLC::releaseFrame(void)
+{
   UNLOCK(m_mutex);
 }
 
-std::vector<std::string>videoVLC::enumerate(void) {
+std::vector<std::string>videoVLC::enumerate(void)
+{
   std::vector<std::string>result;
   result.push_back("vlc");
   return result;
 }
 
-bool videoVLC::setDevice(int ID) {
+bool videoVLC::setDevice(int ID)
+{
   m_devname.clear();
   return false;
 }
-bool videoVLC::setDevice(std::string device) {
+bool videoVLC::setDevice(const std::string&device)
+{
   m_devname=device;
   return true;
 }
 bool videoVLC::enumProperties(gem::Properties&readable,
-			       gem::Properties&writeable) {
+                              gem::Properties&writeable)
+{
   readable.clear();
   writeable.clear();
 
-  writeable.set("width",  m_pixBlock.image.xsize);  readable.set("width",  m_pixBlock.image.xsize);
-  writeable.set("height",  m_pixBlock.image.ysize); readable.set("height",  m_pixBlock.image.ysize);
+  writeable.set("width",  m_pixBlock.image.xsize);
+  readable.set("width",  m_pixBlock.image.xsize);
+  writeable.set("height",  m_pixBlock.image.ysize);
+  readable.set("height",  m_pixBlock.image.ysize);
   return false;
 }
-void videoVLC::setProperties(gem::Properties&props) {
+void videoVLC::setProperties(gem::Properties&props)
+{
   int width=-1;
   int height=-1;
 
@@ -242,26 +270,31 @@ void videoVLC::setProperties(gem::Properties&props) {
 
   double d;
   if(props.get("width", d)) {
-    if(d>0)
+    if(d>0) {
       width = d;
+    }
   }
   if(props.get("height", d)) {
-    if(d>0)
+    if(d>0) {
       height=d;
+    }
   }
 
   if(!m_mediaplayer) {
-    if(width>0)
+    if(width>0) {
       m_pixBlock.image.xsize=width;
-    if(height>0)
+    }
+    if(height>0) {
       m_pixBlock.image.ysize=height;
+    }
   } else {
     // changes will take effect with next restart
   }
 }
 
 
-void videoVLC::getProperties(gem::Properties&props) {
+void videoVLC::getProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   double d;
   int i;
@@ -276,49 +309,55 @@ void videoVLC::getProperties(gem::Properties&props) {
   }
 }
 
-std::vector<std::string>videoVLC::dialogs(void) {
+std::vector<std::string>videoVLC::dialogs(void)
+{
   std::vector<std::string>result;
   return result;
 }
-bool videoVLC::provides(const std::string name) {
+bool videoVLC::provides(const std::string&name)
+{
   return (name==m_name);
 }
-std::vector<std::string>videoVLC::provides(void) {
+std::vector<std::string>videoVLC::provides(void)
+{
   std::vector<std::string>result;
   result.push_back(m_name);
   return result;
 }
-const std::string videoVLC::getName(void) {
+const std::string videoVLC::getName(void)
+{
   return m_name;
 }
 
 
-bool videoVLC::start(void) {
+bool videoVLC::start(void)
+{
   int ret=-1;
   if(m_mediaplayer) {
     int ret=libvlc_media_player_play(m_mediaplayer);
   }
   return (0!=ret);
 }
-bool videoVLC::stop (void) {
-  if(!m_mediaplayer)
+bool videoVLC::stop (void)
+{
+  if(!m_mediaplayer) {
     return false;
+  }
   libvlc_media_player_stop(m_mediaplayer);
   return true;
 }
 
-void*videoVLC::lockFrame(void**plane ) {
+void*videoVLC::lockFrame(void**plane )
+{
   LOCK(m_mutex);
   *plane=m_convertImg->data;
-  //  post("prepareFrame %p @ %p --> %p", *plane, plane, m_pixBlock.image.data);
 
   return NULL;
 }
-void videoVLC::unlockFrame(void*picture, void*const*plane) {
-  //post("processFrame %p\t%p", picture, *plane);
-
+void videoVLC::unlockFrame(void*picture, void*const*plane)
+{
   if(&m_pixBlock.image != m_convertImg) {
-  // convert the image from the buffer
+    // convert the image from the buffer
 #ifdef __APPLE__
     m_pixBlock.image.fromARGB(m_convertImg->data);
 #else
@@ -331,13 +370,14 @@ void videoVLC::unlockFrame(void*picture, void*const*plane) {
   UNLOCK(m_mutex);
 }
 
-unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, unsigned &pitches, unsigned &lines)
+unsigned videoVLC::setFormat(char chroma[4], unsigned &width,
+                             unsigned &height, unsigned &pitches, unsigned &lines)
 {
 #if 0
-  post("chroma: %s", chroma);
-  post("dimen : %dx%d", width, height);
-  post("pitches: %d", pitches);
-  post("lines: %d", lines);
+  verbose(1, "[GEM:videoVLC] chroma: %s", chroma);
+  verbose(1, "[GEM:videoVLC] dimen : %dx%d", width, height);
+  verbose(1, "[GEM:videoVLC] pitches: %d", pitches);
+  verbose(1, "[GEM:videoVLC] lines: %d", lines);
 #endif
   memcpy(chroma, format_string, 4);
 
@@ -352,11 +392,14 @@ unsigned videoVLC::setFormat(char chroma[4], unsigned &width, unsigned &height, 
 
   return 1;
 }
-void videoVLC::resize(unsigned int width, unsigned int height, GLenum format) {
+void videoVLC::resize(unsigned int width, unsigned int height,
+                      GLenum format)
+{
   bool do_convert = true;
 
-  if(0==format)
+  if(0==format) {
     format=format_enum;
+  }
 
   m_pixBlock.image.xsize = width;
   m_pixBlock.image.ysize = height;

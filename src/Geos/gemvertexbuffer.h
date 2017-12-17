@@ -54,7 +54,7 @@ protected:
   //////////
   // Do the rendering
   virtual void renderShape(GemState *state);
-  //virtual void 	runKernel();
+  //virtual void        runKernel();
   void tabMess(unsigned int argc, t_atom *argv, gem::VertexBuffer&array,
                unsigned int offset);
   void resizeMess(float size);

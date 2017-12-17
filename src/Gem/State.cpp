@@ -41,13 +41,15 @@
 
 using namespace gem;
 
-class GemStateData {
+class GemStateData
+{
   friend class GemState;
- public:
-  GemStateData(void) : stacks(new GLStack()){}
+public:
+  GemStateData(void) : stacks(new GLStack()) {}
 
-  ~GemStateData(void) {
-    if (NULL==stacks.get()){
+  ~GemStateData(void)
+  {
+    if (NULL==stacks.get()) {
       post("ouch");
       //      const GLStack*dummy=new GLStack();
       //stacks=dummy;
@@ -56,13 +58,14 @@ class GemStateData {
     }
   }
 
-  GemStateData& copyFrom(const GemStateData*org) {
+  GemStateData& copyFrom(const GemStateData*org)
+  {
     data=org->data;
     stacks->reset();
     return (*this);
   }
 
- protected:
+protected:
   // dictionary for setting values
   std::map <GemState::key_t, any> data;
 
@@ -81,24 +84,24 @@ std::map <std::string, int> GemStateData::keys;
 //
 /////////////////////////////////////////////////////////
 GemState :: GemState()
-		  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
-        image(0), texCoords(0), numTexCoords(0), multiTexUnits(0),
-        tickTime(50.f), drawType(0),
-        VertexDirty(0),
-        VertexArray(0), VertexArraySize(0), VertexArrayStride(0),
-        ColorArray(0), HaveColorArray(0),
-        NormalArray(0), HaveNormalArray(0),
-        TexCoordArray(0), HaveTexCoordArray(0),
-        data(new GemStateData())
+  : dirty(0), inDisplayList(0), lighting(0), smooth(0), texture(0),
+    image(0), texCoords(0), numTexCoords(0), multiTexUnits(0),
+    tickTime(50.f), drawType(0),
+    VertexDirty(0),
+    VertexArray(0), VertexArraySize(0), VertexArrayStride(0),
+    ColorArray(0), HaveColorArray(0),
+    NormalArray(0), HaveNormalArray(0),
+    TexCoordArray(0), HaveTexCoordArray(0),
+    data(new GemStateData())
 {
 
   //  std::cout << "GemState" << std::endl;
 
   stackDepth[GemMan::STACKMODELVIEW]=
     stackDepth[GemMan::STACKCOLOR]=
-    stackDepth[GemMan::STACKTEXTURE]=
-    stackDepth[GemMan::STACKPROJECTION]=
-    1; // 1 is the current matrix
+      stackDepth[GemMan::STACKTEXTURE]=
+        stackDepth[GemMan::STACKPROJECTION]=
+          1; // 1 is the current matrix
 
   set(_DIRTY, (dirty=false));
   set(_GL_DISPLAYLIST, (inDisplayList=false));
@@ -123,7 +126,8 @@ GemState :: GemState()
   */
 }
 
-GemState& GemState::operator=(const GemState&org) {
+GemState& GemState::operator=(const GemState&org)
+{
   dirty=org.dirty;
   inDisplayList=org.inDisplayList;
   lighting=org.lighting;
@@ -180,7 +184,8 @@ GemState::GemState(const GemState&org) :
 
 
 
-void GemState :: reset() {
+void GemState :: reset()
+{
   VertexArray = 0;
   VertexArraySize = 0;
   ColorArray = 0;
@@ -202,23 +207,33 @@ void GemState :: reset() {
 
 }
 
-GemState :: ~GemState() {
-  if(data)delete data;data=NULL;
+GemState :: ~GemState()
+{
+  if(data) {
+    delete data;
+  }
+  data=NULL;
 }
 
 
 // --------------------------------------------------------------
 /* legacy functions */
-float GemState::texCoordX(int num) const {
-  if (texture && numTexCoords > num)
+float GemState::texCoordX(int num) const
+{
+  if (texture && numTexCoords > num) {
     return texCoords[num].s;
-  else return 0.;
+  } else {
+    return 0.;
+  }
 }
 
-float GemState::texCoordY(int num) const {
-  if (texture && numTexCoords > num)
+float GemState::texCoordY(int num) const
+{
+  if (texture && numTexCoords > num) {
     return texCoords[num].t;
-  else return 0.;
+  } else {
+    return 0.;
+  }
 }
 
 
@@ -226,41 +241,108 @@ float GemState::texCoordY(int num) const {
 
 
 /* get a named property */
-bool GemState::get(const GemState::key_t key, any&value) {
+bool GemState::get(const GemState::key_t key, any&value)
+{
   std::map<GemState::key_t,any>::iterator it =
     data->data.find(key);
   if(it==data->data.end()) {
-    if(key==_PIX) { value=image; return true; }
-    if(key==_GL_TEX_NUMCOORDS) { value=numTexCoords; return true; }
+    if(key==_PIX) {
+      value=image;
+      return true;
+    }
+    if(key==_GL_TEX_NUMCOORDS) {
+      value=numTexCoords;
+      return true;
+    }
 
     return false; // FIXXME
 
 #if 0
-    if(key==_DIRTY) { value=dirty; return true; }
-    if(key==_GL_DISPLAYLIST) { value=inDisplayList; return true; }
+    if(key==_DIRTY) {
+      value=dirty;
+      return true;
+    }
+    if(key==_GL_DISPLAYLIST) {
+      value=inDisplayList;
+      return true;
+    }
 
-    if(key==_GL_LIGHTING) { value=lighting; return true; }
-    if(key==_GL_SMOOTH) { value=smooth; return true; }
-    if(key==_GL_TEX_TYPE) { value=texture; return true; }
-    if(key==_GL_TEX_COORDS) { if(!texCoords)return false; value=texCoords; return true; }
-    if(key==_GL_TEX_UNITS) { value=multiTexUnits; return true; }
-    if(key==_TIMING_TICK) { value=tickTime; return true; }
-    if(key==_GL_DRAWTYPE) { value=drawType; return true; }
+    if(key==_GL_LIGHTING) {
+      value=lighting;
+      return true;
+    }
+    if(key==_GL_SMOOTH) {
+      value=smooth;
+      return true;
+    }
+    if(key==_GL_TEX_TYPE) {
+      value=texture;
+      return true;
+    }
+    if(key==_GL_TEX_COORDS) {
+      if(!texCoords) {
+        return false;
+      }
+      value=texCoords;
+      return true;
+    }
+    if(key==_GL_TEX_UNITS) {
+      value=multiTexUnits;
+      return true;
+    }
+    if(key==_TIMING_TICK) {
+      value=tickTime;
+      return true;
+    }
+    if(key==_GL_DRAWTYPE) {
+      value=drawType;
+      return true;
+    }
 #endif
 
 #if 0
     //if(key==GemState::_GL_STACKS) { value=stackDepth[4]; return true; }
 
-    if(key=="vertex.dirty") { value=VertexDirty; return true; }
-    if(key=="*VertexArray") { value=*VertexArray; return true; }
-    if(key=="VertexArraySize") { value=VertexArraySize; return true; }
-    if(key=="VertexArrayStride") { value=VertexArrayStride; return true; }
-    if(key=="*ColorArray") { value=*ColorArray; return true; }
-    if(key=="HaveColorArray") { value=HaveColorArray; return true; }
-    if(key=="*NormalArray") { value=*NormalArray; return true; }
-    if(key=="HaveNormalArray") { value=HaveNormalArray; return true; }
-    if(key=="*TexCoordArray") { value=*TexCoordArray; return true; }
-    if(key=="HaveTexCoordArray") { value=HaveTexCoordArray; return true; }
+    if(key=="vertex.dirty") {
+      value=VertexDirty;
+      return true;
+    }
+    if(key=="*VertexArray") {
+      value=*VertexArray;
+      return true;
+    }
+    if(key=="VertexArraySize") {
+      value=VertexArraySize;
+      return true;
+    }
+    if(key=="VertexArrayStride") {
+      value=VertexArrayStride;
+      return true;
+    }
+    if(key=="*ColorArray") {
+      value=*ColorArray;
+      return true;
+    }
+    if(key=="HaveColorArray") {
+      value=HaveColorArray;
+      return true;
+    }
+    if(key=="*NormalArray") {
+      value=*NormalArray;
+      return true;
+    }
+    if(key=="HaveNormalArray") {
+      value=HaveNormalArray;
+      return true;
+    }
+    if(key=="*TexCoordArray") {
+      value=*TexCoordArray;
+      return true;
+    }
+    if(key=="HaveTexCoordArray") {
+      value=HaveTexCoordArray;
+      return true;
+    }
 #endif
 
     return false;
@@ -271,7 +353,8 @@ bool GemState::get(const GemState::key_t key, any&value) {
 }
 
 /* set a named property */
-bool GemState::set(const GemState::key_t key, any value) {
+bool GemState::set(const GemState::key_t key, any value)
+{
   if(value.empty()) {
     data->data.erase(key);
     return false;
@@ -281,31 +364,57 @@ bool GemState::set(const GemState::key_t key, any value) {
   if(1) {
     try {
       switch(key) {
-      case(_DIRTY): dirty=gem::any_cast<bool>(value); break;
-      case(_PIX): image=gem::any_cast<pixBlock*>(value); break;
-      case(_GL_TEX_NUMCOORDS): numTexCoords=gem::any_cast<int>(value); break;
-      case(_GL_TEX_COORDS): texCoords=gem::any_cast<TexCoord*>(value); break;
-      case(_GL_LIGHTING): lighting=gem::any_cast<bool>(value); break;
-      case(_GL_SMOOTH): smooth=gem::any_cast<bool>(value); break;
-      case(_GL_TEX_TYPE): texture=gem::any_cast<int>(value); break;
-      case(_GL_TEX_UNITS): multiTexUnits=gem::any_cast<int>(value); break;
-      case(_TIMING_TICK): tickTime=gem::any_cast<float>(value); break;
-      case(_GL_DRAWTYPE): drawType=gem::any_cast<GLenum>(value); break;
-      case(_GL_DISPLAYLIST): inDisplayList=gem::any_cast<bool>(value); break;
-      default: break;
+      case(_DIRTY):
+        dirty=gem::any_cast<bool>(value);
+        break;
+      case(_PIX):
+        image=gem::any_cast<pixBlock*>(value);
+        break;
+      case(_GL_TEX_NUMCOORDS):
+        numTexCoords=gem::any_cast<int>(value);
+        break;
+      case(_GL_TEX_COORDS):
+        texCoords=gem::any_cast<TexCoord*>(value);
+        break;
+      case(_GL_LIGHTING):
+        lighting=gem::any_cast<bool>(value);
+        break;
+      case(_GL_SMOOTH):
+        smooth=gem::any_cast<bool>(value);
+        break;
+      case(_GL_TEX_TYPE):
+        texture=gem::any_cast<int>(value);
+        break;
+      case(_GL_TEX_UNITS):
+        multiTexUnits=gem::any_cast<int>(value);
+        break;
+      case(_TIMING_TICK):
+        tickTime=gem::any_cast<float>(value);
+        break;
+      case(_GL_DRAWTYPE):
+        drawType=gem::any_cast<GLenum>(value);
+        break;
+      case(_GL_DISPLAYLIST):
+        inDisplayList=gem::any_cast<bool>(value);
+        break;
+      default:
+        break;
       }
-    } CATCH_ANY(key);
+    }
+    CATCH_ANY(key);
   }
   data->data[key]=value;
   return true;
 }
 
 /* remove a named property */
-bool GemState::remove(const GemState::key_t key) {
+bool GemState::remove(const GemState::key_t key)
+{
   return (0!=data->data.erase(key));
 }
 
-const GemState::key_t GemState::getKey(const std::string&s) {
+const GemState::key_t GemState::getKey(const std::string&s)
+{
   if(GemStateData::keys.empty()) {
     GemStateData::keys["dirty"]=_DIRTY;
     GemStateData::keys["timing.tick"]=_TIMING_TICK;

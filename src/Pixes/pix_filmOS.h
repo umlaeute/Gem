@@ -45,14 +45,14 @@ class GEM_EXTERN pix_filmOS : public GemBase
 {
   CPPEXTERN_HEADER(pix_filmOS, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_filmOS(t_symbol *filename);
   //  pix_filmOS();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -65,7 +65,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
 
   //////////
   // close the movie file
-  virtual void closeMess(void){}
+  virtual void closeMess(void) {}
   //////////
   // open a movie up
   virtual void openMess(t_symbol *filename, int colorspace=0);
@@ -105,7 +105,7 @@ class GEM_EXTERN pix_filmOS : public GemBase
   // change the colorspace
   virtual void csMess(int format);
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
 
   //////////
@@ -118,15 +118,15 @@ class GEM_EXTERN pix_filmOS : public GemBase
 
   //////////
   // If a movie was loaded and what kind of Movie this is
-  int 	    	m_haveMovie;
+  int           m_haveMovie;
 
   int           m_auto;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
-  int 	    	m_reqFrame;
-  int 	    	m_curFrame;
+  int           m_reqFrame;
+  int           m_curFrame;
 
   //////////
   // track information
@@ -138,34 +138,35 @@ class GEM_EXTERN pix_filmOS : public GemBase
   unsigned char*m_frame;  /* this points to the main texture (might be black) */
   unsigned char*m_data;   /* this points always to the real data */
 
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
   imageStruct   m_imageStruct;
 
 
-  int		m_xsize;
-  int		m_ysize;
-  int       	m_csize;
+  int           m_xsize;
+  int           m_ysize;
+  int           m_csize;
 
 
-  bool      	m_film; // are we in film- or in movie-mode
-  int		m_newFilm;
-  int 		newImage;
-  int		m_colorspace;
-  int		m_format;
+  bool          m_film; // are we in film- or in movie-mode
+  int           m_newFilm;
+  int           newImage;
+  int           m_colorspace;
+  int           m_format;
 
   //////////
   // a outlet for information like #frames and "reached end"
   t_outlet     *m_outNumFrames;
   t_outlet     *m_outEnd;
 
- protected:
+protected:
 
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *, int, t_atom*);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
   static void autoCallback       (void *data, t_float state);
   // static void colorspaceCallback(void *data, t_float state);
   static void colorspaceCallback(void *data, t_symbol *state);
 };
-#endif	// for header file
+#endif  // for header file

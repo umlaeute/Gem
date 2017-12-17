@@ -31,20 +31,20 @@ LOG
 /* RGBA */
 
 #if GL_RGBA_GEM == GL_RGBA
-const int chRed		= 0;
-const int chGreen	= 1;
-const int chBlue	= 2;
-const int chAlpha	= 3;
+const int chRed         = 0;
+const int chGreen       = 1;
+const int chBlue        = 2;
+const int chAlpha       = 3;
 #else
-const int chAlpha	= 0;
-const int chRed		= 1;
-const int chGreen	= 2;
-const int chBlue	= 3;
+const int chAlpha       = 0;
+const int chRed         = 1;
+const int chGreen       = 2;
+const int chBlue        = 3;
 #endif
 
 
 /* Gray */
-const int chGray	= 0;
+const int chGray        = 0;
 
 /* YUV422 */
 const int chU           = 0;
@@ -65,8 +65,7 @@ CLASS
 // there is a  new define here:
 #define IMAGE_CLASS
 
-struct GEM_EXTERN imageStruct
-{
+struct GEM_EXTERN imageStruct {
   imageStruct(void);
   imageStruct(const imageStruct&);
   virtual ~imageStruct(void);
@@ -88,11 +87,11 @@ struct GEM_EXTERN imageStruct
   //////////
   // dimensions of the image
   GLint         xsize;
-  GLint   	    ysize;
+  GLint             ysize;
 
   //////////
   // (average) width of 1 pixel (LUMINANCE = 1, RGBA = 4, YUV = 2)
-  GLint   	    csize;
+  GLint             csize;
 
   //////////
   // data type - always GL_UNSIGNED_BYTE (except for OS X)
@@ -118,7 +117,8 @@ struct GEM_EXTERN imageStruct
   // heck, why are X&Y swapped ?? (JMZ)
   inline unsigned char GetPixel(int Y, int X, int C) const
   {
-    return(data[Y * xsize * csize + X * csize + C]); }
+    return(data[Y * xsize * csize + X * csize + C]);
+  }
 
   //////////
   // sets a pixel
@@ -129,14 +129,18 @@ struct GEM_EXTERN imageStruct
    * you must make sure that (0<=X<xsize) and (0<=Y<ysize)
    */
   inline void SetPixel(int Y, int X, int C, unsigned char VAL)
-  { data[Y * xsize * csize + X * csize + C] = VAL; }
+  {
+    data[Y * xsize * csize + X * csize + C] = VAL;
+  }
 
 
   /////////
   // gets the color of a pixel
-  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g, unsigned char*b, unsigned char*a=NULL) const;
+  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g,
+                      unsigned char*b, unsigned char*a=NULL) const;
   virtual void getGrey(int X, int Y, unsigned char*g) const;
-  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u, unsigned char*v) const;
+  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u,
+                      unsigned char*v) const;
 
   /* following will set the whole image-data to either black or white
    * the size of the image-data is NOT xsize*ysize*csize but datasize
@@ -163,7 +167,8 @@ struct GEM_EXTERN imageStruct
    * into a new imageStruct
    */
   virtual void copy2Image(imageStruct *to) const;
-  virtual void copy2ImageStruct(imageStruct *to) const; // copy the imageStruct (but not the actual data)
+  virtual void copy2ImageStruct(imageStruct *to)
+  const; // copy the imageStruct (but not the actual data)
   /* this is a sort of better copy2Image,
    * which only copies the imageStruct-data if it is needed
    */
@@ -203,7 +208,8 @@ struct GEM_EXTERN imageStruct
   virtual void fromYUY2   (const unsigned char* orgdata); // YUYV
   virtual void fromYVYU   (const unsigned char* orgdata);
   /* planar YUV420: this is rather generic and not really YV12 only */
-  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U, const unsigned char*V);
+  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U,
+                           const unsigned char*V);
   /* assume that the planes are near each other: YVU */
   virtual void fromYV12   (const unsigned char* orgdata);
   /* assume that the planes are near each other: YVU */
@@ -213,23 +219,33 @@ struct GEM_EXTERN imageStruct
   virtual void fromYV12   (const short* orgdata);
 
   /* aliases */
-  virtual void fromYUV422 (const unsigned char* orgdata){fromUYVY(orgdata);}
-  virtual void fromYUV420P(const unsigned char* orgdata){fromYV12(orgdata);}
-  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,const unsigned char*V){fromYV12(Y,U,V);}
+  virtual void fromYUV422 (const unsigned char* orgdata)
+  {
+    fromUYVY(orgdata);
+  }
+  virtual void fromYUV420P(const unsigned char* orgdata)
+  {
+    fromYV12(orgdata);
+  }
+  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,
+                           const unsigned char*V)
+  {
+    fromYV12(Y,U,V);
+  }
 
   // "data" points to the image.
   // the memory could(!) be reserved by this class or someone else
   // "notowned" should be set to "1", if "data" points to foreign memory
   // "data" is not freed directly, when the destructor is called
   unsigned char   *data;    // the pointer to the data
-  private:
+private:
   // "pdata" is the private data, and is the memory reserved by this class
   // this data is freed when the destructor is called
   unsigned char   *pdata;
   // "datasize" is the size of data reserved at "pdata"
   size_t    datasize;
 
-  public:
+public:
   //////////
   // true if the image is flipped horizontally (origin is upper-left)
   // false if the image is openGL-conformant (origin is lower-left)
@@ -249,23 +265,22 @@ CLASS
     The pix block structure
 
 -----------------------------------------------------------------*/
-struct GEM_EXTERN pixBlock
-{
+struct GEM_EXTERN pixBlock {
   pixBlock();
 
-    //////////
-    // the block's image
-    imageStruct     image;
+  //////////
+  // the block's image
+  imageStruct     image;
 
-    //////////
-    // is this a newimage since last time?
-    //	ie, has it been refreshed
-    bool     	    newimage;
+  //////////
+  // is this a newimage since last time?
+  //  ie, has it been refreshed
+  bool            newimage;
 
-    //////////
-    // keeps track of when new films are loaded
-    //	useful for rectangle_textures on OSX
-    bool		    newfilm;
+  //////////
+  // keeps track of when new films are loaded
+  //  useful for rectangle_textures on OSX
+  bool                    newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

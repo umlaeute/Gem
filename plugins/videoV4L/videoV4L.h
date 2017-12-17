@@ -50,7 +50,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	videoV4L
+        videoV4L
 
     grab images from a v4l(1) device
 
@@ -67,51 +67,55 @@ DESCRIPTION
     "sat" (int) - the saturation
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoV4L : public videoBase {
-    public:
-        //////////
-        // Constructor
-    	videoV4L(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoV4L : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoV4L(void);
 
-    	//////////
-    	// Destructor
-    	virtual ~videoV4L(void);
+  //////////
+  // Destructor
+  virtual ~videoV4L(void);
 
-	////////
-	// open the video-device
-	virtual bool           openDevice(gem::Properties&props);
-	virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&props);
+  virtual void          closeDevice(void);
 
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	bool	    	startTransfer(void);
-	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool            startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  bool            stopTransfer(void);
 
-	//////////
-	// get the next frame
-	bool grabFrame(void);
+  //////////
+  // get the next frame
+  bool grabFrame(void);
 
-	//////////
-	// Set the video dimensions
+  //////////
+  // Set the video dimensions
 
-	virtual bool enumProperties(gem::Properties&readable,
-				    gem::Properties&writeable);
-	virtual void setProperties(gem::Properties&props);
-	virtual void getProperties(gem::Properties&props);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props);
 
-	virtual bool	    	setColor(int);
+  virtual bool            setColor(int);
 
-	virtual std::vector<std::string>enumerate(void);
+  virtual std::vector<std::string>enumerate(void);
 
- protected:
+protected:
 
   //-----------------------------------
-  // GROUP:	Linux specific video data
+  // GROUP:     Linux specific video data
   //-----------------------------------
 
   struct video_tuner vtuner;
@@ -134,7 +138,8 @@ namespace gem { namespace plugins {
 
 
   unsigned int errorcount;
- };
-};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

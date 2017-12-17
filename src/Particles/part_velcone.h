@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Set the velocity domain for particles
+        Set the velocity domain for particles
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -23,39 +23,40 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_velcone
+        part_velcone
 
-	Set the velocity domain for particles
+        Set the velocity domain for particles
 
 DESCRIPTION
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_velcone : public partlib_base
 {
-    CPPEXTERN_HEADER(part_velcone, partlib_base);
+  CPPEXTERN_HEADER(part_velcone, partlib_base);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	part_velcone(t_floatarg val1, t_floatarg val2, t_floatarg val, t_floatarg radius);
+  //////////
+  // Constructor
+  part_velcone(t_floatarg val1, t_floatarg val2, t_floatarg val,
+               t_floatarg radius);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~part_velcone(void);
+  //////////
+  // Destructor
+  virtual ~part_velcone(void);
 
-      //////////
-      void			vectorMess(float val1, float val2, float val3);
-      void			velMess(float num);
+  //////////
+  void                      vectorMess(float val1, float val2, float val3);
+  void                      velMess(float num);
 
-      //////////
-      float			m_pos[3];
-      float			m_radius;
+  //////////
+  float                     m_pos[3];
+  float                     m_radius;
 };
 
-#endif	// for header file
+#endif  // for header file

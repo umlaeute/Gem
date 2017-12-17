@@ -125,7 +125,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&diffuse, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
-  //post("diffuse: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR,
@@ -133,7 +132,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&specular, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
-  //post("specular: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT,
@@ -141,7 +139,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&ambient, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
-  //post("ambient: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE,
@@ -149,7 +146,6 @@ static void apply_material(const struct aiMaterial *mtl)
     color4_to_float4(&emission, c);
   }
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
-  //  post("emission: %g\t%g\t%g\t%g", c[0], c[1], c[2], c[3]);
 
   max = 1;
   ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
@@ -158,7 +154,6 @@ static void apply_material(const struct aiMaterial *mtl)
                                  &strength, &max);
   if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
-    //post("shininess: %gx%g=%g\t%g", shininess, strength, shininess*strength);
   } else {
     /* JMZ: in modelOBJ the default shininess is 65 */
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0.0f);
@@ -170,7 +165,7 @@ static void apply_material(const struct aiMaterial *mtl)
   if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME,
       &wireframe, &max)) {
     fill_mode = wireframe ? GL_LINE : GL_FILL;
-  }	else {
+  }     else {
     fill_mode = GL_FILL;
   }
   glPolygonMode(GL_FRONT_AND_BACK, fill_mode);
@@ -409,7 +404,8 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    post("key[%d]=%s ... %d", i, keys[i].c_str(), props.type(keys[i]));
+    verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(),
+            props.type(keys[i]));
   }
 #endif
 
@@ -418,11 +414,11 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
     // if there are NO texcoords, we only accept 'linear' and 'spheremap'
     // else, we also allow 'UV'
     // not-accepted textype, simply use the last one
-    if(m_have_texcoords && "UV" == s)
+    if(m_have_texcoords && "UV" == s) {
       m_textype = "";
-    else
-    if(("linear" == s) || ("spheremap" == s))
+    } else if(("linear" == s) || ("spheremap" == s)) {
       m_textype = s;
+    }
     m_rebuild = true;
   }
 
@@ -497,15 +493,17 @@ bool modelASSIMP2 :: compile(void)
   m_texcoords.clear();
   m_colors.clear();
 
-  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale), aiQuaterniont<float>(), m_offset);
+  aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
+                                  aiQuaterniont<float>(), m_offset);
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
 
   if (m_textype.empty() && m_have_texcoords) {;}
-  else if("spheremap" == m_textype)
+  else if("spheremap" == m_textype) {
     modelutils::genTexture_Spheremap(m_texcoords, m_normals);
-  else
+  } else {
     modelutils::genTexture_Linear(m_texcoords, m_vertices);
+  }
 
   fillVBOarray();
   if(useColorMaterial) {

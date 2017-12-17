@@ -39,61 +39,62 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_gain : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_gain, GemPixObj);
+  CPPEXTERN_HEADER(pix_gain, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
+  //////////
+  // Constructor
   pix_gain(int,t_atom*);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_gain();
+  //////////
+  // Destructor
+  virtual ~pix_gain();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 #ifdef __MMX__
-	//////////
-    	// MMX
-    	virtual void 	processRGBAMMX(imageStruct &image);
+  //////////
+  // MMX
+  virtual void    processRGBAMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-	//////////
-    	// altivec
-    	virtual void 	processYUVAltivec(imageStruct &image);
+  //////////
+  // altivec
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
-    	//////////
-    	// Set the new gain
-    	void	    	vecGainMess(int argc, t_atom *argv);
+  //////////
+  // Set the new gain
+  void            vecGainMess(int argc, t_atom *argv);
 
-    	//////////
-    	// Set the new gain
-    	void	    	floatGainMess(float gain);
+  //////////
+  // Set the new gain
+  void            floatGainMess(float gain);
 
-    	//////////
-    	// The new gain
-    	float		  	m_gain[4];
+  //////////
+  // The new gain
+  float                   m_gain[4];
 
-   	//////////
-    	// Set the new gain
-    	void	    	saturateMess(int sat);
+  //////////
+  // Set the new gain
+  void            saturateMess(int sat);
 
-	//////////
-	bool  m_saturate;
+  //////////
+  bool  m_saturate;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	vecGainMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatGainMessCallback(void *data, t_float gain);
-    	static void 	saturateMessCallback(void *data, t_float saturate);
+  //////////
+  // Static member functions
+  static void     vecGainMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
+  static void     floatGainMessCallback(void *data, t_float gain);
+  static void     saturateMessCallback(void *data, t_float saturate);
 };
 
-#endif	// for header file
+#endif  // for header file

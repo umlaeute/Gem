@@ -40,16 +40,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 class GEM_EXTERN pix_movieDarwin : public GemBase
 {
 
-    CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
+  CPPEXTERN_HEADER(pix_movieDarwin, GemBase);
 
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movieDarwin(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -73,7 +73,7 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   // prepare for texturing (on open)
   virtual void prepareTexture();
 
-   //////////
+  //////////
   // Clear the dirty flag on the pixBlock
   virtual void postrender(GemState *state);
 
@@ -114,15 +114,15 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
 
 
   //-----------------------------------
-  // GROUP:	Texture data
+  // GROUP:     Texture data
   //-----------------------------------
 
   //////////
   // The texture coordinates
-  TexCoord    	m_coords[4];
+  TexCoord      m_coords[4];
   //////////
   // The size of the texture (so we can use sub image)
-  int		m_dataSize[3];
+  int           m_dataSize[3];
 
   //////////
   // this is what we get from upstream
@@ -131,13 +131,13 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int             m_oldTexture;
   pixBlock       *m_oldImage;
 
-  GLuint	m_textureObj;
-  float		m_xRatio;
-  float		m_yRatio;
+  GLuint        m_textureObj;
+  float         m_xRatio;
+  float         m_yRatio;
   bool    upsidedown;
   GLint   m_textureType;
 
-   //////////
+  //////////
   // the current file
   t_symbol *x_filename;
 
@@ -155,15 +155,15 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
 
   //////////
   // If a movie was loaded and what kind of Movie this is
-  int 	    	m_haveMovie;
+  int           m_haveMovie;
 
   int           m_auto;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
-  int 	    	m_reqFrame;
-  int 	    	m_curFrame;
+  int           m_reqFrame;
+  int           m_curFrame;
 
   //////////
   // track information
@@ -171,51 +171,52 @@ class GEM_EXTERN pix_movieDarwin : public GemBase
   int           m_track;
 
 
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
   imageStruct   m_imageStruct;
 
 
-  int		m_xsize;
-  int		m_ysize;
-  int       	m_csize;
+  int           m_xsize;
+  int           m_ysize;
+  int           m_csize;
 
 
-  bool      	m_film; // are we in film- or in movie-mode
-  int		m_newFilm;
-  int 		newImage;
-  int		m_colorspace;
-  int		m_format;
-  int		m_rectangle;
+  bool          m_film; // are we in film- or in movie-mode
+  int           m_newFilm;
+  int           newImage;
+  int           m_colorspace;
+  int           m_format;
+  int           m_rectangle;
 
-    //-----------------------------------
-  // GROUP:	Movie data
+  //-----------------------------------
+  // GROUP:     Movie data
   //-----------------------------------
 
-  GWorldPtr		m_srcGWorld;
-  Rect			m_srcRect;
-  TimeValue		m_movieTime;
-  Track			m_movieTrack;
-  TimeValue		m_timeScale;
-  TimeValue		duration;
-  float			durationf;
-  long			movieDur, movieScale;
-  int			m_hiquality;
-  int			m_play;
-  float			m_rate;
-  Fixed			playRate;
-  TimeValue 		prevTime;
-  TimeValue		curTime;
-  float			m_volume;
+  GWorldPtr             m_srcGWorld;
+  Rect                  m_srcRect;
+  TimeValue             m_movieTime;
+  Track                 m_movieTrack;
+  TimeValue             m_timeScale;
+  TimeValue             duration;
+  float                 durationf;
+  long                  movieDur, movieScale;
+  int                   m_hiquality;
+  int                   m_play;
+  float                 m_rate;
+  Fixed                 playRate;
+  TimeValue             prevTime;
+  TimeValue             curTime;
+  float                 m_volume;
 
 private:
-  Movie			m_movie;
+  Movie                 m_movie;
 
- protected:
+protected:
 
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
   static void autoCallback       (void *data, t_float state);
   static void rateCallback       (void *data, t_float state);
   static void ramCallback(void *data);
@@ -224,4 +225,4 @@ private:
   static void volumeCallback(void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

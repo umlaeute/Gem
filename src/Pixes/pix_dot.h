@@ -34,13 +34,13 @@ class GEM_EXTERN pix_dot : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_dot, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_dot();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -48,19 +48,20 @@ class GEM_EXTERN pix_dot : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processYUVImage( imageStruct &image );
-  virtual void 	processGrayImage( imageStruct &image );
-  virtual void	drawDot( int xx, int yy, unsigned char c, U32 *dest );
-  virtual void	drawDotYUV( int xx, int yy, unsigned char c, U16 *dest );
-  virtual void	drawDotGray( int xx, int yy, unsigned char c, unsigned char *dest );
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processYUVImage( imageStruct &image );
+  virtual void  processGrayImage( imageStruct &image );
+  virtual void  drawDot( int xx, int yy, unsigned char c, U32 *dest );
+  virtual void  drawDotYUV( int xx, int yy, unsigned char c, U16 *dest );
+  virtual void  drawDotGray( int xx, int yy, unsigned char c,
+                             unsigned char *dest );
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
   virtual void  makePattern(int format=GL_RGBA);
   virtual void  sizeMess(int width, int height);
-  virtual void 	scaleMess( float state );
-  int	sharedbuffer_init();
-  void	sharedbuffer_reset();
+  virtual void  scaleMess( float state );
+  int   sharedbuffer_init();
+  void  sharedbuffer_reset();
   unsigned char *sharedbuffer_alloc(int size);
   unsigned char inline_RGB2Y( int rgb );
 
@@ -70,27 +71,27 @@ class GEM_EXTERN pix_dot : public GemPixObj
   // Make dots
 
   int m_xsize, m_ysize, m_csize;
-    unsigned char *sharedbuffer;
-    int sharedbuffer_length;
+  unsigned char *sharedbuffer;
+  int sharedbuffer_length;
 
-    int tail;
-    int alreadyInit;
-    int DOTDEPTH, DOTMAX;
-    int dots_width, dots_height;
-    int dot_size, dot_hsize;
-    int *sampx, *sampy;
-    int state;
-    t_float m_scale;
-    U32 *pattern;
-    U32 *heart_pattern;
-    int mode;
-    int R2Y[256];
-    int G2Y[256];
-    int B2Y[256];
+  int tail;
+  int alreadyInit;
+  int DOTDEPTH, DOTMAX;
+  int dots_width, dots_height;
+  int dot_size, dot_hsize;
+  int *sampx, *sampy;
+  int state;
+  t_float m_scale;
+  U32 *pattern;
+  U32 *heart_pattern;
+  int mode;
+  int R2Y[256];
+  int G2Y[256];
+  int B2Y[256];
 
-    bool m_useScale;
+  bool m_useScale;
 
- private:
+private:
 
   //////////
   // static member functions
@@ -99,4 +100,4 @@ class GEM_EXTERN pix_dot : public GemPixObj
   static void scaleMessCallback(void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

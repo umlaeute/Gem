@@ -22,8 +22,7 @@
 
 /* GLMmaterial: Structure that defines a material in a model.
  */
-typedef struct _GLMmaterial
-{
+typedef struct _GLMmaterial {
   std::string name;                   /* name of material */
   GLfloat diffuse[4];           /* diffuse component */
   GLfloat ambient[4];           /* ambient component */
@@ -118,7 +117,9 @@ typedef struct _GLMmodel {
     , groups(0)
     , numuvtexcoords(0)
     , uvtexcoords(0)
-{position[0]=position[1]=position[2]=0.;}
+  {
+    position[0]=position[1]=position[2]=0.;
+  }
 } GLMmodel;
 
 /* _GLMnode: general purpose node */
@@ -129,14 +130,20 @@ typedef struct _GLMnode {
 } GLMnode;
 
 /* fill the vector with model data */
-void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors);
+void fillVector(const GLMmodel* model, GLMgroup* group,
+                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
+                std::vector<std::vector<float> >& vertices,
+                std::vector<std::vector<float> >& normals,
+                std::vector<std::vector<float> >& texcoords,
+                std::vector<std::vector<float> >& colors);
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
 _glmMax(GLfloat a, GLfloat b)
 {
-  if (b > a)
+  if (b > a) {
     return b;
+  }
   return a;
 }
 
@@ -144,8 +151,9 @@ _glmMax(GLfloat a, GLfloat b)
 static GLfloat
 _glmAbs(GLfloat f)
 {
-  if (f < 0)
+  if (f < 0) {
     return -f;
+  }
   return f;
 }
 
@@ -157,7 +165,9 @@ _glmAbs(GLfloat f)
 static GLfloat
 _glmDot(GLfloat* u, GLfloat* v)
 {
-  if (!(u) || !(v))return 0.f;
+  if (!(u) || !(v)) {
+    return 0.f;
+  }
 
   return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
 }
@@ -172,7 +182,15 @@ _glmDot(GLfloat* u, GLfloat* v)
 static GLvoid
 _glmCross(GLfloat* u, GLfloat* v, GLfloat* n)
 {
-  if (!(u))return; if (!(v))return; if (!(n))return;
+  if (!(u)) {
+    return;
+  }
+  if (!(v)) {
+    return;
+  }
+  if (!(n)) {
+    return;
+  }
 
   n[0] = u[1]*v[2] - u[2]*v[1];
   n[1] = u[2]*v[0] - u[0]*v[2];
@@ -188,7 +206,9 @@ _glmNormalize(GLfloat* v)
 {
   GLfloat l;
 
-  if (!(v))return;
+  if (!(v)) {
+    return;
+  }
 
   l = static_cast<GLfloat>(sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]));
   v[0] /= l;
@@ -208,10 +228,9 @@ _glmEqual(GLfloat* u, GLfloat* v, GLfloat epsilon)
 {
   if (_glmAbs(u[0] - v[0]) < epsilon &&
       _glmAbs(u[1] - v[1]) < epsilon &&
-      _glmAbs(u[2] - v[2]) < epsilon)
-    {
-      return GL_TRUE;
-    }
+      _glmAbs(u[2] - v[2]) < epsilon) {
+    return GL_TRUE;
+  }
   return GL_FALSE;
 }
 
@@ -247,7 +266,7 @@ _glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
     j = copied;             /* pass this along for below */
     copied++;
 
-  duplicate:
+duplicate:
     /* set the first component of this vector to point at the correct
        index into the new copies array */
     vectors[3 * i + 0] = static_cast<GLfloat>(j);
@@ -263,12 +282,15 @@ _glmFindGroup(const GLMmodel* model, const std::string&name)
 {
   GLMgroup* group=0;
 
-  if (!(model))return NULL;
+  if (!(model)) {
+    return NULL;
+  }
 
   group = model->groups;
   while(group) {
-    if (name==group->name)
+    if (name==group->name) {
       break;
+    }
     group = group->next;
   }
 
@@ -300,16 +322,19 @@ _glmFindMaterial(const GLMmodel* model, const std::string&name)
   /* XXX doing a linear search on a string key'd list is pretty lame,
      but it works and is fast enough for now. */
   for (i = 0; i < model->nummaterials; i++) {
-    if (name==model->materials[i].name)
+    if (name==model->materials[i].name) {
       goto found;
+    }
   }
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  verbose(0, "_glmFindMaterial():  can't find material \"%s\".", name.c_str());
+  verbose(0,
+          "[GEM:modelOBJ] _glmFindMaterial():  can't find material \"%s\".",
+          name.c_str());
   i = 0;
 
- found:
+found:
   return i;
 }
 
@@ -326,8 +351,9 @@ _glmDirName(const std::string&path)
   std::string dir;
 
   size_t last = path.find_last_of('/');
-  if(path.npos == last)
+  if(path.npos == last) {
     return dir;
+  }
 
   dir=std::string(path, 0, last+1);
 
@@ -352,7 +378,9 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   file = fopen(filename.c_str(), "r");
   if (!file) {
-    verbose(0, "_glmReadMTL() failed: can't open material file \"%s\".",filename.c_str());
+    verbose(0,
+            "[GEM:modelOBJ] _glmReadMTL() failed: can't open material file \"%s\".",
+            filename.c_str());
     return -1;
   }
 
@@ -364,22 +392,26 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmReadMTL() failed reading comment"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmReadMTL() failed reading comment");
+        continue;
       }
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmReadMTL() failed reading new material"); goto mtlread_failed;
+        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading new material");
+        goto mtlread_failed;
       }
       nummaterials++;
       if(EOF == sscanf(buf, "%s %s", buf, buf)) {
-        verbose(0, "_glmReadMTL() failed reading material"); goto mtlread_failed;
+        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
+        goto mtlread_failed;
       }
       break;
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmReadMTL() failed reading"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmReadMTL() failed reading");
+        continue;
       }
       break;
     }
@@ -417,62 +449,68 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmReadMTL() really failed reading comment"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading comment");
+        continue;
       }
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmReadMTL() really failed reading new material"); goto mtlread_failed;
+        verbose(0,
+                "[GEM:modelOBJ] _glmReadMTL() really failed reading new material");
+        goto mtlread_failed;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
-	nummaterials++;
-	model->materials[nummaterials].name = std::string(buf);
+        nummaterials++;
+        model->materials[nummaterials].name = std::string(buf);
       } else {
-	verbose(0, "_glmReadMTL() failed reading material");
+        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
       }
       break;
     case 'N':
       if (EOF != fscanf(file, "%f", &model->materials[nummaterials].shininess)) {
-	/* wavefront shininess is from [0, 1000], so scale for OpenGL */
-	model->materials[nummaterials].shininess /= 1000.0;
-	model->materials[nummaterials].shininess *= 128.0;
+        /* wavefront shininess is from [0, 1000], so scale for OpenGL */
+        model->materials[nummaterials].shininess /= 1000.0;
+        model->materials[nummaterials].shininess *= 128.0;
       } else {
-	verbose(0, "_glmReadMTL() failed reading material shininess");
+        verbose(0,
+                "[GEM:modelOBJ] _glmReadMTL() failed reading material shininess");
       }
       break;
     case 'K':
       switch(buf[1]) {
       case 'd':
         if(EOF != fscanf(file, "%f %f %f",
-			 &model->materials[nummaterials].diffuse[0],
-			 &model->materials[nummaterials].diffuse[1],
-			 &model->materials[nummaterials].diffuse[2])) {
-	} else {
-	  verbose(0, "_glmReadMTL() failed reading diffuse material");
-	}
+                         &model->materials[nummaterials].diffuse[0],
+                         &model->materials[nummaterials].diffuse[1],
+                         &model->materials[nummaterials].diffuse[2])) {
+        } else {
+          verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading diffuse material");
+        }
         break;
       case 's':
         if(EOF != fscanf(file, "%f %f %f",
-			 &model->materials[nummaterials].specular[0],
-			 &model->materials[nummaterials].specular[1],
-			 &model->materials[nummaterials].specular[2])) {
-	} else {
-	  verbose(0, "_glmReadMTL() failed reading specular material");
-	}
+                         &model->materials[nummaterials].specular[0],
+                         &model->materials[nummaterials].specular[1],
+                         &model->materials[nummaterials].specular[2])) {
+        } else {
+          verbose(0,
+                  "[GEM:modelOBJ] _glmReadMTL() failed reading specular material");
+        }
         break;
       case 'a':
         if(EOF != fscanf(file, "%f %f %f",
-			 &model->materials[nummaterials].ambient[0],
-			 &model->materials[nummaterials].ambient[1],
-			 &model->materials[nummaterials].ambient[2])) {
-	} else {
-	  verbose(0, "_glmReadMTL() failed reading ambient material");
-	}
+                         &model->materials[nummaterials].ambient[0],
+                         &model->materials[nummaterials].ambient[1],
+                         &model->materials[nummaterials].ambient[2])) {
+        } else {
+          verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading ambient material");
+        }
         break;
       default:
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(1, "_glmReadMTL() really failed reading K"); continue;
+          verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading K");
+          continue;
         }
         break;
       }
@@ -480,15 +518,20 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmReadMTL() really failed reading"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading");
+        continue;
       }
       break;
     }
   }
-  if(file)fclose(file);
+  if(file) {
+    fclose(file);
+  }
   return 0;
- mtlread_failed:
-  if(file)fclose(file);
+mtlread_failed:
+  if(file) {
+    fclose(file);
+  }
   return -1;
 }
 
@@ -499,10 +542,10 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
  * mtllibname - name of the material library to be written
  */
 static GLboolean
-_glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtllibname)
+_glmWriteMTL(const GLMmodel* model, const char* modelpath,
+             const std::string&mtllibname)
 {
   FILE* file=0;
-  GLMmaterial* material=0;
   GLuint i;
 
   std::string filename = _glmDirName(model->pathname);
@@ -511,7 +554,8 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   /* open the file */
   file = fopen(filename.c_str(), "w");
   if (!file) {
-    verbose(0, "_glmWriteMTL() failed: can't open file \"%s\".",filename.c_str());
+    verbose(0, "[GEM:modelOBJ] _glmWriteMTL() failed: can't open file \"%s\".",
+            filename.c_str());
     return GL_FALSE;
   }
 
@@ -526,7 +570,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath, const std::string&mtl
   fprintf(file, "#  \n\n");
 
   for (i = 0; i < model->nummaterials; i++) {
-    material = &model->materials[i];
+    GLMmaterial* material = &model->materials[i];
     fprintf(file, "newmtl %s\n", material->name.c_str());
     fprintf(file, "Ka %f %f %f\n",
             material->ambient[0], material->ambient[1], material->ambient[2]);
@@ -567,7 +611,8 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass failed reading comment"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading comment");
+        continue;
       }
       break;
     case 'v':               /* v, vn, vt */
@@ -575,56 +620,63 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "_glmFirstPass failed reading vertex"); return GL_FALSE;
+          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading vertex");
+          return GL_FALSE;
         }
         numvertices++;
         break;
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "_glmFirstPass failed reading normals"); return GL_FALSE;
+          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading normals");
+          return GL_FALSE;
         }
         numnormals++;
         break;
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "_glmFirstPass failed reading texcoords"); return GL_FALSE;
+          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading texcoords");
+          return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        verbose(0, "_glmFirstPass: Unknown token \"%s\".", buf);
+        verbose(0, "[GEM:modelOBJ] _glmFirstPass: Unknown token \"%s\".", buf);
         return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmFirstPass failed reading material"); return GL_FALSE;
+        verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading material");
+        return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
-	model->mtllibname = buf;
-	_glmReadMTL(model, buf);
+        model->mtllibname = buf;
+        _glmReadMTL(model, buf);
       } else {
-	verbose(0, "glmFirstPass failed reading material lib");
+        verbose(0, "[GEM:modelOBJ] glmFirstPass failed reading material lib");
       }
       break;
     case 'u':
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass failed reading u"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading u");
+        continue;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmFirstPass failed reading groups"); return GL_FALSE;
+        verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading groups");
+        return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF != sscanf(buf, "%s", buf)) {
       } else {
-	verbose(0, "_glmFirstPass failed reading single-string group name");
-	return GL_FALSE;
+        verbose(0,
+                "[GEM:modelOBJ] _glmFirstPass failed reading single-string group name");
+        return GL_FALSE;
       }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
@@ -634,77 +686,78 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case 'f':               /* face */
       v = n = t = 0;
       if(EOF != fscanf(file, "%127s", buf)) {
-      /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
-	 buf[127]=0;
-         if (strstr(buf, "//")) {
-           /* v//n */
-	   if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
-	     verbose(1, "_glmFirstPass: failed reading v/n.");
-	   }
-           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
-	     verbose(1, "_glmFirstPass: failed reading v/n..");
-	   }
-           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
-	     verbose(1, "_glmFirstPass: failed reading v/n...");
-	   }
-           numtriangles++;
-           group->numtriangles++;
-           while(fscanf(file, "%d//%d", &v, &n) > 0) {
-             numtriangles++;
-             group->numtriangles++;
-           }
-         } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
-           /* v/t/n */
-           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-	     verbose(1, "_glmFirstPass: failed reading v/t/n.");
-	   }
-           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-	     verbose(1, "_glmFirstPass: failed reading v/t/n..");
-	   }
-           numtriangles++;
-           group->numtriangles++;
-           while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
-             numtriangles++;
-             group->numtriangles++;
-           }
-         } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
-           /* v/t */
-           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
-	     verbose(1, "_glmFirstPass: failed reading v/t.");
-	   }
-           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
-	     verbose(1, "_glmFirstPass: failed reading v/t..");
-	   }
-           numtriangles++;
-           group->numtriangles++;
-           while(fscanf(file, "%d/%d", &v, &t) > 0) {
-             numtriangles++;
-             group->numtriangles++;
-           }
-         } else {
-           /* v */
-           if(EOF == fscanf(file, "%d", &v)) {
-	     verbose(1, "_glmFirstPass: failed reading v.");
-	   }
-           if(EOF == fscanf(file, "%d", &v)) {
-	     verbose(1, "_glmFirstPass: failed reading v..");
-	   }
-           numtriangles++;
-           group->numtriangles++;
-           while(fscanf(file, "%d", &v) > 0) {
-             numtriangles++;
-             group->numtriangles++;
-           }
-         }
+        /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+        buf[127]=0;
+        if (strstr(buf, "//")) {
+          /* v//n */
+          if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n.");
+          }
+          if(EOF == fscanf(file, "%d//%d", &v, &n)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n..");
+          }
+          if(EOF == fscanf(file, "%d//%d", &v, &n)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n...");
+          }
+          numtriangles++;
+          group->numtriangles++;
+          while(fscanf(file, "%d//%d", &v, &n) > 0) {
+            numtriangles++;
+            group->numtriangles++;
+          }
+        } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
+          /* v/t/n */
+          if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n.");
+          }
+          if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n..");
+          }
+          numtriangles++;
+          group->numtriangles++;
+          while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
+            numtriangles++;
+            group->numtriangles++;
+          }
+        } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
+          /* v/t */
+          if(EOF == fscanf(file, "%d/%d", &v, &t)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t.");
+          }
+          if(EOF == fscanf(file, "%d/%d", &v, &t)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t..");
+          }
+          numtriangles++;
+          group->numtriangles++;
+          while(fscanf(file, "%d/%d", &v, &t) > 0) {
+            numtriangles++;
+            group->numtriangles++;
+          }
+        } else {
+          /* v */
+          if(EOF == fscanf(file, "%d", &v)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v.");
+          }
+          if(EOF == fscanf(file, "%d", &v)) {
+            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v..");
+          }
+          numtriangles++;
+          group->numtriangles++;
+          while(fscanf(file, "%d", &v) > 0) {
+            numtriangles++;
+            group->numtriangles++;
+          }
+        }
       } else {
-	verbose(1, "_glmFirstPass failed reading facet...");
+        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading facet...");
       }
       break;
 
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmFirstPass failed reading"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading");
+        continue;
       }
       break;
     }
@@ -727,21 +780,24 @@ _glmFirstPass(GLMmodel* model, FILE* file)
   return GL_TRUE;
 }
 
-static GLuint fixIndex(GLint current, GLuint baseindex) {
+static GLuint fixIndex(GLint current, GLuint baseindex)
+{
   GLint idx=baseindex;
 
   /* i'm not sure whether >=0 or >0 is valid...
    * for now, i assume >0 (so if current==0 it resolves to baseindex)
    */
 
-  if(current>0)
+  if(current>0) {
     return (GLuint)(current);
+  }
 
   idx=(baseindex+current);
-  if(idx>0)
+  if(idx>0) {
     return (GLuint)idx;
-  else {
-    verbose(1, "unable to fix negative index %d @ %d", current, baseindex);
+  } else {
+    verbose(1, "[GEM:modelOBJ] unable to fix negative index %d @ %d", current,
+            baseindex);
     return baseindex;
   }
 }
@@ -784,60 +840,69 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmSecondPass() failed reading"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
+        continue;
       }
       break;
     case 'v':               /* v, vn, vt */
       switch(buf[1]) {
       case '\0':          /* vertex */
         if(EOF != fscanf(file, "%f %f %f",
-			 &vertices[3 * numvertices + 0],
-			 &vertices[3 * numvertices + 1],
-			 &vertices[3 * numvertices + 2])) {
-	  numvertices++;
-	} else {
-	  verbose(1, "_glmSecondPass failed reading vertex %d", numvertices);
-	}
+                         &vertices[3 * numvertices + 0],
+                         &vertices[3 * numvertices + 1],
+                         &vertices[3 * numvertices + 2])) {
+          numvertices++;
+        } else {
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading vertex %d",
+                  numvertices);
+        }
         break;
       case 'n':           /* normal */
         if(EOF != fscanf(file, "%f %f %f",
-			 &normals[3 * numnormals + 0],
-			 &normals[3 * numnormals + 1],
-			 &normals[3 * numnormals + 2])) {
-	  numnormals++;
-	} else {
-	  verbose(1, "_glmSecondPass failed reading normal %d", numnormals);
-	}
+                         &normals[3 * numnormals + 0],
+                         &normals[3 * numnormals + 1],
+                         &normals[3 * numnormals + 2])) {
+          numnormals++;
+        } else {
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading normal %d",
+                  numnormals);
+        }
         break;
       case 't':           /* texcoord */
         if(EOF != fscanf(file, "%f %f",
-			 &texcoords[2 * numtexcoords + 0],
-			 &texcoords[2 * numtexcoords + 1])) {
-	  numtexcoords++;
-	} else {
-	  verbose(1, "_glmSecondPass failed reading texcoord %d", numtexcoords);
-	}
+                         &texcoords[2 * numtexcoords + 0],
+                         &texcoords[2 * numtexcoords + 1])) {
+          numtexcoords++;
+        } else {
+          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading texcoord %d",
+                  numtexcoords);
+        }
         break;
       }
       break;
     case 'u':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmSecondPass() failed reading material"); return GL_FALSE;
+        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading material");
+        return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
-	group->material = material = _glmFindMaterial(model, buf);
+        group->material = material = _glmFindMaterial(model, buf);
       } else {
-        verbose(0, "_glmSecondPass() failed finding material"); return GL_FALSE;
+        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed finding material");
+        return GL_FALSE;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "_glmSecondPass() failed reading group"); return GL_FALSE;
+        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading group");
+        return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF == sscanf(buf, "%s", buf)) {
-	verbose(0, "_glmSecondPass() failed reading single-string group name"); return GL_FALSE;
+        verbose(0,
+                "[GEM:modelOBJ] _glmSecondPass() failed reading single-string group name");
+        return GL_FALSE;
       }
 #else
       buf[strlen(buf)-1] = '\0';  /* nuke '\n' */
@@ -848,149 +913,151 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     case 'f':               /* face */
       v = n = t = 0;
       if(EOF != fscanf(file, "%127s", buf)) {
-      /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
-	 buf[127]=0;
-         if (strstr(buf, "//")) {
-           /* v//n */
-	   if(EOF != sscanf(buf, "%d//%d", &v, &n)) {
-	     T(numtriangles).vindices[0] = fixIndex(v,numvertices);
-	     T(numtriangles).nindices[0] = fixIndex(n,numnormals);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/n.");
-	   }
-           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
-	     T(numtriangles).vindices[1] = fixIndex(v,numvertices);
-	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/n..");
-	   }
-           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
-	     T(numtriangles).vindices[2] = fixIndex(v,numvertices);
-	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/n...");
-	   }
-           group->triangles[group->numtriangles++] = numtriangles;
-           numtriangles++;
-           while(fscanf(file, "%d//%d", &v, &n) > 0) {
-             T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-             T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
-             T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-             T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
-             T(numtriangles).vindices[2] = fixIndex(v,numvertices);
-             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
-             group->triangles[group->numtriangles++] = numtriangles;
-             numtriangles++;
-           }
-         } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
-           /* v/t/n */
-           T(numtriangles).vindices[0] = fixIndex(v,numvertices);
-           T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
-           T(numtriangles).nindices[0] = fixIndex(n, numnormals);
-           if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
-	     T(numtriangles).nindices[1] = fixIndex(n, numnormals);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/t/n.");
-	   }
-           if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
-	     T(numtriangles).nindices[2] = fixIndex(n, numnormals);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/t/n..");
-	   }
-           group->triangles[group->numtriangles++] = numtriangles;
-           numtriangles++;
-           while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
-             T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-             T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
-             T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
-             T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-             T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
-             T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
-             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
-             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
-             group->triangles[group->numtriangles++] = numtriangles;
-             numtriangles++;
-           }
-         } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
-           /* v/t */
-           T(numtriangles).vindices[0] = fixIndex(v, numvertices);
-           T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
-           if(EOF != fscanf(file, "%d/%d", &v, &t)) {
-	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-	     T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/t.");
-	   }
-           if(EOF != fscanf(file, "%d/%d", &v, &t)) {
-	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-	     T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v/t..");
-	   }
-           group->triangles[group->numtriangles++] = numtriangles;
-           numtriangles++;
-           while(fscanf(file, "%d/%d", &v, &t) > 0) {
-             T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-             T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
-             T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-             T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
-             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
-             group->triangles[group->numtriangles++] = numtriangles;
-             numtriangles++;
-           }
-         } else {
-           /* v */
-           if(EOF != sscanf(buf, "%d", &v)) {
-	     T(numtriangles).vindices[0] = fixIndex(v, numvertices);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v.");
-	   }
-           if(EOF != fscanf(file, "%d", &v)) {
-	     T(numtriangles).vindices[1] = fixIndex(v, numvertices);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v..");
-	   }
-           if(EOF != fscanf(file, "%d", &v)) {
-	     T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-	   } else {
-	     verbose(0, "_glmSecondPass() failed reading v...");
-	   }
-           group->triangles[group->numtriangles++] = numtriangles;
-           numtriangles++;
-           while(fscanf(file, "%d", &v) > 0) {
-             T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
-             T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
-             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
-             group->triangles[group->numtriangles++] = numtriangles;
-             numtriangles++;
-           }
-         }
+        /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
+        buf[127]=0;
+        if (strstr(buf, "//")) {
+          /* v//n */
+          if(EOF != sscanf(buf, "%d//%d", &v, &n)) {
+            T(numtriangles).vindices[0] = fixIndex(v,numvertices);
+            T(numtriangles).nindices[0] = fixIndex(n,numnormals);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n.");
+          }
+          if(EOF != fscanf(file, "%d//%d", &v, &n)) {
+            T(numtriangles).vindices[1] = fixIndex(v,numvertices);
+            T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n..");
+          }
+          if(EOF != fscanf(file, "%d//%d", &v, &n)) {
+            T(numtriangles).vindices[2] = fixIndex(v,numvertices);
+            T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n...");
+          }
+          group->triangles[group->numtriangles++] = numtriangles;
+          numtriangles++;
+          while(fscanf(file, "%d//%d", &v, &n) > 0) {
+            T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
+            T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
+            T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
+            T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
+            T(numtriangles).vindices[2] = fixIndex(v,numvertices);
+            T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+            group->triangles[group->numtriangles++] = numtriangles;
+            numtriangles++;
+          }
+        } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
+          /* v/t/n */
+          T(numtriangles).vindices[0] = fixIndex(v,numvertices);
+          T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
+          T(numtriangles).nindices[0] = fixIndex(n, numnormals);
+          if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+            T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+            T(numtriangles).nindices[1] = fixIndex(n, numnormals);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n.");
+          }
+          if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+            T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n..");
+          }
+          group->triangles[group->numtriangles++] = numtriangles;
+          numtriangles++;
+          while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
+            T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
+            T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
+            T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
+            T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
+            T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
+            T(numtriangles).nindices[1] = T(numtriangles-1).nindices[2];
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+            T(numtriangles).nindices[2] = fixIndex(n, numnormals);
+            group->triangles[group->numtriangles++] = numtriangles;
+            numtriangles++;
+          }
+        } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
+          /* v/t */
+          T(numtriangles).vindices[0] = fixIndex(v, numvertices);
+          T(numtriangles).uvtindices[0] = fixIndex(t, numtexcoords);
+          if(EOF != fscanf(file, "%d/%d", &v, &t)) {
+            T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t.");
+          }
+          if(EOF != fscanf(file, "%d/%d", &v, &t)) {
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t..");
+          }
+          group->triangles[group->numtriangles++] = numtriangles;
+          numtriangles++;
+          while(fscanf(file, "%d/%d", &v, &t) > 0) {
+            T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
+            T(numtriangles).uvtindices[0] = T(numtriangles-1).uvtindices[0];
+            T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
+            T(numtriangles).uvtindices[1] = T(numtriangles-1).uvtindices[2];
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+            T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
+            group->triangles[group->numtriangles++] = numtriangles;
+            numtriangles++;
+          }
+        } else {
+          /* v */
+          if(EOF != sscanf(buf, "%d", &v)) {
+            T(numtriangles).vindices[0] = fixIndex(v, numvertices);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v.");
+          }
+          if(EOF != fscanf(file, "%d", &v)) {
+            T(numtriangles).vindices[1] = fixIndex(v, numvertices);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v..");
+          }
+          if(EOF != fscanf(file, "%d", &v)) {
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+          } else {
+            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v...");
+          }
+          group->triangles[group->numtriangles++] = numtriangles;
+          numtriangles++;
+          while(fscanf(file, "%d", &v) > 0) {
+            T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
+            T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
+            T(numtriangles).vindices[2] = fixIndex(v, numvertices);
+            group->triangles[group->numtriangles++] = numtriangles;
+            numtriangles++;
+          }
+        }
       } else {
-	verbose(1, "_glmSecondPass() failed reading..."); continue;
+        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading...");
+        continue;
       }
       break;
 
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "_glmSecondPass() failed reading"); continue;
+        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
+        continue;
       }
       break;
     }
   }
 
   /* announce the memory requirements */
-  verbose(1, " Memory: %d bytes", (int)(
-          numvertices  * 3*sizeof(GLfloat) +
-          numnormals   * 3*sizeof(GLfloat) +
-          numtexcoords * 3*sizeof(GLfloat) +
-          numtriangles * 1*sizeof(GLMtriangle)));
+  verbose(1, "[GEM:modelOBJ]  Memory: %d bytes", (int)(
+            numvertices  * 3*sizeof(GLfloat) +
+            numnormals   * 3*sizeof(GLfloat) +
+            numtexcoords * 3*sizeof(GLfloat) +
+            numtriangles * 1*sizeof(GLMtriangle)));
 
   return GL_TRUE;
 }
@@ -1013,28 +1080,38 @@ glmUnitize(GLMmodel* model)
   GLfloat cx, cy, cz, w, h, d;
   GLfloat scale;
 
-  if (!(model))return 0.f;
-  if (!(model->vertices))return 0.f;
+  if (!(model)) {
+    return 0.f;
+  }
+  if (!(model->vertices)) {
+    return 0.f;
+  }
 
   /* get the max/mins */
   maxx = minx = model->vertices[3 + 0];
   maxy = miny = model->vertices[3 + 1];
   maxz = minz = model->vertices[3 + 2];
   for (i = 1; i <= model->numvertices; i++) {
-    if (maxx < model->vertices[3 * i + 0])
+    if (maxx < model->vertices[3 * i + 0]) {
       maxx = model->vertices[3 * i + 0];
-    if (minx > model->vertices[3 * i + 0])
+    }
+    if (minx > model->vertices[3 * i + 0]) {
       minx = model->vertices[3 * i + 0];
+    }
 
-    if (maxy < model->vertices[3 * i + 1])
+    if (maxy < model->vertices[3 * i + 1]) {
       maxy = model->vertices[3 * i + 1];
-    if (miny > model->vertices[3 * i + 1])
+    }
+    if (miny > model->vertices[3 * i + 1]) {
       miny = model->vertices[3 * i + 1];
+    }
 
-    if (maxz < model->vertices[3 * i + 2])
+    if (maxz < model->vertices[3 * i + 2]) {
       maxz = model->vertices[3 * i + 2];
-    if (minz > model->vertices[3 * i + 2])
+    }
+    if (minz > model->vertices[3 * i + 2]) {
       minz = model->vertices[3 * i + 2];
+    }
   }
 
   /* calculate model width, height, and depth */
@@ -1075,29 +1152,41 @@ glmDimensions(const GLMmodel* model, GLfloat* dimensions)
   GLuint i;
   GLfloat maxx, minx, maxy, miny, maxz, minz;
 
-  if (!(model))return;
-  if (!(model->vertices))return;
-  if (!(dimensions))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->vertices)) {
+    return;
+  }
+  if (!(dimensions)) {
+    return;
+  }
 
   /* get the max/mins */
   maxx = minx = model->vertices[3 + 0];
   maxy = miny = model->vertices[3 + 1];
   maxz = minz = model->vertices[3 + 2];
   for (i = 1; i <= model->numvertices; i++) {
-    if (maxx < model->vertices[3 * i + 0])
+    if (maxx < model->vertices[3 * i + 0]) {
       maxx = model->vertices[3 * i + 0];
-    if (minx > model->vertices[3 * i + 0])
+    }
+    if (minx > model->vertices[3 * i + 0]) {
       minx = model->vertices[3 * i + 0];
+    }
 
-    if (maxy < model->vertices[3 * i + 1])
+    if (maxy < model->vertices[3 * i + 1]) {
       maxy = model->vertices[3 * i + 1];
-    if (miny > model->vertices[3 * i + 1])
+    }
+    if (miny > model->vertices[3 * i + 1]) {
       miny = model->vertices[3 * i + 1];
+    }
 
-    if (maxz < model->vertices[3 * i + 2])
+    if (maxz < model->vertices[3 * i + 2]) {
       maxz = model->vertices[3 * i + 2];
-    if (minz > model->vertices[3 * i + 2])
+    }
+    if (minz > model->vertices[3 * i + 2]) {
       minz = model->vertices[3 * i + 2];
+    }
   }
 
   /* calculate model width, height, and depth */
@@ -1133,7 +1222,9 @@ GLvoid
 glmReverseWinding(GLMmodel* model)
 {
   GLuint i, swap;
-  if (!(model))return;
+  if (!(model)) {
+    return;
+  }
 
   for (i = 0; i < model->numtriangles; i++) {
     swap = T(i).vindices[0];
@@ -1181,12 +1272,17 @@ glmFacetNormals(GLMmodel* model)
   GLfloat u[3];
   GLfloat v[3];
 
-  if (!(model))return;
-  if (!(model->vertices))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->vertices)) {
+    return;
+  }
 
   /* clobber any old facetnormals */
-  if (model->facetnorms)
+  if (model->facetnorms) {
     delete[]model->facetnorms;
+  }
 
   /* allocate memory for the new facet normals */
   model->numfacetnorms = model->numtriangles;
@@ -1196,18 +1292,18 @@ glmFacetNormals(GLMmodel* model)
     model->triangles[i].findex = i+1;
 
     u[0] = model->vertices[3 * T(i).vindices[1] + 0] -
-      model->vertices[3 * T(i).vindices[0] + 0];
+           model->vertices[3 * T(i).vindices[0] + 0];
     u[1] = model->vertices[3 * T(i).vindices[1] + 1] -
-      model->vertices[3 * T(i).vindices[0] + 1];
+           model->vertices[3 * T(i).vindices[0] + 1];
     u[2] = model->vertices[3 * T(i).vindices[1] + 2] -
-      model->vertices[3 * T(i).vindices[0] + 2];
+           model->vertices[3 * T(i).vindices[0] + 2];
 
     v[0] = model->vertices[3 * T(i).vindices[2] + 0] -
-      model->vertices[3 * T(i).vindices[0] + 0];
+           model->vertices[3 * T(i).vindices[0] + 0];
     v[1] = model->vertices[3 * T(i).vindices[2] + 1] -
-      model->vertices[3 * T(i).vindices[0] + 1];
+           model->vertices[3 * T(i).vindices[0] + 1];
     v[2] = model->vertices[3 * T(i).vindices[2] + 2] -
-      model->vertices[3 * T(i).vindices[0] + 2];
+           model->vertices[3 * T(i).vindices[0] + 2];
 
     _glmCross(u, v, &model->facetnorms[3 * (i+1)]);
     _glmNormalize(&model->facetnorms[3 * (i+1)]);
@@ -1242,15 +1338,20 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
   GLfloat dot, cos_angle;
   GLuint  i, avg;
 
-  if (!(model))return;
-  if (!(model->facetnorms))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->facetnorms)) {
+    return;
+  }
 
   /* calculate the cosine of the angle (in degrees) */
   cos_angle = (GLfloat)cos(angle * M_PI / 180.0f);
 
   /* nuke any previous normals */
-  if (model->normals)
+  if (model->normals) {
     delete[]model->normals;
+  }
 
   /* allocate space for new normals */
   model->numnormals = model->numtriangles * 3; /* 3 normals per triangle */
@@ -1259,8 +1360,9 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
   /* allocate a structure that will hold a linked list of triangle
      indices for each vertex */
   members = new GLMnode*[model->numvertices + 1];
-  for (i = 1; i <= model->numvertices; i++)
+  for (i = 1; i <= model->numvertices; i++) {
     members[i] = NULL;
+  }
 
   /* for every triangle, create a node for each vertex in it */
   for (i = 0; i < model->numtriangles; i++) {
@@ -1286,9 +1388,12 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     /* calculate an average normal for this vertex by averaging the
        facet normal of every triangle this vertex is in */
     node = members[i];
-    if (!node)
-      verbose(0, "glmVertexNormals(): vertex w/o a triangle");
-    average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
+    if (!node) {
+      verbose(0, "[GEM:modelOBJ] glmVertexNormals(): vertex w/o a triangle");
+    }
+    average[0] = 0.0;
+    average[1] = 0.0;
+    average[2] = 0.0;
     avg = 0;
     while (node) {
       /* only average if the dot product of the angle between the two
@@ -1326,12 +1431,13 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     while (node) {
       if (node->averaged) {
         /* if this node was averaged, use the average normal */
-        if (T(node->index).vindices[0] == i)
+        if (T(node->index).vindices[0] == i) {
           T(node->index).nindices[0] = avg;
-        else if (T(node->index).vindices[1] == i)
+        } else if (T(node->index).vindices[1] == i) {
           T(node->index).nindices[1] = avg;
-        else if (T(node->index).vindices[2] == i)
+        } else if (T(node->index).vindices[2] == i) {
           T(node->index).nindices[2] = avg;
+        }
       } else {
         /* if this node wasn't averaged, use the facet normal */
         model->normals[3 * numnormals + 0] =
@@ -1340,12 +1446,13 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
           model->facetnorms[3 * T(node->index).findex + 1];
         model->normals[3 * numnormals + 2] =
           model->facetnorms[3 * T(node->index).findex + 2];
-        if (T(node->index).vindices[0] == i)
+        if (T(node->index).vindices[0] == i) {
           T(node->index).nindices[0] = numnormals;
-        else if (T(node->index).vindices[1] == i)
+        } else if (T(node->index).vindices[1] == i) {
           T(node->index).nindices[1] = numnormals;
-        else if (T(node->index).vindices[2] == i)
+        } else if (T(node->index).vindices[2] == i) {
           T(node->index).nindices[2] = numnormals;
+        }
         numnormals++;
       }
       node = node->next;
@@ -1390,11 +1497,16 @@ glmUVTexture(GLMmodel* model, float h, float w)
   GLMgroup *group=0;
   GLuint i;
 
-  if(!model)return;
-  if(!(model->uvtexcoords))return;
+  if(!model) {
+    return;
+  }
+  if(!(model->uvtexcoords)) {
+    return;
+  }
 
-  if (model->texcoords)
+  if (model->texcoords) {
     delete[]model->texcoords;
+  }
 
   model->numtexcoords = model->numuvtexcoords;
   model->texcoords=new GLfloat[2*(model->numuvtexcoords+1)];
@@ -1415,7 +1527,9 @@ glmUVTexture(GLMmodel* model, float h, float w)
     }
     group = group->next;
   }
-  verbose(1, "glmUVTexture(): generated %d UV texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmUVTexture(): generated %d UV texture coordinates",
+          model->numtexcoords);
 }
 
 /* glmLinearTexture: Generates texture coordinates according to a
@@ -1432,16 +1546,19 @@ glmLinearTexture(GLMmodel* model, float h, float w)
   GLfloat x, y, scalefactor;
   GLuint i;
 
-  if (!(model))return;
+  if (!(model)) {
+    return;
+  }
 
-  if (model->texcoords)
+  if (model->texcoords) {
     delete[]model->texcoords;
+  }
   model->numtexcoords = model->numvertices;
   model->texcoords=new GLfloat[2*(model->numtexcoords+1)];
 
   glmDimensions(model, dimensions);
   scalefactor = 2.0f /
-    _glmAbs(_glmMax(_glmMax(dimensions[0], dimensions[1]), dimensions[2]));
+                _glmAbs(_glmMax(_glmMax(dimensions[0], dimensions[1]), dimensions[2]));
 
   /* do the calculations */
   for(i = 1; i <= model->numvertices; i++) {
@@ -1462,7 +1579,9 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1, "glmLinearTexture(): generated %d linear texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmLinearTexture(): generated %d linear texture coordinates",
+          model->numtexcoords);
 }
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
@@ -1483,11 +1602,16 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
   GLfloat theta, phi, rho, x, y, z, r;
   GLuint i;
 
-  if (!(model))return;
-  if (!(model->normals))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->normals)) {
+    return;
+  }
 
-  if (model->texcoords)
+  if (model->texcoords) {
     delete[]model->texcoords;
+  }
   model->numtexcoords = model->numnormals;
   model->texcoords=new GLfloat[2*(model->numtexcoords+1)];
 
@@ -1502,15 +1626,17 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
       theta = 0.0f;
       phi = 0.0f;
     } else {
-      if(z == 0.0)
+      if(z == 0.0) {
         phi = M_PI / 2.0f;
-      else
+      } else {
         phi = (GLfloat)acos(z / rho);
+      }
 
-      if(y == 0.0)
+      if(y == 0.0) {
         theta = M_PI / 2.0f;
-      else
+      } else {
         theta = (GLfloat)asin(y / r) + (M_PI / 2.0f);
+      }
     }
 
     model->texcoords[2 * i + 0] = w * theta / M_PI;
@@ -1528,21 +1654,32 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1, "glmSpheremapTexture(): generated %d spheremap texture coordinates", model->numtexcoords);
+  verbose(1,
+          "[GEM:modelOBJ] glmSpheremapTexture(): generated %d spheremap texture coordinates",
+          model->numtexcoords);
 }
 
 GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
 {
-  if(!model)return;
+  if(!model) {
+    return;
+  }
   switch(typ) {
-  case GLM_TEX_UV: glmUVTexture(model, h, w); break;
-  case GLM_TEX_LINEAR: glmLinearTexture(model, h, w); break;
-  case GLM_TEX_SPHEREMAP: glmSpheremapTexture(model, h, w); break;
+  case GLM_TEX_UV:
+    glmUVTexture(model, h, w);
+    break;
+  case GLM_TEX_LINEAR:
+    glmLinearTexture(model, h, w);
+    break;
+  case GLM_TEX_SPHEREMAP:
+    glmSpheremapTexture(model, h, w);
+    break;
   default:
-    if(model->numuvtexcoords)
+    if(model->numuvtexcoords) {
       glmUVTexture(model, h, w);
-    else
+    } else {
       glmLinearTexture(model, h, w);
+    }
   }
 }
 
@@ -1550,37 +1687,58 @@ GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
  * glmGetNumVertices: get number of vertices in the model
  */
 GLuint
-glmGetNumVertices(GLMmodel *model){return (model && model->vertices)?model->numvertices:0;}
+glmGetNumVertices(GLMmodel *model)
+{
+  return (model && model->vertices)?model->numvertices:0;
+}
 /*
  * glmGetNumNormals: get number of normals in the model
  */
 GLuint
-glmGetNumNormals(GLMmodel *model){return (model && model->normals)?model->numnormals:0;}
+glmGetNumNormals(GLMmodel *model)
+{
+  return (model && model->normals)?model->numnormals:0;
+}
 /*
  * glmGetNumTexCoords: get number of texcoords in the model
  */
 GLuint
-glmGetNumTexCoords(GLMmodel *model){return (model && model->texcoords)?model->numtexcoords:0;}
+glmGetNumTexCoords(GLMmodel *model)
+{
+  return (model && model->texcoords)?model->numtexcoords:0;
+}
 /*
  * glmGetNumFacetNorms: get number of facetnorms in the model
  */
 GLuint
-glmGetNumFacetNorms(GLMmodel *model){return (model && model->facetnorms)?model->numfacetnorms:0;}
+glmGetNumFacetNorms(GLMmodel *model)
+{
+  return (model && model->facetnorms)?model->numfacetnorms:0;
+}
 /*
  * glmGetNumTriangles: get number of triangles in the model
  */
 GLuint
-glmGetNumTriangles(GLMmodel *model){return (model && model->triangles)?model->numtriangles:0;}
+glmGetNumTriangles(GLMmodel *model)
+{
+  return (model && model->triangles)?model->numtriangles:0;
+}
 /*
  * glmGetNumMaterials: get number of materials in the model
  */
 GLuint
-glmGetNumMaterials(GLMmodel *model){return (model && model->materials)?model->nummaterials:0;}
+glmGetNumMaterials(GLMmodel *model)
+{
+  return (model && model->materials)?model->nummaterials:0;
+}
 /*
  * glmGetNumGroups: get number of groups in the model
  */
 GLuint
-glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroups:0;}
+glmGetNumGroups(GLMmodel *model)
+{
+  return (model && model->groups)?model->numgroups:0;
+}
 
 /* glmDelete: Deletes a GLMmodel structure.
  *
@@ -1589,29 +1747,42 @@ glmGetNumGroups(GLMmodel *model){return (model && model->groups)?model->numgroup
 GLvoid
 glmDelete(GLMmodel* model)
 {
-  GLMgroup* group=0;
   GLuint i;
 
-  if (!(model))return;
+  if (!(model)) {
+    return;
+  }
 
   //  if (model->pathname)   free(model->pathname);
   //  if (model->mtllibname) free(model->mtllibname);
   model->pathname.clear();
   model->mtllibname.clear();
 
-  if (model->vertices)   delete[]model->vertices;
-  if (model->normals)    delete[]model->normals;
-  if (model->texcoords)  delete[]model->texcoords;
-  if (model->facetnorms) delete[]model->facetnorms;
-  if (model->triangles)  delete[]model->triangles;
+  if (model->vertices) {
+    delete[]model->vertices;
+  }
+  if (model->normals) {
+    delete[]model->normals;
+  }
+  if (model->texcoords) {
+    delete[]model->texcoords;
+  }
+  if (model->facetnorms) {
+    delete[]model->facetnorms;
+  }
+  if (model->triangles) {
+    delete[]model->triangles;
+  }
   if (model->materials) {
     for (i = 0; i < model->nummaterials; i++)
       //free(model->materials[i].name);
+    {
       model->materials[i].name.clear();
+    }
   }
   delete[]model->materials;
   while(model->groups) {
-    group = model->groups;
+    GLMgroup* group = model->groups;
     model->groups = model->groups->next;
     //free(group->name);
     group->name.clear();
@@ -1637,7 +1808,9 @@ glmReadOBJ(const char* filename)
   /* open the file */
   file = fopen(filename, "r");
   if (!file) {
-    verbose(0, "glmReadOBJ() failed: can't open data file \"%s\".", filename);
+    verbose(0,
+            "[GEM:modelOBJ] glmReadOBJ() failed: can't open data file \"%s\".",
+            filename);
     return NULL;
   }
 
@@ -1667,8 +1840,9 @@ glmReadOBJ(const char* filename)
 
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
-  if(GL_FALSE==_glmFirstPass(model, file)){
-    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
+  if(GL_FALSE==_glmFirstPass(model, file)) {
+    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+            filename);
     goto readobj_failed;
   }
 
@@ -1686,7 +1860,8 @@ glmReadOBJ(const char* filename)
   rewind(file);
 
   if(GL_FALSE==_glmSecondPass(model, file)) {
-    verbose(0, "glmReadOBJ() failed: can't parse file \"%s\".", filename);
+    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+            filename);
     goto readobj_failed;
   }
 
@@ -1697,9 +1872,11 @@ glmReadOBJ(const char* filename)
 
   return model;
 
- readobj_failed:
+readobj_failed:
   glmDelete(model);
-  if(file)fclose(file);
+  if(file) {
+    fclose(file);
+  }
   return NULL;
 }
 
@@ -1725,41 +1902,49 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   FILE*   file=0;
   GLMgroup* group=0;
 
-  if (!(model))return -1;
+  if (!(model)) {
+    return -1;
+  }
 
   /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1,"glmWriteOBJ() warning: flat normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,"glmWriteOBJ() warning: smooth normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: smooth normal output requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,"glmWriteOBJ() warning: texture coordinate output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: texture coordinate output requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1,"glmWriteOBJ() warning: flat normal output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "and smooth normal output requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_COLOR && !model->materials) {
-    verbose(1,"glmWriteOBJ() warning: color output requested "
+    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: color output requested "
             "with no colors (materials) defined.");
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,"glmWriteOBJ() warning: material output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: material output requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,"glmWriteOBJ() warning: color and material output requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmWriteOBJ() warning: color and material output requested "
             "outputting only materials.");
     mode &= ~GLM_COLOR;
   }
@@ -1768,7 +1953,9 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   /* open the file */
   file = fopen(filename, "w");
   if (!file) {
-    verbose(0, "glmWriteOBJ() failed: can't open file \"%s\" to write.", filename);
+    verbose(0,
+            "[GEM:modelOBJ] glmWriteOBJ() failed: can't open file \"%s\" to write.",
+            filename);
     return -1;
   }
 
@@ -1837,8 +2024,10 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   group = model->groups;
   while(group) {
     fprintf(file, "g %s\n", group->name.c_str());
-    if (mode & GLM_MATERIAL)
-      fprintf(file, "usemtl %s\n", model->materials[group->material].name.c_str());
+    if (mode & GLM_MATERIAL) {
+      fprintf(file, "usemtl %s\n",
+              model->materials[group->material].name.c_str());
+    }
     for (i = 0; i < group->numtriangles; i++) {
       if (mode & GLM_SMOOTH && mode & GLM_TEXTURE) {
         fprintf(file, "f %d/%d/%d %d/%d/%d %d/%d/%d\n",
@@ -1913,56 +2102,69 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmDraw(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group=0;
   static GLMtriangle* triangle=0;
   static GLMmaterial* material=0;
 
-  if (!(model))return;
-  if (!(model->vertices))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->vertices)) {
+    return;
+  }
 
   /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1,"glmDraw() warning: flat render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,"glmDraw() warning: smooth render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,"glmDraw() warning: texture render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1,"glmDraw() warning: flat render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "and smooth render mode requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_COLOR && !model->materials) {
-    verbose(1,"glmDraw() warning: color render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color render mode requested "
             "with no materials defined.");
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,"glmDraw() warning: material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,"glmDraw() warning: color and material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
             "using only material mode.");
     mode &= ~GLM_COLOR;
   }
-  if (mode & GLM_COLOR)
+  if (mode & GLM_COLOR) {
     glEnable(GL_COLOR_MATERIAL);
-  else if (mode & GLM_MATERIAL)
+  } else if (mode & GLM_MATERIAL) {
     glDisable(GL_COLOR_MATERIAL);
+  }
 
   /* perhaps this loop should be unrolled into material, color, flat,
      smooth, etc. loops?  since most cpu's have good branch prediction
@@ -1971,94 +2173,107 @@ glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
 
   group = model->groups;
   while (group) {
-    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    fillVector(model, group, triangle, material, mode, vertices, normals,
+               texcoords, colors);
     group = group->next;
   }
 }
 
-void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, GLMmaterial* material, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors){
+void fillVector(const GLMmodel* model, GLMgroup* group,
+                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
+                std::vector<std::vector<float> >& vertices,
+                std::vector<std::vector<float> >& normals,
+                std::vector<std::vector<float> >& texcoords,
+                std::vector<std::vector<float> >& colors)
+{
 
-    if (mode & GLM_MATERIAL) {
-      material = &model->materials[group->material];
-      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
-      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
-      glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
+  if (mode & GLM_MATERIAL) {
+    material = &model->materials[group->material];
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
+  }
+
+  std::vector<float> vec, color;
+  float* pt=0;
+  int i;
+  if (mode & GLM_COLOR) {
+    color.insert(color.end(),material->diffuse,material->diffuse + 3);
+    color.push_back(1.);
+  }
+
+  for (i = 0; i < group->numtriangles; i++) {
+    triangle = &T(group->triangles[i]);
+    if (mode & GLM_FLAT) {
+      pt = &model->facetnorms[3 * triangle->findex];
+      vec = std::vector<float>(pt, pt + 3);
+      for ( int j=0; j<3 ; j++) {
+        normals.push_back(vec);
+      }
     }
 
-    std::vector<float> vec, color;
-    float* pt=0;
-    int i;
-    if (mode & GLM_COLOR) {
-      color.insert(color.end(),material->diffuse,material->diffuse + 3);
-      color.push_back(1.);
+    if (mode & GLM_SMOOTH) {
+      //~glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
+      pt = &model->normals[3 * triangle->nindices[0]];
+      vec = std::vector<float>(pt, pt + 3);
+      normals.push_back(vec);
+    }
+    if (mode & GLM_TEXTURE) {
+      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
+      pt =   &model->texcoords[2 * triangle->tindices[0]];
+      vec = std::vector<float>(pt, pt + 2);
+      texcoords.push_back(vec);
+    }
+    //~glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
+    pt = &model->vertices[3 * triangle->vindices[0]];
+    vec = std::vector<float>(pt, pt + 3);
+    vertices.push_back(vec);
+    if(!color.empty()) {
+      colors.push_back(color);
     }
 
-    for (i = 0; i < group->numtriangles; i++) {
-      triangle = &T(group->triangles[i]);
-      if (mode & GLM_FLAT) {
-        pt = &model->facetnorms[3 * triangle->findex];
-        vec = std::vector<float>(pt, pt + 3);
-        for ( int j=0; j<3 ; j++){
-          normals.push_back(vec);
-        }
-      }
-
-      if (mode & GLM_SMOOTH) {
-        //~glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-        pt = &model->normals[3 * triangle->nindices[0]];
-        vec = std::vector<float>(pt, pt + 3);
-        normals.push_back(vec);
-      }
-      if (mode & GLM_TEXTURE) {
-        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-        pt =   &model->texcoords[2 * triangle->tindices[0]];
-        vec = std::vector<float>(pt, pt + 2);
-        texcoords.push_back(vec);
-      }
-      //~glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
-      pt = &model->vertices[3 * triangle->vindices[0]];
+    if (mode & GLM_SMOOTH) {
+      //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
+      pt = &model->normals[3 * triangle->nindices[1]];
       vec = std::vector<float>(pt, pt + 3);
-      vertices.push_back(vec);
-      if(!color.empty()) colors.push_back(color);
+      normals.push_back(vec);
+    }
+    if (mode & GLM_TEXTURE) {
+      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
+      pt =   &model->texcoords[2 * triangle->tindices[1]];
+      vec = std::vector<float>(pt, pt + 2);
+      texcoords.push_back(vec);
+    }
+    //~glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
+    pt = &model->vertices[3 * triangle->vindices[1]];
+    vec = std::vector<float>(pt, pt + 3);
+    vertices.push_back(vec);
+    if(!color.empty()) {
+      colors.push_back(color);
+    }
 
-      if (mode & GLM_SMOOTH) {
-        //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-        pt = &model->normals[3 * triangle->nindices[1]];
-        vec = std::vector<float>(pt, pt + 3);
-        normals.push_back(vec);
-      }
-      if (mode & GLM_TEXTURE) {
-        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-        pt =   &model->texcoords[2 * triangle->tindices[1]];
-        vec = std::vector<float>(pt, pt + 2);
-        texcoords.push_back(vec);
-      }
-      //~glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-      pt = &model->vertices[3 * triangle->vindices[1]];
+    if (mode & GLM_SMOOTH) {
+      //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
+      pt = &model->normals[3 * triangle->nindices[2]];
       vec = std::vector<float>(pt, pt + 3);
-      vertices.push_back(vec);
-      if(!color.empty()) colors.push_back(color);
-
-      if (mode & GLM_SMOOTH) {
-        //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-        pt = &model->normals[3 * triangle->nindices[2]];
-        vec = std::vector<float>(pt, pt + 3);
-        normals.push_back(vec);
-      }
-      if (mode & GLM_TEXTURE) {
-        //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-        pt =   &model->texcoords[2 * triangle->tindices[2]];
-        vec = std::vector<float>(pt, pt + 2);
-        texcoords.push_back(vec);
-      }
-      //~glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-      pt = &model->vertices[3 * triangle->vindices[2]];
-      vec = std::vector<float>(pt, pt + 3);
-      vertices.push_back(vec);
-      if(!color.empty()) colors.push_back(color);
+      normals.push_back(vec);
+    }
+    if (mode & GLM_TEXTURE) {
+      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
+      pt =   &model->texcoords[2 * triangle->tindices[2]];
+      vec = std::vector<float>(pt, pt + 2);
+      texcoords.push_back(vec);
+    }
+    //~glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
+    pt = &model->vertices[3 * triangle->vindices[2]];
+    vec = std::vector<float>(pt, pt + 3);
+    vertices.push_back(vec);
+    if(!color.empty()) {
+      colors.push_back(color);
     }
   }
+}
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -2075,7 +2290,11 @@ void fillVector(const GLMmodel* model, GLMgroup* group, GLMtriangle* triangle, G
  * GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmList(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
@@ -2092,56 +2311,69 @@ glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
  */
 
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& colors)
 {
   static GLuint i;
   static GLMgroup* group=0;
   static GLMtriangle* triangle=0;
   static GLMmaterial* material=0;
 
-  if (!(model))return;
-  if (!(model->vertices))return;
+  if (!(model)) {
+    return;
+  }
+  if (!(model->vertices)) {
+    return;
+  }
 
   /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1,"glmDraw() warning: flat render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,"glmDraw() warning: smooth render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,"glmDraw() warning: texture render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1,"glmDraw() warning: flat render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "and smooth render mode requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_COLOR && !model->materials) {
-    verbose(1,"glmDraw() warning: color render mode requested "
+    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color render mode requested "
             "with no materials defined.");
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,"glmDraw() warning: material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,"glmDraw() warning: color and material render mode requested "
+    verbose(1,
+            "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
             "using only material mode.");
     mode &= ~GLM_COLOR;
   }
-  if (mode & GLM_COLOR)
+  if (mode & GLM_COLOR) {
     glEnable(GL_COLOR_MATERIAL);
-  else if (mode & GLM_MATERIAL)
+  } else if (mode & GLM_MATERIAL) {
     glDisable(GL_COLOR_MATERIAL);
+  }
 
   /* perhaps this loop should be unrolled into material, color, flat,
      smooth, etc. loops?  since most cpu's have good branch prediction
@@ -2150,33 +2382,41 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,  std::vector<s
 
   group = model->groups;
 
-  int count = 1;
   int numgroup;
 
   numgroup = model->numgroups-1;
 
-  verbose(1, "number of groups: %d",numgroup);
+  verbose(1, "[GEM:modelOBJ] number of groups: %d",numgroup);
   //groupNumber-=1;
-  if ( (!(groupNumber > numgroup)) && (groupNumber > 0)){
-    verbose(1, "model group requested is %d number of groups: %d",groupNumber,numgroup);
+  if ( (!(groupNumber > numgroup)) && (groupNumber > 0)) {
+    int count = 1;
+    verbose(1,
+            "[GEM:modelOBJ] model group requested is %d number of groups: %d",
+            groupNumber,numgroup);
 
 
     while (count < groupNumber) {
       group = group->next;
       count++;
     }
-    fillVector(model, group, triangle, material, mode, vertices, normals, texcoords, colors);
+    fillVector(model, group, triangle, material, mode, vertices, normals,
+               texcoords, colors);
   }
 }
 
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& colors)
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& colors)
 {
   GLuint modList;
 
   modList = glGenLists(1);
   glNewList(modList, GL_COMPILE);
-  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords, colors);
+  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords,
+               colors);
   glEndList();
 
   return modList;
@@ -2203,7 +2443,8 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
   vectors  = model->vertices;
   copies = _glmWeldVectors(vectors, &numvectors, epsilon);
 
-  verbose(1, "glmWeld(): %d redundant vertices.", model->numvertices - numvectors - 1);
+  verbose(1, "[GEM:modelOBJ] glmWeld(): %d redundant vertices.",
+          model->numvertices - numvectors - 1);
 
   for (i = 0; i < model->numtriangles; i++) {
     T(i).vindices[0] = static_cast<GLuint>(vectors[3 * T(i).vindices[0] + 0]);
@@ -2274,12 +2515,12 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab first two chars of the file and make sure that it has the
      correct magic cookie for a raw PPM file. */
   if(NULL==fgets(head, 70, fp)) {
-    verbose(0, "_glmReadPPM() failed reading header");
+    verbose(0, "[GEM:modelOBJ] _glmReadPPM() failed reading header");
     fclose(fp);
     return NULL;
   }
   if (strncmp(head, "P6", 2)) {
-    verbose(0, "%s: Not a raw PPM file", filename);
+    verbose(0, "[GEM:modelOBJ] %s: Not a raw PPM file", filename);
     fclose(fp);
     return NULL;
   }
@@ -2288,18 +2529,20 @@ glmReadPPM(const char* filename, int* width, int* height)
   i = 0;
   while(i < 3) {
     if(NULL==fgets(head, 70, fp)) {
-      verbose(0, "_glmReadPPM() failed header info");
+      verbose(0, "[GEM:modelOBJ] _glmReadPPM() failed header info");
       fclose(fp);
       return NULL;
     }
-    if (head[0] == '#')     /* skip comments. */
+    if (head[0] == '#') {   /* skip comments. */
       continue;
-    if (i == 0)
+    }
+    if (i == 0) {
       i += sscanf(head, "%d %d %d", &w, &h, &d);
-    else if (i == 1)
+    } else if (i == 1) {
       i += sscanf(head, "%d %d", &h, &d);
-    else if (i == 2)
+    } else if (i == 2) {
       i += sscanf(head, "%d", &d);
+    }
   }
 
   /* grab all the image data in one fell swoop. */
@@ -2314,7 +2557,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
   if(count!=imagesize) {
-    verbose(0, "_glmReadPPM failed to read all bytes");
+    verbose(0, "[GEM:modelOBJ] _glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;
     image=NULL;

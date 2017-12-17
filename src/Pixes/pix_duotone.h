@@ -39,49 +39,52 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_duotone : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_duotone, GemPixObj);
+  CPPEXTERN_HEADER(pix_duotone, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_duotone();
+  //////////
+  // Constructor
+  pix_duotone();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_duotone();
+  //////////
+  // Destructor
+  virtual ~pix_duotone();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	virtual void 	processRGBImage(imageStruct &image);
-		virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
-         //////////
-    	// altivec
-    	//virtual void 	processYUV_Altivec(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processRGBImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
+  //////////
+  // altivec
+  //virtual void  processYUV_Altivec(imageStruct &image);
 
-    	//////////
-    	// Set the new offset
-    	void	    	vecOffsetMess(int argc, t_atom *argv);
+  //////////
+  // Set the new offset
+  void            vecOffsetMess(int argc, t_atom *argv);
 
-    	//////////
-    	// Set the new offset
-    	void	    	floatOffsetMess(float foffset);
+  //////////
+  // Set the new offset
+  void            floatOffsetMess(float foffset);
 
-    	//////////
-    	// The new offset
-    	unsigned char 	m_color1[3],m_color2[3],m_thresh[3];
+  //////////
+  // The new offset
+  unsigned char   m_color1[3],m_color2[3],m_thresh[3];
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	color1MessCallback(void *data, t_float value1, t_float value2, t_float value3);
-    	static void 	color2MessCallback(void *data, t_float value1, t_float value2, t_float value3);
-        static void 	threshMessCallback(void *data, t_float value1, t_float value2, t_float value3);
+  //////////
+  // Static member functions
+  static void     color1MessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
+  static void     color2MessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
+  static void     threshMessCallback(void *data, t_float value1,
+                                     t_float value2, t_float value3);
 };
 
-#endif	// for header file
+#endif  // for header file

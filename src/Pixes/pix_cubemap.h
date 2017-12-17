@@ -37,13 +37,13 @@ class GEM_EXTERN pix_cubemap : public GemBase
 {
   CPPEXTERN_HEADER(pix_cubemap, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_cubemap();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -56,19 +56,19 @@ class GEM_EXTERN pix_cubemap : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Turn back off texture mapping
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
   // Establish texture object
-  virtual void	startRendering();
+  virtual void  startRendering();
 
   //////////
   // Delete texture object
-  virtual void	stopRendering();
+  virtual void  stopRendering();
 
   //////////
   // Turn on/off texture mapping
@@ -77,13 +77,13 @@ class GEM_EXTERN pix_cubemap : public GemBase
 
   //////////
   // Set up the texture state
-  void		setUpTextureState();
+  void          setUpTextureState();
 
   //////////
   // Set the texture quality
   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void          textureQuality(int type);
-  GLuint	m_textureQuality;
+  GLuint        m_textureQuality;
 
   //////////
   // Set the texture quality
@@ -102,20 +102,21 @@ class GEM_EXTERN pix_cubemap : public GemBase
 
   //////////
   // The size of the texture (so we can use sub image)
-  int	        m_dataSize[3];
+  int           m_dataSize[3];
 
   //////////
   // The texture object number
-  GLuint	    m_textureObj;
+  GLuint            m_textureObj;
 
   /* send out our texture through the 2nd outlet to be used by others */
-  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
-  t_outlet	*m_outTexID;
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio,
+                      GLint texType, GLboolean upsidedown);
+  t_outlet      *m_outTexID;
 
   ////////
   // the texture object we are creating and destroying
   // we use it as our texture
-  GLuint	    m_realTextureObj;
+  GLuint            m_realTextureObj;
 
   //////////
   // The resizing buffer
@@ -126,7 +127,7 @@ class GEM_EXTERN pix_cubemap : public GemBase
 
   //////////
   // The texture coordinates
-  TexCoord    	m_coords[4];
+  TexCoord      m_coords[4];
 
 
   //////////
@@ -144,11 +145,11 @@ class GEM_EXTERN pix_cubemap : public GemBase
 
   //////////
   // texture environment mode
-  void		envMess(int num);
-  GLint		m_env; // GL_TEXTURE_ENV_MODE
+  void          envMess(int num);
+  GLint         m_env; // GL_TEXTURE_ENV_MODE
 
-  GLint	m_texunit;
-  GLint	m_numTexUnits;
+  GLint m_texunit;
+  GLint m_numTexUnits;
 
   GLuint m_map;
 
@@ -163,4 +164,4 @@ class GEM_EXTERN pix_cubemap : public GemBase
   t_inlet*m_imgIn[6];
 };
 
-#endif	// for header file
+#endif  // for header file

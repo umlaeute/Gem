@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -45,7 +45,7 @@ REGISTER_VIDEOFACTORY("VFW", videoVFW);
 //
 /////////////////////////////////////////////////////////
 videoVFW :: videoVFW(void)
-  : videoBase("vfw", 0), 
+  : videoBase("vfw", 0),
     m_hWndC(NULL)
 {
   provide("dv");
@@ -71,38 +71,44 @@ bool videoVFW :: openDevice(gem::Properties&props)
 {
   char driverName[256];
   char driverDesc[256];
-  if (capGetDriverDescription(0, driverName, 256, driverDesc, 256))
-    post("videoVFW: driver '%s'", driverName);
+  if (capGetDriverDescription(0, driverName, 256, driverDesc, 256)) {
+    verbose(1, "[GEM:videoVFW] driver '%s'", driverName);
+  }
 
 
   double d;
-  if (props.get("width", d))
+  if (props.get("width", d)) {
     m_width=d;
+  }
 
-  if (props.get("height", d))
+  if (props.get("height", d)) {
     m_height=d;
+  }
 
-  if(m_hWndC)closeDevice();
-  
+  if(m_hWndC) {
+    closeDevice();
+  }
+
   // Connect to the daemon
-  m_hWndC = capCreateCaptureWindow ((LPSTR) "GEM video",	// window name if pop-up 
-				    0,				// window style (not visible)
-				    0, 0, m_width, m_height,// window position and dimensions
-				    GetDesktopWindow(), 0);
+  m_hWndC = capCreateCaptureWindow ((LPSTR)
+                                    "GEM video",        // window name if pop-up
+                                    0,                          // window style (not visible)
+                                    0, 0, m_width, m_height,// window position and dimensions
+                                    GetDesktopWindow(), 0);
   if (!m_hWndC) {
-    error("Unable to create capture window");
+    verbose(0, "[GEM:videoVFW] Unable to create capture window");
     return false;
-  } 
+  }
 
   if (!capDriverConnect(m_hWndC, 0)) {
-    error("Unable to connect to video driver");
+    verbose(0, "[GEM:videoVFW] Unable to connect to video driver");
     closeDevice();
     return false;
   }
 
   CAPTUREPARMS params;
   if (!capCaptureGetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
-    error("Unable to get capture parameters");
+    verbose(0, "[GEM:videoVFW] Unable to get capture parameters");
     closeDevice();
     return false;
   }
@@ -115,33 +121,29 @@ bool videoVFW :: openDevice(gem::Properties&props)
   params.fStepCaptureAt2x = FALSE;
   params.fAbortLeftMouse = FALSE;
   params.fAbortRightMouse = FALSE;
-  if (!capCaptureSetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS)))
-    {
-      error("Unable to set capture parameters");
-      closeDevice();
-      return false;
-    }
+  if (!capCaptureSetSetup(m_hWndC, &params, sizeof(CAPTUREPARMS))) {
+    verbose(0, "[GEM:videoVFW] Unable to set capture parameters");
+    closeDevice();
+    return false;
+  }
 
-  if (!capSetCallbackOnVideoStream(m_hWndC, videoVFW::videoFrameCallback))
-    {
-      error("Unable to set frame callback");
-      closeDevice();
-      return false;
-    }
-  if (!capSetUserData(m_hWndC, this))
-    {
-      error("Unable to set user data");
-      closeDevice();
-      return false;
-    }
+  if (!capSetCallbackOnVideoStream(m_hWndC, videoVFW::videoFrameCallback)) {
+    verbose(0, "[GEM:videoVFW] Unable to set frame callback");
+    closeDevice();
+    return false;
+  }
+  if (!capSetUserData(m_hWndC, this)) {
+    verbose(0, "[GEM:videoVFW] Unable to set user data");
+    closeDevice();
+    return false;
+  }
   DWORD formSize = capGetVideoFormat(m_hWndC, NULL, 0);
   BITMAPINFO *videoFormat = (BITMAPINFO *)(new char[formSize]);
-  if (!capGetVideoFormat(m_hWndC, videoFormat, formSize))
-    {
-      error("Unable to get video format");
-      closeDevice();
-      return false;
-    }
+  if (!capGetVideoFormat(m_hWndC, videoFormat, formSize)) {
+    verbose(0, "[GEM:videoVFW] Unable to get video format");
+    closeDevice();
+    return false;
+  }
 
   videoFormat->bmiHeader.biWidth = m_width;
   videoFormat->bmiHeader.biHeight = m_height;
@@ -151,22 +153,22 @@ bool videoVFW :: openDevice(gem::Properties&props)
   videoFormat->bmiHeader.biClrImportant = 0;
   videoFormat->bmiHeader.biSizeImage = 0;
   if (!capSetVideoFormat(m_hWndC, videoFormat, formSize)) {
-      error("Unable to set video format");
-      delete videoFormat;
-      closeDevice();
-      return false;
-    }
+    verbose(0, "[GEM:videoVFW] Unable to set video format");
+    delete videoFormat;
+    closeDevice();
+    return false;
+  }
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize)) {
-    error("Unable to get video format");
+    error("[GEM:videoVFW] Unable to get video format");
   }
   m_width=static_cast<int>(videoFormat->bmiHeader.biWidth);
   m_height=static_cast<int>(videoFormat->bmiHeader.biHeight);
 
-  verbose(1, "Connected with %dx%d @ %d",
+  verbose(1, "[GEM:videoVFW] Connected with %dx%d @ %d",
           m_width, m_height,
           static_cast<int>(videoFormat->bmiHeader.biBitCount));
 
-  delete videoFormat;
+  delete[]videoFormat;
 
   m_image.image.xsize = m_width;
   m_image.image.ysize = m_height;
@@ -203,10 +205,9 @@ void videoVFW :: videoFrame(LPVIDEOHDR lpVHdr)
   // incoming data is BGR
   const int dataSize = m_image.image.xsize * m_image.image.ysize * 3;
 
-  if (count < dataSize)
-    {
-      return;
-    }
+  if (count < dataSize) {
+    return;
+  }
 
   lock();
   m_image.image.fromBGR(lpVHdr->lpData);
@@ -257,13 +258,17 @@ bool videoVFW :: stopTransfer(void)
 /////////////////////////////////////////////////////////
 bool videoVFW :: setColor(int format)
 {
-  if(format)m_image.image.setCsizeByFormat(format);
+  if(format) {
+    m_image.image.setCsizeByFormat(format);
+  }
   return true;
 }
 
 
 
-bool videoVFW :: enumProperties(gem::Properties&readable, gem::Properties&writeable) {
+bool videoVFW :: enumProperties(gem::Properties&readable,
+                                gem::Properties&writeable)
+{
   readable.clear();
   writeable.clear();
 
@@ -276,7 +281,8 @@ bool videoVFW :: enumProperties(gem::Properties&readable, gem::Properties&writea
   return true;
 }
 
-void videoVFW :: setProperties(gem::Properties&props) {
+void videoVFW :: setProperties(gem::Properties&props)
+{
   double d;
   bool dorestart=false;
 
@@ -290,10 +296,12 @@ void videoVFW :: setProperties(gem::Properties&props) {
     dorestart=true;
   }
 
-  if(dorestart && m_hWndC)
+  if(dorestart && m_hWndC) {
     reset();
+  }
 }
-void videoVFW :: getProperties(gem::Properties&props) {
+void videoVFW :: getProperties(gem::Properties&props)
+{
 }
 
 #endif /* HAVE_VFW */

@@ -8,7 +8,7 @@
 //
 //    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "LICENSE.txt" 
+//    WARRANTIES, see the file, "LICENSE.txt"
 //
 /////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
@@ -39,12 +39,6 @@ using namespace gem::plugins;
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
-#if 0
-# define debug ::post
-#else
-# define debug
-#endif
-
 /////////////////////////////////////////////////////////
 //
 // videoAVT
@@ -62,22 +56,23 @@ using namespace gem::plugins;
 REGISTER_VIDEOFACTORY("avt", videoAVT);
 
 struct PvApiInitClass {
- PvApiInitClass(void) {
-   unsigned long major=0, minor=0;
-   PvVersion(&major, &minor);
-   //   post("Prosilica AVT SDK %d.%d", major, minor);
+  PvApiInitClass(void)
+  {
+    unsigned long major=0, minor=0;
+    PvVersion(&major, &minor);
 
-   if(ePvErrResources==PvInitialize()) {
-     throw(GemException("unable to initialization PvAPI"));
-   }
- }
- virtual ~PvApiInitClass(void) {
-   PvUnInitialize();
- }
+    if(ePvErrResources==PvInitialize()) {
+      throw(GemException("unable to initialization PvAPI"));
+    }
+  }
+  virtual ~PvApiInitClass(void)
+  {
+    PvUnInitialize();
+  }
 };
 
 videoAVT :: videoAVT() : videoBase("avt"),
-                               m_grabber(NULL)
+  m_grabber(NULL)
 {
   m_width=0;
   m_height=0;
@@ -85,7 +80,7 @@ videoAVT :: videoAVT() : videoBase("avt"),
   static PvApiInitClass paic;
 
   int i=0;
-  for(i=0;i<AVT_FRAMESCOUNT;i++) {
+  for(i=0; i<AVT_FRAMESCOUNT; i++) {
     m_frames[i].ImageBuffer = NULL;
     m_frames[i].ImageBufferSize = 0;
   }
@@ -104,9 +99,10 @@ videoAVT :: ~videoAVT()
   resizeFrames(0);
 }
 
-void videoAVT::resizeFrames(unsigned long int size) {
+void videoAVT::resizeFrames(unsigned long int size)
+{
   int i=0;
-  for(i=0;i<AVT_FRAMESCOUNT;i++) {
+  for(i=0; i<AVT_FRAMESCOUNT; i++) {
     if(m_frames[i].ImageBuffer) {
       unsigned char*frame=(unsigned char*)m_frames[i].ImageBuffer;
       delete[]frame;
@@ -116,8 +112,9 @@ void videoAVT::resizeFrames(unsigned long int size) {
 
     if(size) {
       m_frames[i].ImageBuffer = new unsigned char[size];
-      if(m_frames[i].ImageBuffer)
+      if(m_frames[i].ImageBuffer) {
         m_frames[i].ImageBufferSize = size;
+      }
     }
 
     m_frames[0].AncillaryBuffer=NULL;
@@ -130,11 +127,13 @@ void videoAVT::resizeFrames(unsigned long int size) {
 // frame grabber
 //
 /////////////////////////////////////////////////////////
-bool videoAVT :: grabFrame() {
+bool videoAVT :: grabFrame()
+{
   return true;
 }
 
-void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
+void videoAVT::grabbedFrame(const tPvFrame&pFrame)
+{
   /* frame successfully grabbed -> convert it into a pixbuf */
   bool success=true;
 
@@ -145,27 +144,42 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
   m_image.image.reallocate();
 
   switch(pFrame.Format) {
-  case(ePvFmtMono8) : m_image.image.fromGray((unsigned char *)pFrame.ImageBuffer);break;
-    //  case(ePvFmtMono16): m_image.image.fromGray((unsigned short*)pFrame.ImageBuffer);break;
-  case(ePvFmtRgb24) : m_image.image.fromRGB ((unsigned char *)pFrame.ImageBuffer);break;
-  case(ePvFmtBgr24) : m_image.image.fromBGR ((unsigned char *)pFrame.ImageBuffer);break;
-  case(ePvFmtRgba32): m_image.image.fromRGBA((unsigned char *)pFrame.ImageBuffer);break;
-  case(ePvFmtBgra32): m_image.image.fromBGRA((unsigned char *)pFrame.ImageBuffer);break;
-  case(ePvFmtBayer8):  case(ePvFmtBayer16): do {
-    unsigned char*data=m_image.image.data;    
-    // PixelPadding is most likely plain wrong; need to test what it really means
-    PvUtilityColorInterpolate(&pFrame,
-                              &data[chRed],
-                              &data[chGreen],
-                              &data[chBlue],
-                              2, // PixelPadding (Alpha)
-                              0  // LinePadding
-                              );
-  } while(0);
+  case(ePvFmtMono8) :
+    m_image.image.fromGray((unsigned char *)pFrame.ImageBuffer);
     break;
-  case (ePvFmtRgb48):  
-  case(ePvFmtMono12Packed): case(ePvFmtBayer12Packed):
-  case (ePvFmtYuv411):      case(ePvFmtYuv422):       case(ePvFmtYuv444): 
+  //  case(ePvFmtMono16): m_image.image.fromGray((unsigned short*)pFrame.ImageBuffer);break;
+  case(ePvFmtRgb24) :
+    m_image.image.fromRGB ((unsigned char *)pFrame.ImageBuffer);
+    break;
+  case(ePvFmtBgr24) :
+    m_image.image.fromBGR ((unsigned char *)pFrame.ImageBuffer);
+    break;
+  case(ePvFmtRgba32):
+    m_image.image.fromRGBA((unsigned char *)pFrame.ImageBuffer);
+    break;
+  case(ePvFmtBgra32):
+    m_image.image.fromBGRA((unsigned char *)pFrame.ImageBuffer);
+    break;
+  case(ePvFmtBayer8):
+  case(ePvFmtBayer16):
+    do {
+      unsigned char*data=m_image.image.data;
+      // PixelPadding is most likely plain wrong; need to test what it really means
+      PvUtilityColorInterpolate(&pFrame,
+                                &data[chRed],
+                                &data[chGreen],
+                                &data[chBlue],
+                                2, // PixelPadding (Alpha)
+                                0  // LinePadding
+                               );
+    } while(0);
+    break;
+  case (ePvFmtRgb48):
+  case(ePvFmtMono12Packed):
+  case(ePvFmtBayer12Packed):
+  case (ePvFmtYuv411):
+  case(ePvFmtYuv422):
+  case(ePvFmtYuv444):
   default:
     // ouch
     success=false;
@@ -178,21 +192,26 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame) {
 
   unlock();
 }
-void videoAVT::grabCB(tPvFrame*pFrame) {
+void videoAVT::grabCB(tPvFrame*pFrame)
+{
   videoAVT*me=(videoAVT*)pFrame->Context[0];
 
-  if(me && ePvErrSuccess==pFrame->Status)
+  if(me && ePvErrSuccess==pFrame->Status) {
     me->grabbedFrame(*pFrame);
+  }
 
   // if the frame was completed we re-enqueue it
-  if(pFrame->Status != ePvErrUnplugged && pFrame->Status != ePvErrCancelled)
-    {
-      PvCaptureQueueFrame(me->m_grabber, pFrame, (tPvFrameCallback) grabCB);
-    }
+  if(pFrame->Status != ePvErrUnplugged
+      && pFrame->Status != ePvErrCancelled) {
+    PvCaptureQueueFrame(me->m_grabber, pFrame, (tPvFrameCallback) grabCB);
+  }
 }
 
-pixBlock* videoAVT::getFrame(void) {
-  if(!(m_haveVideo && m_capturing))return NULL;
+pixBlock* videoAVT::getFrame(void)
+{
+  if(!(m_haveVideo && m_capturing)) {
+    return NULL;
+  }
 
   lock();
   return &m_image;
@@ -206,20 +225,26 @@ pixBlock* videoAVT::getFrame(void) {
 /////////////////////////////////////////////////////////
 bool videoAVT :: openDevice(gem::Properties&props)
 {
-  if(m_grabber)closeDevice();
+  if(m_grabber) {
+    closeDevice();
+  }
 
   unsigned long cameraNum=PvCameraCount();
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
 
   if(m_devicenum>=0) {
-    verbose(1, "AVT trying to open #%d of %d devices", m_devicenum, cameraNum);
-    if(cameraNum>m_devicenum && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
-      if (PvCameraOpen(cameraList[m_devicenum].UniqueId, ePvAccessMaster, &m_grabber) != ePvErrSuccess) {
+    verbose(0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum,
+            cameraNum);
+    if(cameraNum>m_devicenum
+        && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
+      if (PvCameraOpen(cameraList[m_devicenum].UniqueId, ePvAccessMaster,
+                       &m_grabber) != ePvErrSuccess) {
         m_grabber=NULL;
       }
     }
   } else {
-    verbose(1, "AVT trying to open device '%s'", m_devicename.c_str());
+    verbose(0, "[GEM:videoAVT] trying to open device '%s'",
+            m_devicename.c_str());
     /*
       cameraList[i].SerialString,
       cameraList[i].DisplayName,
@@ -231,28 +256,36 @@ bool videoAVT :: openDevice(gem::Properties&props)
     const unsigned long uid=strtoul(m_devicename.c_str(), NULL, 0);
 
     if(NULL==m_grabber && 0==errno) {
-      verbose(1, "checking UniqueID: 0x% 8x", uid);
+      verbose(1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
       for(i=0; i<cameraNum; i++) {
-        if(uid==cameraList[i].UniqueId && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(uid==cameraList[i].UniqueId
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
         }
       }
     }
 
     if(NULL==m_grabber) {
-      verbose(1, "checking SerialString: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking SerialString: %s",
+              m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
-        if(m_devicename==cameraList[i].SerialString && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(m_devicename==cameraList[i].SerialString
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
-        } 
+        }
       }
     }
     if(NULL==m_grabber) {
-      verbose(1, "checking DisplayName: %s", m_devicename.c_str());
+      verbose(1, "[GEM:videoAVT] checking DisplayName: %s",
+              m_devicename.c_str());
       for(i=0; i<cameraNum; i++) {
-        if(m_devicename==cameraList[i].DisplayName && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster, &m_grabber) == ePvErrSuccess) {
+        if(m_devicename==cameraList[i].DisplayName
+            && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
+                            &m_grabber) == ePvErrSuccess) {
           break;
-        } 
+        }
       }
     }
 
@@ -266,24 +299,27 @@ bool videoAVT :: openDevice(gem::Properties&props)
         for(rp=result; rp!=NULL; rp=rp->ai_next) {
           struct sockaddr_in*ipv4 = (struct sockaddr_in*)result->ai_addr;
           unsigned long IpAddr=ipv4->sin_addr.s_addr ; // byte order??
-          if(OldAddr==IpAddr)continue;
+          if(OldAddr==IpAddr) {
+            continue;
+          }
           OldAddr=IpAddr;
-          verbose(1, "AVT trying to connect to %3d.%3d.%3d.%3d", 
+          verbose(0, "[GEM:videoAVT] trying to connect to %3d.%3d.%3d.%3d",
                   (IpAddr & 0x0FF),
                   (IpAddr & 0x0FF00)>>8,
                   (IpAddr & 0x0FF0000)>>16,
                   (IpAddr & 0xFF000000)>>24
-                  );
-          
-          if(ePvErrSuccess == PvCameraOpenByAddr(IpAddr, ePvAccessMaster, &m_grabber)) {
+                 );
+
+          if(ePvErrSuccess == PvCameraOpenByAddr(IpAddr, ePvAccessMaster,
+                                                 &m_grabber)) {
             break;
           }
-          m_grabber=NULL;   
+          m_grabber=NULL;
         }
         freeaddrinfo(result);
       }
     }
-    
+
   }
 
   delete[]cameraList;
@@ -305,8 +341,11 @@ bool videoAVT :: openDevice(gem::Properties&props)
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoAVT :: closeDevice() {
-  if(m_grabber)PvCameraClose(m_grabber);
+void videoAVT :: closeDevice()
+{
+  if(m_grabber) {
+    PvCameraClose(m_grabber);
+  }
   m_grabber=NULL;
 }
 
@@ -319,7 +358,7 @@ bool videoAVT :: startTransfer()
 {
   PvCaptureStart(m_grabber);
   if(!PvCommandRun(m_grabber,"AcquisitionStart")) {
-    error("AVT::AcquistionStart failed");
+    error("[GEM:videoAVT] AcquistionStart failed");
   } else {
     PvCaptureQueueFrame(m_grabber, &m_frames[0], (tPvFrameCallback) grabCB);
   }
@@ -336,14 +375,15 @@ bool videoAVT :: stopTransfer()
   PvCaptureQueueClear(m_grabber);
 
   if(!PvCommandRun(m_grabber,"AcquisitionStop")) {
-    error("AVT::AcquistionStop failed");
+    error("[GEM:videoAVT] AcquistionStop failed");
   }
 
   PvCaptureEnd(m_grabber);
   return true;
 }
 
-std::vector<std::string> videoAVT::enumerate() {
+std::vector<std::string> videoAVT::enumerate()
+{
   std::vector<std::string> result;
   unsigned long cameraNum=PvCameraCount();
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
@@ -353,14 +393,15 @@ std::vector<std::string> videoAVT::enumerate() {
   for (i = 0; i < cameraNum; i++) {
     result.push_back(cameraList[i].DisplayName);
   }
-  
+
   delete[]cameraList;
   return result;
 }
 
 
 bool videoAVT::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                              gem::Properties&writeable)
+{
 
   tPvAttrListPtr    listPtr;
   unsigned long     listLength;
@@ -371,61 +412,63 @@ bool videoAVT::enumProperties(gem::Properties&readable,
 
       tPvAttributeInfo pInfo;
       if(ePvErrSuccess==PvAttrInfo(m_grabber, attributeName, &pInfo)) {
-	std::string name=attributeName;
-	gem::any type;
-	switch (pInfo.Datatype) {
-	case ePvDatatypeUnknown:
-	case ePvDatatypeRaw:
-	  continue;
+        std::string name=attributeName;
+        gem::any type;
+        switch (pInfo.Datatype) {
+        case ePvDatatypeUnknown:
+        case ePvDatatypeRaw:
+          continue;
 
-	case ePvDatatypeCommand:
-	  // type=notype;
-	  break;
-	case ePvDatatypeString:
-	  type=std::string("string");
-	  break;
-	case ePvDatatypeEnum:
-	  //PvAttrRangeEnum
-	  type=0;
-	  break;
-	case ePvDatatypeUint32:
-	  //PvAttrRangeUint32
-	  type=0;
-	  break;
-	case ePvDatatypeFloat32:
-	  //PvAttrRangeFloat32
-	  type=0;
-	  break;
-	case ePvDatatypeInt64:
-	  //PvAttrRangeInt64
-	  type=0;
-	  break;
-	case ePvDatatypeBoolean:
-	  type=1;
-	  break;
-	}
+        case ePvDatatypeCommand:
+          // type=notype;
+          break;
+        case ePvDatatypeString:
+          type=std::string("string");
+          break;
+        case ePvDatatypeEnum:
+          //PvAttrRangeEnum
+          type=0;
+          break;
+        case ePvDatatypeUint32:
+          //PvAttrRangeUint32
+          type=0;
+          break;
+        case ePvDatatypeFloat32:
+          //PvAttrRangeFloat32
+          type=0;
+          break;
+        case ePvDatatypeInt64:
+          //PvAttrRangeInt64
+          type=0;
+          break;
+        case ePvDatatypeBoolean:
+          type=1;
+          break;
+        }
 
-	if((pInfo.Flags & ePvFlagRead) || (pInfo.Flags & ePvFlagConst))  {
-	  readable.set(name, type);
-	}
-	
-	if(pInfo.Flags & ePvFlagWrite) {
-	  writeable.set(name, type);
-	}
+        if((pInfo.Flags & ePvFlagRead) || (pInfo.Flags & ePvFlagConst))  {
+          readable.set(name, type);
+        }
+
+        if(pInfo.Flags & ePvFlagWrite) {
+          writeable.set(name, type);
+        }
       }
     }
   }
 
   return true;
 }
-void videoAVT::setProperties(gem::Properties&props){
+void videoAVT::setProperties(gem::Properties&props)
+{
   int i;
   std::vector<std::string>keys=props.keys();
   for(i=0; i<keys.size(); i++) {
     tPvAttributeInfo pInfo;
     std::string key=keys[i];
-    if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo))
+    if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo)) {
       continue;
+    }
 
     if(!(pInfo.Flags & ePvFlagWrite)) {
       continue;
@@ -442,126 +485,131 @@ void videoAVT::setProperties(gem::Properties&props){
       break;
     case ePvDatatypeString:
       if(props.get(key, s)) {
-	PvAttrStringSet(m_grabber, key.c_str(), s.c_str());
+        PvAttrStringSet(m_grabber, key.c_str(), s.c_str());
       }
       break;
     case ePvDatatypeEnum:
       if(props.get(key, s)) {
-	PvAttrEnumSet(m_grabber, key.c_str(), s.c_str());
+        PvAttrEnumSet(m_grabber, key.c_str(), s.c_str());
       }
-#if 0 
+#if 0
       else if(props.get(key, d)) {
-	std::vector<std::string>sv;
-	int index=d;
-	if(index<0)continue;
+        std::vector<std::string>sv;
+        int index=d;
+        if(index<0) {
+          continue;
+        }
 
-	if (PvAttrRangeEnum(m_camera, "AcquisitionMode",
-			    enumSet, sizeof(enumSet), NULL) == ePvErrSuccess) {
-	  char* member = strtok(enumSet, ","); // strtok isn't always thread safe!
-	  while (member != NULL) {
-	    sv.push_back(member);
-	    member = strtok(NULL, ",");
-	  }
-	  if(index>=sv.size()) {
-	    continue;
-	  }
-	  PvAttrEnumSet(m_grabber, key.c_str(), sv[index].c_str());
-	}
+        if (PvAttrRangeEnum(m_camera, "AcquisitionMode",
+                            enumSet, sizeof(enumSet), NULL) == ePvErrSuccess) {
+          char* member = strtok(enumSet, ","); // strtok isn't always thread safe!
+          while (member != NULL) {
+            sv.push_back(member);
+            member = strtok(NULL, ",");
+          }
+          if(index>=sv.size()) {
+            continue;
+          }
+          PvAttrEnumSet(m_grabber, key.c_str(), sv[index].c_str());
+        }
 #endif
-      break;
-    case ePvDatatypeUint32:
-      if(props.get(key, d)) {
-	tPvUint32 v=d;
-	PvAttrUint32Set(m_grabber, key.c_str(), d);
+        break;
+      case ePvDatatypeUint32:
+        if(props.get(key, d)) {
+          tPvUint32 v=d;
+          PvAttrUint32Set(m_grabber, key.c_str(), d);
+        }
+        break;
+      case ePvDatatypeFloat32:
+        if(props.get(key, d)) {
+          tPvFloat32 v=d;
+          PvAttrFloat32Set(m_grabber, key.c_str(), d);
+        }
+        break;
+      case ePvDatatypeInt64:
+        if(props.get(key, d)) {
+          tPvInt64 v=d;
+          PvAttrInt64Set(m_grabber, key.c_str(), d);
+        }
+        break;
+      case ePvDatatypeBoolean:
+        if(props.get(key, d)) {
+          tPvBoolean v=d;
+          PvAttrBooleanSet(m_grabber, key.c_str(), d);
+        }
+        break;
       }
-      break;
-    case ePvDatatypeFloat32:
-      if(props.get(key, d)) {
-	tPvFloat32 v=d;
-	PvAttrFloat32Set(m_grabber, key.c_str(), d);
+    } // loop
+  }
+  void videoAVT::getProperties(gem::Properties&props) {
+    int i;
+    std::vector<std::string>keys=props.keys();
+    for(i=0; i<keys.size(); i++) {
+      tPvAttributeInfo pInfo;
+      std::string key=keys[i];
+      if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo)) {
+        continue;
       }
-      break;
-    case ePvDatatypeInt64:
-      if(props.get(key, d)) {
-	tPvInt64 v=d;
-	PvAttrInt64Set(m_grabber, key.c_str(), d);
-      }
-      break;
-    case ePvDatatypeBoolean:
-      if(props.get(key, d)) {
-	tPvBoolean v=d;
-	PvAttrBooleanSet(m_grabber, key.c_str(), d);
-      }
-      break;
-    }
-  } // loop
-}
-void videoAVT::getProperties(gem::Properties&props) {
-  int i;
-  std::vector<std::string>keys=props.keys();
-  for(i=0; i<keys.size(); i++) {
-    tPvAttributeInfo pInfo;
-    std::string key=keys[i];
-    if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo))
-      continue;
 
-    if(!(pInfo.Flags & ePvFlagRead)) {
-      continue;
-    }
+      if(!(pInfo.Flags & ePvFlagRead)) {
+        continue;
+      }
 
-    std::string s;
-    double d;
+      std::string s;
+      double d;
 
-    char svalue[MAXPDSTRING];
-    unsigned long size;
+      char svalue[MAXPDSTRING];
+      unsigned long size;
 
-    props.erase(key);
-    switch (pInfo.Datatype) {
-    default:
-      continue;
-    case ePvDatatypeString:
-      if (ePvErrSuccess==PvAttrStringGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
-	s=svalue;
-	props.set(key, s);
+      props.erase(key);
+      switch (pInfo.Datatype) {
+      default:
+        continue;
+      case ePvDatatypeString:
+        if (ePvErrSuccess==PvAttrStringGet(m_grabber, key.c_str(), svalue,
+                                           MAXPDSTRING, &size)) {
+          s=svalue;
+          props.set(key, s);
+        }
+        break;
+      case ePvDatatypeEnum:
+        if (ePvErrSuccess==PvAttrEnumGet(m_grabber, key.c_str(), svalue,
+                                         MAXPDSTRING, &size)) {
+          s=svalue;
+          props.set(key, s);
+        }
+        break;
+      case ePvDatatypeUint32: {
+        tPvUint32 value;
+        if (ePvErrSuccess==PvAttrUint32Get(m_grabber, key.c_str(), &value)) {
+          props.set(key, static_cast<double>(value));
+        }
       }
       break;
-    case ePvDatatypeEnum:
-      if (ePvErrSuccess==PvAttrEnumGet(m_grabber, key.c_str(), svalue, MAXPDSTRING, &size)) {
-	s=svalue;
-	props.set(key, s);
+      case ePvDatatypeFloat32: {
+        tPvFloat32 value;
+        if (ePvErrSuccess==PvAttrFloat32Get(m_grabber, key.c_str(), &value)) {
+          props.set(key, static_cast<double>(value));
+        }
       }
       break;
-    case ePvDatatypeUint32: {
-      tPvUint32 value;
-      if (ePvErrSuccess==PvAttrUint32Get(m_grabber, key.c_str(), &value)) {
-	props.set(key, static_cast<double>(value));
+      case ePvDatatypeInt64: {
+        tPvInt64 value;
+        if (ePvErrSuccess==PvAttrInt64Get(m_grabber, key.c_str(), &value)) {
+          props.set(key, static_cast<double>(value));
+        }
       }
-    }
       break;
-    case ePvDatatypeFloat32: {
-      tPvFloat32 value;
-      if (ePvErrSuccess==PvAttrFloat32Get(m_grabber, key.c_str(), &value)) {
-	props.set(key, static_cast<double>(value));
+      case ePvDatatypeBoolean: {
+        tPvBoolean value;
+        if (ePvErrSuccess==PvAttrBooleanGet(m_grabber, key.c_str(), &value)) {
+          props.set(key, static_cast<double>(value));
+        }
       }
-    }
       break;
-    case ePvDatatypeInt64: {
-      tPvInt64 value;
-      if (ePvErrSuccess==PvAttrInt64Get(m_grabber, key.c_str(), &value)) {
-	props.set(key, static_cast<double>(value));
       }
-    }
-      break;
-    case ePvDatatypeBoolean: {
-      tPvBoolean value;
-      if (ePvErrSuccess==PvAttrBooleanGet(m_grabber, key.c_str(), &value)) {
-	props.set(key, static_cast<double>(value));
-      }
-    }
-      break;
-    }
-  } // loop
-}
+    } // loop
+  }
 
 
 

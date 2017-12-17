@@ -33,41 +33,43 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN diffuse : public GemBase
 {
-    CPPEXTERN_HEADER(diffuse, GemBase);
+  CPPEXTERN_HEADER(diffuse, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	diffuse(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  diffuse(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~diffuse();
+  //////////
+  // Destructor
+  virtual ~diffuse();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on the color material
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The diffuse vector (RGBA)
-    	float	    	m_diffuse[4];
+  //////////
+  // The diffuse vector (RGBA)
+  float           m_diffuse[4];
 
-    	//////////
-    	// diffuse changed
-    	void	    	diffuseMess(float red, float green, float blue, float alpha);
+  //////////
+  // diffuse changed
+  void            diffuseMess(float red, float green, float blue,
+                              float alpha);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	diffuseMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // static member functions
+  static void     diffuseMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

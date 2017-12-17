@@ -43,112 +43,114 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_write : public GemBase
 {
-    CPPEXTERN_HEADER(pix_write, GemBase);
+  CPPEXTERN_HEADER(pix_write, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_write(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  pix_write(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_write(void);
+  //////////
+  // Destructor
+  virtual ~pix_write(void);
 
-    	//////////
-    	// Write to the current filename
-    	virtual void	doWrite(void);
+  //////////
+  // Write to the current filename
+  virtual void    doWrite(void);
 
-      // check extensions
-      virtual bool isRunnable(void);
+  // check extensions
+  virtual bool isRunnable(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Clear the dirty flag on the pixBlock
-    	virtual void 	postrender(GemState *state) {};
+  //////////
+  // Clear the dirty flag on the pixBlock
+  virtual void    postrender(GemState *state) {};
 
-    	//////////
-    	// Set the filename and filetype
-    	virtual void	fileMess(t_symbol*, int argc, t_atom *argv);
+  //////////
+  // Set the filename and filetype
+  virtual void    fileMess(t_symbol*, int argc, t_atom *argv);
 
-    	//////////
-    	// When a size message is received
-    	virtual void	sizeMess(int width, int height);
+  //////////
+  // When a size message is received
+  virtual void    sizeMess(int width, int height);
 
-    	//////////
-    	// When a position message is received
-    	virtual void	posMess(int x, int y);
+  //////////
+  // When a position message is received
+  virtual void    posMess(int x, int y);
 
-      void autoMess(bool);
-      void bangMess(void);
-      void colorFormatMess(int format);
+  void autoMess(bool);
+  void bangMess(void);
+  void colorFormatMess(int format);
 
-    	//////////
-    	// Clean up the image
-    	void	    	cleanImage(void);
+  //////////
+  // Clean up the image
+  void            cleanImage(void);
 
-    	//////////
-    	// The original pix_write
-    	imageStruct 	*m_originalImage;
+  //////////
+  // The original pix_write
+  imageStruct     *m_originalImage;
 
 
-	//////////
-	// Manual writing
-	bool            m_banged;
+  //////////
+  // Manual writing
+  bool            m_banged;
 
-	//////////
-	// Automatic writing
-	bool            m_automatic;
+  //////////
+  // Automatic writing
+  bool            m_automatic;
 
-	//////////
-	// Counter for automatic writing
-	int             m_autocount;
+  //////////
+  // Counter for automatic writing
+  int             m_autocount;
 
-    	//////////
-	// path to write to
+  //////////
+  // path to write to
   std::string m_pathname;
-    	//////////
-	// current file to write to
+  //////////
+  // current file to write to
   char m_filename[MAXPDSTRING];
 
-    	//////////
-	// current file to write to
-    	int	    	m_filetype; // 0=tiff, [1..6=jpeg]
+  //////////
+  // current file to write to
+  int             m_filetype; // 0=tiff, [1..6=jpeg]
 
-    	//////////
-    	// The x position
-    	int     	m_xoff;
+  //////////
+  // The x position
+  int             m_xoff;
 
-    	//////////
-    	// The y position
-    	int     	m_yoff;
+  //////////
+  // The y position
+  int             m_yoff;
 
-    	//////////
-    	// The width
-    	int     	m_width;
+  //////////
+  // The width
+  int             m_width;
 
-    	//////////
-    	// The height
-    	int     	m_height;
+  //////////
+  // The height
+  int             m_height;
 
-      /////////
-      // The color (1 = R, 3 = RGB, 4 = RGBA)
-      int m_color;
+  /////////
+  // The color (1 = R, 3 = RGB, 4 = RGBA)
+  int m_color;
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-    	static void 	autoMessCallback(void *data, t_float on);
-    	static void 	bangMessCallback(void *data);
-    	static void 	sizeMessCallback(void *data, t_float width, t_float height );
-    	static void 	posMessCallback(void *data, t_float x, t_float y);
+  //////////
+  // static member functions
+  static void     fileMessCallback(void *data, t_symbol *s, int argc,
+                                   t_atom *argv);
+  static void     autoMessCallback(void *data, t_float on);
+  static void     bangMessCallback(void *data);
+  static void     sizeMessCallback(void *data, t_float width,
+                                   t_float height );
+  static void     posMessCallback(void *data, t_float x, t_float y);
 };
 
-#endif	// for header file
+#endif  // for header file

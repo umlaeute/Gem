@@ -45,7 +45,8 @@ extern "C" {
 
 using namespace gem::RTE;
 
-class RTE::PIMPL {
+class RTE::PIMPL
+{
   PIMPL(void) {}
 };
 
@@ -55,17 +56,20 @@ RTE :: RTE (void) :
 
 RTE :: ~RTE (void)
 {
-  if(m_pimpl)
+  if(m_pimpl) {
     delete(m_pimpl);
+  }
   m_pimpl=NULL;
 }
 
-const std::string RTE :: getName(void) {
+const std::string RTE :: getName(void)
+{
   return std::string("Pd");
 }
 
 typedef void (*rte_getversion_t)(int*major,int*minor,int*bugfix);
-const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
+const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor)
+{
   static rte_getversion_t rte_getversion=NULL;
   if(NULL==rte_getversion) {
     rte_getversion=(rte_getversion_t)this->getFunction("sys_getversion");
@@ -86,7 +90,8 @@ const std::string RTE :: getVersion(unsigned int&major, unsigned int&minor) {
   return std::string("");
 }
 
-void*RTE :: getFunction(const std::string&name) const {
+void*RTE :: getFunction(const std::string&name) const
+{
 #ifdef DL_OPEN
   return (void*)dlsym(RTLD_DEFAULT, name.c_str());
 #elif defined _WIN32
@@ -100,9 +105,11 @@ void*RTE :: getFunction(const std::string&name) const {
 }
 
 static  RTE*s_rte=NULL;
-RTE* RTE::getRuntimeEnvironment(void) {
-  if(s_rte==NULL)
+RTE* RTE::getRuntimeEnvironment(void)
+{
+  if(s_rte==NULL) {
     s_rte=new RTE();
+  }
 
   return s_rte;
 }
@@ -111,7 +118,9 @@ typedef int (*close_t)(int fd);
 #ifndef _WIN32
 #include <unistd.h>
 #endif
-std::string RTE::findFile(const std::string&f, const std::string&e, const void* ctx) const {
+std::string RTE::findFile(const std::string&f, const std::string&e,
+                          const void* ctx) const
+{
   char buf[MAXPDSTRING], buf2[MAXPDSTRING];
   char*bufptr=0;
   std::string result="";
@@ -123,15 +132,16 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
   const char nullstring[]="\0";
   const char*cnvdir=nullstring;
 
-  if(canvas)
+  if(canvas) {
     cnvdir=canvas_getdir(canvas)->s_name;
+  }
   if ((fd=open_via_path(cnvdir, filename, ext,
-                        buf2, &bufptr, MAXPDSTRING, 1))>=0){
+                        buf2, &bufptr, MAXPDSTRING, 1))>=0) {
     static close_t rte_close=NULL;
     if(NULL==rte_close) {
       rte_close=(close_t)this->getFunction("sys_close");
       if(NULL==rte_close) {
-	rte_close=close;
+        rte_close=close;
       }
     }
     rte_close(fd);
@@ -152,12 +162,14 @@ std::string RTE::findFile(const std::string&f, const std::string&e, const void* 
 }
 
 
-bool RTE::addSearchPath(const std::string&path, void* ctx) {
+bool RTE::addSearchPath(const std::string&path, void* ctx)
+{
   static bool didit=false;
   static t_namelist *rte_searchpath = 0;
   static bool modern = true;
-  if(ctx)
+  if(ctx) {
     return false;
+  }
 
   if(!didit) {
     unsigned int major = 0, minor = 0;
@@ -173,16 +185,18 @@ bool RTE::addSearchPath(const std::string&path, void* ctx) {
     *outptr++='+';
     while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
       *outptr++ = *inptr++;
-      if ('+'==inptr[-1])
+      if ('+'==inptr[-1]) {
         *outptr++='+';
+      }
     }
     *outptr=0;
     SETSYMBOL(ap+0, gensym(encoded));
     SETFLOAT (ap+1, 0.f);
     pd_typedmess(gensym("pd")->s_thing, gensym("add-to-path"), 2, ap);
   } else {
-    if(!rte_searchpath)
+    if(!rte_searchpath) {
       return false;
+    }
     rte_searchpath = namelist_append(rte_searchpath, path.c_str(), 0);
   }
   return true;

@@ -29,23 +29,24 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN spline_path : public GemPathBase
 {
-    CPPEXTERN_HEADER(spline_path, GemPathBase);
+  CPPEXTERN_HEADER(spline_path, GemPathBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	spline_path(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  spline_path(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~spline_path();
+  //////////
+  // Destructor
+  virtual ~spline_path();
 
-        //////////
-        // When a float val is received
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
+  //////////
+  // When a float val is received
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
+                          t_float *pnts);
 };
 
-#endif	// for header file
+#endif  // for header file

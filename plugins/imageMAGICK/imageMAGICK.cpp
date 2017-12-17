@@ -117,7 +117,9 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 imageMAGICK :: imageMAGICK(void)
 {
 #ifdef HAVE_ISMAGICKINSTANTIATED
-  if(!IsMagickCoreInstantiated())MagickCoreGenesis(NULL,MagickTrue);
+  if(!IsMagickCoreInstantiated()) {
+    MagickCoreGenesis(NULL,MagickTrue);
+  }
 #else
   InitializeMagick(0);
 #endif
@@ -146,12 +148,14 @@ imageMAGICK :: imageMAGICK(void)
 }
 imageMAGICK :: ~imageMAGICK(void)
 {
-  //post("~imageMAGICK");
 }
 
 
 
-float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+float imageMAGICK::estimateSave(const imageStruct&image,
+                                const std::string&filename, const std::string&mimetype,
+                                const gem::Properties&props)
+{
   float result=0.5; // slightly preference for MAGICK
   unsigned int i;
   for(i=0; i<m_mimetypes.size(); i++) {
@@ -161,13 +165,16 @@ float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filen
     }
   }
 
-  if(gem::Properties::UNSET != props.type("quality"))
+  if(gem::Properties::UNSET != props.type("quality")) {
     result += 1.;
+  }
 
   return result;
 }
 
-void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                       gem::Properties&props)
+{
   mimetypes.clear();
   props.clear();
 

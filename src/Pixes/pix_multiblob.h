@@ -30,7 +30,8 @@ pix_multiblob
 #include <stdio.h>
 
 
-class GEM_EXTERN Blob {
+class GEM_EXTERN Blob
+{
 public:
 
   Blob();
@@ -46,11 +47,12 @@ public:
   // the diamter
   double diameter();
 
-  double angle() {
-      double mm_11 = m_11 - xmid()*m_yaccum;
-      double mm_02 = m_02 - ymid()*m_yaccum;
-      double mm_20 = m_20 - xmid()*m_xaccum;
-      return .5*atan2(2.*mm_11,(mm_20-mm_02));
+  double angle()
+  {
+    double mm_11 = m_11 - xmid()*m_yaccum;
+    double mm_02 = m_02 - ymid()*m_yaccum;
+    double mm_20 = m_20 - xmid()*m_xaccum;
+    return .5*atan2(2.*mm_11,(mm_20-mm_02));
   }
 
   // the angular orientation of the principal axis in radians
@@ -120,4 +122,4 @@ protected:
   t_outlet        *m_infoOut;
 };
 
-#endif 	// for header file
+#endif  // for header file

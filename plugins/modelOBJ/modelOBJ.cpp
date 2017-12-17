@@ -37,33 +37,39 @@ modelOBJ :: modelOBJ(void) :
 {
 }
 
-modelOBJ ::~modelOBJ(void) {
+modelOBJ ::~modelOBJ(void)
+{
   destroy();
 }
 
-bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops) {
+bool modelOBJ :: open(const std::string&name,
+                      const gem::Properties&requestprops)
+{
   destroy();
 
 #if 0
   std::vector<std::string>keys=requestprops.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    post("key[%d]=%s", i, keys[i].c_str());
+    verbose(1, "[GEM:modelOBJ] key[%d]=%s", i, keys[i].c_str());
   }
 #endif
   m_model = glmReadOBJ(name.c_str());
-  if (!m_model){
+  if (!m_model) {
     return false;
   }
   m_reverse=false;
 
   double d=1;
   requestprops.get("rescale", d);
-  if(d)glmUnitize(m_model);
+  if(d) {
+    glmUnitize(m_model);
+  }
   glmFacetNormals (m_model);
 
   gem::Properties props=requestprops;
-  if(gem::Properties::UNSET==requestprops.type("smooth") && 0==glmGetNumNormals(m_model)) {
+  if(gem::Properties::UNSET==requestprops.type("smooth")
+      && 0==glmGetNumNormals(m_model)) {
     props.set("smooth", 0.5);
   }
   setProperties(props);
@@ -74,20 +80,33 @@ bool modelOBJ :: open(const std::string&name, const gem::Properties&requestprops
   return true;
 }
 
-std::vector<std::vector<float> > modelOBJ :: getVector(std::string vectorName){
-  if ( vectorName == "vertices" ) return m_vertices;
-  if ( vectorName == "normals" ) return m_normals;
-  if ( vectorName == "texcoords" ) return m_texcoords;
-  if ( vectorName == "colors" ) return m_colors;
-  error("there is no \"%s\" vector !",vectorName.c_str());
+std::vector<std::vector<float> > modelOBJ :: getVector(
+  std::string vectorName)
+{
+  if ( vectorName == "vertices" ) {
+    return m_vertices;
+  }
+  if ( vectorName == "normals" ) {
+    return m_normals;
+  }
+  if ( vectorName == "texcoords" ) {
+    return m_texcoords;
+  }
+  if ( vectorName == "colors" ) {
+    return m_colors;
+  }
+  verbose(0, "[GEM:modelOBJ] there is no \"%s\" vector !",
+          vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 
-std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray(){
+std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray()
+{
   return m_VBOarray;
 }
 
-bool modelOBJ :: render(void) {
+bool modelOBJ :: render(void)
+{
   bool res = true;
   if(m_rebuild) {
     glmTexture(m_model, m_textype, 1,1);
@@ -95,60 +114,79 @@ bool modelOBJ :: render(void) {
   }
   return res;
 }
-void modelOBJ :: close(void)  {
+void modelOBJ :: close(void)
+{
   destroy();
 }
 
-void modelOBJ :: unsetRefresh(){ m_refresh = false; }
-bool modelOBJ :: needRefresh(){ return m_refresh; }
+void modelOBJ :: unsetRefresh()
+{
+  m_refresh = false;
+}
+bool modelOBJ :: needRefresh()
+{
+  return m_refresh;
+}
 
 bool modelOBJ :: enumProperties(gem::Properties&readable,
-                                gem::Properties&writeable) {
+                                gem::Properties&writeable)
+{
   readable.clear();
   writeable.clear();
   return false;
 }
 
-void modelOBJ :: setProperties(gem::Properties&props) {
+void modelOBJ :: setProperties(gem::Properties&props)
+{
   double d;
 
   if(props.get("smooth", d)) {
-    if(d<0.)d=0.;
-    if(d>1.)d=1.;
-    if(m_model)
+    if(d<0.) {
+      d=0.;
+    }
+    if(d>1.) {
+      d=1.;
+    }
+    if(m_model) {
       glmVertexNormals(m_model, d*180.);
+    }
     m_rebuild=true;
   }
   if(props.get("texwidth", d)) {
-    if(d!=m_currentW)
+    if(d!=m_currentW) {
       m_rebuild=true;
+    }
 
     m_currentW=d;
   }
   if(props.get("texheight", d)) {
-    if(d!=m_currentH)
+    if(d!=m_currentH) {
       m_rebuild=true;
+    }
     m_currentH=d;
   }
   if(props.get("usematerials", d)) {
     int flags=GLM_SMOOTH | GLM_TEXTURE;
-    if(d)
+    if(d) {
       flags |= GLM_MATERIAL;
+    }
 
-    if(flags!=m_flags)
+    if(flags!=m_flags) {
       m_rebuild=true;
+    }
     m_flags=flags;
   }
 
 
   std::string s;
   if(props.get("textype", s)) {
-    if("UV"==s)
+    if("UV"==s) {
       m_textype= GLM_TEX_UV;
-    else if("linear"==s)
+    } else if("linear"==s) {
       m_textype= GLM_TEX_LINEAR;
-    else if("spheremap"==s)
+    } else if("spheremap"==s) {
       m_textype= GLM_TEX_SPHEREMAP;
+    }
 
     m_rebuild=true;
   }
@@ -170,22 +208,25 @@ void modelOBJ :: setProperties(gem::Properties&props) {
 
   render();
 }
-void modelOBJ :: getProperties(gem::Properties&props) {
+void modelOBJ :: getProperties(gem::Properties&props)
+{
   props.clear();
 }
 
-bool modelOBJ :: compile(void)  {
+bool modelOBJ :: compile(void)
+{
   m_vertices.clear();
   m_normals.clear();
   m_texcoords.clear();
   m_colors.clear();
-  if (!m_group){
+  if (!m_group) {
     glmDraw(m_model, m_flags, m_vertices, m_normals, m_texcoords, m_colors);
   } else {
-    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords, m_colors);
+    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords,
+                 m_colors);
   }
-  //~printf("size of vectrices : %ld\n", m_vertices.size());
-  bool res = !(m_vertices.empty() && m_normals.empty() && m_texcoords.empty() && m_colors.empty());
+  bool res = !(m_vertices.empty() && m_normals.empty()
+               && m_texcoords.empty() && m_colors.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;
@@ -193,7 +234,8 @@ bool modelOBJ :: compile(void)  {
   return res;
 }
 
-void modelOBJ :: destroy(void)  {
+void modelOBJ :: destroy(void)
+{
   if(m_model) {
     glmDelete(m_model);
     m_model=NULL;

@@ -18,10 +18,12 @@
 
 #include <memory>
 
-namespace gem {
-class GEM_EXTERN GLStack {
- public:
-  GLStack(bool haveValidContext=false);
+namespace gem
+{
+class GEM_EXTERN GLStack
+{
+public:
+  explicit GLStack(bool haveValidContext=false);
   virtual ~GLStack(void);
 
   enum GemStackId { MODELVIEW, COLOR, TEXTURE, PROJECTION };
@@ -63,7 +65,7 @@ class GEM_EXTERN GLStack {
 
   void print(void);
 
- private:
+private:
   class Data;
   // try using unique_ptr<> if it is supported
 #if  __cplusplus < 201103L

@@ -177,23 +177,23 @@ void gemvertexbuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "draw_range", partialDrawMess, unsigned int,
                  unsigned int);
 
-  CPPEXTERN_MSG1(classPtr, "position_enable", posVBO_enableMess , bool);
-  CPPEXTERN_MSG1(classPtr, "color_enable"   , colVBO_enableMess , bool);
-  CPPEXTERN_MSG1(classPtr, "texture_enable" , texVBO_enableMess , bool);
-  CPPEXTERN_MSG1(classPtr, "normal_enable"  , normVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "position_enable", posVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "color_enable", colVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "texture_enable", texVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "normal_enable", normVBO_enableMess, bool);
 
   /* legacy */
-  CPPEXTERN_MSG1(classPtr, "posVBO_enable" , posVBO_enableMess , bool);
-  CPPEXTERN_MSG1(classPtr, "colVBO_enable" , colVBO_enableMess , bool);
-  CPPEXTERN_MSG1(classPtr, "texVBO_enable" , texVBO_enableMess , bool);
+  CPPEXTERN_MSG1(classPtr, "posVBO_enable", posVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "colVBO_enable", colVBO_enableMess, bool);
+  CPPEXTERN_MSG1(classPtr, "texVBO_enable", texVBO_enableMess, bool);
   CPPEXTERN_MSG1(classPtr, "normVBO_enable", normVBO_enableMess, bool);
   /* attributes */
-  CPPEXTERN_MSG1 (classPtr, "program"          , setProgramID, float);
-  CPPEXTERN_MSG  (classPtr, "attribute"        , attribute);
-  CPPEXTERN_MSG1 (classPtr, "attribute_enable" , attribVBO_enableMess ,
+  CPPEXTERN_MSG1 (classPtr, "program", setProgramID, float);
+  CPPEXTERN_MSG  (classPtr, "attribute", attribute);
+  CPPEXTERN_MSG1 (classPtr, "attribute_enable", attribVBO_enableMess,
                   bool);
-  CPPEXTERN_MSG0 (classPtr, "reset_attributes" , resetAttributes);
-  CPPEXTERN_MSG0 (classPtr, "print_attributes" , printAttributes);
+  CPPEXTERN_MSG0 (classPtr, "reset_attributes", resetAttributes);
+  CPPEXTERN_MSG0 (classPtr, "print_attributes", printAttributes);
 }
 
 void gemvertexbuffer :: tableMess (gem::VertexBuffer&vb, std::string name,
@@ -292,41 +292,41 @@ void gemvertexbuffer :: poszMess (t_symbol*s, int argc, t_atom *argv)
 
 void gemvertexbuffer :: colrMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_color   , 0);
+  tabMess(argc,argv, m_color, 0);
 }
 void gemvertexbuffer :: colgMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_color   , 1);
+  tabMess(argc,argv, m_color, 1);
 }
 void gemvertexbuffer :: colbMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_color   , 2);
+  tabMess(argc,argv, m_color, 2);
 }
 void gemvertexbuffer :: colaMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_color   , 3);
+  tabMess(argc,argv, m_color, 3);
 }
 
 void gemvertexbuffer :: texuMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_texture , 0);
+  tabMess(argc,argv, m_texture, 0);
 }
 void gemvertexbuffer :: texvMess (t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_texture , 1);
+  tabMess(argc,argv, m_texture, 1);
 }
 
 void gemvertexbuffer :: normxMess(t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_normal  , 0);
+  tabMess(argc,argv, m_normal, 0);
 }
 void gemvertexbuffer :: normyMess(t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_normal  , 1);
+  tabMess(argc,argv, m_normal, 1);
 }
 void gemvertexbuffer :: normzMess(t_symbol*s, int argc, t_atom *argv)
 {
-  tabMess(argc,argv, m_normal  , 2);
+  tabMess(argc,argv, m_normal, 2);
 }
 
 void gemvertexbuffer :: posVBO_enableMess (bool flag)
@@ -418,7 +418,8 @@ void gemvertexbuffer :: tabMess(unsigned int argc, t_atom *argv,
   }
   offset2 = offset2<0?0:offset2;
   std::string tab_name = atom_getsymbol(argv)->s_name;
-  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset, resize);
+  copyArray(tab_name, array, array.dimen, offset2 * array.dimen + offset,
+            resize);
   array.enabled=true;
 }
 
@@ -458,8 +459,8 @@ void gemvertexbuffer :: createVBO(void)
 
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
                                   gem::VertexBuffer&vb,
-				  unsigned int dimen, unsigned int offset,
-				  bool resize)
+                                  unsigned int dimen, unsigned int offset,
+                                  bool resize)
 {
   t_garray *a;
   int npoints_;
@@ -494,8 +495,9 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
     npoints=size*vb.dimen;
   }
   if(size!=vb.size) {
-    if(resize)
+    if(resize) {
       vb.resize(size);
+    }
   }
 
   float*array=vb.array;
@@ -514,9 +516,11 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
   } else { // single channel
     const unsigned int maxindex=vb.size*vb.dimen;
 
-    for ( i = 0 ; i < size ; i++ )	{
+    for ( i = 0 ; i < size ; i++ )      {
       const unsigned int index=offset+i*dimen;
-      if(index>=maxindex)break;
+      if(index>=maxindex) {
+        break;
+      }
       array[index] = vec[i].w_float;
     }
   }
@@ -572,7 +576,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
       tabname=std::string(atom_getsymbol(argv+1)->s_name);
       copyArray(tabname, m_attribute[i], 1,
                 tab_offset*m_attribute[i].dimen,
-		resize);  // always interleaved
+                resize);  // always interleaved
       m_attribute[i].attrib_array = tabname;
       m_attribute[i].offset = tab_offset;
       return;
@@ -593,7 +597,8 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 
   glGetActiveAttrib(glsl_program,
                     glsl_index,  /* GLuint program, GLuint index */
-                    0, &length, &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
+                    0, &length,
+                    &size,          /* GLsizei maxLength, GLsizei* length, GLint* size */
                     &attrib_type, &glname);       /* GLenum* type, GLchar* name */
   switch(attrib_type) {
   case GL_FLOAT:
@@ -638,7 +643,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     copyArray(m_attribute[i].attrib_array, m_attribute[i], 1,
               m_attribute[i].offset*m_attribute[i].dimen,
-	      resize);
+              resize);
   }
   return;
 }

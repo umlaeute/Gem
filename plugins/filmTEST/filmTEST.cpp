@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -48,7 +48,8 @@ filmTEST :: filmTEST(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmTEST :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmTEST :: open(const std::string&filename,
+                      const gem::Properties&wantProps)
 {
   m_numFrames=100;
   m_fps=20;
@@ -59,18 +60,23 @@ bool filmTEST :: open(const std::string filename, const gem::Properties&wantProp
 }
 
 void filmTEST::close(void) {}
-bool filmTEST::isThreadable(void) {return true;}
-
-void filmTEST::setProperties(gem::Properties&props) {
+bool filmTEST::isThreadable(void)
+{
+  return true;
 }
 
-void filmTEST::getProperties(gem::Properties&props) {
+void filmTEST::setProperties(gem::Properties&props)
+{
+}
+
+void filmTEST::getProperties(gem::Properties&props)
+{
   std::vector<std::string> keys=props.keys();
   unsigned int i=0;
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     props.erase(key);
-#define SETPROP(k, v) } else if(k == key) { double d=(double)v; props.set(key, v)
+#define SETPROP(k, v) } else if(k == key) { double d=(double)v; props.set(key, d)
     if(""==key) {
       SETPROP("fps", m_fps);
       SETPROP("frames", m_numFrames);
@@ -85,13 +91,16 @@ void filmTEST::getProperties(gem::Properties&props) {
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmTEST :: getFrame(){
+pixBlock* filmTEST :: getFrame()
+{
   return &m_image;
 }
 
-film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
+film::errCode filmTEST :: changeImage(int imgNum, int trackNum)
+{
   unsigned char*data=m_image.image.data;
-  unsigned int size=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
+  unsigned int size=
+    m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
 
   unsigned char value=(unsigned char)imgNum;
 
@@ -106,7 +115,9 @@ film::errCode filmTEST :: changeImage(int imgNum, int trackNum){
 }
 
 
-bool filmTEST::enumProperties(gem::Properties&readprops, gem::Properties&writeprops) {
+bool filmTEST::enumProperties(gem::Properties&readprops,
+                              gem::Properties&writeprops)
+{
   readprops.clear();
   writeprops.clear();
 

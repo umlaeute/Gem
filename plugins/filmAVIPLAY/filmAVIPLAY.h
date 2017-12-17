@@ -19,15 +19,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Gem/Image.h"
 
 #if defined (_WIN32) & defined (HAVE_LIBAVIPLAY)
-   // un windows there are other ways...
+// un windows there are other ways...
 #undef HAVE_LIBAVIPLAY
 #endif
 
 #ifdef HAVE_LIBAVIPLAY
-   /* this used to be <avifile/avifile.h>
-    * but on my system it changed to <avifile-0.7/avifile.h>
-    * so we now find the correct path via "configure"
-    */
+/* this used to be <avifile/avifile.h>
+ * but on my system it changed to <avifile-0.7/avifile.h>
+ * so we now find the correct path via "configure"
+ */
 
 // ugly hack, since avifile.h does weird things if HAVE_CONFIG_H is defined
 # undef HAVE_CONFIG_H
@@ -36,7 +36,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # include "infotypes.h"
 # include "image.h"
 
-   // some version checking...
+// some version checking...
 # ifndef IMG_FMT_RGB24
 #  undef HAVE_LIBAVIPLAY
 # endif // IMG_FMT_RGB24
@@ -56,9 +56,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmAVIPLAY : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmAVIPLAY : public film
+{
+public:
 
   //////////
   // Constructor
@@ -71,7 +75,7 @@ class GEM_EXPORT filmAVIPLAY : public film {
 #ifdef HAVE_LIBAVIPLAY
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -85,14 +89,18 @@ class GEM_EXPORT filmAVIPLAY : public film {
   virtual errCode changeImage(int imgNum, int trackNum=-1);
 
   // can be used within a threaded context
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
- protected:
+protected:
   GLenum  m_wantedFormat; // format requested by the user
   double m_fps;  // the frame-rate
   int  m_numFrames, m_numTracks; // number of frames in video
@@ -115,6 +123,8 @@ class GEM_EXPORT filmAVIPLAY : public film {
 #endif //AVIPLAY
   unsigned char *m_rawdata;
   long           m_rawlength;
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

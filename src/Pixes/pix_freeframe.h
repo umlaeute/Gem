@@ -56,46 +56,47 @@ DESCRIPTION
 
 class GEM_EXTERN pix_freeframe : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_freeframe, GemPixObj);
+  CPPEXTERN_HEADER(pix_freeframe, GemPixObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_freeframe(t_symbol*s);
+  //////////
+  // Constructor
+  pix_freeframe(t_symbol*s);
 
- protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~pix_freeframe();
+  //////////
+  // Destructor
+  virtual ~pix_freeframe();
 
 #ifndef DONT_WANT_FREEFRAME
 
-    //////////
-    // Do the processing
-    void 	processImage(imageStruct &image);
+  //////////
+  // Do the processing
+  void        processImage(imageStruct &image);
 
-    imageStruct m_image;
-    class FFPlugin;
-    FFPlugin*m_plugin;
+  imageStruct m_image;
+  class FFPlugin;
+  FFPlugin*m_plugin;
 
-    bool m_canopen;
-    std::vector<t_inlet*>m_inlet;
+  bool m_canopen;
+  std::vector<t_inlet*>m_inlet;
 
-    void parmMess(int param, t_atom*value);
-    void parmMess(std::string param, t_atom*value);
+  void parmMess(int param, t_atom*value);
+  void parmMess(std::string param, t_atom*value);
 
-    void openMess(t_symbol*name);
-    void closeMess(void);
+  void openMess(t_symbol*name);
+  void closeMess(void);
 #endif /* DONT_WANT_FREEFRAME */
 
- private:
-    static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
-    static void openCallback(void *data, t_symbol*s);
+private:
+  static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
+  static void openCallback(void *data, t_symbol*s);
 
- public:
-    static bool loader(const t_canvas *canvas, const std::string classname, const std::string path);
+public:
+  static bool loader(const t_canvas *canvas, const std::string&classname,
+                     const std::string&path);
 };
 
-#endif	// for header file
+#endif  // for header file

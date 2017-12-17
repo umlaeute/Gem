@@ -21,7 +21,8 @@
 #include <string.h>
 #include <stdio.h>
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg,
+                             A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -45,8 +46,9 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
   post("MULTIMODEL");
 
   // make sure that there are some characters
-  if (filename&&filename->s_name&&*filename->s_name)
+  if (filename&&filename->s_name&&*filename->s_name) {
     openMess(filename->s_name, baseModel, topModel, skipRate);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -87,8 +89,9 @@ void multimodel :: applyProperties(void)
   }
 #endif
 
-  if(m_loader)
+  if(m_loader) {
     m_loader->setProperties(m_properties);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -238,14 +241,17 @@ void multimodel :: openMess(const std::string&filename,
   int topModeli=static_cast<int>(topModel);
   int baseModeli=static_cast<int>(baseModel);
   if (skipRatei == 0) {
-    if (topModeli == 0)
+    if (topModeli == 0) {
       open(filename, 0, baseModeli, 1);
-    else
+    } else {
       open(filename, baseModeli, topModeli, 1);
+    }
+  } else {
+    open(filename, baseModeli, topModeli, skipRatei);
   }
-  else open(filename, baseModeli, topModeli, skipRatei);
 }
-void multimodel :: open(const std::string&filename, int baseModel, int topModel, int skipRate)
+void multimodel :: open(const std::string&filename, int baseModel,
+                        int topModel, int skipRate)
 {
   gem::Properties wantProps = m_properties;
   if(!m_backends.empty()) {
@@ -261,7 +267,9 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
     error("top range less than base model");
     return;
   }
-  if (skipRate < 1) skipRate = 1;
+  if (skipRate < 1) {
+    skipRate = 1;
+  }
   char preName[256];
   char postName[256];
 
@@ -286,7 +294,8 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   int realNum = baseModel;
   char bufName[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), preName, bufName,
+                      MAXPDSTRING);
 
   char newName[MAXPDSTRING];
   newName[0]=0;
@@ -297,11 +306,13 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
     verbose(1, "trying to load '%s'", newName);
 
     gem::plugins::modelloader*loader=gem::plugins::modelloader::getInstance();
-    if(!loader) break;
+    if(!loader) {
+      break;
+    }
 
-    if(loader->open(newName, wantProps))
+    if(loader->open(newName, wantProps)) {
       loaders.push_back(loader);
-    else {
+    } else {
       delete loader;
       break;
     }
@@ -309,11 +320,13 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   if(loaders.size()!=numModels) {
     /* ouch, something went wrong! */
-    error("failed to load model#%d of %d (%s)...resetting to original models", i, numModels, newName);
+    error("failed to load model#%d of %d (%s)...resetting to original models",
+          i, numModels, newName);
     unsigned int ui;
     for(ui=0; ui<loaders.size(); ui++) {
-      if(loaders[ui])
+      if(loaders[ui]) {
         delete loaders[ui];
+      }
       loaders[ui]=NULL;
     }
     loaders.clear();
@@ -322,8 +335,9 @@ void multimodel :: open(const std::string&filename, int baseModel, int topModel,
 
   close();
   m_loaders=loaders;
-  if(m_loaders.size()>0)
+  if(m_loaders.size()>0) {
     m_loader = m_loaders[0];
+  }
 
   post("loaded models: %s %s from %d to %d skipping %d",
        bufName, postName, baseModel, topModel, skipRate);
@@ -348,8 +362,9 @@ void multimodel :: changeModel(int modelNum)
   setModified();
 }
 
-void multimodel :: startRendering() {
-  if (m_loader){
+void multimodel :: startRendering()
+{
+  if (m_loader) {
     copyArray(m_loader->getVector("vertices"), m_position);
     copyArray(m_loader->getVector("texcoords"), m_texture);
     copyArray(m_loader->getVector("normals"), m_normal);
@@ -362,9 +377,12 @@ void multimodel :: startRendering() {
 /////////////////////////////////////////////////////////
 void multimodel :: render(GemState *state)
 {
-  if(!m_loader)return;
+  if(!m_loader) {
+    return;
+  }
 
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
+       || m_size_change_flag ) {
     createVBO();
     m_size_change_flag = false;
   }
@@ -418,7 +436,8 @@ void multimodel :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void multimodel :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&multimodel::openMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&multimodel::openMessCallback),
                   gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   CPPEXTERN_MSG1(classPtr, "mdl_num", changeModel, int);
 
@@ -430,10 +449,12 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
 }
-void multimodel :: openMessCallback(void *data, t_symbol *filesymbol, t_float baseModel,
+void multimodel :: openMessCallback(void *data, t_symbol *filesymbol,
+                                    t_float baseModel,
                                     t_floatarg topModel, t_floatarg skipRate)
 {
-  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel, skipRate);
+  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel,
+                             skipRate);
 }
 
 
@@ -445,12 +466,15 @@ void multimodel :: createVBO(void)
   m_normal  .create();
 }
 
-void multimodel :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
+void multimodel :: copyArray(const std::vector<std::vector<float> > tab,
+                             gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
   //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
-  if ( tab.empty() ) return;
+  if ( tab.empty() ) {
+    return;
+  }
   size=tab.size();
 
   if(size!=vb.size) {
@@ -467,8 +491,9 @@ void multimodel :: copyArray(const std::vector<std::vector<float> > tab, gem::Ve
   vb.enabled=true;
 }
 
-void multimodel :: copyAllArrays(){
-  if (m_loader && m_loader->needRefresh()){
+void multimodel :: copyAllArrays()
+{
+  if (m_loader && m_loader->needRefresh()) {
     copyArray(m_loader->getVector("vertices"), m_position);
     copyArray(m_loader->getVector("texcoords"), m_texture);
     copyArray(m_loader->getVector("normals"), m_normal);
@@ -477,30 +502,32 @@ void multimodel :: copyAllArrays(){
   }
 }
 
-void multimodel :: getVBOarray(){
-  if (m_loader && m_loader->needRefresh()){
+void multimodel :: getVBOarray()
+{
+  if (m_loader && m_loader->needRefresh()) {
 
-    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray =
+      m_loader->getVBOarray();
 
-    if ( vboArray.empty() ){
+    if ( vboArray.empty() ) {
       copyAllArrays();
     } else {
-      for (int i = 0; i<vboArray.size(); i++){
-        switch (vboArray[i].type){
-          case gem::VertexBuffer::GEM_VBO_VERTICES:
-            copyArray(*vboArray[i].data, m_position);
-            break;
-          case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
-            copyArray(*vboArray[i].data, m_texture);
-            break;
-          case gem::VertexBuffer::GEM_VBO_NORMALS:
-            copyArray(*vboArray[i].data, m_normal);
-            break;
-          case gem::VertexBuffer::GEM_VBO_COLORS:
-            copyArray(*vboArray[i].data, m_color);
-            break;
-          default:
-            error("VBO type %d not supported\n",vboArray[i].type);
+      for (int i = 0; i<vboArray.size(); i++) {
+        switch (vboArray[i].type) {
+        case gem::VertexBuffer::GEM_VBO_VERTICES:
+          copyArray(*vboArray[i].data, m_position);
+          break;
+        case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
+          copyArray(*vboArray[i].data, m_texture);
+          break;
+        case gem::VertexBuffer::GEM_VBO_NORMALS:
+          copyArray(*vboArray[i].data, m_normal);
+          break;
+        case gem::VertexBuffer::GEM_VBO_COLORS:
+          copyArray(*vboArray[i].data, m_color);
+          break;
+        default:
+          error("VBO type %d not supported\n",vboArray[i].type);
         }
       }
       m_loader->unsetRefresh();

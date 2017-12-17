@@ -42,14 +42,14 @@ class GEM_EXTERN vertex_program : public GemBase
 {
   CPPEXTERN_HEADER(vertex_program, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_program(void);
   vertex_program(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -88,7 +88,8 @@ class GEM_EXTERN vertex_program : public GemBase
 
   //////////
   // set 1 parameter of the program
-  virtual void paramMess(int envNum, t_float param1, t_float param2, t_float param3, t_float param4);
+  virtual void paramMess(int envNum, t_float param1, t_float param2,
+                         t_float param3, t_float param4);
 
   //////////
   // Print Info about Hardware limits
@@ -98,14 +99,14 @@ class GEM_EXTERN vertex_program : public GemBase
   //
   GLuint    m_programType;
 
-  GLuint 	m_programTarget;
+  GLuint        m_programTarget;
   GLuint        m_programID;
-  char*		m_programString;
-  size_t	m_size;
+  char*         m_programString;
+  size_t        m_size;
   std::string   m_buf;
 
-  float		m_param[4];
-  int	        m_envNum;
+  float         m_param[4];
+  int           m_envNum;
 };
 
-#endif	// for header file
+#endif  // for header file

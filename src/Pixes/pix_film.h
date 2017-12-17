@@ -41,12 +41,12 @@ class GEM_EXTERN pix_film : public GemBase
 {
   CPPEXTERN_HEADER(pix_film, GemBase);
 
-    public:
+public:
   //////////
   // Constructor
   pix_film(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -58,7 +58,8 @@ class GEM_EXTERN pix_film : public GemBase
   //////////
   // open a movie up (with a given format and a preferred codec)
   virtual void openMess(std::string filename, int format, std::string codec);
-  virtual void openMess(std::string filename, int format, unsigned int codec);
+  virtual void openMess(std::string filename, int format,
+                        unsigned int codec);
 
   //////////
   // prepare for texturing (on open)
@@ -105,20 +106,20 @@ class GEM_EXTERN pix_film : public GemBase
 
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
 
   //////////
   // If a movie was loaded and what kind of Movie this is
-  int 	    	m_haveMovie;
+  int           m_haveMovie;
   t_float       m_auto;
   int           m_format;
 
   //////////
-  // frame infromation
+  // frame information
   int           m_numFrames;
-  t_float   	m_reqFrame;
-  int 	    	m_curFrame;
+  t_float       m_reqFrame;
+  int           m_curFrame;
 
   //////////
   // track information
@@ -135,8 +136,8 @@ class GEM_EXTERN pix_film : public GemBase
   t_outlet     *m_outEnd;
 
 
- protected:
- /* grab-thread */
+protected:
+  /* grab-thread */
 #ifdef HAVE_PTHREADS
   pthread_t m_thread_id;
   pthread_mutex_t *m_mutex;
@@ -156,7 +157,8 @@ class GEM_EXTERN pix_film : public GemBase
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

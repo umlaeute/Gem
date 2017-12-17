@@ -2,7 +2,7 @@
  * GEM - Graphics Environment for Multimedia
  *
  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- *	zmoelnig@iem.kug.ac.at
+ *      zmoelnig@iem.kug.ac.at
  *  For information on usage and redistribution, and for a DISCLAIMER
  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
  *
@@ -19,7 +19,7 @@
   CLASS
   GEMglBlendEquation
   KEYWORDS
-  openGL	0
+  openGL        0
   DESCRIPTION
   wrapper for the openGL-function
   "glBlendEquation( GLenum mode)"
@@ -29,30 +29,30 @@ class GEM_EXTERN GEMglBlendEquation : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglBlendEquation, GemGLBase);
 
-    public:
+public:
   // Constructor
-  GEMglBlendEquation (t_float);	// CON
+  GEMglBlendEquation (t_float); // CON
 
- protected:
+protected:
   // Destructor
   virtual ~GEMglBlendEquation ();
-          // check extensions
-          virtual bool isRunnable(void);
+  // check extensions
+  virtual bool isRunnable(void);
 
   // Do the rendering
-  virtual void	render (GemState *state);
+  virtual void  render (GemState *state);
 
   // variables
-  GLenum	mode;		// VAR
-  virtual void	modeMess(t_float);	// FUN
+  GLenum        mode;           // VAR
+  virtual void  modeMess(t_float);      // FUN
 
 
- private:
+private:
 
   // we need some inlets
   t_inlet *m_inlet[1];
 
   // static member functions
-  static void	 modeMessCallback (void*, t_float);
+  static void    modeMessCallback (void*, t_float);
 };
 #endif // for header file

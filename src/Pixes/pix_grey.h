@@ -36,15 +36,15 @@ DESCRIPTION
 
 class GEM_EXTERN pix_grey : public pix_rgba
 {
-    CPPEXTERN_HEADER(pix_grey, GemPixObj);
+  CPPEXTERN_HEADER(pix_grey, GemPixObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_grey();
+  //////////
+  // Constructor
+  pix_grey();
 
-   protected:
+protected:
 };
 
-#endif	// for header file
+#endif  // for header file

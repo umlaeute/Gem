@@ -31,7 +31,8 @@ part_size :: part_size(int argc, t_atom*argv)
 {
   m_size[0]=m_size[1]=m_size[2]=1.0f;
   sizeMess(0, argc,argv);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ part_size :: ~part_size()
 /////////////////////////////////////////////////////////
 void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
 {
-  switch(argc){
+  switch(argc) {
   case 1:
     m_size[0]=m_size[1]=m_size[2]=atom_getfloat(argv);
     break;
@@ -55,7 +56,8 @@ void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
     m_size[0]=atom_getfloat(argv++);
     m_size[1]=atom_getfloat(argv++);
     m_size[2]=atom_getfloat(argv++);
-  default:;
+  default:
+    ;
   }
 }
 /////////////////////////////////////////////////////////
@@ -65,8 +67,8 @@ void part_size :: sizeMess(t_symbol*s, int argc, t_atom*argv)
 void part_size :: renderParticles(GemState *state)
 {
   if (m_tickTime > 0.f)    {
-      pSize(m_size[0], m_size[1], m_size[2]);
-    }
+    pSize(m_size[0], m_size[1], m_size[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -77,4 +79,3 @@ void part_size :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG (classPtr, "size", sizeMess);
 }
-

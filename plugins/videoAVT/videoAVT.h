@@ -53,7 +53,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	videoAVT
+        videoAVT
 
     Grabs in a video
 
@@ -65,48 +65,52 @@ DESCRIPTION
     support for the "AVT GiGE SDK" by Prosilica
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoAVT : public videoBase {
-    public:
-        //////////
-        // Constructor
-    	videoAVT(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoAVT : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoAVT(void);
 
-    	//////////
-    	// Destructor
-    	virtual ~videoAVT(void);
+  //////////
+  // Destructor
+  virtual ~videoAVT(void);
 
 #ifdef HAVE_AVT
-	////////
-	// open the video-device
-	virtual bool           openDevice(gem::Properties&props);
-	virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&props);
+  virtual void          closeDevice(void);
 
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	virtual bool	    	startTransfer(void);
-	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	virtual bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  virtual bool            startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  virtual bool            stopTransfer(void);
 
-	//////////
-	// get the next frame
-	virtual bool grabFrame(void);
+  //////////
+  // get the next frame
+  virtual bool grabFrame(void);
 
-	virtual std::vector<std::string>enumerate(void);
-
-
-	//////////
-	// properties
-	virtual bool enumProperties(gem::Properties&readable,
-				    gem::Properties&writeable);
-	virtual void setProperties(gem::Properties&writeprops);
-	virtual void getProperties(gem::Properties&readprops);
+  virtual std::vector<std::string>enumerate(void);
 
 
- protected:
+  //////////
+  // properties
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&writeprops);
+  virtual void getProperties(gem::Properties&readprops);
+
+
+protected:
 
   tPvHandle m_grabber;
 #define AVT_FRAMESCOUNT 4
@@ -121,6 +125,7 @@ namespace gem { namespace plugins {
 #endif /* HAVE_AVT */
 
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

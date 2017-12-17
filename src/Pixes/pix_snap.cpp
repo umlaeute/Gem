@@ -39,16 +39,16 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
 {
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data = NULL;
-  if (argc == 4){
+  if (argc == 4) {
     m_x = atom_getint(&argv[0]);
     m_y = atom_getint(&argv[1]);
     m_width = atom_getint(&argv[2]);
     m_height = atom_getint(&argv[3]);
-  } else if (argc == 2)	{
+  } else if (argc == 2) {
     m_x = m_y = 0;
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
-  } else if (argc == 0)	{
+  } else if (argc == 0) {
     m_x = m_y = 0;
     m_width = m_height = 128;
   } else {
@@ -59,8 +59,10 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
 
   gem::Settings::get("snap.pbo", m_numPbo);
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_size"));
 }
 
 /////////////////////////////////////////////////////////
@@ -69,18 +71,18 @@ pix_snap :: pix_snap(int argc, t_atom *argv) :
 /////////////////////////////////////////////////////////
 pix_snap :: ~pix_snap(void)
 {
-    cleanImage();
+  cleanImage();
 }
 
 
 #ifdef DEBUG_TIME
 #include <sys/time.h>
 
-# define START_TIMING() float mseconds=0.f;      \
-  timeval startTime, endTime;             \
+# define START_TIMING() float mseconds=0.f;     \
+  timeval startTime, endTime;                   \
   gettimeofday(&startTime, 0)
-# define STOP_TIMING(x) gettimeofday(&endTime, 0);       \
-  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 +	\
+# define STOP_TIMING(x) gettimeofday(&endTime, 0);      \
+  mseconds = (endTime.tv_sec - startTime.tv_sec)*1000 + \
     (endTime.tv_usec - startTime.tv_usec) * 0.001;      \
   post("%d PBO time = %f ms", x, mseconds)
 
@@ -99,49 +101,54 @@ void pix_snap :: snapMess(void)
     verbose(0, "not initialized yet with a valid context");
     return;
   }
-  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) return;
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
+    return;
+  }
 
-  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC)
+  if (m_cache&&m_cache->m_magic!=GEMCACHE_MAGIC) {
     m_cache=NULL;
+  }
 
-	if (m_width <= 0 || m_height <= 0) {
-		error("Illegal size");
-		return;
-	}
-	// do we need to remake the data?
-	bool makeNew = false;
+  if (m_width <= 0 || m_height <= 0) {
+    error("Illegal size");
+    return;
+  }
+  // do we need to remake the data?
+  bool makeNew = false;
   bool makePbo = false;
 
   // release previous data
   if (m_originalImage)  {
-		if (m_originalImage->xsize != m_width ||
+    if (m_originalImage->xsize != m_width ||
         m_originalImage->ysize != m_height) {
-			m_originalImage->clear();
-			delete m_originalImage;
-			m_originalImage = NULL;
-			makeNew = true;
-		}
-	}	else {
-		makeNew = true;
+      m_originalImage->clear();
+      delete m_originalImage;
+      m_originalImage = NULL;
+      makeNew = true;
+    }
+  }       else {
+    makeNew = true;
   }
   if (makeNew) {
-		m_originalImage = new imageStruct;
-		m_originalImage->xsize = m_width;
-		m_originalImage->ysize = m_height;
+    m_originalImage = new imageStruct;
+    m_originalImage->xsize = m_width;
+    m_originalImage->ysize = m_height;
     m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
-		m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize * m_originalImage->csize);
+    m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize *
+                              m_originalImage->csize);
 
     makePbo=true;
   }
 
 
-  if(m_numPbo>0 && !m_pbo)
+  if(m_numPbo>0 && !m_pbo) {
     makePbo=true;
-  else if(m_numPbo<=0)
+  } else if(m_numPbo<=0) {
     makePbo=false;
+  }
 
   /* FIXXME */
   if(makePbo) {
@@ -179,10 +186,12 @@ void pix_snap :: snapMess(void)
 
 
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[nextIndex]);
-    GLubyte* src = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB, GL_READ_ONLY_ARB);
+    GLubyte* src = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB,
+                                            GL_READ_ONLY_ARB);
     if(src) {
       m_originalImage->fromRGBA(src);
-      glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
+      glUnmapBufferARB(
+        GL_PIXEL_PACK_BUFFER_ARB);     // release pointer to the mapped buffer
     }
     glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
     STOP_TIMING(m_numPbo);
@@ -199,8 +208,9 @@ void pix_snap :: snapMess(void)
     STOP_TIMING(-1);
   }
 
-  if (m_cache)
-		m_cache->resendImage = 1;
+  if (m_cache) {
+    m_cache->resendImage = 1;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -209,19 +219,19 @@ void pix_snap :: snapMess(void)
 /////////////////////////////////////////////////////////
 void pix_snap :: render(GemState *state)
 {
-    // if we don't have an image, just return
-    if (!m_originalImage)
-      return;
+  // if we don't have an image, just return
+  if (!m_originalImage) {
+    return;
+  }
 
-    // do we need to reload the image?
-    if (m_cache&&m_cache->resendImage)
-    {
-      m_originalImage->refreshImage(&m_pixBlock.image);
-    	m_pixBlock.newimage = 1;
-    	m_cache->resendImage = 0;
-    }
+  // do we need to reload the image?
+  if (m_cache&&m_cache->resendImage) {
+    m_originalImage->refreshImage(&m_pixBlock.image);
+    m_pixBlock.newimage = 1;
+    m_cache->resendImage = 0;
+  }
 
-    state->set(GemState::_PIX, &m_pixBlock);
+  state->set(GemState::_PIX, &m_pixBlock);
 }
 
 /////////////////////////////////////////////////////////
@@ -230,8 +240,8 @@ void pix_snap :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap :: postrender(GemState *state)
 {
-    m_pixBlock.newimage = 0;
-    state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
+  m_pixBlock.newimage = 0;
+  state->set(GemState::_PIX, static_cast<pixBlock*>(NULL));
 }
 
 /////////////////////////////////////////////////////////
@@ -240,8 +250,8 @@ void pix_snap :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_snap :: sizeMess(int width, int height)
 {
-	m_width = width;
-    m_height = height;
+  m_width = width;
+  m_height = height;
 }
 
 /////////////////////////////////////////////////////////
@@ -250,8 +260,8 @@ void pix_snap :: sizeMess(int width, int height)
 /////////////////////////////////////////////////////////
 void pix_snap :: posMess(int x, int y)
 {
-    m_x = x;
-    m_y = y;
+  m_x = x;
+  m_y = y;
 }
 
 /////////////////////////////////////////////////////////
@@ -260,14 +270,13 @@ void pix_snap :: posMess(int x, int y)
 /////////////////////////////////////////////////////////
 void pix_snap :: cleanImage(void)
 {
-    // release previous data
-    if (m_originalImage)
-    {
-      delete m_originalImage;
-      m_originalImage = NULL;
+  // release previous data
+  if (m_originalImage) {
+    delete m_originalImage;
+    m_originalImage = NULL;
 
-      m_pixBlock.image.clear();
-    }
+    m_pixBlock.image.clear();
+  }
 }
 
 
@@ -303,7 +312,7 @@ void pix_snap :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
   CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
-  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess , int, int);
+  CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
 
-  CPPEXTERN_MSG1(classPtr, "pbo",  pboMess , int);
+  CPPEXTERN_MSG1(classPtr, "pbo",  pboMess, int);
 }

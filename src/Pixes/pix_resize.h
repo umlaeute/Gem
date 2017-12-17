@@ -30,35 +30,35 @@ KEYWORDS
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_resize : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_resize, GemPixObj);
+  CPPEXTERN_HEADER(pix_resize, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
+  //////////
+  // Constructor
   pix_resize(t_floatarg w, t_floatarg h);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_resize();
+  //////////
+  // Destructor
+  virtual ~pix_resize();
 
-    	//////////
-    	// Do the processing
-	void 	processImage(imageStruct &image);
+  //////////
+  // Do the processing
+  void    processImage(imageStruct &image);
 
-	//////////
-	// setting dimension and colourspace
-	void  dimenMess(int w, int h);
-	int           m_width, m_height;
-	imageStruct   m_image;
+  //////////
+  // setting dimension and colourspace
+  void  dimenMess(int w, int h);
+  int           m_width, m_height;
+  imageStruct   m_image;
 
- private:
+private:
 
-	//////////
-	// static member functions
-	static void   dimenMessCallback(void *data, t_float w, t_float h);
+  //////////
+  // static member functions
+  static void   dimenMessCallback(void *data, t_float w, t_float h);
 };
 
-#endif	// for header file
+#endif  // for header file

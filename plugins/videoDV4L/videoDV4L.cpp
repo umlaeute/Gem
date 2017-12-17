@@ -30,7 +30,7 @@ using namespace gem::plugins;
 #if 0
 # define DEBUG_WHERE post("%s:%d\t%s", __FILE__, __LINE__, __FUNCTION__)
 #else
-# define DEBUG_WHERE 
+# define DEBUG_WHERE
 #endif
 
 
@@ -46,12 +46,12 @@ REGISTER_VIDEOFACTORY("dv4l", videoDV4L);
 /////////////////////////////////////////////////////////
 
 videoDV4L :: videoDV4L() : videoBase("dv4l"),
-                           m_dvfd(-1),
-                           m_raw(NULL),
-                           m_iec(NULL),
-                           m_decoder(NULL),
-                           m_parsed(false),
-                           m_quality(DV_QUALITY_BEST)
+  m_dvfd(-1),
+  m_raw(NULL),
+  m_iec(NULL),
+  m_decoder(NULL),
+  m_parsed(false),
+  m_quality(DV_QUALITY_BEST)
 {
   m_devicenum  = -1;
 
@@ -70,23 +70,32 @@ videoDV4L :: videoDV4L() : videoBase("dv4l"),
 // Destructor
 //
 /////////////////////////////////////////////////////////
-videoDV4L :: ~videoDV4L(){
+videoDV4L :: ~videoDV4L()
+{
   close();
-  if(m_haveVideo)stopTransfer();
-  if(m_decoder!=NULL)dv_decoder_free(m_decoder);
+  if(m_haveVideo) {
+    stopTransfer();
+  }
+  if(m_decoder!=NULL) {
+    dv_decoder_free(m_decoder);
+  }
 
   dv_cleanup(); // singleton?
 }
 
 
-bool videoDV4L :: grabFrame(){
+bool videoDV4L :: grabFrame()
+{
   /* this actually only transports the raw1394 stream
    * libiec will issue a callback when a frame is ready
    */
   fd_set rfds;
-  if(m_dvfd<0)return false;
+  if(m_dvfd<0) {
+    return false;
+  }
   struct timeval sleep;
-  sleep.tv_sec=0;  sleep.tv_usec=10; /* 10us */
+  sleep.tv_sec=0;
+  sleep.tv_usec=10; /* 10us */
 
   FD_ZERO(&rfds);
   FD_SET(m_dvfd, &rfds);
@@ -97,15 +106,16 @@ bool videoDV4L :: grabFrame(){
       raw1394_loop_iterate(m_raw);
     }
   } else {
-    perror("select");
+    perror("[GEM:videoDV4L] select");
   }
   return true;
 }
 
-int videoDV4L::decodeFrame(unsigned char*data, int len) {
+int videoDV4L::decodeFrame(unsigned char*data, int len)
+{
   DEBUG_WHERE;
   if(!m_parsed) {
-    dv_parse_header(m_decoder, data);  
+    dv_parse_header(m_decoder, data);
     if(NULL==m_frame[0]) {
       int w=m_decoder->width;
       int h=m_decoder->height;
@@ -125,7 +135,7 @@ int videoDV4L::decodeFrame(unsigned char*data, int len) {
                          e_dv_color_rgb,
                          m_frame,
                          m_pitches);
-    
+
     lock();
     m_image.newimage=true;
     m_image.image.fromRGB(m_frame[0]);
@@ -137,14 +147,13 @@ int videoDV4L::decodeFrame(unsigned char*data, int len) {
 }
 
 int videoDV4L::iec_frame(
-                          unsigned char *data,
-                          int len,
-                          int complete,
-                          void *arg
-                          )
+  unsigned char *data,
+  int len,
+  int complete,
+  void *arg
+)
 {
   DEBUG_WHERE;
-  //  post("iec_frame: %x/%d\t%d\t%x", data, len, complete, arg);
   if(complete) {
     videoDV4L*dv4l=(videoDV4L*)arg;
     return dv4l->decodeFrame(data, len);
@@ -156,32 +165,36 @@ int videoDV4L::iec_frame(
 // openDevice
 //
 /////////////////////////////////////////////////////////
-bool videoDV4L :: openDevice(gem::Properties&props){
+bool videoDV4L :: openDevice(gem::Properties&props)
+{
   DEBUG_WHERE;
-  if(m_raw)closeDevice();
+  if(m_raw) {
+    closeDevice();
+  }
 
   // LATER think about multithreading issues
   // according to the manual: "it is not allowed to use the same handle in multiple threads"
   // http://www.dennedy.org/libraw1394/API-raw1394-new-handle.html
   m_raw=raw1394_new_handle();
   if(!m_raw) {
-    error("unable to get raw1394 handle");
+    verbose(0, "[GEM:videoDV4L] unable to get raw1394 handle");
     return false;
   }
 
   int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
-  
+
   int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
-  verbose(1, "DV4L: got %d ports", ports);
+  verbose(1, "[GEM:videoDV4L] got %d ports", ports);
 
   int devnum=m_devicenum;
-  if (!m_devicename.empty())
+  if (!m_devicename.empty()) {
     devnum=-1;
+  }
 
   int i=0;
   for(i=0; i<ports; i++) {
-    verbose(1, "port#%02d: %.*s", i, 32, pinf[i].name);
+    verbose(1, "[GEM:videoDV4L] port#%02d: %.*s", i, 32, pinf[i].name);
     if (devnum<0 && m_devicename==pinf[i].name) {
       devnum=i;
       /* we don't "break" for the nice verbose listing of ports */
@@ -191,15 +204,15 @@ bool videoDV4L :: openDevice(gem::Properties&props){
   delete[]pinf;
 
   int nodes=raw1394_get_nodecount(m_raw);
-  verbose(1, "DV4L: got %d nodes", nodes);
+  verbose(1, "[GEM:videoDV4L] got %d nodes", nodes);
 
-  if(devnum>=ports){
+  if(devnum>=ports) {
     closeDevice();
     return false;
   }
 
   if(devnum<0) {
-    if (!m_devicename.empty()){
+    if (!m_devicename.empty()) {
       /* bad devicename given */
       closeDevice();
       return false;
@@ -210,19 +223,19 @@ bool videoDV4L :: openDevice(gem::Properties&props){
   }
 
   if(raw1394_set_port(m_raw, devnum)<0) {
-    perror("raw1394_set_port");
+    perror("[GEM:videoDV4L] raw1394_set_port");
     closeDevice();
     return false;
   }
 
   m_dvfd = raw1394_get_fd(m_raw);
   if(m_dvfd<0) {
-    verbose(1, "DV4L: illegal filedescriptor");
+    verbose(0, "[GEM:videoDV4L] illegal filedescriptor");
     closeDevice();
     return false;
   }
 
-  verbose(1, "DV4L: successfully opened device %d", devnum);
+  verbose(1, "[GEM:videoDV4L] successfully opened device %d", devnum);
 
   setProperties(props);
 
@@ -233,10 +246,17 @@ bool videoDV4L :: openDevice(gem::Properties&props){
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoDV4L :: closeDevice(void){
+void videoDV4L :: closeDevice(void)
+{
   DEBUG_WHERE;
-  if(m_dvfd>=0)      ::close(m_dvfd);m_dvfd=-1;
-  if(m_raw)          raw1394_destroy_handle(m_raw);m_raw=NULL;
+  if(m_dvfd>=0) {
+    ::close(m_dvfd);
+  }
+  m_dvfd=-1;
+  if(m_raw) {
+    raw1394_destroy_handle(m_raw);
+  }
+  m_raw=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -253,29 +273,34 @@ bool videoDV4L :: startTransfer()
   m_image.image.setCsizeByFormat(m_reqFormat);
   m_image.image.reallocate();
 
-  if(NULL==m_raw)return false;
+  if(NULL==m_raw) {
+    return false;
+  }
 
   m_parsed=false;
 
-  if(m_decoder!=NULL)dv_decoder_free(m_decoder);m_decoder=NULL;
+  if(m_decoder!=NULL) {
+    dv_decoder_free(m_decoder);
+  }
+  m_decoder=NULL;
 
-  if (!(m_decoder=dv_decoder_new(true, true, true))){
-    error("DV4L: unable to create DV-decoder...closing");
+  if (!(m_decoder=dv_decoder_new(true, true, true))) {
+    error("[GEM:videoDV4L] unable to create DV-decoder...closing");
     return false;
   }
 
   m_decoder->quality=m_quality;
-  verbose(1, "DV4L: DV decoding quality %d ", m_decoder->quality);
+  verbose(1, "[GEM:videoDV4L] DV decoding quality %d ", m_decoder->quality);
 
   m_iec = iec61883_dv_fb_init(m_raw, iec_frame, this);
   if(NULL==m_iec) {
-    error("DV4L: unable to initialize IEC grabber");
+    error("[GEM:videoDV4L] unable to initialize IEC grabber");
     stopTransfer();
     return false;
   }
 
   if(iec61883_dv_fb_start(m_iec, 63) < 0) {
-    error("DV4L: iec61883_dv_fb_start failed");
+    error("[GEM:videoDV4L] iec61883_dv_fb_start failed");
     stopTransfer();
     return false;
   }
@@ -308,21 +333,27 @@ bool videoDV4L :: stopTransfer()
 
   int i=0;
   for(i=0; i<3; i++) {
-    if(m_frame[i]) delete[]m_frame[i]; m_frame[i] = NULL;
+    if(m_frame[i]) {
+      delete[]m_frame[i];
+    }
+    m_frame[i] = NULL;
     m_pitches[i] = 0;
   }
 
   return(1);
 }
 /*
-bool videoDV4L :: setDevice(const std::string name){
+bool videoDV4L :: setDevice(const std::string&name){
   // setting device by name not yet supported
   return false;
 }
 */
 
-bool videoDV4L :: setColor(int format){
-  if (format<=0)return false;
+bool videoDV4L :: setColor(int format)
+{
+  if (format<=0) {
+    return false;
+  }
   m_reqFormat=format;
   lock();
   m_image.image.setCsizeByFormat(m_reqFormat);
@@ -335,9 +366,14 @@ bool videoDV4L :: setColor(int format){
 // Set the quality for DV decoding
 //
 /////////////////////////////////////////
-bool videoDV4L :: setQuality(int quality){
-  if (quality<DV_QUALITY_FASTEST)return -1;
-  if (quality>DV_QUALITY_BEST)return -1;
+bool videoDV4L :: setQuality(int quality)
+{
+  if (quality<DV_QUALITY_FASTEST) {
+    return -1;
+  }
+  if (quality>DV_QUALITY_BEST) {
+    return -1;
+  }
   m_quality=quality;
 
   if(m_decoder) {
@@ -346,7 +382,8 @@ bool videoDV4L :: setQuality(int quality){
   return true;
 }
 
-std::vector<std::string> videoDV4L::enumerate() {
+std::vector<std::string> videoDV4L::enumerate()
+{
   std::vector<std::string> result;
 
   raw1394handle_t handle=m_raw;
@@ -354,18 +391,20 @@ std::vector<std::string> videoDV4L::enumerate() {
     handle=raw1394_new_handle();
   }
 
-  if(NULL==handle)return result;
+  if(NULL==handle) {
+    return result;
+  }
 
   int num_pinf=MAX_PORTNUM;
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
-  
+
   int ports = raw1394_get_port_info(handle, pinf, num_pinf);
   int i=0;
   for(i=0; i<ports; i++) {
     result.push_back(pinf[i].name);
   }
   delete[]pinf;
-  
+
   if(NULL==m_raw) {
     raw1394_destroy_handle(handle);
   }
@@ -375,7 +414,8 @@ std::vector<std::string> videoDV4L::enumerate() {
 
 
 bool videoDV4L::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                               gem::Properties&writeable)
+{
   gem::any typ;
 
   readable.clear();
@@ -384,7 +424,7 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
   typ=DV_QUALITY_BEST;
   writeable.set("quality", typ);
 
-  typ=1; // readables are all boolean 
+  typ=1; // readables are all boolean
   readable.set("PAL", typ);
   readable.set("is_color", typ);
   readable.set("50_fields", typ);
@@ -404,13 +444,12 @@ bool videoDV4L::enumProperties(gem::Properties&readable,
 
   return true;
 }
-void videoDV4L::getProperties(gem::Properties&props) {
+void videoDV4L::getProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
-  int i;
-
 #if 0
   /* get properties without decoder */
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if(0) {
     }
@@ -421,7 +460,7 @@ void videoDV4L::getProperties(gem::Properties&props) {
   /* get properties that need decoder */
   if(m_decoder) {
 
-    for(i=0; i<keys.size(); i++) {
+    for(int i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       if (0) {
       } else     if("quality"==key) {
@@ -461,10 +500,10 @@ void videoDV4L::getProperties(gem::Properties&props) {
         char dt_str[40];
         char*dtptr=dt_str;
         if(dv_get_recording_datetime (m_decoder, dtptr)>0) {
-          dt_str[39]=0; // just in case 
+          dt_str[39]=0; // just in case
           props.set(key, std::string(dt_str));
         }
-      } 
+      }
 
 
 
@@ -472,7 +511,8 @@ void videoDV4L::getProperties(gem::Properties&props) {
   }
 
 }
-void videoDV4L::setProperties(gem::Properties&props) {
+void videoDV4L::setProperties(gem::Properties&props)
+{
   double d;
   if(props.get("quality", d)) {
     int quality=static_cast<int>(d);

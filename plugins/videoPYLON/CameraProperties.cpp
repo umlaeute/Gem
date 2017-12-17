@@ -24,253 +24,258 @@
 #include <map>
 #include <sstream>
 
-namespace gem{namespace pylon{namespace cameraproperties{
-  static gem::Properties writeprops, readprops;
+namespace gem
+{
+namespace pylon
+{
+namespace cameraproperties
+{
+static gem::Properties writeprops, readprops;
 
-  typedef Pylon::CBaslerGigECamera DEVICE;
+typedef Pylon::CBaslerGigECamera DEVICE;
 
 
-  /* GenApi::IBoolean */
-  typedef bool (*t_getbool)(DEVICE*device);
-  std::map<std::string, t_getbool>map_getbool;
-  typedef void (*t_setbool)(DEVICE*device, const bool);
-  std::map<std::string, t_setbool>map_setbool;
+/* GenApi::IBoolean */
+typedef bool (*t_getbool)(DEVICE*device);
+std::map<std::string, t_getbool>map_getbool;
+typedef void (*t_setbool)(DEVICE*device, const bool);
+std::map<std::string, t_setbool>map_setbool;
 #define GETSETBOOL(T)                                                   \
   static bool get##T(DEVICE*device) { return device->T.GetValue(); }    \
     static void set##T(DEVICE*device, const bool v) { device->T.SetValue(v); }
 
-  GETSETBOOL(GammaEnable);
-  GETSETBOOL(ExposureTimeBaseAbsEnable);
-  GETSETBOOL(AcquisitionFrameRateEnable);
-  GETSETBOOL(LineInverter);
-  GETSETBOOL(LineTermination);
-  GETSETBOOL(LineStatus);
-  GETSETBOOL(UserOutputValue);
-  GETSETBOOL(TimerSequenceEnable);
-  GETSETBOOL(TimerSequenceTimerEnable);
-  GETSETBOOL(TimerSequenceTimerInverter);
-  GETSETBOOL(LUTEnable);
-  GETSETBOOL(ShadingEnable);
-  GETSETBOOL(RemoveLimits);
-  GETSETBOOL(ExpertFeatureEnable);
-  GETSETBOOL(PixelStepCorrectionEnable);
-  GETSETBOOL(ChunkModeActive);
-  GETSETBOOL(ChunkEnable);
-  GETSETBOOL(GevDeviceModeIsBigEndian);
-  GETSETBOOL(GevSupportedIPConfigurationLLA);
-  GETSETBOOL(GevSupportedIPConfigurationDHCP);
-  GETSETBOOL(GevSupportedIPConfigurationPersistentIP);
-  GETSETBOOL(GevSupportedOptionalCommandsEVENTDATA);
-  GETSETBOOL(GevSupportedOptionalCommandsEVENT);
-  GETSETBOOL(GevSupportedOptionalCommandsPACKETRESEND);
-  GETSETBOOL(GevSupportedOptionalCommandsWRITEMEM);
-  GETSETBOOL(GevSupportedOptionalCommandsConcatenation);
+GETSETBOOL(GammaEnable);
+GETSETBOOL(ExposureTimeBaseAbsEnable);
+GETSETBOOL(AcquisitionFrameRateEnable);
+GETSETBOOL(LineInverter);
+GETSETBOOL(LineTermination);
+GETSETBOOL(LineStatus);
+GETSETBOOL(UserOutputValue);
+GETSETBOOL(TimerSequenceEnable);
+GETSETBOOL(TimerSequenceTimerEnable);
+GETSETBOOL(TimerSequenceTimerInverter);
+GETSETBOOL(LUTEnable);
+GETSETBOOL(ShadingEnable);
+GETSETBOOL(RemoveLimits);
+GETSETBOOL(ExpertFeatureEnable);
+GETSETBOOL(PixelStepCorrectionEnable);
+GETSETBOOL(ChunkModeActive);
+GETSETBOOL(ChunkEnable);
+GETSETBOOL(GevDeviceModeIsBigEndian);
+GETSETBOOL(GevSupportedIPConfigurationLLA);
+GETSETBOOL(GevSupportedIPConfigurationDHCP);
+GETSETBOOL(GevSupportedIPConfigurationPersistentIP);
+GETSETBOOL(GevSupportedOptionalCommandsEVENTDATA);
+GETSETBOOL(GevSupportedOptionalCommandsEVENT);
+GETSETBOOL(GevSupportedOptionalCommandsPACKETRESEND);
+GETSETBOOL(GevSupportedOptionalCommandsWRITEMEM);
+GETSETBOOL(GevSupportedOptionalCommandsConcatenation);
 
 
 
 
-  /* GenApi::IInteger */
-  typedef int64_t (*t_getint)(DEVICE*device);
-  std::map<std::string, t_getint>map_getint;
-  typedef void (*t_setint)(DEVICE*device, const int64_t);
-  std::map<std::string, t_setint>map_setint;
+/* GenApi::IInteger */
+typedef int64_t (*t_getint)(DEVICE*device);
+std::map<std::string, t_getint>map_getint;
+typedef void (*t_setint)(DEVICE*device, const int64_t);
+std::map<std::string, t_setint>map_setint;
 
 
 #define GETSETINT(T)                                                    \
   static int64_t get##T(DEVICE*device) { return device->T.GetValue(); } \
     static void set##T(DEVICE*device, const int64_t v) { device->T.SetValue(v); }
 
-  GETSETINT(GainRaw);
-  GETSETINT(BlackLevelRaw);
-  GETSETINT(BalanceRatioRaw);
-  GETSETINT(DigitalShift);
-  GETSETINT(PixelDynamicRangeMin);
-  GETSETINT(PixelDynamicRangeMax);
-  GETSETINT(SpatialCorrection);
-  GETSETINT(SpatialCorrectionAmount);
-  GETSETINT(Width);
-  GETSETINT(Height);
-  GETSETINT(OffsetX);
-  GETSETINT(OffsetY);
-  GETSETINT(BinningVertical);
-  GETSETINT(BinningHorizontal);
-  GETSETINT(ExposureTimeRaw);
-  GETSETINT(AveragingNumberOfFrames);
-  GETSETINT(LineDebouncerTimeRaw);
-  GETSETINT(LineStatusAll);
-  GETSETINT(UserOutputValueAll);
-  GETSETINT(UserOutputValueAllMask);
-  GETSETINT(ShaftEncoderModuleCounter);
-  GETSETINT(ShaftEncoderModuleCounterMax);
-  GETSETINT(ShaftEncoderModuleReverseCounterMax);
-  GETSETINT(TimerDelayRaw);
-  GETSETINT(TimerDurationRaw);
-  GETSETINT(TimerSequenceLastEntryIndex);
-  GETSETINT(TimerSequenceCurrentEntryIndex);
-  GETSETINT(TimerSequenceTimerDelayRaw);
-  GETSETINT(TimerSequenceTimerDurationRaw);
-  GETSETINT(LUTIndex);
-  GETSETINT(LUTValue);
-  GETSETINT(AutoTargetValue);
-  GETSETINT(AutoGainRawLowerLimit);
-  GETSETINT(AutoGainRawUpperLimit);
-  GETSETINT(AutoFunctionAOIWidth);
-  GETSETINT(AutoFunctionAOIHeight);
-  GETSETINT(AutoFunctionAOIOffsetX);
-  GETSETINT(AutoFunctionAOIOffsetY);
-  GETSETINT(UserDefinedValue);
-  GETSETINT(SensorWidth);
-  GETSETINT(SensorHeight);
-  GETSETINT(WidthMax);
-  GETSETINT(HeightMax);
-  GETSETINT(ExpertFeatureAccessKey);
-  GETSETINT(PixelStepCorrectionValueRaw);
-  GETSETINT(PixelStepCorrectionBusy);
-  GETSETINT(ChunkStride);
-  GETSETINT(ChunkOffsetX);
-  GETSETINT(ChunkOffsetY);
-  GETSETINT(ChunkWidth);
-  GETSETINT(ChunkHeight);
-  GETSETINT(ChunkDynamicRangeMin);
-  GETSETINT(ChunkDynamicRangeMax);
-  GETSETINT(ChunkTimestamp);
-  GETSETINT(ChunkFramecounter);
-  GETSETINT(ChunkLineStatusAll);
-  GETSETINT(ChunkTriggerinputcounter);
-  GETSETINT(ChunkLineTriggerIgnoredCounter);
-  GETSETINT(ChunkFrameTriggerIgnoredCounter);
-  GETSETINT(ChunkFrameTriggerCounter);
-  GETSETINT(ChunkFramesPerTriggerCounter);
-  GETSETINT(ChunkLineTriggerEndToEndCounter);
-  GETSETINT(ChunkPayloadCRC16);
-  GETSETINT(ExposureEndEventStreamChannelIndex);
-  GETSETINT(ExposureEndEventFrameID);
-  GETSETINT(ExposureEndEventTimestamp);
-  GETSETINT(LineStartOvertriggerEventStreamChannelIndex);
-  GETSETINT(LineStartOvertriggerEventTimestamp);
-  GETSETINT(FrameStartOvertriggerEventStreamChannelIndex);
-  GETSETINT(FrameStartOvertriggerEventTimestamp);
-  GETSETINT(EventOverrunEventStreamChannelIndex);
-  GETSETINT(EventOverrunEventFrameID);
-  GETSETINT(EventOverrunEventTimestamp);
-  GETSETINT(FileAccessOffset);
-  GETSETINT(FileAccessLength);
-  GETSETINT(FileOperationResult);
-  GETSETINT(FileSize);
-  GETSETINT(PayloadSize);
-  GETSETINT(GevVersionMajor);
-  GETSETINT(GevVersionMinor);
-  GETSETINT(GevDeviceModeCharacterSet);
-  GETSETINT(GevMACAddress);
-  GETSETINT(GevCurrentIPConfiguration);
-  GETSETINT(GevCurrentIPAddress);
-  GETSETINT(GevCurrentSubnetMask);
-  GETSETINT(GevCurrentDefaultGateway);
-  GETSETINT(GevPersistentIPAddress);
-  GETSETINT(GevPersistentSubnetMask);
-  GETSETINT(GevPersistentDefaultGateway);
-  GETSETINT(GevLinkSpeed);
-  GETSETINT(GevNumberOfInterfaces);
-  GETSETINT(GevMessageChannelCount);
-  GETSETINT(GevStreamChannelCount);
-  GETSETINT(GevHeartbeatTimeout);
-  GETSETINT(GevTimestampTickFrequency);
-  GETSETINT(GevTimestampValue);
-  GETSETINT(GevSCPInterfaceIndex);
-  GETSETINT(GevSCDA);
-  GETSETINT(GevSCPHostPort);
-  GETSETINT(GevSCPSPacketSize);
-  GETSETINT(GevSCPD);
-  GETSETINT(GevSCFTD);
-  GETSETINT(GevSCBWR);
-  GETSETINT(GevSCBWRA);
-  GETSETINT(GevSCBWA);
-  GETSETINT(GevSCDMT);
-  GETSETINT(GevSCDCT);
-  GETSETINT(GevSCFJM);
-  GETSETINT(TLParamsLocked);
+GETSETINT(GainRaw);
+GETSETINT(BlackLevelRaw);
+GETSETINT(BalanceRatioRaw);
+GETSETINT(DigitalShift);
+GETSETINT(PixelDynamicRangeMin);
+GETSETINT(PixelDynamicRangeMax);
+GETSETINT(SpatialCorrection);
+GETSETINT(SpatialCorrectionAmount);
+GETSETINT(Width);
+GETSETINT(Height);
+GETSETINT(OffsetX);
+GETSETINT(OffsetY);
+GETSETINT(BinningVertical);
+GETSETINT(BinningHorizontal);
+GETSETINT(ExposureTimeRaw);
+GETSETINT(AveragingNumberOfFrames);
+GETSETINT(LineDebouncerTimeRaw);
+GETSETINT(LineStatusAll);
+GETSETINT(UserOutputValueAll);
+GETSETINT(UserOutputValueAllMask);
+GETSETINT(ShaftEncoderModuleCounter);
+GETSETINT(ShaftEncoderModuleCounterMax);
+GETSETINT(ShaftEncoderModuleReverseCounterMax);
+GETSETINT(TimerDelayRaw);
+GETSETINT(TimerDurationRaw);
+GETSETINT(TimerSequenceLastEntryIndex);
+GETSETINT(TimerSequenceCurrentEntryIndex);
+GETSETINT(TimerSequenceTimerDelayRaw);
+GETSETINT(TimerSequenceTimerDurationRaw);
+GETSETINT(LUTIndex);
+GETSETINT(LUTValue);
+GETSETINT(AutoTargetValue);
+GETSETINT(AutoGainRawLowerLimit);
+GETSETINT(AutoGainRawUpperLimit);
+GETSETINT(AutoFunctionAOIWidth);
+GETSETINT(AutoFunctionAOIHeight);
+GETSETINT(AutoFunctionAOIOffsetX);
+GETSETINT(AutoFunctionAOIOffsetY);
+GETSETINT(UserDefinedValue);
+GETSETINT(SensorWidth);
+GETSETINT(SensorHeight);
+GETSETINT(WidthMax);
+GETSETINT(HeightMax);
+GETSETINT(ExpertFeatureAccessKey);
+GETSETINT(PixelStepCorrectionValueRaw);
+GETSETINT(PixelStepCorrectionBusy);
+GETSETINT(ChunkStride);
+GETSETINT(ChunkOffsetX);
+GETSETINT(ChunkOffsetY);
+GETSETINT(ChunkWidth);
+GETSETINT(ChunkHeight);
+GETSETINT(ChunkDynamicRangeMin);
+GETSETINT(ChunkDynamicRangeMax);
+GETSETINT(ChunkTimestamp);
+GETSETINT(ChunkFramecounter);
+GETSETINT(ChunkLineStatusAll);
+GETSETINT(ChunkTriggerinputcounter);
+GETSETINT(ChunkLineTriggerIgnoredCounter);
+GETSETINT(ChunkFrameTriggerIgnoredCounter);
+GETSETINT(ChunkFrameTriggerCounter);
+GETSETINT(ChunkFramesPerTriggerCounter);
+GETSETINT(ChunkLineTriggerEndToEndCounter);
+GETSETINT(ChunkPayloadCRC16);
+GETSETINT(ExposureEndEventStreamChannelIndex);
+GETSETINT(ExposureEndEventFrameID);
+GETSETINT(ExposureEndEventTimestamp);
+GETSETINT(LineStartOvertriggerEventStreamChannelIndex);
+GETSETINT(LineStartOvertriggerEventTimestamp);
+GETSETINT(FrameStartOvertriggerEventStreamChannelIndex);
+GETSETINT(FrameStartOvertriggerEventTimestamp);
+GETSETINT(EventOverrunEventStreamChannelIndex);
+GETSETINT(EventOverrunEventFrameID);
+GETSETINT(EventOverrunEventTimestamp);
+GETSETINT(FileAccessOffset);
+GETSETINT(FileAccessLength);
+GETSETINT(FileOperationResult);
+GETSETINT(FileSize);
+GETSETINT(PayloadSize);
+GETSETINT(GevVersionMajor);
+GETSETINT(GevVersionMinor);
+GETSETINT(GevDeviceModeCharacterSet);
+GETSETINT(GevMACAddress);
+GETSETINT(GevCurrentIPConfiguration);
+GETSETINT(GevCurrentIPAddress);
+GETSETINT(GevCurrentSubnetMask);
+GETSETINT(GevCurrentDefaultGateway);
+GETSETINT(GevPersistentIPAddress);
+GETSETINT(GevPersistentSubnetMask);
+GETSETINT(GevPersistentDefaultGateway);
+GETSETINT(GevLinkSpeed);
+GETSETINT(GevNumberOfInterfaces);
+GETSETINT(GevMessageChannelCount);
+GETSETINT(GevStreamChannelCount);
+GETSETINT(GevHeartbeatTimeout);
+GETSETINT(GevTimestampTickFrequency);
+GETSETINT(GevTimestampValue);
+GETSETINT(GevSCPInterfaceIndex);
+GETSETINT(GevSCDA);
+GETSETINT(GevSCPHostPort);
+GETSETINT(GevSCPSPacketSize);
+GETSETINT(GevSCPD);
+GETSETINT(GevSCFTD);
+GETSETINT(GevSCBWR);
+GETSETINT(GevSCBWRA);
+GETSETINT(GevSCBWA);
+GETSETINT(GevSCDMT);
+GETSETINT(GevSCDCT);
+GETSETINT(GevSCFJM);
+GETSETINT(TLParamsLocked);
 
 
 
-  /* GenApi::IFloat */
-  typedef double (*t_getfloat)(DEVICE*device);
-  std::map<std::string, t_getfloat>map_getfloat;
-  typedef void (*t_setfloat)(DEVICE*device, const double);
-  std::map<std::string, t_setfloat>map_setfloat;
+/* GenApi::IFloat */
+typedef double (*t_getfloat)(DEVICE*device);
+std::map<std::string, t_getfloat>map_getfloat;
+typedef void (*t_setfloat)(DEVICE*device, const double);
+std::map<std::string, t_setfloat>map_setfloat;
 
 #define GETSETFLOAT(T)                                                  \
   static double get##T(DEVICE*device) { return device->T.GetValue(); }  \
     static void set##T(DEVICE*device, const double v) { device->T.SetValue(v); }
 
-  GETSETFLOAT(GainAbs);
-  GETSETFLOAT(BlackLevelAbs);
-  GETSETFLOAT(BalanceRatioAbs);
-  GETSETFLOAT(Gamma);
-  GETSETFLOAT(ExposureTimeAbs);
-  GETSETFLOAT(ExposureTimeBaseAbs);
-  GETSETFLOAT(AcquisitionLineRateAbs);
-  GETSETFLOAT(ResultingLineRateAbs);
-  GETSETFLOAT(AcquisitionFrameRateAbs);
-  GETSETFLOAT(ResultingFrameRateAbs);
-  GETSETFLOAT(LineDebouncerTimeAbs);
-  GETSETFLOAT(TimerDelayTimebaseAbs);
-  GETSETFLOAT(TimerDurationTimebaseAbs);
-  GETSETFLOAT(TimerDelayAbs);
-  GETSETFLOAT(TimerDurationAbs);
-  GETSETFLOAT(AutoExposureTimeAbsLowerLimit);
-  GETSETFLOAT(AutoExposureTimeAbsUpperLimit);
-  GETSETFLOAT(TemperatureAbs);
-  GETSETFLOAT(PixelStepCorrectionValueAbs);
+GETSETFLOAT(GainAbs);
+GETSETFLOAT(BlackLevelAbs);
+GETSETFLOAT(BalanceRatioAbs);
+GETSETFLOAT(Gamma);
+GETSETFLOAT(ExposureTimeAbs);
+GETSETFLOAT(ExposureTimeBaseAbs);
+GETSETFLOAT(AcquisitionLineRateAbs);
+GETSETFLOAT(ResultingLineRateAbs);
+GETSETFLOAT(AcquisitionFrameRateAbs);
+GETSETFLOAT(ResultingFrameRateAbs);
+GETSETFLOAT(LineDebouncerTimeAbs);
+GETSETFLOAT(TimerDelayTimebaseAbs);
+GETSETFLOAT(TimerDurationTimebaseAbs);
+GETSETFLOAT(TimerDelayAbs);
+GETSETFLOAT(TimerDurationAbs);
+GETSETFLOAT(AutoExposureTimeAbsLowerLimit);
+GETSETFLOAT(AutoExposureTimeAbsUpperLimit);
+GETSETFLOAT(TemperatureAbs);
+GETSETFLOAT(PixelStepCorrectionValueAbs);
 
-  /* GenApi::IString */
-  typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
-  std::map<std::string, t_getstring>map_getstring;
-  typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
-  std::map<std::string, t_setstring>map_setstring;
+/* GenApi::IString */
+typedef GenICam::gcstring (*t_getstring)(DEVICE*device);
+std::map<std::string, t_getstring>map_getstring;
+typedef void (*t_setstring)(DEVICE*device, GenICam::gcstring);
+std::map<std::string, t_setstring>map_setstring;
 #define GETSETSTRING(T)                                                 \
   static void set##T(DEVICE*device, const GenICam::gcstring v) { device->T.SetValue(v); } \
     static GenICam::gcstring get##T(DEVICE*device) { return device->T.GetValue(); }
 
-  GETSETSTRING(DeviceVendorName);
-  GETSETSTRING(DeviceModelName);
-  GETSETSTRING(DeviceManufacturerInfo);
-  GETSETSTRING(DeviceVersion);
-  GETSETSTRING(DeviceFirmwareVersion);
-  GETSETSTRING(DeviceID);
-  GETSETSTRING(DeviceUserID);
-  GETSETSTRING(GevFirstURL);
-  GETSETSTRING(GevSecondURL);
+GETSETSTRING(DeviceVendorName);
+GETSETSTRING(DeviceModelName);
+GETSETSTRING(DeviceManufacturerInfo);
+GETSETSTRING(DeviceVersion);
+GETSETSTRING(DeviceFirmwareVersion);
+GETSETSTRING(DeviceID);
+GETSETSTRING(DeviceUserID);
+GETSETSTRING(GevFirstURL);
+GETSETSTRING(GevSecondURL);
 
 
-  /* GenApi::ICommand */
-  // only setting(=calling), no getting
-  typedef void (*t_setcommand)(DEVICE*device);
-  std::map<std::string, t_setcommand>map_setcommand;
+/* GenApi::ICommand */
+// only setting(=calling), no getting
+typedef void (*t_setcommand)(DEVICE*device);
+std::map<std::string, t_setcommand>map_setcommand;
 #define GETSETCOMMAND(T)                                      \
   static void set##T(DEVICE*device) { device->T.Execute(); }
-  GETSETCOMMAND(AcquisitionStart);
-  GETSETCOMMAND(AcquisitionStop);
-  GETSETCOMMAND(AcquisitionAbort);
-  GETSETCOMMAND(TriggerSoftware);
-  GETSETCOMMAND(ShaftEncoderModuleCounterReset);
-  GETSETCOMMAND(ShaftEncoderModuleReverseCounterReset);
-  GETSETCOMMAND(UserSetLoad);
-  GETSETCOMMAND(UserSetSave);
-  GETSETCOMMAND(ShadingSetActivate);
-  GETSETCOMMAND(ShadingSetCreate);
-  GETSETCOMMAND(DeviceReset);
-  GETSETCOMMAND(SavePixelStepCorrection);
-  GETSETCOMMAND(CreatePixelStepCorrection);
-  GETSETCOMMAND(FileOperationExecute);
-  GETSETCOMMAND(GevTimestampControlLatch);
-  GETSETCOMMAND(GevTimestampControlReset);
-  GETSETCOMMAND(GevTimestampControlLatchReset);
+GETSETCOMMAND(AcquisitionStart);
+GETSETCOMMAND(AcquisitionStop);
+GETSETCOMMAND(AcquisitionAbort);
+GETSETCOMMAND(TriggerSoftware);
+GETSETCOMMAND(ShaftEncoderModuleCounterReset);
+GETSETCOMMAND(ShaftEncoderModuleReverseCounterReset);
+GETSETCOMMAND(UserSetLoad);
+GETSETCOMMAND(UserSetSave);
+GETSETCOMMAND(ShadingSetActivate);
+GETSETCOMMAND(ShadingSetCreate);
+GETSETCOMMAND(DeviceReset);
+GETSETCOMMAND(SavePixelStepCorrection);
+GETSETCOMMAND(CreatePixelStepCorrection);
+GETSETCOMMAND(FileOperationExecute);
+GETSETCOMMAND(GevTimestampControlLatch);
+GETSETCOMMAND(GevTimestampControlReset);
+GETSETCOMMAND(GevTimestampControlLatchReset);
 
-  /* GenApi::IRegister */
-  // skip this, it's too lowlevel
-  
-  /* GenApi::IEnumerationT */
-  // do this manually!
+/* GenApi::IRegister */
+// skip this, it's too lowlevel
+
+/* GenApi::IEnumerationT */
+// do this manually!
 
 #define GETSETENUMVAL(T)                                                \
   std::map<std::string, enum Basler_GigECameraParams::T##Enums> enumap_##T; \
@@ -283,7 +288,7 @@ namespace gem{namespace pylon{namespace cameraproperties{
       }                                                                 \
       return std::string("unknown");                                    \
     }                                                                   \
-    static void setS_##T (DEVICE*device, const std::string s) {         \
+    static void setS_##T (DEVICE*device, const std::string&s) {         \
       std::map<std::string, Basler_GigECameraParams:: T##Enums>::iterator it=enumap_##T.find(s); \
       if(it!=enumap_##T.end())                                          \
         device->T.SetValue(it->second);                                 \
@@ -301,74 +306,76 @@ namespace gem{namespace pylon{namespace cameraproperties{
       }                                                                 \
     }
 
-  typedef std::string (*t_getenum)(DEVICE*device);
-  typedef void (*t_setenum)(DEVICE*device, const std::string);
-  typedef void (*t_setenumi)(DEVICE*device, const int);
-  std::map<std::string, t_getenum>map_getenum; 
-  std::map<std::string, t_setenum>map_setenum; 
-  std::map<std::string, t_setenumi>map_setenumi;
+typedef std::string (*t_getenum)(DEVICE*device);
+typedef void (*t_setenum)(DEVICE*device, const std::string&);
+typedef void (*t_setenumi)(DEVICE*device, const int);
+std::map<std::string, t_getenum>map_getenum;
+std::map<std::string, t_setenum>map_setenum;
+std::map<std::string, t_setenumi>map_setenumi;
 
-  GETSETENUMVAL(AcquisitionMode);
-  GETSETENUMVAL(AutoFunctionAOISelector);
-  GETSETENUMVAL(BalanceRatioSelector);
-  GETSETENUMVAL(BalanceWhiteAuto);
-  GETSETENUMVAL(BlackLevelSelector);
-  GETSETENUMVAL(ChunkPixelFormat);
-  GETSETENUMVAL(ChunkSelector);
-  GETSETENUMVAL(DeviceScanType);
-  GETSETENUMVAL(EventNotification);
-  GETSETENUMVAL(EventSelector);
-  GETSETENUMVAL(ExpertFeatureAccessSelector);
-  GETSETENUMVAL(ExposureAuto);
-  GETSETENUMVAL(ExposureMode);
-  GETSETENUMVAL(FileOpenMode);
-  GETSETENUMVAL(FileOperationSelector);
-  GETSETENUMVAL(FileOperationStatus);
-  GETSETENUMVAL(FileSelector);
-  GETSETENUMVAL(GainAuto);
-  GETSETENUMVAL(GainSelector);
-  GETSETENUMVAL(GevCCP);
-  GETSETENUMVAL(GevInterfaceSelector);
-  GETSETENUMVAL(GevStreamChannelSelector);
-  GETSETENUMVAL(LegacyBinningVertical);
-  GETSETENUMVAL(LineFormat);
-  GETSETENUMVAL(LineMode);
-  GETSETENUMVAL(LineSelector);
-  GETSETENUMVAL(LineSource);
-  GETSETENUMVAL(LUTSelector);
-  GETSETENUMVAL(ParameterSelector);
-  GETSETENUMVAL(PixelCoding);
-  GETSETENUMVAL(PixelColorFilter);
-  GETSETENUMVAL(PixelFormat);
-  GETSETENUMVAL(PixelSize);
-  GETSETENUMVAL(PixelStepCorrectionSelector);
-  GETSETENUMVAL(ShadingSelector);
-  GETSETENUMVAL(ShadingSetDefaultSelector);
-  GETSETENUMVAL(ShadingSetSelector);
-  GETSETENUMVAL(ShadingStatus);
-  GETSETENUMVAL(ShaftEncoderModuleCounterMode);
-  GETSETENUMVAL(ShaftEncoderModuleLineSelector);
-  GETSETENUMVAL(ShaftEncoderModuleLineSource);
-  GETSETENUMVAL(ShaftEncoderModuleMode);
-  GETSETENUMVAL(SpatialCorrectionStartingLine);
-  GETSETENUMVAL(TemperatureSelector);
-  GETSETENUMVAL(TestImageSelector);
-  GETSETENUMVAL(TimerSelector);
-  GETSETENUMVAL(TimerSequenceEntrySelector);
-  GETSETENUMVAL(TimerSequenceTimerSelector);
-  GETSETENUMVAL(TimerTriggerActivation);
-  GETSETENUMVAL(TimerTriggerSource);
-  GETSETENUMVAL(TriggerActivation);
-  GETSETENUMVAL(TriggerMode);
-  GETSETENUMVAL(TriggerSelector);
-  GETSETENUMVAL(TriggerSource);
-  GETSETENUMVAL(UserDefinedValueSelector);
-  GETSETENUMVAL(UserOutputSelector);
-  GETSETENUMVAL(UserSetDefaultSelector);
-  GETSETENUMVAL(UserSetSelector);
-  
+GETSETENUMVAL(AcquisitionMode);
+GETSETENUMVAL(AutoFunctionAOISelector);
+GETSETENUMVAL(BalanceRatioSelector);
+GETSETENUMVAL(BalanceWhiteAuto);
+GETSETENUMVAL(BlackLevelSelector);
+GETSETENUMVAL(ChunkPixelFormat);
+GETSETENUMVAL(ChunkSelector);
+GETSETENUMVAL(DeviceScanType);
+GETSETENUMVAL(EventNotification);
+GETSETENUMVAL(EventSelector);
+GETSETENUMVAL(ExpertFeatureAccessSelector);
+GETSETENUMVAL(ExposureAuto);
+GETSETENUMVAL(ExposureMode);
+GETSETENUMVAL(FileOpenMode);
+GETSETENUMVAL(FileOperationSelector);
+GETSETENUMVAL(FileOperationStatus);
+GETSETENUMVAL(FileSelector);
+GETSETENUMVAL(GainAuto);
+GETSETENUMVAL(GainSelector);
+GETSETENUMVAL(GevCCP);
+GETSETENUMVAL(GevInterfaceSelector);
+GETSETENUMVAL(GevStreamChannelSelector);
+GETSETENUMVAL(LegacyBinningVertical);
+GETSETENUMVAL(LineFormat);
+GETSETENUMVAL(LineMode);
+GETSETENUMVAL(LineSelector);
+GETSETENUMVAL(LineSource);
+GETSETENUMVAL(LUTSelector);
+GETSETENUMVAL(ParameterSelector);
+GETSETENUMVAL(PixelCoding);
+GETSETENUMVAL(PixelColorFilter);
+GETSETENUMVAL(PixelFormat);
+GETSETENUMVAL(PixelSize);
+GETSETENUMVAL(PixelStepCorrectionSelector);
+GETSETENUMVAL(ShadingSelector);
+GETSETENUMVAL(ShadingSetDefaultSelector);
+GETSETENUMVAL(ShadingSetSelector);
+GETSETENUMVAL(ShadingStatus);
+GETSETENUMVAL(ShaftEncoderModuleCounterMode);
+GETSETENUMVAL(ShaftEncoderModuleLineSelector);
+GETSETENUMVAL(ShaftEncoderModuleLineSource);
+GETSETENUMVAL(ShaftEncoderModuleMode);
+GETSETENUMVAL(SpatialCorrectionStartingLine);
+GETSETENUMVAL(TemperatureSelector);
+GETSETENUMVAL(TestImageSelector);
+GETSETENUMVAL(TimerSelector);
+GETSETENUMVAL(TimerSequenceEntrySelector);
+GETSETENUMVAL(TimerSequenceTimerSelector);
+GETSETENUMVAL(TimerTriggerActivation);
+GETSETENUMVAL(TimerTriggerSource);
+GETSETENUMVAL(TriggerActivation);
+GETSETENUMVAL(TriggerMode);
+GETSETENUMVAL(TriggerSelector);
+GETSETENUMVAL(TriggerSource);
+GETSETENUMVAL(UserDefinedValueSelector);
+GETSETENUMVAL(UserOutputSelector);
+GETSETENUMVAL(UserSetDefaultSelector);
+GETSETENUMVAL(UserSetSelector);
 
-};};};
+
+};
+};
+};
 
 using namespace gem::pylon::cameraproperties;
 
@@ -382,8 +389,14 @@ typedef GenApi::IInteger& bla_t;
 
 static std::map<std::string, GenApi::IInteger&>s_intfun;
 
-void   gem::pylon::cameraproperties::init() {
-  static bool initialized=false;  if(initialized){return;} else {initialized=true;}
+void   gem::pylon::cameraproperties::init()
+{
+  static bool initialized=false;
+  if(initialized) {
+    return;
+  } else {
+    initialized=true;
+  }
 
 #define MAP_GETSETBOOL(T)                       \
   map_getbool[ #T ]=get##T;                     \
@@ -844,27 +857,43 @@ void   gem::pylon::cameraproperties::init() {
   enumap_PixelColorFilter["Bayer_GB"]=PixelColorFilter_Bayer_GB;
   enumap_PixelColorFilter["Bayer_GR"]=PixelColorFilter_Bayer_GR;
   enumap_PixelColorFilter["Bayer_BG"]=PixelColorFilter_Bayer_BG;
-  enumap_SpatialCorrectionStartingLine["LineRed"]=SpatialCorrectionStartingLine_LineRed;
-  enumap_SpatialCorrectionStartingLine["LineGreen"]=SpatialCorrectionStartingLine_LineGreen;
-  enumap_SpatialCorrectionStartingLine["LineBlue"]=SpatialCorrectionStartingLine_LineBlue;
+  enumap_SpatialCorrectionStartingLine["LineRed"]=
+    SpatialCorrectionStartingLine_LineRed;
+  enumap_SpatialCorrectionStartingLine["LineGreen"]=
+    SpatialCorrectionStartingLine_LineGreen;
+  enumap_SpatialCorrectionStartingLine["LineBlue"]=
+    SpatialCorrectionStartingLine_LineBlue;
   enumap_TestImageSelector["Off"]=TestImageSelector_Off;
   enumap_TestImageSelector["Black"]=TestImageSelector_Black;
   enumap_TestImageSelector["White"]=TestImageSelector_White;
-  enumap_TestImageSelector["GreyHorizontalRamp"]=TestImageSelector_GreyHorizontalRamp;
-  enumap_TestImageSelector["GreyVerticalRamp"]=TestImageSelector_GreyVerticalRamp;
-  enumap_TestImageSelector["GreyHorizontalRampMoving"]=TestImageSelector_GreyHorizontalRampMoving;
-  enumap_TestImageSelector["GreyVerticalRampMoving"]=TestImageSelector_GreyVerticalRampMoving;
-  enumap_TestImageSelector["HorzontalLineMoving"]=TestImageSelector_HorzontalLineMoving;
-  enumap_TestImageSelector["VerticalLineMoving"]=TestImageSelector_VerticalLineMoving;
+  enumap_TestImageSelector["GreyHorizontalRamp"]=
+    TestImageSelector_GreyHorizontalRamp;
+  enumap_TestImageSelector["GreyVerticalRamp"]=
+    TestImageSelector_GreyVerticalRamp;
+  enumap_TestImageSelector["GreyHorizontalRampMoving"]=
+    TestImageSelector_GreyHorizontalRampMoving;
+  enumap_TestImageSelector["GreyVerticalRampMoving"]=
+    TestImageSelector_GreyVerticalRampMoving;
+  enumap_TestImageSelector["HorzontalLineMoving"]=
+    TestImageSelector_HorzontalLineMoving;
+  enumap_TestImageSelector["VerticalLineMoving"]=
+    TestImageSelector_VerticalLineMoving;
   enumap_TestImageSelector["ColorBar"]=TestImageSelector_ColorBar;
   enumap_TestImageSelector["FrameCounter"]=TestImageSelector_FrameCounter;
-  enumap_TestImageSelector["DeviceSpecific"]=TestImageSelector_DeviceSpecific;
-  enumap_TestImageSelector["FixedDiagonalGrayGradient_8Bit"]=TestImageSelector_FixedDiagonalGrayGradient_8Bit;
-  enumap_TestImageSelector["MovingDiagonalGrayGradient_8Bit"]=TestImageSelector_MovingDiagonalGrayGradient_8Bit;
-  enumap_TestImageSelector["MovingDiagonalGrayGradient_12Bit"]=TestImageSelector_MovingDiagonalGrayGradient_12Bit;
-  enumap_TestImageSelector["MovingDiagonalGrayGradientFeatureTest_8Bit"]=TestImageSelector_MovingDiagonalGrayGradientFeatureTest_8Bit;
-  enumap_TestImageSelector["MovingDiagonalGrayGradientFeatureTest_12Bit"]=TestImageSelector_MovingDiagonalGrayGradientFeatureTest_12Bit;
-  enumap_TestImageSelector["MovingDiagonalColorGradient"]=TestImageSelector_MovingDiagonalColorGradient;
+  enumap_TestImageSelector["DeviceSpecific"]=
+    TestImageSelector_DeviceSpecific;
+  enumap_TestImageSelector["FixedDiagonalGrayGradient_8Bit"]=
+    TestImageSelector_FixedDiagonalGrayGradient_8Bit;
+  enumap_TestImageSelector["MovingDiagonalGrayGradient_8Bit"]=
+    TestImageSelector_MovingDiagonalGrayGradient_8Bit;
+  enumap_TestImageSelector["MovingDiagonalGrayGradient_12Bit"]=
+    TestImageSelector_MovingDiagonalGrayGradient_12Bit;
+  enumap_TestImageSelector["MovingDiagonalGrayGradientFeatureTest_8Bit"]=
+    TestImageSelector_MovingDiagonalGrayGradientFeatureTest_8Bit;
+  enumap_TestImageSelector["MovingDiagonalGrayGradientFeatureTest_12Bit"]=
+    TestImageSelector_MovingDiagonalGrayGradientFeatureTest_12Bit;
+  enumap_TestImageSelector["MovingDiagonalColorGradient"]=
+    TestImageSelector_MovingDiagonalColorGradient;
   enumap_TestImageSelector["Testimage1"]=TestImageSelector_Testimage1;
   enumap_TestImageSelector["Testimage2"]=TestImageSelector_Testimage2;
   enumap_TestImageSelector["Testimage3"]=TestImageSelector_Testimage3;
@@ -877,9 +906,11 @@ void   gem::pylon::cameraproperties::init() {
   enumap_AcquisitionMode["SingleFrame"]=AcquisitionMode_SingleFrame;
   enumap_AcquisitionMode["MultiFrame"]=AcquisitionMode_MultiFrame;
   enumap_AcquisitionMode["Continuous"]=AcquisitionMode_Continuous;
-  enumap_TriggerSelector["AcquisitionStart"]=TriggerSelector_AcquisitionStart;
+  enumap_TriggerSelector["AcquisitionStart"]=
+    TriggerSelector_AcquisitionStart;
   enumap_TriggerSelector["AcquisitionEnd"]=TriggerSelector_AcquisitionEnd;
-  enumap_TriggerSelector["AcquisitionActive"]=TriggerSelector_AcquisitionActive;
+  enumap_TriggerSelector["AcquisitionActive"]=
+    TriggerSelector_AcquisitionActive;
   enumap_TriggerSelector["FrameStart"]=TriggerSelector_FrameStart;
   enumap_TriggerSelector["FrameEnd"]=TriggerSelector_FrameEnd;
   enumap_TriggerSelector["FrameActive"]=TriggerSelector_FrameActive;
@@ -900,7 +931,8 @@ void   gem::pylon::cameraproperties::init() {
   enumap_TriggerSource["UserOutput1"]=TriggerSource_UserOutput1;
   enumap_TriggerSource["UserOutput2"]=TriggerSource_UserOutput2;
   enumap_TriggerSource["Software"]=TriggerSource_Software;
-  enumap_TriggerSource["ShaftEncoderModuleOut"]=TriggerSource_ShaftEncoderModuleOut;
+  enumap_TriggerSource["ShaftEncoderModuleOut"]=
+    TriggerSource_ShaftEncoderModuleOut;
   enumap_TriggerActivation["RisingEdge"]=TriggerActivation_RisingEdge;
   enumap_TriggerActivation["FallingEdge"]=TriggerActivation_FallingEdge;
   enumap_TriggerActivation["AnyEdge"]=TriggerActivation_AnyEdge;
@@ -953,46 +985,80 @@ void   gem::pylon::cameraproperties::init() {
   enumap_UserOutputSelector["UserOutput2"]=UserOutputSelector_UserOutput2;
   enumap_UserOutputSelector["UserOutput3"]=UserOutputSelector_UserOutput3;
   enumap_UserOutputSelector["UserOutput4"]=UserOutputSelector_UserOutput4;
-  enumap_ShaftEncoderModuleLineSelector["PhaseA"]=ShaftEncoderModuleLineSelector_PhaseA;
-  enumap_ShaftEncoderModuleLineSelector["PhaseB"]=ShaftEncoderModuleLineSelector_PhaseB;
-  enumap_ShaftEncoderModuleLineSource["Line1"]=ShaftEncoderModuleLineSource_Line1;
-  enumap_ShaftEncoderModuleLineSource["Line2"]=ShaftEncoderModuleLineSource_Line2;
-  enumap_ShaftEncoderModuleLineSource["Line3"]=ShaftEncoderModuleLineSource_Line3;
-  enumap_ShaftEncoderModuleLineSource["Line4"]=ShaftEncoderModuleLineSource_Line4;
-  enumap_ShaftEncoderModuleMode["AnyDirection"]=ShaftEncoderModuleMode_AnyDirection;
-  enumap_ShaftEncoderModuleMode["ForwardOnly"]=ShaftEncoderModuleMode_ForwardOnly;
-  enumap_ShaftEncoderModuleCounterMode["FollowDirection"]=ShaftEncoderModuleCounterMode_FollowDirection;
-  enumap_ShaftEncoderModuleCounterMode["IgnoreDirection"]=ShaftEncoderModuleCounterMode_IgnoreDirection;
+  enumap_ShaftEncoderModuleLineSelector["PhaseA"]=
+    ShaftEncoderModuleLineSelector_PhaseA;
+  enumap_ShaftEncoderModuleLineSelector["PhaseB"]=
+    ShaftEncoderModuleLineSelector_PhaseB;
+  enumap_ShaftEncoderModuleLineSource["Line1"]=
+    ShaftEncoderModuleLineSource_Line1;
+  enumap_ShaftEncoderModuleLineSource["Line2"]=
+    ShaftEncoderModuleLineSource_Line2;
+  enumap_ShaftEncoderModuleLineSource["Line3"]=
+    ShaftEncoderModuleLineSource_Line3;
+  enumap_ShaftEncoderModuleLineSource["Line4"]=
+    ShaftEncoderModuleLineSource_Line4;
+  enumap_ShaftEncoderModuleMode["AnyDirection"]=
+    ShaftEncoderModuleMode_AnyDirection;
+  enumap_ShaftEncoderModuleMode["ForwardOnly"]=
+    ShaftEncoderModuleMode_ForwardOnly;
+  enumap_ShaftEncoderModuleCounterMode["FollowDirection"]=
+    ShaftEncoderModuleCounterMode_FollowDirection;
+  enumap_ShaftEncoderModuleCounterMode["IgnoreDirection"]=
+    ShaftEncoderModuleCounterMode_IgnoreDirection;
   enumap_TimerSelector["Timer1"]=TimerSelector_Timer1;
   enumap_TimerSelector["Timer2"]=TimerSelector_Timer2;
   enumap_TimerSelector["Timer3"]=TimerSelector_Timer3;
   enumap_TimerSelector["Timer4"]=TimerSelector_Timer4;
   enumap_TimerTriggerSource["Off"]=TimerTriggerSource_Off;
-  enumap_TimerTriggerSource["ExposureStart"]=TimerTriggerSource_ExposureStart;
-  enumap_TimerTriggerActivation["RisingEdge"]=TimerTriggerActivation_RisingEdge;
-  enumap_TimerTriggerActivation["FallingEdge"]=TimerTriggerActivation_FallingEdge;
-  enumap_TimerTriggerActivation["LevelHigh"]=TimerTriggerActivation_LevelHigh;
+  enumap_TimerTriggerSource["ExposureStart"]=
+    TimerTriggerSource_ExposureStart;
+  enumap_TimerTriggerActivation["RisingEdge"]=
+    TimerTriggerActivation_RisingEdge;
+  enumap_TimerTriggerActivation["FallingEdge"]=
+    TimerTriggerActivation_FallingEdge;
+  enumap_TimerTriggerActivation["LevelHigh"]=
+    TimerTriggerActivation_LevelHigh;
   enumap_TimerTriggerActivation["LevelLow"]=TimerTriggerActivation_LevelLow;
-  enumap_TimerSequenceEntrySelector["Entry1"]=TimerSequenceEntrySelector_Entry1;
-  enumap_TimerSequenceEntrySelector["Entry2"]=TimerSequenceEntrySelector_Entry2;
-  enumap_TimerSequenceEntrySelector["Entry3"]=TimerSequenceEntrySelector_Entry3;
-  enumap_TimerSequenceEntrySelector["Entry4"]=TimerSequenceEntrySelector_Entry4;
-  enumap_TimerSequenceEntrySelector["Entry5"]=TimerSequenceEntrySelector_Entry5;
-  enumap_TimerSequenceEntrySelector["Entry6"]=TimerSequenceEntrySelector_Entry6;
-  enumap_TimerSequenceEntrySelector["Entry7"]=TimerSequenceEntrySelector_Entry7;
-  enumap_TimerSequenceEntrySelector["Entry8"]=TimerSequenceEntrySelector_Entry8;
-  enumap_TimerSequenceEntrySelector["Entry9"]=TimerSequenceEntrySelector_Entry9;
-  enumap_TimerSequenceEntrySelector["Entry10"]=TimerSequenceEntrySelector_Entry10;
-  enumap_TimerSequenceEntrySelector["Entry11"]=TimerSequenceEntrySelector_Entry11;
-  enumap_TimerSequenceEntrySelector["Entry12"]=TimerSequenceEntrySelector_Entry12;
-  enumap_TimerSequenceEntrySelector["Entry13"]=TimerSequenceEntrySelector_Entry13;
-  enumap_TimerSequenceEntrySelector["Entry14"]=TimerSequenceEntrySelector_Entry14;
-  enumap_TimerSequenceEntrySelector["Entry15"]=TimerSequenceEntrySelector_Entry15;
-  enumap_TimerSequenceEntrySelector["Entry16"]=TimerSequenceEntrySelector_Entry16;
-  enumap_TimerSequenceTimerSelector["Timer1"]=TimerSequenceTimerSelector_Timer1;
-  enumap_TimerSequenceTimerSelector["Timer2"]=TimerSequenceTimerSelector_Timer2;
-  enumap_TimerSequenceTimerSelector["Timer3"]=TimerSequenceTimerSelector_Timer3;
-  enumap_TimerSequenceTimerSelector["Timer4"]=TimerSequenceTimerSelector_Timer4;
+  enumap_TimerSequenceEntrySelector["Entry1"]=
+    TimerSequenceEntrySelector_Entry1;
+  enumap_TimerSequenceEntrySelector["Entry2"]=
+    TimerSequenceEntrySelector_Entry2;
+  enumap_TimerSequenceEntrySelector["Entry3"]=
+    TimerSequenceEntrySelector_Entry3;
+  enumap_TimerSequenceEntrySelector["Entry4"]=
+    TimerSequenceEntrySelector_Entry4;
+  enumap_TimerSequenceEntrySelector["Entry5"]=
+    TimerSequenceEntrySelector_Entry5;
+  enumap_TimerSequenceEntrySelector["Entry6"]=
+    TimerSequenceEntrySelector_Entry6;
+  enumap_TimerSequenceEntrySelector["Entry7"]=
+    TimerSequenceEntrySelector_Entry7;
+  enumap_TimerSequenceEntrySelector["Entry8"]=
+    TimerSequenceEntrySelector_Entry8;
+  enumap_TimerSequenceEntrySelector["Entry9"]=
+    TimerSequenceEntrySelector_Entry9;
+  enumap_TimerSequenceEntrySelector["Entry10"]=
+    TimerSequenceEntrySelector_Entry10;
+  enumap_TimerSequenceEntrySelector["Entry11"]=
+    TimerSequenceEntrySelector_Entry11;
+  enumap_TimerSequenceEntrySelector["Entry12"]=
+    TimerSequenceEntrySelector_Entry12;
+  enumap_TimerSequenceEntrySelector["Entry13"]=
+    TimerSequenceEntrySelector_Entry13;
+  enumap_TimerSequenceEntrySelector["Entry14"]=
+    TimerSequenceEntrySelector_Entry14;
+  enumap_TimerSequenceEntrySelector["Entry15"]=
+    TimerSequenceEntrySelector_Entry15;
+  enumap_TimerSequenceEntrySelector["Entry16"]=
+    TimerSequenceEntrySelector_Entry16;
+  enumap_TimerSequenceTimerSelector["Timer1"]=
+    TimerSequenceTimerSelector_Timer1;
+  enumap_TimerSequenceTimerSelector["Timer2"]=
+    TimerSequenceTimerSelector_Timer2;
+  enumap_TimerSequenceTimerSelector["Timer3"]=
+    TimerSequenceTimerSelector_Timer3;
+  enumap_TimerSequenceTimerSelector["Timer4"]=
+    TimerSequenceTimerSelector_Timer4;
   enumap_LUTSelector["Luminance"]=LUTSelector_Luminance;
   enumap_UserSetSelector["Default"]=UserSetSelector_Default;
   enumap_UserSetSelector["UserSet1"]=UserSetSelector_UserSet1;
@@ -1016,12 +1082,18 @@ void   gem::pylon::cameraproperties::init() {
   enumap_ShadingStatus["StartupSetError"]=ShadingStatus_StartupSetError;
   enumap_ShadingStatus["ActivateError"]=ShadingStatus_ActivateError;
   enumap_ShadingStatus["CreateError"]=ShadingStatus_CreateError;
-  enumap_ShadingSetDefaultSelector["DefaultShadingSet"]=ShadingSetDefaultSelector_DefaultShadingSet;
-  enumap_ShadingSetDefaultSelector["UserShadingSet1"]=ShadingSetDefaultSelector_UserShadingSet1;
-  enumap_ShadingSetDefaultSelector["UserShadingSet2"]=ShadingSetDefaultSelector_UserShadingSet2;
-  enumap_ShadingSetSelector["DefaultShadingSet"]=ShadingSetSelector_DefaultShadingSet;
-  enumap_ShadingSetSelector["UserShadingSet1"]=ShadingSetSelector_UserShadingSet1;
-  enumap_ShadingSetSelector["UserShadingSet2"]=ShadingSetSelector_UserShadingSet2;
+  enumap_ShadingSetDefaultSelector["DefaultShadingSet"]=
+    ShadingSetDefaultSelector_DefaultShadingSet;
+  enumap_ShadingSetDefaultSelector["UserShadingSet1"]=
+    ShadingSetDefaultSelector_UserShadingSet1;
+  enumap_ShadingSetDefaultSelector["UserShadingSet2"]=
+    ShadingSetDefaultSelector_UserShadingSet2;
+  enumap_ShadingSetSelector["DefaultShadingSet"]=
+    ShadingSetSelector_DefaultShadingSet;
+  enumap_ShadingSetSelector["UserShadingSet1"]=
+    ShadingSetSelector_UserShadingSet1;
+  enumap_ShadingSetSelector["UserShadingSet2"]=
+    ShadingSetSelector_UserShadingSet2;
   enumap_UserDefinedValueSelector["Value1"]=UserDefinedValueSelector_Value1;
   enumap_UserDefinedValueSelector["Value2"]=UserDefinedValueSelector_Value2;
   enumap_UserDefinedValueSelector["Value3"]=UserDefinedValueSelector_Value3;
@@ -1030,18 +1102,27 @@ void   gem::pylon::cameraproperties::init() {
   enumap_DeviceScanType["Linescan"]=DeviceScanType_Linescan;
   enumap_TemperatureSelector["Sensorboard"]=TemperatureSelector_Sensorboard;
   enumap_TemperatureSelector["Coreboard"]=TemperatureSelector_Coreboard;
-  enumap_TemperatureSelector["Framegrabberboard"]=TemperatureSelector_Framegrabberboard;
+  enumap_TemperatureSelector["Framegrabberboard"]=
+    TemperatureSelector_Framegrabberboard;
   enumap_ParameterSelector["Gain"]=ParameterSelector_Gain;
   enumap_ParameterSelector["Brightness"]=ParameterSelector_Brightness;
   enumap_ParameterSelector["ExposureTime"]=ParameterSelector_ExposureTime;
-  enumap_ExpertFeatureAccessSelector["ExpertFeature1"]=ExpertFeatureAccessSelector_ExpertFeature1;
-  enumap_ExpertFeatureAccessSelector["ExpertFeature2"]=ExpertFeatureAccessSelector_ExpertFeature2;
-  enumap_ExpertFeatureAccessSelector["ExpertFeature3"]=ExpertFeatureAccessSelector_ExpertFeature3;
-  enumap_ExpertFeatureAccessSelector["ExpertFeature4"]=ExpertFeatureAccessSelector_ExpertFeature4;
-  enumap_PixelStepCorrectionSelector["Tap1"]=PixelStepCorrectionSelector_Tap1;
-  enumap_PixelStepCorrectionSelector["Tap2"]=PixelStepCorrectionSelector_Tap2;
-  enumap_PixelStepCorrectionSelector["Tap3"]=PixelStepCorrectionSelector_Tap3;
-  enumap_PixelStepCorrectionSelector["Tap4"]=PixelStepCorrectionSelector_Tap4;
+  enumap_ExpertFeatureAccessSelector["ExpertFeature1"]=
+    ExpertFeatureAccessSelector_ExpertFeature1;
+  enumap_ExpertFeatureAccessSelector["ExpertFeature2"]=
+    ExpertFeatureAccessSelector_ExpertFeature2;
+  enumap_ExpertFeatureAccessSelector["ExpertFeature3"]=
+    ExpertFeatureAccessSelector_ExpertFeature3;
+  enumap_ExpertFeatureAccessSelector["ExpertFeature4"]=
+    ExpertFeatureAccessSelector_ExpertFeature4;
+  enumap_PixelStepCorrectionSelector["Tap1"]=
+    PixelStepCorrectionSelector_Tap1;
+  enumap_PixelStepCorrectionSelector["Tap2"]=
+    PixelStepCorrectionSelector_Tap2;
+  enumap_PixelStepCorrectionSelector["Tap3"]=
+    PixelStepCorrectionSelector_Tap3;
+  enumap_PixelStepCorrectionSelector["Tap4"]=
+    PixelStepCorrectionSelector_Tap4;
   enumap_ChunkSelector["Image"]=ChunkSelector_Image;
   enumap_ChunkSelector["OffsetX"]=ChunkSelector_OffsetX;
   enumap_ChunkSelector["OffsetY"]=ChunkSelector_OffsetY;
@@ -1053,12 +1134,18 @@ void   gem::pylon::cameraproperties::init() {
   enumap_ChunkSelector["Timestamp"]=ChunkSelector_Timestamp;
   enumap_ChunkSelector["LineStatusAll"]=ChunkSelector_LineStatusAll;
   enumap_ChunkSelector["Framecounter"]=ChunkSelector_Framecounter;
-  enumap_ChunkSelector["Triggerinputcounter"]=ChunkSelector_Triggerinputcounter;
-  enumap_ChunkSelector["LineTriggerIgnoredCounter"]=ChunkSelector_LineTriggerIgnoredCounter;
-  enumap_ChunkSelector["FrameTriggerIgnoredCounter"]=ChunkSelector_FrameTriggerIgnoredCounter;
-  enumap_ChunkSelector["LineTriggerEndToEndCounter"]=ChunkSelector_LineTriggerEndToEndCounter;
-  enumap_ChunkSelector["FrameTriggerCounter"]=ChunkSelector_FrameTriggerCounter;
-  enumap_ChunkSelector["FramesPerTriggerCounter"]=ChunkSelector_FramesPerTriggerCounter;
+  enumap_ChunkSelector["Triggerinputcounter"]=
+    ChunkSelector_Triggerinputcounter;
+  enumap_ChunkSelector["LineTriggerIgnoredCounter"]=
+    ChunkSelector_LineTriggerIgnoredCounter;
+  enumap_ChunkSelector["FrameTriggerIgnoredCounter"]=
+    ChunkSelector_FrameTriggerIgnoredCounter;
+  enumap_ChunkSelector["LineTriggerEndToEndCounter"]=
+    ChunkSelector_LineTriggerEndToEndCounter;
+  enumap_ChunkSelector["FrameTriggerCounter"]=
+    ChunkSelector_FrameTriggerCounter;
+  enumap_ChunkSelector["FramesPerTriggerCounter"]=
+    ChunkSelector_FramesPerTriggerCounter;
   enumap_ChunkSelector["PayloadCRC16"]=ChunkSelector_PayloadCRC16;
   enumap_ChunkPixelFormat["Mono8"]=ChunkPixelFormat_Mono8;
   enumap_ChunkPixelFormat["Mono8Signed"]=ChunkPixelFormat_Mono8Signed;
@@ -1097,14 +1184,20 @@ void   gem::pylon::cameraproperties::init() {
   enumap_ChunkPixelFormat["RGB12Planar"]=ChunkPixelFormat_RGB12Planar;
   enumap_ChunkPixelFormat["RGB16Planar"]=ChunkPixelFormat_RGB16Planar;
   //enumap_ChunkPixelFormat["YUV422Packed_AlternateByteOrder"]=ChunkPixelFormat_YUV422Packed_AlternateByteOrder;
-  enumap_ChunkPixelFormat["BayerGB12Packed"]=ChunkPixelFormat_BayerGB12Packed;
-  enumap_ChunkPixelFormat["BayerGR12Packed"]=ChunkPixelFormat_BayerGR12Packed;
-  enumap_ChunkPixelFormat["BayerRG12Packed"]=ChunkPixelFormat_BayerRG12Packed;
-  enumap_ChunkPixelFormat["BayerBG12Packed"]=ChunkPixelFormat_BayerBG12Packed;
+  enumap_ChunkPixelFormat["BayerGB12Packed"]=
+    ChunkPixelFormat_BayerGB12Packed;
+  enumap_ChunkPixelFormat["BayerGR12Packed"]=
+    ChunkPixelFormat_BayerGR12Packed;
+  enumap_ChunkPixelFormat["BayerRG12Packed"]=
+    ChunkPixelFormat_BayerRG12Packed;
+  enumap_ChunkPixelFormat["BayerBG12Packed"]=
+    ChunkPixelFormat_BayerBG12Packed;
   enumap_ChunkPixelFormat["RGB12V1Packed"]=ChunkPixelFormat_RGB12V1Packed;
   enumap_EventSelector["ExposureEnd"]=EventSelector_ExposureEnd;
-  enumap_EventSelector["LineStartOvertrigger"]=EventSelector_LineStartOvertrigger;
-  enumap_EventSelector["FrameStartOvertrigger"]=EventSelector_FrameStartOvertrigger;
+  enumap_EventSelector["LineStartOvertrigger"]=
+    EventSelector_LineStartOvertrigger;
+  enumap_EventSelector["FrameStartOvertrigger"]=
+    EventSelector_FrameStartOvertrigger;
   enumap_EventSelector["EventOverrun"]=EventSelector_EventOverrun;
   enumap_EventNotification["Off"]=EventNotification_Off;
   enumap_EventNotification["GenICamEvent"]=EventNotification_GenICamEvent;
@@ -1121,15 +1214,19 @@ void   gem::pylon::cameraproperties::init() {
   enumap_FileOpenMode["Write"]=FileOpenMode_Write;
   enumap_FileOperationStatus["Success"]=FileOperationStatus_Success;
   enumap_FileOperationStatus["Failure"]=FileOperationStatus_Failure;
-  enumap_GevInterfaceSelector["NetworkInterface0"]=GevInterfaceSelector_NetworkInterface0;
+  enumap_GevInterfaceSelector["NetworkInterface0"]=
+    GevInterfaceSelector_NetworkInterface0;
   enumap_GevCCP["Exclusive"]=GevCCP_Exclusive;
   enumap_GevCCP["Control"]=GevCCP_Control;
   enumap_GevCCP["ExclusiveControl"]=GevCCP_ExclusiveControl;
-  enumap_GevStreamChannelSelector["StreamChannel0"]=GevStreamChannelSelector_StreamChannel0;
+  enumap_GevStreamChannelSelector["StreamChannel0"]=
+    GevStreamChannelSelector_StreamChannel0;
 
 }
-gem::Properties&gem::pylon::cameraproperties::getKeys(void) {
-  gem::Properties&result=readprops; result.clear();
+gem::Properties&gem::pylon::cameraproperties::getKeys(void)
+{
+  gem::Properties&result=readprops;
+  result.clear();
   gem::pylon::cameraproperties::init();
 
   do {
@@ -1184,8 +1281,10 @@ gem::Properties&gem::pylon::cameraproperties::getKeys(void) {
 
   return result;
 }
-gem::Properties&gem::pylon::cameraproperties::setKeys(void) {
-  gem::Properties&result=writeprops; result.clear();
+gem::Properties&gem::pylon::cameraproperties::setKeys(void)
+{
+  gem::Properties&result=writeprops;
+  result.clear();
   gem::pylon::cameraproperties::init();
 
   do {
@@ -1239,7 +1338,7 @@ gem::Properties&gem::pylon::cameraproperties::setKeys(void) {
   return result;
 }
 
-void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device, 
+void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device,
                                        std::string key,
                                        gem::any&result)
 {
@@ -1289,7 +1388,7 @@ void gem::pylon::cameraproperties::get(Pylon::CBaslerGigECamera*device,
 }
 
 
-bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device, 
+bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device,
                                        std::string key,
                                        gem::Properties&props)
 {
@@ -1349,7 +1448,8 @@ bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device,
       return false;
     }
   }
-  std::map<std::string, t_setcommand>::iterator it_c=map_setcommand.find(key);
+  std::map<std::string, t_setcommand>::iterator it_c=map_setcommand.find(
+        key);
   if(it_c != map_setcommand.end()) {
     it_c->second(device);
     props.erase(key);
@@ -1363,7 +1463,7 @@ bool gem::pylon::cameraproperties::set(Pylon::CBaslerGigECamera*device,
       std::map<std::string, t_setenumi>::iterator it_ei=map_setenumi.find(key);
       if(it_ei != map_setenumi.end()) {
         it_ei->second(device, d);
-      }   
+      }
     }
     return true;
   }

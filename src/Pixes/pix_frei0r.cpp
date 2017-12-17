@@ -51,33 +51,61 @@
 
 #ifndef HAVE_STRNLEN
 #define strnlen f0r_strnlen
-static size_t f0r_strnlen(const char* str, size_t maxlen) {
+static size_t f0r_strnlen(const char* str, size_t maxlen)
+{
   size_t len=0;
-  if(NULL==str)return len;
-  while(*str++ && len<maxlen)len++;
+  if(NULL==str) {
+    return len;
+  }
+  while(*str++ && len<maxlen) {
+    len++;
+  }
 
   return len;
 }
 #endif
 
 
-class pix_frei0r::F0RPlugin {
+class pix_frei0r::F0RPlugin
+{
 public:
-  bool init(void) {
-    if(!f0r_init)return false;
+  bool init(void)
+  {
+    if(!f0r_init) {
+      return false;
+    }
 
-    if(!f0r_get_plugin_info)return false;
-    if(!f0r_get_param_info)return false;
-    if(!f0r_construct)return false;
-    if(!f0r_destruct)return false;
-    if(!f0r_set_param_value)return false;
-    if(!f0r_get_param_value)return false;
-    if(!f0r_deinit)return false;
+    if(!f0r_get_plugin_info) {
+      return false;
+    }
+    if(!f0r_get_param_info) {
+      return false;
+    }
+    if(!f0r_construct) {
+      return false;
+    }
+    if(!f0r_destruct) {
+      return false;
+    }
+    if(!f0r_set_param_value) {
+      return false;
+    }
+    if(!f0r_get_param_value) {
+      return false;
+    }
+    if(!f0r_deinit) {
+      return false;
+    }
 
     int err=0;
 
-    if(f0r_init)
+    if(f0r_init) {
       err=f0r_init();
+    }
+    if (err<0) {
+      ::error("[pix_frei0r] failed to initialize plugin");
+      return false;
+    }
 
     f0r_plugin_info_t info;
     f0r_get_plugin_info(&info);
@@ -109,7 +137,9 @@ public:
     ::post("%d:: %s", m_type, info.explanation);
 
 
-    if(!f0r_update)return false;
+    if(!f0r_update) {
+      return false;
+    }
     // if(!f0r_update2)return false;
 
     int numparameters = info.num_params;
@@ -133,24 +163,29 @@ public:
 
     return true;
   }
-  void deinit(void) {
+  void deinit(void)
+  {
     destruct();
-    if(f0r_deinit)
+    if(f0r_deinit) {
       f0r_deinit();
+    }
   }
 
   unsigned int m_width, m_height;
 
-  bool construct(unsigned int width, unsigned int height) {
+  bool construct(unsigned int width, unsigned int height)
+  {
     destruct();
     m_instance=f0r_construct(width, height);
     m_width=width;
     m_height=height;
     return (m_instance!=NULL);
   }
-  void destruct(void) {
-    if(m_instance)
+  void destruct(void)
+  {
+    if(m_instance) {
       f0r_destruct(m_instance);
+    }
     m_instance=NULL;
   }
 
@@ -158,27 +193,34 @@ public:
 
   std::string m_name;
   std::string m_author;
-  int 	m_type;
-  int 	m_color;
-  int 	m_frei0rVersion;
-  int 	m_majorVersion;
-  int 	m_minorVersion;
+  int   m_type;
+  int   m_color;
+  int   m_frei0rVersion;
+  int   m_majorVersion;
+  int   m_minorVersion;
   std::string m_explanation;
 
   gem::Properties m_parameter;
   std::vector<std::string>m_parameterNames;
   std::vector<int>m_parameterTypes;
 
-typedef int (*t_f0r_init)(void);
-typedef void (*t_f0r_get_plugin_info)(f0r_plugin_info_t* pluginInfo);
-typedef void (*t_f0r_get_param_info)(f0r_param_info_t* info, int param_index);
-typedef f0r_instance_t (*t_f0r_construct)(unsigned int width, unsigned int height);
-typedef void (*t_f0r_destruct)(f0r_instance_t instance);
-typedef void (*t_f0r_set_param_value)(f0r_instance_t instance, f0r_param_t param, int param_index);
-typedef void (*t_f0r_get_param_value)(f0r_instance_t instance, f0r_param_t param, int param_index);
-typedef void (*t_f0r_update) (f0r_instance_t instance, double time, const uint32_t* inframe, uint32_t* outframe);
-typedef void (*t_f0r_update2)(f0r_instance_t instance, double time, const uint32_t* inframe1, const uint32_t* inframe2, const uint32_t* inframe3, uint32_t* outframe);
-typedef int (*t_f0r_deinit)(void);
+  typedef int (*t_f0r_init)(void);
+  typedef void (*t_f0r_get_plugin_info)(f0r_plugin_info_t* pluginInfo);
+  typedef void (*t_f0r_get_param_info)(f0r_param_info_t* info,
+                                       int param_index);
+  typedef f0r_instance_t (*t_f0r_construct)(unsigned int width,
+      unsigned int height);
+  typedef void (*t_f0r_destruct)(f0r_instance_t instance);
+  typedef void (*t_f0r_set_param_value)(f0r_instance_t instance,
+                                        f0r_param_t param, int param_index);
+  typedef void (*t_f0r_get_param_value)(f0r_instance_t instance,
+                                        f0r_param_t param, int param_index);
+  typedef void (*t_f0r_update) (f0r_instance_t instance, double time,
+                                const uint32_t* inframe, uint32_t* outframe);
+  typedef void (*t_f0r_update2)(f0r_instance_t instance, double time,
+                                const uint32_t* inframe1, const uint32_t* inframe2,
+                                const uint32_t* inframe3, uint32_t* outframe);
+  typedef int (*t_f0r_deinit)(void);
 
 
   t_f0r_init f0r_init;
@@ -193,11 +235,14 @@ typedef int (*t_f0r_deinit)(void);
   t_f0r_deinit f0r_deinit;
 
 
-  void close(void) {
+  void close(void)
+  {
     destruct();
     if(f0r_deinit) {
       int err=f0r_deinit();
-      if(err)::error("[%s] f0r_deinit() failed with %d", m_name.c_str(), err);
+      if(err) {
+        ::error("[%s] f0r_deinit() failed with %d", m_name.c_str(), err);
+      }
     }
   }
 
@@ -210,16 +255,26 @@ typedef int (*t_f0r_deinit)(void);
     m_explanation(""),
     m_dylib(name)
   {
-    f0r_init           =reinterpret_cast<t_f0r_init           >(m_dylib.proc("f0r_init"));
-    f0r_get_plugin_info=reinterpret_cast<t_f0r_get_plugin_info>(m_dylib.proc("f0r_get_plugin_info"));
-    f0r_get_param_info =reinterpret_cast<t_f0r_get_param_info >(m_dylib.proc("f0r_get_param_info"));
-    f0r_construct      =reinterpret_cast<t_f0r_construct      >(m_dylib.proc("f0r_construct"));
-    f0r_destruct       =reinterpret_cast<t_f0r_destruct       >(m_dylib.proc("f0r_destruct"));
-    f0r_set_param_value=reinterpret_cast<t_f0r_set_param_value>(m_dylib.proc("f0r_set_param_value"));
-    f0r_get_param_value=reinterpret_cast<t_f0r_get_param_value>(m_dylib.proc("f0r_get_param_value"));
-    f0r_update         =reinterpret_cast<t_f0r_update         >(m_dylib.proc("f0r_update"));
-    f0r_update2        =reinterpret_cast<t_f0r_update2        >(m_dylib.proc("f0r_update2"));
-    f0r_deinit         =reinterpret_cast<t_f0r_deinit         >(m_dylib.proc("f0r_deinit"));
+    f0r_init           =reinterpret_cast<t_f0r_init           >
+                        (m_dylib.proc("f0r_init"));
+    f0r_get_plugin_info=reinterpret_cast<t_f0r_get_plugin_info>
+                        (m_dylib.proc("f0r_get_plugin_info"));
+    f0r_get_param_info =reinterpret_cast<t_f0r_get_param_info >
+                        (m_dylib.proc("f0r_get_param_info"));
+    f0r_construct      =reinterpret_cast<t_f0r_construct      >
+                        (m_dylib.proc("f0r_construct"));
+    f0r_destruct       =reinterpret_cast<t_f0r_destruct       >
+                        (m_dylib.proc("f0r_destruct"));
+    f0r_set_param_value=reinterpret_cast<t_f0r_set_param_value>
+                        (m_dylib.proc("f0r_set_param_value"));
+    f0r_get_param_value=reinterpret_cast<t_f0r_get_param_value>
+                        (m_dylib.proc("f0r_get_param_value"));
+    f0r_update         =reinterpret_cast<t_f0r_update         >
+                        (m_dylib.proc("f0r_update"));
+    f0r_update2        =reinterpret_cast<t_f0r_update2        >
+                        (m_dylib.proc("f0r_update2"));
+    f0r_deinit         =reinterpret_cast<t_f0r_deinit         >
+                        (m_dylib.proc("f0r_deinit"));
 
     if(!init()) {
       deinit();
@@ -227,28 +282,40 @@ typedef int (*t_f0r_deinit)(void);
     }
   }
 
-  bool set(unsigned int key, bool value) {
-    if(!m_instance)return false;
+  bool set(unsigned int key, bool value)
+  {
+    if(!m_instance) {
+      return false;
+    }
     f0r_param_bool v=value;
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
-  bool set(unsigned int key, double value) {
-    if(!m_instance)return false;
+  bool set(unsigned int key, double value)
+  {
+    if(!m_instance) {
+      return false;
+    }
     f0r_param_double v=value;
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
-  bool set(unsigned int key, double x, double y) {
-    if(!m_instance)return false;
+  bool set(unsigned int key, double x, double y)
+  {
+    if(!m_instance) {
+      return false;
+    }
     f0r_param_position v;
     v.x=x;
     v.y=y;
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
-  bool set(unsigned int key, double r, double g, double b) {
-    if(!m_instance)return false;
+  bool set(unsigned int key, double r, double g, double b)
+  {
+    if(!m_instance) {
+      return false;
+    }
     f0r_param_color v;
     v.r=r;
     v.g=g;
@@ -256,23 +323,30 @@ typedef int (*t_f0r_deinit)(void);
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
-  bool set(unsigned int key, std::string s) {
-    if(!m_instance)return false;
+  bool set(unsigned int key, std::string s)
+  {
+    if(!m_instance) {
+      return false;
+    }
     f0r_param_string v=const_cast<f0r_param_string>(s.c_str());
     f0r_set_param_value(m_instance, &v, key);
     return true;
   }
 
 
-  bool process(double time, imageStruct&input, imageStruct&output) {
-    if(!m_instance || m_width!=input.xsize || m_height!=input.ysize)
+  bool process(double time, imageStruct&input, imageStruct&output)
+  {
+    if(!m_instance || m_width!=input.xsize || m_height!=input.ysize) {
       construct(input.xsize, input.ysize);
+    }
 
-    if(!m_instance)return false;
+    if(!m_instance) {
+      return false;
+    }
 
     f0r_update(m_instance, time,
-	       reinterpret_cast<const uint32_t*>(input.data),
-	       reinterpret_cast<uint32_t*>(output.data));
+               reinterpret_cast<const uint32_t*>(input.data),
+               reinterpret_cast<uint32_t*>(output.data));
 
     return true;
   }
@@ -320,7 +394,8 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   if (0 == m_plugin) {
     gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
     if(rte) {
-      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(),
+                             getCanvas());
     }
 
     m_plugin = new F0RPlugin(filename);
@@ -341,18 +416,19 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
     case(F0R_PARAM_BOOL):
     case(F0R_PARAM_DOUBLE):
       s_inletType=gensym("float");
-    break;
+      break;
     case(F0R_PARAM_COLOR):
     case(F0R_PARAM_POSITION):
       s_inletType=gensym("list");
-    break;
+      break;
     case(F0R_PARAM_STRING):
       s_inletType=gensym("symbol");
       break;
     default:
       s_inletType=&s_;
     }
-    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType, gensym(tempVt)));
+    m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType,
+                                gensym(tempVt)));
   }
 }
 
@@ -364,7 +440,9 @@ pix_frei0r :: ~pix_frei0r()
 {
   while(!m_inlet.empty()) {
     t_inlet*in=m_inlet.back();
-    if(in)inlet_free(in);
+    if(in) {
+      inlet_free(in);
+    }
     m_inlet.pop_back();
   }
   closeMess();
@@ -372,7 +450,7 @@ pix_frei0r :: ~pix_frei0r()
 
 void pix_frei0r :: closeMess()
 {
-  if(m_plugin){
+  if(m_plugin) {
     delete m_plugin;
   }
   m_plugin=NULL;
@@ -395,7 +473,8 @@ void pix_frei0r :: openMess(t_symbol*s)
     std::string filename = pluginname;
     gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
     if(rte) {
-      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), getCanvas());
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(),
+                             getCanvas());
     }
     m_plugin = new F0RPlugin(filename);
   } catch (GemException&x) {
@@ -415,7 +494,9 @@ void pix_frei0r :: openMess(t_symbol*s)
 void pix_frei0r :: processRGBAImage(imageStruct &image)
 {
   static double time=0;
-  if(!m_plugin)return;
+  if(!m_plugin) {
+    return;
+  }
 
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
@@ -429,7 +510,8 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
   image.setCsizeByFormat(m_image.format);
 }
 
-void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv){
+void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv)
+{
   if(!m_plugin) {
     error("no plugin present! forgetting parameter....");
     return;
@@ -445,7 +527,8 @@ void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv){
 }
 
 
-void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
+void pix_frei0r :: parmMess(int key, int argc, t_atom *argv)
+{
   unsigned int realkey=0;
   if(!m_plugin) {
     error("no plugin present! forgetting parameter....");
@@ -471,21 +554,24 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
   switch(type) {
   case(F0R_PARAM_BOOL):
     if(argc!=1) {
-      error("param#%02d('%s') is of type BOOL: need exactly 1 argument", key, name);
+      error("param#%02d('%s') is of type BOOL: need exactly 1 argument", key,
+            name);
       return;
     }
     m_plugin->set(realkey, (atom_getfloat(argv)>0.5));
     break;
   case(F0R_PARAM_DOUBLE):
     if(argc!=1) {
-      error("param#%02d('%s') is of type DOUBLE: need exactly 1 argument", key, name);
+      error("param#%02d('%s') is of type DOUBLE: need exactly 1 argument", key,
+            name);
       return;
     }
     m_plugin->set(realkey, static_cast<double>(atom_getfloat(argv)));
     break;
   case(F0R_PARAM_COLOR):
     if(argc!=3) {
-      error("param#%02d('%s') is of type COLOR: need exactly 3 arguments", key, name);
+      error("param#%02d('%s') is of type COLOR: need exactly 3 arguments", key,
+            name);
       return;
     }
     r=atom_getfloat(argv+0);
@@ -495,7 +581,8 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
     break;
   case(F0R_PARAM_POSITION):
     if(argc!=2) {
-      error("param#%02d('%s') is of type POSITION: need exactly 2 arguments", key, name);
+      error("param#%02d('%s') is of type POSITION: need exactly 2 arguments",
+            key, name);
       return;
     }
     x=atom_getfloat(argv+0);
@@ -504,7 +591,8 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
     break;
   case(F0R_PARAM_STRING):
     if(argc!=1) {
-      error("param#%02d('%s') is of type STRING: need exactly 1 argument", key, name);
+      error("param#%02d('%s') is of type STRING: need exactly 1 argument", key,
+            name);
       return;
     }
     m_plugin->set(realkey, std::string(atom_getsymbol(argv)->s_name));
@@ -518,13 +606,14 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv){
 
 static const int offset_pix_=strlen("pix_");
 
-static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
-  if(!s){
+static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
+{
+  if(!s) {
     ::verbose(2, "frei0r_loader: no name given");
     return 0;
   }
   ::verbose(2, "frei0r_loader: %s",s->s_name);
-  try{
+  try {
     Obj_header *obj = new (pd_new(pix_frei0r_class),(void *)NULL) Obj_header;
     char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
@@ -539,7 +628,9 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv) {
   }
   return 0;
 }
-bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, const std::string path) {
+bool pix_frei0r :: loader(const t_canvas*canvas,
+                          const std::string&classname, const std::string&path)
+{
   if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
   }
@@ -547,10 +638,13 @@ bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, co
   std::string filename = pluginname;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
-    if (path.empty())
-      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(), canvas);
-    else
-      filename=rte->findFile(path+"/"+pluginname, GemDylib::getDefaultExtension(), canvas);
+    if (path.empty()) {
+      filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(),
+                             canvas);
+    } else {
+      filename=rte->findFile(path+"/"+pluginname,
+                             GemDylib::getDefaultExtension(), canvas);
+    }
   }
   pix_frei0r::F0RPlugin*plugin=NULL;
   try {
@@ -565,13 +659,16 @@ bool pix_frei0r :: loader(const t_canvas*canvas, const std::string classname, co
     /* cache the filename that loads this plugin */
     s_class2filename[gensym(pluginname.c_str())]=filename;
     /* register a new class */
-    class_addcreator(reinterpret_cast<t_newmethod>(frei0r_loader_new), gensym(classname.c_str()), A_GIMME, 0);
+    class_addcreator(reinterpret_cast<t_newmethod>(frei0r_loader_new),
+                     gensym(classname.c_str()), A_GIMME, 0);
     return true;
   }
   return false;
 }
 
-static int frei0r_loader(const t_canvas *canvas, const char *classname, const char *path) {
+static int frei0r_loader(const t_canvas *canvas, const char *classname,
+                         const char *path)
+{
   return pix_frei0r::loader(canvas, classname, path?path:"");
 }
 
@@ -582,12 +679,17 @@ static int frei0r_loader(const t_canvas *canvas, const char *classname, const ch
 
 void pix_frei0r :: obj_setupCallback(t_class *classPtr)
 {
-  class_addanything(classPtr, reinterpret_cast<t_method>(&pix_frei0r::parmCallback));
-  class_addmethod  (classPtr, reinterpret_cast<t_method>(&pix_frei0r::openCallback), gensym("load"), A_SYMBOL, A_NULL);
+  class_addanything(classPtr,
+                    reinterpret_cast<t_method>(&pix_frei0r::parmCallback));
+  class_addmethod  (classPtr,
+                    reinterpret_cast<t_method>(&pix_frei0r::openCallback), gensym("load"),
+                    A_SYMBOL, A_NULL);
   gem_register_loader(frei0r_loader);
 }
 
-void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
+void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc,
+                                t_atom*argv)
+{
   if('#'==s->s_name[0]) {
     int i = atoi(s->s_name+1);
     GetMyClass(data)->parmMess(i, argc, argv);
@@ -596,6 +698,7 @@ void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc, t_atom*argv){
   }
 }
 
-void pix_frei0r :: openCallback(void *data, t_symbol*name){
+void pix_frei0r :: openCallback(void *data, t_symbol*name)
+{
   GetMyClass(data)->openMess(name);
 }

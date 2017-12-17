@@ -20,19 +20,27 @@
 #include "Gem/RTE.h"
 
 
-class gem::RTE::Outlet::PIMPL {
+class gem::RTE::Outlet::PIMPL
+{
 public:
   CPPExtern*parent_;
   t_outlet*outlet;
-  PIMPL(CPPExtern*parent) : parent_(parent), outlet(NULL) {
+  PIMPL(CPPExtern*parent) : parent_(parent), outlet(NULL)
+  {
     outlet=outlet_new(parent->x_obj, 0);
   }
-  ~PIMPL(void) {
-    if(outlet)outlet_free(outlet);
+  ~PIMPL(void)
+  {
+    if(outlet) {
+      outlet_free(outlet);
+    }
     outlet=NULL;
-    if(parent_)parent_=NULL;
+    if(parent_) {
+      parent_=NULL;
+    }
   }
-  static bool any2atom(const gem::any value, t_atom&atom) {
+  static bool any2atom(const gem::any value, t_atom&atom)
+  {
     double d=0;
     std::string s=std::string();
     void*p=NULL;
@@ -130,29 +138,37 @@ gem::RTE::Outlet :: ~Outlet(void)
   delete m_pimpl;
 }
 
-void gem::RTE::Outlet :: send(void) {
+void gem::RTE::Outlet :: send(void)
+{
   outlet_bang(m_pimpl->outlet);
 }
-void gem::RTE::Outlet :: send(double f) {
+void gem::RTE::Outlet :: send(double f)
+{
   outlet_float(m_pimpl->outlet, f);
 }
-void gem::RTE::Outlet :: send(std::string selector, std::vector<gem::any>data) {
+void gem::RTE::Outlet :: send(std::string selector,
+                              std::vector<gem::any>data)
+{
   t_atom*atomlist=new t_atom[data.size()];
   unsigned int count=0;
   unsigned int i;
   for(i=0; i<data.size(); i++) {
-    if(m_pimpl->any2atom(data[i], atomlist[i]))
+    if(m_pimpl->any2atom(data[i], atomlist[i])) {
       count++;
+    }
   }
 
-  outlet_anything(m_pimpl->outlet, gensym(selector.c_str()), count, atomlist);
+  outlet_anything(m_pimpl->outlet, gensym(selector.c_str()), count,
+                  atomlist);
   delete[]atomlist;
 }
-gem::RTE::Outlet& gem::RTE::Outlet::operator=(const gem::RTE::Outlet&org) {
+gem::RTE::Outlet& gem::RTE::Outlet::operator=(const gem::RTE::Outlet&org)
+{
   delete m_pimpl;
   m_pimpl = new PIMPL(org.m_pimpl->parent_);
   return (*this);
 }
 
-gem::RTE::Outlet :: Outlet (const gem::RTE::Outlet&org) : m_pimpl(new PIMPL(org.m_pimpl->parent_))
+gem::RTE::Outlet :: Outlet (const gem::RTE::Outlet&org) : m_pimpl(
+    new PIMPL(org.m_pimpl->parent_))
 { }

@@ -35,7 +35,8 @@ using namespace gem::plugins;
 #if 0
 # define debug ::post
 #else
-# define debug
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
 
 using namespace Basler_GigECameraParams;
@@ -47,31 +48,44 @@ using namespace Basler_GigEStreamParams;
 
 // Constructor allocates the image buffer
 
-class videoPYLON::CGrabBuffer {
+class videoPYLON::CGrabBuffer
+{
   static int buffercount;
 public:
 
   CGrabBuffer(const size_t ImageSize)
-    : m_pBuffer(NULL)  {
+    : m_pBuffer(NULL)
+  {
     buffercount++;
     m_pBuffer = new uint8_t[ ImageSize ];
-    if (NULL == m_pBuffer)
-      {
-        GenICam::GenericException e("Not enough memory to allocate image buffer", __FILE__, __LINE__);
-        throw e;
-      }
+    if (NULL == m_pBuffer) {
+      GenICam::GenericException e("Not enough memory to allocate image buffer",
+                                  __FILE__, __LINE__);
+      throw e;
+    }
   }
 
   // Freeing the memory
-  ~CGrabBuffer() {
-    if (NULL != m_pBuffer)
+  ~CGrabBuffer()
+  {
+    if (NULL != m_pBuffer) {
       delete[] m_pBuffer;
+    }
     buffercount--;
   }
-  uint8_t* GetBufferPointer(void) { return m_pBuffer; }
-  Pylon::StreamBufferHandle GetBufferHandle(void) { return m_hBuffer; }
-  void SetBufferHandle(Pylon::StreamBufferHandle hBuffer) { m_hBuffer = hBuffer; };
-  
+  uint8_t* GetBufferPointer(void)
+  {
+    return m_pBuffer;
+  }
+  Pylon::StreamBufferHandle GetBufferHandle(void)
+  {
+    return m_hBuffer;
+  }
+  void SetBufferHandle(Pylon::StreamBufferHandle hBuffer)
+  {
+    m_hBuffer = hBuffer;
+  };
+
 protected:
   uint8_t *m_pBuffer;
   Pylon::StreamBufferHandle m_hBuffer;
@@ -93,13 +107,15 @@ struct videoPYLON::Converter {
     : converter(NULL)
 #endif
   {
-    
+
   }
-  ~Converter(void) {
+  ~Converter(void)
+  {
     destroyConverter();
   }
 
-  void destroyConverter(void) {
+  void destroyConverter(void)
+  {
 #ifdef HAVE_LIBPYLONUTILITY
     if(converter) {
       delete converter;
@@ -108,14 +124,15 @@ struct videoPYLON::Converter {
 #endif
   }
 
-  void makeConverter(const struct Pylon::SImageFormat&format) {
+  void makeConverter(const struct Pylon::SImageFormat&format)
+  {
     destroyConverter();
-    
+
     using namespace Pylon;
-    
+
     bool rgba_out=false;
     bool need_converter=true;
-    
+
 #ifdef HAVE_LIBPYLONUTILITY
     switch(format.PixelFormat) {
     case PixelType_Mono8:
@@ -134,18 +151,18 @@ struct videoPYLON::Converter {
     case PixelType_Mono10:
     case PixelType_Mono12:
     case PixelType_Mono16:
-      converter= new	Pylon::CPixelFormatConverterGamma ();
-      // converter= new	Pylon::CPixelFormatConverterTruncate ();
+      converter= new    Pylon::CPixelFormatConverterGamma ();
+      // converter= new Pylon::CPixelFormatConverterTruncate ();
       rgba_out=false;
       break;
 
     case PixelType_Mono10packed:
     case PixelType_Mono12packed:
-      converter= new	Pylon::CPixelFormatConverterGammaPacked ();
-      // converter= new	Pylon::CPixelFormatConverterTruncatePacked ();
+      converter= new    Pylon::CPixelFormatConverterGammaPacked ();
+      // converter= new Pylon::CPixelFormatConverterTruncatePacked ();
       rgba_out=false;
       break;
-    
+
     case PixelType_BayerGR8:
     case PixelType_BayerRG8:
     case PixelType_BayerGB8:
@@ -166,7 +183,7 @@ struct videoPYLON::Converter {
     case PixelType_BayerRG16:
     case PixelType_BayerGB16:
     case PixelType_BayerBG16:
-      converter= new	Pylon::CPixelFormatConverterBayer ();
+      converter= new    Pylon::CPixelFormatConverterBayer ();
       rgba_out=true;
       break;
 
@@ -184,17 +201,17 @@ struct videoPYLON::Converter {
     case PixelType_BGR12packed:
     case PixelType_BGR10V1packed:
     case PixelType_BGR10V2packed:
-      converter= new	Pylon::CPixelFormatConverterRGB ();
+      converter= new    Pylon::CPixelFormatConverterRGB ();
       rgba_out=true;
       break;
 
     case PixelType_YUV422_YUYV_Packed:
-      converter= new	Pylon::CPixelFormatConverterYUV422YUYV();
+      converter= new    Pylon::CPixelFormatConverterYUV422YUYV();
       rgba_out=true;
       break;
 
     case PixelType_YUV422packed:
-      converter= new	Pylon::CPixelFormatConverterYUV422();
+      converter= new    Pylon::CPixelFormatConverterYUV422();
       rgba_out=true;
       break;
 
@@ -206,10 +223,11 @@ struct videoPYLON::Converter {
     }
 
     if(NULL==converter && need_converter) {
-      error("PYLON: could not find a converter for given colorspace");
+      error("[GEM:videoPYLON] could not find a converter for given colorspace");
     }
-    if(converter)
+    if(converter) {
       converter->Init(format);
+    }
 #endif
     if(rgba_out) {
       image.setCsizeByFormat(GL_RGBA);
@@ -219,7 +237,9 @@ struct videoPYLON::Converter {
   }
 
 
-  static struct Pylon::SImageFormat getInFormat(const Pylon::GrabResult&Result) {
+  static struct Pylon::SImageFormat getInFormat(const
+      Pylon::GrabResult&Result)
+  {
     using namespace Pylon;
     struct SImageFormat imageFormat;
     const enum PixelType pixelType= (PixelType) Result.GetPixelType();
@@ -227,16 +247,17 @@ struct videoPYLON::Converter {
     imageFormat.Height=Result.GetSizeY();
     imageFormat.PixelFormat= (Pylon::EPixelType) pixelType;
     imageFormat.LinePitch=IsPacked((Pylon::EPixelType) pixelType)?
-      0:
-      (7+Result.GetSizeX()*BitPerPixel( (Pylon::EPixelType) pixelType)) >>3;
-    
+                          0:
+                          (7+Result.GetSizeX()*BitPerPixel( (Pylon::EPixelType) pixelType)) >>3;
+
     return imageFormat;
   }
 
-  static struct Pylon::SOutputImageFormat getOutFormat(const imageStruct&img) {
+  static struct Pylon::SOutputImageFormat getOutFormat(const imageStruct&img)
+  {
     using namespace Pylon;
     struct SOutputImageFormat imageFormat;
-    
+
     switch(img.format) {
     case GL_RGBA:
       imageFormat.LinePitch=img.xsize*img.csize;
@@ -251,28 +272,36 @@ struct videoPYLON::Converter {
     return imageFormat;
   }
 
-  bool convertFrom(Pylon::GrabResult Result) {
+  bool convertFrom(Pylon::GrabResult Result)
+  {
     const struct Pylon::SImageFormat format=getInFormat(Result);
     bool init=false;
 
 #ifdef HAVE_LIBPYLONUTILITY
-    if(!converter)init=true;
-    if(converter && !converter->IsInitialized())init=true;
+    if(!converter) {
+      init=true;
+    }
+    if(converter && !converter->IsInitialized()) {
+      init=true;
+    }
 #endif
 
-    if(format!=inFormat)init=true;
-    
+    if(format!=inFormat) {
+      init=true;
+    }
+
     if(init) {
       makeConverter(format);
-      inFormat=format;      
+      inFormat=format;
     }
 
 
     image.xsize=inFormat.Width;
     image.ysize=inFormat.Height;
     image.reallocate();
-    
-    if(0) {; 
+
+    if(0) {
+      ;
 #ifdef HAVE_LIBPYLONUTILITY
     } else if(converter) {
       const struct Pylon::SOutputImageFormat oformat=getOutFormat(image);
@@ -284,17 +313,19 @@ struct videoPYLON::Converter {
                          oformat);
 #endif
     } else {
-      if(image.format==GL_RGBA)
+      if(image.format==GL_RGBA) {
         image.fromRGBA(reinterpret_cast<unsigned char*>(Result.Buffer()));
-      else
+      } else {
         image.fromGray(reinterpret_cast<unsigned char*>(Result.Buffer()));
+      }
     }
     return true;
   }
 
-  bool convertTo(imageStruct&img) {
+  bool convertTo(imageStruct&img)
+  {
     img.convertFrom(&image);
-	return true;
+    return true;
   }
 };
 
@@ -310,11 +341,11 @@ struct videoPYLON::Converter {
 REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
 videoPYLON :: videoPYLON() : videoBase("pylon")
-                           , m_factory(NULL)
-                           , m_camera(NULL)
-                           , m_grabber(NULL)
-                           , m_converter(new Converter())
-                           , m_numBuffers(NUM_BUFFERS)
+  , m_factory(NULL)
+  , m_camera(NULL)
+  , m_grabber(NULL)
+  , m_converter(new Converter())
+  , m_numBuffers(NUM_BUFFERS)
 {
   m_width=0;
   m_height=0;
@@ -326,8 +357,9 @@ videoPYLON :: videoPYLON() : videoBase("pylon")
     int i=0;
     for(i=0; i<count; i++) {
       std::string s=tli[i].GetFriendlyName().c_str();
-      if("GigE"==s)
+      if("GigE"==s) {
         provide("gige");
+      }
       provide(s);
     }
 
@@ -351,9 +383,11 @@ videoPYLON :: ~videoPYLON()
 // frame grabber
 //
 /////////////////////////////////////////////////////////
-bool videoPYLON :: grabFrame() {
-  if(NULL==m_camera || NULL==m_grabber)
+bool videoPYLON :: grabFrame()
+{
+  if(NULL==m_camera || NULL==m_grabber) {
     return false;
+  }
 
   struct Pylon::SImageFormat imageFormat;
   struct Pylon::SOutputImageFormat outImageFormat;
@@ -374,7 +408,7 @@ bool videoPYLON :: grabFrame() {
       m_grabber->QueueBuffer(Result.Handle(), NULL);
 
     }
-      break;
+    break;
     case Pylon::Failed:
       std::cerr << "PYLON: grab failed and ";
     default:
@@ -401,47 +435,59 @@ bool videoPYLON :: openDevice(gem::Properties&props)
 {
   double d;
   uint32_t channel=0;
-  if(props.get("channel", d))
+  if(props.get("channel", d)) {
     channel=d;
+  }
 
-  if(m_camera)closeDevice();
-  if(NULL==m_factory)return false;
+  if(m_camera) {
+    closeDevice();
+  }
+  if(NULL==m_factory) {
+    return false;
+  }
 
   Pylon::IPylonDevice *device = NULL;
 
   try {
     if(m_devicename.empty()) {
-      if(m_id2device.empty())
+      if(m_id2device.empty()) {
         enumerate();
+      }
       std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.begin();
       if(m_devicenum>=0) {
         std::advance( it, m_devicenum );
-      } 
-      if(it != m_id2device.end()) {  
+      }
+      if(it != m_id2device.end()) {
         device = m_factory->CreateDevice(it->second);
       }
     } else {
-      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(m_devicename);
-      if(it!=m_id2device.end())
+      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(
+            m_devicename);
+      if(it!=m_id2device.end()) {
         device = m_factory->CreateDevice(it->second);
-      else
+      } else {
         device = m_factory->CreateDevice(Pylon::String_t(m_devicename.c_str()));
+      }
     }
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     return false;
   }
 
-  if(device==NULL)
+  if(device==NULL) {
     return false;
+  }
 
   try {
     m_camera=new Pylon::CBaslerGigECamera (device);
     m_camera->Open();
     uint32_t maxchannel=m_camera->GetNumStreamGrabberChannels();
-    if(channel>maxchannel)channel=maxchannel;
+    if(channel>maxchannel) {
+      channel=maxchannel;
+    }
 
-    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(channel));
+    m_grabber=new Pylon::CPylonGigEStreamGrabber(m_camera->GetStreamGrabber(
+          channel));
   } catch (GenICam::GenericException &e) {
     std::cerr << e.GetDescription() << std::endl;
     close();
@@ -453,14 +499,17 @@ bool videoPYLON :: openDevice(gem::Properties&props)
 // closeDevice
 //
 /////////////////////////////////////////////////////////
-void videoPYLON :: closeDevice() {
-  if(m_camera){
+void videoPYLON :: closeDevice()
+{
+  if(m_camera) {
     m_camera->Close();
     delete m_camera;
   }
   m_camera=NULL;
 
-  if(m_grabber)delete m_grabber;
+  if(m_grabber) {
+    delete m_grabber;
+  }
   m_grabber=NULL;
 }
 
@@ -471,11 +520,13 @@ void videoPYLON :: closeDevice() {
 /////////////////////////////////////////////////////////
 bool videoPYLON :: startTransfer()
 {
-  if(NULL==m_camera)
+  if(NULL==m_camera) {
     return false;
+  }
 
-  if(NULL==m_grabber)
+  if(NULL==m_grabber) {
     return false;
+  }
 
   try {
     m_grabber->Open();
@@ -506,8 +557,8 @@ bool videoPYLON :: startTransfer()
     for (i = 0; i < m_numBuffers; ++i) {
       CGrabBuffer *pGrabBuffer = new CGrabBuffer(ImageSize);
       pGrabBuffer->SetBufferHandle(m_grabber->RegisterBuffer(
-                                                             pGrabBuffer->GetBufferPointer(),
-                                                             ImageSize));
+                                     pGrabBuffer->GetBufferPointer(),
+                                     ImageSize));
 
       // Put the grab buffer object into the buffer list
       m_buffers.push_back(pGrabBuffer);
@@ -546,7 +597,7 @@ bool videoPYLON :: stopTransfer()
       m_grabber->CancelGrab();
       // Get all buffers back
       Pylon::GrabResult r;
-      while(m_grabber->RetrieveResult(r)){;}
+      while(m_grabber->RetrieveResult(r)) {;}
 
       std::vector<CGrabBuffer*>::iterator it;
       for (it = m_buffers.begin(); it != m_buffers.end(); it++) {
@@ -565,18 +616,22 @@ bool videoPYLON :: stopTransfer()
   return true;
 }
 
-std::vector<std::string> videoPYLON::enumerate() {
+std::vector<std::string> videoPYLON::enumerate()
+{
   m_id2device.clear();
   std::vector<std::string> result;
-  if(NULL==m_factory)return result;
+  if(NULL==m_factory) {
+    return result;
+  }
 
   Pylon::DeviceInfoList_t devices;
   if (0 == m_factory->EnumerateDevices(devices))  {
     std::cout << "could not enumerate" << std::endl;
     return result;
   }
-  if(devices.empty() )
+  if(devices.empty() ) {
     return result;
+  }
 
   int i=0;
   for(i=0; i<devices.size(); i++) {
@@ -590,32 +645,63 @@ std::vector<std::string> videoPYLON::enumerate() {
 #endif
 
     name=device.GetUserDefinedName();
-    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("user")}
-    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+    if(!name.empty()) {
+      m_id2device[name]=device;
+      SHOWNAME("user")
+    }
+    if(!added && !name.empty()) {
+      result.push_back(name);
+      added=true;
+    }
 
     try {
       /* darn, this doesn't seem to work..., it would be great though */
-      Pylon::CBaslerGigEDeviceInfo&gdevice=dynamic_cast< Pylon::CBaslerGigEDeviceInfo&>(device);
+      Pylon::CBaslerGigEDeviceInfo&gdevice=
+        dynamic_cast< Pylon::CBaslerGigEDeviceInfo&>(device);
 
       name=gdevice.GetAddress ();
-      if(!name.empty()) { m_id2device[name]=device; SHOWNAME("address")}
-      if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+      if(!name.empty()) {
+        m_id2device[name]=device;
+        SHOWNAME("address")
+      }
+      if(!added && !name.empty()) {
+        result.push_back(name);
+        added=true;
+      }
 
     } catch (const std::bad_cast& e) {
       //      std::cerr << i<<" not a GigE&device"<<std::endl;
     }
 
     name=device.GetFullName();
-    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("full")}
-    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+    if(!name.empty()) {
+      m_id2device[name]=device;
+      SHOWNAME("full")
+    }
+    if(!added && !name.empty()) {
+      result.push_back(name);
+      added=true;
+    }
 
     name=device.GetSerialNumber();
-    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("serial")}
-    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+    if(!name.empty()) {
+      m_id2device[name]=device;
+      SHOWNAME("serial")
+    }
+    if(!added && !name.empty()) {
+      result.push_back(name);
+      added=true;
+    }
 
     name=device.GetFriendlyName();
-    if(!name.empty()) { m_id2device[name]=device; SHOWNAME("friendly")}
-    if(!added && !name.empty()) {  result.push_back(name);  added=true;  }
+    if(!name.empty()) {
+      m_id2device[name]=device;
+      SHOWNAME("friendly")
+    }
+    if(!added && !name.empty()) {
+      result.push_back(name);
+      added=true;
+    }
   }
 
   return result;
@@ -623,7 +709,8 @@ std::vector<std::string> videoPYLON::enumerate() {
 
 
 bool videoPYLON::enumProperties(gem::Properties&readable,
-                                gem::Properties&writeable) {
+                                gem::Properties&writeable)
+{
 
   int i=0;
   gem::Properties props;
@@ -643,7 +730,8 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
-        case GenApi::RO: case GenApi::RW:
+        case GenApi::RO:
+        case GenApi::RW:
           readable.set(keys[i], props.get(keys[i]));
         default:
           break;
@@ -652,8 +740,9 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
     }
   } else {
 #if 0
-    for(i=0; i<keys.size(); i++)
+    for(i=0; i<keys.size(); i++) {
       readable.set(keys[i], type);
+    }
 #endif
   }
 
@@ -666,7 +755,8 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
-        case GenApi::WO: case GenApi::RW:
+        case GenApi::WO:
+        case GenApi::RW:
           writeable.set(keys[i], props.get(keys[i]));
         default:
           break;
@@ -675,8 +765,9 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
     }
   } else {
 #if 0
-    for(i=0; i<keys.size(); i++)
+    for(i=0; i<keys.size(); i++) {
       writeable.set(keys[i], type);
+    }
 #endif
   }
 
@@ -689,7 +780,8 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
-        case GenApi::RO: case GenApi::RW:
+        case GenApi::RO:
+        case GenApi::RW:
           readable.set(keys[i], props.get(keys[i]));
         default:
           break;
@@ -698,8 +790,9 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
     }
   } else {
 #if 0
-    for(i=0; i<keys.size(); i++)
+    for(i=0; i<keys.size(); i++) {
       readable.set(keys[i], type);
+    }
 #endif
   }
 
@@ -713,7 +806,8 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
-        case GenApi::WO: case GenApi::RW:
+        case GenApi::WO:
+        case GenApi::RW:
           writeable.set(keys[i], props.get(keys[i]));
         default:
           break;
@@ -722,8 +816,9 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
     }
   } else {
 #if 0
-    for(i=0; i<keys.size(); i++)
+    for(i=0; i<keys.size(); i++) {
       writeable.set(keys[i], type);
+    }
 #endif
   }
 
@@ -749,7 +844,8 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
 #endif
   return false;
 }
-void videoPYLON::setProperties(gem::Properties&props) {
+void videoPYLON::setProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
@@ -759,8 +855,7 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=gem::pylon::streamgrabberproperties::set(m_grabber, key, props);
       } catch (GenICam::GenericException &e) {
-        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
-        //std::cerr << e.GetDescription() << std::endl;
+        verbose(0, "[GEM:videoPYLON] [%s] %s", key.c_str(), e.GetDescription());
         didit=false;
       }
     }
@@ -769,15 +864,15 @@ void videoPYLON::setProperties(gem::Properties&props) {
       try {
         didit=gem::pylon::cameraproperties::set(m_camera, key, props);
       } catch (GenICam::GenericException &e) {
-        error("videoPYLON: [%s] %s", key.c_str(), e.GetDescription());
-        //std::cerr << e.GetDescription() << std::endl;
+        verbose(0, "[GEM:videoPYLON] [%s] %s", key.c_str(), e.GetDescription());
         didit=false;
       }
 
   }
 }
 
-void videoPYLON::getProperties(gem::Properties&props) {
+void videoPYLON::getProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
@@ -787,16 +882,21 @@ void videoPYLON::getProperties(gem::Properties&props) {
     if(m_grabber) {
       try {
         gem::pylon::streamgrabberproperties::get(m_grabber, key, result);
-      } catch (GenICam::GenericException &e) {result.reset(); }
+      } catch (GenICam::GenericException &e) {
+        result.reset();
+      }
     }
 
     if(result.empty() && m_camera)
       try {
         gem::pylon::cameraproperties::get(m_camera, key, result);
-      } catch (GenICam::GenericException &e) {result.reset(); }
+      } catch (GenICam::GenericException &e) {
+        result.reset();
+      }
 
-    if(result.empty())
+    if(result.empty()) {
       continue;
+    }
     props.set(key, result);
   }
 }

@@ -63,15 +63,20 @@ TextBase :: TextBase(int argc, t_atom *argv)
 
   m_theText.push_back(L"gem");
   makeLineDist();
-  if(argc)textMess(argc, argv);
+  if(argc) {
+    textMess(argc, argv);
+  }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                      gensym("ft1"));
 }
 
-void TextBase :: startRendering(void) {
+void TextBase :: startRendering(void)
+{
   if(NULL==m_font) {
-    if(m_fontname)
+    if(m_fontname) {
       fontNameMess(m_fontname->s_name);
+    }
   }
 }
 
@@ -80,7 +85,8 @@ void TextBase :: startRendering(void) {
 // render
 //
 /////////////////////////////////////////////////////////
-void TextBase :: renderLine(const char*line, float dist) {
+void TextBase :: renderLine(const char*line, float dist)
+{
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
@@ -95,7 +101,8 @@ void TextBase :: renderLine(const char*line, float dist) {
   glPopMatrix();
 }
 
-void TextBase :: renderLine(const wchar_t*line, float dist) {
+void TextBase :: renderLine(const wchar_t*line, float dist)
+{
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
@@ -113,12 +120,14 @@ void TextBase :: renderLine(const wchar_t*line, float dist) {
 void TextBase :: render(GemState *)
 {
   unsigned int i=0;
-  if (m_theText.empty() || !m_font)return;
+  if (m_theText.empty() || !m_font) {
+    return;
+  }
   // step through the lines
-  for(i=0; i<m_theText.size(); i++)
-    {
-      renderLine(m_theText[i].c_str(), m_lineDist[i]*m_fontSize*m_dist*m_precision);
-    }
+  for(i=0; i<m_theText.size(); i++) {
+    renderLine(m_theText[i].c_str(),
+               m_lineDist[i]*m_fontSize*m_dist*m_precision);
+  }
   fontInfo();
 }
 
@@ -126,7 +135,8 @@ void TextBase :: render(GemState *)
 // setFontSize
 //
 ////////////////////////////////////////////////////////
-void TextBase :: setFontSize(float size){
+void TextBase :: setFontSize(float size)
+{
   m_fontSize = size;
   setFontSize();
 }
@@ -136,8 +146,9 @@ void TextBase :: setFontSize(float size){
 ////////////////////////////////////////////////////////
 void TextBase :: setPrecision(float prec)
 {
-  if(prec<=0.f)
+  if(prec<=0.f) {
     prec=1.f;
+  }
   m_precision = 3.*prec;
 
   setFontSize();
@@ -147,12 +158,12 @@ void TextBase :: setPrecision(float prec)
 // fontNameMess
 //
 ////////////////////////////////////////////////////////
-void TextBase :: fontNameMess(const std::string filename){
+void TextBase :: fontNameMess(const std::string&filename)
+{
   m_valid = 0;
   const char *bufptr=NULL;
-  int fd=-1;
 
-  if(filename.empty()){
+  if(filename.empty()) {
     error("no font-file specified");
     return;
   }
@@ -169,7 +180,7 @@ void TextBase :: fontNameMess(const std::string filename){
 
   /* now read font */
   m_font=makeFont(bufptr);
-  if (NULL==m_font){
+  if (NULL==m_font) {
     error("unable to open font '%s'", bufptr);
     return;
   }
@@ -186,20 +197,28 @@ void TextBase :: fontNameMess(const std::string filename){
 // Destructor
 //
 /////////////////////////////////////////////////////////
-TextBase :: ~TextBase(){
+TextBase :: ~TextBase()
+{
   /* textbase deletion */
-  if(m_inlet)inlet_free(m_inlet);
+  if(m_inlet) {
+    inlet_free(m_inlet);
+  }
 }
 
 /////////////////////////////////////////////////////////
 // setJustification
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setFontSize(){
-  if (!m_font)return;
+void TextBase :: setFontSize()
+{
+  if (!m_font) {
+    return;
+  }
 
   int fs=static_cast<int>(m_fontSize*m_precision);
-  if(fs<0)fs=-fs;
+  if(fs<0) {
+    fs=-fs;
+  }
 
   if(!m_font->FaceSize(fs)) {
     error("unable to set fontsize !");
@@ -212,7 +231,9 @@ void TextBase :: setFontSize(){
 // setJustification
 //
 /////////////////////////////////////////////////////////
-void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType){
+void TextBase :: setJustification(JustifyWidth wType, JustifyHeight hType,
+                                  JustifyDepth dType)
+{
   m_widthJus = wType;
   m_heightJus = hType;
   m_depthJus = dType;
@@ -233,24 +254,31 @@ void TextBase :: setJustification(JustifyWidth wType)
 
 
 void TextBase :: getBBox(float&x0,float&y0,float&z0,
-			 float&x1,float&y1,float&z1) {
+                         float&x1,float&y1,float&z1)
+{
 
 }
-void TextBase :: fontInfo(void) {
-  if(!m_font)return;
+void TextBase :: fontInfo(void)
+{
+  if(!m_font) {
+    return;
+  }
   std::vector<gem::any>atoms;
   gem::any value;
 
   value = m_font->Ascender();
-  atoms.clear(); atoms.push_back(value);
+  atoms.clear();
+  atoms.push_back(value);
   m_infoOut.send("ascender", atoms);
 
   value = m_font->Descender();
-  atoms.clear(); atoms.push_back(value);
+  atoms.clear();
+  atoms.push_back(value);
   m_infoOut.send("descender", atoms);
 
   value = m_font->LineHeight();
-  atoms.clear(); atoms.push_back(value);
+  atoms.clear();
+  atoms.push_back(value);
   m_infoOut.send("height", atoms);
 
   if(!m_theText.empty()) {
@@ -269,8 +297,9 @@ void TextBase :: fontInfo(void) {
   }
 }
 
-TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
-						float x2, float y2, float z2, float y_offset)
+TextBase::Justification TextBase :: justifyFont(float x1, float y1,
+    float z1,
+    float x2, float y2, float z2, float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -344,11 +373,13 @@ TextBase::Justification TextBase :: justifyFont(float x1, float y1, float z1,
 void TextBase :: breakLine(wstring line)
 {
   // split the string wherever there is a '\n'
-  while(line.length()>0){
+  while(line.length()>0) {
     size_t pos=line.find('\n');
 
     // if not found, we're done
-    if(wstring::npos == pos)break;
+    if(wstring::npos == pos) {
+      break;
+    }
     wstring lin=line.substr(0,pos);
 
     m_theText.push_back(gem::string::getVisualLine(lin));
@@ -367,39 +398,42 @@ void TextBase :: breakLine(wstring line)
 void TextBase :: textMess(int argc, t_atom *argv)
 {
   m_theText.clear();
-  if ( argc < 1 ) {return; }
+  if ( argc < 1 ) {
+    return;
+  }
 
   wstring line = L"";
   int i=0;
 
   // convert the atom-list into 1 string
-  for (i = 0; i < argc; ++i)
-    {
-      string newtext;
-      if (A_FLOAT == argv[i].a_type) {
-        char str[MAXPDSTRING];
-        char*sp=str;
+  for (i = 0; i < argc; ++i) {
+    string newtext;
+    if (A_FLOAT == argv[i].a_type) {
+      char str[MAXPDSTRING];
+      char*sp=str;
 
-        atom_string(&argv[i], str, MAXPDSTRING);
+      atom_string(&argv[i], str, MAXPDSTRING);
+      while(*sp) {
+        unsigned char c=*sp++;
+        line+=c;
+      }
+    } else {
+      char*sp=atom_getsymbol(&argv[i])->s_name;
+      try {
+        std::wstring ws=gem::string::toWstring(sp);
+        line+=ws;
+      } catch (int i) {
+        i=0;
         while(*sp) {
           unsigned char c=*sp++;
           line+=c;
         }
-      } else {
-        char*sp=atom_getsymbol(&argv[i])->s_name;
-        try {
-          std::wstring ws=gem::string::toWstring(sp);
-          line+=ws;
-        } catch (int i) {
-            i=0;
-          while(*sp) {
-            unsigned char c=*sp++;
-            line+=c;
-          }
-        }
       }
-      if(argc-1>i)line += L' ';
     }
+    if(argc-1>i) {
+      line += L' ';
+    }
+  }
 
   breakLine(line);
 }
@@ -412,25 +446,24 @@ void TextBase :: makeLineDist()
 {
   unsigned int i=0;
   m_lineDist.clear();
-  if (m_heightJus == BOTTOM || m_heightJus == BASEH)
-    {
-      // so the offset will be a simple
-      // [0 1 2 3 ... n] sequence
-      for(i=0; i<m_theText.size(); i++)
-        m_lineDist.push_back(i);
-      return;
+  if (m_heightJus == BOTTOM || m_heightJus == BASEH) {
+    // so the offset will be a simple
+    // [0 1 2 3 ... n] sequence
+    for(i=0; i<m_theText.size(); i++) {
+      m_lineDist.push_back(i);
     }
+    return;
+  }
 
-  if (m_heightJus == TOP)
-    {
-      // now in the other direction:
-      // [-n ... -2 -1 0]
-      signed long j;
-      for(j=m_theText.size()-1; j>=0; j--){
-        m_lineDist.push_back(-j);
-      }
-      return;
+  if (m_heightJus == TOP) {
+    // now in the other direction:
+    // [-n ... -2 -1 0]
+    signed long j;
+    for(j=m_theText.size()-1; j>=0; j--) {
+      m_lineDist.push_back(-j);
     }
+    return;
+  }
 
   // else:
   // calculate the y offset of each line, so
@@ -445,8 +478,9 @@ void TextBase :: makeLineDist()
   */
 
   float diff = (m_theText.size()-1)*0.5;
-  for(i=0; i<m_theText.size(); i++)
+  for(i=0; i<m_theText.size(); i++) {
     m_lineDist.push_back((i-diff));
+  }
 }
 
 
@@ -462,7 +496,9 @@ void TextBase :: stringMess(int argc, t_atom *argv)
 {
   m_theText.clear();
 
-  if ( argc < 1 ) { return; }
+  if ( argc < 1 ) {
+    return;
+  }
 
   int i;
   wstring line = L"";
@@ -506,64 +542,116 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "precision", setPrecision, float);
   CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
-		  gensym("justify"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
+                  gensym("justify"), A_GIMME, A_NULL);
 }
 
-void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
+void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc,
+                                     t_atom*argv)
 {
   JustifyWidth  wType=CENTER;
   JustifyHeight hType=MIDDLE;
   JustifyDepth  dType=HALFWAY;
   char c;
 
-  switch(argc){
+  switch(argc) {
   case 3:
     c=atom_getsymbol(argv+2)->s_name[2];
-    switch (c){
-    case 'o': case 'O': dType = FRONT; break;
-    case 'c': case 'C': dType = BACK; break;
-    case 's': case 'S': dType = BASED; break;
-    case 'l': case 'L': case 'n': case 'N': dType = HALFWAY; break;
+    switch (c) {
+    case 'o':
+    case 'O':
+      dType = FRONT;
+      break;
+    case 'c':
+    case 'C':
+      dType = BACK;
+      break;
+    case 's':
+    case 'S':
+      dType = BASED;
+      break;
+    case 'l':
+    case 'L':
+    case 'n':
+    case 'N':
+      dType = HALFWAY;
+      break;
     default:
-      GetMyClass(data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
-	    atom_getsymbol(argv+2)->s_name);
+      GetMyClass(
+        data)->error("invalid depth justification: %s (must be: front|back|halfway|base)",
+                     atom_getsymbol(argv+2)->s_name);
       return;
     }
   case 2:
     c=atom_getsymbol(argv+1)->s_name[2];
-    switch (c){
-    case 't': case 'T': hType = BOTTOM; break;
-    case 'p': case 'P': hType = TOP; break;
-    case 'd': case 'D': case 'n': case 'N': hType = MIDDLE; break;
-    case 's': case 'S': hType = BASEH; break;
+    switch (c) {
+    case 't':
+    case 'T':
+      hType = BOTTOM;
+      break;
+    case 'p':
+    case 'P':
+      hType = TOP;
+      break;
+    case 'd':
+    case 'D':
+    case 'n':
+    case 'N':
+      hType = MIDDLE;
+      break;
+    case 's':
+    case 'S':
+      hType = BASEH;
+      break;
     default:
-      GetMyClass(data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
-	    atom_getsymbol(argv+1)->s_name);
+      GetMyClass(
+        data)->error("invalid height justification: %s (must be bottom|top|middle|base)",
+                     atom_getsymbol(argv+1)->s_name);
       return;
     }
   case 1:
     c=atom_getsymbol(argv)->s_name[2];
-    switch (c){
-    case 'f': case 'F': wType = LEFT; break;
-    case 'g': case 'G': wType = RIGHT; break;
-    case 'n': case 'N': wType = CENTER; break;
-    case 's': case 'S': wType = BASEW; break;
+    switch (c) {
+    case 'f':
+    case 'F':
+      wType = LEFT;
+      break;
+    case 'g':
+    case 'G':
+      wType = RIGHT;
+      break;
+    case 'n':
+    case 'N':
+      wType = CENTER;
+      break;
+    case 's':
+    case 'S':
+      wType = BASEW;
+      break;
     default:
-      GetMyClass(data)->error("invalid width justification: %s (must be left|right|center|base)",
-	    atom_getsymbol(argv+0)->s_name);
+      GetMyClass(
+        data)->error("invalid width justification: %s (must be left|right|center|base)",
+                     atom_getsymbol(argv+0)->s_name);
       return;
     }
     break;
   default:
-    GetMyClass(data)->error("justification most be \"width [height [depth]]\"");
+    GetMyClass(
+      data)->error("justification most be \"width [height [depth]]\"");
     return;
   }
 
-  switch(argc){
-  case 1: GetMyClass(data)->setJustification(wType); break;
-  case 2: GetMyClass(data)->setJustification(wType, hType); break;
-  case 3: GetMyClass(data)->setJustification(wType, hType, dType); break;
+  switch(argc) {
+  case 1:
+    GetMyClass(data)->setJustification(wType);
+    break;
+  case 2:
+    GetMyClass(data)->setJustification(wType, hType);
+    break;
+  case 3:
+    GetMyClass(data)->setJustification(wType, hType, dType);
+    break;
   }
 }
 void TextBase :: linedistMess(float dist)

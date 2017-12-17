@@ -33,41 +33,43 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN emission : public GemBase
 {
-    CPPEXTERN_HEADER(emission, GemBase);
+  CPPEXTERN_HEADER(emission, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	emission(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  emission(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~emission();
+  //////////
+  // Destructor
+  virtual ~emission();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on the color material
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The emission vector (RGBA)
-    	float	    	m_emission[4];
+  //////////
+  // The emission vector (RGBA)
+  float           m_emission[4];
 
-    	//////////
-    	// emission changed
-    	void	    	emissionMess(float red, float green, float blue, float alpha);
+  //////////
+  // emission changed
+  void            emissionMess(float red, float green, float blue,
+                               float alpha);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	emissionMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // static member functions
+  static void     emissionMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -15,43 +15,43 @@
 
 class GEM_EXTERN pix_contrast : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_contrast, GemPixObj);
+  CPPEXTERN_HEADER(pix_contrast, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_contrast();
+  //////////
+  // Constructor
+  pix_contrast();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_contrast();
+  //////////
+  // Destructor
+  virtual ~pix_contrast();
 
-		virtual void	processRGBAImage(imageStruct &image);
+  virtual void    processRGBAImage(imageStruct &image);
 
-		virtual void	processGrayImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
 
-	#ifdef __VEC__
-		virtual void 	processYUVAltivec(imageStruct &image);
-	#endif //__VEC__
-		virtual void 	processYUVImage(imageStruct &image);
+#ifdef __VEC__
+  virtual void    processYUVAltivec(imageStruct &image);
+#endif //__VEC__
+  virtual void    processYUVImage(imageStruct &image);
 
-		void	contrastMess(float contrast);
-		void	saturationMess(float contrast);
+  void    contrastMess(float contrast);
+  void    saturationMess(float contrast);
 
-		float	m_contrast;
-		float	m_saturation;
+  float   m_contrast;
+  float   m_saturation;
 
-                t_inlet*m_inSat, *m_inCon;
+  t_inlet*m_inSat, *m_inCon;
 
- private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	contrastMessCallback(void *data, t_float contrast);
-		static void 	saturationMessCallback(void *data, t_float contrast);
+  //////////
+  // Static member functions
+  static void     contrastMessCallback(void *data, t_float contrast);
+  static void     saturationMessCallback(void *data, t_float contrast);
 
 };
 #endif

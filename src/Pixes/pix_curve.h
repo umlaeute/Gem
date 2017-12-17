@@ -43,13 +43,13 @@ class GEM_EXTERN pix_curve : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_curve, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_curve(int argc, t_atom *argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -57,8 +57,8 @@ class GEM_EXTERN pix_curve : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processGrayImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
   virtual void  processYUVImage (imageStruct &image);
 
   //////////
@@ -71,8 +71,8 @@ class GEM_EXTERN pix_curve : public GemPixObj
 
   //////////
   // Set new arrays
-  void	    	setMess(t_symbol*s,int argc, t_atom *argv);
+  void          setMess(t_symbol*s,int argc, t_atom *argv);
 
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -32,7 +32,8 @@
 #include <stdarg.h>
 
 
-void *Obj_header::operator new(size_t, void *location, void *) {
+void *Obj_header::operator new(size_t, void *location, void *)
+{
   return(location);
 }
 
@@ -53,12 +54,12 @@ CPPExtern :: CPPExtern()
     m_canvas(NULL),
     m_endpost(true)
 {
-    m_canvas = canvas_getcurrent();
-    if(m_holdname) {
-      m_objectname=gensym(m_holdname);
-    } else {
-      m_objectname=gensym("unknown Gem object");
-    }
+  m_canvas = canvas_getcurrent();
+  if(m_holdname) {
+    m_objectname=gensym(m_holdname);
+  } else {
+    m_objectname=gensym("unknown Gem object");
+  }
 }
 CPPExtern :: CPPExtern(const CPPExtern&org) :
   x_obj(org.x_obj),
@@ -83,7 +84,8 @@ void CPPExtern :: post(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     ::post("[%s]: %s", m_objectname->s_name, buf);
   } else {
     ::post("%s", buf);
@@ -97,7 +99,8 @@ void CPPExtern :: startpost(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     ::startpost("[%s]: %s", m_objectname->s_name, buf);
   } else {
     ::startpost("%s", buf);
@@ -130,13 +133,15 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
 
   /* only pd>=0.39(?) supports ::verbose() */
   if(rte_verbose) {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    if(NULL!=m_objectname && NULL!=m_objectname->s_name
+        && &s_ != m_objectname) {
       rte_verbose(level, "[%s]: %s", m_objectname->s_name, buf);
     } else {
       rte_verbose(level, "%s", buf);
     }
   } else {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+    if(NULL!=m_objectname && NULL!=m_objectname->s_name
+        && &s_ != m_objectname) {
       ::post("[%s]: %s", m_objectname->s_name, buf);
     } else {
       ::post("%s", buf);
@@ -151,27 +156,32 @@ void CPPExtern :: error(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(NULL!=m_objectname && NULL!=m_objectname->s_name && &s_ != m_objectname){
+  if(NULL!=m_objectname && NULL!=m_objectname->s_name
+      && &s_ != m_objectname) {
     char*objname=m_objectname->s_name;
-    if(x_obj)
+    if(x_obj) {
       pd_error(x_obj, "[%s]: %s", objname, buf);
-    else if (m_holder)
+    } else if (m_holder) {
       pd_error(m_holder, "[%s]: %s", objname, buf);
-    else
+    } else {
       ::error("[%s]: %s", objname, buf);
+    }
   } else {
-    if(x_obj)
+    if(x_obj) {
       pd_error(x_obj, "%s", buf);
-    else if (m_holder)
+    } else if (m_holder) {
       pd_error(m_holder, "%s", buf);
-    else
+    } else {
       ::error("%s", buf);
+    }
   }
 }
 
 typedef int (*close_t)(int fd);
 
-std::string CPPExtern::findFile(const std::string f, const std::string e) const {
+std::string CPPExtern::findFile(const std::string&f,
+                                const std::string&e) const
+{
   std::string result;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
@@ -180,22 +190,25 @@ std::string CPPExtern::findFile(const std::string f, const std::string e) const 
   return result;
 }
 
-std::string CPPExtern::findFile(const std::string file) const {
+std::string CPPExtern::findFile(const std::string&file) const
+{
   return findFile(file, "");
 
 }
-bool CPPExtern :: checkGemVersion(const int major, const int minor) {
+bool CPPExtern :: checkGemVersion(const int major, const int minor)
+{
   if(!GemVersion::versionCheck(major, minor)) {
     ::error("GEM version mismatch: compiled for %d.%d but we are running %s",
-	    major, minor,
-	    GemVersion::versionString());
-        return false;
+            major, minor,
+            GemVersion::versionString());
+    return false;
   }
   return true;
 }
 
 
-CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
+CPPExtern&CPPExtern::operator=(const CPPExtern&org)
+{
   x_obj=org.x_obj;
   m_objectname=org.m_objectname;
   m_canvas=org.m_canvas;
@@ -203,6 +216,7 @@ CPPExtern&CPPExtern::operator=(const CPPExtern&org) {
   return *this;
 }
 
-void CPPExtern::beforeDeletion(void) {
+void CPPExtern::beforeDeletion(void)
+{
   //post("CPPExtern to be deleted");
 }

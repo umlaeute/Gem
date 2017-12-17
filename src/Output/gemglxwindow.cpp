@@ -53,7 +53,8 @@ static int fbDbl32[] =       {GLX_RENDER_TYPE, GLX_RGBA_BIT,
                               GLX_BLUE_SIZE, 8,
                               GLX_ALPHA_SIZE, 8,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int fbDbl32Stereo[] = {GLX_RENDER_TYPE, GLX_RGBA_BIT,
                               GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
@@ -64,7 +65,8 @@ static int fbDbl32Stereo[] = {GLX_RENDER_TYPE, GLX_RGBA_BIT,
                               GLX_BLUE_SIZE, 8,
                               GLX_ALPHA_SIZE, 8,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int fbDbl24[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_DOUBLEBUFFER, True,
@@ -72,7 +74,8 @@ static int fbDbl24[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_GREEN_SIZE, 8,
                               GLX_BLUE_SIZE, 8,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int fbDbl24Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_DOUBLEBUFFER, True,
@@ -81,78 +84,86 @@ static int fbDbl24Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_GREEN_SIZE, 8,
                               GLX_BLUE_SIZE, 8,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int fbDbl8[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, True,
-                              GLX_RED_SIZE, 3,
-                              GLX_GREEN_SIZE, 3,
-                              GLX_BLUE_SIZE, 2,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                             GLX_DOUBLEBUFFER, True,
+                             GLX_RED_SIZE, 3,
+                             GLX_GREEN_SIZE, 3,
+                             GLX_BLUE_SIZE, 2,
+                             GLX_DEPTH_SIZE, 16,
+                             None
+                            };
 
 static int fbDbl8Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, True,
-                              GLX_STEREO, True,
-                              GLX_RED_SIZE, 3,
-                              GLX_GREEN_SIZE, 3,
-                              GLX_BLUE_SIZE, 2,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                             GLX_DOUBLEBUFFER, True,
+                             GLX_STEREO, True,
+                             GLX_RED_SIZE, 3,
+                             GLX_GREEN_SIZE, 3,
+                             GLX_BLUE_SIZE, 2,
+                             GLX_DEPTH_SIZE, 16,
+                             None
+                            };
 
 static int *dblBufFbCfg[] = {fbDbl32,
-  fbDbl32Stereo,
-  fbDbl24,
-  fbDbl24Stereo,
-  fbDbl8,
-  fbDbl8Stereo,
-  0
-};
+                             fbDbl32Stereo,
+                             fbDbl24,
+                             fbDbl24Stereo,
+                             fbDbl8,
+                             fbDbl8Stereo,
+                             0
+                            };
 
 static int fbSngl32[] =       {GLX_RENDER_TYPE, GLX_RGBA_BIT,
-                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, False,
-                              GLX_RED_SIZE, 8,
-                              GLX_GREEN_SIZE, 8,
-                              GLX_BLUE_SIZE, 8,
-                              GLX_ALPHA_SIZE, 8,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                               GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                               GLX_DOUBLEBUFFER, False,
+                               GLX_RED_SIZE, 8,
+                               GLX_GREEN_SIZE, 8,
+                               GLX_BLUE_SIZE, 8,
+                               GLX_ALPHA_SIZE, 8,
+                               GLX_DEPTH_SIZE, 16,
+                               None
+                              };
 
 static int fbSngl32Stereo[] = {GLX_RENDER_TYPE, GLX_RGBA_BIT,
-                              GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, False,
-                              GLX_STEREO, True,
-                              GLX_RED_SIZE, 8,
-                              GLX_GREEN_SIZE, 8,
-                              GLX_BLUE_SIZE, 8,
-                              GLX_ALPHA_SIZE, 8,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                               GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+                               GLX_DOUBLEBUFFER, False,
+                               GLX_STEREO, True,
+                               GLX_RED_SIZE, 8,
+                               GLX_GREEN_SIZE, 8,
+                               GLX_BLUE_SIZE, 8,
+                               GLX_ALPHA_SIZE, 8,
+                               GLX_DEPTH_SIZE, 16,
+                               None
+                              };
 
 static int fbSngl24[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, False,
-                              GLX_RED_SIZE, 8,
-                              GLX_GREEN_SIZE, 8,
-                              GLX_BLUE_SIZE, 8,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                               GLX_DOUBLEBUFFER, False,
+                               GLX_RED_SIZE, 8,
+                               GLX_GREEN_SIZE, 8,
+                               GLX_BLUE_SIZE, 8,
+                               GLX_DEPTH_SIZE, 16,
+                               None
+                              };
 
 static int fbSngl24Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-                              GLX_DOUBLEBUFFER, False,
-                              GLX_STEREO, True,
-                              GLX_RED_SIZE, 8,
-                              GLX_GREEN_SIZE, 8,
-                              GLX_BLUE_SIZE, 8,
-                              GLX_DEPTH_SIZE, 16,
-                              None};
+                               GLX_DOUBLEBUFFER, False,
+                               GLX_STEREO, True,
+                               GLX_RED_SIZE, 8,
+                               GLX_GREEN_SIZE, 8,
+                               GLX_BLUE_SIZE, 8,
+                               GLX_DEPTH_SIZE, 16,
+                               None
+                              };
 static int fbSngl8[] =       {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_DOUBLEBUFFER, False,
                               GLX_RED_SIZE, 3,
                               GLX_GREEN_SIZE, 3,
                               GLX_BLUE_SIZE, 2,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int fbSngl8Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_DOUBLEBUFFER, False,
@@ -161,16 +172,17 @@ static int fbSngl8Stereo[] = {GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
                               GLX_GREEN_SIZE, 3,
                               GLX_BLUE_SIZE, 2,
                               GLX_DEPTH_SIZE, 16,
-                              None};
+                              None
+                             };
 
 static int *snglBufFbCfg[] = {fbSngl32,
-  fbSngl32Stereo,
-  fbSngl24,
-  fbSngl24Stereo,
-  fbSngl8,
-  fbSngl8Stereo,
-  0
-};
+                              fbSngl32Stereo,
+                              fbSngl24,
+                              fbSngl24Stereo,
+                              fbSngl8,
+                              fbSngl8Stereo,
+                              0
+                             };
 
 #endif // HAVE_LIBXRENDER
 
@@ -184,7 +196,8 @@ static int snglBuf24[] = {GLX_RGBA,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-                          None};
+                          None
+                         };
 static int snglBuf24Stereo[] = {GLX_RGBA,
                                 GLX_RED_SIZE, 8,
                                 GLX_GREEN_SIZE, 8,
@@ -195,7 +208,8 @@ static int snglBuf24Stereo[] = {GLX_RGBA,
                                 GLX_ACCUM_GREEN_SIZE, 8,
                                 GLX_ACCUM_BLUE_SIZE, 8,
                                 GLX_STEREO,
-                                None};
+                                None
+                               };
 static int dblBuf24[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 4,
                           GLX_GREEN_SIZE, 4,
@@ -206,7 +220,8 @@ static int dblBuf24[] =  {GLX_RGBA,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           GLX_DOUBLEBUFFER,
-                          None};
+                          None
+                         };
 static int dblBuf24Stereo[] =  {GLX_RGBA,
                                 GLX_RED_SIZE, 4,
                                 GLX_GREEN_SIZE, 4,
@@ -218,27 +233,31 @@ static int dblBuf24Stereo[] =  {GLX_RGBA,
                                 GLX_ACCUM_BLUE_SIZE, 8,
                                 GLX_DOUBLEBUFFER,
                                 GLX_STEREO,
-                                None};
+                                None
+                               };
 static int snglBuf8[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 3,
                           GLX_GREEN_SIZE, 3,
                           GLX_BLUE_SIZE, 2,
                           GLX_DEPTH_SIZE, 16,
-                          None};
+                          None
+                         };
 static int snglBuf8Stereo[] =  {GLX_RGBA,
                                 GLX_RED_SIZE, 3,
                                 GLX_GREEN_SIZE, 3,
                                 GLX_BLUE_SIZE, 2,
                                 GLX_DEPTH_SIZE, 16,
                                 GLX_STEREO,
-                                None};
+                                None
+                               };
 static int dblBuf8[] =   {GLX_RGBA,
                           GLX_RED_SIZE, 1,
                           GLX_GREEN_SIZE, 2,
                           GLX_BLUE_SIZE, 1,
                           GLX_DEPTH_SIZE, 16,
                           GLX_DOUBLEBUFFER,
-                          None};
+                          None
+                         };
 
 static int dblBuf8Stereo[] =   {GLX_RGBA,
                                 GLX_RED_SIZE, 1,
@@ -247,16 +266,17 @@ static int dblBuf8Stereo[] =   {GLX_RGBA,
                                 GLX_DEPTH_SIZE, 16,
                                 GLX_DOUBLEBUFFER,
                                 GLX_STEREO,
-                                None};
+                                None
+                               };
 
-static int*dblBufs[]={
+static int*dblBufs[]= {
   dblBuf24Stereo,
   dblBuf24,
   dblBuf8Stereo,
   dblBuf8,
   0
 };
-static int*snglBufs[]={
+static int*snglBufs[]= {
   snglBuf24Stereo,
   snglBuf24,
   snglBuf8Stereo,
@@ -331,17 +351,20 @@ struct gemglxwindow::PIMPL {
     memset(&deskMode, 0, sizeof(deskMode));
 #endif
   }
-  ~PIMPL(void) {
+  ~PIMPL(void)
+  {
   }
 
-  std::string key2string(XKeyEvent* kb) {
+  std::string key2string(XKeyEvent* kb)
+  {
 #define KEYSTRING_SIZE 10
     char keystring[KEYSTRING_SIZE];
     KeySym keysym_return;
     int len=0;
 
     if(inputContext) {
-      len=Xutf8LookupString(inputContext, kb,keystring,KEYSTRING_SIZE,&keysym_return,NULL);
+      len=Xutf8LookupString(inputContext, kb,keystring,KEYSTRING_SIZE,
+                            &keysym_return,NULL);
     }
     if(len<1) {
       len=XLookupString(kb,keystring,2,&keysym_return,NULL);
@@ -364,9 +387,10 @@ struct gemglxwindow::PIMPL {
     return std::string(keystring);
   }
 
-  bool create(std::string display, int buffer, bool fullscreen, bool border, int&x, int&y, unsigned int&w, unsigned int&h, bool transparent) {
+  bool create(std::string display, int buffer, bool fullscreen, bool border,
+              int&x, int&y, unsigned int&w, unsigned int&h, bool transparent)
+  {
     int modeNum=4;
-    int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
     XF86VidModeModeInfo **modes;
 #endif
@@ -384,8 +408,8 @@ struct gemglxwindow::PIMPL {
       return false;
     }
 
-    if (fullscreen){
-      if (!display.empty()){
+    if (fullscreen) {
+      if (!display.empty()) {
         fullscreen=false;
         throw(GemException("fullscreen not available on remote display"));
       } else {
@@ -401,110 +425,140 @@ struct gemglxwindow::PIMPL {
     XVisualInfo *vi=0;
 
 #ifdef HAVE_LIBXRENDER
-  if (transparent){
+    if (transparent) {
 
-    static GLXFBConfig *fbconfigs, fbconfig;
-    static int numfbconfigs;
-    XRenderPictFormat *pict_format;
+      static GLXFBConfig *fbconfigs, fbconfig;
+      static int numfbconfigs;
 
-    // need to get some function pointer at runtime
-    typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen, const int* attribList, int* nitems);
-    glXChooseFBConfigProc glXChooseFBConfigFn = (glXChooseFBConfigProc)glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
+      // need to get some function pointer at runtime
+      typedef GLXFBConfig*(*glXChooseFBConfigProc)(Display* dpy, int screen,
+          const int* attribList, int* nitems);
+      glXChooseFBConfigProc glXChooseFBConfigFn = (glXChooseFBConfigProc)
+          glXGetProcAddress((const GLubyte*)"glXChooseFBConfig");
 
-    typedef XVisualInfo*(*glXGetVisualFromFBConfigProc)(Display* dpy,GLXFBConfig fbconfig);
-    glXGetVisualFromFBConfigProc glXGetVisualFromFBConfigFn = (glXGetVisualFromFBConfigProc)glXGetProcAddress((const GLubyte*)"glXGetVisualFromFBConfig");
+      typedef XVisualInfo*(*glXGetVisualFromFBConfigProc)(Display* dpy,
+          GLXFBConfig fbconfig);
+      glXGetVisualFromFBConfigProc glXGetVisualFromFBConfigFn =
+        (glXGetVisualFromFBConfigProc)glXGetProcAddress((const GLubyte*)
+            "glXGetVisualFromFBConfig");
 
-    if (glXChooseFBConfigFn && glXGetVisualFromFBConfigFn){
-      static int**fbbuf=0;
-      switch(buffer) {
-      default: ::error("only single/double buffer supported; defaulting to double");
-      case 2: fbbuf=dblBufFbCfg; break;
-      case 1: fbbuf=snglBufFbCfg; break;
-      }
-      bool breakme=false;
-      for(; *fbbuf; fbbuf++) {
+      if (glXChooseFBConfigFn && glXGetVisualFromFBConfigFn) {
+        static int**fbbuf=0;
+        switch(buffer) {
+        default: ::error("only single/double buffer supported; defaulting to double");
+        case 2:
+          fbbuf=dblBufFbCfg;
+          break;
+        case 1:
+          fbbuf=snglBufFbCfg;
+          break;
+        }
+        bool breakme=false;
+        for(; *fbbuf; fbbuf++) {
 
-        fbconfigs =  glXChooseFBConfigFn(dpy, screen, *fbbuf, &numfbconfigs);
+          fbconfigs =  glXChooseFBConfigFn(dpy, screen, *fbbuf, &numfbconfigs);
 
-        fbconfig = 0;
-        for(int i = 0; i<numfbconfigs; i++) {
-          vi = (XVisualInfo*) glXGetVisualFromFBConfigFn(dpy, fbconfigs[i]);
-          if(!vi)
-            continue;
+          fbconfig = 0;
+          for(int i = 0; i<numfbconfigs; i++) {
+            vi = (XVisualInfo*) glXGetVisualFromFBConfigFn(dpy, fbconfigs[i]);
+            if(!vi) {
+              continue;
+            }
 
-          pict_format = XRenderFindVisualFormat(dpy, vi->visual);
-          if(!pict_format)
-            continue;
+            XRenderPictFormat *pict_format = XRenderFindVisualFormat(dpy, vi->visual);
+            if(!pict_format) {
+              continue;
+            }
 
-          fbconfig = fbconfigs[i];
-          if(pict_format->direct.alphaMask > 0) {
-            ::verbose(0,"choose fbconfig : %d", i);
-            breakme = true;
+            fbconfig = fbconfigs[i];
+            if(pict_format->direct.alphaMask > 0) {
+              ::verbose(0,"choose fbconfig : %d", i);
+              breakme = true;
+              break;
+            }
+          }
+          if ( breakme ) {
             break;
           }
         }
-        if ( breakme ) break;
-      }
 
-      if(!fbconfig) {
-        ::error("Can't find valid framebuffer configuration, try again with legacy method.");
-      } else {
-        typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig, int attr, int* val);
-        glXGetFBConfigAttribProc glXGetFBConfigAttribFn = (glXGetFBConfigAttribProc)glXGetProcAddress((const GLubyte*)"glXGetFBConfigAttrib");
-        if ( glXGetFBConfigAttribFn ) {
-          int doublebuffer;
-          int red_bits, green_bits, blue_bits, alpha_bits, depth_bits;
-
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DOUBLEBUFFER, &doublebuffer);
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_RED_SIZE, &red_bits);
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_GREEN_SIZE, &green_bits);
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_BLUE_SIZE, &blue_bits);
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
-          glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
-
-          ::verbose(0, "FBConfig selected:");
-          ::verbose(0, " Doublebuffer: %s", doublebuffer == True ? "Yes" : "No");
-          ::verbose(0, " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
-            red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
+        if(!fbconfig) {
+          ::error("Can't find valid framebuffer configuration, try again with legacy method.");
         } else {
-          ::error("can't get glXGetFBConfigAttrib function pointer");
+          typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig,
+                                                  int attr, int* val);
+          glXGetFBConfigAttribProc glXGetFBConfigAttribFn =
+            (glXGetFBConfigAttribProc)glXGetProcAddress((const GLubyte*)
+                "glXGetFBConfigAttrib");
+          if ( glXGetFBConfigAttribFn ) {
+            int doublebuffer;
+            int red_bits, green_bits, blue_bits, alpha_bits, depth_bits;
+
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DOUBLEBUFFER, &doublebuffer);
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_RED_SIZE, &red_bits);
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_GREEN_SIZE, &green_bits);
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_BLUE_SIZE, &blue_bits);
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_ALPHA_SIZE, &alpha_bits);
+            glXGetFBConfigAttribFn(dpy, fbconfig, GLX_DEPTH_SIZE, &depth_bits);
+
+            ::verbose(0, "FBConfig selected:");
+            ::verbose(0, " Doublebuffer: %s", doublebuffer == True ? "Yes" : "No");
+            ::verbose(0,
+                      " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
+                      red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
+          } else {
+            ::error("can't get glXGetFBConfigAttrib function pointer");
+          }
         }
       }
     }
-   }
 
 #endif // HAVE_LIBXRENDER
 
-  if (vi == NULL) { // if Xrender method doesn't work try legacy
-    static int**buf=0;
-    switch(buffer) {
-    default: ::error("only single/double buffer supported; defaulting to double");
-    case 2: buf=dblBufs; break;
-    case 1: buf=snglBufs; break;
+    if (vi == NULL) { // if Xrender method doesn't work try legacy
+      static int**buf=0;
+      switch(buffer) {
+      default: ::error("only single/double buffer supported; defaulting to double");
+      case 2:
+        buf=dblBufs;
+        break;
+      case 1:
+        buf=snglBufs;
+        break;
+      }
+      // the user wants double buffer
+      for(; *buf; buf++) {
+        vi = glXChooseVisual(dpy, screen, *buf);
+        if(vi) {
+          break;
+        }
+      }
     }
-    // the user wants double buffer
-    for(; *buf; buf++) {
-      vi = glXChooseVisual(dpy, screen, *buf);
-      if(vi)break;
-    }
-  }
 
     if (vi == NULL) {
       std::string errstr="Unable to create ";
       switch(buffer) {
-      default: errstr+="???"; break;
-      case 1:  errstr+"single"; break;
-      case 2:  errstr+"double"; break;
+      default:
+        errstr+="???";
+        break;
+      case 1:
+        errstr+"single";
+        break;
+      case 2:
+        errstr+"double";
+        break;
       }
       errstr+=" buffer window";
       throw(GemException(errstr));
       return false;
     }
 
-    if(vi->depth<24)
+    if(vi->depth<24) {
       ::verbose(0, "Only using %d color bits", vi->depth);
+    }
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-      ::error("TrueColor visual required for this program (got %d)", vi->c_class);
+      ::error("TrueColor visual required for this program (got %d)",
+              vi->c_class);
       return false;
     }
     // create the rendering context
@@ -512,10 +566,10 @@ struct gemglxwindow::PIMPL {
       // first check whether we have a shared context for 'display'
       GLXContext sharedContext=0;
       if(s_shared.count(display)>0) {
-	sharedContext=s_shared[display].glxcontext;;
+        sharedContext=s_shared[display].glxcontext;;
       }
       glxcontext = glXCreateContext(dpy, vi, sharedContext, GL_TRUE);
-    } catch(void*e){
+    } catch(void*e) {
       glxcontext=NULL;
     }
     if (glxcontext == NULL) {
@@ -524,7 +578,7 @@ struct gemglxwindow::PIMPL {
     }
     // create the X color map
     cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen),
-                                    vi->visual, AllocNone);
+                           vi->visual, AllocNone);
     if (!cmap) {
       throw(GemException("Could not create X colormap"));
       return false;
@@ -538,7 +592,8 @@ struct gemglxwindow::PIMPL {
 
     int flags;
 #ifdef HAVE_LIBXXF86VM
-    if (fullscreen){
+    if (fullscreen) {
+      int bestMode=0;
       /* look for mode with requested resolution */
       for (int i = 0; i < modeNum; i++) {
         if ((modes[i]->hdisplay == w) && (modes[i]->vdisplay == w)) {
@@ -557,21 +612,22 @@ struct gemglxwindow::PIMPL {
       flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     } else
 #endif
-      { // !fullscren
-        if (border){
-          swa.override_redirect = False;
-          flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-        } else {
-          swa.override_redirect = True;
-          flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
-        }
+    {
+      // !fullscren
+      if (border) {
+        swa.override_redirect = False;
+        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
+      } else {
+        swa.override_redirect = True;
+        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
       }
+    }
     fs = fullscreen;
 
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen),
-                                 x, y, w, h,
-                                 0, vi->depth, InputOutput,
-                                 vi->visual, flags, &swa);
+                        x, y, w, h,
+                        0, vi->depth, InputOutput,
+                        vi->visual, flags, &swa);
     XFree( vi );
 
     if (!win) {
@@ -590,7 +646,8 @@ struct gemglxwindow::PIMPL {
       const char *preedit_attname = NULL;
       XVaNestedList preedit_attlist = NULL;
 
-      if ((XGetIMValues(inputMethod, XNQueryInputStyle, &stylePtr, NULL) != NULL)) {
+      if ((XGetIMValues(inputMethod, XNQueryInputStyle, &stylePtr,
+                        NULL) != NULL)) {
         stylePtr=NULL;
       }
 
@@ -598,9 +655,8 @@ struct gemglxwindow::PIMPL {
       /*
        * Select the best input style supported by both the IM and Tk.
        */
-      int i=0;
       if(stylePtr) {
-        for (i = 0; i < stylePtr->count_styles; i++) {
+        for (int i = 0; i < stylePtr->count_styles; i++) {
           XIMStyle thisStyle = stylePtr->supported_styles[i];
           if (thisStyle == (XIMPreeditPosition | XIMStatusNothing)) {
             style = thisStyle;
@@ -624,11 +680,11 @@ struct gemglxwindow::PIMPL {
       }
 
       inputContext=XCreateIC(inputMethod,
-                                      XNInputStyle, style,
-                                      XNClientWindow, win,
-                                      XNFocusWindow, win,
-                                      preedit_attname, preedit_attlist,
-                                      NULL);
+                             XNInputStyle, style,
+                             XNClientWindow, win,
+                             XNFocusWindow, win,
+                             preedit_attname, preedit_attlist,
+                             NULL);
     }
 
 
@@ -638,10 +694,11 @@ struct gemglxwindow::PIMPL {
      * LATER think about reacting on this event...
      */
     delete_atom = XInternAtom(dpy, "WM_DELETE_WINDOW", True);
-    if (delete_atom != None)
+    if (delete_atom != None) {
       XSetWMProtocols(dpy, win, &delete_atom,1);
+    }
 
-    try{
+    try {
       xerr=0;
       glXMakeCurrent(dpy, win, glxcontext);
 
@@ -663,7 +720,7 @@ struct gemglxwindow::PIMPL {
                    &x, &y,
                    &w, &h,
                    &borderDummy, &depthDummy);
-    }catch(void*e){
+    } catch(void*e) {
       throw(GemException("Could not make glX-context current"));
       return false;
     }
@@ -695,16 +752,19 @@ gemglxwindow :: gemglxwindow(void) :
 /////////////////////////////////////////////////////////
 gemglxwindow :: ~gemglxwindow()
 {
-  if(m_pimpl->win)
+  if(m_pimpl->win) {
     destroyMess();
+  }
 
   delete m_pimpl;
 }
 
 
-bool gemglxwindow :: makeCurrent(void){
-  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->glxcontext)
+bool gemglxwindow :: makeCurrent(void)
+{
+  if(!m_pimpl->dpy || !m_pimpl->win || !m_pimpl->glxcontext) {
     return false;
+  }
 
   xerr=0;
   glXMakeCurrent(m_pimpl->dpy, m_pimpl->win, m_pimpl->glxcontext);
@@ -714,12 +774,16 @@ bool gemglxwindow :: makeCurrent(void){
   return true;
 }
 
-void gemglxwindow :: swapBuffers(void) {
+void gemglxwindow :: swapBuffers(void)
+{
   glXSwapBuffers(m_pimpl->dpy, m_pimpl->win);
 }
 
-void gemglxwindow::dispatch(void) {
-  if(!m_pimpl->doDispatch)return;
+void gemglxwindow::dispatch(void)
+{
+  if(!m_pimpl->doDispatch) {
+    return;
+  }
   XEvent event;
   XButtonEvent* eb = (XButtonEvent*)&event;
   XKeyEvent* kb  = (XKeyEvent*)&event;
@@ -734,52 +798,51 @@ void gemglxwindow::dispatch(void) {
                            ButtonMotionMask |
                            ButtonPressMask |
                            ButtonReleaseMask,
-                           &event))
-    {
-      switch (event.type)
-        {
-        case ButtonPress:
-          button(devID, eb->button-1, 1);
-          motion(devID, eb->x, eb->y);
-          break;
-        case ButtonRelease:
-          button(devID, eb->button-1, 0);
-          motion(devID, eb->x, eb->y);
-          break;
-        case MotionNotify:
-          motion(devID, eb->x, eb->y);
-          if(!m_pimpl->have_border) {
-            int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent, CurrentTime);
-            err=0;
-          }
-          break;
-        case KeyPress:
-          key(devID, m_pimpl->key2string(kb), kb->keycode, 1);
-          break;
-        case KeyRelease:
-          key(devID, m_pimpl->key2string(kb), kb->keycode, 0);
-          break;
-        case ConfigureNotify:
-          if ((event.xconfigure.width != m_width) ||
-              (event.xconfigure.height != m_height)) {
-            m_width=event.xconfigure.width;
-            m_height=event.xconfigure.height;
-            XResizeWindow(m_pimpl->dpy, m_pimpl->win, m_width, m_height);
-            dimension(m_width, m_height);
-          }
-          if ((event.xconfigure.send_event) &&
-              ((event.xconfigure.x != m_xoffset) ||
-               (event.xconfigure.y != m_yoffset))) {
-            m_xoffset=event.xconfigure.x;
-            m_yoffset=event.xconfigure.y;
-            position(m_xoffset, m_yoffset);
-          }
-          break;
-        default:
-          // post("event %d", event.type);
-          break;
-        }
+                           &event)) {
+    switch (event.type) {
+    case ButtonPress:
+      button(devID, eb->button-1, 1);
+      motion(devID, eb->x, eb->y);
+      break;
+    case ButtonRelease:
+      button(devID, eb->button-1, 0);
+      motion(devID, eb->x, eb->y);
+      break;
+    case MotionNotify:
+      motion(devID, eb->x, eb->y);
+      if(!m_pimpl->have_border) {
+        int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent,
+                               CurrentTime);
+        err=0;
+      }
+      break;
+    case KeyPress:
+      key(devID, m_pimpl->key2string(kb), kb->keycode, 1);
+      break;
+    case KeyRelease:
+      key(devID, m_pimpl->key2string(kb), kb->keycode, 0);
+      break;
+    case ConfigureNotify:
+      if ((event.xconfigure.width != m_width) ||
+          (event.xconfigure.height != m_height)) {
+        m_width=event.xconfigure.width;
+        m_height=event.xconfigure.height;
+        XResizeWindow(m_pimpl->dpy, m_pimpl->win, m_width, m_height);
+        dimension(m_width, m_height);
+      }
+      if ((event.xconfigure.send_event) &&
+          ((event.xconfigure.x != m_xoffset) ||
+           (event.xconfigure.y != m_yoffset))) {
+        m_xoffset=event.xconfigure.x;
+        m_yoffset=event.xconfigure.y;
+        position(m_xoffset, m_yoffset);
+      }
+      break;
+    default:
+      // post("event %d", event.type);
+      break;
     }
+  }
 
   if (XCheckTypedEvent(m_pimpl->dpy,  ClientMessage, &event)) {
     info("window", "destroy");
@@ -795,7 +858,8 @@ void gemglxwindow::dispatch(void) {
 void gemglxwindow :: bufferMess(int buf)
 {
   switch(buf) {
-  case 1: case 2:
+  case 1:
+  case 2:
     m_buffer=buf;
     break;
   default:
@@ -808,7 +872,7 @@ void gemglxwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: titleMess(std::string s)
+void gemglxwindow :: titleMess(const std::string&s)
 {
   m_title=s;
   if(m_pimpl->dpy && m_pimpl->win) {
@@ -822,14 +886,15 @@ void gemglxwindow :: titleMess(std::string s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglxwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglxwindow :: dimensionsMess(unsigned int width,
+                                    unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1) {
     error ("height must be greater than 0");
     return;
   }
@@ -851,25 +916,27 @@ bool gemglxwindow :: create(void)
    */
   //~#warning context-sharing disabled
   bool context_sharing=true;
-  if(!m_context && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
+  if(!m_context
+      && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
     gemglxwindow::PIMPL*sharedPimpl=&gemglxwindow::PIMPL::s_shared[m_display];
     if(!sharedPimpl->glxcontext) {
       try {
-	int x=0, y=0;
-	unsigned int w=1, h=1;
-	success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h, m_transparent);
+        int x=0, y=0;
+        unsigned int w=1, h=1;
+        success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h,
+                                    m_transparent);
       } catch (GemException&x) {
-	error("creation of shared glxcontext failed: %s", x.what());
-	verbose(0, "continuing at your own risk!");
+        error("creation of shared glxcontext failed: %s", x.what());
+        verbose(0, "continuing at your own risk!");
       }
       if(!sharedPimpl->gemcontext) {
-	try {
-	  sharedPimpl->gemcontext = createContext();
-	} catch (GemException&x) {
-	  sharedPimpl->gemcontext = NULL;
-	  error("creation of shared gem::context failed: %s", x.what());
-	}
+        try {
+          sharedPimpl->gemcontext = createContext();
+        } catch (GemException&x) {
+          sharedPimpl->gemcontext = NULL;
+          error("creation of shared gem::context failed: %s", x.what());
+        }
       }
     }
 
@@ -879,7 +946,6 @@ bool gemglxwindow :: create(void)
   }
 
   int modeNum=4;
-  int bestMode=0;
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo **modes;
 #endif
@@ -888,16 +954,21 @@ bool gemglxwindow :: create(void)
   char svalue[3];
   snprintf(svalue, 3, "%d", m_fsaa);
   svalue[2]=0;
-  if (m_fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
+  if (m_fsaa!=0) {
+    setenv("__GL_FSAA_MODE", svalue, 1);  // this works only for NVIDIA-cards
+  }
 
 
   try {
-    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border, m_xoffset, m_yoffset, m_width, m_height, m_transparent);
+    success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border,
+                            m_xoffset, m_yoffset, m_width, m_height, m_transparent);
   } catch (GemException&x) {
     x.report();
     success=false;
   }
-  if(!success)return false;
+  if(!success) {
+    return false;
+  }
 
   /* create a gem::context if we don't already have (a shared) one */
   if(!m_context) {
@@ -914,14 +985,15 @@ bool gemglxwindow :: create(void)
   //  XMapWindow(m_pimpl->dpy, m_pimpl->win);
   XEvent report;
   XIfEvent(m_pimpl->dpy, &report, WaitForNotify, (char*)m_pimpl->win);
-  if (glXIsDirect(m_pimpl->dpy, m_pimpl->glxcontext))
+  if (glXIsDirect(m_pimpl->dpy, m_pimpl->glxcontext)) {
     post("Direct Rendering enabled!");
+  }
 
   cursorMess(m_cursor);
   titleMess(m_title);
   return createGemWindow();
 }
-void gemglxwindow :: createMess(std::string display)
+void gemglxwindow :: createMess(const std::string&display)
 {
   if(m_pimpl->win) {
     error("window already made");
@@ -950,7 +1022,7 @@ void gemglxwindow :: destroy(void)
     int err=0;
 
 #ifdef HAVE_LIBXXF86VM
-    if (m_pimpl->fs){
+    if (m_pimpl->fs) {
       XF86VidModeSwitchToMode(m_pimpl->dpy, m_pimpl->screen, &m_pimpl->deskMode);
       XF86VidModeSetViewPort(m_pimpl->dpy, m_pimpl->screen, 0, 0);
       m_pimpl->fs=0;
@@ -958,7 +1030,8 @@ void gemglxwindow :: destroy(void)
 #endif
 
     /* patch by cesare marilungo to prevent the crash "on my laptop" */
-    glXMakeCurrent(m_pimpl->dpy, None, NULL); /* this crashes if no window is there! */
+    glXMakeCurrent(m_pimpl->dpy, None,
+                   NULL); /* this crashes if no window is there! */
     if (m_pimpl->glxcontext) {
       // this crashes sometimes on my laptop:
       glXDestroyContext(m_pimpl->dpy, m_pimpl->glxcontext);
@@ -967,19 +1040,31 @@ void gemglxwindow :: destroy(void)
     if (m_pimpl->win) {
       XUnmapWindow      (m_pimpl->dpy, m_pimpl->win);
       err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
+      if(err) {
+        verbose(1, "XDestroyWindow returned %d", err);
+      }
     }
 
-    if (m_pimpl->cmap)
+    if (m_pimpl->cmap) {
       err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
+      if(err) {
+        verbose(1, "XFreeColormap returned %d", err);
+      }
+    }
 
     XFlush( m_pimpl->dpy );
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
+    if(err) {
+      verbose(1, "XCloseDisplay returned %d", err);
+    }
   }
   m_pimpl->dpy = NULL;
   m_pimpl->win = 0;
   m_pimpl->cmap = 0;
   m_pimpl->glxcontext = NULL;
-  if(m_pimpl->delete_atom)m_pimpl->delete_atom=None; /* not very sophisticated destruction...*/
+  if(m_pimpl->delete_atom) {
+    m_pimpl->delete_atom=None;  /* not very sophisticated destruction...*/
+  }
 
   destroyGemWindow();
 }
@@ -1001,22 +1086,23 @@ void gemglxwindow :: destroyMess(void)
 void gemglxwindow :: cursorMess(bool state)
 {
   m_cursor=state;
-  if(!m_pimpl->dpy || !m_pimpl->win)
+  if(!m_pimpl->dpy || !m_pimpl->win) {
     return;
+  }
 
   if (!state) {
     static char data[1] = {0};
     XColor dummy;
 
     Pixmap blank = XCreateBitmapFromData(m_pimpl->dpy, m_pimpl->win,
-				  data, 1, 1);
+                                         data, 1, 1);
     Cursor cursor = XCreatePixmapCursor(m_pimpl->dpy, blank, blank,
-				 &dummy, &dummy, 0, 0);
+                                        &dummy, &dummy, 0, 0);
     XFreePixmap(m_pimpl->dpy, blank);
     XDefineCursor(m_pimpl->dpy, m_pimpl->win, cursor);
-  }
-  else
+  } else {
     XUndefineCursor(m_pimpl->dpy, m_pimpl->win);
+  }
 }
 
 /////////////////////////////////////////////////////////

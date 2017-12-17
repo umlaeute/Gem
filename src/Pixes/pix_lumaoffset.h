@@ -30,45 +30,45 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_lumaoffset : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_lumaoffset, GemPixObj);
+  CPPEXTERN_HEADER(pix_lumaoffset, GemPixObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_lumaoffset();
+  //////////
+  // Constructor
+  pix_lumaoffset();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_lumaoffset();
+  //////////
+  // Destructor
+  virtual ~pix_lumaoffset();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void	processYUVImage(imageStruct &image);
-	virtual void	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
 
-	imageStruct	myImage;
-	int		init;
+  imageStruct     myImage;
+  int             init;
 
-	float	m_OffsetScale;
-	float	m_LineGap;
-	bool	m_DoFilledLines;
-	bool	m_DoSmoothFill;
+  float   m_OffsetScale;
+  float   m_LineGap;
+  bool    m_DoFilledLines;
+  bool    m_DoSmoothFill;
 
-	SPete_MemHandle 	hPreviousLineHeights;
-	SPete_MemHandle 	hPreviousLineHeights2;
-	int hPreviousLineHeights_size;
-    private:
+  SPete_MemHandle         hPreviousLineHeights;
+  SPete_MemHandle         hPreviousLineHeights2;
+  int hPreviousLineHeights_size;
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	offsetCallback(void *data, t_float m_OffsetScale);
-	static void 	gapCallback(void *data, t_float m_LineGap);
-	static void 	fillCallback(void *data, t_float m_DoFilledLines);
-	static void 	smoothCallback(void *data, t_float m_DoSmoothFill);
+  //////////
+  // Static member functions
+  static void     offsetCallback(void *data, t_float m_OffsetScale);
+  static void     gapCallback(void *data, t_float m_LineGap);
+  static void     fillCallback(void *data, t_float m_DoFilledLines);
+  static void     smoothCallback(void *data, t_float m_DoSmoothFill);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -156,8 +156,8 @@ void pix_invert :: processYUVImage(imageStruct &image)
 
   //format is U Y V Y
 
-  for (h=0; h<image.ysize; h++){
-    for(w=0; w<image.xsize/2; w++){
+  for (h=0; h<image.ysize; h++) {
+    for(w=0; w<image.xsize/2; w++) {
       image.data[src] = 255 - image.data[src];
       image.data[src+1] = 255 - image.data[src+1];
       image.data[src+2] = 255 - image.data[src+2];
@@ -174,38 +174,38 @@ void pix_invert :: processYUVImage(imageStruct &image)
 #ifdef __VEC__
 void pix_invert :: processYUVAltivec(imageStruct &image)
 {
-int h,w,width;
-   width = image.xsize/8;
+  int h,w,width;
+  width = image.xsize/8;
 
-    union{
-        unsigned char c[16];
-        vector unsigned char v;
-    }charBuffer;
+  union {
+    unsigned char c[16];
+    vector unsigned char v;
+  } charBuffer;
 
-    vector unsigned char offset;
-    vector unsigned char *inData = (vector unsigned char*) image.data;
+  vector unsigned char offset;
+  vector unsigned char *inData = (vector unsigned char*) image.data;
 
-    charBuffer.c[0] = 255;
-    offset = charBuffer.v;
-    offset = (vector unsigned char) vec_splat(offset,0);
-    #ifndef PPC970
-    UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( inData, prefetchSize, 0 );
-       #endif
-    for ( h=0; h<image.ysize; h++){
-        for (w=0; w<width; w++)
-        {
-        #ifndef PPC970
-	vec_dst( inData, prefetchSize, 0 );
-        #endif
-        inData[0]=vec_subs(offset,inData[0]);
-        inData++;
+  charBuffer.c[0] = 255;
+  offset = charBuffer.v;
+  offset = (vector unsigned char) vec_splat(offset,0);
+#ifndef PPC970
+  UInt32                      prefetchSize = GetPrefetchConstant( 16, 1,
+      256 );
+  vec_dst( inData, prefetchSize, 0 );
+#endif
+  for ( h=0; h<image.ysize; h++) {
+    for (w=0; w<width; w++) {
+#ifndef PPC970
+      vec_dst( inData, prefetchSize, 0 );
+#endif
+      inData[0]=vec_subs(offset,inData[0]);
+      inData++;
 
-         }
-         #ifndef PPC970
-        vec_dss( 0 );
-        #endif
-    }  /*end of working altivec function */
+    }
+#ifndef PPC970
+    vec_dss( 0 );
+#endif
+  }  /*end of working altivec function */
 }
 #endif // ALTIVEC
 

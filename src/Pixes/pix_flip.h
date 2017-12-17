@@ -38,45 +38,45 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_flip : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_flip, GemPixObj);
+  CPPEXTERN_HEADER(pix_flip, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_flip();
+  //////////
+  // Constructor
+  pix_flip();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_flip();
+  //////////
+  // Destructor
+  virtual ~pix_flip();
 
-    	//////////
-    	// Do the processing
-       	virtual void 	processRGBAImage(imageStruct &image);
- 	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 
-    	//////////
-    	enum FlipType	{ HORIZONTAL, VERTICAL, BOTH, NONE };
+  //////////
+  enum FlipType   { HORIZONTAL, VERTICAL, BOTH, NONE };
 
-    	//////////
-    	void	    	flipMess(FlipType type);
+  //////////
+  void            flipMess(FlipType type);
 
-    	//////////
-    	// The flip type
-    	FlipType 	    m_flip;
+  //////////
+  // The flip type
+  FlipType            m_flip;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	horMessCallback(void *data);
-    	static void 	vertMessCallback(void *data);
-    	static void 	bothMessCallback(void *data);
-    	static void 	noneMessCallback(void *data);
-	static void     flipMessCallback(void *data, t_symbol*s);
+  //////////
+  // Static member functions
+  static void     horMessCallback(void *data);
+  static void     vertMessCallback(void *data);
+  static void     bothMessCallback(void *data);
+  static void     noneMessCallback(void *data);
+  static void     flipMessCallback(void *data, t_symbol*s);
 };
 
-#endif	// for header file
+#endif  // for header file

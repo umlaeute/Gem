@@ -32,46 +32,46 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_refraction : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_refraction, GemPixObj);
+  CPPEXTERN_HEADER(pix_refraction, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_refraction();
+  //////////
+  // Constructor
+  pix_refraction();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_refraction();
+  //////////
+  // Destructor
+  virtual ~pix_refraction();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-        virtual void	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 
-	imageStruct	myImage;
-	int		nHeight;
-	int		nWidth;
-	int		init;
+  imageStruct     myImage;
+  int             nHeight;
+  int             nWidth;
+  int             init;
 
-	U32*		pSource;
-	U32*		pOutput;
+  U32*            pSource;
+  U32*            pOutput;
 
-	float 		m_Refraction;
-	float 		m_CellWidth;
-	float 		m_CellHeight;
-	float 		m_DoAllowMagnification;
+  float           m_Refraction;
+  float           m_CellWidth;
+  float           m_CellHeight;
+  float           m_DoAllowMagnification;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	refractCallback(void *data, t_float m_Refraction);
-	static void 	widthCallback(void *data, t_float m_CellWidth);
-	static void 	heightCallback(void *data, t_float m_CellHeight);
-	static void 	magCallback(void *data, t_float m_DoAllowMagnification);
+  //////////
+  // Static member functions
+  static void     refractCallback(void *data, t_float m_Refraction);
+  static void     widthCallback(void *data, t_float m_CellWidth);
+  static void     heightCallback(void *data, t_float m_CellHeight);
+  static void     magCallback(void *data, t_float m_DoAllowMagnification);
 };
 
-#endif	// for header file
+#endif  // for header file

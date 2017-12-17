@@ -41,49 +41,49 @@ pix_movement
   KEYWORDS
   pix
 
-	DESCRIPTION
+        DESCRIPTION
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movement : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_movement, GemPixObj);
+  CPPEXTERN_HEADER(pix_movement, GemPixObj);
 
 public:
 
-	//////////
-	// Constructor
-	pix_movement(t_floatarg f);
+  //////////
+  // Constructor
+  pix_movement(t_floatarg f);
 
 protected:
 
-	//////////
-	// Destructor
-	virtual ~pix_movement();
+  //////////
+  // Destructor
+  virtual ~pix_movement();
 
-	//////////
-	// Do the processing
-	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void 	processYUVImage(imageStruct &image);
-	virtual void 	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
 #ifdef __MMX__
-        virtual void 	processGrayMMX(imageStruct &image);
+  virtual void    processGrayMMX(imageStruct &image);
 #endif
 
 #ifdef __VEC__
-        virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
 
-	//////////
-	// the last image (grey-scale)
-	imageStruct    buffer;
-	imageStruct    buffer2; // (the difference image for greyscales)
-	//////////
-	// the movement-mode
-	unsigned char  threshold;
+  //////////
+  // the last image (grey-scale)
+  imageStruct    buffer;
+  imageStruct    buffer2; // (the difference image for greyscales)
+  //////////
+  // the movement-mode
+  unsigned char  threshold;
 
-	//////////
-	// the methods
-	static void threshMessCallback(void *data, t_float fthresh);
+  //////////
+  // the methods
+  static void threshMessCallback(void *data, t_float fthresh);
 };
 
-#endif	// for header file
+#endif  // for header file

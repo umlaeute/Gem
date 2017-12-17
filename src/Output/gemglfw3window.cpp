@@ -70,16 +70,20 @@ gemglfw3window :: ~gemglfw3window()
 }
 
 
-bool gemglfw3window :: makeCurrent(void){
-  if(!m_window)
+bool gemglfw3window :: makeCurrent(void)
+{
+  if(!m_window) {
     return false;
+  }
   glfwMakeContextCurrent(m_window);
   return true;
 }
 
-void gemglfw3window :: swapBuffers(void) {
-  if(makeCurrent()) // FIXME: is this needed?
+void gemglfw3window :: swapBuffers(void)
+{
+  if(makeCurrent()) { // FIXME: is this needed?
     glfwSwapBuffers(m_window);
+  }
 }
 
 void gemglfw3window :: doRender()
@@ -89,7 +93,9 @@ void gemglfw3window :: doRender()
 }
 void gemglfw3window :: dispatch()
 {
-  if(!m_window)return;
+  if(!m_window) {
+    return;
+  }
   glfwPollEvents();
 }
 
@@ -101,7 +107,8 @@ void gemglfw3window :: dispatch()
 void gemglfw3window :: bufferMess(int buf)
 {
   switch(buf) {
-  case 1: case 2:
+  case 1:
+  case 2:
     m_buffer=buf;
     if(m_window) {
       post("changing buffer type will only effect newly created windows");
@@ -117,10 +124,10 @@ void gemglfw3window :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglfw3window :: titleMess(std::string s)
+void gemglfw3window :: titleMess(const std::string&s)
 {
   m_title = s;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glfwSetWindowTitle(m_window, m_title.c_str());
   }
 }
@@ -128,20 +135,21 @@ void gemglfw3window :: titleMess(std::string s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglfw3window :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglfw3window :: dimensionsMess(unsigned int width,
+                                      unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1) {
     error ("height must be greater than 0");
     return;
   }
   m_width = width;
   m_height = height;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glfwSetWindowSize(m_window, m_width, m_height);
   }
 }
@@ -163,7 +171,7 @@ void gemglfw3window :: offsetMess(int x, int y)
 {
   m_xoffset = x;
   m_yoffset = y;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glfwSetWindowPos(m_window, x, y);
   }
 }
@@ -177,17 +185,20 @@ void gemglfw3window :: glprofileMess(int major, int minor)
   if(major>0) {
     m_profile_major=major;
     m_profile_minor=0;
-    if(minor>0)
+    if(minor>0) {
       m_profile_minor=minor;
+    }
   } else {
     m_profile_major=0;
     m_profile_minor=0;
   }
 }
 
-void gemglfw3window :: glesMess(bool gles) {
-  if(m_window && gles != m_gles)
+void gemglfw3window :: glesMess(bool gles)
+{
+  if(m_window && gles != m_gles) {
     post("openGL-ES mode will only effect newly created windows");
+  }
   m_gles=gles;
 }
 
@@ -209,10 +220,11 @@ bool gemglfw3window :: create(void)
   if(m_fullscreen) {
     int count;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
-    if(m_fullscreen<0 || m_fullscreen >= count)
+    if(m_fullscreen<0 || m_fullscreen >= count) {
       monitor=glfwGetPrimaryMonitor();
-    else
+    } else {
       monitor=monitors[m_fullscreen];
+    }
   }
 
   glfwWindowHint(GLFW_SAMPLES, m_fsaa);
@@ -228,16 +240,16 @@ bool gemglfw3window :: create(void)
   }
 
   m_window=glfwCreateWindow(m_width, m_height,
-			    m_title.c_str(),
-			    monitor,
-			    NULL);
+                            m_title.c_str(),
+                            monitor,
+                            NULL);
 
-  if (!m_window){
+  if (!m_window) {
     error("glfw couldn't create window");
     return false;
   }
   s_windowmap[m_window]=this;
-  if(!makeCurrent()){
+  if(!makeCurrent()) {
     error("couldn't switch to glfw3-context");
   }
 
@@ -263,7 +275,8 @@ bool gemglfw3window :: create(void)
   dispatch();
   return (0!=m_window);
 }
-void gemglfw3window :: createMess(std::string) {
+void gemglfw3window :: createMess(const std::string&)
+{
   create();
 }
 
@@ -298,22 +311,28 @@ void gemglfw3window :: cursorMess(bool setting)
 {
   m_cursor=setting;
   if(m_window) {
-    glfwSetInputMode(m_window, GLFW_CURSOR, m_cursor?GLFW_CURSOR_NORMAL:GLFW_CURSOR_HIDDEN); /* GLFW_CURSOR_DISABLED */
+    glfwSetInputMode(m_window, GLFW_CURSOR,
+                     m_cursor?GLFW_CURSOR_NORMAL:GLFW_CURSOR_HIDDEN); /* GLFW_CURSOR_DISABLED */
   }
 }
 
 
-void gemglfw3window::windowsizeCallback(int w, int h) {
+void gemglfw3window::windowsizeCallback(int w, int h)
+{
   dimension(w, h);
 }
-int gemglfw3window::windowcloseCallback() {
+int gemglfw3window::windowcloseCallback()
+{
   info("window", "destroy");
   return 0;
 }
-void gemglfw3window::windowrefreshCallback() {
+void gemglfw3window::windowrefreshCallback()
+{
   info("window", "exposed");
 }
-void gemglfw3window::keyCallback(int key, int scancode, int action, int mods) {
+void gemglfw3window::keyCallback(int key, int scancode, int action,
+                                 int mods)
+{
   t_atom ap[3];
   SETSYMBOL(ap+0, gensym("key"));
   SETFLOAT (ap+1, key);
@@ -321,7 +340,8 @@ void gemglfw3window::keyCallback(int key, int scancode, int action, int mods) {
 
   info(gensym("keyboard"), 3, ap);
 }
-void gemglfw3window::charCallback(unsigned int character) {
+void gemglfw3window::charCallback(unsigned int character)
+{
   t_atom ap[3];
   std::string sid;
   int action=-1; // ????
@@ -338,11 +358,13 @@ void gemglfw3window::charCallback(unsigned int character) {
 
   info(gensym("keyboard"), 3, ap);
 }
-void gemglfw3window::mousebuttonCallback(int button, int action, int mods) {
+void gemglfw3window::mousebuttonCallback(int button, int action, int mods)
+{
   int devID=0;
   gemglfw3window:: button(devID, button, action);
 }
-void gemglfw3window::mouseposCallback(float x, float y) {
+void gemglfw3window::mouseposCallback(float x, float y)
+{
   int devID=0;
   motion(devID, x, y);
 }
@@ -353,18 +375,23 @@ void gemglfw3window::mouseposCallback(float x, float y) {
 #define WHEELRIGHT 6
 
 
-void gemglfw3window::scrollCallback(float x, float y) {
+void gemglfw3window::scrollCallback(float x, float y)
+{
   int i, dir;
   int devID=0;
   dir=(x>0)?WHEELUP:WHEELDOWN;
-  if(x<0)x=-x;
+  if(x<0) {
+    x=-x;
+  }
   for(i=0; i<x; i++) {
     button(devID, dir, 1);
     button(devID, dir, 0);
   }
 
   dir=(y>0)?WHEELRIGHT:WHEELLEFT;
-  if(y<0)y=-y;
+  if(y<0) {
+    y=-y;
+  }
   for(i=0; i<y; i++) {
     button(devID, dir, 1);
     button(devID, dir, 0);
@@ -378,34 +405,44 @@ void gemglfw3window::scrollCallback(float x, float y) {
 void gemglfw3window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG2(classPtr, "glprofile", glprofileMess, int, int);
-  CPPEXTERN_MSG1(classPtr, "gles"     , glesMess, bool);
+  CPPEXTERN_MSG1(classPtr, "gles", glesMess, bool);
 }
 
 #ifdef CALLBACK
 # undef CALLBACK
 #endif
 #define CALLBACK(x) gemglfw3window*g3w=s_windowmap[win]; if (!g3w){::error("couldn't find [gemglfw3window] for window#%p", win); return;} else g3w->x
-void gemglfw3window::windowsizeCb(GLFWwindow *win,int w, int h) {
+void gemglfw3window::windowsizeCb(GLFWwindow *win,int w, int h)
+{
   CALLBACK(windowsizeCallback(w, h));
 }
-void gemglfw3window::windowcloseCb(GLFWwindow *win) {
+void gemglfw3window::windowcloseCb(GLFWwindow *win)
+{
   CALLBACK(windowcloseCallback());
 }
-void gemglfw3window::windowrefreshCb(GLFWwindow *win) {
+void gemglfw3window::windowrefreshCb(GLFWwindow *win)
+{
   CALLBACK(windowrefreshCallback());
 }
-void gemglfw3window::keyCb(GLFWwindow *win, int key, int scancode, int action, int mods) {
+void gemglfw3window::keyCb(GLFWwindow *win, int key, int scancode,
+                           int action, int mods)
+{
   CALLBACK(keyCallback(key, scancode, action, mods));
 }
-void gemglfw3window::charCb(GLFWwindow *win, unsigned int character) {
+void gemglfw3window::charCb(GLFWwindow *win, unsigned int character)
+{
   CALLBACK(charCallback(character));
 }
-void gemglfw3window::mousebuttonCb(GLFWwindow *win, int button, int action, int mods) {
+void gemglfw3window::mousebuttonCb(GLFWwindow *win, int button, int action,
+                                   int mods)
+{
   CALLBACK(mousebuttonCallback(button, action, mods));
 }
-void gemglfw3window::mouseposCb(GLFWwindow *win, double x, double y) {
+void gemglfw3window::mouseposCb(GLFWwindow *win, double x, double y)
+{
   CALLBACK(mouseposCallback(x, y));
 }
-void gemglfw3window::scrollCb(GLFWwindow *win, double x, double y) {
+void gemglfw3window::scrollCb(GLFWwindow *win, double x, double y)
+{
   CALLBACK(scrollCallback(x, y));
 }

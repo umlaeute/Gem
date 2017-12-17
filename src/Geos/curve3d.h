@@ -36,13 +36,13 @@ class GEM_EXTERN curve3d : public GemShape
 {
   CPPEXTERN_HEADER(curve3d, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   curve3d(t_floatarg size_X, t_floatarg size_Y);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -50,7 +50,7 @@ class GEM_EXTERN curve3d : public GemShape
 
   //////////
   // Do the renderShapeing
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
 
   typedef struct {
@@ -65,12 +65,13 @@ class GEM_EXTERN curve3d : public GemShape
   void gridMess(int gridX, int gridY);
   void setMess(int X,int Y,float posX, float posY,float posZ);
 
-  enum C3dDrawType{LINE, FILL, POINT,
-                   LINE1, LINE2, LINE3, LINE4,
-                   CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2};
+  enum C3dDrawType {LINE, FILL, POINT,
+                    LINE1, LINE2, LINE3, LINE4,
+                    CONTROL_FILL, CONTROL_POINT, CONTROL_LINE, CONTROL_LINE1, CONTROL_LINE2
+                   };
 
 
-  t_float3		*m_posXYZ; // attention, valeur critique
+  t_float3              *m_posXYZ; // attention, valeur critique
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -33,39 +33,39 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN translateXYZ : public GemBase
 {
-    CPPEXTERN_HEADER(translateXYZ, GemBase);
+  CPPEXTERN_HEADER(translateXYZ, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	translateXYZ(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  translateXYZ(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~translateXYZ();
+  //////////
+  // Destructor
+  virtual ~translateXYZ();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The translation vector (x, y, z)
-    	float	    	m_vector[3];
+  //////////
+  // The translation vector (x, y, z)
+  float           m_vector[3];
 
-    	//////////
-    	// X value changed
-    	void	    	xMess(float val);
+  //////////
+  // X value changed
+  void            xMess(float val);
 
-    	//////////
-    	// Y value changed
-    	void	    	yMess(float val);
+  //////////
+  // Y value changed
+  void            yMess(float val);
 
-    	//////////
-    	// Z value changed
-    	void	    	zMess(float val);
+  //////////
+  // Z value changed
+  void            zMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

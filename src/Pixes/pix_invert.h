@@ -33,34 +33,34 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_invert : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_invert, GemPixObj);
+  CPPEXTERN_HEADER(pix_invert, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_invert();
+  //////////
+  // Constructor
+  pix_invert();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_invert();
+  //////////
+  // Destructor
+  virtual ~pix_invert();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	virtual void 	processGrayImage(imageStruct &image);
-        virtual void 	processYUVImage (imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage (imageStruct &image);
 
 #ifdef __MMX__
-        virtual void 	processRGBAMMX(imageStruct &image);
-        virtual void 	processYUVMMX (imageStruct &image);
-        virtual void 	processGrayMMX(imageStruct &image);
+  virtual void    processRGBAMMX(imageStruct &image);
+  virtual void    processYUVMMX (imageStruct &image);
+  virtual void    processGrayMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-        virtual void 	processYUVAltivec  (imageStruct &image);
+  virtual void    processYUVAltivec  (imageStruct &image);
 #endif
 };
 
-#endif	// for header file
+#endif  // for header file

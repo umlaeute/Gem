@@ -33,29 +33,29 @@ class GEM_EXTERN part_sink : public partlib_base
 {
   CPPEXTERN_HEADER(part_sink, partlib_base);
 
-    public:
+public:
 
   //////////
   // Constructor
   part_sink(int argc, t_atom*argv);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
+  virtual void  renderParticles(GemState *state);
 
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~part_sink(void);
 
   //////////
-  void			killMess(int num);
+  void                  killMess(int num);
   void      domainMess(const std::string&s);
-  void			vectorMess(t_symbol*,int argc, t_atom*argv);
+  void                  vectorMess(t_symbol*,int argc, t_atom*argv);
 
-  bool			m_kill;
+  bool                  m_kill;
   PDomainEnum           m_domain;
-  float			m_arg[9];
+  float                 m_arg[9];
 };
 
-#endif	// for header file
+#endif  // for header file

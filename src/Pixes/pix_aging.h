@@ -34,66 +34,65 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-typedef struct _scratch
-{
-	int life;
-	int x;
-	int dx;
-	int init;
+typedef struct _scratch {
+  int life;
+  int x;
+  int dx;
+  int init;
 } t_scratch;
 
 class GEM_EXTERN pix_aging : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_aging, GemPixObj);
+  CPPEXTERN_HEADER(pix_aging, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_aging();
+  //////////
+  // Constructor
+  pix_aging();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_aging();
+  //////////
+  // Destructor
+  virtual ~pix_aging();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processImage(imageStruct &image);
 
-	void scratchMess(int scratchlines);
+  void scratchMess(int scratchlines);
 
-	////////
-	// which FX do we want ?
-	int m_coloraging;
-	int m_scratching;
-	int m_pits;
-	int m_dusts;
+  ////////
+  // which FX do we want ?
+  int m_coloraging;
+  int m_scratching;
+  int m_pits;
+  int m_dusts;
 
 
-	////////
-	// scratching
-	int m_scratchlines;
-	t_scratch *m_scratch;
+  ////////
+  // scratching
+  int m_scratchlines;
+  t_scratch *m_scratch;
 
-	////////
-	// pits
-	int m_pitinterval;
-	int m_areascale;
+  ////////
+  // pits
+  int m_pitinterval;
+  int m_areascale;
 
-	////////
-	// dust
-	int m_dustinterval;
+  ////////
+  // dust
+  int m_dustinterval;
 
- private:
+private:
 
-	//////////
-	// Static member callbacks
-	static void colorMessCallback(void *dump, t_float state);
-	static void scratchMessCallback(void *dump, t_float state);
-	static void pitsMessCallback(void *dump, t_float state);
-	static void dustMessCallback(void *dump, t_float state);
+  //////////
+  // Static member callbacks
+  static void colorMessCallback(void *dump, t_float state);
+  static void scratchMessCallback(void *dump, t_float state);
+  static void pitsMessCallback(void *dump, t_float state);
+  static void dustMessCallback(void *dump, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -39,63 +39,64 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_offset : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_offset, GemPixObj);
+  CPPEXTERN_HEADER(pix_offset, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_offset();
+  //////////
+  // Constructor
+  pix_offset();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_offset();
+  //////////
+  // Destructor
+  virtual ~pix_offset();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 #ifdef __MMX__
-	//////////
-	// MMX
-    	virtual void 	processRGBAMMX(imageStruct &image);
-     	virtual void 	processYUVMMX(imageStruct &image);
-   	virtual void 	processGrayMMX(imageStruct &image);
+  //////////
+  // MMX
+  virtual void    processRGBAMMX(imageStruct &image);
+  virtual void    processYUVMMX(imageStruct &image);
+  virtual void    processGrayMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-	//////////
-    	// altivec
-    	virtual void 	processYUVAltivec(imageStruct &image);
+  //////////
+  // altivec
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
 
-    	//////////
-    	// Set the new offset
-    	void	    	vecOffsetMess(int argc, t_atom *argv);
+  //////////
+  // Set the new offset
+  void            vecOffsetMess(int argc, t_atom *argv);
 
-    	//////////
-    	// Set the new offset
-    	void	    	floatOffsetMess(float foffset);
+  //////////
+  // Set the new offset
+  void            floatOffsetMess(float foffset);
 
-    	//////////
-    	// The new offset
-    	unsigned char	m_offset[4];
-        short Y,U,V;
+  //////////
+  // The new offset
+  unsigned char   m_offset[4];
+  short Y,U,V;
 
-   	//////////
-    	// whether we want saturated logic
-    	void	    	saturateMess(int sat);
-	bool  m_saturate;
+  //////////
+  // whether we want saturated logic
+  void            saturateMess(int sat);
+  bool  m_saturate;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	vecOffsetMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatOffsetMessCallback(void *data, t_float offset);
-    	static void 	saturateMessCallback(void *data, t_float saturate);
+  //////////
+  // Static member functions
+  static void     vecOffsetMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv);
+  static void     floatOffsetMessCallback(void *data, t_float offset);
+  static void     saturateMessCallback(void *data, t_float saturate);
 };
 
-#endif	// for header file
+#endif  // for header file

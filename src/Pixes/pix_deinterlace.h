@@ -28,48 +28,48 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_deinterlace : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_deinterlace, GemPixObj);
+  CPPEXTERN_HEADER(pix_deinterlace, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_deinterlace();
+  //////////
+  // Constructor
+  pix_deinterlace();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_deinterlace();
+  //////////
+  // Destructor
+  virtual ~pix_deinterlace();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-		virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 #ifdef __MMX__
- //       virtual void 	processRGBAMMX(imageStruct &image);
- //       virtual void 	processYUVMMX(imageStruct &image);
+//       virtual void  processRGBAMMX(imageStruct &image);
+//       virtual void  processYUVMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-    //    virtual void 	processRGBAAltivec(imageStruct &image);
-        virtual void 	processYUVAltivec(imageStruct &image);
+  //    virtual void  processRGBAAltivec(imageStruct &image);
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
 
-    	//////////
-    	// Do the processing
-        virtual void 	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processGrayImage(imageStruct &image);
 
-		int	m_mode;
-		int	m_adaptive;
+  int     m_mode;
+  int     m_adaptive;
 
-		imageStruct		m_savedImage;
+  imageStruct             m_savedImage;
 
-	private:
+private:
 
-		static void 	modeMessCallback(void *data, t_float contrast);
-		static void 	adaptiveMessCallback(void *data, t_float contrast);
+  static void     modeMessCallback(void *data, t_float contrast);
+  static void     adaptiveMessCallback(void *data, t_float contrast);
 };
 
 
 
-#endif	// for header file
+#endif  // for header file

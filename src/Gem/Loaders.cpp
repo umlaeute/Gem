@@ -44,29 +44,46 @@ extern "C" {
   typedef void (*loader_registrar_t)(gem_loader_t loader);
 }
 
-static int gem_loader(const t_canvas *canvas, const char *classname, const char* path) {
+static int gem_loader(const t_canvas *canvas, const char *classname,
+                      const char* path)
+{
   if(path) {
-    for (std::vector<gem_loader_t>::iterator it = loaders_path.begin() ; it != loaders_path.end(); ++it)
-      if((*it)(canvas, classname, path))return true;
+    for (std::vector<gem_loader_t>::iterator it = loaders_path.begin() ;
+         it != loaders_path.end(); ++it)
+      if((*it)(canvas, classname, path)) {
+        return true;
+      }
   } else {
-    for (std::vector<gem_loader_t>::iterator it = loaders_nopath.begin() ; it != loaders_nopath.end(); ++it)
-      if((*it)(canvas, classname, path))return true;
+    for (std::vector<gem_loader_t>::iterator it = loaders_nopath.begin() ;
+         it != loaders_nopath.end(); ++it)
+      if((*it)(canvas, classname, path)) {
+        return true;
+      }
   }
   return false;
 }
-static int gem_loader_legacy(const t_canvas *canvas, const char *classname) {
-  for (std::vector<gem_loader_t>::iterator it = loaders.begin() ; it != loaders.end(); ++it)
-    if((*it)(canvas, classname, 0))return true;
+static int gem_loader_legacy(const t_canvas *canvas, const char *classname)
+{
+  for (std::vector<gem_loader_t>::iterator it = loaders.begin() ;
+       it != loaders.end(); ++it)
+    if((*it)(canvas, classname, 0)) {
+      return true;
+    }
   return false;
 }
 
 static loader_registrar_t rte_register_loader = NULL;
 
-static bool check_rte_loader(void) {
-  if(rte_register_loader)return true;
+static bool check_rte_loader(void)
+{
+  if(rte_register_loader) {
+    return true;
+  }
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
-  if(rte)
-    rte_register_loader=(loader_registrar_t)rte->getFunction("sys_register_loader");
+  if(rte) {
+    rte_register_loader=(loader_registrar_t)
+                        rte->getFunction("sys_register_loader");
+  }
   if(rte_register_loader) {
     unsigned int major=0, minor=0;
     rte->getVersion(major, minor);
@@ -79,13 +96,15 @@ static bool check_rte_loader(void) {
   return(NULL!=rte_register_loader);
 }
 
-void gem_register_loader(gem_loader_t loader) {
+void gem_register_loader(gem_loader_t loader)
+{
   if(check_rte_loader()) {
     loaders_path.push_back(loader);
     loaders.push_back(loader);
   }
 }
-void gem_register_loader_nopath(gem_loader_t loader) {
+void gem_register_loader_nopath(gem_loader_t loader)
+{
   if(check_rte_loader()) {
     loaders_nopath.push_back(loader);
     loaders.push_back(loader);

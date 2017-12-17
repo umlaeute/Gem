@@ -62,7 +62,9 @@ filmQT4L :: ~filmQT4L()
 
 void filmQT4L :: close(void)
 {
-  if(m_quickfile)quicktime_close(m_quickfile);
+  if(m_quickfile) {
+    quicktime_close(m_quickfile);
+  }
   m_quickfile=0;
 }
 
@@ -70,7 +72,8 @@ void filmQT4L :: close(void)
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProps)
+bool filmQT4L :: open(const std::string&filename,
+                      const gem::Properties&wantProps)
 {
   int wantedFormat=GL_RGBA;
   double d;
@@ -78,7 +81,7 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
   if(wantProps.get("format", d)) {
     format=d;
   }
-  switch(format){
+  switch(format) {
   default:
     break;
   case GL_RGBA:
@@ -89,9 +92,9 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
   }
 
   char*cfilename=const_cast<char*>(filename.c_str());
-  if (quicktime_check_sig(cfilename)){ /* ok, this is quicktime */
-    if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))){
-//      post("filmQT4L: Unable to open file: %s", filename.c_str());
+  if (quicktime_check_sig(cfilename)) { /* ok, this is quicktime */
+    if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))) {
+      verbose(0, "[GEM:filmQT4L] Unable to open file: %s", filename.c_str());
       return false;
     }
     m_curFrame = -1;
@@ -105,9 +108,9 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
     // Get the video dimensions
     m_image.image.xsize = quicktime_video_width (m_quickfile, m_curTrack);
     m_image.image.ysize = quicktime_video_height(m_quickfile, m_curTrack);
-    if (!quicktime_supported_video(m_quickfile, m_curTrack)){
-      //    char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
-      //    post("filmQT4L: unsupported CODEC '%s'!", codec);
+    if (!quicktime_supported_video(m_quickfile, m_curTrack)) {
+      char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
+      verbose(0, "[GEM:filmQT4L] unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
       m_quickfile=0;
       return false;
@@ -125,10 +128,10 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
     m_qtimage.reallocate();
 
     m_newfilm = true;
-   return true;
+    return true;
   }
   goto unsupported;
- unsupported:
+unsupported:
   close();
   return false;
 }
@@ -137,13 +140,13 @@ bool filmQT4L :: open(const std::string filename, const gem::Properties&wantProp
 // render
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmQT4L :: getFrame(){
+pixBlock* filmQT4L :: getFrame()
+{
   int i=m_image.image.ysize;
   if (m_lastFrame==m_curFrame &&
-      m_image.image.format==m_wantedFormat)
-  {
-	  m_image.newimage=0;
-	  return &m_image;
+      m_image.image.format==m_wantedFormat) {
+    m_image.newimage=0;
+    return &m_image;
   }
 
   m_image.image.setCsizeByFormat(m_wantedFormat);
@@ -151,33 +154,47 @@ pixBlock* filmQT4L :: getFrame(){
 
   pixBlock* pimage = 0;
   unsigned char **rows = new unsigned char*[m_image.image.ysize];
-  while(i--)rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*(m_qtimage.ysize-i-1);
+  while(i--) {
+    rows[i]=m_qtimage.data+m_qtimage.xsize*m_qtimage.csize*
+            (m_qtimage.ysize-i-1);
+  }
 
   m_lastFrame=m_curFrame;
 
   if (quicktime_decode_video(m_quickfile, rows, m_curTrack)) {
-    post("filmQT4L:: couldn't decode video !");
-  }else {
+    fprintf(stderr, "[GEM:filmQT4L] couldn't decode video!\n");
+  } else {
     m_image.image.convertFrom(&m_qtimage);
-    m_image.newimage=1; m_image.image.upsidedown=false;
+    m_image.newimage=1;
+    m_image.image.upsidedown=false;
     pimage = &m_image;
-    if(m_newfilm)m_image.newfilm=1;
-	m_newfilm=false;
+    if(m_newfilm) {
+      m_image.newfilm=1;
+    }
+    m_newfilm=false;
   }
   delete[] rows;
   return pimage;
 }
 
-film::errCode filmQT4L :: changeImage(int imgNum, int trackNum){
-  if(imgNum>m_numFrames || imgNum<0)return film::FAILURE;
-  if  (imgNum>0)m_curFrame=imgNum;
-  if(trackNum>0)m_curTrack=trackNum;
+film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
+{
+  if(imgNum>m_numFrames || imgNum<0) {
+    return film::FAILURE;
+  }
+  if  (imgNum>0) {
+    m_curFrame=imgNum;
+  }
+  if(trackNum>0) {
+    m_curTrack=trackNum;
+  }
 
   int i=-1;
 #ifdef HAVE_QUICKTIME_SEEK_VIDEO
-  lqt_seek_video  	(m_quickfile, m_curTrack, m_curFrame, m_curTrack);
+  lqt_seek_video        (m_quickfile, m_curTrack, m_curFrame, m_curTrack);
 #else
-  if ((i=quicktime_set_video_position(m_quickfile, m_curFrame, m_curTrack))){  }
+  if ((i=quicktime_set_video_position(m_quickfile, m_curFrame,
+                                      m_curTrack))) {  }
 #endif
   return film::SUCCESS;
 }
@@ -187,7 +204,8 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum){
 ///////////////////////////////
 // Properties
 bool filmQT4L::enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable) {
+                              gem::Properties&writeable)
+{
   readable.clear();
   writeable.clear();
 
@@ -204,14 +222,16 @@ bool filmQT4L::enumProperties(gem::Properties&readable,
   return false;
 }
 
-void filmQT4L::setProperties(gem::Properties&props) {
+void filmQT4L::setProperties(gem::Properties&props)
+{
   double d;
   if(props.get("colorspace", d)) {
     m_wantedFormat=d;
   }
 }
 
-void filmQT4L::getProperties(gem::Properties&props) {
+void filmQT4L::getProperties(gem::Properties&props)
+{
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
@@ -221,23 +241,28 @@ void filmQT4L::getProperties(gem::Properties&props) {
     props.erase(key);
     if("fps"==key) {
       d=m_fps;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("frames"==key) {
       d=m_numFrames;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("tracks"==key) {
       d=m_numTracks;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("width"==key) {
       d=m_image.image.xsize;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
     if("height"==key) {
       d=m_image.image.ysize;
-      value=d; props.set(key, value);
+      value=d;
+      props.set(key, value);
     }
   }
 }

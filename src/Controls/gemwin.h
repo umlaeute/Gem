@@ -57,7 +57,7 @@
   - # == 2 : turn on without image caching
 
   "view" - set the viewpoint
-  "fogmode"	- set the fog mode
+  "fogmode"     - set the fog mode
   - 0 : FOG_OFF
   - 1 : FOG_LINEAR (from begin to end)
   - 2 : FOG_EXP (density) (default)
@@ -70,75 +70,78 @@ class GEM_EXTERN gemwin : public CPPExtern
 {
   CPPEXTERN_HEADER(gemwin, CPPExtern);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemwin(t_floatarg framespersecond);
 
- private:
+private:
 
   //////////
   // Destructor
-  virtual     	~gemwin();
+  virtual       ~gemwin();
 
-  void 	    	bangMess();
-  void 	    	intMess(int state);
-  void			renderMess();
-  void 	    	titleMess(t_symbol* s);
-  void 	    	createMess(t_symbol* s);
-  void 	    	stereoMess(int mode);
-  void 	    	bufferMess(int buf);
-  void 	    	dimensionsMess(int width, int height);
-  void 	    	fullscreenMess(int on);
-  void			menuBarMess(int on);
-  void 	    	secondscreenMess(int on);
-  void 	    	offsetMess(int x, int y);
-  void 	    	colorMess(float red, float green, float blue, float alpha);
-  void 	    	clearmaskMess(float bitmask);
-  void 	    	ambientMess(float red, float green, float blue, float alpha);
-  void 	    	specularMess(float red, float green, float blue, float alpha);
-  void 	    	shininessMess(float val);
+  void          bangMess();
+  void          intMess(int state);
+  void                  renderMess();
+  void          titleMess(t_symbol* s);
+  void          createMess(t_symbol* s);
+  void          stereoMess(int mode);
+  void          bufferMess(int buf);
+  void          dimensionsMess(int width, int height);
+  void          fullscreenMess(int on);
+  void                  menuBarMess(int on);
+  void          secondscreenMess(int on);
+  void          offsetMess(int x, int y);
+  void          colorMess(float red, float green, float blue, float alpha);
+  void          clearmaskMess(float bitmask);
+  void          ambientMess(float red, float green, float blue, float alpha);
+  void          specularMess(float red, float green, float blue,
+                             float alpha);
+  void          shininessMess(float val);
 
-  void		fogModeMess(int mode);
-  void 	    	fogDensityMess(float val);
-  void		fogRangeMess(float start, float end);
-  void 	    	fogColorMess(float red, float green, float blue, float alpha);
+  void          fogModeMess(int mode);
+  void          fogDensityMess(float val);
+  void          fogRangeMess(float start, float end);
+  void          fogColorMess(float red, float green, float blue,
+                             float alpha);
   void          cursorMess(float setting);
-  void		topmostMess(float settting);
+  void          topmostMess(float setting);
   void          blurMess(float setting);
   void          fpsMess();
   void          fsaaMess(int value);
-  t_outlet	*m_FrameRate;
+  t_outlet      *m_FrameRate;
 
 
- private:
+private:
 
   //////////
   // Static member functions
-  static void 	titleMessCallback(void *data, t_symbol* s);
-  static void 	createMessCallback(void *data, t_symbol* s);
-  static void 	createStereoMessCallback(void *data);
-  static void 	colorMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void 	ambientMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void 	specularMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void	fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
-  static void 	fogColorMessCallback(void *, t_symbol*,int,t_atom*);
+  static void   titleMessCallback(void *data, t_symbol* s);
+  static void   createMessCallback(void *data, t_symbol* s);
+  static void   createStereoMessCallback(void *data);
+  static void   colorMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void   ambientMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void   specularMessCallback(void *data, t_symbol*,int,t_atom*);
+  static void   fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void   fogColorMessCallback(void *, t_symbol*,int,t_atom*);
 
   // just call GemMan directly
-  static void 	destroyMessCallback(void *);
-  static void 	printMessCallback(void *);
-  static void 	profileMessCallback(void *, t_float state);
-  static void 	resetMessCallback(void *);
-  static void 	lightingMessCallback(void *, t_float state);
-  static void 	borderMessCallback(void *, t_float state);
-  static void 	frameMessCallback(void *, t_float framesPerSecond);
-  static void	perspectiveMessCallback(void *, t_symbol *, int argc, t_atom *argv);
-  static void	viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
-  static void 	stereoMessCallback(void *data, t_float state);
-  static void	stereoFocMessCallback(void *, t_float state);
-  static void 	stereoSepMessCallback(void *, t_float state);
-  static void 	stereoLineMessCallback(void *, t_float state);
+  static void   destroyMessCallback(void *);
+  static void   printMessCallback(void *);
+  static void   profileMessCallback(void *, t_float state);
+  static void   resetMessCallback(void *);
+  static void   lightingMessCallback(void *, t_float state);
+  static void   borderMessCallback(void *, t_float state);
+  static void   frameMessCallback(void *, t_float framesPerSecond);
+  static void   perspectiveMessCallback(void *, t_symbol *, int argc,
+                                        t_atom *argv);
+  static void   viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void   stereoMessCallback(void *data, t_float state);
+  static void   stereoFocMessCallback(void *, t_float state);
+  static void   stereoSepMessCallback(void *, t_float state);
+  static void   stereoLineMessCallback(void *, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

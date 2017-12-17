@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -25,7 +25,7 @@
 #define rad2deg -57.2957795132
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT );
+CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info, t_floatarg, A_DEFFLOAT );
 
 /////////////////////////////////////////////////////////
 //
@@ -34,7 +34,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( gemlist_info , t_floatarg, A_DEFFLOAT );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-gemlist_info :: gemlist_info	(t_floatarg) {
+gemlist_info :: gemlist_info    (t_floatarg)
+{
   m_outletRotation = outlet_new(this->x_obj, 0);
   m_outletShear = outlet_new(this->x_obj, 0);
   m_outletScale = outlet_new(this->x_obj, 0);
@@ -43,7 +44,8 @@ gemlist_info :: gemlist_info	(t_floatarg) {
 /////////////////////////////////////////////////////////
 // Destructor
 //
-gemlist_info :: ~gemlist_info () {
+gemlist_info :: ~gemlist_info ()
+{
   outlet_free(m_outletScale);
   outlet_free(m_outletPosition);
   outlet_free(m_outletRotation);
@@ -54,9 +56,11 @@ gemlist_info :: ~gemlist_info () {
 /////////////////////////////////////////////////////////
 // extension check
 //
-bool gemlist_info :: isRunnable() {
-  if(GLEW_VERSION_1_1)
+bool gemlist_info :: isRunnable()
+{
+  if(GLEW_VERSION_1_1) {
     return true;
+  }
 
   error("your system does not support openGL-1.0 needed for operation");
   return false;
@@ -66,8 +70,9 @@ bool gemlist_info :: isRunnable() {
 /////////////////////////////////////////////////////////
 // Render
 //
-void gemlist_info :: render(GemState *state) {
-  float mi[16]={0};
+void gemlist_info :: render(GemState *state)
+{
+  float mi[16]= {0};
   t_atom alist[12];
 
 
@@ -78,8 +83,8 @@ void gemlist_info :: render(GemState *state) {
   // test de syngularité a effectuer
 
   // normalisation
-  //	for (i=0; i<16; i++) mi[i] /= mi[15];
-  // not usefull because I never saw mi[15]!=1; if this change, un-comment this normalisation procedure
+  //    for (i=0; i<16; i++) mi[i] /= mi[15];
+  // not useful because I never saw mi[15]!=1; if this change, un-comment this normalisation procedure
   ScaleX = sqrt (mi[0] * mi[0] + mi[4] * mi[4] + mi[8] * mi[8]);
   mi[0] /= ScaleX; // Normalise X
   mi[4] /= ScaleX;
@@ -159,5 +164,6 @@ void gemlist_info :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // static member functions
 //
-void gemlist_info :: obj_setupCallback(t_class *classPtr) {
+void gemlist_info :: obj_setupCallback(t_class *classPtr)
+{
 }

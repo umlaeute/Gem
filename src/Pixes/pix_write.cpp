@@ -33,7 +33,7 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_write);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_write
 //
@@ -62,14 +62,16 @@ pix_write :: pix_write(int argc, t_atom *argv)
   } else if (argc == 2) {
     m_width = atom_getint(&argv[0]);
     m_height = atom_getint(&argv[1]);
-  } else if (argc != 0){
+  } else if (argc != 0) {
     error("needs 0, 2, 4 or 5 values");
     m_xoff = m_yoff = 0;
     m_width = m_height = 128;
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_pos"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert_size"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_pos"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vert_size"));
 
   m_automatic = false;
   m_autocount = 0;
@@ -92,7 +94,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 pix_write :: ~pix_write(void)
 {
-	cleanImage();
+  cleanImage();
 }
 
 
@@ -100,9 +102,11 @@ pix_write :: ~pix_write(void)
 // extension checks
 //
 /////////////////////////////////////////////////////////
-bool pix_write :: isRunnable(void) {
-  if(GLEW_VERSION_1_1 || GLEW_EXT_texture_object)
+bool pix_write :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1 || GLEW_EXT_texture_object) {
     return true;
+  }
 
   error("your system lacks texture support");
   return false;
@@ -119,7 +123,7 @@ void pix_write :: doWrite(void)
   int height = m_height;
 
   GemMan::getDimen(((m_width >0)?NULL:&width ),
-		   ((m_height>0)?NULL:&height));
+                   ((m_height>0)?NULL:&height));
 
   m_originalImage->xsize = width;
   m_originalImage->ysize = height;
@@ -142,19 +146,20 @@ void pix_write :: doWrite(void)
                m_originalImage->format, m_originalImage->type, m_originalImage->data);
 
 #if 0 // asynchronous texture fetching idea sketch
-/* Enable AGP storage hints */
-	glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
-	glTextureRangeAPPLE(...);
-	glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE, GL_STORAGE_SHARED_APPLE );
+  /* Enable AGP storage hints */
+  glPixelStorei( GL_UNPACK_CLIENT_STORAGE_APPLE, 1 );
+  glTextureRangeAPPLE(...);
+  glTexParameteri(..., GL_TEXTURE_STORAGE_HINT_APPLE,
+                  GL_STORAGE_SHARED_APPLE );
 
-	/* Copy from Frame Buffer */
-	glCopyTexSubImage2d(...);
+  /* Copy from Frame Buffer */
+  glCopyTexSubImage2d(...);
 
-	/* Flush into AGP */
-	glFlush(...);
+  /* Flush into AGP */
+  glFlush(...);
 
-	/* Pull out of AGP */
-	glGetTexImage(...);
+  /* Pull out of AGP */
+  glGetTexImage(...);
 #endif
 
 
@@ -169,14 +174,17 @@ void pix_write :: render(GemState *state)
 {
   if (m_automatic || m_banged) {
     char *extension;
-    if (m_filetype<0)m_filetype=0;
+    if (m_filetype<0) {
+      m_filetype=0;
+    }
     if (m_filetype==0) {
       extension=(char*)"tif";
     } else {
       extension=(char*)"jpg";
     }
 
-    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s", m_pathname.c_str(), m_autocount, extension);
+    snprintf(m_filename, (size_t)(MAXPDSTRING), "%s%05d.%s",
+             m_pathname.c_str(), m_autocount, extension);
     m_filename[MAXPDSTRING-1]=0;
 
     m_autocount++;
@@ -208,18 +216,17 @@ void pix_write :: posMess(int x, int y)
 
 void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 {
-  char *extension = (char*)".tif";
-  char tmp[MAXPDSTRING];
-
   if (argc) {
     if (argv->a_type == A_SYMBOL) {
+      char tmp[MAXPDSTRING];
       atom_string(argv++, tmp, MAXPDSTRING);
       argc--;
 
       m_pathname=gem::files::getFullpath(tmp, this);
     }
-    if (argc>0)
+    if (argc>0) {
       m_filetype = atom_getint(argv);
+    }
   }
 
   m_autocount = 0;
@@ -232,11 +239,10 @@ void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 void pix_write :: cleanImage(void)
 {
   // release previous data
-  if (m_originalImage)
-    {
-      delete m_originalImage;
-      m_originalImage = NULL;
-    }
+  if (m_originalImage) {
+    delete m_originalImage;
+    m_originalImage = NULL;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -262,7 +268,8 @@ void pix_write :: bangMess(void)
 {
   m_banged=true;
 }
-void pix_write :: colorFormatMess(int format){
+void pix_write :: colorFormatMess(int format)
+{
   m_color = format;
   if (m_color != 1 && m_color != 3 && m_color != 4) {
     error("color argument could be 1, 3 or 4");

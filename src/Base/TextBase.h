@@ -62,14 +62,14 @@ class GEM_EXTERN TextBase : public GemBase
 {
   CPPEXTERN_HEADER(TextBase, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor with args
   TextBase(int argc, t_atom *argv);
 
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -77,7 +77,7 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Do the rendering
-  virtual void	render(GemState*);
+  virtual void  render(GemState*);
 
   //////////
   // break a string according to '\n'
@@ -87,17 +87,23 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // Set the text string from an ASCII list
   virtual void  stringMess(int argc, t_atom *argv);
-  void stringMess(t_symbol*, int argc, t_atom*argv) { stringMess(argc, argv); }
+  void stringMess(t_symbol*, int argc, t_atom*argv)
+  {
+    stringMess(argc, argv);
+  }
   //-- /moocow
 
   //////////
   // Set the text string
   virtual void  textMess(int argc, t_atom *argv);
-  void  textMess(t_symbol*, int argc, t_atom*argv) { textMess(argc, argv); }
+  void  textMess(t_symbol*, int argc, t_atom*argv)
+  {
+    textMess(argc, argv);
+  }
 
   //////////
   // The font to use
-  virtual void  fontNameMess(const std::string filename);
+  virtual void  fontNameMess(const std::string&filename);
 
   //////////
   // set line distance
@@ -105,12 +111,12 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Set the font size
-  virtual void	setFontSize(float size);
+  virtual void  setFontSize(float size);
   virtual void  setFontSize();
 
   //////////
   // Set the precision for rendering
-  virtual void	setPrecision(float prec);
+  virtual void  setPrecision(float prec);
 
   //////////
   // The different types of justification
@@ -122,7 +128,8 @@ class GEM_EXTERN TextBase : public GemBase
   // Set the justification
   virtual void setJustification(JustifyWidth wType);
   virtual void setJustification(JustifyWidth wType, JustifyHeight hType);
-  virtual void setJustification(JustifyWidth wType, JustifyHeight hType, JustifyDepth dType);
+  virtual void setJustification(JustifyWidth wType, JustifyHeight hType,
+                                JustifyDepth dType);
 
   typedef struct Justification_ {
     float width;
@@ -135,11 +142,11 @@ class GEM_EXTERN TextBase : public GemBase
   // x1,...,z2 just defines the bounding box of the rendered string.
   // y_offset is the offset of the current line
   virtual Justification justifyFont(float x1, float y1, float z1,
-				    float x2, float y2, float z2, float y_offset=0);
+                                    float x2, float y2, float z2, float y_offset=0);
 
 
   //-----------------------------------
-  // GROUP:	Member variables
+  // GROUP:     Member variables
   //-----------------------------------
 
   //////////
@@ -163,27 +170,27 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // The font fize
-  float		m_fontSize;
+  float         m_fontSize;
 
   //////////
   // The font depth (only for extruded fonts)
-  float		m_fontDepth;
+  float         m_fontDepth;
 
   //////////
   // The rendering precision
-  float		m_precision;
+  float         m_precision;
 
   //////////
   // The width justification
-  JustifyWidth	m_widthJus;
+  JustifyWidth  m_widthJus;
 
   //////////
   // The height justification
-  JustifyHeight	m_heightJus;
+  JustifyHeight m_heightJus;
 
   //////////
   // The depth justification
-  JustifyDepth	m_depthJus;
+  JustifyDepth  m_depthJus;
 
   //////////
   // The inlet
@@ -208,7 +215,7 @@ class GEM_EXTERN TextBase : public GemBase
   //////////
   // The font structure
 #ifdef FTGL
-  FTFont		*m_font;
+  FTFont                *m_font;
   /* this should delete (m_font) if it is notnull and recreate it.
    * a pointer to the new structure is returned (and is set to m_font).
    * if creation fails, the font is cleaned-up and NULL is returned
@@ -227,7 +234,7 @@ class GEM_EXTERN TextBase : public GemBase
   virtual void renderLine(const wchar_t*line,float dist);
 #endif
 
- private:
+private:
 
   ///////////
   // helpers:
@@ -239,7 +246,7 @@ class GEM_EXTERN TextBase : public GemBase
 
   //////////
   // Static member functions
-  static void 	justifyMessCallback(void *data, t_symbol *, int, t_atom*);
+  static void   justifyMessCallback(void *data, t_symbol *, int, t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

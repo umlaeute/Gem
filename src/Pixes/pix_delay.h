@@ -35,13 +35,13 @@ class GEM_EXTERN pix_delay : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_delay, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_delay(t_float &f);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -49,7 +49,7 @@ class GEM_EXTERN pix_delay : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
   imageStruct    myImage;
 
@@ -59,11 +59,11 @@ class GEM_EXTERN pix_delay : public GemPixObj
   int m_frame;
 
 
- private:
+private:
 
   //////////
   // static member functions
   static void delayMessCallback(void *data, t_float);
 };
 
-#endif	// for header file
+#endif  // for header file

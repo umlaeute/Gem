@@ -31,33 +31,33 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN render_trigger : public GemBase
 {
-    CPPEXTERN_HEADER(render_trigger, GemBase);
+  CPPEXTERN_HEADER(render_trigger, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	render_trigger();
+  //////////
+  // Constructor
+  render_trigger();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~render_trigger();
+  //////////
+  // Destructor
+  virtual ~render_trigger();
 
-    	//////////
-    	// Push the current state
-    	virtual void 	render(GemState *state);
+  //////////
+  // Push the current state
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Pop the state
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Pop the state
+  virtual void    postrender(GemState *state);
 
-    	//////////
-        t_outlet        *m_preOut;	    // bang for the pre render
+  //////////
+  t_outlet        *m_preOut;          // bang for the pre render
 
-    	//////////
-        t_outlet        *m_postOut;	    // bang for the post render
+  //////////
+  t_outlet        *m_postOut;         // bang for the post render
 };
 
-#endif	// for header file
+#endif  // for header file

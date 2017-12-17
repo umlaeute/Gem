@@ -39,13 +39,13 @@ class GEM_EXTERN pix_test : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_test, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_test();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -53,8 +53,8 @@ class GEM_EXTERN pix_test : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	render(GemState*);
-  virtual void 	postrender(GemState*);
+  virtual void  render(GemState*);
+  virtual void  postrender(GemState*);
 
   pixBlock    m_pix;
 
@@ -62,4 +62,4 @@ class GEM_EXTERN pix_test : public GemPixObj
   void csMess(std::string);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -18,38 +18,43 @@
 
 struct _symbol;
 struct _atom;
-namespace gem {
-  namespace RTE {
-    class GEM_EXTERN Symbol {
-    private:
-      class PIMPL;
-      PIMPL*m_pimpl;
+namespace gem
+{
+namespace RTE
+{
+class GEM_EXTERN Symbol
+{
+private:
+  class PIMPL;
+  PIMPL*m_pimpl;
 
-    public:
-      Symbol(void);
-      Symbol(const gem::RTE::Symbol&a);
-      Symbol(const std::string&name);
-      Symbol(const struct _symbol*name);
-      Symbol(const unsigned int, const struct _atom*);
+public:
+  Symbol(void);
+  Symbol(const gem::RTE::Symbol&a);
+  Symbol(const std::string&name);
+  Symbol(const struct _symbol*name);
+  Symbol(const unsigned int, const struct _atom*);
 
-      virtual ~Symbol(void);
+  virtual ~Symbol(void);
 
-      virtual Symbol&operator=(const Symbol&);
-      virtual Symbol&operator=(const std::string&);
-      virtual Symbol&operator=(const struct _symbol*);
-      virtual Symbol&setSymbol(const unsigned int, const struct _atom*);
+  virtual Symbol&operator=(const Symbol&);
+  virtual Symbol&operator=(const std::string&);
+  virtual Symbol&operator=(const struct _symbol*);
+  virtual Symbol&setSymbol(const unsigned int, const struct _atom*);
 
-      virtual std::string getString(void) const;
-      virtual struct _symbol*getRTESymbol(void) const;
+  virtual std::string getString(void) const;
+  virtual struct _symbol*getRTESymbol(void) const;
 
-      virtual operator std::string(void) {
-	return getString();
-      }
+  virtual operator std::string(void)
+  {
+    return getString();
+  }
 
-      virtual operator struct _symbol*(void) {
-	return getRTESymbol();
-      }
-    };
-  };
+  virtual operator struct _symbol*(void)
+  {
+    return getRTESymbol();
+  }
+};
+};
 };
 #endif /* _INCLUDE__GEM_RTE_SYMBOL_H_ */

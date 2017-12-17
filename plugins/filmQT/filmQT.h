@@ -47,10 +47,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
+namespace gem
+{
+namespace plugins
+{
 class GEM_EXPORT filmQT : public film
 {
- public:
+public:
   //////////
   // Constructor
   filmQT(void);
@@ -60,7 +63,7 @@ class GEM_EXPORT filmQT : public film
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -74,34 +77,40 @@ class GEM_EXPORT filmQT : public film
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
   // cannot be used within a threaded context
-  virtual bool isThreadable(void) { return false; }
+  virtual bool isThreadable(void)
+  {
+    return false;
+  }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
- protected:
+protected:
   GLenum m_wantedFormat; // the requested pixel format (in GL)
   double m_fps;  // the frame-rate
   int m_numFrames, m_numTracks; // number of frames in video
   int m_curFrame, m_curTrack;
   pixBlock m_image; // output image
   bool m_readNext;
-  float			m_auto;
+  float                 m_auto;
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
-  Movie			m_movie;
-  GWorldPtr		m_srcGWorld;
-  TimeValue		m_movieTime;
-  Track			m_movieTrack;
-  TimeValue		m_timeScale;
-  TimeValue		m_frameDuration;
+  Movie                 m_movie;
+  GWorldPtr             m_srcGWorld;
+  TimeValue             m_movieTime;
+  Track                 m_movieTrack;
+  TimeValue             m_timeScale;
+  TimeValue             m_frameDuration;
 
   // managed to initialize our Quicktime-Decoder
-  bool			m_bInit;
-};};};
+  bool                  m_bInit;
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

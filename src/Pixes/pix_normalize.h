@@ -40,32 +40,33 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_normalize : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_normalize, GemPixObj);
+  CPPEXTERN_HEADER(pix_normalize, GemPixObj);
 
-      public:
+public:
 
-    //////////
-    // Constructor
-    pix_normalize();
+  //////////
+  // Constructor
+  pix_normalize();
 
- protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~pix_normalize();
+  //////////
+  // Destructor
+  virtual ~pix_normalize();
 
-    //////////
-    // Do the processing
-    virtual void 	processRGBAImage(imageStruct &image);
-    virtual void 	processGrayImage(imageStruct &image);
-    virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void        processRGBAImage(imageStruct &image);
+  virtual void        processGrayImage(imageStruct &image);
+  virtual void        processYUVImage(imageStruct &image);
 
- private:
+private:
 
-    //////////
-    // Static member functions
-    static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    static void 	floatMaskMessCallback(void *data, t_float gain);
+  //////////
+  // Static member functions
+  static void         vecMaskMessCallback(void *data, t_symbol *, int argc,
+                                          t_atom *argv);
+  static void         floatMaskMessCallback(void *data, t_float gain);
 };
 
-#endif	// for header file
+#endif  // for header file

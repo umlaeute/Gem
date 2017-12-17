@@ -32,31 +32,31 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN shearYZ : public GemBase
 {
-    CPPEXTERN_HEADER(shearYZ, GemBase);
+  CPPEXTERN_HEADER(shearYZ, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	shearYZ(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  shearYZ(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~shearYZ();
+  //////////
+  // Destructor
+  virtual ~shearYZ();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
 
-    	//////////
-    	// X value changed
-    	void	    	shearMess(float val);
+  //////////
+  // X value changed
+  void            shearMess(float val);
 
-	//shear value
-	float			shear;
+  //shear value
+  float                   shear;
 };
 
-#endif	// for header file
+#endif  // for header file

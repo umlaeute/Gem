@@ -32,39 +32,41 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN sphere3d : public GemGluObj
 {
-    CPPEXTERN_HEADER(sphere3d, GemGluObj);
+  CPPEXTERN_HEADER(sphere3d, GemGluObj);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   sphere3d(t_floatarg size, t_floatarg slice=10.0, t_floatarg stack=0.0);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~sphere3d(void);
+  //////////
+  // Destructor
+  virtual ~sphere3d(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-        virtual void  	createSphere3d(void);
+  virtual void    createSphere3d(void);
 
-        virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y, GLfloat z);
-        virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth, GLfloat elevation);
+  virtual void    setCartesian(int i, int j, GLfloat x, GLfloat y,
+                               GLfloat z);
+  virtual void    setSpherical(int i, int j, GLfloat r, GLfloat azimuth,
+                               GLfloat elevation);
 
-        virtual void    print(int slice, int stack);
-        virtual void    print(void);
+  virtual void    print(int slice, int stack);
+  virtual void    print(void);
 
-        GLfloat		*m_x;
-        GLfloat		*m_y;
-        GLfloat		*m_z;
-        int 		oldStacks, oldSlices;
-        GLenum		oldDrawType;
-        int             oldTexture;
+  GLfloat         *m_x;
+  GLfloat         *m_y;
+  GLfloat         *m_z;
+  int             oldStacks, oldSlices;
+  GLenum          oldDrawType;
+  int             oldTexture;
 
-        GLuint          m_displayList;
+  GLuint          m_displayList;
 };
-#endif	// for header file
+#endif  // for header file

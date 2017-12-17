@@ -1,14 +1,14 @@
- /* ------------------------------------------------------------------
-  * GEM - Graphics Environment for Multimedia
-  *
-  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  *	zmoelnig@iem.kug.ac.at
-  *  For information on usage and redistribution, and for a DISCLAIMER
-  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
-  *
-  *  this file has been generated...
-  * ------------------------------------------------------------------
-  */
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ *     zmoelnig@iem.kug.ac.at
+ *  For information on usage and redistribution, and for a DISCLAIMER
+ *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+ *
+ *  this file has been generated...
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OPENGL_GEMGLEVALPOINT__H_
 #define _INCLUDE__GEM_OPENGL_GEMGLEVALPOINT__H_
@@ -17,46 +17,46 @@
 
 /*
  CLASS
-	GEMglEvalPoint2
+        GEMglEvalPoint2
  KEYWORDS
-	openGL	0
+        openGL  0
  DESCRIPTION
-	wrapper for the openGL-function
-	"glEvalPoint2( GLint i, GLint j)"
+        wrapper for the openGL-function
+        "glEvalPoint2( GLint i, GLint j)"
  */
 
 class GEM_EXTERN GEMglEvalPoint2 : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMglEvalPoint2, GemGLBase);
+  CPPEXTERN_HEADER(GEMglEvalPoint2, GemGLBase);
 
-	public:
-	  // Constructor
-	  GEMglEvalPoint2 (t_float, t_float);	// CON
+public:
+  // Constructor
+  GEMglEvalPoint2 (t_float, t_float);   // CON
 
-	protected:
-	  // Destructor
-	  virtual ~GEMglEvalPoint2 ();
-          // check extensions
-          virtual bool isRunnable(void);
+protected:
+  // Destructor
+  virtual ~GEMglEvalPoint2 ();
+  // check extensions
+  virtual bool isRunnable(void);
 
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+  // Do the rendering
+  virtual void  render (GemState *state);
 
-	// variables
-	  GLint	i;		// VAR
-	  virtual void	iMess(t_float);	// FUN
+  // variables
+  GLint i;              // VAR
+  virtual void  iMess(t_float); // FUN
 
-	  GLint	j;		// VAR
-	  virtual void	jMess(t_float);	// FUN
+  GLint j;              // VAR
+  virtual void  jMess(t_float); // FUN
 
 
-	private:
+private:
 
-	// we need some inlets
-	  t_inlet *m_inlet[2];
+  // we need some inlets
+  t_inlet *m_inlet[2];
 
-	// static member functions
-	  static void	 iMessCallback (void*, t_float);
-	  static void	 jMessCallback (void*, t_float);
+  // static member functions
+  static void    iMessCallback (void*, t_float);
+  static void    jMessCallback (void*, t_float);
 };
 #endif // for header file

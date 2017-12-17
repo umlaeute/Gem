@@ -24,7 +24,7 @@ CLASS
 
     pix_data
 
-	Get pixel information
+        Get pixel information
 
 KEYWORDS
     pix
@@ -34,66 +34,66 @@ DESCRIPTION
     Inlet for a float - "xPos"
     Inlet for a float - "yPos"
 
-	The x and y position should be normalized between 0 and 1.
+        The x and y position should be normalized between 0 and 1.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_data : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_data, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_data, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-    	// Constructor
-    	pix_data();
+  //////////
+  // Constructor
+  pix_data();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_data();
+  //////////
+  // Destructor
+  virtual ~pix_data();
 
-    	//////////
-    	// All we want is the pixel information, so this is a complete override.
-    	virtual void 	render(GemState *state)			{}
+  //////////
+  // All we want is the pixel information, so this is a complete override.
+  virtual void    render(GemState *state)                 {}
 
-    	//////////
-        virtual void 	processImage(imageStruct &)		{}
+  //////////
+  virtual void    processImage(imageStruct &)             {}
 
-    	//////////
-    	virtual void 	processDualImage(imageStruct &, imageStruct &)	{}
+  //////////
+  virtual void    processDualImage(imageStruct &, imageStruct &)  {}
 
-        //////////
-        void			trigger(void);
+  //////////
+  void                    trigger(void);
 
-        //////////
-        void			xPos(t_float pos);
+  //////////
+  void                    xPos(t_float pos);
 
-        //////////
-        void			yPos(t_float pos);
+  //////////
+  void                    yPos(t_float pos);
 
-        //////////
-        t_float			m_position[2];
+  //////////
+  t_float                 m_position[2];
 
-        //////////
-        void			qualityMess(int q);
-        int m_quality;
+  //////////
+  void                    qualityMess(int q);
+  int m_quality;
 
-        //////////
-        // The color outlet
-        t_outlet    	*m_colorOut;
+  //////////
+  // The color outlet
+  t_outlet        *m_colorOut;
 
-        //////////
-        // The grayscale outlet
-        t_outlet    	*m_grayOut;
+  //////////
+  // The grayscale outlet
+  t_outlet        *m_grayOut;
 
-	private:
+private:
 
-        //////////
-        // Static member callbacks
-	static void		triggerMessCallback(void *data);
-	static void		xPosCallback(void *data, t_float pos);
-	static void		yPosCallback(void *data, t_float pos);
+  //////////
+  // Static member callbacks
+  static void             triggerMessCallback(void *data);
+  static void             xPosCallback(void *data, t_float pos);
+  static void             yPosCallback(void *data, t_float pos);
 };
 
-#endif	// for header file
+#endif  // for header file

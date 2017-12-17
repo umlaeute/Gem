@@ -40,13 +40,13 @@ class GEM_EXTERN pix_rds : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_rds, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_rds();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -59,12 +59,12 @@ class GEM_EXTERN pix_rds : public GemPixObj
   virtual void processYUVImage(imageStruct &image);
 
   imageStruct    myImage;
-  int 	doDots;
-  int 	stride;
-  int	method;
-  int	fastrand_val;
+  int   doDots;
+  int   stride;
+  int   method;
+  int   fastrand_val;
 
- private:
+private:
 
   //////////
   // static member functions
@@ -73,4 +73,4 @@ class GEM_EXTERN pix_rds : public GemPixObj
   static void seedMessCallback(void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -21,7 +21,8 @@
 #include "Gem/State.h"
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM,
+                             t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,7 +32,8 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_imageInPlace :: pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
+pix_imageInPlace :: pix_imageInPlace(t_symbol *filename,
+                                     t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
     m_wantDownload(false),
     mInPreload(0),
@@ -50,9 +52,14 @@ pix_imageInPlace :: ~pix_imageInPlace()
 // extension checks
 //
 /////////////////////////////////////////////////////////
-bool pix_imageInPlace :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
-  if(GLEW_EXT_texture_object)return true;
+bool pix_imageInPlace :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
+  if(GLEW_EXT_texture_object) {
+    return true;
+  }
 
   error("your system lacks texture support");
   return false;
@@ -65,14 +72,18 @@ bool pix_imageInPlace :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: render(GemState *state)
 {
-  if(m_wantDownload)downloadMess();
+  if(m_wantDownload) {
+    downloadMess();
+  }
   // if we don't have an image, just return
-  if (!m_numImages)
+  if (!m_numImages) {
     return;
+  }
 
   // if nothing has been bound yet
-  if (!m_loadedCache->textBind[m_curImage])
+  if (!m_loadedCache->textBind[m_curImage]) {
     return;
+  }
 
   state->set(GemState::_GL_TEX_TYPE, 1);
 
@@ -103,8 +114,9 @@ void pix_imageInPlace :: postrender(GemState *state)
 void pix_imageInPlace :: startRendering()
 {
   // if we don't have any images or if we are going to delay loading
-  if (!m_numImages || mInPreload)
+  if (!m_numImages || mInPreload) {
     return;
+  }
 
   downloadMess();
 }
@@ -122,11 +134,15 @@ void pix_imageInPlace :: stopRendering()
 // preloadMess
 //
 /////////////////////////////////////////////////////////
-void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage, int topImage, int skipRate)
+void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage,
+                                     int topImage, int skipRate)
 {
   openMess(filename, baseImage, topImage, skipRate);
-  if (m_loadedCache)mInPreload = 1;
-  else mInPreload = 0;
+  if (m_loadedCache) {
+    mInPreload = 1;
+  } else {
+    mInPreload = 0;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -141,40 +157,40 @@ void pix_imageInPlace :: downloadMess()
     return;
   }
   m_wantDownload=false;
-  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object){
+  if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
     error("cannot download now: do you have a window?");
     return;
   }
 
-  if (!mInPreload)return;
-  if (!m_loadedCache->textBind[0])
-    {
-      glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
+  if (!mInPreload) {
+    return;
+  }
+  if (!m_loadedCache->textBind[0]) {
+    glGenTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
 
-      for (int i = 0; i < m_numImages; ++i)
-	{
-    if(GLEW_VERSION_1_1) {
-	  glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
-    } else {
-	  glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+    for (int i = 0; i < m_numImages; ++i) {
+      if(GLEW_VERSION_1_1) {
+        glBindTexture(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+      } else {
+        glBindTextureEXT(GL_TEXTURE_2D, m_loadedCache->textBind[i]);
+      }
+
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_repeat);
+      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_repeat);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
+      glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+      glTexImage2D(GL_TEXTURE_2D, 0,
+                   m_loadedCache->images[i]->csize,
+                   m_loadedCache->images[i]->xsize,
+                   m_loadedCache->images[i]->ysize, 0,
+                   m_loadedCache->images[i]->format,
+                   m_loadedCache->images[i]->type,
+                   m_loadedCache->images[i]->data);
     }
-
-	  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_repeat);
-	  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_repeat);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_textureQuality);
-	  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_textureQuality);
-	  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	  glTexImage2D(GL_TEXTURE_2D, 0,
-		       m_loadedCache->images[i]->csize,
-		       m_loadedCache->images[i]->xsize,
-		       m_loadedCache->images[i]->ysize, 0,
-		       m_loadedCache->images[i]->format,
-		       m_loadedCache->images[i]->type,
-		       m_loadedCache->images[i]->data);
-	}
-    }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -183,17 +199,17 @@ void pix_imageInPlace :: downloadMess()
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: purgeMess()
 {
-  if (!m_numImages)
+  if (!m_numImages) {
     return;
+  }
 
-  if (m_loadedCache->textBind[0])
-    {
-      glDeleteTextures(m_numImages, (GLuint *)m_loadedCache->textBind);//__APPLE__
-      for (int i = 0; i < m_numImages; ++i)
-	{
-	  m_loadedCache->textBind[i] = 0;
-	}
+  if (m_loadedCache->textBind[0]) {
+    glDeleteTextures(m_numImages,
+                     (GLuint *)m_loadedCache->textBind);//__APPLE__
+    for (int i = 0; i < m_numImages; ++i) {
+      m_loadedCache->textBind[i] = 0;
     }
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -202,10 +218,11 @@ void pix_imageInPlace :: purgeMess()
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: textureQuality(int type)
 {
-  if (type)
+  if (type) {
     m_textureQuality = GL_LINEAR;
-  else
+  } else {
     m_textureQuality = GL_NEAREST;
+  }
 }
 
 
@@ -215,13 +232,14 @@ void pix_imageInPlace :: textureQuality(int type)
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: repeatMess(int type)
 {
-  if (type)
+  if (type) {
     m_repeat = GL_REPEAT;
-  else {
-    if(getState()!=INIT && GLEW_EXT_texture_edge_clamp)
+  } else {
+    if(getState()!=INIT && GLEW_EXT_texture_edge_clamp) {
       m_repeat = GL_CLAMP_TO_EDGE;
-    else
+    } else {
       m_repeat = GL_CLAMP;
+    }
   }
 
 }
@@ -233,24 +251,27 @@ void pix_imageInPlace :: repeatMess(int type)
 /////////////////////////////////////////////////////////
 void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
-		  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_imageInPlace::preloadMessCallback),
+                  gensym("preload"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
   CPPEXTERN_MSG0(classPtr, "download", downloadMess);
   CPPEXTERN_MSG0(classPtr, "purge", purgeMess);
   CPPEXTERN_MSG1(classPtr, "quality", textureQuality, int);
   CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
 }
 
-void pix_imageInPlace :: preloadMessCallback(void *data, t_symbol *filename, t_float baseImage,
-					     t_floatarg topImage, t_floatarg skipRate)
+void pix_imageInPlace :: preloadMessCallback(void *data,
+    t_symbol *filename, t_float baseImage,
+    t_floatarg topImage, t_floatarg skipRate)
 {
-  if ((int)skipRate == 0)
-    {
-      if ((int)topImage == 0)
-	GetMyClass(data)->preloadMess(filename, 0, (int)baseImage, 0);
-      else
-	GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, 0);
+  if ((int)skipRate == 0) {
+    if ((int)topImage == 0) {
+      GetMyClass(data)->preloadMess(filename, 0, (int)baseImage, 0);
+    } else {
+      GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, 0);
     }
-  else
-    GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage, (int)skipRate);
+  } else {
+    GetMyClass(data)->preloadMess(filename, (int)baseImage, (int)topImage,
+                                  (int)skipRate);
+  }
 }

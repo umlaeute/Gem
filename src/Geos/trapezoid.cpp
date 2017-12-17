@@ -18,7 +18,8 @@
 
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(trapezoid, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(trapezoid, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +34,9 @@ trapezoid :: trapezoid(t_floatarg size, t_floatarg top)
     m_top(top),
     m_scale_texcoord(1.f)
 {
-  if(m_top==0.f)m_top=m_size;
+  if(m_top==0.f) {
+    m_top=m_size;
+  }
 
   m_topinlet=floatinlet_new(this->x_obj, &m_top);
 }
@@ -57,12 +60,16 @@ void trapezoid :: renderShape(GemState *state)
   float tx = m_scale_texcoord * m_top;
 
   int drawType = m_drawType;
-  if(drawType==GL_DEFAULT_GEM)drawType=GL_QUADS;
+  if(drawType==GL_DEFAULT_GEM) {
+    drawType=GL_QUADS;
+  }
 
-  if (drawType == GL_LINE_LOOP)
+  if (drawType == GL_LINE_LOOP) {
     glLineWidth(m_linewidth);
-  if (m_top<0)
+  }
+  if (m_top<0) {
     top*=-1;
+  }
 
   glNormal3f(0.0f, 0.0f, 1.0f);
 

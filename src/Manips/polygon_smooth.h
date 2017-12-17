@@ -31,34 +31,34 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon_smooth : public GemBase
 {
-    CPPEXTERN_HEADER(polygon_smooth, GemBase);
+  CPPEXTERN_HEADER(polygon_smooth, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	polygon_smooth();
+  //////////
+  // Constructor
+  polygon_smooth();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~polygon_smooth();
+  //////////
+  // Destructor
+  virtual ~polygon_smooth();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Turn off polygon_smooth blending
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn off polygon_smooth blending
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// polygon_smooth blending state
-    	int	    	    m_polygon_smoothState;
-    	//////////
-    	// Polygon_Smooth state changed
-   	void	    	polygon_smoothMess(int polygon_smoothState);
+  //////////
+  // polygon_smooth blending state
+  int                 m_polygon_smoothState;
+  //////////
+  // Polygon_Smooth state changed
+  void            polygon_smoothMess(int polygon_smoothState);
 };
 
-#endif	// for header file
+#endif  // for header file

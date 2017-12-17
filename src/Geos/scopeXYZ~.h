@@ -38,13 +38,13 @@ class GEM_EXTERN scopeXYZ : public GemShape
 {
   CPPEXTERN_HEADER(scopeXYZ, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   scopeXYZ(t_floatarg len=0);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -52,24 +52,24 @@ class GEM_EXTERN scopeXYZ : public GemShape
 
   //////////
   // Do the renderShapeing
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
   //////////
   // The width of the lines in line draw mode
-  void	    	linewidthMess(float linewidth);
+  void          linewidthMess(float linewidth);
 
   //-----------------------------------
-  // GROUP:	Member variables
+  // GROUP:     Member variables
   //-----------------------------------
 
   //////////
   // the number of points
   unsigned int m_requestedLength, m_realLength;
   unsigned int m_length;
-  virtual void	doLengthMess(unsigned int length=0);
-  virtual void	lengthMess(int length);
+  virtual void  doLengthMess(unsigned int length=0);
+  virtual void  lengthMess(int length);
 
-  virtual void	bangMess();
+  virtual void  bangMess();
 
   int m_position;
 
@@ -82,13 +82,13 @@ class GEM_EXTERN scopeXYZ : public GemShape
 
   void perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z);
 
- private:
+private:
 
   //////////
   // Static member functions
-  static void 	dspCallback(void *data, t_signal** sp);
+  static void   dspCallback(void *data, t_signal** sp);
   static t_int*   perform(t_int* w);
 
 };
 
-#endif	// for header file
+#endif  // for header file

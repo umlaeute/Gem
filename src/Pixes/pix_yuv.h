@@ -36,15 +36,15 @@ DESCRIPTION
 
 class GEM_EXTERN pix_yuv : public pix_rgba
 {
-    CPPEXTERN_HEADER(pix_yuv, GemPixObj);
+  CPPEXTERN_HEADER(pix_yuv, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_yuv();
+  //////////
+  // Constructor
+  pix_yuv();
 
-    protected:
+protected:
 };
 
-#endif	// for header file
+#endif  // for header file

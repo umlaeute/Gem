@@ -31,9 +31,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmTEST : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmTEST : public film
+{
+public:
 
   //////////
   // Constructor
@@ -41,7 +45,7 @@ class GEM_EXPORT filmTEST : public film {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
 
   virtual void close(void);
 
@@ -53,7 +57,8 @@ class GEM_EXPORT filmTEST : public film {
   // set the next frame to read;
   virtual errCode changeImage(int imgNum, int trackNum = -1);
 
-  virtual bool enumProperties(gem::Properties&readprops, gem::Properties&writeprops);
+  virtual bool enumProperties(gem::Properties&readprops,
+                              gem::Properties&writeprops);
 
   virtual void getProperties(gem::Properties&props);
   virtual void setProperties(gem::Properties&props);
@@ -64,6 +69,8 @@ class GEM_EXPORT filmTEST : public film {
   pixBlock m_image;
   double m_fps;
   unsigned int m_numFrames;
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

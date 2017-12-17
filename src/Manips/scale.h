@@ -35,39 +35,39 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN scale : public GemBase
 {
-    CPPEXTERN_HEADER(scale, GemBase);
+  CPPEXTERN_HEADER(scale, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	scale(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  scale(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~scale();
+  //////////
+  // Destructor
+  virtual ~scale();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The translation vector (x, y, z)
-    	float	    	m_vector[3];
+  //////////
+  // The translation vector (x, y, z)
+  float           m_vector[3];
 
-    	//////////
-    	// The scale distance
-    	float	    	m_distance;
+  //////////
+  // The scale distance
+  float           m_distance;
 
-    	//////////
-    	// Distance changed
-    	void	    	distanceMess(float distance);
+  //////////
+  // Distance changed
+  void            distanceMess(float distance);
 
-    	//////////
-    	// Vector changed
-    	void	    	vectorMess(float x, float y, float z);
+  //////////
+  // Vector changed
+  void            vectorMess(float x, float y, float z);
 };
 
-#endif	// for header file
+#endif  // for header file

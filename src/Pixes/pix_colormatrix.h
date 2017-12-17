@@ -37,37 +37,38 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_colormatrix : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_colormatrix, GemPixObj);
+  CPPEXTERN_HEADER(pix_colormatrix, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_colormatrix();
+  //////////
+  // Constructor
+  pix_colormatrix();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_colormatrix();
+  //////////
+  // Destructor
+  virtual ~pix_colormatrix();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
 
-    	//////////
-    	// Set the matrix
-    	void	    	matrixMess(int argc, t_atom *argv);
+  //////////
+  // Set the matrix
+  void            matrixMess(int argc, t_atom *argv);
 
-    	//////////
-    	// The matrix
-    	float  	    	m_matrix[16];
+  //////////
+  // The matrix
+  float           m_matrix[16];
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // Static member functions
+  static void     matrixMessCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

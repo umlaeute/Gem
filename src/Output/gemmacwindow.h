@@ -55,13 +55,13 @@ class GEM_EXTERN gemmacwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemmacwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemmacwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -82,8 +82,8 @@ class GEM_EXTERN gemmacwindow : public GemWindow
   /* dispatch window events */
   virtual void dispatch(void);
 
-   /* creation/destruction */
-  virtual void        createMess(std::string);
+  /* creation/destruction */
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* decoration,... */
@@ -96,10 +96,10 @@ class GEM_EXTERN gemmacwindow : public GemWindow
   // Should the window be realized
 #warning actuallyDisplay
   bool         m_actuallyDisplay;
-  public:
+public:
   OSStatus eventHandler (EventRef event);
 
- private:
+private:
 
   class Info;
   Info*m_info;

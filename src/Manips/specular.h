@@ -36,41 +36,43 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN specular : public GemBase
 {
-    CPPEXTERN_HEADER(specular, GemBase);
+  CPPEXTERN_HEADER(specular, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	specular(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  specular(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~specular();
+  //////////
+  // Destructor
+  virtual ~specular();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on the color material
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The specular vector (RGBA)
-    	float	    	m_specular[4];
+  //////////
+  // The specular vector (RGBA)
+  float           m_specular[4];
 
-    	//////////
-    	// specular changed
-    	void	    	specularMess(float red, float green, float blue, float alpha);
+  //////////
+  // specular changed
+  void            specularMess(float red, float green, float blue,
+                               float alpha);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	specularMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // static member functions
+  static void     specularMessCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

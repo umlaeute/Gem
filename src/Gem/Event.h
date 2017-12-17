@@ -29,7 +29,8 @@ GEM_EXTERN extern void setMotionCallback(MOTION_CB callback, void *data);
 
 //////////
 // Remove a mouse motion callback
-GEM_EXTERN extern void removeMotionCallback(MOTION_CB callback, void *data);
+GEM_EXTERN extern void removeMotionCallback(MOTION_CB callback,
+    void *data);
 
 
 //////////////////////////////////////////////////////////////////
@@ -47,7 +48,8 @@ GEM_EXTERN extern void setButtonCallback(BUTTON_CB callback, void *data);
 
 //////////
 // Remove a button callback
-GEM_EXTERN extern void removeButtonCallback(BUTTON_CB callback, void *data);
+GEM_EXTERN extern void removeButtonCallback(BUTTON_CB callback,
+    void *data);
 
 
 //////////////////////////////////////////////////////////////////
@@ -72,11 +74,13 @@ GEM_EXTERN extern void removeWheelCallback(WHEEL_CB callback, void *data);
 typedef void (*KEYBOARD_CB)(char *,int, int, void *);
 //////////
 // Set a keyboard callback
-GEM_EXTERN extern void setKeyboardCallback(KEYBOARD_CB callback, void *data);
+GEM_EXTERN extern void setKeyboardCallback(KEYBOARD_CB callback,
+    void *data);
 
 //////////
 // Remove a keyboard callback
-GEM_EXTERN extern void removeKeyboardCallback(KEYBOARD_CB callback, void *data);
+GEM_EXTERN extern void removeKeyboardCallback(KEYBOARD_CB callback,
+    void *data);
 
 //////////////////////////////////////////////////////////////////
 //
@@ -90,15 +94,17 @@ GEM_EXTERN extern void setResizeCallback(RESIZE_CB callback, void *data);
 
 //////////
 // Remove a resize callback
-GEM_EXTERN extern void removeResizeCallback(RESIZE_CB callback, void *data);
+GEM_EXTERN extern void removeResizeCallback(RESIZE_CB callback,
+    void *data);
 
 //////////
 // Trigger an event
 GEM_EXTERN extern void triggerMotionEvent(int x, int y);
-GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x, int y);
+GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x,
+    int y);
 GEM_EXTERN extern void triggerWheelEvent(int axis, int value);
-GEM_EXTERN extern void triggerKeyboardEvent(char *string, int value, int state);
+GEM_EXTERN extern void triggerKeyboardEvent(char *string, int value,
+    int state);
 GEM_EXTERN extern void triggerResizeEvent(int xSize, int ySize);
 
 #endif  // for header file
-

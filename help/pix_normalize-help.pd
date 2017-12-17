@@ -70,7 +70,7 @@
 #X text 509 118 (JPEG \, TIFF \, ..);
 #X obj 468 165 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X text 63 275 Inlet 1: 0|1 : apply/don't apply;
+#X text 63 275 Inlet 1: 1|0 : apply/don't apply;
 #X obj 451 186 pix_normalize;
 #X text 29 76 Description: normalize an image;
 #X text 29 123 [pix_normalize] will normalize your image \, so that

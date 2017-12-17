@@ -20,7 +20,8 @@
 #include "Gem/State.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -30,17 +31,20 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height) : m_reqFormat(GL_RGBA_GEM)
+pix_sig2pix :: pix_sig2pix(t_floatarg width,
+                           t_floatarg height) : m_reqFormat(GL_RGBA_GEM)
 {
 
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data=NULL;
 
-  dimenMess((int)width, (int)height);	//tigital
+  dimenMess((int)width, (int)height);   //tigital
 
   int i;
-  for (i=0; i<3; i++)
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal); /* channels inlet */
+  for (i=0; i<3; i++) {
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal,
+              &s_signal);  /* channels inlet */
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -50,17 +54,30 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height) : m_reqFormat(GL
 pix_sig2pix :: ~pix_sig2pix()
 {}
 
-void pix_sig2pix :: dimenMess(int width, int height) {
-  if (width>32000)width=8;
-  if (height>32000)height=8;
-  if (width  < 0) width  = 0;
-  if (height < 0) height = 0;
+void pix_sig2pix :: dimenMess(int width, int height)
+{
+  if (width>32000) {
+    width=8;
+  }
+  if (height>32000) {
+    height=8;
+  }
+  if (width  < 0) {
+    width  = 0;
+  }
+  if (height < 0) {
+    height = 0;
+  }
 
   m_width =width;
   m_height=height;
 
-  if (width  == 0) width = 8;
-  if (height == 0) height = 8;
+  if (width  == 0) {
+    width = 8;
+  }
+  if (height == 0) {
+    height = 8;
+  }
 
   m_pixBlock.image.xsize =(GLint) width;
   m_pixBlock.image.ysize = (GLint) height;
@@ -71,7 +88,8 @@ void pix_sig2pix :: dimenMess(int width, int height) {
   m_pixBlock.image.setBlack();
 }
 
-void pix_sig2pix :: csMess(GLint cs) {
+void pix_sig2pix :: csMess(GLint cs)
+{
   m_reqFormat=cs;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
@@ -120,11 +138,14 @@ t_int* pix_sig2pix :: perform(t_int* w)
   t_int n = (t_int)(w[6]);
 
   unsigned char* data = x->m_pixBlock.image.data;
-  if (n > x->m_pixsize) n = x->m_pixsize;
+  if (n > x->m_pixsize) {
+    n = x->m_pixsize;
+  }
 
-  switch(x->m_pixBlock.image.format){
-  case GL_RGBA:  default:
-    while(n--){
+  switch(x->m_pixBlock.image.format) {
+  case GL_RGBA:
+  default:
+    while(n--) {
       data[chRed]   = (unsigned char) (*in_red++  *255.0);
       data[chGreen] = (unsigned char) (*in_green++*255.0);
       data[chBlue]  = (unsigned char) (*in_blue++ *255.0);
@@ -134,7 +155,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
     break;
   case GL_YUV422_GEM:
     n/=2;
-    while(n--){
+    while(n--) {
       data[chY0] = (unsigned char) (*in_red++  *255.0);
       data[chU ] = (unsigned char) (*in_green++  *255.0);
       in_green++;
@@ -146,7 +167,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
     }
     break;
   case GL_LUMINANCE:
-    while(n--){
+    while(n--) {
       *data++ = (unsigned char) (*in_red++  *255.0);
     }
     break;
@@ -157,7 +178,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
 
 void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 {
-  if (m_width==0 && m_height==0){
+  if (m_width==0 && m_height==0) {
     int w = powerOfTwo((int)sqrt((double)sp[0]->s_n));
     int h = (sp[0]->s_n / w);
     dimenMess(w, h);
@@ -165,7 +186,8 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_height= 0;
   }
   m_pixBlock.image.setBlack();
-  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[0]->s_n);
+  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+          sp[3]->s_vec, sp[0]->s_n);
 }
 
 /////////////////////////////////////////////////////////
@@ -175,15 +197,19 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix), gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix),
+                   gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
-		  gensym("dsp"), A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
-		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
-		  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
+                  gensym("dsp"), A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
+                  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
+                  gensym("colorspace"), A_DEFSYMBOL, A_NULL);
 }
 
 
@@ -199,6 +225,9 @@ void pix_sig2pix ::dimenMessCallback(void *data, t_float w, t_float h)
 void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
 {
   int cs = getPixFormat(s->s_name);
-  if(cs>0)GetMyClass(data)->csMess(cs);
-  else GetMyClass(data)->error("colorspace must be Grey, YUV or RGBA");
+  if(cs>0) {
+    GetMyClass(data)->csMess(cs);
+  } else {
+    GetMyClass(data)->error("colorspace must be Grey, YUV or RGBA");
+  }
 }

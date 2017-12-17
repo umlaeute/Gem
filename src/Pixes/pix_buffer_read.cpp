@@ -47,17 +47,19 @@ pix_buffer_read :: pix_buffer_read(t_symbol *s) :
   m_bindname(NULL),
   m_needsupdate(false)
 {
-  if ((s)&&(&s_!=s)){
+  if ((s)&&(&s_!=s)) {
     setMess(s);
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("frame"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("frame"));
 }
 
 /////////////////////////////////////////////////////////
 // Destructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_read :: ~pix_buffer_read(){
+pix_buffer_read :: ~pix_buffer_read()
+{
 
 }
 
@@ -65,8 +67,9 @@ pix_buffer_read :: ~pix_buffer_read(){
 // setMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_read :: setMess(t_symbol*s){
-  if (s!=&s_){
+void pix_buffer_read :: setMess(t_symbol*s)
+{
+  if (s!=&s_) {
     m_bindname = s;
   }
   m_needsupdate=true;
@@ -75,8 +78,9 @@ void pix_buffer_read :: setMess(t_symbol*s){
 // frameMess
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_read :: frameMess(t_float f){
-  if (f<0.){
+void pix_buffer_read :: frameMess(t_float f)
+{
+  if (f<0.) {
     error("frame# must not be less than zero (%f)", f);
   }
   m_frame=f;
@@ -87,7 +91,8 @@ void pix_buffer_read :: frameMess(t_float f){
 //   specify an incrementor to proceed to the next image
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_read :: autoMess(t_float f){
+void pix_buffer_read :: autoMess(t_float f)
+{
   m_auto=f;
 }
 /////////////////////////////////////////////////////////
@@ -95,7 +100,8 @@ void pix_buffer_read :: autoMess(t_float f){
 //   should we loop when reaching the end of the buffer ?
 //
 /////////////////////////////////////////////////////////
-void pix_buffer_read :: loopMess(int i){
+void pix_buffer_read :: loopMess(int i)
+{
   m_loop=(i!=0);
 }
 
@@ -110,37 +116,37 @@ void pix_buffer_read :: update_image()
 
   m_haveImage=false;
 
-  if(m_bindname==NULL || m_bindname->s_name==NULL)
-    {
-      error("you must set a buffer name!");
-      return;
-    }
+  if(m_bindname==NULL || m_bindname->s_name==NULL) {
+    error("you must set a buffer name!");
+    return;
+  }
 
   ohead=(Obj_header*)pd_findbyclass(m_bindname, pix_buffer_class);
-  if(ohead==NULL)
-    {
-      error("couldn't find pix_buffer '%s'", m_bindname->s_name);
-      return;
-    }
+  if(ohead==NULL) {
+    error("couldn't find pix_buffer '%s'", m_bindname->s_name);
+    return;
+  }
   buffer=(pix_buffer *)(ohead)->data;
 
-  if (!buffer) return;
+  if (!buffer) {
+    return;
+  }
 
-  if(m_loop)
-    {
-      unsigned int numFrames=buffer->numFrames();
-      m_frame=fmod(m_frame, numFrames);
-      if(m_frame<0.f)m_frame+=numFrames;
+  if(m_loop) {
+    unsigned int numFrames=buffer->numFrames();
+    m_frame=fmod(m_frame, numFrames);
+    if(m_frame<0.f) {
+      m_frame+=numFrames;
     }
+  }
 
   img=buffer->getMess((int)m_frame);
 
-  if (img && img->data)
-    {
-      img->copy2ImageStruct(&m_pixBlock.image);
-      m_pixBlock.newimage = 1;
-      m_haveImage=true;
-    }
+  if (img && img->data) {
+    img->copy2ImageStruct(&m_pixBlock.image);
+    m_pixBlock.newimage = 1;
+    m_haveImage=true;
+  }
   m_needsupdate=false;
 }
 
@@ -150,12 +156,15 @@ void pix_buffer_read :: update_image()
 /////////////////////////////////////////////////////////
 void pix_buffer_read :: render(GemState*state)
 {
-  if(m_needsupdate)
+  if(m_needsupdate) {
     update_image();
+  }
 
 
   // if we don't have an image, just return
-  if (!m_haveImage) return;
+  if (!m_haveImage) {
+    return;
+  }
 
   /* push the incoming state->image into a temporary memory */
   state->get(GemState::_PIX, orgPixBlock);
@@ -166,7 +175,9 @@ void pix_buffer_read :: render(GemState*state)
     additional penalty for traversing the list of classes;
     all in all, msp has done a good job
   */
-  if (NULL==pd_findbyclass(m_bindname, pix_buffer_class)) return;
+  if (NULL==pd_findbyclass(m_bindname, pix_buffer_class)) {
+    return;
+  }
 
   state->set(GemState::_PIX, &m_pixBlock);
 
@@ -180,11 +191,10 @@ void pix_buffer_read :: postrender(GemState *state)
   m_pixBlock.newimage = 0;
 
   // auto-mode logic:
-  if(m_auto > 0.00001 || m_auto < -0.00001)
-    {
-      m_frame+=m_auto;
-      update_image();
-    }
+  if(m_auto > 0.00001 || m_auto < -0.00001) {
+    m_frame+=m_auto;
+    update_image();
+  }
 
   /* restore the original incoming image */
   state->set(GemState::_PIX, orgPixBlock);
@@ -207,14 +217,18 @@ void pix_buffer_read :: obj_setupCallback(t_class *classPtr)
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer_read),
                    gensym("pix_get"),
                    A_DEFSYM, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
-  		  gensym("set"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),
-  		  gensym("frame"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::autoMessCallback),
-  		  gensym("auto"), A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_buffer_read::loopMessCallback),
-  		  gensym("loop"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::setMessCallback),
+                  gensym("set"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::frameMessCallback),
+                  gensym("frame"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::autoMessCallback),
+                  gensym("auto"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_buffer_read::loopMessCallback),
+                  gensym("loop"), A_FLOAT, A_NULL);
 }
 void pix_buffer_read :: setMessCallback(void *data, t_symbol*s)
 {

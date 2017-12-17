@@ -36,27 +36,27 @@ DESCRIPTION
 
 class GEM_EXTERN pix_convert : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_convert, GemPixObj);
+  CPPEXTERN_HEADER(pix_convert, GemPixObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_convert();
+  //////////
+  // Constructor
+  pix_convert();
 
- protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~pix_convert();
+  //////////
+  // Destructor
+  virtual ~pix_convert();
 
-    //////////
-    // Do the processing
-    void 	processImage(imageStruct &image);
+  //////////
+  // Do the processing
+  void        processImage(imageStruct &image);
 
-    imageStruct m_image;
- private:
-    static void colorMessCallback(void *data, t_symbol*s);
+  imageStruct m_image;
+private:
+  static void colorMessCallback(void *data, t_symbol*s);
 };
 
-#endif	// for header file
+#endif  // for header file

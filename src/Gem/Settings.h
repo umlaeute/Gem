@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	- Runtime Configuration of Gem
+        - Runtime Configuration of Gem
 
     Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
     For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -17,19 +17,23 @@ LOG
 #include <vector>
 
 typedef struct _atom t_atom;
-namespace gem { namespace Settings {
-  void init(void);
-  void print(void);
-  void save(void);
+namespace gem
+{
+namespace Settings
+{
+void init(void);
+void print(void);
+void save(void);
 
-  t_atom*get(const std::string key);
-  void set(const std::string key, t_atom*value=NULL);
+t_atom*get(const std::string&key);
+void set(const std::string&key, t_atom*value=NULL);
 
-  void get(const std::string key, int&value);
-  void get(const std::string key, float&value);
-  void get(const std::string key, double&value);
-  void get(const std::string key, std::string&value);
+void get(const std::string&key, int&value);
+void get(const std::string&key, float&value);
+void get(const std::string&key, double&value);
+void get(const std::string&key, std::string&value);
 
-  std::vector<std::string> keys();
-}; };
+std::vector<std::string> keys();
+};
+};
 #endif

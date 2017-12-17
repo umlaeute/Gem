@@ -28,8 +28,9 @@ static std::map<int, gemsdlwindow*>s_windowmap;
 
 CPPEXTERN_NEW(gemsdlwindow);
 
-namespace {
-  static unsigned int sdl_count = 0;
+namespace
+{
+static unsigned int sdl_count = 0;
 };
 
 
@@ -37,22 +38,29 @@ namespace {
 #include <dlfcn.h>
 //This must be called before playing with SDL, else it won't work on osx.
 
-namespace {
-  static void pre_init()
-  {
-    void* cocoa_lib;
+namespace
+{
+static void pre_init()
+{
+  void* cocoa_lib;
 
-    cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa", RTLD_LAZY );
-    if(!cocoa_lib)return;
-    void (*nsappload)(void);
-    nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
-    if(!nsappload)return;
-    nsappload();
+  cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa",
+                      RTLD_LAZY );
+  if(!cocoa_lib) {
+    return;
   }
+  void (*nsappload)(void);
+  nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
+  if(!nsappload) {
+    return;
+  }
+  nsappload();
+}
 };
 #else /* __APPLE__ */
-namespace {
-  void pre_init() {;}
+namespace
+{
+void pre_init() {;}
 };
 #endif /* __APPLE__ */
 
@@ -71,8 +79,9 @@ gemsdlwindow :: gemsdlwindow(void) :
 {
   if(!sdl_count) {
     pre_init();
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
       throw(GemException("could not initialize SDL window infrastructure"));
+    }
     SDL_EnableUNICODE(1);
   }
   sdl_count++;
@@ -93,15 +102,20 @@ gemsdlwindow :: ~gemsdlwindow()
 }
 
 
-bool gemsdlwindow :: makeCurrent(void){
-  if(!m_surface)return false;
+bool gemsdlwindow :: makeCurrent(void)
+{
+  if(!m_surface) {
+    return false;
+  }
   // ????
   return(true);
 }
 
-void gemsdlwindow :: swapBuffers(void) {
-  if(makeCurrent()) // FIXME: is this needed?
+void gemsdlwindow :: swapBuffers(void)
+{
+  if(makeCurrent()) { // FIXME: is this needed?
     SDL_GL_SwapBuffers();
+  }
 }
 
 void gemsdlwindow :: doRender()
@@ -113,7 +127,8 @@ void gemsdlwindow :: doRender()
 
 static std::map<SDLKey, std::string>s_key2symbol;
 static std::map<SDLKey, std::string>s_worldkey2symbol;
-static std::string key2symbol(SDLKey k, Uint16 unicode) {
+static std::string key2symbol(SDLKey k, Uint16 unicode)
+{
   if(0==s_key2symbol.size()) {
     s_key2symbol[SDLK_BACKSPACE]="BackSpace";
     s_key2symbol[SDLK_TAB]="Tab";
@@ -367,7 +382,9 @@ static std::string key2symbol(SDLKey k, Uint16 unicode) {
 
 void gemsdlwindow :: dispatch()
 {
-  if(!m_surface)return;
+  if(!m_surface) {
+    return;
+  }
 
   std::vector<t_atom>al;
   t_atom a;
@@ -391,10 +408,12 @@ void gemsdlwindow :: dispatch()
         info("visible", state);
       }
     }
-      break;
+    break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      key(event.key.which, key2symbol(event.key.keysym.sym, event.key.keysym.unicode), event.key.keysym.scancode, event.key.state==SDL_PRESSED);
+      key(event.key.which, key2symbol(event.key.keysym.sym,
+                                      event.key.keysym.unicode), event.key.keysym.scancode,
+          event.key.state==SDL_PRESSED);
       break;
     case SDL_MOUSEMOTION:
       motion(event.motion.which, event.motion.x, event.motion.y);
@@ -402,7 +421,8 @@ void gemsdlwindow :: dispatch()
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEBUTTONDOWN:
       motion(event.button.which, event.button.x, event.button.y);
-      button(event.button.which, event.button.button-SDL_BUTTON_LEFT, event.button.state==SDL_PRESSED);
+      button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
+             event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);
@@ -425,7 +445,8 @@ void gemsdlwindow :: dispatch()
 void gemsdlwindow :: bufferMess(int buf)
 {
   switch(buf) {
-  case 1: case 2:
+  case 1:
+  case 2:
     m_buffer=buf;
     if(m_surface) {
       post("changing buffer type will only effect newly created windows");
@@ -441,7 +462,7 @@ void gemsdlwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemsdlwindow :: titleMess(std::string s)
+void gemsdlwindow :: titleMess(const std::string&s)
 {
   m_title = s;
   if(m_surface) {
@@ -452,20 +473,21 @@ void gemsdlwindow :: titleMess(std::string s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemsdlwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemsdlwindow :: dimensionsMess(unsigned int width,
+                                    unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1) {
     error ("height must be greater than 0");
     return;
   }
   m_width = width;
   m_height = height;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     m_surface = SDL_SetVideoMode( m_width,
                                   m_height,
                                   m_bpp,
@@ -482,10 +504,11 @@ void gemsdlwindow :: fullscreenMess(int on)
   m_fullscreen = on;
   if(m_surface) {
     if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
-       (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN)))
-        toggle=true;
+        (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN))) {
+      toggle=true;
+    }
   }
-  if(toggle && makeCurrent()){
+  if(toggle && makeCurrent()) {
     SDL_WM_ToggleFullScreen( m_surface );
   }
 }
@@ -526,14 +549,16 @@ bool gemsdlwindow :: create(void)
 
   if(videoInfo) {
     /* This checks to see if surfaces can be stored in memory */
-    if ( videoInfo->hw_available )
+    if ( videoInfo->hw_available ) {
       m_videoFlags |= SDL_HWSURFACE;
-    else
+    } else {
       m_videoFlags |= SDL_SWSURFACE;
+    }
 
     /* This checks if hardware blits can be done */
-    if ( videoInfo->blit_hw )
+    if ( videoInfo->blit_hw ) {
       m_videoFlags |= SDL_HWACCEL;
+    }
   }
 
   /* get a SDL surface */
@@ -541,8 +566,9 @@ bool gemsdlwindow :: create(void)
                                 m_bpp,
                                 m_videoFlags );
 
-  if(!m_surface)
+  if(!m_surface) {
     return false;
+  }
 
 
   if(!createGemWindow()) {
@@ -555,7 +581,8 @@ bool gemsdlwindow :: create(void)
   dispatch();
   return true;
 }
-void gemsdlwindow :: createMess(std::string) {
+void gemsdlwindow :: createMess(const std::string&)
+{
   create();
 }
 

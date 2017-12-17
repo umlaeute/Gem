@@ -42,58 +42,59 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_writer : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_writer, GemBase);
+  CPPEXTERN_HEADER(pix_writer, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_writer(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  pix_writer(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_writer();
+  //////////
+  // Destructor
+  virtual ~pix_writer();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	processImage(imageStruct&image);
+  //////////
+  // Do the rendering
+  virtual void    processImage(imageStruct&image);
 
-    	//////////
-    	// Set the filename and filetype
-    	virtual void	fileMess(int argc, t_atom *argv);
+  //////////
+  // Set the filename and filetype
+  virtual void    fileMess(int argc, t_atom *argv);
 
-      //////////
-      // Manual writing
-      bool            m_banged;
+  //////////
+  // Manual writing
+  bool            m_banged;
 
-      //////////
-      // Automatic writing
-      bool            m_automatic;
+  //////////
+  // Automatic writing
+  bool            m_automatic;
 
-      //////////
-      // Counter for automatic writing
-      int             m_autocount;
+  //////////
+  // Counter for automatic writing
+  int             m_autocount;
 
-    	//////////
-      // path to write to
-    	char	    	m_pathname[MAXPDSTRING];
-    	//////////
-      // current file to write to
-    	char	    	m_filename[MAXPDSTRING+10];
+  //////////
+  // path to write to
+  char            m_pathname[MAXPDSTRING];
+  //////////
+  // current file to write to
+  char            m_filename[MAXPDSTRING+10];
 
-    	//////////
-      // current file to write to
-    	int	    	m_filetype; // 0=tiff, [1..6=jpeg]
+  //////////
+  // current file to write to
+  int             m_filetype; // 0=tiff, [1..6=jpeg]
 
- private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	fileMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
-    	static void 	autoMessCallback(void *data, t_float on);
-    	static void 	bangMessCallback(void *data);
+  //////////
+  // static member functions
+  static void     fileMessCallback(void *data, t_symbol *s, int argc,
+                                   t_atom *argv);
+  static void     autoMessCallback(void *data, t_float on);
+  static void     bangMessCallback(void *data);
 };
 
-#endif	// for header file
+#endif  // for header file

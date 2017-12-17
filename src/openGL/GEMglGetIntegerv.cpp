@@ -5,7 +5,7 @@
 // Implementation file
 //
 // Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//	zmoelnig@iem.kug.ac.at
+//      zmoelnig@iem.kug.ac.at
 //  For information on usage and redistribution, and for a DISCLAIMER
 //  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
 //
@@ -25,31 +25,42 @@ using namespace gem::utils::gl;
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglGetIntegerv :: GEMglGetIntegerv	(int argc, t_atom*argv) :
+GEMglGetIntegerv :: GEMglGetIntegerv    (int argc, t_atom*argv) :
   pname(0),
   m_inlet(0), m_outlet(0)
 {
   unsigned int i;
   unsigned int alistlen=sizeof(m_alist)/sizeof(*m_alist);
-  for(i=0; i<alistlen; i++)SETFLOAT(m_alist+i, 0.);
-  if(1==argc)pnameMess(argv[0]); else if(argc) throw(GemException("invalid number of arguments"));
+  for(i=0; i<alistlen; i++) {
+    SETFLOAT(m_alist+i, 0.);
+  }
+  if(1==argc) {
+    pnameMess(argv[0]);
+  } else if(argc) {
+    throw(GemException("invalid number of arguments"));
+  }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("pname"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                      gensym("pname"));
   m_outlet = outlet_new(this->x_obj, 0);
 
 }
 /////////////////////////////////////////////////////////
 // Destructor
 //
-GEMglGetIntegerv :: ~GEMglGetIntegerv () {
+GEMglGetIntegerv :: ~GEMglGetIntegerv ()
+{
   inlet_free(m_inlet);
   outlet_free(m_outlet);
 }
 
 //////////////////
 // extension check
-bool GEMglGetIntegerv :: isRunnable(void) {
-  if(GLEW_VERSION_1_1)return true;
+bool GEMglGetIntegerv :: isRunnable(void)
+{
+  if(GLEW_VERSION_1_1) {
+    return true;
+  }
   error("your system does not support OpenGL-1.1");
   return false;
 }
@@ -57,8 +68,9 @@ bool GEMglGetIntegerv :: isRunnable(void) {
 /////////////////////////////////////////////////////////
 // Render
 //
-void GEMglGetIntegerv :: render(GemState *state) {
-  GLint mi[16]={0};
+void GEMglGetIntegerv :: render(GemState *state)
+{
+  GLint mi[16]= {0};
 
   glGetIntegerv(pname,mi);
 
@@ -85,7 +97,8 @@ void GEMglGetIntegerv :: render(GemState *state) {
 /////////////////////////////////////////////////////////
 // variable
 //
-void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
+void GEMglGetIntegerv :: pnameMess (t_atom arg)         // FUN
+{
   pname=static_cast<GLenum>(getGLdefine(&arg));
   setModified();
 }
@@ -94,10 +107,17 @@ void GEMglGetIntegerv :: pnameMess (t_atom arg) {	// FUN
 // static member functions
 //
 
-void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr) {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),  	gensym("pname"), A_GIMME, A_NULL);
+void GEMglGetIntegerv :: obj_setupCallback(t_class *classPtr)
+{
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GEMglGetIntegerv::pnameMessCallback),
+                  gensym("pname"), A_GIMME, A_NULL);
 }
 
-void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*, int argc, t_atom*argv) {
-  if(argc==1)GetMyClass(data)->pnameMess ( argv[0]);
+void GEMglGetIntegerv :: pnameMessCallback (void* data, t_symbol*,
+    int argc, t_atom*argv)
+{
+  if(argc==1) {
+    GetMyClass(data)->pnameMess ( argv[0]);
+  }
 }

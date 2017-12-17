@@ -49,9 +49,13 @@ extern "C" {
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmGMERLIN : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmGMERLIN : public film
+{
+public:
 
   //////////
   // Constructor
@@ -63,7 +67,7 @@ class GEM_EXPORT filmGMERLIN : public film {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -79,18 +83,19 @@ class GEM_EXPORT filmGMERLIN : public film {
   virtual bool isThreadable(void);
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
   //-----------------------------------
-  // GROUP:	Movie data
+  // GROUP:     Movie data
   //-----------------------------------
- protected:
+protected:
   pixBlock m_image; // output image
   int m_numFrames, m_numTracks; // number of frames in video
 
-  bgav_t*   	 m_file;
+  bgav_t*        m_file;
   bgav_options_t * m_opt;
   int m_track, m_stream;
   gavl_video_frame_t*m_gframe,*m_finalframe;
@@ -108,10 +113,14 @@ class GEM_EXPORT filmGMERLIN : public film {
   bool m_doConvert;
 
 
-  virtual void log(bgav_log_level_t level, const char *log_domain, const char *message);
- private:
-  static void log_callback(void *data, bgav_log_level_t level, const char *log_domain, const char *message);
+  virtual void log(bgav_log_level_t level, const char *log_domain,
+                   const char *message);
+private:
+  static void log_callback(void *data, bgav_log_level_t level,
+                           const char *log_domain, const char *message);
 
-};};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

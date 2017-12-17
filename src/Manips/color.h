@@ -33,37 +33,38 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN color : public GemBase
 {
-    CPPEXTERN_HEADER(color, GemBase);
+  CPPEXTERN_HEADER(color, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	color(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  color(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~color();
+  //////////
+  // Destructor
+  virtual ~color();
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The color vector (RGBA)
-    	float	    	m_color[4];
+  //////////
+  // The color vector (RGBA)
+  float           m_color[4];
 
-    	//////////
-    	// Color changed
-    	void	    	colorMess(float red, float green, float blue, float alpha);
+  //////////
+  // Color changed
+  void            colorMess(float red, float green, float blue, float alpha);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // static member functions
+  static void     colorMessCallback(void *data, t_symbol *, int argc,
+                                    t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

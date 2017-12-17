@@ -33,29 +33,29 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_takealpha : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_takealpha, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_takealpha, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-    	// Constructor
-    	pix_takealpha();
+  //////////
+  // Constructor
+  pix_takealpha();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_takealpha();
+  //////////
+  // Destructor
+  virtual ~pix_takealpha();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_Gray(imageStruct &image, imageStruct &right);
 
-	// MMX isn't really faster here
+  // MMX isn't really faster here
 };
 
-#endif	// for header file
+#endif  // for header file

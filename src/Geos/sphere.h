@@ -32,33 +32,33 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN sphere : public GemGluObj
 {
-    CPPEXTERN_HEADER(sphere, GemGluObj);
+  CPPEXTERN_HEADER(sphere, GemGluObj);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   sphere(t_floatarg size, t_floatarg slice=10.0);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~sphere(void);
+  //////////
+  // Destructor
+  virtual ~sphere(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-        virtual void  	createSphere(GemState *state);
+  virtual void    createSphere(GemState *state);
 
-        float		*m_x;
-        float		*m_y;
-        float		*m_z;
-        int 		oldStacks, oldSlices;
-        GLenum		oldDrawType;
-	int             oldTexture;
+  float           *m_x;
+  float           *m_y;
+  float           *m_z;
+  int             oldStacks, oldSlices;
+  GLenum          oldDrawType;
+  int             oldTexture;
 
 };
 
-#endif	// for header file
+#endif  // for header file

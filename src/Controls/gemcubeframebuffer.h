@@ -39,13 +39,13 @@ class GEM_EXTERN gemcubeframebuffer : public GemBase
 {
   CPPEXTERN_HEADER(gemcubeframebuffer, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemcubeframebuffer(t_symbol *format, t_symbol *type);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -87,14 +87,14 @@ class GEM_EXTERN gemcubeframebuffer : public GemBase
   virtual void fixFormat(GLenum wantedFormat);
   virtual void printInfo(void);
 
- private:
+private:
   GLboolean             m_haveinit, m_wantinit;
   GLuint      m_frameBufferIndex;
   GLuint      m_depthBufferIndex;
   GLuint      m_offScreenID;
   GLuint      m_texTarget;
   GLuint      m_texunit;
-  int      	  m_face;
+  int             m_face;
   int         m_width, m_height;
   bool        m_rectangle; // 1=TEXTURE_RECTANGLE_EXT, 0=TEXTURE_2D
   GLenum      m_canRectangle; // whichever rectangle formats are supported

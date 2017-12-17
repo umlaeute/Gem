@@ -37,7 +37,7 @@ class GEM_EXTERN gemhead : public gemreceive
 {
   CPPEXTERN_HEADER(gemhead, CPPExtern);
 
- public:
+public:
 
   //////////
   // Constructor
@@ -45,25 +45,25 @@ class GEM_EXTERN gemhead : public gemreceive
 
   //////////
   // A render message
-  void	    	renderGL(GemState *state);
+  void          renderGL(GemState *state);
 
   //////////
   // Set up the modifying flags
-  virtual void	    	startRendering();
+  virtual void          startRendering();
 
   //////////
   // Clean up the modifying flags
-  virtual void	    	stopRendering();
+  virtual void          stopRendering();
 
 
   //////////
   // change the priority
-  void	    	setMess(t_float priority);
-  void        setContext(std::string contextName);
+  void          setMess(t_float priority);
+  void        setContext(const std::string&contextName);
 
   virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -71,16 +71,16 @@ class GEM_EXTERN gemhead : public gemreceive
 
   std::string m_basename;
 
- private:
+private:
 
-  GemCache    	*m_cache;   	    	    // The cache information
+  GemCache      *m_cache;                   // The cache information
 
   void            outputRenderOnOff(int state);
 
-  void	    	renderOnOff(int state);     // Turn rendering on and off
-  int 	    	m_renderOn;
+  void          renderOnOff(int state);     // Turn rendering on and off
+  int           m_renderOn;
 
-  void	    	bangMess();
+  void          bangMess();
 };
 
-#endif	// for header file
+#endif  // for header file

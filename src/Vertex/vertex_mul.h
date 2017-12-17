@@ -32,23 +32,24 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_mul : public vertex_add
 {
-    CPPEXTERN_HEADER(vertex_mul, vertex_add);
+  CPPEXTERN_HEADER(vertex_mul, vertex_add);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   vertex_mul(int, t_atom*);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_mul(void);
+  //////////
+  // Destructor
+  virtual ~vertex_mul(void);
 
-    	//////////
-    	// Do the rendering
-	virtual void    vertexProcess(int lsize, float*larray, int rsize, float*rarray);
+  //////////
+  // Do the rendering
+  virtual void    vertexProcess(int lsize, float*larray, int rsize,
+                                float*rarray);
 };
 
-#endif	// for header file
+#endif  // for header file

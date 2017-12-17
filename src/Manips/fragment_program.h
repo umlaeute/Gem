@@ -37,13 +37,13 @@ class GEM_EXTERN fragment_program : public vertex_program
 {
   CPPEXTERN_HEADER(fragment_program, vertex_program);
 
-    public:
+public:
 
   //////////
   // Constructor
   fragment_program(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -62,4 +62,4 @@ class GEM_EXTERN fragment_program : public vertex_program
   virtual bool isRunnable(void);
 };
 
-#endif	// for header file
+#endif  // for header file

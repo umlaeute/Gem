@@ -32,39 +32,40 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_combine : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_combine, GemBase);
+  CPPEXTERN_HEADER(vertex_combine, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	vertex_combine(void);
+  //////////
+  // Constructor
+  vertex_combine(void);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_combine(void);
+  //////////
+  // Destructor
+  virtual ~vertex_combine(void);
 
-        float	*m_rightVertexArray;
-        float	*m_rightColorArray;
+  float   *m_rightVertexArray;
+  float   *m_rightColorArray;
 
-        float	m_blend;
+  float   m_blend;
 
-        int	m_vertCountR;
-        t_inlet *m_inlet;
-        GemCache *m_cacheRight;
+  int     m_vertCountR;
+  t_inlet *m_inlet;
+  GemCache *m_cacheRight;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-        virtual void 	postrender(GemState *state);
-        virtual void 	rightRender(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
+  virtual void    postrender(GemState *state);
+  virtual void    rightRender(GemState *state);
 
-        //private:
-        static void 	gem_rightMessCallback(void *x, t_symbol *s, int argc, t_atom *argv);
-        static void	blendCallback(void *data, t_float x);
+  //private:
+  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc,
+                                        t_atom *argv);
+  static void     blendCallback(void *data, t_float x);
 
 };
 
-#endif	// for header file
+#endif  // for header file

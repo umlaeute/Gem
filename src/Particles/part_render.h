@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Draw a part_render group
+        Draw a part_render group
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,9 +21,9 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_render
+        part_render
 
-	Draw a part_render group
+        Draw a part_render group
 
 DESCRIPTION
 
@@ -32,27 +32,27 @@ class GEM_EXTERN part_render : public partlib_base
 {
   CPPEXTERN_HEADER(part_render, partlib_base);
 
-    public:
+public:
 
   //////////
   // Constructor
   part_render(void);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
-  virtual void 	postrender(GemState *state);
+  virtual void  renderParticles(GemState *state);
+  virtual void  postrender(GemState *state);
 
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~part_render();
-  void		colorMess(bool state);
-  void		sizeMess (bool state);
+  void          colorMess(bool state);
+  void          sizeMess (bool state);
 
   // How the object should be drawn
-  bool		m_colorize;
-  bool		m_sizing;
+  bool          m_colorize;
+  bool          m_sizing;
 
   unsigned int           m_number;
 
@@ -62,4 +62,4 @@ class GEM_EXTERN part_render : public partlib_base
 
 };
 
-#endif	// for header file
+#endif  // for header file

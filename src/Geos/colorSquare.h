@@ -32,44 +32,48 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN colorSquare : public GemShape
 {
-    CPPEXTERN_HEADER(colorSquare, GemShape);
+  CPPEXTERN_HEADER(colorSquare, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	colorSquare(t_floatarg size);
+  //////////
+  // Constructor
+  colorSquare(t_floatarg size);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~colorSquare();
+  //////////
+  // Destructor
+  virtual ~colorSquare();
 
-    	//////////
-    	// Do the renderShapeing
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the renderShapeing
+  virtual void    renderShape(GemState *state);
 
-    	//////////
-    	// After renderShapeing
-    	virtual void 	postrenderShape(GemState *state);
+  //////////
+  // After renderShapeing
+  virtual void    postrenderShape(GemState *state);
 
-    	//////////
-    	// Set the individual color vertices
-        void            vertColorMess(int whichVert, float r, float g, float b);
+  //////////
+  // Set the individual color vertices
+  void            vertColorMess(int whichVert, float r, float g, float b);
 
-        //////////
-        // Color values
-        float           m_color[4][3];
+  //////////
+  // Color values
+  float           m_color[4][3];
 
-    private:
+private:
 
-       	//////////
-    	// static member functions
-    	static void 	vert0MessCallback(void *data, t_float r, t_float g, t_float b);
-    	static void 	vert1MessCallback(void *data, t_float r, t_float g, t_float b);
-    	static void 	vert2MessCallback(void *data, t_float r, t_float g, t_float b);
-    	static void 	vert3MessCallback(void *data, t_float r, t_float g, t_float b);
+  //////////
+  // static member functions
+  static void     vert0MessCallback(void *data, t_float r, t_float g,
+                                    t_float b);
+  static void     vert1MessCallback(void *data, t_float r, t_float g,
+                                    t_float b);
+  static void     vert2MessCallback(void *data, t_float r, t_float g,
+                                    t_float b);
+  static void     vert3MessCallback(void *data, t_float r, t_float g,
+                                    t_float b);
 };
 
-#endif	// for header file
+#endif  // for header file

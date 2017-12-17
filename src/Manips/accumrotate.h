@@ -21,9 +21,9 @@ LOG
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	accumrotate
+        accumrotate
 
-	accumulate a rotation
+        accumulate a rotation
 
 DESCRIPTION
 
@@ -36,43 +36,43 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN accumrotate : public GemBase
 {
-    CPPEXTERN_HEADER(accumrotate, GemBase);
+  CPPEXTERN_HEADER(accumrotate, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-		accumrotate(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  accumrotate(int argc, t_atom *argv);
 
-	protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~accumrotate();
+  //////////
+  // Destructor
+  virtual ~accumrotate();
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The rotation matrix
-		Matrix			m_rotMatrix;
+  //////////
+  // The rotation matrix
+  Matrix                  m_rotMatrix;
 
-    	//////////
-    	// X value changed
-    	void	    	xMess(float val);
+  //////////
+  // X value changed
+  void            xMess(float val);
 
-    	//////////
-    	// Y value changed
-    	void	    	yMess(float val);
+  //////////
+  // Y value changed
+  void            yMess(float val);
 
-    	//////////
-    	// Z value changed
-    	void	    	zMess(float val);
+  //////////
+  // Z value changed
+  void            zMess(float val);
 
-    	//////////
-    	// A reset was received
-    	void	    	reset();
+  //////////
+  // A reset was received
+  void            reset();
 };
 
-#endif	// for header file
+#endif  // for header file

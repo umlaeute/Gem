@@ -20,7 +20,7 @@ LOG
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	cylinder
+        cylinder
 
     Creates a cylinder
 
@@ -32,32 +32,32 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN cylinder : public GemGluObj
 {
-    CPPEXTERN_HEADER(cylinder, GemGluObj);
+  CPPEXTERN_HEADER(cylinder, GemGluObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
+  //////////
+  // Constructor
   cylinder(t_floatarg size,t_floatarg slize);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~cylinder();
+  //////////
+  // Destructor
+  virtual ~cylinder();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
 
-	virtual void setupParameters(void);
-	GLdouble baseRadius;
-	GLdouble topRadius;
-	GLdouble height;
-	GLint    slices;
-	GLint    stacks;
+  virtual void setupParameters(void);
+  GLdouble baseRadius;
+  GLdouble topRadius;
+  GLdouble height;
+  GLint    slices;
+  GLint    stacks;
 
 };
 
-#endif	// for header file
+#endif  // for header file

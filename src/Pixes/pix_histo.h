@@ -43,13 +43,13 @@ class GEM_EXTERN pix_histo : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_histo, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_histo(int argc, t_atom *argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -57,9 +57,9 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processGrayImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 
   //////////
   // tables to hold the curves
@@ -76,12 +76,13 @@ class GEM_EXTERN pix_histo : public GemPixObj
 
   //////////
   // Set new arrays
-  void	setMess(int argc, t_atom *argv);
+  void  setMess(int argc, t_atom *argv);
 
   //////////
   // the methods
-  static void setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv);
+  static void setMessCallback(void *data, t_symbol *s, int argc,
+                              t_atom* argv);
 
 };
 
-#endif	// for header file
+#endif  // for header file

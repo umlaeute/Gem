@@ -39,66 +39,67 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_convolve : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_convolve, GemPixObj);
+  CPPEXTERN_HEADER(pix_convolve, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_convolve(t_floatarg row, t_floatarg col);
+  //////////
+  // Constructor
+  pix_convolve(t_floatarg row, t_floatarg col);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_convolve();
+  //////////
+  // Destructor
+  virtual ~pix_convolve();
 
-        void calculate3x3YUV(imageStruct &image,imageStruct &tempImg);
-        void calculate3x3YUVAltivec(imageStruct &image,imageStruct &tempImg);
-	void calculateRGBA3x3(imageStruct &image,imageStruct &tempImg);
-
-
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-    	virtual void 	processGrayImage(imageStruct &image);
-	virtual void 	processYUVImage(imageStruct &image);
-
-    	//////////
-    	// Set the matrix range
-    	void	    	rangeMess(float range);
-
-    	//////////
-    	// Set the matrix
-    	void	    	matrixMess(int argc, t_atom *argv);
-
-    	//////////
-    	// The matrix
-    	short int  	*m_imatrix;
-
-    	//////////
-    	// The range
-    	int             m_irange;
+  void calculate3x3YUV(imageStruct &image,imageStruct &tempImg);
+  void calculate3x3YUVAltivec(imageStruct &image,imageStruct &tempImg);
+  void calculateRGBA3x3(imageStruct &image,imageStruct &tempImg);
 
 
-    	//////////
-    	// The number of rows
-    	int 	    	m_rows;
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 
-    	//////////
-    	// The number of columns
-    	int 	    	m_cols;
+  //////////
+  // Set the matrix range
+  void            rangeMess(float range);
 
-        int 		m_chroma;
+  //////////
+  // Set the matrix
+  void            matrixMess(int argc, t_atom *argv);
 
-    private:
-	imageStruct tempImg;
+  //////////
+  // The matrix
+  short int       *m_imatrix;
 
-    	//////////
-    	// Static member functions
-    	static void 	rangeMessCallback(void *data, t_float range);
-    	static void 	matrixMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-        static void 	chromaMessCallback(void *data, t_float value);
+  //////////
+  // The range
+  int             m_irange;
+
+
+  //////////
+  // The number of rows
+  int             m_rows;
+
+  //////////
+  // The number of columns
+  int             m_cols;
+
+  int             m_chroma;
+
+private:
+  imageStruct tempImg;
+
+  //////////
+  // Static member functions
+  static void     rangeMessCallback(void *data, t_float range);
+  static void     matrixMessCallback(void *data, t_symbol *, int argc,
+                                     t_atom *argv);
+  static void     chromaMessCallback(void *data, t_float value);
 };
 
-#endif	// for header file
+#endif  // for header file

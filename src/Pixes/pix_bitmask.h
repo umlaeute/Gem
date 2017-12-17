@@ -38,52 +38,53 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_bitmask : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_bitmask, GemPixObj);
+  CPPEXTERN_HEADER(pix_bitmask, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_bitmask();
+  //////////
+  // Constructor
+  pix_bitmask();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_bitmask();
+  //////////
+  // Destructor
+  virtual ~pix_bitmask();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void	processGrayImage(imageStruct &image);
-	virtual void	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 
 #ifdef __MMX__
-    	virtual void 	processRGBAMMX(imageStruct &image);
-	virtual void	processGrayMMX(imageStruct &image);
-	virtual void	processYUVMMX(imageStruct &image);
+  virtual void    processRGBAMMX(imageStruct &image);
+  virtual void    processGrayMMX(imageStruct &image);
+  virtual void    processYUVMMX(imageStruct &image);
 #endif
 
-    	//////////
-    	// Set the new gain
-    	void	    	vecMaskMess(int argc, t_atom *argv);
+  //////////
+  // Set the new gain
+  void            vecMaskMess(int argc, t_atom *argv);
 
-    	//////////
-    	// Set the new mask
-    	void	    	intMaskMess(int gain);
+  //////////
+  // Set the new mask
+  void            intMaskMess(int gain);
 
-    	//////////
-    	// The new gain
-    	unsigned char	m_mask[4];
+  //////////
+  // The new gain
+  unsigned char   m_mask[4];
 
-	int m_mode; // whether we have only 1 value or separate values; interesting for YUV
+  int m_mode; // whether we have only 1 value or separate values; interesting for YUV
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	vecMaskMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatMaskMessCallback(void *data, t_float gain);
+  //////////
+  // Static member functions
+  static void     vecMaskMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
+  static void     floatMaskMessCallback(void *data, t_float gain);
 };
 
-#endif	// for header file
+#endif  // for header file

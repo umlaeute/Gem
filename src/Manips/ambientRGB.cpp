@@ -29,37 +29,30 @@ CPPEXTERN_NEW_WITH_GIMME(ambientRGB);
 /////////////////////////////////////////////////////////
 ambientRGB :: ambientRGB(int argc, t_atom *argv)
 {
-    if (argc == 4)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[1]);
-        m_vector[2] = atom_getfloat(&argv[2]);
-        m_vector[3] = atom_getfloat(&argv[3]);
-    }
-    else if (argc == 3)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[1]);
-        m_vector[2] = atom_getfloat(&argv[2]);
-        m_vector[3] = 1;
-    }
-    else if (argc == 0)
-    {
-        m_vector[0] = 0.2f;
-        m_vector[1] = 0.2f;
-        m_vector[2] = 0.2f;
-        m_vector[3] = 1.f;
-    }
-    else
-    {
-      throw(GemException("needs 0, 3 or 4 arguments"));
-    }
+  if (argc == 4) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[1]);
+    m_vector[2] = atom_getfloat(&argv[2]);
+    m_vector[3] = atom_getfloat(&argv[3]);
+  } else if (argc == 3) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[1]);
+    m_vector[2] = atom_getfloat(&argv[2]);
+    m_vector[3] = 1;
+  } else if (argc == 0) {
+    m_vector[0] = 0.2f;
+    m_vector[1] = 0.2f;
+    m_vector[2] = 0.2f;
+    m_vector[3] = 1.f;
+  } else {
+    throw(GemException("needs 0, 3 or 4 arguments"));
+  }
 
-    // create the new inlets
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aVal"));
+  // create the new inlets
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aVal"));
 }
 
 /////////////////////////////////////////////////////////
@@ -75,7 +68,7 @@ ambientRGB :: ~ambientRGB()
 /////////////////////////////////////////////////////////
 void ambientRGB :: postrender(GemState *)
 {
-	glEnable(GL_COLOR_MATERIAL);
+  glEnable(GL_COLOR_MATERIAL);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,8 +77,8 @@ void ambientRGB :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void ambientRGB :: render(GemState *)
 {
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_vector);
+  glDisable(GL_COLOR_MATERIAL);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m_vector);
 }
 
 /////////////////////////////////////////////////////////
@@ -94,8 +87,8 @@ void ambientRGB :: render(GemState *)
 /////////////////////////////////////////////////////////
 void ambientRGB :: rMess(float val)
 {
-    m_vector[0] = val;
-    setModified();
+  m_vector[0] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -104,8 +97,8 @@ void ambientRGB :: rMess(float val)
 /////////////////////////////////////////////////////////
 void ambientRGB :: gMess(float val)
 {
-    m_vector[1] = val;
-    setModified();
+  m_vector[1] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -114,8 +107,8 @@ void ambientRGB :: gMess(float val)
 /////////////////////////////////////////////////////////
 void ambientRGB :: bMess(float val)
 {
-    m_vector[2] = val;
-    setModified();
+  m_vector[2] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -124,8 +117,8 @@ void ambientRGB :: bMess(float val)
 /////////////////////////////////////////////////////////
 void ambientRGB :: aMess(float val)
 {
-    m_vector[3] = val;
-    setModified();
+  m_vector[3] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

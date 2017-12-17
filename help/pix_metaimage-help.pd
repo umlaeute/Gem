@@ -60,7 +60,7 @@
 #X obj 451 253 pix_draw;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X text 63 335 Inlet 1: 0|1 : apply/don't apply;
+#X text 63 335 Inlet 1: 1|0 : apply/don't apply;
 #X obj 451 226 pix_metaimage;
 #X floatatom 537 159 3 0 1 1 size - -;
 #X obj 457 178 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0

@@ -38,13 +38,13 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_pix2sig, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_pix2sig();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -63,12 +63,12 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   virtual void  dspMess(void *data, t_signal** sp);
 
   //-----------------------------------
-  // GROUP:	Image data
+  // GROUP:     Image data
   //-----------------------------------
 
   //////////
   // The pixBlock with the current image
-  //  pixBlock    	m_pixBlock;
+  //  pixBlock          m_pixBlock;
   unsigned char *m_data;
   long int       m_size;
   int            m_csize;
@@ -78,11 +78,11 @@ class GEM_EXTERN pix_pix2sig : public GemPixObj
   // the outlets~
   t_outlet *o_col[4];
 
- private:
+private:
 
   //////////
   // static member functions
   static void   dspMessCallback(void* data,t_signal** sp);
 };
 
-#endif	// for header file
+#endif  // for header file

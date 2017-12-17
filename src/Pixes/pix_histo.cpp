@@ -75,7 +75,7 @@ void pix_histo :: setMess(int argc, t_atom *argv)
     return;
   }
 
-  while(n--){
+  while(n--) {
     if (ap->a_type != A_SYMBOL) {
       error("only symbolic table-names are accepted");
       return;
@@ -91,7 +91,7 @@ void pix_histo :: setMess(int argc, t_atom *argv)
     name_R=name_G=name_B=name_A=atom_getsymbol(ap);
     m_mode=1;
     break;
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 4:
     name_A=atom_getsymbol(ap+3);
     m_mode=4;
@@ -113,19 +113,23 @@ void pix_histo :: update_graphs(void)
   t_garray *a;
 
   switch (m_mode) {
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 4:
-    if ((a = (t_garray *)pd_findbyclass(name_A, garray_class)))
+    if ((a = (t_garray *)pd_findbyclass(name_A, garray_class))) {
       garray_redraw(a);
-    /* coverity[unterminated_case] */
+    }
+  /* coverity[unterminated_case] */
   case 3:
-    if ((a = (t_garray *)pd_findbyclass(name_G, garray_class)))
+    if ((a = (t_garray *)pd_findbyclass(name_G, garray_class))) {
       garray_redraw(a);
-    if ((a = (t_garray *)pd_findbyclass(name_B, garray_class)))
+    }
+    if ((a = (t_garray *)pd_findbyclass(name_B, garray_class))) {
       garray_redraw(a);
+    }
   case 1:
-    if ((a = (t_garray *)pd_findbyclass(name_R, garray_class)))
+    if ((a = (t_garray *)pd_findbyclass(name_R, garray_class))) {
       garray_redraw(a);
+    }
   default:
     break;
   }
@@ -149,26 +153,36 @@ void pix_histo :: processRGBAImage(imageStruct &image)
   gem::RTE::Array tabB=gem::RTE::Array(name_B->s_name);
   gem::RTE::Array tabA=gem::RTE::Array(name_A->s_name);
 
-  if (m_mode==0) return;
+  if (m_mode==0) {
+    return;
+  }
   switch (m_mode) {
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 4:
-    if(!tabA.isValid())return;
+    if(!tabA.isValid()) {
+      return;
+    }
     n_A=tabA.size();
     tabA.set(0);
 
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 3:
-    if(!tabB.isValid())return;
+    if(!tabB.isValid()) {
+      return;
+    }
     n_B=tabB.size();
     tabB.set(0);
 
-    if(!tabG.isValid())return;
+    if(!tabG.isValid()) {
+      return;
+    }
     n_G=tabG.size();
     tabG.set(0);
 
   case 1:
-    if(!tabR.isValid())return;
+    if(!tabR.isValid()) {
+      return;
+    }
     n_R=tabR.size();
     tabR.set(0);
 
@@ -190,7 +204,8 @@ void pix_histo :: processRGBAImage(imageStruct &image)
       const unsigned int index=(n_R*grey)>>8;
       tabR[index]+=incr;
 #else
-      float grey = (base[chRed] * 0.3086f + base[chGreen] * 0.6094f + base[chBlue] * 0.0820f)/255.f;
+      float grey = (base[chRed] * 0.3086f + base[chGreen] * 0.6094f +
+                    base[chBlue] * 0.0820f)/255.f;
       tabR[static_cast<int>(n_R*grey)]+=incr;
 #endif
       base+=4;
@@ -232,20 +247,28 @@ void pix_histo :: processYUVImage(imageStruct &image)
   gem::RTE::Array tabU=gem::RTE::Array(name_G->s_name);
   gem::RTE::Array tabV=gem::RTE::Array(name_B->s_name);
 
-  if (m_mode==0) return;
+  if (m_mode==0) {
+    return;
+  }
   switch (m_mode) {
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 3:
-    if(!tabU.isValid())return;
+    if(!tabU.isValid()) {
+      return;
+    }
     n_U=tabU.size();
     tabU.set(0);
 
-    if(!tabV.isValid())return;
+    if(!tabV.isValid()) {
+      return;
+    }
     n_V=tabV.size();
     tabV.set(0);
 
   case 1:
-    if(!tabY.isValid())return;
+    if(!tabY.isValid()) {
+      return;
+    }
     n_Y=tabY.size();
     tabY.set(0);
   default:
@@ -289,13 +312,16 @@ void pix_histo :: processGrayImage(imageStruct &image)
 
   unsigned char *base = image.data;
 
-  if (m_mode==0) return;
+  if (m_mode==0) {
+    return;
+  }
 
   gem::RTE::Array tab=gem::RTE::Array(name_A->s_name);
   int n=tab.size();
 
-  if(!tab.isValid())
+  if(!tab.isValid()) {
     return;
+  }
 
   tab.set(0);
 
@@ -312,11 +338,13 @@ void pix_histo :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_histo :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_histo::setMessCallback),
-		  gensym("set"), A_GIMME,0);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_histo::setMessCallback),
+                  gensym("set"), A_GIMME,0);
 }
 
-void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc, t_atom* argv)
+void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc,
+                                  t_atom* argv)
 {
-    GetMyClass(data)->setMess(argc, argv);
+  GetMyClass(data)->setMess(argc, argv);
 }

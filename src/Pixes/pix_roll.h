@@ -33,13 +33,13 @@ class GEM_EXTERN pix_roll : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_roll, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_roll();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -47,19 +47,19 @@ class GEM_EXTERN pix_roll : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
-  virtual void 	processRGBAImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
 
   //////////
   // Do the YUV processing
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 
   unsigned char  *saved;
-  int		m_vroll,m_axis;
-  int		m_blurH,m_blurW,m_blurSize,m_blurBpp;
+  int           m_vroll,m_axis;
+  int           m_blurH,m_blurW,m_blurSize,m_blurBpp;
   t_inlet         *inletBlur;
 
- private:
+private:
 
   //////////
   // Static member functions
@@ -69,4 +69,3 @@ class GEM_EXTERN pix_roll : public GemPixObj
 };
 
 #endif
-

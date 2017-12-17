@@ -60,7 +60,7 @@
 #X obj 451 263 pix_draw;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X text 63 375 Inlet 1: 0|1 : apply/don't apply;
+#X text 63 375 Inlet 1: 1|0 : apply/don't apply;
 #X msg 463 146 bang;
 #X text 50 12 Synopsis: [pix_puzzle];
 #X text 63 77 Description: shuffle an image;

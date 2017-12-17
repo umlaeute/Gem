@@ -32,23 +32,23 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN triangle : public GemShape
 {
-    CPPEXTERN_HEADER(triangle, GemShape);
+  CPPEXTERN_HEADER(triangle, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	triangle(t_floatarg size);
+  //////////
+  // Constructor
+  triangle(t_floatarg size);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~triangle();
+  //////////
+  // Destructor
+  virtual ~triangle();
 
-    	//////////
-    	// Do the renderShapeing
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the renderShapeing
+  virtual void    renderShape(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

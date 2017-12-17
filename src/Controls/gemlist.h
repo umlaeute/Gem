@@ -35,13 +35,13 @@ class GEM_EXTERN gemlist : public GemBase
 {
   CPPEXTERN_HEADER(gemlist, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   gemlist(void);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -49,17 +49,17 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   // Push the current state
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
   // send a valid state to the outlet
   void sendCacheState(GemCache*cache, GemState*state);
 
   //////////
-  void			trigger(void);
+  void                  trigger(void);
   virtual void rightRender(GemCache*cache, GemState *state);
   void         rightMess(t_symbol *s, int argc, t_atom *argv);
 
@@ -71,8 +71,8 @@ class GEM_EXTERN gemlist : public GemBase
 
   //////////
   // curent state
-  GemState 	m_state;
-  bool		m_validState;
+  GemState      m_state;
+  bool          m_validState;
 
 
   float m_tickTime;
@@ -86,4 +86,4 @@ class GEM_EXTERN gemlist : public GemBase
   t_inlet   *m_inlet;
 };
 
-#endif	// for header file
+#endif  // for header file

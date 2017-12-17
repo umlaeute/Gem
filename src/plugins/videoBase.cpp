@@ -46,7 +46,8 @@ using namespace gem::plugins;
  *
  */
 
-class videoBase :: PIMPL {
+class videoBase :: PIMPL
+{
 public:
   /* interfaces */
   // the list of provided device-classes
@@ -74,7 +75,8 @@ public:
 
   const std::string name;
 
-  PIMPL(const std::string name_, unsigned int locks_, unsigned int timeout_) :
+  PIMPL(const std::string&name_, unsigned int locks_,
+        unsigned int timeout_) :
     threading(locks_>0),
 #ifndef HAVE_PTW32_HANDLE_T
     thread(0),
@@ -93,8 +95,9 @@ public:
       numlocks=locks_;
       locks=new pthread_mutex_t*[numlocks];
       unsigned int i=0;
-      for(i=0; i<locks_; i++)
+      for(i=0; i<locks_; i++) {
         locks[i]=NULL;
+      }
 
       condition_mutex=new pthread_mutex_t;
       condition_cond =new pthread_cond_t;
@@ -110,7 +113,8 @@ public:
       pthread_cond_init(runCondition, NULL);
     }
   }
-  ~PIMPL(void) {
+  ~PIMPL(void)
+  {
     cont=false;
     lock_delete();
     delete[]locks;
@@ -137,21 +141,24 @@ public:
 
   }
 
-  void lock(unsigned int i) {
+  void lock(unsigned int i)
+  {
     //    post("lock %d?\t%d", i, numlocks);
 
     if(i<numlocks && locks[i]) {
       pthread_mutex_lock(locks[i]);
     }
   }
-  void unlock(unsigned int i) {
+  void unlock(unsigned int i)
+  {
     //      post("unlock %d? %d", i,numlocks);
 
     if(i<numlocks && locks[i]) {
       pthread_mutex_unlock(locks[i]);
     }
   }
-  bool lock_new(void) {
+  bool lock_new(void)
+  {
     if(locks) {
       unsigned int i=0;
       for(i=0; i<numlocks; i++) {
@@ -165,7 +172,8 @@ public:
     }
     return true;
   }
-  void lock_delete(void) {
+  void lock_delete(void)
+  {
     if(locks) {
       unsigned int i=0;
       for(i=0; i<numlocks; i++) {
@@ -178,20 +186,25 @@ public:
     }
   }
 
-  void doFreeze(void) {
+  void doFreeze(void)
+  {
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  ( condition_mutex );
-       pthread_cond_wait  ( condition_cond, condition_mutex );
+      pthread_cond_wait  ( condition_cond, condition_mutex );
       pthread_mutex_unlock( condition_mutex );
     }
   }
 
-  void freeze(void) {
-    if(asynchronous)return;
+  void freeze(void)
+  {
+    if(asynchronous) {
+      return;
+    }
     doFreeze();
   }
 
-  void doThaw(void) {
+  void doThaw(void)
+  {
     if(condition_mutex && condition_cond) {
       pthread_mutex_lock  (condition_mutex);
       pthread_cond_signal(condition_cond );
@@ -199,12 +212,16 @@ public:
     }
   }
 
-  void thaw(void) {
-    if(asynchronous)return;
+  void thaw(void)
+  {
+    if(asynchronous) {
+      return;
+    }
     doThaw();
   }
 
-  static void*threadfun(void*you) {
+  static void*threadfun(void*you)
+  {
     videoBase*me=(videoBase*)you;
     pixBlock*pix=NULL;
     me->m_pimpl->cont=true;
@@ -212,8 +229,9 @@ public:
 
     if(me->m_pimpl->runMutex) {
       pthread_mutex_lock(me->m_pimpl->runMutex);
-      if(me->m_pimpl->runCondition)
+      if(me->m_pimpl->runCondition) {
         pthread_cond_signal(me->m_pimpl->runCondition);
+      }
       pthread_mutex_unlock(me->m_pimpl->runMutex);
     }
 
@@ -228,10 +246,11 @@ public:
     return NULL;
   }
 
-  bool setAsynchronous(bool cont) {
+  bool setAsynchronous(bool cont)
+  {
     bool old=asynchronous;
     asynchronous=cont;
-    if(asynchronous){
+    if(asynchronous) {
       doThaw();
     }
     return old;
@@ -247,7 +266,7 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-videoBase :: videoBase(const std::string name, unsigned int locks) :
+videoBase :: videoBase(const std::string&name, unsigned int locks) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA_GEM),
@@ -258,7 +277,7 @@ videoBase :: videoBase(const std::string name, unsigned int locks) :
     provide(name);
   }
 }
-videoBase :: videoBase(const std::string name) :
+videoBase :: videoBase(const std::string&name) :
   m_capturing(false), m_haveVideo(false),
   m_width(64), m_height(64),
   m_reqFormat(GL_RGBA_GEM),
@@ -276,7 +295,10 @@ videoBase :: videoBase(const std::string name) :
 /////////////////////////////////////////////////////////
 videoBase :: ~videoBase()
 {
-  if(m_pimpl)delete m_pimpl; m_pimpl=NULL;
+  if(m_pimpl) {
+    delete m_pimpl;
+  }
+  m_pimpl=NULL;
 }
 /////////////////////////////////////////////////////////
 // open/close
@@ -285,15 +307,21 @@ videoBase :: ~videoBase()
 bool videoBase :: open(gem::Properties&props)
 {
   debugPost("open: %d -> %d", m_haveVideo, m_capturing);
-  if(m_haveVideo)close();
+  if(m_haveVideo) {
+    close();
+  }
   m_haveVideo=openDevice(props);
   return m_haveVideo;
 }
 void videoBase :: close()
 {
   debugPost("close: %d -> %d", m_capturing, m_haveVideo);
-  if(m_capturing)stop();
-  if(m_haveVideo)closeDevice();
+  if(m_capturing) {
+    stop();
+  }
+  if(m_haveVideo) {
+    closeDevice();
+  }
   m_pimpl->shouldrun=false;
   m_haveVideo=false;
 }
@@ -304,21 +332,29 @@ void videoBase :: close()
 bool videoBase :: start()
 {
   debugPost("start: %d -> %d", m_haveVideo, m_capturing);
-  if(!m_haveVideo)return false;
-  if(m_capturing)stop();
+  if(!m_haveVideo) {
+    return false;
+  }
+  if(m_capturing) {
+    stop();
+  }
   m_capturing=startTransfer();
-  if(m_capturing)
+  if(m_capturing) {
     startThread();
+  }
 
   m_pimpl->shouldrun=true;
   return m_capturing;
 }
 bool videoBase :: stop()
 {
-  debugPost("stop(%d): %d -> %d", m_pimpl->shouldrun, m_capturing, m_haveVideo);
+  debugPost("stop(%d): %d -> %d", m_pimpl->shouldrun, m_capturing,
+            m_haveVideo);
   bool running=m_pimpl->shouldrun;
   m_pimpl->shouldrun=false;
-  if(!m_haveVideo)return false;
+  if(!m_haveVideo) {
+    return false;
+  }
   if(m_capturing) {
     stopThread();
     stopTransfer();
@@ -345,22 +381,28 @@ bool videoBase :: restartTransfer()
 {
   debugPost("restartTransfer");
   bool running=stop();
-  if(running)return start();
+  if(running) {
+    return start();
+  }
 
   return false;
 }
 
-bool videoBase :: startThread() {
+bool videoBase :: startThread()
+{
   debugPost("startThread %d", m_pimpl->running);
   if(m_pimpl->running) {
     stopThread();
   }
 
   if(m_pimpl->threading) {
-    if(!m_pimpl->lock_new())return false;
+    if(!m_pimpl->lock_new()) {
+      return false;
+    }
 
-    if(m_pimpl->runMutex)
+    if(m_pimpl->runMutex) {
       pthread_mutex_lock(m_pimpl->runMutex);
+    }
 
     pthread_create(&m_pimpl->thread,
                    0,
@@ -372,23 +414,29 @@ bool videoBase :: startThread() {
       }
       pthread_mutex_unlock(m_pimpl->runMutex);
     }
-    while(!m_pimpl->running)
+    while(!m_pimpl->running) {
       usleep(10);
+    }
 
     return true;
   }
   return false;
 }
-bool videoBase :: stopThread(int timeout) {
+bool videoBase :: stopThread(int timeout)
+{
   int i=0;
-  if(!m_pimpl->threading)return true;
+  if(!m_pimpl->threading) {
+    return true;
+  }
 
   debugPost("stopThread: %d", timeout);
 
   m_pimpl->cont=false;
 
   m_pimpl->thaw();
-  if(timeout<0)timeout=m_pimpl->timeout;
+  if(timeout<0) {
+    timeout=m_pimpl->timeout;
+  }
 
   if(timeout>0) {
     while(m_pimpl->running) {
@@ -414,13 +462,16 @@ bool videoBase :: stopThread(int timeout) {
   m_pimpl->lock_delete();
   return true;
 }
-void videoBase :: lock(unsigned int id) {
+void videoBase :: lock(unsigned int id)
+{
   m_pimpl->lock(id);
 }
-void videoBase :: unlock(unsigned int id) {
+void videoBase :: unlock(unsigned int id)
+{
   m_pimpl->unlock(id);
 }
-void videoBase :: usleep(unsigned long usec) {
+void videoBase :: usleep(unsigned long usec)
+{
   struct timeval sleep;
   long usec_ = usec%1000000;
   long sec_=0;
@@ -430,12 +481,15 @@ void videoBase :: usleep(unsigned long usec) {
   select(0,0,0,0,&sleep);
 }
 
-pixBlock* videoBase :: getFrame(void) {
+pixBlock* videoBase :: getFrame(void)
+{
   pixBlock*pix=&m_image;
-  if(!(m_haveVideo && m_capturing))return NULL;
+  if(!(m_haveVideo && m_capturing)) {
+    return NULL;
+  }
   if(m_pimpl->threading) {
-     // get from thread
-    if(!m_pimpl->running){
+    // get from thread
+    if(!m_pimpl->running) {
       pix=NULL;
     }
   } else {
@@ -450,7 +504,8 @@ pixBlock* videoBase :: getFrame(void) {
 }
 
 
-void videoBase :: releaseFrame(void) {
+void videoBase :: releaseFrame(void)
+{
   m_image.newimage=false;
   unlock();
   m_pimpl->thaw();
@@ -458,21 +513,25 @@ void videoBase :: releaseFrame(void) {
 
 /////////////////////////////////////////////////////////
 // set the color-space
-bool videoBase :: setColor(int d){
+bool videoBase :: setColor(int d)
+{
   post("setting the color-space is not supported by this OS/device");
   return false;
 }
 
 /////////////////////////////////////////////////////////
 // open a dialog for the settings
-bool videoBase :: dialog(std::vector<std::string>dialognames){
+bool videoBase :: dialog(std::vector<std::string>dialognames)
+{
   return false;
 }
-std::vector<std::string>videoBase :: dialogs(void) {
+std::vector<std::string>videoBase :: dialogs(void)
+{
   std::vector<std::string>result;
   return result;
 }
-std::vector<std::string>videoBase :: enumerate(void) {
+std::vector<std::string>videoBase :: enumerate(void)
+{
   std::vector<std::string>result;
   return result;
 }
@@ -482,18 +541,21 @@ std::vector<std::string>videoBase :: enumerate(void) {
 bool videoBase :: setDevice(int d)
 {
   m_devicename.clear();
-  if (d==m_devicenum)return true;
+  if (d==m_devicenum) {
+    return true;
+  }
   m_devicenum=d;
   return true;
 }
-bool videoBase :: setDevice(const std::string name)
+bool videoBase :: setDevice(const std::string&name)
 {
   m_devicenum=-1;
   m_devicename=name;
   return true;
 }
 
-const std::string videoBase :: getName() {
+const std::string videoBase :: getName()
+{
   return m_pimpl->name;
 }
 
@@ -502,20 +564,27 @@ const std::string videoBase :: getName() {
 
 /////////////////////////////////////////////////////////
 // query whether this backend provides a certain type of video decoding, e.g. "dv"
-bool videoBase :: provides(const std::string name) {
-  if(!m_pimpl)return false;
+bool videoBase :: provides(const std::string&name)
+{
+  if(!m_pimpl) {
+    return false;
+  }
   unsigned int i;
   for(i=0; i<m_pimpl->m_providers.size(); i++)
-    if(name == m_pimpl->m_providers[i])return true;
+    if(name == m_pimpl->m_providers[i]) {
+      return true;
+    }
 
   return false;
 }
-std::vector<std::string>videoBase :: provides() {
+std::vector<std::string>videoBase :: provides()
+{
   std::vector<std::string>result;
   if(m_pimpl) {
     unsigned int i;
-    for(i=0; i<m_pimpl->m_providers.size(); i++)
+    for(i=0; i<m_pimpl->m_providers.size(); i++) {
       result.push_back(m_pimpl->m_providers[i]);
+    }
   }
   return result;
 }
@@ -523,22 +592,26 @@ std::vector<std::string>videoBase :: provides() {
 
 /////////////////////////////////////////////////////////
 // remember that this backend provides a certain type of video decoding, e.g. "dv"
-void videoBase :: provide(const std::string name) {
-  if(!m_pimpl)return;
+void videoBase :: provide(const std::string&name)
+{
+  if(!m_pimpl) {
+    return;
+  }
   if(!provides(name)) {
     m_pimpl->m_providers.push_back(name);
   }
 }
 
 bool videoBase :: enumProperties(gem::Properties&readable,
-			     gem::Properties&writeable)
+                                 gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();
   return false;
 }
 
-void videoBase :: setProperties(gem::Properties&props) {
+void videoBase :: setProperties(gem::Properties&props)
+{
   // nada
 
   std::vector<std::string> keys=props.keys();
@@ -564,7 +637,8 @@ void videoBase :: setProperties(gem::Properties&props) {
   std::cerr << std::endl;
 }
 
-void videoBase :: getProperties(gem::Properties&props) {
+void videoBase :: getProperties(gem::Properties&props)
+{
   // nada
   std::vector<std::string>keys=props.keys();
   unsigned int i=0;
@@ -575,11 +649,12 @@ void videoBase :: getProperties(gem::Properties&props) {
 }
 
 
-bool videoBase :: grabAsynchronous(bool fast) {
+bool videoBase :: grabAsynchronous(bool fast)
+{
   return m_pimpl->setAsynchronous(fast);
 }
 
-bool videoBase :: isThreadable(void) {
+bool videoBase :: isThreadable(void)
+{
   return (m_pimpl->numlocks>0);
 }
-

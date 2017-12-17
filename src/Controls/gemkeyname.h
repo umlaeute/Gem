@@ -29,38 +29,38 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN gemkeyname : public CPPExtern
 {
-    CPPEXTERN_HEADER(gemkeyname, CPPExtern);
+  CPPEXTERN_HEADER(gemkeyname, CPPExtern);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-        gemkeyname();
+  //////////
+  // Constructor
+  gemkeyname();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~gemkeyname();
+  //////////
+  // Destructor
+  virtual ~gemkeyname();
 
-        //////////
-        // keyname-button
-        void            KeyNamePressed(char* string, int val, int state);
+  //////////
+  // keyname-button
+  void            KeyNamePressed(char* string, int val, int state);
 
-        //////////
-        // The key-val outlet
-        t_outlet    	*m_outKeyVal;
+  //////////
+  // The key-val outlet
+  t_outlet        *m_outKeyVal;
 
-        //////////
-        // The key-state outlet
-        t_outlet    	*m_outKeyState;
+  //////////
+  // The key-state outlet
+  t_outlet        *m_outKeyState;
 
 
-    private:
+private:
 
-        //////////
-        // Static member functions
-        static void     keynameCallback(char* x, int y, int z, void *data);
+  //////////
+  // Static member functions
+  static void     keynameCallback(char* x, int y, int z, void *data);
 };
 
 #endif  // for header file

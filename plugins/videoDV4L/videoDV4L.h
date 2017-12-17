@@ -42,7 +42,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	pix_video
+        pix_video
 
     Loads in a video
 
@@ -59,55 +59,59 @@ DESCRIPTION
     "sat" (int) - the saturation
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoDV4L : public videoBase {
-    public:
-        //////////
-        // Constructor
-    	videoDV4L(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoDV4L : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoDV4L(void);
 
-    	//////////
-    	// Destructor
-    	virtual ~videoDV4L(void);
+  //////////
+  // Destructor
+  virtual ~videoDV4L(void);
 #ifdef HAVE_DV
-	////////
-	// open the video-device
-	virtual bool           openDevice(gem::Properties&props);
-	virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&props);
+  virtual void          closeDevice(void);
 
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
-  bool	    	startTransfer(void);
-	//////////
+  bool          startTransfer(void);
+  //////////
   // Stop the video device
   // returns TRUE is transfer was running, FALSE is otherwise
-  bool	   	stopTransfer(void);
+  bool          stopTransfer(void);
 
-	//////////
-	// get the next frame
-	bool grabFrame(void);
+  //////////
+  // get the next frame
+  bool grabFrame(void);
 
   int decodeFrame(unsigned char*, int);
   static int iec_frame(unsigned char *data,int len, int complete, void *arg);
 
-	//////////
-	// Set the video dimensions
-	virtual bool	  setColor(int);
-	virtual bool		setQuality(int);
+  //////////
+  // Set the video dimensions
+  virtual bool      setColor(int);
+  virtual bool            setQuality(int);
 
   virtual std::vector<std::string>enumerate(void);
 
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable);
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
- protected:
+protected:
 
   //-----------------------------------
-  // GROUP:	Linux specific video data
+  // GROUP:     Linux specific video data
   //-----------------------------------
   int m_dvfd;
 
@@ -125,6 +129,7 @@ namespace gem { namespace plugins {
   int m_quality;
 #endif /* HAVE_DV */
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

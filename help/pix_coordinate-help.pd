@@ -33,7 +33,7 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 479 383 pd gemwin;
-#X msg 479 364 destroy;
+#X msg 479 364 create;
 #X text 475 343 Create window:;
 #X obj 450 188 cnv 15 160 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -69,30 +69,30 @@ the texture S \, T values from 1 \, 1 to 2 \, 2 (See the examples).
 #X text 63 367 Inlet 2: list: 8 values (4 (s \, t)-pairs);
 #X obj 538 144 loadbang;
 #X msg 461 237 \$1 \$1 0 \$1 0 0 \$1 0;
-#X floatatom 461 220 3 0 256 0 - - -;
+#X floatatom 461 220 3 0 256 0 - - -, f 3;
 #X obj 451 136 pix_texture;
 #X text 14 159 IMPORTANT NOTE-1: [pix_texture] sets the texture-coordinates
 to "appropriate" values \, so you probably want to use [pix_coordinate]
 afterwards;
-#X obj 10 207 cnv 15 420 70 empty empty empty 20 12 0 14 -225280 -66577
+#X obj 10 201 cnv 15 420 45 empty empty empty 20 12 0 14 -225280 -66577
 0;
-#X text 14 209 IMPORTANT NOTE-2: if your hardware supports it \, Gem
-tries to use "rectangle-texturing". This means that normal texture-coordinates
-range from 0..xsize (resp. 0..ysize). If it is not supported (or forced-off
-with "mode 0" to [pix_texture]) texture-coordinates range from 0..1
-;
 #X obj 451 266 pix_coordinate;
 #X msg 459 193 0 0 1 0 1 1 0 1;
 #X msg 468 167 rectangle 0 \, repeat 1;
+#X text 14 248 IMPORTANT NOTE-3: Images with dimensions that are not
+powers-of-2 \, will not "repeat" properly in any case., f 60;
+#X text 14 203 IMPORTANT NOTE-2: if your hardware supports it \, Gem
+tries to use "rectangle-texturing"\\\, which does not support "repeat"
+mode. This is an OpenGL limitation;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
 #X connect 17 0 31 0;
-#X connect 28 0 37 0;
-#X connect 29 0 35 1;
+#X connect 28 0 36 0;
+#X connect 29 0 34 1;
 #X connect 30 0 29 0;
-#X connect 31 0 35 0;
-#X connect 35 0 23 0;
-#X connect 36 0 35 1;
-#X connect 37 0 31 0;
+#X connect 31 0 34 0;
+#X connect 34 0 23 0;
+#X connect 35 0 34 1;
+#X connect 36 0 31 0;

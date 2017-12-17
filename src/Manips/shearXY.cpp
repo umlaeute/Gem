@@ -51,16 +51,16 @@ shearXY :: ~shearXY()
 /////////////////////////////////////////////////////////
 void shearXY :: render(GemState *)
 {
-    GLfloat matrix[16];
+  GLfloat matrix[16];
 
-	matrix[0]=matrix[5]=matrix[10]=matrix[15]=1;
-	matrix[1]=matrix[2]=matrix[3]=matrix[4]=0.f;
-	matrix[6]=matrix[7]=matrix[8]=matrix[9]=0.f;
-	matrix[11]=matrix[12]=matrix[13]=matrix[14]=0.f;
+  matrix[0]=matrix[5]=matrix[10]=matrix[15]=1;
+  matrix[1]=matrix[2]=matrix[3]=matrix[4]=0.f;
+  matrix[6]=matrix[7]=matrix[8]=matrix[9]=0.f;
+  matrix[11]=matrix[12]=matrix[13]=matrix[14]=0.f;
 
-	matrix[4]=shear;
+  matrix[4]=shear;
 
-	glMultMatrixf(matrix);
+  glMultMatrixf(matrix);
 }
 
 /////////////////////////////////////////////////////////
@@ -69,8 +69,8 @@ void shearXY :: render(GemState *)
 /////////////////////////////////////////////////////////
 void shearXY :: shearMess(float val)
 {
-    shear = val;
-    setModified();
+  shear = val;
+  setModified();
 }
 
 
@@ -82,4 +82,3 @@ void shearXY :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "shearVal", shearMess, float);
 }
-

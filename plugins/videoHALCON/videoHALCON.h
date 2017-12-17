@@ -42,7 +42,7 @@
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	pix_video
+        pix_video
 
     Loads in a video
 
@@ -52,44 +52,48 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoHALCON : public videoBase {
-    public:
-        //////////
-        // Constructor
-    	videoHALCON(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoHALCON : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoHALCON(void);
 
-    	//////////
-    	// Destructor
-    	virtual ~videoHALCON(void);
+  //////////
+  // Destructor
+  virtual ~videoHALCON(void);
 
 #ifdef HAVE_HALCON
-	////////
-	// open the video-device
-      virtual bool           openDevice(gem::Properties&);
-      virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&);
+  virtual void          closeDevice(void);
 
-    	//////////
-    	// Start up the video device
-    	// [out] int - returns 0 if bad
-    	bool	    	startTransfer(void);
-	//////////
-    	// Stop the video device
-    	// [out] int - returns 0 if bad
-    	bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool            startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  bool            stopTransfer(void);
 
-	//////////
-	// get the next frame
-	bool grabFrame(void);
+  //////////
+  // get the next frame
+  bool grabFrame(void);
 
   virtual std::vector<std::string>enumerate(void);
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable);
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
- protected:
+protected:
   Halcon::HFramegrabber*m_grabber;
   std::string m_backendname;
   std::vector<std::string> m_backends;
@@ -104,6 +108,7 @@ namespace gem { namespace plugins {
 #endif /* HAVE_HALCON */
 
 };
-};};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

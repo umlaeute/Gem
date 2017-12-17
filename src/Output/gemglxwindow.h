@@ -55,13 +55,13 @@ class GEM_EXTERN gemglxwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemglxwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglxwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -85,13 +85,13 @@ class GEM_EXTERN gemglxwindow : public GemWindow
   virtual void  bufferMess(int buf);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string);
+  virtual void titleMess(const std::string&);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
 
   /* creation/destruction */
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
@@ -101,7 +101,7 @@ class GEM_EXTERN gemglxwindow : public GemWindow
   std::string m_display;
 
   void       print(void);
- private:
+private:
 
   class PIMPL;
   PIMPL*m_pimpl;

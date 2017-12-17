@@ -34,19 +34,26 @@
   "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { class modelloader; };};
+namespace gem
+{
+namespace plugins
+{
+class modelloader;
+};
+};
 
 class GEM_EXTERN multimodel : public GemBase
 {
   CPPEXTERN_HEADER(multimodel, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
-  multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel, t_floatarg skipRate);
+  multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel,
+             t_floatarg skipRate);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -54,8 +61,10 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // When an open is received
-  virtual void  openMess(const std::string&filename, float baseModel, float topModel, float skipRate);
-  virtual void  open(const std::string&filename, int baseModel, int topModel, int skipRate);
+  virtual void  openMess(const std::string&filename, float baseModel,
+                         float topModel, float skipRate);
+  virtual void  open(const std::string&filename, int baseModel, int topModel,
+                     int skipRate);
 
   //////////
   // Change which model to display
@@ -67,16 +76,16 @@ class GEM_EXTERN multimodel : public GemBase
 
   //////////
   // When a rescale is received
-  virtual void	rescaleMess(bool state);
+  virtual void  rescaleMess(bool state);
   //////////
   // When a reverse is received
-  virtual void	reverseMess(bool state);
+  virtual void  reverseMess(bool state);
   //////////
   // Which texture type (linear, spheric)
-  virtual void	textureMess(int state);
+  virtual void  textureMess(int state);
   //////////
   // Set smoothing factor
-  virtual void	smoothMess(t_float fsmooth);
+  virtual void  smoothMess(t_float fsmooth);
   //////////
   // Set material mode
   virtual void  materialMess(int material);
@@ -90,10 +99,11 @@ class GEM_EXTERN multimodel : public GemBase
   virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
 
   //////////
-  virtual void	render(GemState *state);
-  virtual void	startRendering();
+  virtual void  render(GemState *state);
+  virtual void  startRendering();
 
-  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
+  void copyArray(const std::vector<std::vector<float> > tab,
+                 gem::VertexBuffer&vb);
   void copyAllArrays();
   void getVBOarray();
   void createVBO(void);
@@ -110,11 +120,12 @@ class GEM_EXTERN multimodel : public GemBase
   gem::RTE::Outlet m_infoOut;
   std::vector<std::string> m_backends;
 
- private:
+private:
 
   //////////
   // static member functions
-  static void   openMessCallback(void *data, t_symbol *filename, t_float baseModel, t_float topModel, t_float skipRate);
+  static void   openMessCallback(void *data, t_symbol *filename,
+                                 t_float baseModel, t_float topModel, t_float skipRate);
 };
 
-#endif	// for header file
+#endif  // for header file

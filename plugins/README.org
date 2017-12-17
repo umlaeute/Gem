@@ -1,0 +1,106 @@
+* plugins for Gem
+
+this is a collection of plugins, that allow Gem to accomplish input and output
+of media files in a platform-specific way.
+
+** Developer notes
+
+*** verbosity-levels
+when reporting errors, keep in mind that oftentimes the current plugin is only
+one in a long chain.
+e.g. when a film-plugin fails to open a movie file, the next plugin in the
+chain might succeed. therefore, to keep noise for the end user low, the
+reporting verbosity should be kept low; usually below post() level.
+errors that happen once a plugin has been selected, may be more load.
+reporting from (potentially) threaded callbacks, should avoid using Pd's
+post(),... functions and instead just printf() to the stderr.
+
+| loglevel   | maximum visible verbosity      |
+|------------+--------------------------------|
+| LOG:fatal  | verbose(..-3)                  |
+| LOG:error  | pd_error, error, verbose(..-2) |
+| LOG:normal | post, verbose(..-1)            |
+| LOG:debug  | verbose(..0)                   |
+| LOG:all    | verbose(..verbosity)           |
+
+***** namespace
+it would be nice if all plugins supported a common prefix, so people can know where the error comes from,
+e.g. "[GEM:filmAVI]"
+
+***** idea
+ - fatal errors that /must/ effect the user (because the current plugin is selected and there cannot be an alternative) ~error()~
+ - non-fatal errors effecting the user: ~verbose(0)~ (warning)
+ - errors that /might/ effect the user must be ~verbose(0)~
+ - debugging output should be done with ~verbose(1)~
+
+The following is an attempt to define the apropriate logging levels
+
+**** ~film~
+| function         | max reporting state                        |
+|------------------+--------------------------------------------|
+| CTOR             | ~verbose(0)~                               |
+| DTOR             | ~verbose(0)~                               |
+| ~isThreadable~   | ~verbose(0)~                               |
+| ~enumProperties~ | ~verbose(0)~, ~error()~ for opened devices |
+| ~setProperties~  | ~verbose(0)~, ~error()~ for opened devices |
+| ~getProperties~  | ~verbose(0)~, ~error()~ for opened devices |
+| ~open~           | ~verbose(0)~                               |
+| ~close~          | ~error()~                                  |
+| ~changeImage~    | ~error()~                                  |
+| ~getFrame~       | ~error()~, ~printf()~ if threaded          |
+
+**** imageloader
+| function       | max reporting state |
+|----------------+---------------------|
+| CTOR           | ~verbose(0)~        |
+| DTOR           | ~verbose(0)~        |
+| ~isThreadable~ | ~verbose(0)~        |
+| ~load~         | ~verbose(0)~        |
+**** imagesaver
+| function               | max reporting state |
+|------------------------+---------------------|
+| CTOR                   | ~verbose(0)~        |
+| DTOR                   | ~verbose(0)~        |
+| ~isThreadable~         | ~verbose(0)~        |
+| ~save~                 | ~verbose(0)~        |
+| ~estimateSave~         | ~verbose(0)~        |
+| ~getWriteCapabilities~ | ~verbose(0)~        |
+**** modelloader
+**** record
+| function              | max reporting state |
+|-----------------------+---------------------|
+| CTOR                  | ~verbose(0)~        |
+| DTOR                  | ~verbose(0)~        |
+| ~isThreadable~        | ~verbose(0)~        |
+| ~getCodecs~           | ~verbose(0)~        |
+| ~getCodecDescription~ | ~verbose(0)~        |
+| ~setCodec~            | ~verbose(0)~        |
+| ~enumProperties~      | ~verbose(0)~        |
+| ~dialog~              | ~error()~           |
+| ~start~               | ~error()~           |
+| ~write~               | ~error()~           |
+| ~stop~                | ~error()~           |
+
+**** video
+| function           | max reporting state                            |
+|--------------------+------------------------------------------------|
+| CTOR               | ~verbose(0)~                                   |
+| DTOR               | ~verbose(0)~                                   |
+| ~isThreadable~     | ~verbose(0)~                                   |
+| ~enumerate~        | ~verbose(0)~                                   |
+| ~setDevice~        | ~verbose(0)~                                   |
+| ~open~             | ~verbose(0)~                                   |
+| ~start~            | ~error()~                                      |
+| ~getFrame~         | ~fprintf()~ for threaded; ~error()~ otherwise  |
+| ~stop~             | ~error()~                                      |
+| ~close~            | ~error()~                                      |
+| ~reset~            | ~error()~ (?)                                  |
+| ~enumProperties~   | ~error()~ (~verbose()~ for non-opened devices) |
+| ~getProperties~    | ~error()~ (~verbose()~ for non-opened devices) |
+| ~setProperties~    | ~error()~ (~verbose()~ for non-opened devices) |
+| ~dialog~           | ~error()~                                      |
+| ~dialogs~          | ~error()~ (~verbose()~ for non-opened devices) |
+| ~grabAsynchronous~ | ~verbose(0)~                                   |
+| ~setColor~         | ~verbose(0)~                                   |
+| ~provides~         | ~verbose(0)~                                   |
+| ~getName~          | ~verbose(0)~                                   |

@@ -51,7 +51,7 @@ public:
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties &props);
+  virtual bool open(const std::string &filename, const gem::Properties &props);
   
   //////////
   // close the movie file

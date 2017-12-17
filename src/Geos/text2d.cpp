@@ -35,39 +35,57 @@ CPPEXTERN_NEW_WITH_GIMME(text2d);
 #ifdef FTGL
 text2d :: text2d(int argc, t_atom *argv)
   : TextBase(argc,argv), m_antialias(true),
-  m_aafont(NULL), m_bmfont(NULL)
+    m_aafont(NULL), m_bmfont(NULL)
 {
   fontNameMess(DEFAULT_FONT);
 }
 
-text2d :: ~text2d() {
-  if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
-  if(m_aafont) delete m_aafont; m_aafont=NULL;
+text2d :: ~text2d()
+{
+  if(m_bmfont) {
+    delete m_bmfont;
+  }
+  m_bmfont=NULL;
+  if(m_aafont) {
+    delete m_aafont;
+  }
+  m_aafont=NULL;
   m_font=NULL;
 }
 
-FTFont *text2d :: selectFont(void){
-  if(m_antialias && NULL!=m_aafont)
+FTFont *text2d :: selectFont(void)
+{
+  if(m_antialias && NULL!=m_aafont) {
     return m_aafont;
-  if(!m_antialias && NULL!=m_bmfont)
+  }
+  if(!m_antialias && NULL!=m_bmfont) {
     return m_bmfont;
+  }
 
-  if(m_bmfont)
+  if(m_bmfont) {
     return m_bmfont;
+  }
   return m_aafont;
 }
-FTFont *text2d :: makeFont(const char*fontfile){
-  if(m_bmfont) delete m_bmfont; m_bmfont=NULL;
-  if(m_aafont) delete m_aafont; m_aafont=NULL;
+FTFont *text2d :: makeFont(const char*fontfile)
+{
+  if(m_bmfont) {
+    delete m_bmfont;
+  }
+  m_bmfont=NULL;
+  if(m_aafont) {
+    delete m_aafont;
+  }
+  m_aafont=NULL;
   m_font=NULL;
 
   m_bmfont =  new FTGLBitmapFont(fontfile);
-  if (m_bmfont && m_bmfont->Error()){
+  if (m_bmfont && m_bmfont->Error()) {
     delete m_bmfont;
     m_bmfont = NULL;
   }
   m_aafont =  new FTGLPixmapFont(fontfile);
-  if (m_aafont && m_aafont->Error()){
+  if (m_aafont && m_aafont->Error()) {
     delete m_aafont;
     m_aafont = NULL;
   }
@@ -78,17 +96,22 @@ FTFont *text2d :: makeFont(const char*fontfile){
 // setFontSize
 //
 /////////////////////////////////////////////////////////
-void text2d :: setFontSize(){
+void text2d :: setFontSize()
+{
   int fs=static_cast<int>(m_fontSize);
-  if(fs<0)fs=-fs;
+  if(fs<0) {
+    fs=-fs;
+  }
 
   if (m_bmfont) {
-    if (! m_bmfont->FaceSize(fs) )
+    if (! m_bmfont->FaceSize(fs) ) {
       error("unable to set fontsize!");
+    }
   }
   if (m_aafont) {
-    if (! m_aafont->FaceSize(fs) )
+    if (! m_aafont->FaceSize(fs) ) {
       error("unable to set antialiased-fontfize!");
+    }
   }
   m_font=selectFont();
   setModified();
@@ -98,7 +121,8 @@ void text2d :: setFontSize(){
 // render
 //
 /////////////////////////////////////////////////////////
-void text2d :: renderLine(const char*line, float dist) {
+void text2d :: renderLine(const char*line, float dist)
+{
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
@@ -112,7 +136,8 @@ void text2d :: renderLine(const char*line, float dist) {
   m_font->Render(line);
   glPopMatrix();
 }
-void text2d :: renderLine(const wchar_t*line, float dist) {
+void text2d :: renderLine(const wchar_t*line, float dist)
+{
   float x1=0, y1=0, z1=0, x2=0, y2=0, z2=0;
   m_font->BBox(line, x1, y1, z1, x2, y2, z2); // FTGL
 
@@ -153,4 +178,3 @@ void text2d :: aliasMess(int io)
   m_font=selectFont();
 #endif
 }
-

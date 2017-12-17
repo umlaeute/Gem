@@ -43,9 +43,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmDarwin : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmDarwin : public film
+{
+public:
 
   //////////
   // Constructor
@@ -57,7 +61,7 @@ class GEM_EXPORT filmDarwin : public film {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -71,14 +75,18 @@ class GEM_EXPORT filmDarwin : public film {
   virtual errCode changeImage(int imgNum, int trackNum=-1);
 
   // cannot be used within a threaded context
-  virtual bool isThreadable(void) { return false; }
+  virtual bool isThreadable(void)
+  {
+    return false;
+  }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
- protected:
+protected:
   GLenum  m_wantedFormat; // format requested by the user
   bool m_auto;  // automatic progression
   int m_numFrames, m_numTracks; // number of frames in video
@@ -86,16 +94,18 @@ class GEM_EXPORT filmDarwin : public film {
   pixBlock m_image; // output image
 
 
-  Movie			m_movie;
-  GWorldPtr		m_srcGWorld;
-  TimeValue		m_movieTime;
-  Track			m_movieTrack;
-  Media			m_movieMedia;
-  TimeValue		m_timeScale;
-  double		m_durationf;
-  double		m_fps;
+  Movie                 m_movie;
+  GWorldPtr             m_srcGWorld;
+  TimeValue             m_movieTime;
+  Track                 m_movieTrack;
+  Media                 m_movieMedia;
+  TimeValue             m_timeScale;
+  double                m_durationf;
+  double                m_fps;
 
-};};};
+};
+};
+};
 
 #endif //HAVE_CARBONQUICKTIME
-#endif	// for header file
+#endif  // for header file

@@ -27,20 +27,21 @@ CLASS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-namespace gem {
-  class Context;
+namespace gem
+{
+class Context;
 };
 class GemBase;
 
 class GEM_EXTERN GemWindow : public CPPExtern
 {
- CPPEXTERN_HEADER(GemWindow, CPPExtern);
+  CPPEXTERN_HEADER(GemWindow, CPPExtern);
 
- private:
+private:
   class PIMPL;
   PIMPL*m_pimpl;
 
- public:
+public:
 
   //////////
   // Constructor
@@ -50,17 +51,17 @@ class GEM_EXTERN GemWindow : public CPPExtern
   // Destructor
   virtual ~GemWindow(void);
 
- public:
+public:
   /* OUTPUT */
 
   /* an outlet to propagate information to the patch... mainly callbacks from the context */
   /* LATER think about detaching the output from the stack, so we can e.g. destroy a window from a mouse-callback */
   void info(std::vector<t_atom>);
   void info(t_symbol*s, int, t_atom*);
-  void info(std::string);
-  void info(std::string, t_float);
-  void info(std::string, int i);
-  void info(std::string, std::string);
+  void info(const std::string&);
+  void info(const std::string&, t_float);
+  void info(const std::string&, int i);
+  void info(const std::string&, const std::string&);
 
   /* tell downstream objects to render */
   void bang(void);
@@ -72,7 +73,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* mouse entering window */
   void entry(int devId, int state);
   /* keyboard buttons */
-  void key(int devId, std::string, int, int state);
+  void key(int devId, const std::string&, int, int state);
 
   /* window resize/move */
   void dimension(unsigned int, unsigned int);
@@ -177,14 +178,14 @@ class GEM_EXTERN GemWindow : public CPPExtern
   virtual void    transparentMess(bool on);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string);
+  virtual void titleMess(const std::string&);
   virtual void borderMess(bool on);
 
   virtual void    fullscreenMess(int on);
   virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
@@ -196,7 +197,7 @@ class GEM_EXTERN GemWindow : public CPPExtern
   /* fallback callback */
   virtual void        anyMess(t_symbol*s, int argc, t_atom*argv);
 
- protected:
+protected:
   unsigned int m_width, m_height;
 
   // common properties of GemWindow's
@@ -217,4 +218,4 @@ class GEM_EXTERN GemWindow : public CPPExtern
 
 
 
-#endif	// for header file
+#endif  // for header file

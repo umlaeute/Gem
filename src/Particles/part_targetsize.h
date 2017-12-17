@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Set the target size for a particle system
+        Set the target size for a particle system
 
     Copyright (c) 1997-2000 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -21,54 +21,54 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-	part_targetsize
+        part_targetsize
 
-	Set the target color for a particle system
+        Set the target color for a particle system
 
 DESCRIPTION
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_targetsize : public partlib_base
 {
-    CPPEXTERN_HEADER(part_targetsize, partlib_base);
+  CPPEXTERN_HEADER(part_targetsize, partlib_base);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	part_targetsize(t_floatarg size, t_floatarg scale);
+  //////////
+  // Constructor
+  part_targetsize(t_floatarg size, t_floatarg scale);
 
-    	//////////
-    	virtual void 	renderParticles(GemState *state);
+  //////////
+  virtual void    renderParticles(GemState *state);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~part_targetsize();
+  //////////
+  // Destructor
+  virtual ~part_targetsize();
 
-    	//////////
-    	// The scale factor angle
-    	float	    	m_scale[3];
+  //////////
+  // The scale factor angle
+  float           m_scale[3];
 
-	//////////
-	// The target size
-	float		m_size[3];
+  //////////
+  // The target size
+  float           m_size[3];
 
-    	//////////
-    	// Scale changed
-    	void	    	scaleMess(float x, float y, float z);
+  //////////
+  // Scale changed
+  void            scaleMess(float x, float y, float z);
 
-    	//////////
-    	// Size changed
-    	void	    	sizeMess(float sizex, float sizey, float sizez);
+  //////////
+  // Size changed
+  void            sizeMess(float sizex, float sizey, float sizez);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	scaleMessCallback(void *data, t_symbol*, int, t_atom*);
-    	static void 	sizeMessCallback (void *data, t_symbol*, int, t_atom*);
+  //////////
+  // static member functions
+  static void     scaleMessCallback(void *data, t_symbol*, int, t_atom*);
+  static void     sizeMessCallback (void *data, t_symbol*, int, t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

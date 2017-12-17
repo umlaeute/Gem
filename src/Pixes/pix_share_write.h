@@ -16,10 +16,10 @@ class GEM_EXTERN pix_share_write : public GemBase
 {
   CPPEXTERN_HEADER(pix_share_write, GemBase);
 
-    public:
+public:
   pix_share_write(int, t_atom*);
 
- protected:
+protected:
   ~pix_share_write();
 
   void freeShm();
@@ -28,7 +28,7 @@ class GEM_EXTERN pix_share_write : public GemBase
   virtual void render(GemState *state);
   unsigned char *shm_addr;
 #ifndef _WIN32
-  int	shm_id;
+  int   shm_id;
   struct shmid_ds shm_desc;
 #else
   HANDLE m_MapFile;
@@ -36,7 +36,8 @@ class GEM_EXTERN pix_share_write : public GemBase
 #endif
   size_t m_size;
   t_outlet *m_outlet;
-  static void 	setMessCallback(void *data, t_symbol *s, int argc, t_atom *argv);
+  static void   setMessCallback(void *data, t_symbol *s, int argc,
+                                t_atom *argv);
 
 };
 

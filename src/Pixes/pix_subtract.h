@@ -33,35 +33,36 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_subtract : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_subtract, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_subtract, GemPixDualObj);
 
-    public:
+public:
 
-        //////////
-    	// Constructor
-    	pix_subtract();
+  //////////
+  // Constructor
+  pix_subtract();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_subtract();
+  //////////
+  // Destructor
+  virtual ~pix_subtract();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_Gray(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_YUV(imageStruct &image, imageStruct &right);
 #ifdef __MMX__
-	virtual void	processRGBA_MMX(imageStruct &image, imageStruct &right);
-	virtual void	processYUV_MMX(imageStruct &image, imageStruct &right);
-	virtual void	processGray_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
 #ifdef __VEC__
-        virtual void	processYUV_Altivec(imageStruct &image, imageStruct &right);
-        virtual void	processRGBA_Altivec(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_Altivec(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_Altivec(imageStruct &image,
+                                      imageStruct &right);
 #endif
-	virtual void    processDualImage(imageStruct &image, imageStruct &right);
+  virtual void    processDualImage(imageStruct &image, imageStruct &right);
 };
 
-#endif	// for header file
+#endif  // for header file

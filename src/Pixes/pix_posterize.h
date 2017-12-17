@@ -29,32 +29,31 @@ DESCRIPTION
 
 class GEM_EXTERN pix_posterize : public GemPixObj
 {
-CPPEXTERN_HEADER(pix_posterize, GemPixObj);
+  CPPEXTERN_HEADER(pix_posterize, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_posterize();
+  //////////
+  // Constructor
+  pix_posterize();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_posterize();
+  //////////
+  // Destructor
+  virtual ~pix_posterize();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processYUVImage(imageStruct &image);
 
-        void	    	factorMess(float f);
-        void	    	limitMess(int l);
+  void            factorMess(float f);
+  void            limitMess(int l);
 
-        t_inlet         *inletF;
-        t_inlet         *inletL;
-        int		factor; // 0..1 (was 0..255) /* jmz */
-        int		limit; // 0,1,2,3,4
+  t_inlet         *inletF;
+  t_inlet         *inletL;
+  int             factor; // 0..1 (was 0..255) /* jmz */
+  int             limit; // 0,1,2,3,4
 };
 
 #endif
-

@@ -39,48 +39,48 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold_bernsen : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_threshold_bernsen, GemPixObj);
+  CPPEXTERN_HEADER(pix_threshold_bernsen, GemPixObj);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_threshold_bernsen();
+  //////////
+  // Constructor
+  pix_threshold_bernsen();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_threshold_bernsen();
+  //////////
+  // Destructor
+  virtual ~pix_threshold_bernsen();
 
-    	//////////
-    	// Do the processing
-        static void processGraySub_getMinMax(imageStruct&image,
-                                      int fromX, int toX,
-                                      int fromY, int toY,
-                                      unsigned char*resultMin,
-                                      unsigned char*resultMax);
-    	virtual void 	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  static void processGraySub_getMinMax(imageStruct&image,
+                                       int fromX, int toX,
+                                       int fromY, int toY,
+                                       unsigned char*resultMin,
+                                       unsigned char*resultMax);
+  virtual void    processGrayImage(imageStruct &image);
 
-    	//////////
-    	// set the number of tiles
-    	void	    	tilesMess(int w, int h);
-    	void	    	contrastMess(int c);
+  //////////
+  // set the number of tiles
+  void            tilesMess(int w, int h);
+  void            contrastMess(int c);
 
-        int m_xtiles, m_ytiles;
+  int m_xtiles, m_ytiles;
 
-        int m_contrast;
+  int m_contrast;
 
-        unsigned char*m_minVals;
-        unsigned char*m_maxVals;
+  unsigned char*m_minVals;
+  unsigned char*m_maxVals;
 
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	tilesMessCallback(void *data, t_float w, t_float h);
-    	static void 	contrastMessCallback(void *data, t_float c);
+  //////////
+  // Static member functions
+  static void     tilesMessCallback(void *data, t_float w, t_float h);
+  static void     contrastMessCallback(void *data, t_float c);
 };
 
-#endif	// for header file
+#endif  // for header file

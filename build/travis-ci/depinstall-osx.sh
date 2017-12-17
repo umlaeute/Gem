@@ -20,22 +20,24 @@ brewinstall() {
 doinstall() {
   brew update
   brewinstall pkg-config gettext
-  brewinstall fribidi --universal
   brew link gettext --force
+  if [ "x${ARCH}" != "xi386" ]; then
+    brewinstall fribidi
+  fi
   brewinstall imagemagick ftgl
   brewinstall sdl glfw glfw@2
   brewinstall coreutils
   
   ## and install pd
-  PDVERSION="0.46-5"
+  PDVERSION="0.48-0"
   if [ "x${ARCH}" = "xi386" ]; then
+    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.mac.tar.gz
+    tar -xf pd-${PDVERSION}-i386.mac.tar.gz
+    PDDIR=$(pwd)/Pd-${PDVERSION}-i386.app/Contents/Resources/
+  else
     wget http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
     tar -xf pd-${PDVERSION}.mac.tar.gz
     PDDIR=$(pwd)/Pd-${PDVERSION}.app/Contents/Resources/
-  else
-    wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-64bit.mac.tar.gz
-    tar -xf pd-${PDVERSION}-64bit.mac.tar.gz
-    PDDIR=$(pwd)/Pd-${PDVERSION}-64bit.app/Contents/Resources/
   fi
   chmod -R u+rXw .
   

@@ -32,23 +32,23 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemSplash : public GemBase
 {
-    CPPEXTERN_HEADER(GemSplash, GemBase);
+  CPPEXTERN_HEADER(GemSplash, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	GemSplash();
+  //////////
+  // Constructor
+  GemSplash();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~GemSplash();
+  //////////
+  // Destructor
+  virtual ~GemSplash();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

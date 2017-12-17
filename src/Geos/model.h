@@ -34,19 +34,25 @@
   "open" - the RGB model to set the object to
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins { class modelloader; };};
+namespace gem
+{
+namespace plugins
+{
+class modelloader;
+};
+};
 
 class GEM_EXTERN model : public GemBase
 {
   CPPEXTERN_HEADER(model, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   model(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -54,22 +60,22 @@ class GEM_EXTERN model : public GemBase
 
   //////////
   // When an open is received
-  virtual void	openMess(const std::string&filename);
+  virtual void  openMess(const std::string&filename);
 
   virtual void applyProperties(void);
 
   //////////
   // When a rescale is received
-  virtual void	rescaleMess(bool state);
+  virtual void  rescaleMess(bool state);
   //////////
   // When a reverse is received
-  virtual void	reverseMess(bool state);
+  virtual void  reverseMess(bool state);
   //////////
   // Which texture type (linear, spheric)
-  virtual void	textureMess(int state);
+  virtual void  textureMess(int state);
   //////////
   // Set smoothing factor
-  virtual void	smoothMess(t_float fsmooth);
+  virtual void  smoothMess(t_float fsmooth);
   //////////
   // Set material mode
   virtual void  materialMess(int material);
@@ -83,10 +89,11 @@ class GEM_EXTERN model : public GemBase
   virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
 
   //////////
-  virtual void	render(GemState *state);
-  virtual void	startRendering();
+  virtual void  render(GemState *state);
+  virtual void  startRendering();
 
-  void copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb);
+  void copyArray(const std::vector<std::vector<float> > tab,
+                 gem::VertexBuffer&vb);
   void copyAllArrays();
   void getVBOarray();
   void createVBO(void);
@@ -102,4 +109,4 @@ class GEM_EXTERN model : public GemBase
   std::vector<std::string> m_backends;
 };
 
-#endif	// for header file
+#endif  // for header file

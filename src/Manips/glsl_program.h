@@ -41,13 +41,13 @@ class GEM_EXTERN glsl_program : public GemBase
 {
   CPPEXTERN_HEADER(glsl_program, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   glsl_program(void);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -56,17 +56,17 @@ class GEM_EXTERN glsl_program : public GemBase
 
   //////////
   // check openGL-extensions
-  virtual bool 	isRunnable(void);
+  virtual bool  isRunnable(void);
 
   //////////
   // Do the rendering
-  virtual void 	renderGL2(void);
-  virtual void 	renderARB(void);
-  virtual void 	render(GemState *state);
+  virtual void  renderGL2(void);
+  virtual void  renderARB(void);
+  virtual void  render(GemState *state);
 
   //////////
   // Clean up after rendering
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
   // parameters to the glsl-program
@@ -74,19 +74,22 @@ class GEM_EXTERN glsl_program : public GemBase
 
   //////////
   // shader message
-  virtual void 	shaderMess(int argc, t_atom *argv);
-  void 	shaderMess(t_symbol*, int argc, t_atom *argv) { shaderMess(argc, argv); }
-  virtual void 	linkMess(t_symbol*, int, t_atom *);
+  virtual void  shaderMess(int argc, t_atom *argv);
+  void  shaderMess(t_symbol*, int argc, t_atom *argv)
+  {
+    shaderMess(argc, argv);
+  }
+  virtual void  linkMess(t_symbol*, int, t_atom *);
 
   //////////
   // Do the linking
-  virtual bool 	LinkGL2(void);
-  virtual bool 	LinkARB(void);
-  virtual void 	LinkProgram(void);
+  virtual bool  LinkGL2(void);
+  virtual bool  LinkARB(void);
+  virtual void  LinkProgram(void);
 
   //////////
   // What can we play with?
-  virtual void 	getVariables(void);
+  virtual void  getVariables(void);
 
   void createArrays(void);
   void destroyArrays(void);
@@ -95,29 +98,29 @@ class GEM_EXTERN glsl_program : public GemBase
   // Print Info about Hardware limits
   virtual void printInfo(void);
 
-  GLuint		m_program;
-  GLuint		m_shaderObj[MAX_NUM_SHADERS];
+  GLuint                m_program;
+  GLuint                m_shaderObj[MAX_NUM_SHADERS];
 
-  GLhandleARB		m_programARB;
-  GLhandleARB		m_shaderObjARB[MAX_NUM_SHADERS];
+  GLhandleARB           m_programARB;
+  GLhandleARB           m_shaderObjARB[MAX_NUM_SHADERS];
 
-  GLint			m_maxLength;
+  GLint                 m_maxLength;
 
   //////////
   // Variables for the, uh, variables
-  GLint			m_uniformCount;
+  GLint                 m_uniformCount;
   t_symbol  **m_symname;
-  GLint			*m_size;
-  GLenum		*m_type;
+  GLint                 *m_size;
+  GLenum                *m_type;
   GLint       *m_loc;
   GLfloat    **m_param;
   int         *m_flag;
 
-  GLint		m_linked;
+  GLint         m_linked;
   bool        m_wantLink;
-  int		  m_num;
+  int             m_num;
 
-  t_outlet	 *m_outProgramID;
+  t_outlet       *m_outProgramID;
 
   gem::utils::gl::GLuintMap m_shadermapper, m_programmapper;
   float                 m_programmapped;
@@ -133,7 +136,7 @@ class GEM_EXTERN glsl_program : public GemBase
   GLint  m_geoOutVertices;
 
 
- private:
+private:
 
   //////////
   // static member functions
@@ -144,4 +147,4 @@ class GEM_EXTERN glsl_program : public GemBase
   static void typeMessCallback  (void *, t_symbol*, int, t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -27,7 +27,8 @@
 #include "Gem/State.h"
 #include "Gem/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL,
+                            t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -38,7 +39,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL, t_symbo
 //
 /////////////////////////////////////////////////////////
 gemcubeframebuffer :: gemcubeframebuffer(t_symbol *format, t_symbol *type)
-  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0), m_depthBufferIndex(0),
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
+    m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0), m_face(0),
     m_width(256), m_height(256),
     m_rectangle(false), m_canRectangle(0),
@@ -51,8 +53,9 @@ gemcubeframebuffer :: gemcubeframebuffer(t_symbol *format, t_symbol *type)
   //  - width & height
   //  - format/type (ie. GL_TEXTURE_RECTANGLE or GL_TEXTURE_2D)
   //  - anything else?
-  if(!m_outTexInfo)
+  if(!m_outTexInfo) {
     m_outTexInfo = outlet_new(this->x_obj, 0);
+  }
 
   m_FBOcolor[0] = 0.f;
   m_FBOcolor[1] = 0.f;
@@ -67,10 +70,12 @@ gemcubeframebuffer :: gemcubeframebuffer(t_symbol *format, t_symbol *type)
   m_perspect[5] = 20.f;
 
 
-  if(format && format->s_name && format!=gensym(""))
+  if(format && format->s_name && format!=gensym("")) {
     formatMess(format->s_name);
-  if(type   && type->s_name   && type  !=gensym(""))
+  }
+  if(type   && type->s_name   && type  !=gensym("")) {
     typeMess(type->s_name);
+  }
 }
 
 ////////////////////////////////////////////////////////
@@ -87,7 +92,8 @@ gemcubeframebuffer :: ~gemcubeframebuffer()
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool gemcubeframebuffer :: isRunnable() {
+bool gemcubeframebuffer :: isRunnable()
+{
   if(!GLEW_VERSION_1_3) {
     error("openGL version 1.3 needed");
     return false;
@@ -98,10 +104,11 @@ bool gemcubeframebuffer :: isRunnable() {
 
     /* check rectangle possibilities */
     m_canRectangle=GL_TEXTURE_2D;
-    if(GLEW_ARB_texture_rectangle)
+    if(GLEW_ARB_texture_rectangle) {
       m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
-    else if (GLEW_EXT_texture_rectangle)
+    } else if (GLEW_EXT_texture_rectangle) {
       m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
+    }
 
     return true;
   }
@@ -128,8 +135,9 @@ void gemcubeframebuffer :: render(GemState *state)
 
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
 
-  if (m_wantinit)
+  if (m_wantinit) {
     initFBO();
+  }
 
   // store the window viewport dimensions so we can reset them,
   // and set the viewport to the dimensions of our texture
@@ -158,11 +166,16 @@ void gemcubeframebuffer :: render(GemState *state)
   // texel is generated and processed in the fragment program.
   glViewport(0,0, m_width, m_height);
 
-  if(stacks) stacks->push(gem::GLStack::PROJECTION);
+  if(stacks) {
+    stacks->push(gem::GLStack::PROJECTION);
+  }
   glLoadIdentity();
-  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3], m_perspect[4], m_perspect[5]);
+  glFrustum( m_perspect[0],  m_perspect[1],  m_perspect[2],  m_perspect[3],
+             m_perspect[4], m_perspect[5]);
 
-  if(stacks) stacks->push(gem::GLStack::MODELVIEW);
+  if(stacks) {
+    stacks->push(gem::GLStack::MODELVIEW);
+  }
   glLoadIdentity();
 }
 
@@ -181,8 +194,8 @@ void gemcubeframebuffer :: postrender(GemState *state)
   glActiveTexture(GL_TEXTURE0_ARB + m_texunit);
 
   //if(m_texTarget== GL_TEXTURE_2D) {
-    w=1.f;
-    h=1.f;
+  w=1.f;
+  h=1.f;
   /*} else {
     w=static_cast<t_float>(m_width);
     h=static_cast<t_float>(m_height);
@@ -201,8 +214,12 @@ void gemcubeframebuffer :: postrender(GemState *state)
   glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
   glBindTexture( /*m_texTarget*/GL_TEXTURE_CUBE_MAP, m_offScreenID );
 
-  if(stacks) stacks->pop(gem::GLStack::PROJECTION);
-  if(stacks) stacks->pop(gem::GLStack::MODELVIEW);
+  if(stacks) {
+    stacks->pop(gem::GLStack::PROJECTION);
+  }
+  if(stacks) {
+    stacks->pop(gem::GLStack::MODELVIEW);
+  }
 
   // reset to visible window's clear color
   glClearColor( m_color[0], m_color[1], m_color[2], m_color[3] );
@@ -211,30 +228,43 @@ void gemcubeframebuffer :: postrender(GemState *state)
   // now that the render is done,
 
   if(m_face == 0) {
-	  // send textureID, w, h, textureTarget to outlet
-	  t_atom ap[5];
-	  SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
-	  SETFLOAT(ap+1, w);
-	  SETFLOAT(ap+2, h);
-	  SETFLOAT(ap+3, m_texTarget);
-	  SETFLOAT(ap+4, static_cast<t_float>(0.));
-	  outlet_list(m_outTexInfo, 0, 5, ap);
+    // send textureID, w, h, textureTarget to outlet
+    t_atom ap[5];
+    SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
+    SETFLOAT(ap+1, w);
+    SETFLOAT(ap+2, h);
+    SETFLOAT(ap+3, m_texTarget);
+    SETFLOAT(ap+4, static_cast<t_float>(0.));
+    outlet_list(m_outTexInfo, 0, 5, ap);
   }
 }
 
-namespace {
-  const std::string getFormatString(int fmt){
-    std::string format;
-    switch(fmt) {
-    case GL_YUV422_GEM: format="YUV"; break;
-    case GL_RGB: format="RGB"; break;
-    case GL_RGBA: format="RGBA"; break;
-    case GL_BGRA: format="BGRA"; break;
-    case GL_RGB_FLOAT32_ATI: format="RGB32"; break;
-    default: format="<unknown>";
-    }
-    return format;
-  };
+namespace
+{
+const std::string getFormatString(int fmt)
+{
+  std::string format;
+  switch(fmt) {
+  case GL_YUV422_GEM:
+    format="YUV";
+    break;
+  case GL_RGB:
+    format="RGB";
+    break;
+  case GL_RGBA:
+    format="RGBA";
+    break;
+  case GL_BGRA:
+    format="BGRA";
+    break;
+  case GL_RGB_FLOAT32_ATI:
+    format="RGB32";
+    break;
+  default:
+    format="<unknown>";
+  }
+  return format;
+};
 };
 void gemcubeframebuffer :: printInfo()
 {
@@ -243,25 +273,38 @@ void gemcubeframebuffer :: printInfo()
 
   std::string rectangle;
   switch(m_rectangle?m_canRectangle:GL_TEXTURE_2D) {
-  case GL_TEXTURE_2D:            rectangle="2D";             break;
-  case GL_TEXTURE_RECTANGLE_ARB: rectangle="RECTANGLE(ARB)"; break;
+  case GL_TEXTURE_2D:
+    rectangle="2D";
+    break;
+  case GL_TEXTURE_RECTANGLE_ARB:
+    rectangle="RECTANGLE(ARB)";
+    break;
 #if 0
-    /* TR_ARB == TR_EXT for all practical purposes */
-  case GL_TEXTURE_RECTANGLE_EXT: rectangle="RECTANGLE(EXT)"; break;
+  /* TR_ARB == TR_EXT for all practical purposes */
+  case GL_TEXTURE_RECTANGLE_EXT:
+    rectangle="RECTANGLE(EXT)";
+    break;
 #endif
-  default:                       rectangle="<unknown>";
+  default:
+    rectangle="<unknown>";
   }
 
   std::string type;
   switch(m_type) {
-  case GL_UNSIGNED_BYTE: type="BYTE"; break;
-  case GL_FLOAT        : type="FLOAT"; break;
-  default              : type="unknown";
+  case GL_UNSIGNED_BYTE:
+    type="BYTE";
+    break;
+  case GL_FLOAT        :
+    type="FLOAT";
+    break;
+  default              :
+    type="unknown";
   }
 
   verbose(0, "size: %dx%d", m_width, m_height);
   //verbose(0, "rectangle: %d -> %s", m_rectangle, rectangle.c_str());
-  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(), m_format, m_internalformat);
+  verbose(0, "format: %s/%s [%d/%d]", format.c_str(), internalformat.c_str(),
+          m_format, m_internalformat);
   verbose(0, "type: %s [%d]", type.c_str(), m_type);
   verbose(0, "texunit: %d", m_texunit);
 }
@@ -273,10 +316,12 @@ void gemcubeframebuffer :: printInfo()
 void gemcubeframebuffer :: initFBO()
 {
   // clean up any existing FBO before creating a new one
-  if(m_haveinit)
+  if(m_haveinit) {
     destroyFBO();
+  }
 
-  m_texTarget = GL_TEXTURE_CUBE_MAP;//(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
+  m_texTarget =
+    GL_TEXTURE_CUBE_MAP;//(m_rectangle?m_canRectangle:GL_TEXTURE_2D);
   /* check supported formats */
   fixFormat(m_wantFormat);
 
@@ -292,7 +337,7 @@ void gemcubeframebuffer :: initFBO()
   // set textures
   for (int i = 0; i < 6; ++i)
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-      0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
+                 0, m_internalformat, m_width, m_height, 0, m_format, m_type, NULL );
 
 
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -315,42 +360,42 @@ void gemcubeframebuffer :: initFBO()
 
   // Initialize the render buffer.
   glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, m_depthBufferIndex);
-  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, m_width, m_height);
+  glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24,
+                           m_width, m_height);
 
   // Make sure we have not errors.
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;
-  if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
-    {
-      switch(status) {
-      case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
-        break;
-      case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
-        break;
-      case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
-        break;
-      case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
-        break;
-      case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
-        break;
-      case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-        error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
-        break;
-      case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-        error("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
-        break;
-      case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
-        error("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
-        break;
-      default:
-        error("Unknown ERROR %d", status);
-      }
-      return;
+  if( status != GL_FRAMEBUFFER_COMPLETE_EXT ) {
+    switch(status) {
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT");
+      break;
+    case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+      error("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT");
+      break;
+    case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+      error("GL_FRAMEBUFFER_UNSUPPORTED_EXT");
+      break;
+    case GL_INVALID_FRAMEBUFFER_OPERATION_EXT:
+      error("GL_INVALID_FRAMEBUFFER_OPERATION_EXT");
+      break;
+    default:
+      error("Unknown ERROR %d", status);
     }
+    return;
+  }
 
   // Return out of the frame buffer.
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
@@ -367,12 +412,16 @@ void gemcubeframebuffer :: initFBO()
 /////////////////////////////////////////////////////////
 void gemcubeframebuffer :: destroyFBO()
 {
-  if(!GLEW_EXT_framebuffer_object)
-    return;
   // Release all resources.
-  if(m_depthBufferIndex) glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
-  if(m_frameBufferIndex) glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
-  if(m_offScreenID) glDeleteTextures(1, &m_offScreenID);
+  if(m_depthBufferIndex && GLEW_EXT_framebuffer_object) {
+    glDeleteRenderbuffersEXT(1, &m_depthBufferIndex);
+  }
+  if(m_frameBufferIndex && GLEW_EXT_framebuffer_object) {
+    glDeleteFramebuffersEXT(1, &m_frameBufferIndex);
+  }
+  if(m_offScreenID && GLEW_EXT_framebuffer_object) {
+    glDeleteTextures(1, &m_offScreenID);
+  }
 
   m_haveinit = false;
 }
@@ -413,12 +462,11 @@ void gemcubeframebuffer :: stopRendering()
 /////////////////////////////////////////////////////////
 void gemcubeframebuffer :: dimMess(int width, int height)
 {
-  if (width != m_width || height != m_height)
-    {
-      m_width = width;
-      m_height = height;
-      setModified();
-    }
+  if (width != m_width || height != m_height) {
+    m_width = width;
+    m_height = height;
+    setModified();
+  }
 }
 
 void gemcubeframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
@@ -445,9 +493,10 @@ void gemcubeframebuffer :: colorMess(t_symbol*s,int argc, t_atom*argv)
   //  setModified();
 }
 
-void gemcubeframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
+void gemcubeframebuffer :: perspectiveMess(t_symbol*s,int argc,
+    t_atom*argv)
 {
-  switch(argc){
+  switch(argc) {
   case 6:
     m_perspect[0]=atom_getfloat(argv);
     m_perspect[1]=atom_getfloat(argv+1);
@@ -468,14 +517,14 @@ void gemcubeframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
 /* needs to be called with a valid context */
 void gemcubeframebuffer :: fixFormat(GLenum wantFormat)
 {
-   m_type = GL_UNSIGNED_BYTE;
+  m_type = GL_UNSIGNED_BYTE;
 
   if(wantFormat == GL_RGB_FLOAT32_ATI && !GLEW_ATI_texture_float) {
     wantFormat =  GL_RGB;
   }
 
   switch(wantFormat) {
-    /* coverity[unterminated_default] */
+  /* coverity[unterminated_default] */
   default:
     verbose(1,"using default format");
   case GL_RGB:
@@ -502,8 +551,8 @@ void gemcubeframebuffer :: fixFormat(GLenum wantFormat)
 #ifdef __APPLE__
   switch(wantFormat) {
   case  GL_RGB_FLOAT32_ATI:
-  m_format = GL_BGR;
-  break;
+    m_format = GL_BGR;
+    break;
   case GL_RGBA:
     m_format = GL_BGRA;
     break;
@@ -527,13 +576,14 @@ void gemcubeframebuffer :: formatMess(std::string format)
   } else if ("RGBA"==format) {
     tmp_format = GL_RGBA;
   } else if ("RGB32"==format) {
-      tmp_format =  GL_RGB_FLOAT32_ATI;
+    tmp_format =  GL_RGB_FLOAT32_ATI;
   } else if ("RGBA32F"==format) {
-      tmp_format =  GL_RGBA32F;
+    tmp_format =  GL_RGBA32F;
   }
 
-  if(tmp_format)
+  if(tmp_format) {
     m_wantFormat=tmp_format;
+  }
   setModified();
 }
 
@@ -554,11 +604,13 @@ void gemcubeframebuffer :: rectangleMess(bool rectangle)
   m_rectangle=rectangle;
   setModified();
 }
-void gemcubeframebuffer :: texunitMess(int unit) {
+void gemcubeframebuffer :: texunitMess(int unit)
+{
   m_texunit=static_cast<GLuint>(unit);
 }
 
-void gemcubeframebuffer :: faceMess(int face) {
+void gemcubeframebuffer :: faceMess(int face)
+{
   m_face=face;
 }
 

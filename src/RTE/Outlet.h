@@ -18,25 +18,29 @@
 #include "Utils/any.h"
 
 class CPPExtern;
-namespace gem { namespace RTE {
-    class GEM_EXTERN Outlet {
-    private:
-      class PIMPL;
-      PIMPL*m_pimpl;
+namespace gem
+{
+namespace RTE
+{
+class GEM_EXTERN Outlet
+{
+private:
+  class PIMPL;
+  PIMPL*m_pimpl;
 
-    public:
-      Outlet(CPPExtern*parent);
-      Outlet(const Outlet&);
+public:
+  Outlet(CPPExtern*parent);
+  Outlet(const Outlet&);
 
-      virtual ~Outlet(void);
+  virtual ~Outlet(void);
 
-      void send(void);   // bang
-      void send(double); // float
-      void send(std::string, std::vector<gem::any>data);
+  void send(void);   // bang
+  void send(double); // float
+  void send(std::string, std::vector<gem::any>data);
 
-      Outlet& operator=(const Outlet&);
-    };
-  };
+  Outlet& operator=(const Outlet&);
+};
+};
 };
 
 

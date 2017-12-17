@@ -51,11 +51,11 @@ fragment_program :: ~fragment_program()
 /////////////////////////////////////////////////////////
 GLint fragment_program :: queryProgramtype(char*program)
 {
-  if(!strncmp(program,"!!ARBfp1.0",10)){
+  if(!strncmp(program,"!!ARBfp1.0",10)) {
     m_programTarget=GL_FRAGMENT_PROGRAM_ARB;
     return(GEM_PROGRAM_ARB);
   }
-  if(!strncmp(program,"!!FP1.0",7)){
+  if(!strncmp(program,"!!FP1.0",7)) {
     m_programTarget=GL_FRAGMENT_PROGRAM_NV;
     return(GEM_PROGRAM_NV);
   }
@@ -65,9 +65,11 @@ GLint fragment_program :: queryProgramtype(char*program)
 /////////////////////////////////////////////////////////
 // extension check
 //
-bool fragment_program :: isRunnable() {
-  if(GLEW_ARB_fragment_program || GLEW_NV_fragment_program)
+bool fragment_program :: isRunnable()
+{
+  if(GLEW_ARB_fragment_program || GLEW_NV_fragment_program) {
     return true;
+  }
 
   error("need ARB (or NV) fragment_program extension for shaders");
   return false;
@@ -104,118 +106,154 @@ void fragment_program :: printInfo()
   glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
   post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEMPORARIES_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_TEMPORARIES: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_PARAMETERS_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_PARAMETERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ATTRIBS_ARB,
+                     &bitnum);
   post("MAX_PROGRAM_ATTRIBS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
   post("MAX_PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_LOCAL_PARAMETERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_ENV_PARAMETERS_ARB, &bitnum);
   post("MAX_PROGRAM_ENV_PARAMETERS: %d", bitnum);
   post("");
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_LENGTH_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_LENGTH_ARB,
+                     &bitnum);
   post("PROGRAM_LENGTH: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_FORMAT_ARB,
+                     &bitnum);
   post("PROGRAM_FORMAT: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_BINDING_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_BINDING_ARB,
+                     &bitnum);
   post("PROGRAM_BINDING: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_INSTRUCTIONS_ARB,
+                     &bitnum);
   post("PROGRAM_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEMPORARIES_ARB,
+                     &bitnum);
   post("PROGRAM_TEMPORARIES: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_TEMPORARIES_ARB, &bitnum);
   post("PROGRAM_NATIVE_TEMPORARIES: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_PARAMETERS_ARB,
+                     &bitnum);
   post("PROGRAM_PARAMETERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_PARAMETERS_ARB, &bitnum);
   post("PROGRAM_NATIVE_PARAMETERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ATTRIBS_ARB,
+                     &bitnum);
   post("PROGRAM_ATTRIBS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ATTRIBS_ARB,
+                     &bitnum);
   post("PROGRAM_NATIVE_ATTRIBS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_ADDRESS_REGISTERS_ARB, &bitnum);
   post("PROGRAM_ADDRESS_REGISTERS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB, &bitnum);
   post("PROGRAM_NATIVE_ADDRESS_REGISTERS: %d", bitnum);
   post("");
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_ALU_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_TEX_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_TEX_INDIRECTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
   post("MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS: %d", bitnum);
   post("");
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_ALU_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_ALU_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_TEX_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_TEX_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_TEX_INDIRECTIONS_ARB, &bitnum);
   post("PROGRAM_TEX_INDIRECTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_ALU_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_TEX_INSTRUCTIONS: %d", bitnum);
 
-  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB, GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
+  glGetProgramivARB( GL_FRAGMENT_PROGRAM_ARB,
+                     GL_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB, &bitnum);
   post("PROGRAM_NATIVE_TEX_INDIRECTIONS: %d", bitnum);
 
-	post("");
+  post("");
 }
 
 /////////////////////////////////////////////////////////

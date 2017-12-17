@@ -68,12 +68,12 @@ float CVector3::operator*(CVector3 vVector) const
 // cross-multiplication
 CVector3 CVector3::cross(CVector3 vVector) const
 {
-    CVector3 vCross;                                // The vector to hold the cross product
-    vCross.x = ((y * vVector.z) - (z * vVector.y)); // Get the X value
-    vCross.y = ((z * vVector.x) - (x * vVector.z)); // Get the Y value
-    vCross.z = ((x * vVector.y) - (y * vVector.x)); // Get the Z value
+  CVector3 vCross;                                // The vector to hold the cross product
+  vCross.x = ((y * vVector.z) - (z * vVector.y)); // Get the X value
+  vCross.y = ((z * vVector.x) - (x * vVector.z)); // Get the Y value
+  vCross.z = ((x * vVector.y) - (y * vVector.x)); // Get the Z value
 
-    return vCross;                              // Return the cross product
+  return vCross;                              // Return the cross product
 }
 
 
@@ -104,9 +104,12 @@ CVector3 CVector3::normalize() const
   CVector3 vNormal;
   float InvMagnitude = 1.f / abs();  // Get the magnitude
 
-  vNormal.x = x*InvMagnitude;              // Divide the vector's X by the magnitude
-  vNormal.y = y*InvMagnitude;              // Divide the vector's Y by the magnitude
-  vNormal.z = z*InvMagnitude;              // Divide the vector's Z by the magnitude
+  vNormal.x =
+    x*InvMagnitude;              // Divide the vector's X by the magnitude
+  vNormal.y =
+    y*InvMagnitude;              // Divide the vector's Y by the magnitude
+  vNormal.z =
+    z*InvMagnitude;              // Divide the vector's Z by the magnitude
 
   return vNormal;                         // Return the normal
 }
@@ -115,6 +118,6 @@ CVector3 CVector3::normalize() const
 bool CVector3::equals(CVector3 vVector, float epsilon) const
 {
   return (fabsf(x - vVector.x) < epsilon &&
-	  fabsf(y - vVector.y) < epsilon &&
-	  fabsf(z - vVector.z) < epsilon);
+          fabsf(y - vVector.y) < epsilon &&
+          fabsf(z - vVector.z) < epsilon);
 }

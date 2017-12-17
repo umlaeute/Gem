@@ -7,13 +7,13 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_movement2, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movement2(t_float lothresh=0.392f, t_float hithresh=0.588f);
 
- protected:
+protected:
   //Destructor
   ~pix_movement2();
   void processImage(imageStruct &image);
@@ -33,11 +33,11 @@ class GEM_EXTERN pix_movement2 : public GemPixObj
   void lowThreshMess(int thresh);
   void bangMess();
 
- private:
+private:
   static void threshMessCallback(void *data, t_float fthresh);
   static void lowThreshMessCallback(void *data, t_float fthresh);
   static void bangMessCallback(void *data);
 };
 
 
-#endif 	// for header file
+#endif  // for header file

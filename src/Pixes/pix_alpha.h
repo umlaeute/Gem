@@ -43,64 +43,66 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_alpha : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_alpha, GemPixObj);
+  CPPEXTERN_HEADER(pix_alpha, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_alpha();
+  //////////
+  // Constructor
+  pix_alpha();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_alpha();
+  //////////
+  // Destructor
+  virtual ~pix_alpha();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
 
-    	//////////
-    	// Set the high threshold vector
-    	void	    	highThreshMess(float red, float green, float blue);
+  //////////
+  // Set the high threshold vector
+  void            highThreshMess(float red, float green, float blue);
 
-    	//////////
-    	// Set the low threshold vector
-    	void	    	lowThreshMess(float red, float green, float blue);
+  //////////
+  // Set the low threshold vector
+  void            lowThreshMess(float red, float green, float blue);
 
-    	//////////
-    	// Set the new alpha value
-    	void	    	alphaMess(float alpha);
+  //////////
+  // Set the new alpha value
+  void            alphaMess(float alpha);
 
-    	//////////
-    	// Set the other alpha value
-    	void	    	otheralphaMess(float alpha);
+  //////////
+  // Set the other alpha value
+  void            otheralphaMess(float alpha);
 
-    	//////////
-    	// The low threshold
-    	unsigned char  	m_lowThresh[3];
+  //////////
+  // The low threshold
+  unsigned char   m_lowThresh[3];
 
-    	//////////
-    	// The high threshold
-    	unsigned char  	m_highThresh[3];
+  //////////
+  // The high threshold
+  unsigned char   m_highThresh[3];
 
-    	//////////
-    	// The alpha value
-    	unsigned char	m_alpha;
+  //////////
+  // The alpha value
+  unsigned char   m_alpha;
 
-    	//////////
-    	// The other alpha value
-    	unsigned char	m_otheralpha;
+  //////////
+  // The other alpha value
+  unsigned char   m_otheralpha;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	highThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
-    	static void 	lowThreshMessCallback(void *data, t_float red, t_float green, t_float blue);
-    	static void 	alphaMessCallback(void *data, t_float alpha);
-    	static void 	otheralphaMessCallback(void *data, t_float alpha);
+  //////////
+  // Static member functions
+  static void     highThreshMessCallback(void *data, t_float red,
+                                         t_float green, t_float blue);
+  static void     lowThreshMessCallback(void *data, t_float red,
+                                        t_float green, t_float blue);
+  static void     alphaMessCallback(void *data, t_float alpha);
+  static void     otheralphaMessCallback(void *data, t_float alpha);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -30,71 +30,79 @@ struct _symbol;
 #include "Gem/Exception.h"
 
 
-namespace gem {namespace utils {namespace gl {
-GEM_EXTERN extern GLenum	glReportError (bool verbose=true);
+namespace gem
+{
+namespace utils
+{
+namespace gl
+{
+GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
 GEM_EXTERN extern int           getGLdefine(const char *name);
 GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
 GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
-GEM_EXTERN extern int           getGLbitfield(int argc, struct _atom *argv);
+GEM_EXTERN extern int           getGLbitfield(int argc,
+    struct _atom *argv);
 
 
 
-  /* mapping between GLSL-program IDs and float */
-  /* this can also return different IDs for different contexts */
-  class GEM_EXTERN GLuintMap {
-  public:
-    GLuintMap(const std::string&name);
-    virtual ~GLuintMap();
-    GLuint get(float) throw(GemException&);
-    /* map a GLuint to float; if float is 0, the new mapping is created,
-     * else we just update an existing one
-     * updating is especially useful with multiple contexts */
-    float set(GLuint, float f=0);
+/* mapping between GLSL-program IDs and float */
+/* this can also return different IDs for different contexts */
+class GEM_EXTERN GLuintMap
+{
+public:
+  GLuintMap(const std::string&name);
+  virtual ~GLuintMap();
+  GLuint get(float); // throws GemException
+  /* map a GLuint to float; if float is 0, the new mapping is created,
+   * else we just update an existing one
+   * updating is especially useful with multiple contexts */
+  float set(GLuint, float f=0);
 
-    void del(float);
+  void del(float);
 
 
-    /* usage:
+  /* usage:
+     mapper=GLuintMap("glsl_program");
+     prog=glCreateProgram();
+     progMapped=mapper.set(prog);
+     // for multi-context, you probably want to have a single float map to multiple
+     // programIDs; you add (or update) an existing mapping with:
+     //    progMapped=mapper.set(prog, progMapped));
+     outlet_float(m_out, mapper.get(progMapped));
+
+     // ... somewhere else
+     mapper=GLuintMap("glsl_program");
+     GLuint id = mapper.get(atom_getfloat(ap));
+  */
+
+  /* multi-context:
        mapper=GLuintMap("glsl_program");
+       float progF=0;
+       switchContext(A);
        prog=glCreateProgram();
-       progMapped=mapper.set(prog);
-       // for multi-context, you probably want to have a single float map to multiple
-       // programIDs; you add (or update) an existing mapping with:
-       //    progMapped=mapper.set(prog, progMapped));
-       outlet_float(m_out, mapper.get(progMapped));
+       progF=mapper.set(prog, progF);
+       print(prog,progF); // "3" "3.1415"
+       switchContext(B);
+       prog=glCreateProgram();
+       progF=mapper.set(prog, progF);
+       print(prog,progF); // "6" "3.1415"
 
-       // ... somewhere else
+       // ...somewhere else
        mapper=GLuintMap("glsl_program");
-       GLuint id = mapper.get(atom_getfloat(ap));
-    */
-
-    /* multi-context:
-         mapper=GLuintMap("glsl_program");
-         float progF=0;
-         switchContext(A);
-         prog=glCreateProgram();
-         progF=mapper.set(prog, progF);
-         print(prog,progF); // "3" "3.1415"
-         switchContext(B);
-         prog=glCreateProgram();
-         progF=mapper.set(prog, progF);
-         print(prog,progF); // "6" "3.1415"
-
-	 // ...somewhere else
-         mapper=GLuintMap("glsl_program");
-         prog=mapper.get(progF);
-         print(prog,progF); // "3" "3.1415"
-         switchContext(B);
-         prog=mapper.get(progF);
-         print(prog,progF); // "6" "3.1415"
-    */
-  private:
-    struct PIMPL;
-    PIMPL*m_pimpl;
-    GLuintMap();
-    GLuintMap&operator=(const GLuintMap&);
-  };
-};};}; /* namespace */
+       prog=mapper.get(progF);
+       print(prog,progF); // "3" "3.1415"
+       switchContext(B);
+       prog=mapper.get(progF);
+       print(prog,progF); // "6" "3.1415"
+  */
+private:
+  struct PIMPL;
+  PIMPL*m_pimpl;
+  GLuintMap();
+  GLuintMap&operator=(const GLuintMap&);
+};
+};
+};
+}; /* namespace */
 
 #endif  // for header file
-

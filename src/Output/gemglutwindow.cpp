@@ -37,124 +37,177 @@
 #include <map>
 static std::map<int, gemglutwindow*>s_windowmap;
 
-namespace {
-  static std::string key2symbol(unsigned char c) {
-    std::string sym;
-    sym+=c;
-    return sym;
+namespace
+{
+static std::string key2symbol(unsigned char c)
+{
+  std::string sym;
+  sym+=c;
+  return sym;
+}
+
+static std::string key2symbol(int c)
+{
+  switch(c) {
+  case GLUT_KEY_F1:
+    return std::string("F1");
+  case GLUT_KEY_F2:
+    return std::string("F2");
+  case GLUT_KEY_F3:
+    return std::string("F3");
+  case GLUT_KEY_F4:
+    return std::string("F4");
+  case GLUT_KEY_F5:
+    return std::string("F5");
+  case GLUT_KEY_F6:
+    return std::string("F6");
+  case GLUT_KEY_F7:
+    return std::string("F7");
+  case GLUT_KEY_F8:
+    return std::string("F8");
+  case GLUT_KEY_F9:
+    return std::string("F9");
+  case GLUT_KEY_F10:
+    return std::string("F10");
+  case GLUT_KEY_F11:
+    return std::string("F11");
+  case GLUT_KEY_F12:
+    return std::string("F12");
+  case GLUT_KEY_LEFT:
+    return std::string("Left");
+  case GLUT_KEY_UP:
+    return std::string("Up");
+  case GLUT_KEY_RIGHT:
+    return std::string("Right");
+  case GLUT_KEY_DOWN:
+    return std::string("Down");
+  case GLUT_KEY_PAGE_UP:
+    return std::string("PageUp");
+  case GLUT_KEY_PAGE_DOWN:
+    return std::string("PageDown");
+  case GLUT_KEY_HOME:
+    return std::string("Home");
+  case GLUT_KEY_END:
+    return std::string("End");
+  case GLUT_KEY_INSERT:
+    return std::string("Insert");
+  default:
+    break;
   }
 
-  static std::string key2symbol(int c) {
-    switch(c) {
-    case GLUT_KEY_F1: return std::string("F1");
-    case GLUT_KEY_F2: return std::string("F2");
-    case GLUT_KEY_F3: return std::string("F3");
-    case GLUT_KEY_F4: return std::string("F4");
-    case GLUT_KEY_F5: return std::string("F5");
-    case GLUT_KEY_F6: return std::string("F6");
-    case GLUT_KEY_F7: return std::string("F7");
-    case GLUT_KEY_F8: return std::string("F8");
-    case GLUT_KEY_F9: return std::string("F9");
-    case GLUT_KEY_F10: return std::string("F10");
-    case GLUT_KEY_F11: return std::string("F11");
-    case GLUT_KEY_F12: return std::string("F12");
-    case GLUT_KEY_LEFT: return std::string("Left");
-    case GLUT_KEY_UP: return std::string("Up");
-    case GLUT_KEY_RIGHT: return std::string("Right");
-    case GLUT_KEY_DOWN: return std::string("Down");
-    case GLUT_KEY_PAGE_UP: return std::string("PageUp");
-    case GLUT_KEY_PAGE_DOWN: return std::string("PageDown");
-    case GLUT_KEY_HOME: return std::string("Home");
-    case GLUT_KEY_END: return std::string("End");
-    case GLUT_KEY_INSERT: return std::string("Insert");
-    default:
-      break;
-    }
-
-    return std::string("<unknown>");
-  }
+  return std::string("<unknown>");
+}
 
 /* callbacks */
 #define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
 
-void displayCb(void) {
+void displayCb(void)
+{
   CALLBACK4WIN ->bang(); // fixme??
 }
-void visibleCb(int state) {
+void visibleCb(int state)
+{
   CALLBACK4WIN->info("visible", state);
 }
-void closeCb(void) {
+void closeCb(void)
+{
   CALLBACK4WIN->info("window", "destroy");
 }
-void keyboardCb(unsigned char c, int x, int y) {
+void keyboardCb(unsigned char c, int x, int y)
+{
   CALLBACK4WIN->motion( 0,x,y);
   ggw->key( 0,key2symbol(c), c, 1);
 }
-void keyboardupCb(unsigned char c, int x, int y) {
+void keyboardupCb(unsigned char c, int x, int y)
+{
   CALLBACK4WIN->motion( 0,x,y);
   ggw->key( 0,key2symbol(c), c, 0);
 }
-void specialCb(int c, int x, int y) {
+void specialCb(int c, int x, int y)
+{
   CALLBACK4WIN->motion(0,x,y);
   ggw->key(0,key2symbol(c), c, 1);
 }
-void specialupCb(int c, int x, int y) {
+void specialupCb(int c, int x, int y)
+{
   CALLBACK4WIN->motion(0,x,y);
   ggw->key(0,key2symbol(c), c, 0);
 }
-void reshapeCb(int x, int y) {
+void reshapeCb(int x, int y)
+{
   CALLBACK4WIN->dimension(x, y);
 }
-void mouseCb(int button, int state, int x, int y) {
+void mouseCb(int button, int state, int x, int y)
+{
   CALLBACK4WIN->motion(0,x,y);
   ggw->button(0,button, !state);
 }
-void motionCb(int x, int y) {
+void motionCb(int x, int y)
+{
   CALLBACK4WIN->motion(0,x,y);
 }
-void passivemotionCb(int x, int y) {
+void passivemotionCb(int x, int y)
+{
   CALLBACK4WIN->motion(0,x,y);
 }
-void entryCb(int state) {
+void entryCb(int state)
+{
   CALLBACK4WIN->entry(0, state);
 }
-void joystickCb(unsigned int a, int x, int y, int z) {
+void joystickCb(unsigned int a, int x, int y, int z)
+{
 }
-void menuCb(int menu) {
+void menuCb(int menu)
+{
   CALLBACK4WIN->info("menu", menu);
 }
-void menustateCb(int value) {
+void menustateCb(int value)
+{
 }
-void menustatusCb(int x, int y, int z) {
+void menustatusCb(int x, int y, int z)
+{
 }
-void windowstatusCb(int value) {
+void windowstatusCb(int value)
+{
   std::string s;
 
   switch(value) {
-  case GLUT_HIDDEN: s=std::string("hidden"); break;
-  case GLUT_FULLY_RETAINED: s=std::string("full"); break;
-  case GLUT_PARTIALLY_RETAINED: s=std::string("partial"); break;
-  case GLUT_FULLY_COVERED: s=std::string("covered"); break;
+  case GLUT_HIDDEN:
+    s=std::string("hidden");
+    break;
+  case GLUT_FULLY_RETAINED:
+    s=std::string("full");
+    break;
+  case GLUT_PARTIALLY_RETAINED:
+    s=std::string("partial");
+    break;
+  case GLUT_FULLY_COVERED:
+    s=std::string("covered");
+    break;
   default:
     s=std::string("unknown");
   }
   CALLBACK4WIN->info("window", s);
 }
 #if (defined GLUT_HAS_MULTI) && (GLUT_HAS_MULTI > 0)
-  void multiButtonCb(int id, int x, int y, int button, int state) {
-    CALLBACK4WIN->motion(id,x,y);
-    ggw->button(id,button, !state);
-  }
-  void multiMotionCb(int id, int x, int y) {
-    CALLBACK4WIN->motion(id,x,y);
-  }
-  void multiPassivemotionCb(int id, int x, int y) {
-    CALLBACK4WIN->motion(id,x,y);
-  }
-  void multiEntryCb(int id, int state) {
-    CALLBACK4WIN->entry(id, state);
-  }
+void multiButtonCb(int id, int x, int y, int button, int state)
+{
+  CALLBACK4WIN->motion(id,x,y);
+  ggw->button(id,button, !state);
+}
+void multiMotionCb(int id, int x, int y)
+{
+  CALLBACK4WIN->motion(id,x,y);
+}
+void multiPassivemotionCb(int id, int x, int y)
+{
+  CALLBACK4WIN->motion(id,x,y);
+}
+void multiEntryCb(int id, int state)
+{
+  CALLBACK4WIN->entry(id, state);
+}
 #endif
 }; /* namespace */
 
@@ -183,16 +236,21 @@ gemglutwindow :: ~gemglutwindow()
 }
 
 
-bool gemglutwindow :: makeCurrent(void){
-  if(!m_window)return false;
-    glutSetWindow(m_window);
+bool gemglutwindow :: makeCurrent(void)
+{
+  if(!m_window) {
+    return false;
+  }
+  glutSetWindow(m_window);
 
   return(true);
 }
 
-void gemglutwindow :: swapBuffers(void) {
-  if(makeCurrent()) // FIXME: is this needed?
+void gemglutwindow :: swapBuffers(void)
+{
+  if(makeCurrent()) { // FIXME: is this needed?
     glutSwapBuffers();
+  }
 }
 
 void gemglutwindow :: doRender()
@@ -202,7 +260,9 @@ void gemglutwindow :: doRender()
 }
 void gemglutwindow :: dispatch()
 {
-  if(!m_window)return;
+  if(!m_window) {
+    return;
+  }
 
   // mark the render-buffer as dirty, so the displayCb() gets called
   // other things that mark dirty are (e.g.) resizing, making (parts of) the window visible,...
@@ -223,7 +283,8 @@ void gemglutwindow :: dispatch()
 void gemglutwindow :: bufferMess(int buf)
 {
   switch(buf) {
-  case 1: case 2:
+  case 1:
+  case 2:
     m_buffer=buf;
     if(m_window) {
       post("changing buffer type will only effect newly created windows");
@@ -239,10 +300,10 @@ void gemglutwindow :: bufferMess(int buf)
 // titleMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: titleMess(std::string s)
+void gemglutwindow :: titleMess(const std::string&s)
 {
   m_title = s;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glutSetWindowTitle(m_title.c_str());
     glutSetIconTitle(m_title.c_str());
   }
@@ -251,22 +312,24 @@ void gemglutwindow :: titleMess(std::string s)
 // dimensionsMess
 //
 /////////////////////////////////////////////////////////
-void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
+void gemglutwindow :: dimensionsMess(unsigned int width,
+                                     unsigned int height)
 {
-  if (width <= 0) {
+  if (width < 1) {
     error("width must be greater than 0");
     return;
   }
 
-  if (height <= 0 ) {
+  if (height < 1 ) {
     error ("height must be greater than 0");
     return;
   }
   m_width = width;
   m_height = height;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glutReshapeWindow(width, height);
-    glutHideWindow();glutShowWindow();
+    glutHideWindow();
+    glutShowWindow();
     glutPositionWindow(m_xoffset, m_yoffset);
     glutMainLoopEvent();
   }
@@ -278,10 +341,10 @@ void gemglutwindow :: dimensionsMess(unsigned int width, unsigned int height)
 void gemglutwindow :: fullscreenMess(int on)
 {
   m_fullscreen = on;
-  if(makeCurrent()){
-    if(m_fullscreen)
+  if(makeCurrent()) {
+    if(m_fullscreen) {
       glutFullScreen();
-    else {
+    } else {
       glutReshapeWindow(m_width, m_height);
       glutPositionWindow(m_xoffset, m_yoffset);
     }
@@ -296,7 +359,7 @@ void gemglutwindow :: offsetMess(int x, int y)
 {
   m_xoffset = x;
   m_yoffset = y;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glutPositionWindow(x, y);
   }
 }
@@ -318,6 +381,7 @@ bool gemglutwindow :: create(void)
   if(s_windowmap.size()>0) {
     std::map<int,gemglutwindow*>::iterator it = s_windowmap.begin();
     gemglutwindow*other=NULL;
+    // FIXXME: shouldn't we iterate over all the windows?
     other=it->second;
     if(other && other->makeCurrent()) {
       glutSetOption(GLUT_RENDERING_CONTEXT, GLUT_USE_CURRENT_CONTEXT );
@@ -326,10 +390,11 @@ bool gemglutwindow :: create(void)
 #endif
 
   unsigned int mode=GLUT_RGB | GLUT_DEPTH;
-  if(2==m_buffer)
+  if(2==m_buffer) {
     mode|=GLUT_DOUBLE;
-  else
+  } else {
     mode|=GLUT_SINGLE;
+  }
 
   glutInitDisplayMode(mode);
 
@@ -389,7 +454,8 @@ bool gemglutwindow :: create(void)
   dispatch();
   return true;
 }
-void gemglutwindow :: createMess(std::string) {
+void gemglutwindow :: createMess(const std::string&)
+{
   create();
 }
 
@@ -427,26 +493,33 @@ void gemglutwindow :: destroyMess(void)
 void gemglutwindow :: cursorMess(bool setting)
 {
   m_cursor=setting;
-  if(makeCurrent()){
+  if(makeCurrent()) {
     glutSetCursor(setting?GLUT_CURSOR_INHERIT:GLUT_CURSOR_NONE);
   }
 }
 
 
-void gemglutwindow :: menuMess(void) {
+void gemglutwindow :: menuMess(void)
+{
   int id=glutCreateMenu(menuCb);
 
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 
   std::vector<t_atom>alist;
   t_atom a;
-  SETSYMBOL(&a, gensym("menu")); alist.push_back(a);
-  SETSYMBOL(&a, gensym("new") ); alist.push_back(a);
-  SETFLOAT (&a, id            ); alist.push_back(a);
+  SETSYMBOL(&a, gensym("menu"));
+  alist.push_back(a);
+  SETSYMBOL(&a, gensym("new") );
+  alist.push_back(a);
+  SETFLOAT (&a, id            );
+  alist.push_back(a);
   info(alist);
 }
-void gemglutwindow :: addMenuMess(t_symbol*sym, int argc, t_atom*argv) {
-  if (argc!=3)return;
+void gemglutwindow :: addMenuMess(t_symbol*sym, int argc, t_atom*argv)
+{
+  if (argc!=3) {
+    return;
+  }
   int menu=atom_getint(argv+0);
   const char*s=atom_getsymbol(argv+1)->s_name;
   int v=atom_getint(argv+2);

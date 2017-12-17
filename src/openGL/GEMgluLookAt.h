@@ -16,71 +16,71 @@
 
 /*
  CLASS
-	GEMgluLookAt
+        GEMgluLookAt
  KEYWORDS
-	openGL
+        openGL
  DESCRIPTION
-	wrapper for the openGL-function
-	"void gluLookAt (GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ, GLdouble centerX, GLdouble centerY, GLdouble centerZ, GLdouble upX, GLdouble upY, GLdouble upZ);"
+        wrapper for the openGL-function
+        "void gluLookAt (GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ, GLdouble centerX, GLdouble centerY, GLdouble centerZ, GLdouble upX, GLdouble upY, GLdouble upZ);"
  */
 
 class GEM_EXTERN GEMgluLookAt : public GemGLBase
 {
-	CPPEXTERN_HEADER(GEMgluLookAt, GemGLBase);
+  CPPEXTERN_HEADER(GEMgluLookAt, GemGLBase);
 
-	public:
-	  // Constructor
+public:
+  // Constructor
   GEMgluLookAt (int, t_atom*);
 
-	protected:
-	  // Destructor
-	  virtual ~GEMgluLookAt ();
-	  // Do the rendering
-	  virtual void	render (GemState *state);
+protected:
+  // Destructor
+  virtual ~GEMgluLookAt ();
+  // Do the rendering
+  virtual void  render (GemState *state);
 
-    // variables
-	  GLdouble m_eyeX; // VAR
-	  virtual void eyeXMess( t_float ); // VAR
+  // variables
+  GLdouble m_eyeX; // VAR
+  virtual void eyeXMess( t_float ); // VAR
 
-	  GLdouble m_eyeY; // VAR
-	  virtual void eyeYMess( t_float ); // VAR
+  GLdouble m_eyeY; // VAR
+  virtual void eyeYMess( t_float ); // VAR
 
-	  GLdouble m_eyeZ; // VAR
-	  virtual void eyeZMess( t_float ); // VAR
+  GLdouble m_eyeZ; // VAR
+  virtual void eyeZMess( t_float ); // VAR
 
-	  GLdouble m_centerX; // VAR
-	  virtual void centerXMess( t_float ); // VAR
+  GLdouble m_centerX; // VAR
+  virtual void centerXMess( t_float ); // VAR
 
-	  GLdouble m_centerY; // VAR
-	  virtual void centerYMess( t_float ); // VAR
+  GLdouble m_centerY; // VAR
+  virtual void centerYMess( t_float ); // VAR
 
-	  GLdouble m_centerZ; // VAR
-	  virtual void centerZMess( t_float ); // VAR
+  GLdouble m_centerZ; // VAR
+  virtual void centerZMess( t_float ); // VAR
 
-	  GLdouble m_upX; // VAR
-	  virtual void upXMess( t_float ); // VAR
+  GLdouble m_upX; // VAR
+  virtual void upXMess( t_float ); // VAR
 
-	  GLdouble m_upY; // VAR
-	  virtual void upYMess( t_float ); // VAR
+  GLdouble m_upY; // VAR
+  virtual void upYMess( t_float ); // VAR
 
-	  GLdouble m_upZ; // VAR
-	  virtual void upZMess( t_float ); // VAR
+  GLdouble m_upZ; // VAR
+  virtual void upZMess( t_float ); // VAR
 
 
-	private:
+private:
 
-    // we need some inlets
-	  t_inlet *m_inlet[9];
+  // we need some inlets
+  t_inlet *m_inlet[9];
 
-    // static member functions
-	  static void eyeXMessCallback(void*, t_float );
-	  static void eyeYMessCallback(void*, t_float );
-	  static void eyeZMessCallback(void*, t_float );
-	  static void centerXMessCallback(void*, t_float );
-	  static void centerYMessCallback(void*, t_float );
-	  static void centerZMessCallback(void*, t_float );
-	  static void upXMessCallback(void*, t_float );
-	  static void upYMessCallback(void*, t_float );
-	  static void upZMessCallback(void*, t_float );
+  // static member functions
+  static void eyeXMessCallback(void*, t_float );
+  static void eyeYMessCallback(void*, t_float );
+  static void eyeZMessCallback(void*, t_float );
+  static void centerXMessCallback(void*, t_float );
+  static void centerYMessCallback(void*, t_float );
+  static void centerZMessCallback(void*, t_float );
+  static void upXMessCallback(void*, t_float );
+  static void upYMessCallback(void*, t_float );
+  static void upZMessCallback(void*, t_float );
 };
 #endif /* for header file */

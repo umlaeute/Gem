@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -48,7 +48,7 @@ recordQT4L :: recordQT4L(void) :
 #if defined  GEM_USE_RECORDQT4L
   m_qtfile(NULL),
   m_codec(NULL), m_codecs(NULL),
-  m_codecname(std::string()), 
+  m_codecname(std::string()),
   m_qtbuffer(NULL),
   m_colormodel(0),
   m_width(-1), m_height(-1),
@@ -62,7 +62,7 @@ recordQT4L :: recordQT4L(void) :
   std::vector<std::string>codecs=getCodecs();
   if(codecs.size()>0) {
     setCodec(codecs[0]);
-    verbose(1, "QT4L: default codec is: '%s'", m_codecname.c_str());
+    verbose(1, "[GEM:recordQT4L] default codec is: '%s'", m_codecname.c_str());
   }
 }
 #else
@@ -81,14 +81,14 @@ recordQT4L :: ~recordQT4L(void)
 #if defined  GEM_USE_RECORDQT4L
 void recordQT4L :: stop(void)
 {
-  if(m_qtfile){
+  if(m_qtfile) {
     quicktime_close(m_qtfile);
     m_qtfile=NULL;
   }
 #if 0
   /* this crashes badly! */
   if(m_qtbuffer) {
-     lqt_rows_free(m_qtbuffer);
+    lqt_rows_free(m_qtbuffer);
   }
 #endif
 }
@@ -97,8 +97,7 @@ void recordQT4L :: stop(void)
 // open a file !
 //
 /////////////////////////////////////////////////////////
-static struct
-{
+static struct {
   const char * name;
   const lqt_file_type_t type;
   const char * extension;
@@ -113,13 +112,14 @@ static struct
   { "m4a",      LQT_FILE_M4A,       "m4a", "m4a (iTunes compatible)",      "yuv2"  }, /* ffmpeg_mpg4 */
 };
 /* guess the file-format by inspecting the extension */
-static lqt_file_type_t guess_qtformat(const std::string filename)
+static lqt_file_type_t guess_qtformat(const std::string&filename)
 {
   const char * extension = strrchr(filename.c_str(), '.');
   unsigned int i=0;
 
   if(!extension) {
-    error("no extension given: encoding will be QuickTime");
+    verbose(0,
+            "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
     return LQT_FILE_QT;
   }
 
@@ -127,25 +127,25 @@ static lqt_file_type_t guess_qtformat(const std::string filename)
 
   for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
-      //      post("encoding as %s", qtformats[i].description);
       return qtformats[i].type;
     }
   }
-  
-  error("unknown extension: encoding will be QuickTime");
+
+  verbose(0,
+          "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
 
-bool recordQT4L :: start(const std::string filename, gem::Properties&props)
+bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 {
-  post("starting QT4LL %s", filename.c_str());
   stop();
 
   lqt_file_type_t type =  guess_qtformat(filename);
 
   m_qtfile = lqt_open_write(filename.c_str(), type);
-  if(m_qtfile==NULL){
-    post("starting QT4L %s failed", filename.c_str());
+  if(m_qtfile==NULL) {
+    error("[GEM:recordQT4L] starting to record to %s failed",
+          filename.c_str());
     return false;
   }
 
@@ -160,20 +160,26 @@ bool recordQT4L :: start(const std::string filename, gem::Properties&props)
 //
 /////////////////////////////////////////////////////////
 
-static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec, 
-			    gem::Properties&props) {
+static void applyProperties(quicktime_t*file, int track,
+                            lqt_codec_info_t*codec,
+                            gem::Properties&props)
+{
 
-  if(NULL==file || NULL==codec)return;
+  if(NULL==file || NULL==codec) {
+    return;
+  }
   std::vector<std::string>keys=props.keys();
 
   std::map<std::string, lqt_parameter_type_t>proptypes;
   int i=0;
   for(i=0; i<codec->num_encoding_parameters; i++) {
-    proptypes[codec->encoding_parameters[i].name]=codec->encoding_parameters[i].type;
+    proptypes[codec->encoding_parameters[i].name]=
+      codec->encoding_parameters[i].type;
   }
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(key);
+    std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(
+          key);
     if(it!=proptypes.end()) {
       void*value=NULL;
       int v_i=0;
@@ -188,54 +194,58 @@ static void applyProperties(quicktime_t*file, int track, lqt_codec_info_t*codec,
 #else
       char* q_key=const_cast<char*>(key.c_str());
 #endif
-        
+
       double d;
       std::string s;
       switch(proptypes[key]) {
       case LQT_PARAMETER_INT:
-	if(props.get(key, d)) {
-	  v_i=static_cast<int>(d);
-	  value=static_cast<void*>(&v_i);
-	}
-	break;
+        if(props.get(key, d)) {
+          v_i=static_cast<int>(d);
+          value=static_cast<void*>(&v_i);
+        }
+        break;
       case LQT_PARAMETER_FLOAT:
-	if(props.get(key, d)) {
-	  v_f=static_cast<float>(d);
-	  value=static_cast<void*>(&v_f);
-	}
-	break;
+        if(props.get(key, d)) {
+          v_f=static_cast<float>(d);
+          value=static_cast<void*>(&v_f);
+        }
+        break;
       case LQT_PARAMETER_STRING:
-	if(props.get(key, s)) {
-	  v_s=s.c_str();
-	  value=static_cast<void*>(const_cast<char*>(v_s));
-	}
-	break;
+        if(props.get(key, s)) {
+          v_s=s.c_str();
+          value=static_cast<void*>(const_cast<char*>(v_s));
+        }
+        break;
       }
-      if(value) 
-	lqt_set_video_parameter(file, track, q_key, value);
+      if(value) {
+        lqt_set_video_parameter(file, track, q_key, value);
+      }
     }
 
   }
 
 }
 
-static int try_colormodel(quicktime_t *   	 file,
-			  int  	track,
-			  int  	colormodel) {
+static int try_colormodel(quicktime_t *          file,
+                          int   track,
+                          int   colormodel)
+{
   if(quicktime_writes_cmodel(file, colormodel, track)) {
     lqt_set_cmodel(file, track, colormodel);
     return colormodel;
   }
-  return 0;  
+  return 0;
 }
-static int try_colormodel(quicktime_t *   	 file,
-			  int  	track,
-			  std::vector<int>  	colormodel) {
+static int try_colormodel(quicktime_t *          file,
+                          int   track,
+                          std::vector<int>      colormodel)
+{
   int i=0;
   for(i=0; i<colormodel.size(); i++) {
     int result=try_colormodel(file, track, colormodel[i]);
-    if(result)
+    if(result) {
       return result;
+    }
   }
   return 0;
 }
@@ -249,15 +259,16 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   int track=0;
 
 
-  if(!m_qtfile || !img || fps < 0.)
+  if(!m_qtfile || !img || fps < 0.) {
     return false;
+  }
 
   /* do we have a codec specified? */
   if(NULL==m_codec) {
     setCodec(m_codecname);
   }
   if(NULL==m_codec) {
-    error("couldn't initialize codec");
+    error("[GEM:recordQT4L] couldn't initialize codec");
     return false;
   }
 
@@ -276,11 +287,11 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   m_timeTick=TIMEBASE/fps;
 
   err=lqt_add_video_track(m_qtfile,
-		      img->xsize,
-		      img->ysize,
-		      m_timeTick,
-		      TIMEBASE,
-		      m_codec);
+                          img->xsize,
+                          img->ysize,
+                          m_timeTick,
+                          TIMEBASE,
+                          m_codec);
   if(err!=0) {
     return false;
   }
@@ -294,14 +305,16 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   trycolormodels.push_back(BC_YUV422);
 
   m_colormodel=try_colormodel(m_qtfile, track, trycolormodels);
-  if(!m_colormodel)
+  if(!m_colormodel) {
     return false;
+  }
 
-  /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size, 
-     so we just grab a multiple of what we actually want... 
+  /* make sure to allocate enough buffer; it sometimes crashes when i allocate the "right" size,
+     so we just grab a multiple of what we actually want...
   */
   /* but isn't this a memleak? it sure crashes if i try to lqt_rows_free() the qtbuffer */
-  m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel, &rowspan, &rowspan_uv);
+  m_qtbuffer = lqt_rows_alloc(2*img->xsize, 2*img->ysize, m_colormodel,
+                              &rowspan, &rowspan_uv);
 
   m_width =img->xsize;
   m_height=img->ysize;
@@ -315,34 +328,36 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
 /////////////////////////////////////////////////////////
 bool recordQT4L :: write(imageStruct*img)
 {
-  if(!m_qtfile || !img){
+  if(!m_qtfile || !img) {
     return false;
   }
   unsigned char**rowpointers;
   int row, row_stride;
   float framerate = GemMan::getFramerate();
 
-  if(m_width!=img->xsize || m_height!=img->ysize)m_restart=true;
+  if(m_width!=img->xsize || m_height!=img->ysize) {
+    m_restart=true;
+  }
 
-  if(m_restart){
+  if(m_restart) {
     if(!init(img, framerate)) {
       /* something went wrong! */
       stop();
-      error("unable to initialize QT4L");
+      error("[GEM:recordQT4L] unable to initialize QT4L");
       return false;
     }
     m_restart=false;
   }
 
   double timestamp_d=(m_useTimeStamp
-		      ?(clock_gettimesince(m_startTime)*TIMEBASE/1000.)
-		      :m_curFrame*m_timeTick);
+                      ?(clock_gettimesince(m_startTime)*TIMEBASE/1000.)
+                      :m_curFrame*m_timeTick);
 
   int64_t timestamp=timestamp_d;
 
   m_curFrame++;
 
-  switch(m_colormodel){
+  switch(m_colormodel) {
   case BC_RGBA8888:
     m_image.convertFrom(img, GL_RGBA);
     break;
@@ -353,19 +368,19 @@ bool recordQT4L :: write(imageStruct*img)
     m_image.convertFrom(img, GL_YUV422_GEM);
     break;
   default:
-    error("record: unsupported colormodel...");
+    error("[GEM:recordQT4L] unsupported colormodel...");
     return false;
   }
 
   row=m_image.ysize;
   row_stride=m_image.xsize*m_image.csize;
   rowpointers=new unsigned char*[row];
-  if(!m_image.upsidedown){
-    while(row--){
+  if(!m_image.upsidedown) {
+    while(row--) {
       rowpointers[m_image.ysize-row-1]=m_image.data+(row-1)*row_stride;
     }
   } else {
-    while(row--){
+    while(row--) {
       rowpointers[row]=m_image.data+row*row_stride;
     }
   }
@@ -381,7 +396,8 @@ bool recordQT4L :: write(imageStruct*img)
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordQT4L::getCodecs(void) {
+std::vector<std::string>recordQT4L::getCodecs(void)
+{
   std::vector<std::string>result;
   m_codecdescriptions.clear();
 
@@ -389,7 +405,7 @@ std::vector<std::string>recordQT4L::getCodecs(void) {
 
   if(codec) {
     int n=0;
-    while(NULL!=codec[n]){
+    while(NULL!=codec[n]) {
       std::string name=codec[n]->name;
       std::string desc=codec[n]->long_name;
       result.push_back(name);
@@ -404,7 +420,9 @@ std::vector<std::string>recordQT4L::getCodecs(void) {
   return result;
 }
 
-const std::string recordQT4L::getCodecDescription(const std::string codecname) {
+const std::string recordQT4L::getCodecDescription(const
+    std::string&codecname)
+{
   return m_codecdescriptions[codecname];
 }
 
@@ -412,7 +430,7 @@ const std::string recordQT4L::getCodecDescription(const std::string codecname) {
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordQT4L :: setCodec(const std::string name)
+bool recordQT4L :: setCodec(const std::string&name)
 {
   std::string codecname=name;
   // stop();
@@ -420,16 +438,16 @@ bool recordQT4L :: setCodec(const std::string name)
   m_codec=NULL;
 
   if(codecname.empty() && m_qtfile) {
-    /* LATER figure out automatically which codec to use */ 
+    /* LATER figure out automatically which codec to use */
     lqt_file_type_t type = lqt_get_file_type(m_qtfile);
     unsigned int i=0;
     for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
-      if(type == qtformats[i].type){
-	codecname = qtformats[i].default_video_codec;
+      if(type == qtformats[i].type) {
+        codecname = qtformats[i].default_video_codec;
       }
     }
     if(codecname.empty()) {
-      error("couldn't find default codec for this format");
+      verbose(0, "[GEM:recordQT4L] couldn't find default codec for this format");
       return false;
     }
   }
@@ -445,11 +463,12 @@ bool recordQT4L :: setCodec(const std::string name)
   return result;
 }
 
-bool recordQT4L :: enumProperties(gem::Properties&props) 
+bool recordQT4L :: enumProperties(gem::Properties&props)
 {
   props.clear();
-  if(NULL==m_codec)
+  if(NULL==m_codec) {
     return false;
+  }
 
   props.set("framerate", 0.f);
 

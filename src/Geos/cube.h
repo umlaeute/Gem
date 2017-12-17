@@ -33,23 +33,23 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN cube : public GemShape
 {
-    CPPEXTERN_HEADER(cube, GemShape);
+  CPPEXTERN_HEADER(cube, GemShape);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	cube(t_floatarg size);
+  //////////
+  // Constructor
+  cube(t_floatarg size);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~cube();
+  //////////
+  // Destructor
+  virtual ~cube();
 
-    	//////////
-    	// Do the renderShapeing
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the renderShapeing
+  virtual void    renderShape(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

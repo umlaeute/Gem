@@ -62,7 +62,8 @@ public:
   gem::plugins::videoDECKLINK*m_priv;
 
 public:
-  DeckLinkCaptureDelegate(gem::plugins::videoDECKLINK*parent, IDeckLinkInput*dli)
+  DeckLinkCaptureDelegate(gem::plugins::videoDECKLINK*parent,
+                          IDeckLinkInput*dli)
     : IDeckLinkInputCallback()
     , m_refCount(0)
     , m_frameCount(0)
@@ -84,7 +85,10 @@ public:
     m_deckLinkInput->Release();
     pthread_mutex_destroy(&m_mutex);
   }
-  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) { return E_NOINTERFACE; }
+  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv)
+  {
+    return E_NOINTERFACE;
+  }
   virtual ULONG STDMETHODCALLTYPE AddRef(void)
   {
     pthread_mutex_lock(&m_mutex);
@@ -93,7 +97,8 @@ public:
 
     return (ULONG)m_refCount;
   }
-  virtual ULONG STDMETHODCALLTYPE  Release(void) {
+  virtual ULONG STDMETHODCALLTYPE  Release(void)
+  {
     pthread_mutex_lock(&m_mutex);
     m_refCount--;
     pthread_mutex_unlock(&m_mutex);
@@ -105,10 +110,11 @@ public:
 
     return (ULONG)m_refCount;
   }
-  virtual HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(IDeckLinkVideoInputFrame*videoFrame, IDeckLinkAudioInputPacket*audioFrame)
+  virtual HRESULT STDMETHODCALLTYPE VideoInputFrameArrived(
+    IDeckLinkVideoInputFrame*videoFrame, IDeckLinkAudioInputPacket*audioFrame)
   {
     IDeckLinkVideoFrame*rightEyeFrame = NULL;
-    IDeckLinkVideoFrame3DExtensions*	threeDExtensions = NULL;
+    IDeckLinkVideoFrame3DExtensions*    threeDExtensions = NULL;
     void*frameBytes;
     void*audioFrameBytes;
 
@@ -117,28 +123,30 @@ public:
 #if 0
       // If 3D mode is enabled we retreive the 3D extensions interface which gives.
       // us access to the right eye frame by calling GetFrameForRightEye() .
-      if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions, (void **) &threeDExtensions) != S_OK) ||
-	   (threeDExtensions->GetFrameForRightEye(&rightEyeFrame) != S_OK)) {
-	rightEyeFrame = NULL;
+      if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions,
+                                       (void **) &threeDExtensions) != S_OK) ||
+           (threeDExtensions->GetFrameForRightEye(&rightEyeFrame) != S_OK)) {
+        rightEyeFrame = NULL;
       }
 #endif
-      if (threeDExtensions)
-	threeDExtensions->Release();
+      if (threeDExtensions) {
+        threeDExtensions->Release();
+      }
 
       if (videoFrame->GetFlags() & bmdFrameHasNoInputSource) {
-	//printf("Frame received (#%lu) - No input signal detected\n", m_frameCount);
       } else {
-	long w=videoFrame->GetWidth();
-	long h=videoFrame->GetHeight();
-	videoFrame->GetBytes(&frameBytes);
-	m_priv->setFrame(videoFrame->GetWidth(),
-			 videoFrame->GetHeight(),
-			 GL_YUV422_GEM,
-			 (unsigned char*)frameBytes);
-	}
+        long w=videoFrame->GetWidth();
+        long h=videoFrame->GetHeight();
+        videoFrame->GetBytes(&frameBytes);
+        m_priv->setFrame(videoFrame->GetWidth(),
+                         videoFrame->GetHeight(),
+                         GL_YUV422_GEM,
+                         (unsigned char*)frameBytes);
+      }
 
-      if (rightEyeFrame)
-	rightEyeFrame->Release();
+      if (rightEyeFrame) {
+        rightEyeFrame->Release();
+      }
 
       m_frameCount++;
     }
@@ -148,36 +156,37 @@ public:
 
   virtual HRESULT STDMETHODCALLTYPE
   VideoInputFormatChanged(BMDVideoInputFormatChangedEvents events,
-			  IDeckLinkDisplayMode*mode,
-			  BMDDetectedVideoInputFormatFlags)
+                          IDeckLinkDisplayMode*mode,
+                          BMDDetectedVideoInputFormatFlags)
   {
     // This only gets called if bmdVideoInputEnableFormatDetection was set
     // when enabling video input
-    HRESULT	result;
-    char*	displayModeName = NULL;
+    HRESULT     result;
+    char*       displayModeName = NULL;
 
-    if (!(events & bmdVideoInputDisplayModeChanged))
+    if (!(events & bmdVideoInputDisplayModeChanged)) {
       return S_OK;
+    }
 
     mode->GetName((const char**)&displayModeName);
-    //printf("Video format changed to %s\n", displayModeName);
 
-    if (displayModeName)
+    if (displayModeName) {
       free(displayModeName);
+    }
 
     if (m_deckLinkInput) {
       m_deckLinkInput->StopStreams();
 
-      result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(), m_cfg_pixelFormat, m_cfg_inputFlags);
+      result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(),
+               m_cfg_pixelFormat, m_cfg_inputFlags);
       if (result != S_OK) {
-	//fprintf(stderr, "Failed to switch video mode\n");
-	goto bail;
+        goto bail;
       }
 
       m_deckLinkInput->StartStreams();
     }
 
-  bail:
+bail:
     return S_OK;
   }
 };
@@ -186,39 +195,46 @@ public:
 */
 
 
-namespace {
-  IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli, const std::string&formatname, int formatnum) {
-    IDeckLinkDisplayModeIterator*dmi = NULL;
-    IDeckLinkDisplayMode*displayMode = NULL;
-    int count=formatnum;
-    if(S_OK == dli->GetDisplayModeIterator(&dmi)) {
-      while(S_OK == dmi->Next(&displayMode)) {
-	if (formatnum<0 && formatname.empty()) {
-	  // we don't care for the format; accept the first one
-	  break;
-	}
-
-	// if we have set the format name, check that
-	if(!formatname.empty()) {
-	  const char*dmn = NULL;
-	  if (S_OK == displayMode->GetName(&dmn)) {
-            bool found=(formatname == dmn);
-            free((void*)dmn);
-	    if(found)break;
-	  }
-	}
-	// else check the format index
-	if(formatnum>=0 && 0 == count)
-	  break;
-	--count;
-
-	displayMode->Release();
-	displayMode=NULL;
+namespace
+{
+IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
+                                    const std::string&formatname, int formatnum)
+{
+  IDeckLinkDisplayModeIterator*dmi = NULL;
+  IDeckLinkDisplayMode*displayMode = NULL;
+  int count=formatnum;
+  if(S_OK == dli->GetDisplayModeIterator(&dmi)) {
+    while(S_OK == dmi->Next(&displayMode)) {
+      if (formatnum<0 && formatname.empty()) {
+        // we don't care for the format; accept the first one
+        break;
       }
-      dmi->Release();
+
+      // if we have set the format name, check that
+      if(!formatname.empty()) {
+        const char*dmn = NULL;
+        if (S_OK == displayMode->GetName(&dmn)) {
+          bool found=(formatname == dmn);
+          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmn);
+          free((void*)dmn);
+          if(found) {
+            break;
+          }
+        }
+      }
+      // else check the format index
+      if(formatnum>=0 && 0 == count) {
+        break;
+      }
+      --count;
+
+      displayMode->Release();
+      displayMode=NULL;
     }
-    return displayMode;
+    dmi->Release();
   }
+  return displayMode;
+}
 };
 
 
@@ -253,11 +269,13 @@ videoDECKLINK::videoDECKLINK(void)
   m_pixBlock.image.reallocate();
 }
 
-videoDECKLINK::~videoDECKLINK(void) {
+videoDECKLINK::~videoDECKLINK(void)
+{
   close();
 }
 
-void videoDECKLINK::close(void) {
+void videoDECKLINK::close(void)
+{
   stop();
   if(m_displayMode) {
     m_displayMode->Release();
@@ -288,10 +306,12 @@ void videoDECKLINK::close(void) {
   }
 }
 
-bool videoDECKLINK::open(gem::Properties&props) {
+bool videoDECKLINK::open(gem::Properties&props)
+{
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
   BMDPixelFormat pixformat = bmdFormat8BitYUV;
-  const std::string formatname=(("auto"==m_formatname) || ("automatic" == m_formatname))?"":m_formatname;
+  const std::string formatname=(("auto"==m_formatname)
+                                || ("automatic" == m_formatname))?"":m_formatname;
 
   //if(m_devname.empty())return false;
   close();
@@ -303,50 +323,53 @@ bool videoDECKLINK::open(gem::Properties&props) {
     if(m_devnum<0 && m_devname.empty()) {
       // TODO: automatic device detection, based on input and mode
       while (m_dlIterator->Next(&m_dl) == S_OK) {
-	m_dlInput=NULL;
-	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
-	  // check whether this device supports the selected format
-	  m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
-	  if(m_displayMode) {
-	    // supported!
-	    break;
-	  }
-	  m_dlInput->Release();
-	}
-	m_dlInput=NULL;
+        m_dlInput=NULL;
+        if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
+          // check whether this device supports the selected format
+          m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
+          if(m_displayMode) {
+            // supported!
+            break;
+          }
+          m_dlInput->Release();
+        }
+        m_dlInput=NULL;
       }
     } else { // user requested device (via name or index)
       int deviceCount=0;
       while (m_dlIterator->Next(&m_dl) == S_OK) {
-	if(m_devnum == deviceCount)
-	  break;
-	if(!m_devname.empty()) {
-	  char*deckLinkName = NULL;
-	  if(S_OK == m_dl->GetDisplayName((const char**)&deckLinkName)) {
-	    if (m_devname == deckLinkName) {
-	      free(deckLinkName);
-	      break;
-	    }
-	    free(deckLinkName);
-	  }
-	  if(S_OK == m_dl->GetModelName((const char**)&deckLinkName)) {
-	    if (m_devname == deckLinkName) {
-	      free(deckLinkName);
-	      break;
-	    }
-	    free(deckLinkName);
-	  }
-	}
-	m_dl->Release();
-	m_dl=NULL;
-	++deviceCount;
+        if(m_devnum == deviceCount) {
+          break;
+        }
+        if(!m_devname.empty()) {
+          char*deckLinkName = NULL;
+          if(S_OK == m_dl->GetDisplayName((const char**)&deckLinkName)) {
+            if (m_devname == deckLinkName) {
+              free(deckLinkName);
+              break;
+            }
+            free(deckLinkName);
+          }
+          if(S_OK == m_dl->GetModelName((const char**)&deckLinkName)) {
+            if (m_devname == deckLinkName) {
+              free(deckLinkName);
+              break;
+            }
+            free(deckLinkName);
+          }
+        }
+        m_dl->Release();
+        m_dl=NULL;
+        ++deviceCount;
       }
       m_dlInput=NULL;
       if(m_dl) {
-	if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
-	  // check whether this device supports the selected format
-	  m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
-	} else m_dlInput=NULL;
+        if (S_OK == m_dl->QueryInterface(IID_IDeckLinkInput, (void**)&m_dlInput)) {
+          // check whether this device supports the selected format
+          m_displayMode=getDisplayMode(m_dlInput, formatname, m_formatnum);
+        } else {
+          m_dlInput=NULL;
+        }
       }
     }
   }
@@ -357,48 +380,61 @@ bool videoDECKLINK::open(gem::Properties&props) {
     // no format specified; try auto-detection
     IDeckLinkAttributes*dlAttribs=0;
     bool formatDetectionSupported = false;
-    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes, (void**)&dlAttribs)) {
-      if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection, &formatDetectionSupported)) {
-	if(formatDetectionSupported)
-	  flags|=bmdVideoInputEnableFormatDetection;
+    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes,
+                                     (void**)&dlAttribs)) {
+      if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection,
+                                     &formatDetectionSupported)) {
+        if(formatDetectionSupported) {
+          flags|=bmdVideoInputEnableFormatDetection;
+        }
       }
     }
-    if(dlAttribs)
+    if(dlAttribs) {
       dlAttribs->Release();
+    }
   }
 
   BMDDisplayModeSupport displayModeSupported;
-  if (S_OK != m_dlInput->DoesSupportVideoMode(m_displayMode->GetDisplayMode(),
-					 pixformat,
-					 flags,
-					 &displayModeSupported,
-					 NULL)) {
+  if (S_OK != m_dlInput->DoesSupportVideoMode(
+        m_displayMode->GetDisplayMode(),
+        pixformat,
+        flags,
+        &displayModeSupported,
+        NULL)) {
     goto bail;
   }
-  if (displayModeSupported == bmdDisplayModeNotSupported)
+  if (displayModeSupported == bmdDisplayModeNotSupported) {
     goto bail;
-  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration, (void**)&m_dlConfig))
+  }
+  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration,
+                                   (void**)&m_dlConfig)) {
     m_dlConfig=NULL;
+  }
 
   if(m_dlConfig) {
-    m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, m_connectionType);
+    m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection,
+                       m_connectionType);
   }
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
-  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(), pixformat, flags))
+  if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(),
+                                         pixformat, flags)) {
     goto bail;
+  }
 
   return true;
 
- bail:
+bail:
   close();
   return false;
 }
 
-bool videoDECKLINK::start(void) {
+bool videoDECKLINK::start(void)
+{
   return (m_dlInput && (S_OK == m_dlInput->StartStreams()));
 }
-bool videoDECKLINK::stop(void) {
+bool videoDECKLINK::stop(void)
+{
   if(m_dlInput) {
     m_dlInput->StopStreams();
   }
@@ -406,11 +442,13 @@ bool videoDECKLINK::stop(void) {
 }
 
 
-pixBlock*videoDECKLINK::getFrame(void) {
+pixBlock*videoDECKLINK::getFrame(void)
+{
   m_mutex.lock();
   return &m_pixBlock;
 }
-void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format, unsigned char*data)
+void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format,
+                             unsigned char*data)
 {
   m_mutex.lock();
   m_pixBlock.image.xsize=w;
@@ -424,13 +462,15 @@ void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format, unsi
   m_mutex.unlock();
 }
 
-void videoDECKLINK::releaseFrame(void) {
+void videoDECKLINK::releaseFrame(void)
+{
   m_pixBlock.newimage=false;
   m_mutex.unlock();
 }
 
 
-std::vector<std::string>videoDECKLINK::enumerate(void) {
+std::vector<std::string>videoDECKLINK::enumerate(void)
+{
   std::vector<std::string>result;
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
   if(dli) {
@@ -439,8 +479,8 @@ std::vector<std::string>videoDECKLINK::enumerate(void) {
       char*deckLinkName = NULL;
       HRESULT res = deckLink->GetDisplayName((const char**)&deckLinkName);
       if (res == S_OK) {
-	result.push_back(std::string(deckLinkName));
-	free(deckLinkName);
+        result.push_back(std::string(deckLinkName));
+        free(deckLinkName);
       }
       deckLink->Release();
     }
@@ -449,12 +489,14 @@ std::vector<std::string>videoDECKLINK::enumerate(void) {
   return result;
 }
 
-bool videoDECKLINK::setDevice(int ID) {
+bool videoDECKLINK::setDevice(int ID)
+{
   m_devname.clear();
   m_devnum=ID;
   return true;
 }
-bool videoDECKLINK::setDevice(std::string device) {
+bool videoDECKLINK::setDevice(const std::string&device)
+{
   m_devname=device;
   return true;
 #if 0
@@ -468,7 +510,8 @@ bool videoDECKLINK::setDevice(std::string device) {
 #endif
 }
 bool videoDECKLINK::enumProperties(gem::Properties&readable,
-	gem::Properties&writeable) {
+                                   gem::Properties&writeable)
+{
   std::string dummy_s;
   int dummy_i=0;
   readable.clear();
@@ -483,7 +526,8 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
 
   return true;
 }
-void videoDECKLINK::setProperties(gem::Properties&props) {
+void videoDECKLINK::setProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   int i=0;
   for(i=0; i<keys.size(); i++) {
@@ -492,18 +536,18 @@ void videoDECKLINK::setProperties(gem::Properties&props) {
       std::string s;
       double d;
       switch(props.type(key)) {
-        case gem::Properties::STRING:
-	  if(props.get(key, s)) {
-            m_formatnum =-1;
-	    m_formatname=s;
-          }
-	  break;
-        case gem::Properties::DOUBLE:
-	  if(props.get(key, d)) {
-            m_formatnum =(int)d;
-	    m_formatname="";
-          }
-	  break;
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          m_formatnum =-1;
+          m_formatname=s;
+        }
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          m_formatnum =(int)d;
+          m_formatname="";
+        }
+        break;
       }
     }
     if("connection" == key) {
@@ -511,52 +555,60 @@ void videoDECKLINK::setProperties(gem::Properties&props) {
       std::string s;
       double d;
       switch(props.type(key)) {
-        case gem::Properties::STRING:
-	  if(props.get(key, s)) {
-	    if      ("SDI"        == s) vconn=bmdVideoConnectionSDI;
-	    else if ("HDMI"       == s) vconn=bmdVideoConnectionHDMI;
-	    else if ("OpticalSDI" == s) vconn=bmdVideoConnectionOpticalSDI;
-	    else if ("Component"  == s) vconn=bmdVideoConnectionComponent;
-	    else if ("Composite"  == s) vconn=bmdVideoConnectionComposite;
-	    else if ("SVideo"     == s) vconn=bmdVideoConnectionSVideo;
-	  }
-	  break;
-        case gem::Properties::DOUBLE:
-	  if(props.get(key, d)) {
-            int idx =(int)d;
-	    switch(idx) {
-	    default:
-	    case 0:
-	      vconn=bmdVideoConnectionSDI;
-	      break;
-	    case 1:
-	      vconn=bmdVideoConnectionHDMI;
-	      break;
-	    case 2:
-	      vconn=bmdVideoConnectionOpticalSDI;
-	      break;
-	    case 3:
-	      vconn=bmdVideoConnectionComponent;
-	      break;
-	    case 4:
-	      vconn=bmdVideoConnectionComposite;
-	      break;
-	    case 5:
-	      vconn=bmdVideoConnectionSVideo;
-	      break;
-	    }
-	  }
-	  break;
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          if      ("SDI"        == s) {
+            vconn=bmdVideoConnectionSDI;
+          } else if ("HDMI"       == s) {
+            vconn=bmdVideoConnectionHDMI;
+          } else if ("OpticalSDI" == s) {
+            vconn=bmdVideoConnectionOpticalSDI;
+          } else if ("Component"  == s) {
+            vconn=bmdVideoConnectionComponent;
+          } else if ("Composite"  == s) {
+            vconn=bmdVideoConnectionComposite;
+          } else if ("SVideo"     == s) {
+            vconn=bmdVideoConnectionSVideo;
+          }
+        }
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          int idx =(int)d;
+          switch(idx) {
+          default:
+          case 0:
+            vconn=bmdVideoConnectionSDI;
+            break;
+          case 1:
+            vconn=bmdVideoConnectionHDMI;
+            break;
+          case 2:
+            vconn=bmdVideoConnectionOpticalSDI;
+            break;
+          case 3:
+            vconn=bmdVideoConnectionComponent;
+            break;
+          case 4:
+            vconn=bmdVideoConnectionComposite;
+            break;
+          case 5:
+            vconn=bmdVideoConnectionSVideo;
+            break;
+          }
+        }
+        break;
       }
       if(m_dlConfig && (m_connectionType != vconn)) {
-	m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
+        m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
       }
       m_connectionType = vconn;
     }
   }
   m_props=props;
 }
-void videoDECKLINK::getProperties(gem::Properties&props) {
+void videoDECKLINK::getProperties(gem::Properties&props)
+{
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
@@ -569,19 +621,23 @@ void videoDECKLINK::getProperties(gem::Properties&props) {
   }
 }
 
-std::vector<std::string>videoDECKLINK::dialogs(void) {
+std::vector<std::string>videoDECKLINK::dialogs(void)
+{
   std::vector<std::string>result;
   return result;
 }
-bool videoDECKLINK::provides(const std::string name) {
+bool videoDECKLINK::provides(const std::string&name)
+{
   return (name==m_name);
 }
-std::vector<std::string>videoDECKLINK::provides(void) {
+std::vector<std::string>videoDECKLINK::provides(void)
+{
   std::vector<std::string>result;
   result.push_back(m_name);
   return result;
 }
-const std::string videoDECKLINK::getName(void) {
+const std::string videoDECKLINK::getName(void)
+{
   return m_name;
 }
 

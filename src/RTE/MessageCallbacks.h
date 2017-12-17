@@ -20,67 +20,111 @@
  *      CPPEXTERN_MSG (classPtr, "foo", gimmeMess); // A_GIMME
  *      CPPEXTERN_MSG0(classPtr, "doit", bangMess); // no args
  *      CPPEXTERN_MSG1(classPtr, "name", nameMess, t_symbol*);  // 1 arg (A_SYMBOL)
- *      CPPEXTERN_MSG1(classPtr, "title", titleMess, std::string); // 1 arg (A_SYMBOL)
+ *      CPPEXTERN_MSG1(classPtr, "title", titleMess, const std::string&); // 1 arg (A_SYMBOL)
  *      CPPEXTERN_MSG3(classPtr, "values", tripletMess, t_float, t_float, t_float);  // 3 args (A_FLOAT)
  *    }
  *    void myclass::gimmeMess  (t_symbol*s, int argc, t_atom*argv) {;}
  *    void myclass::bangMess   (void)                              {;}
  *    void myclass::nameMess   (t_symbol*s)                        {;}
- *    void myclass::titleMess  (std::string s)                     {;}
+ *    void myclass::titleMess  (const std::string&s)               {;}
  *    void myclass::tripletMess(t_float a, t_float b, t_float c)   {;}
  */
 #ifndef _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_
 #define _INCLUDE__GEM_RTE_MESSAGECALLBACKS_H_
 
-namespace gem {
-  namespace RteMess {
-    class NoneType {}; // just a dummy class
-    template<class T=NoneType, class T1=T>
-      struct TypeTemplateCore{
-        static t_atomtype atomtype_id(void) { return A_NULL; }
-        static T1 cast(T value) { return static_cast<T1>(value); }
-        typedef T proxyType;
-        virtual ~TypeTemplateCore(void) { }
-      };
-    template<class T>
-      struct TypeTemplate : TypeTemplateCore<T, T> {
-      };
-    template<>
-      struct TypeTemplate<float> : TypeTemplateCore<t_float, float> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-      };
-    template<>
-      struct TypeTemplate<double> : TypeTemplateCore<t_float, double> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-      };
-    template<>
-      struct TypeTemplate<t_int> : TypeTemplateCore<t_float, t_int> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-      };
-    template<>
-      struct TypeTemplate<int> : TypeTemplateCore<t_float, int> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-      };
-    template<>
-      struct TypeTemplate<unsigned int> : TypeTemplateCore<t_float, unsigned int> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-        static unsigned int cast(t_float f) { return (f>0.)?static_cast<unsigned int>(f):0; }
-      };
-    template<>
-      struct TypeTemplate<bool> : TypeTemplateCore<t_float, bool> {
-        static t_atomtype atomtype_id(void) { return A_FLOAT; }
-        static bool cast(t_float f) {return (f>0.5); }
-      };
-    template<>
-      struct TypeTemplate<t_symbol*> : TypeTemplateCore<t_symbol*> {
-        static t_atomtype atomtype_id(void) { return A_DEFSYMBOL; }
-      };
-    template<>
-      struct TypeTemplate<std::string> : TypeTemplateCore<t_symbol*, std::string> {
-        static t_atomtype atomtype_id(void) { return A_DEFSYMBOL; }
-        static std::string cast(t_symbol*s) {return std::string(s->s_name); }
-      };
-  }; };
+namespace gem
+{
+namespace RteMess
+{
+class NoneType {}; // just a dummy class
+template<class T=NoneType, class T1=T>
+struct TypeTemplateCore {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_NULL;
+  }
+  static T1 cast(T value)
+  {
+    return static_cast<T1>(value);
+  }
+  typedef T proxyType;
+  virtual ~TypeTemplateCore(void) { }
+};
+template<class T>
+struct TypeTemplate : TypeTemplateCore<T, T> {
+};
+template<>
+struct TypeTemplate<float> : TypeTemplateCore<t_float, float> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+};
+template<>
+struct TypeTemplate<double> : TypeTemplateCore<t_float, double> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+};
+template<>
+struct TypeTemplate<t_int> : TypeTemplateCore<t_float, t_int> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+};
+template<>
+struct TypeTemplate<int> : TypeTemplateCore<t_float, int> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+};
+template<>
+struct TypeTemplate<unsigned int> :
+  TypeTemplateCore<t_float, unsigned int> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+  static unsigned int cast(t_float f)
+  {
+    return (f>0.)?static_cast<unsigned int>(f):0;
+  }
+};
+template<>
+struct TypeTemplate<bool> : TypeTemplateCore<t_float, bool> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_FLOAT;
+  }
+  static bool cast(t_float f)
+  {
+    return (f>0.5);
+  }
+};
+template<>
+struct TypeTemplate<t_symbol*> : TypeTemplateCore<t_symbol*> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_DEFSYMBOL;
+  }
+};
+template<>
+struct TypeTemplate<std::string> :
+  TypeTemplateCore<t_symbol*, std::string> {
+  static t_atomtype atomtype_id(void)
+  {
+    return A_DEFSYMBOL;
+  }
+  static std::string cast(t_symbol*s)
+  {
+    return std::string(s->s_name);
+  }
+};
+};
+};
 #define MSG_CONCAT3(a, b, c) _##a##_##b##_##c
 
 

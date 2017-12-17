@@ -83,13 +83,14 @@ GemBase :: GemBase(void)
 /////////////////////////////////////////////////////////
 GemBase :: ~GemBase(void)
 {
-  if (gem_amRendering){
+  if (gem_amRendering) {
     stopRendering();
     gem_amRendering=false;
   }
 
-    if (m_out1)
-        outlet_free(m_out1);
+  if (m_out1) {
+    outlet_free(m_out1);
+  }
   pd_unbind(&this->x_obj->ob_pd, gensym("__gemBase"));
 }
 
@@ -101,14 +102,13 @@ void GemBase :: gem_startstopMess(int state)
 {
   // for now, this is important, as it is the only way to call the stopRendering
 #if 1
-  if (state && !gem_amRendering){
+  if (state && !gem_amRendering) {
     m_enabled = isRunnable();
     if(m_enabled) {
       startRendering();
       m_state=RENDERING;
     }
-  }
-  else if (!state && gem_amRendering){
+  } else if (!state && gem_amRendering) {
     if(m_enabled) {
       stopRendering();
       m_state=ENABLED;
@@ -123,7 +123,8 @@ void GemBase :: gem_startstopMess(int state)
   SETFLOAT(ap, state);
   outlet_anything(this->m_out1, gensym("gem_state"), 1, ap);
 #else
-  post("gem_startstopMess(%d) called...please report this to the upstream developers", state);
+  post("gem_startstopMess(%d) called...please report this to the upstream developers",
+       state);
 #endif
 }
 
@@ -134,8 +135,9 @@ void GemBase :: gem_startstopMess(int state)
 void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
 {
   m_cache=cache;
-  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)
+  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC) {
     m_cache=NULL;
+  }
   if(INIT==m_state) {
     if(isRunnable()) {
       m_state=ENABLED;
@@ -153,14 +155,19 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   }
   if(RENDERING==m_state) {
     gem_amRendering=true;
-    if(state)render(state);
+    if(state) {
+      render(state);
+    }
     continueRender(state);
-    if(state)postrender(state);
+    if(state) {
+      postrender(state);
+    }
   }
   m_modified=false;
 }
 
-void GemBase :: continueRender(GemState*state){
+void GemBase :: continueRender(GemState*state)
+{
   t_atom ap[2];
   ap->a_type=A_POINTER;
   ap->a_w.w_gpointer=(t_gpointer *)m_cache;  // the cache ?
@@ -177,9 +184,12 @@ void GemBase :: continueRender(GemState*state){
 /////////////////////////////////////////////////////////
 void GemBase :: setModified(void)
 {
-  if (m_cache&& (m_cache->m_magic!=GEMCACHE_MAGIC))
+  if (m_cache&& (m_cache->m_magic!=GEMCACHE_MAGIC)) {
     m_cache=NULL;
-  if (m_cache) m_cache->dirty = true;
+  }
+  if (m_cache) {
+    m_cache->dirty = true;
+  }
   m_modified=true;
   switch(m_state) {
   case DISABLED:
@@ -214,12 +224,14 @@ bool GemBase :: isRunnable(void)
   return true;
 }
 
-enum GemBase::RenderState GemBase::getState(void) {
+enum GemBase::RenderState GemBase::getState(void)
+{
   return m_state;
 }
 
 #include "Base/GemWindow.h"
-void GemBase::beforeDeletion(void) {
+void GemBase::beforeDeletion(void)
+{
   //post("GemBase to be deleted");
   GemWindow::stopInAllContexts(this);
   CPPExtern::beforeDeletion();
@@ -234,35 +246,43 @@ void GemBase::beforeDeletion(void) {
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
-    	    gensym("gem_state"), A_GIMME, A_NULL);
-    struct _CallbackClass_gemContext {
-      static void callback(void*data, t_float v0) {
-	GemBase*obj=GetMyClass(data);
-	bool state=(bool)v0;
-	if(!state && obj->gem_amRendering) {
-	  if(obj->m_enabled) {
-	    //obj->post("stop rendering");
-	    obj->stopRendering();
-	    obj->m_state=obj->ENABLED;
-	  }
-	}
-	obj->gem_amRendering=(!state);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
+                  gensym("gem_state"), A_GIMME, A_NULL);
+  struct _CallbackClass_gemContext {
+    static void callback(void*data, t_float v0)
+    {
+      GemBase*obj=GetMyClass(data);
+      bool state=(bool)v0;
+      if(!state && obj->gem_amRendering) {
+        if(obj->m_enabled) {
+          //obj->post("stop rendering");
+          obj->stopRendering();
+          obj->m_state=obj->ENABLED;
+        }
       }
-      _CallbackClass_gemContext (struct _class*c) {
-	class_addmethod(c, reinterpret_cast<t_method>(callback), gensym("__gem_context"), A_FLOAT, A_NULL);
-      }
-    };
-    _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
+      obj->gem_amRendering=(!state);
+    }
+    explicit _CallbackClass_gemContext (struct _class*c)
+    {
+      class_addmethod(c, reinterpret_cast<t_method>(callback),
+                      gensym("__gem_context"), A_FLOAT, A_NULL);
+    }
+  };
+  _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
 
 }
-void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc, t_atom *argv)
+void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc,
+                                 t_atom *argv)
 {
-  if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    GetMyClass(data)->gem_renderMess((GemCache *)argv->a_w.w_gpointer, (GemState *)(argv+1)->a_w.w_gpointer);
+  if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
+    GetMyClass(data)->gem_renderMess(
+      reinterpret_cast<GemCache *>(argv->a_w.w_gpointer),
+      reinterpret_cast<GemState *>((argv+1)->a_w.w_gpointer));
 #if 1
-  } else if (argc==1 && argv->a_type==A_FLOAT){
-    GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
+  } else if (argc==1 && argv->a_type==A_FLOAT) {
+    GetMyClass(data)->gem_startstopMess(atom_getint(
+                                          argv));  // start rendering (forget this !?)
 #endif
   } else {
     GetMyClass(data)->error("wrong arguments in GemTrigger...");
