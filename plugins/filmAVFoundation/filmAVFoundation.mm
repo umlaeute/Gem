@@ -96,7 +96,7 @@ bool filmAVFoundation::open(const std::string &filename, const gem::Properties &
   if(m_moviePlayer.duration > 0) {
     m_fps = m_moviePlayer.frameRate;
     m_numFrames = m_moviePlayer.numFrames;
-    m_numTracks = m_moviePlayer.m_numTracks;
+    m_numTracks = m_moviePlayer.numTracks;
   }
   else { // defaults
     m_fps = 30.f;
