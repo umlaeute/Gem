@@ -18,15 +18,16 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #import <CoreMedia/CoreMedia.h>
 
 // AVFoundation asset reader wrapper
-@interface AVFMoviePlayer : NSObject {
-  
+@interface AVFMoviePlayer : NSObject
+{
+
   AVAsset *_asset;
   AVAssetReader *_assetReader;
   AVAssetReaderTrackOutput *_videoTrackOutput;
 
   BOOL _isLoaded;
   int _numFrames;
-  
+
   unsigned long _desiredPixelFormat;
   CMSampleBufferRef videoSampleBuffer;
 }

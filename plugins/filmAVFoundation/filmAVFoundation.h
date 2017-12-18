@@ -18,9 +18,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 // forward declare PIMPL types, depending on the compiler
 #ifdef __OBJC__
-  @class AVFMoviePlayer;
+@class AVFMoviePlayer;
 #else
-  typedef struct objc_object AVFMoviePlayer;
+typedef struct objc_object AVFMoviePlayer;
 #endif
 
 /*-----------------------------------------------------------------
@@ -36,23 +36,28 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmAVFoundation : public film {
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmAVFoundation : public film
+{
 
 public:
 
   //////////
   // Constructor
   filmAVFoundation(void);
-  
+
   //////////
   // Destructor
   virtual ~filmAVFoundation(void);
 
   //////////
   // open a movie up
-  virtual bool open(const std::string &filename, const gem::Properties &props);
-  
+  virtual bool open(const std::string &filename,
+                    const gem::Properties &props);
+
   //////////
   // get the next frame
   virtual pixBlock* getFrame(void);
@@ -63,7 +68,10 @@ public:
 
   //////////
   // returns true if instance can be used in thread
-  virtual bool isThreadable(void) {return true;}
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   //////////
   // close the movie file
@@ -85,7 +93,7 @@ public:
   //////////
   // set the desired color-space
   //virtual void requestColor(GLenum format) {m_wantedFormat = format;}
-  
+
   //////////
   // get the number of frames for the current track
   //virtual int getFrameNum(void) {return m_numFrames;}
@@ -120,6 +128,8 @@ protected:
   //double m_auto;                //< auto increment
   //bool m_newfilm;               //< has the film just been opened?
 
-};};};
+};
+};
+};
 
 #endif // header guard

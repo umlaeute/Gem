@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
 #include "filmAVFoundation.h"
@@ -35,7 +35,8 @@ REGISTER_FILMFACTORY("AVFoundation", filmAVFoundation);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-filmAVFoundation::filmAVFoundation(void) {
+filmAVFoundation::filmAVFoundation(void)
+{
   close(); // default values
   m_wantedFormat = FILMAVFOUNDATION_DEFAULT_PIXELFORMAT;
   m_image.image.setCsizeByFormat(m_wantedFormat);
@@ -45,7 +46,8 @@ filmAVFoundation::filmAVFoundation(void) {
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmAVFoundation::~filmAVFoundation(void) {
+filmAVFoundation::~filmAVFoundation(void)
+{
   close();
 }
 
@@ -53,7 +55,9 @@ filmAVFoundation::~filmAVFoundation(void) {
 // open
 //
 /////////////////////////////////////////////////////////
-bool filmAVFoundation::open(const std::string &filename, const gem::Properties &props) {
+bool filmAVFoundation::open(const std::string &filename,
+                            const gem::Properties &props)
+{
   if(filename.empty()) {
     return false;
   }
@@ -68,13 +72,13 @@ bool filmAVFoundation::open(const std::string &filename, const gem::Properties &
 
   // set desired format
   switch(m_wantedFormat) {
-    default:
-    case GL_YUV422_GEM:
-      m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_422YpCbCr8;
-      break;
-    case GL_RGBA_GEM:
-      m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_32ARGB;
-      break;
+  default:
+  case GL_YUV422_GEM:
+    m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_422YpCbCr8;
+    break;
+  case GL_RGBA_GEM:
+    m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_32ARGB;
+    break;
   }
 
   // load
@@ -82,7 +86,7 @@ bool filmAVFoundation::open(const std::string &filename, const gem::Properties &
   if(![m_moviePlayer openFile:path async:NO]) {
     return false;
   }
-  
+
   // set up frame data
   m_image.image.xsize = m_moviePlayer.width;
   m_image.image.ysize = m_moviePlayer.height;
@@ -97,8 +101,7 @@ bool filmAVFoundation::open(const std::string &filename, const gem::Properties &
     m_fps = m_moviePlayer.frameRate;
     m_numFrames = m_moviePlayer.numFrames;
     m_numTracks = m_moviePlayer.numTracks;
-  }
-  else { // defaults
+  } else { // defaults
     m_fps = 30.f;
     m_numFrames = 0;
     m_numTracks = 0;
@@ -111,7 +114,8 @@ bool filmAVFoundation::open(const std::string &filename, const gem::Properties &
 // close
 //
 /////////////////////////////////////////////////////////
-void filmAVFoundation::close(void) {
+void filmAVFoundation::close(void)
+{
   if(m_moviePlayer) {
     m_moviePlayer = nil;
     m_image.image.clear();
@@ -130,24 +134,26 @@ void filmAVFoundation::close(void) {
 // getFrame
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmAVFoundation::getFrame(void) {
+pixBlock* filmAVFoundation::getFrame(void)
+{
   if(!m_moviePlayer.isLoaded) {
     return 0;
   }
-  
+
   // nothing to process?
   if(m_readNext == false) {
-      return &m_image;
+    return &m_image;
   }
-  
+
   // grab frame into GEM image buffer
   CVImageBufferRef imageBuffer = [m_moviePlayer getFrame];
-  
+
   // lock buffer
   CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-  
+
   // get buffer format & set buffer info for copying
-  unsigned long imageBufferPixelFormat = CVPixelBufferGetPixelFormatType(imageBuffer);
+  unsigned long imageBufferPixelFormat = CVPixelBufferGetPixelFormatType(
+      imageBuffer);
   vImage_Buffer src = {
     CVPixelBufferGetBaseAddress(imageBuffer),
     CVPixelBufferGetHeight(imageBuffer),
@@ -161,27 +167,26 @@ pixBlock* filmAVFoundation::getFrame(void) {
     static_cast<size_t>(m_image.image.xsize * m_image.image.csize)
   };
   vImage_Error err = kvImageNoError;
-  
+
   // use Accelerate framework to convert formats and copy buffer
   if(imageBufferPixelFormat == kCVPixelFormatType_422YpCbCr8) {
     uint8_t permuteMap[4] = {0, 3, 2, 1};
     err = vImagePermuteChannels_ARGB8888(&src, &dest, permuteMap, 0);
-  }
-  else if(imageBufferPixelFormat == kCVPixelFormatType_32ARGB) {
+  } else if(imageBufferPixelFormat == kCVPixelFormatType_32ARGB) {
     uint8_t permuteMap[4] = {0, 1, 2, 3};
     err = vImagePermuteChannels_ARGB8888(&src, &dest, permuteMap, 0);
-  }
-  else {
+  } else {
     error("filmAVFoundation: Unable to convert frame pixels, "
           "format %d is not 422 YUV or ARGB", (int)imageBufferPixelFormat);
   }
-  
+
   // done, unlock buffer
   CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-  
+
   // check for errors
   if(err != kvImageNoError) {
-    error("filmAVFoundation: Unable to convert frame pixels, vImage_error %d", (int)err);
+    error("filmAVFoundation: Unable to convert frame pixels, vImage_error %d",
+          (int)err);
   }
 
   // done
@@ -194,7 +199,8 @@ pixBlock* filmAVFoundation::getFrame(void) {
 // changeImage
 //
 /////////////////////////////////////////////////////////
-film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum) {
+film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum)
+{
   m_readNext = false;
   if(imgNum == -1) {
     imgNum = m_curFrame;
@@ -206,7 +212,7 @@ film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum) {
     trackNum = m_curTrack;
   }
   if(!m_moviePlayer.isLoaded) {
-      return film::SUCCESS;
+    return film::SUCCESS;
   }
   [m_moviePlayer setFrame:imgNum andTrack:trackNum];
   m_curFrame = imgNum;
@@ -219,7 +225,8 @@ film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum) {
 //
 /////////////////////////////////////////////////////////
 bool filmAVFoundation::enumProperties(gem::Properties &readable,
-                                      gem::Properties &writeable) {
+                                      gem::Properties &writeable)
+{
   readable.clear();
   writeable.clear();
 
@@ -235,7 +242,8 @@ bool filmAVFoundation::enumProperties(gem::Properties &readable,
   return false;
 }
 
-void filmAVFoundation::setProperties(gem::Properties &props) {
+void filmAVFoundation::setProperties(gem::Properties &props)
+{
   double d;
   // if(props.get("auto", d)) {
   //   m_auto = d;
@@ -245,7 +253,8 @@ void filmAVFoundation::setProperties(gem::Properties &props) {
   }
 }
 
-void filmAVFoundation::getProperties(gem::Properties &props) {
+void filmAVFoundation::getProperties(gem::Properties &props)
+{
   std::vector<std::string> keys = props.keys();
   gem::any value;
   double d;
@@ -255,19 +264,23 @@ void filmAVFoundation::getProperties(gem::Properties &props) {
     props.erase(key);
     if("fps" == key) {
       d = m_fps;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("frames" == key) {
       d = m_numFrames;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("width" == key) {
       d = m_image.image.xsize;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("height" == key) {
       d = m_image.image.ysize;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
   }
 }
