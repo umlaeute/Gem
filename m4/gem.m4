@@ -303,6 +303,22 @@ undefine([Name])
 undefine([NAME])
 ])# GEM_CHECK_LIB
 
+# GEM_CHECK_ERRORFLAG()
+# checks whether we can apply "-Werror" to the compiler
+# this is taken from ax_pthread.m4
+AC_DEFUN([GEM_CHECK_WERROR],
+[
+AC_MSG_CHECKING([whether $CC needs -Werror to reject unknown flags])
+save_CFLAGS="$CFLAGS"
+GEM_CFLAGS_WERROR="-Werror"
+CFLAGS="$CFLAGS $GEM_CFLAGS_WERROR -Wunknown-warning-option -Wsizeof-array-argument"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([int foo(void);],[foo()])],
+                  [AC_MSG_RESULT([yes])],
+                  [GEM_CFLAGS_WERROR=
+                   AC_MSG_RESULT([no])])
+CFLAGS="$save_CFLAGS"
+])
+
 # GEM_CHECK_CXXFLAGS(ADDITIONAL-CXXFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
 #
 # checks whether the $(CXX) compiler accepts the ADDITIONAL-CXXFLAGS
