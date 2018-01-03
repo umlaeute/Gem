@@ -19,6 +19,7 @@
 @property (nonatomic, strong) AVAssetReader *assetReader;
 @property (nonatomic, strong) AVAssetReaderTrackOutput *videoTrackOutput;
 @property (nonatomic, readwrite) BOOL isLoaded;
+@property (nonatomic, readwrite) BOOL isFrameNew;
 @property (nonatomic, readwrite) int numFrames;
 @end
 
@@ -33,6 +34,7 @@
 @synthesize assetReader = _assetReader;
 @synthesize videoTrackOutput = _videoTrackOutput;
 @synthesize isLoaded = _isLoaded;
+@synthesize isFrameNew = _isFrameNew;
 @synthesize numFrames = _numFrames;
 @synthesize desiredPixelFormat = _desiredPixelFormat;
 
@@ -126,12 +128,10 @@
 
   // wait for the done semaphore signal
   if(async) {
-    //dispatch_release(done);
     return YES;
   }
   else { // done
     dispatch_semaphore_wait(done, DISPATCH_TIME_FOREVER);
-    //dispatch_release(done);
     return self.isLoaded;
   }
 }
@@ -154,6 +154,7 @@
 
   // defaults
   self.isLoaded = NO;
+  self.isFrameNew = NO;
   self.numFrames = 0;
 }
 
@@ -170,11 +171,6 @@
   float position = frame / (float)self.numFrames;
   double t = self.duration * position;
   CMTime time = CMTimeMakeWithSeconds(t, NSEC_PER_SEC);
-
-  // self.assetReader = nil;
-  // if(self.videoTrackOutput) {
-  //   self.videoTrackOutput = nil;
-  // }
   
   // create asset reader at specific time, restrict time within 0-duration
   time = CMTimeMaximum(time, kCMTimeZero);
@@ -201,11 +197,11 @@
       }
       videoSampleBuffer = newVideoSampleBuffer; // save reference to new buffer
       newVideoSampleBuffer = nil;
-      //videoSampleTime = CMSampleBufferGetPresentationTimeStamp(videoSampleBuffer);
+      self.isFrameNew = YES;
     }
-    //else {
-    //  videoSampleTime = videoSampleTimePrev = kCMTimeNegativeInfinity;
-    //}
+    else {
+      self.isFrameNew = NO;
+    }
   }
   return CMSampleBufferGetImageBuffer(videoSampleBuffer);
 }
@@ -266,7 +262,7 @@
 - (void)setDesiredPixelFormat:(unsigned long) format {
   if(_desiredPixelFormat == format) {return;}
   _desiredPixelFormat = format;
-  if(self.asset) {
+  if(self.assetReader) {
     // recreate asset reader with new format
     [self createAssetReaderWithTimeRange:self.assetReader.timeRange];
   }

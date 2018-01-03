@@ -25,6 +25,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   AVAssetReaderTrackOutput *_videoTrackOutput;
 
   BOOL _isLoaded;
+  BOOL _isFrameNew;
   int _numFrames;
   
   unsigned long _desiredPixelFormat;
@@ -33,6 +34,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 // has a file been loaded?
 @property (nonatomic, readonly) BOOL isLoaded;
+
+// is the current video frame new?
+@property (nonatomic, readonly) BOOL isFrameNew;
 
 // desired asset reader pixel format,
 // either kCVPixelFormatType_32ARGB or kCVPixelFormatType_422YpCbCr8 (default)
@@ -57,7 +61,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 // set track = -1 keep current
 - (void)setFrame:(int)frame andTrack:(int)track;
 
-// get the current frame data
+// get the current frame data, updates isFrameNew
 - (CVImageBufferRef)getFrame;
 
 @end

@@ -58,6 +58,10 @@ bool filmAVFoundation::open(const std::string &filename,
   if(filename.empty()) {
     return false;
   }
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat = (GLenum)d;
+  }
 
   // close and reset
   close();
@@ -129,6 +133,10 @@ pixBlock* filmAVFoundation::getFrame(void) {
   
   // grab frame into GEM image buffer
   CVImageBufferRef imageBuffer = [m_moviePlayer getFrame];
+  if(!m_moviePlayer.isFrameNew) {
+    m_readNext = false;
+    return &m_image;
+  }
   
   // lock buffer
   CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
@@ -230,9 +238,10 @@ void filmAVFoundation::setProperties(gem::Properties &props) {
   // }
   if(props.get("colorspace", d)) {
     changeFormat((GLenum)d);
-    if(m_moviePlayer) {
+    if(m_moviePlayer && m_moviePlayer.isLoaded) {
       // update current frame
       m_readNext = true;
+      getFrame();
     }
   }
 }
