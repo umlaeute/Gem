@@ -4,7 +4,7 @@ GEM - Graphics Environment for Multimedia
 
 Load a digital video (.mov, .mp4, etc) into a pix block on macOS 10.7+
 
-Copyright (c) 2016 Dan Wilcox. danomatika@gmail.com
+Copyright (c) 2016-2018 Dan Wilcox.
 
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
@@ -26,7 +26,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-  filmAVFoundation
+  filmAVF
 
   Loads in a film on macOS using the AVFoundation framework
 
@@ -37,17 +37,17 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
   -----------------------------------------------------------------*/
 namespace gem { namespace plugins {
-class GEM_EXPORT filmAVFoundation : public film {
+class GEM_EXPORT filmAVF : public film {
 
 public:
 
   //////////
   // Constructor
-  filmAVFoundation(void);
+  filmAVF(void);
   
   //////////
   // Destructor
-  virtual ~filmAVFoundation(void);
+  virtual ~filmAVF(void);
 
   //////////
   // open a movie up

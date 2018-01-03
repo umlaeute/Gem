@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////
-//
-// GEM - Graphics Environment for Multimedia
-//
-// Implementation file
-//
-//    Copyright (c) 2016 Dan Wilcox.
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+/*-----------------------------------------------------------------
+
+GEM - Graphics Environment for Multimedia
+
+Implementation file
+
+Copyright (c) 2016-2018 Dan Wilcox.
+
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+
+-----------------------------------------------------------------*/
 #ifdef HAVE_CONFIG_H
   #include "config.h"
 #endif
 
-#include "filmAVFoundation.h"
+#include "filmAVF.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
@@ -23,21 +24,21 @@
 
 using namespace gem::plugins;
 
-REGISTER_FILMFACTORY("AVFoundation", filmAVFoundation);
+REGISTER_FILMFACTORY("AVF", filmAVF);
 
-#define FILMAVFOUNDATION_DEFAULT_PIXELFORMAT GL_YCBCR_422_APPLE
+#define FILMAVF_DEFAULT_PIXELFORMAT GL_YCBCR_422_APPLE
 
 /////////////////////////////////////////////////////////
 //
-// filmAVFoundation
+// filmAVF
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-filmAVFoundation::filmAVFoundation(void) {
+filmAVF::filmAVF(void) {
   close(); // default values
-  m_wantedFormat = FILMAVFOUNDATION_DEFAULT_PIXELFORMAT;
+  m_wantedFormat = FILMAVF_DEFAULT_PIXELFORMAT;
   m_image.image.setCsizeByFormat(m_wantedFormat);
 }
 
@@ -45,7 +46,7 @@ filmAVFoundation::filmAVFoundation(void) {
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmAVFoundation::~filmAVFoundation(void) {
+filmAVF::~filmAVF(void) {
   close();
 }
 
@@ -53,7 +54,7 @@ filmAVFoundation::~filmAVFoundation(void) {
 // open
 //
 /////////////////////////////////////////////////////////
-bool filmAVFoundation::open(const std::string &filename,
+bool filmAVF::open(const std::string &filename,
                             const gem::Properties &props) {
   if(filename.empty()) {
     return false;
@@ -104,7 +105,7 @@ bool filmAVFoundation::open(const std::string &filename,
 // close
 //
 /////////////////////////////////////////////////////////
-void filmAVFoundation::close(void) {
+void filmAVF::close(void) {
   if(m_moviePlayer) {
     m_moviePlayer = nil;
     m_image.image.clear();
@@ -122,7 +123,7 @@ void filmAVFoundation::close(void) {
 // getFrame
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmAVFoundation::getFrame(void) {
+pixBlock* filmAVF::getFrame(void) {
   if(!m_moviePlayer || !m_moviePlayer.isLoaded) {
     return 0;
   }
@@ -168,13 +169,13 @@ pixBlock* filmAVFoundation::getFrame(void) {
         break;
       }
       default:
-        error("filmAVFoundation: Unable to convert frame pixels, "
+        error("filmAVF: Unable to convert frame pixels, "
               "unknown format %d", (int)m_wantedFormat);
         break;
     }
   }
   else {
-    error("filmAVFoundation: Unable to convert frame pixels, "
+    error("filmAVF: Unable to convert frame pixels, "
           "source buffer is null");
   }
   
@@ -191,7 +192,7 @@ pixBlock* filmAVFoundation::getFrame(void) {
 // changeImage
 //
 /////////////////////////////////////////////////////////
-film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum) {
+film::errCode filmAVF::changeImage(int imgNum, int trackNum) {
   m_readNext = false;
   if(imgNum == -1) {
     imgNum = m_curFrame;
@@ -215,7 +216,7 @@ film::errCode filmAVFoundation::changeImage(int imgNum, int trackNum) {
 // Properties
 //
 /////////////////////////////////////////////////////////
-bool filmAVFoundation::enumProperties(gem::Properties &readable,
+bool filmAVF::enumProperties(gem::Properties &readable,
                                       gem::Properties &writeable) {
   readable.clear();
   writeable.clear();
@@ -232,7 +233,7 @@ bool filmAVFoundation::enumProperties(gem::Properties &readable,
   return false;
 }
 
-void filmAVFoundation::setProperties(gem::Properties &props) {
+void filmAVF::setProperties(gem::Properties &props) {
   double d;
   // if(props.get("auto", d)) {
   //   m_auto = d;
@@ -247,7 +248,7 @@ void filmAVFoundation::setProperties(gem::Properties &props) {
   }
 }
 
-void filmAVFoundation::getProperties(gem::Properties &props) {
+void filmAVF::getProperties(gem::Properties &props) {
   std::vector<std::string> keys = props.keys();
   gem::any value;
   double d;
@@ -276,7 +277,7 @@ void filmAVFoundation::getProperties(gem::Properties &props) {
 
 // PROTECTED
 
-bool filmAVFoundation::changeFormat(GLenum format) {
+bool filmAVF::changeFormat(GLenum format) {
   bool changed = (m_wantedFormat != format);
   m_wantedFormat = format;
   if(m_moviePlayer) {

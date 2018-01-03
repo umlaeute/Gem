@@ -8,7 +8,7 @@ SUBDIRS += imageMAGICK imageTIFF imageJPEG imageSGI imageQT
 
 
 ## film loading plugins
-SUBDIRS += filmAVFoundation filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
+SUBDIRS += filmAVF filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
 if DISABLED
 SUBDIRS += filmDSATL
 SUBDIRS += filmTEST

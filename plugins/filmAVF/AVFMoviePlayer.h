@@ -4,7 +4,7 @@ GEM - Graphics Environment for Multimedia
 
 Load a digital video (.mov, .mp4, etc) into a pix block on macOS 10.7+
 
-Copyright (c) 2016 Dan Wilcox. danomatika@gmail.com
+Copyright (c) 2016-2018 Dan Wilcox.
 
 Adapted from the openFrameworks ofAVFoundationVideoPlayer class:
 Lukasz Karluk, Sam Kronick, James George, & Elie Zananiri 2014.
