@@ -303,19 +303,36 @@ undefine([Name])
 undefine([NAME])
 ])# GEM_CHECK_LIB
 
+# GEM_CHECK_ERRORFLAG()
+# checks whether we can apply "-Werror" to the compiler
+# this is taken from ax_pthread.m4
+AC_DEFUN([GEM_CHECK_WERROR],
+[
+AC_MSG_CHECKING([whether $CC needs -Werror to reject unknown flags])
+save_CFLAGS="$CFLAGS"
+GEM_CFLAGS_WERROR="-Werror"
+CFLAGS="$CFLAGS $GEM_CFLAGS_WERROR -Wunknown-warning-option -Wsizeof-array-argument"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([int foo(void);],[foo()])],
+                  [AC_MSG_RESULT([yes])],
+                  [GEM_CFLAGS_WERROR=
+                   AC_MSG_RESULT([no])])
+CFLAGS="$save_CFLAGS"
+])
+
 # GEM_CHECK_CXXFLAGS(ADDITIONAL-CXXFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
 #
 # checks whether the $(CXX) compiler accepts the ADDITIONAL-CXXFLAGS
 # if so, they are added to the CXXFLAGS
 AC_DEFUN([GEM_CHECK_CXXFLAGS],
 [
+  AC_REQUIRE([GEM_CHECK_WERROR])
   AC_MSG_CHECKING([whether compiler accepts "$1"])
 cat > conftest.c++ << EOF
 int main(){
   return 0;
 }
 EOF
-AS_IF([ $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&1 ],[
+AS_IF([ $CXX $CPPFLAGS $CXXFLAGS $GEM_CFLAGS_WERROR -o conftest.o conftest.c++ [$1] > /dev/null 2>&1 ],[
   AC_MSG_RESULT([yes])
   CXXFLAGS="${CXXFLAGS} [$1]"
   [$2]
