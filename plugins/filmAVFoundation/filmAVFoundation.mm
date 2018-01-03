@@ -72,6 +72,7 @@ bool filmAVFoundation::open(const std::string &filename,
   }
 
   // load
+  // TODO: figure out how to make async loading work with GEM?
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
   if(![m_moviePlayer openFile:path async:NO]) {
     return false;
@@ -237,8 +238,8 @@ void filmAVFoundation::setProperties(gem::Properties &props) {
   //   m_auto = d;
   // }
   if(props.get("colorspace", d)) {
-    changeFormat((GLenum)d);
-    if(m_moviePlayer && m_moviePlayer.isLoaded) {
+    bool changed = changeFormat((GLenum)d);
+    if(changed && !m_readNext) {
       // update current frame
       m_readNext = true;
       getFrame();
@@ -275,7 +276,8 @@ void filmAVFoundation::getProperties(gem::Properties &props) {
 
 // PROTECTED
 
-void filmAVFoundation::changeFormat(GLenum format) {
+bool filmAVFoundation::changeFormat(GLenum format) {
+  bool changed = (m_wantedFormat != format);
   m_wantedFormat = format;
   if(m_moviePlayer) {
     switch(m_wantedFormat) {
@@ -297,4 +299,5 @@ void filmAVFoundation::changeFormat(GLenum format) {
   else {
     m_image.image.allocate();
   }
+  return changed;
 }

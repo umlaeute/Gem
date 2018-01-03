@@ -86,8 +86,8 @@ protected:
 
   //////////
   // set the pixel format: GL_YCBCR_422_APPLE, GL_RGBA_GEM, or GL_LUMINANCE
-  // (re)allocates when necessary
-  void changeFormat(GLenum format);
+  // (re)allocates when necessary, returns true if format was changed
+  bool changeFormat(GLenum format);
 
   // PIMPL pointer to the Obj-C object behind this class
   AVFMoviePlayer* m_moviePlayer;
