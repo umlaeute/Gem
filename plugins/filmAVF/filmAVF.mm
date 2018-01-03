@@ -115,7 +115,6 @@ void filmAVF::close(void) {
   m_curFrame = -1;
   m_curTrack = -1;
   m_readNext = false;
-  //m_auto = 0.f;
   m_fps = -1.0;
 }
 
@@ -217,7 +216,7 @@ film::errCode filmAVF::changeImage(int imgNum, int trackNum) {
 //
 /////////////////////////////////////////////////////////
 bool filmAVF::enumProperties(gem::Properties &readable,
-                                      gem::Properties &writeable) {
+                             gem::Properties &writeable) {
   readable.clear();
   writeable.clear();
 
@@ -235,16 +234,8 @@ bool filmAVF::enumProperties(gem::Properties &readable,
 
 void filmAVF::setProperties(gem::Properties &props) {
   double d;
-  // if(props.get("auto", d)) {
-  //   m_auto = d;
-  // }
   if(props.get("colorspace", d)) {
-    bool changed = changeFormat((GLenum)d);
-    if(changed && !m_readNext) {
-      // update current frame
-      m_readNext = true;
-      getFrame();
-    }
+    changeFormat((GLenum)d);
   }
 }
 

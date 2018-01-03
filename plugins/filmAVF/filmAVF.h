@@ -97,8 +97,7 @@ protected:
   int m_numFrames, m_numTracks; //< num frames & tracks in the stream
   int m_curFrame, m_curTrack;   //< current frame and track
   double m_fps;                 //< frame rate
-  bool m_readNext;              //< is the video frame new & should be read?
-  //double m_auto;                //< auto increment
+  bool m_readNext;              //< should the frame be read next getFrame call?
 
 };};};
 
