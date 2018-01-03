@@ -233,7 +233,7 @@
   self.assetReader.timeRange = timeRange;
 
   // https://developer.apple.com/reference/avfoundation/avassetreadertrackoutput?language=objc
-  // kCVPixelFormatType_422YpCbCr8 or kCVPixelFormatType_32BGRA
+  // kCVPixelFormatType_422YpCbCr8 (fastest) or kCVPixelFormatType_32BGRA
   NSDictionary *settings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithInt:self.desiredPixelFormat]};
   AVAssetTrack *videoTrack = [[self.asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
   self.videoTrackOutput = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:videoTrack outputSettings:settings];
@@ -262,6 +262,15 @@
 }
 
 #pragma mark Overridden Getters/Setters
+
+- (void)setDesiredPixelFormat:(unsigned long) format {
+  if(_desiredPixelFormat == format) {return;}
+  _desiredPixelFormat = format;
+  if(self.asset) {
+    // recreate asset reader with new format
+    [self createAssetReaderWithTimeRange:self.assetReader.timeRange];
+  }
+}
 
 - (int)numTracks {
   return self.asset == nil ? 0 : [[self.asset tracksWithMediaType:AVMediaTypeVideo] count];

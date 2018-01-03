@@ -82,31 +82,12 @@ public:
   // get properties: "width", "height", "frames", "fps"
   virtual void getProperties(gem::Properties &props);
 
-  //////////
-  // set the desired color-space
-  //virtual void requestColor(GLenum format) {m_wantedFormat = format;}
-  
-  //////////
-  // get the number of frames for the current track
-  //virtual int getFrameNum(void) {return m_numFrames;}
-
-  //////////
-  // get the frames per second or -1 if unknown
-  //virtual double getFPS(void) {return m_fps;}
-
-  //////////
-  // get xsize of the frame
-  //virtual int getWidth(void) {return m_image.image.xsize;}
-
-  //////////
-  // get ysize of the frame
-  //virtual int getHeight(void) {return m_image.image.ysize;}
-
-  //////////
-  // set auto frame increment
-  //virtual void setAuto(double incr) {m_auto = incr;}
-
 protected:
+
+  //////////
+  // set the pixel format: GL_YCBCR_422_APPLE, GL_RGBA_GEM, or GL_LUMINANCE
+  // (re)allocates when necessary
+  void changeFormat(GLenum format);
 
   // PIMPL pointer to the Obj-C object behind this class
   AVFMoviePlayer* m_moviePlayer;
@@ -118,7 +99,6 @@ protected:
   double m_fps;                 //< frame rate
   bool m_readNext;              //< is the video frame new & should be read?
   //double m_auto;                //< auto increment
-  //bool m_newfilm;               //< has the film just been opened?
 
 };};};
 
