@@ -11,7 +11,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 #ifdef HAVE_CONFIG_H
-  #include "config.h"
+#include "config.h"
 #endif
 
 #include "filmAVF.h"
@@ -36,7 +36,8 @@ REGISTER_FILMFACTORY("AVF", filmAVF);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-filmAVF::filmAVF(void) {
+filmAVF::filmAVF(void)
+{
   close(); // default values
   m_wantedFormat = FILMAVF_DEFAULT_PIXELFORMAT;
   m_image.image.setCsizeByFormat(m_wantedFormat);
@@ -46,7 +47,8 @@ filmAVF::filmAVF(void) {
 // Destructor
 //
 /////////////////////////////////////////////////////////
-filmAVF::~filmAVF(void) {
+filmAVF::~filmAVF(void)
+{
   close();
 }
 
@@ -55,7 +57,8 @@ filmAVF::~filmAVF(void) {
 //
 /////////////////////////////////////////////////////////
 bool filmAVF::open(const std::string &filename,
-                            const gem::Properties &props) {
+                   const gem::Properties &props)
+{
   if(filename.empty()) {
     return false;
   }
@@ -78,7 +81,7 @@ bool filmAVF::open(const std::string &filename,
   if(![m_moviePlayer openFile:path async:NO]) {
     return false;
   }
-  
+
   // set up frame data
   m_image.image.xsize = m_moviePlayer.width;
   m_image.image.ysize = m_moviePlayer.height;
@@ -91,8 +94,7 @@ bool filmAVF::open(const std::string &filename,
     m_fps = m_moviePlayer.frameRate;
     m_numFrames = m_moviePlayer.numFrames;
     m_numTracks = m_moviePlayer.numTracks;
-  }
-  else { // defaults
+  } else { // defaults
     m_fps = 30.f;
     m_numFrames = 0;
     m_numTracks = 0;
@@ -105,7 +107,8 @@ bool filmAVF::open(const std::string &filename,
 // close
 //
 /////////////////////////////////////////////////////////
-void filmAVF::close(void) {
+void filmAVF::close(void)
+{
   if(m_moviePlayer) {
     m_moviePlayer = nil;
     m_image.image.clear();
@@ -122,26 +125,27 @@ void filmAVF::close(void) {
 // getFrame
 //
 /////////////////////////////////////////////////////////
-pixBlock* filmAVF::getFrame(void) {
+pixBlock* filmAVF::getFrame(void)
+{
   if(!m_moviePlayer || !m_moviePlayer.isLoaded) {
     return 0;
   }
-  
+
   // nothing to process?
   if(m_readNext == false) {
-      return &m_image;
+    return &m_image;
   }
-  
+
   // grab frame into GEM image buffer
   CVImageBufferRef imageBuffer = [m_moviePlayer getFrame];
   if(!m_moviePlayer.isFrameNew) {
     m_readNext = false;
     return &m_image;
   }
-  
+
   // lock buffer
   CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-  
+
   // copy pixels
   uint8_t *src = (uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
   uint8_t *dest = m_image.image.data;
@@ -149,35 +153,34 @@ pixBlock* filmAVF::getFrame(void) {
                 CVPixelBufferGetBytesPerRow(imageBuffer);
   if(src) {
     switch(m_wantedFormat) {
-      case GL_YCBCR_422_APPLE:
-      case GL_RGBA_GEM:
-        // format should be correct, so just pass through
-        memcpy(dest, src, size);
-        break;
-      case GL_LUMINANCE: {
-          // copy every second byte (Y-channel) for grayscale
-          src =  (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);
-          uint8_t *srcPos = (uint8_t *)src + 1;
-          uint8_t *destPos = (uint8_t *)dest;
-          uint8_t *destEnd = (uint8_t *)dest + size/2;
-          while(destPos <= destEnd) {
-              memcpy(destPos, srcPos, 1);
-              srcPos += 2;
-              destPos += 1;
-          }
-        break;
+    case GL_YCBCR_422_APPLE:
+    case GL_RGBA_GEM:
+      // format should be correct, so just pass through
+      memcpy(dest, src, size);
+      break;
+    case GL_LUMINANCE: {
+      // copy every second byte (Y-channel) for grayscale
+      src =  (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);
+      uint8_t *srcPos = (uint8_t *)src + 1;
+      uint8_t *destPos = (uint8_t *)dest;
+      uint8_t *destEnd = (uint8_t *)dest + size/2;
+      while(destPos <= destEnd) {
+        memcpy(destPos, srcPos, 1);
+        srcPos += 2;
+        destPos += 1;
       }
-      default:
-        error("filmAVF: Unable to convert frame pixels, "
-              "unknown format %d", (int)m_wantedFormat);
-        break;
+      break;
     }
-  }
-  else {
+    default:
+      error("filmAVF: Unable to convert frame pixels, "
+            "unknown format %d", (int)m_wantedFormat);
+      break;
+    }
+  } else {
     error("filmAVF: Unable to convert frame pixels, "
           "source buffer is null");
   }
-  
+
   // done, unlock buffer
   CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
 
@@ -191,7 +194,8 @@ pixBlock* filmAVF::getFrame(void) {
 // changeImage
 //
 /////////////////////////////////////////////////////////
-film::errCode filmAVF::changeImage(int imgNum, int trackNum) {
+film::errCode filmAVF::changeImage(int imgNum, int trackNum)
+{
   m_readNext = false;
   if(imgNum == -1) {
     imgNum = m_curFrame;
@@ -216,7 +220,8 @@ film::errCode filmAVF::changeImage(int imgNum, int trackNum) {
 //
 /////////////////////////////////////////////////////////
 bool filmAVF::enumProperties(gem::Properties &readable,
-                             gem::Properties &writeable) {
+                             gem::Properties &writeable)
+{
   readable.clear();
   writeable.clear();
 
@@ -232,14 +237,16 @@ bool filmAVF::enumProperties(gem::Properties &readable,
   return false;
 }
 
-void filmAVF::setProperties(gem::Properties &props) {
+void filmAVF::setProperties(gem::Properties &props)
+{
   double d;
   if(props.get("colorspace", d)) {
     changeFormat((GLenum)d);
   }
 }
 
-void filmAVF::getProperties(gem::Properties &props) {
+void filmAVF::getProperties(gem::Properties &props)
+{
   std::vector<std::string> keys = props.keys();
   gem::any value;
   double d;
@@ -249,46 +256,50 @@ void filmAVF::getProperties(gem::Properties &props) {
     props.erase(key);
     if("fps" == key) {
       d = m_fps;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("frames" == key) {
       d = m_numFrames;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("width" == key) {
       d = m_image.image.xsize;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
     if("height" == key) {
       d = m_image.image.ysize;
-      value = d; props.set(key, value);
+      value = d;
+      props.set(key, value);
     }
   }
 }
 
 // PROTECTED
 
-bool filmAVF::changeFormat(GLenum format) {
+bool filmAVF::changeFormat(GLenum format)
+{
   bool changed = (m_wantedFormat != format);
   m_wantedFormat = format;
   if(m_moviePlayer) {
     switch(m_wantedFormat) {
-      default:
-      case GL_YCBCR_422_APPLE:
-      case GL_LUMINANCE:
-        m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_422YpCbCr8;
-        break;
-      case GL_RGBA_GEM:
-        m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_32ARGB;
-        break;
+    default:
+    case GL_YCBCR_422_APPLE:
+    case GL_LUMINANCE:
+      m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_422YpCbCr8;
+      break;
+    case GL_RGBA_GEM:
+      m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_32ARGB;
+      break;
     }
   }
   m_image.image.format = m_wantedFormat;
   m_image.image.setCsizeByFormat();
   if(m_image.image.data) {
     m_image.image.reallocate();
-  }
-  else {
+  } else {
     m_image.image.allocate();
   }
   return changed;
