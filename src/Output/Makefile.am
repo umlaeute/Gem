@@ -12,6 +12,7 @@ pkglib_LTLIBRARIES =
 #if HAVE_COCOA
 if MACOSX
 pkglib_LTLIBRARIES += gemcocoawindow.la
+pkglib_LTLIBRARIES += gemmacoswindow.la
 endif
 
 if HAVE_GLUT
@@ -80,6 +81,33 @@ gemcocoawindow_la_SOURCES = \
   gemcocoawindow.mm \
   gemcocoawindow.h
 
+########### gemmacoswindow ###########
+# some default flags
+gemmacoswindow_la_CXXFLAGS =
+gemmacoswindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemmacoswindow_la_LIBADD   =
+# RTE flags
+gemmacoswindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
+gemmacoswindow_la_LIBADD   += @GEM_RTE_LIBS@
+# arch flags
+gemmacoswindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+gemmacoswindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+# flags for building Gem externals
+gemmacoswindow_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
+gemmacoswindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+# gemmacoswindow_la @MOREFLAGS@
+
+# object specific libraries
+gemmacoswindow_la_CXXFLAGS += @GEM_FRAMEWORK_COCOA_CFLAGS@
+gemmacoswindow_la_LIBADD   += @GEM_FRAMEWORK_COCOA_LIBS@
+gemmacoswindow_la_LDFLAGS  +=
+
+## SOURCES
+nodist_EXTRA_gemmacoswindow_la_SOURCES=gemmacoswindow.cpp
+gemmacoswindow_la_SOURCES = \
+  gemmacoswindow.mm \
+  gemmacoswindow.h
+
 
 ######################################
 # ObjC++ nastiness {
@@ -87,13 +115,20 @@ gemcocoawindow_la_SOURCES = \
 SUFFIXES=.mm
 
 am_gemcocoawindow_la_OBJECTS = gemcocoawindow_la-gemcocoawindow.lo
-
 gemcocoawindow_la-gemcocoawindow.lo: gemcocoawindow.mm
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemcocoawindow_la_CXXFLAGS) $(CXXFLAGS) -MT gemcocoawindow_la-gemcocoawindow.lo -MD -MP -MF $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Tpo -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
 @am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Tpo $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gemcocoawindow.mm' object='gemcocoawindow_la-gemcocoawindow.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemcocoawindow_la_CXXFLAGS) $(CXXFLAGS) -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
+
+am_gemmacoswindow_la_OBJECTS = gemcocoawindow_la-gemcocoawindow.lo
+gemmacoswindow_la-gemcocoawindow.lo: gemcocoawindow.mm
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemmacoswindow_la_CXXFLAGS) $(CXXFLAGS) -MT gemcocoawindow_la-gemcocoawindow.lo -MD -MP -MF $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Tpo -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/gemmacoswindow_la-gemcocoawindow.Tpo $(DEPDIR)/gemcocoawindow_la-gemcocoawindow.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gemmacoswindow.mm' object='gemcocoawindow_la-gemcocoawindow.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gemmacoswindow_la_CXXFLAGS) $(CXXFLAGS) -c -o gemcocoawindow_la-gemcocoawindow.lo `test -f 'gemcocoawindow.mm' || echo '$(srcdir)/'`gemcocoawindow.mm
 
 # } ObjC++ nastiness
 ######################################
