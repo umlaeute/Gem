@@ -134,7 +134,7 @@ struct gemcocoawindow :: PIMPL {
 };
 
 
-CPPEXTERN_NEW(gemcocoawindow)
+CPPEXTERN_NEW(gemcocoawindow);
 
 /////////////////////////////////////////////////////////
 //

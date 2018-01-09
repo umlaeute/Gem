@@ -134,7 +134,7 @@ struct gemmacoswindow :: PIMPL {
 };
 
 
-CPPEXTERN_NEW(gemmacoswindow)
+CPPEXTERN_NEW(gemmacoswindow);
 
 /////////////////////////////////////////////////////////
 //
