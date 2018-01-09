@@ -20,9 +20,9 @@
 #include "RTE/MessageCallbacks.h"
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
-
+#include <AvailabilityMacros.h>
+#if defined (MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 #warning openGL context sharing
-
 
 static NSDate *distantFuture, *distantPast;
 
@@ -558,3 +558,7 @@ void gemmacoswindow :: obj_setupCallback(t_class *classPtr)
 
   [NSApplication sharedApplication];
 }
+
+#else
+# warning gemmacoswindow requires OSX-10.10
+#endif
