@@ -22,6 +22,7 @@
 #include "RTE/MessageCallbacks.h"
 #define DEBUGLINE  std::cerr << __FILE__<<":"<<__LINE__<<" ("<<__FUNCTION__<<")" << std::endl;
 
+
 #include <AvailabilityMacros.h>
 #if defined (MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 #warning openGL context sharing
@@ -48,12 +49,7 @@ static NSDate *distantFuture, *distantPast;
 }
 @end
 
-#if defined MAC_OS_X_VERSION_10_5 && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-// argh! what do they think?
 typedef GLint oglc_setvalue_t;
-#else
-typedef long int oglc_setvalue_t;
-#endif
 @implementation GemCocoaView
 - (void) prepareOpenGL
 {
