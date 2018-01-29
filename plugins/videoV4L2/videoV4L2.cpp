@@ -311,7 +311,7 @@ void *videoV4L2 :: capturing(void)
 
     debugThread("V4L2: dequeueued");
 
-    if(expectedSize==gotSize) {
+    if(expectedSize<=gotSize) {
       m_frame_ready = 1;
       m_last_frame=m_frame;
       m_currentBuffer=currentBuffer;
