@@ -317,7 +317,7 @@ void *videoV4L2 :: capturing(void)
       m_currentBuffer=currentBuffer;
     } else {
       fprintf(stderr,
-              "[GEM:videoV4L2] oops, skipping incomplete capture %d of %d bytes",
+              "[GEM:videoV4L2] oops, skipping incomplete capture %d of %d bytes\n",
               gotSize, expectedSize);
     }
 
