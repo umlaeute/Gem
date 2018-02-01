@@ -115,7 +115,7 @@ pix_record :: pix_record(int argc, t_atom *argv):
   m_pimpl(new PIMPL())
 {
   if (argc != 0) {
-    error("ignoring arugments");
+    error("ignoring arguments");
   }
   m_outNumFrames = outlet_new(this->x_obj, 0);
   m_outInfo      = outlet_new(this->x_obj, 0);

@@ -6650,7 +6650,7 @@
 2004-04-07 19:20  zmoelnig
 
 	* src/Pixes/pix_rgba.cpp: added some more verbosity on errors (so
-	  we know, where the error occured)
+	  we know, where the error occurred)
 
 2004-04-07 18:09  tigital
 
