@@ -203,7 +203,7 @@ void recordQT :: setupQT(
     }
     err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8,
                        &theFSSpec);
-    if (err != noErr && err != -37) { /* what is -37 */
+    if (err != noErr && err != -37) { /* -37: invalid filename (e.g.  non-existant) */
       error("[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
       return;
     }
@@ -238,7 +238,13 @@ void recordQT :: setupQT(
                                 createMovieFileDontCreateResFile,
                                 &nFileRefNum,
                                 &m_movie);
-  if (err != noErr) {
+  switch(err) {
+  case noErr:
+    break;
+  case -37:
+    error("[GEM:recordQT] invalid filename '%s'", filename);
+    return;
+  default:
     error("[GEM:recordQT] CreateMovieFile failed with error %d",err);
     return;
   }
