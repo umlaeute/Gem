@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-EXTRA_DIST = 
+EXTRA_DIST =
 EXTRA_DIST += win-vs2003/filmAVI.sln win-vs2003/filmAVI.vcproj
 EXTRA_DIST += win-vs2008/filmAVI.sln win-vs2008/filmAVI.vcproj
 
@@ -12,7 +12,7 @@ pkglib_LTLIBRARIES += gem_filmAVI.la
 endif
 
 gem_filmAVI_la_CXXFLAGS =
-gem_filmAVI_la_LDFLAGS  = -module -avoid-version -shared 
+gem_filmAVI_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_filmAVI_la_LDFLAGS += -no-undefined
 endif

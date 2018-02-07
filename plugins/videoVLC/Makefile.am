@@ -12,7 +12,7 @@ dist_gemhelp_DATA +=vlc-videoplugin.pd
 endif
 
 gem_videoVLC_la_CXXFLAGS =
-gem_videoVLC_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoVLC_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoVLC_la_LDFLAGS += -no-undefined
 endif

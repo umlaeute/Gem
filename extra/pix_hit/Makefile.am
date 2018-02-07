@@ -15,7 +15,7 @@ dist_extra_DATA += pix_hit-help.pd
 
 ## some default flags
 pix_hit_la_CXXFLAGS =
-pix_hit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+pix_hit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 if WINDOWS
 pix_hit_la_LDFLAGS += -no-undefined
 endif

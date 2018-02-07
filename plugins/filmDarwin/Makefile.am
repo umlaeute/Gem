@@ -12,7 +12,7 @@ endif
 endif
 
 gem_filmDarwin_la_CXXFLAGS =
-gem_filmDarwin_la_LDFLAGS  = -module -avoid-version -shared 
+gem_filmDarwin_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_filmDarwin_la_LDFLAGS += -no-undefined
 endif

@@ -12,7 +12,7 @@ dist_gemhelp_DATA +=sgi-videoplugin.pd
 endif
 
 gem_videoSGI_la_CXXFLAGS =
-gem_videoSGI_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoSGI_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoSGI_la_LDFLAGS += -no-undefined
 endif

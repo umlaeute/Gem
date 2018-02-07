@@ -17,7 +17,7 @@ dist_plugin_DATA  += pylon-videoplugin.pd
 endif
 
 gem_videoPYLON_la_CXXFLAGS =
-gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoPYLON_la_LDFLAGS += -no-undefined
 endif

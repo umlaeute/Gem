@@ -13,7 +13,7 @@ pkglib_LTLIBRARIES+= gem_imageJPEG.la
 endif
 
 gem_imageJPEG_la_CXXFLAGS =
-gem_imageJPEG_la_LDFLAGS  = -module -avoid-version -shared 
+gem_imageJPEG_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_imageJPEG_la_LDFLAGS += -no-undefined
 endif

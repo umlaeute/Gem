@@ -50,7 +50,7 @@ if test "x$with_halcon" != "xno"; then
                     have_halcon="yes"
                   ],[
                     have_halcon="no"
-                  ])  
+                  ])
   if test "x$have_halcon" = "xyes"; then
    AC_CHECK_LIB(halconcpp, main, , [have_halcon="no"], ["${tmp_halcon_ldflags}"])
   fi

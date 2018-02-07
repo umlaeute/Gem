@@ -16,7 +16,7 @@ dist_gemhelp_DATA +=OptiTrack-videoplugin.pd
 endif
 
 gem_videoOptiTrack_la_CXXFLAGS =
-gem_videoOptiTrack_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoOptiTrack_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoOptiTrack_la_LDFLAGS += -no-undefined
 endif

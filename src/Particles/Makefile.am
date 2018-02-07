@@ -8,7 +8,7 @@ include ../check-sources.mk
 
 noinst_LTLIBRARIES = libParticles.la libPAPI.la
 
-libParticles_la_CXXFLAGS = 
+libParticles_la_CXXFLAGS =
 libParticles_la_LIBADD   =
 libParticles_la_LDFLAGS  =
 
@@ -24,7 +24,7 @@ libParticles_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 libParticles_la_LIBADD   += libPAPI.la
 
 libPAPI_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
-libPAPI_la_LIBADD   += 
+libPAPI_la_LIBADD   +=
 libPAPI_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libPAPI_la_SOURCES=  \

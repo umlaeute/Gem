@@ -35,7 +35,7 @@ libUtils_la_include_HEADERS = \
 	PixPete.h \
 	SIMD.h \
 	GemString.h \
-	Vector.h 
+	Vector.h
 
 libUtils_la_include_HEADERS += \
 	Thread.h \
@@ -78,5 +78,5 @@ libUtils_la_SOURCES=  \
 	Vector.h
 
 if MINGW
-libUtils_la_SOURCES+=MSVCMinGW.cpp 
+libUtils_la_SOURCES+=MSVCMinGW.cpp
 endif

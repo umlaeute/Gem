@@ -18,7 +18,7 @@ dist_plugin_DATA  += halcon-videoplugin.pd
 endif
 
 gem_videoHALCON_la_CXXFLAGS =
-gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoHALCON_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoHALCON_la_LDFLAGS += -no-undefined
 endif

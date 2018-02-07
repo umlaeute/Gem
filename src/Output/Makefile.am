@@ -7,7 +7,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src
 include ../check-sources.mk
 
-pkglib_LTLIBRARIES = 
+pkglib_LTLIBRARIES =
 
 #if HAVE_COCOA
 if MACOSX
@@ -179,7 +179,7 @@ gemglxwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # object specific libraries
 gemglxwindow_la_CXXFLAGS += $(X_CFLAGS)
 gemglxwindow_la_LIBADD   += $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
-gemglxwindow_la_LDFLAGS  += 
+gemglxwindow_la_LDFLAGS  +=
 
 ## SOURCES
 gemglxwindow_la_SOURCES = \
@@ -204,9 +204,9 @@ gemmacwindow_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gemmacwindow_la @MOREFLAGS@
 
 # object specific libraries
-gemmacwindow_la_CXXFLAGS += 
-gemmacwindow_la_LIBADD   += 
-gemmacwindow_la_LDFLAGS  += 
+gemmacwindow_la_CXXFLAGS +=
+gemmacwindow_la_LIBADD   +=
+gemmacwindow_la_LDFLAGS  +=
 
 ## SOURCES
 gemmacwindow_la_SOURCES = \
@@ -260,7 +260,7 @@ gemw32window_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 
 # object specific libraries
 gemw32window_la_CXXFLAGS += @GL_CFLAGS@
-gemw32window_la_LIBADD   += @GL_LIBS@ 
+gemw32window_la_LIBADD   += @GL_LIBS@
 gemw32window_la_LDFLAGS  += @GL_LDFLAGS@
 ## QuickTime support
 #gemw32window_la_CXXFLAGS += @GEM_FRAMEWORK_QUICKTIME_CFLAGS@
@@ -361,13 +361,13 @@ convenience-link: $(pkglib_LTLIBRARIES)
 	    cd $(abs_top_builddir) && \
 	    $(LN_S) $(abs_builddir)/.libs/$$soname $$soname || echo "create oops $$soname" && \
 	    cd $(abs_builddir); \
-	  done 
+	  done
 
 clean-convenience-link:
 	  @for soname in `echo | $(EGREP) -h "^dlname=" $(pkglib_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: cleaning convenience links"; \
             test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || echo "clean oops: $$soname"; \
-	  done 
+	  done
 
 
 all-local:: convenience-link

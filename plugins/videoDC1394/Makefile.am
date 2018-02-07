@@ -12,7 +12,7 @@ dist_gemhelp_DATA +=dc1394-videoplugin.pd
 endif
 
 gem_videoDC1394_la_CXXFLAGS =
-gem_videoDC1394_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoDC1394_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoDC1394_la_LDFLAGS += -no-undefined
 endif

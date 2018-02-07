@@ -12,7 +12,7 @@ dist_gemhelp_DATA += v4l2-videoplugin.pd
 endif
 
 gem_videoV4L2_la_CXXFLAGS =
-gem_videoV4L2_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoV4L2_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoV4L2_la_LDFLAGS += -no-undefined
 endif
@@ -30,7 +30,7 @@ gem_videoV4L2_la_LIBADD   += @GEM_THREADS_LIBS@
 # gem_videoV4L2_la @MOREFLAGS@
 
 # Dependencies
-gem_videoV4L2_la_CXXFLAGS += @GEM_LIB_LIBV4L2_CFLAGS@ 
+gem_videoV4L2_la_CXXFLAGS += @GEM_LIB_LIBV4L2_CFLAGS@
 gem_videoV4L2_la_LIBADD   += @GEM_LIB_LIBV4L2_LIBS@
 
 # convenience symlinks

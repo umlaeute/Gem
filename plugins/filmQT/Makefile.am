@@ -12,7 +12,7 @@ pkglib_LTLIBRARIES+= gem_filmQT.la
 endif
 
 gem_filmQT_la_CXXFLAGS =
-gem_filmQT_la_LDFLAGS  = -module -avoid-version -shared 
+gem_filmQT_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_filmQT_la_LDFLAGS += -no-undefined
 endif

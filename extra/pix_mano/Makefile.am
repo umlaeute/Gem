@@ -9,14 +9,14 @@ EXTRA_DIST+=win-vs2008/pix_mano.sln win-vs2008/pix_mano.vcproj
 extradir=$(libdir)/pix_mano
 
 extra_LTLIBRARIES = pix_mano.la
- 
+
 dist_extra_DATA  = LICENSE.txt
 dist_extra_DATA += pix_mano-help.pd
 
 
 ## some default flags
 pix_mano_la_CXXFLAGS =
-pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 if WINDOWS
 pix_mano_la_LDFLAGS += -no-undefined
 endif

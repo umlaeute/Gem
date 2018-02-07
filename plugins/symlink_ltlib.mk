@@ -12,14 +12,14 @@ convenience-link: $(pkglib_LTLIBRARIES) $(plugin_LTLIBRARIES)
 	    test -e $(abs_builddir)/.libs/$$soname && \
 	    cd $(top_builddir) && \
 	    $(LN_S) $(abs_builddir)/.libs/$$soname $$soname || true;\
-	  done 
+	  done
 
 clean-convenience-link:
 	  @for soname in `echo | $(EGREP) -h "^dlname=" $(pkglib_LTLIBRARIES) $(plugin_LTLIBRARIES) | $(SED) -e "s|^dlname='\(.*\)'|\1|"`; do  \
             echo "$$soname: cleaning convenience links"; \
             test -L $(top_builddir)/$$soname && rm -f $(top_builddir)/$$soname || true; \
-	  done 
-	
+	  done
+
 
 all-local:: convenience-link
 

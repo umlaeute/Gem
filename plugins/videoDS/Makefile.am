@@ -15,7 +15,7 @@ dist_gemhelp_DATA +=DS-videoplugin.pd
 endif
 
 gem_videoDS_la_CXXFLAGS =
-gem_videoDS_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoDS_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoDS_la_LDFLAGS += -no-undefined
 endif

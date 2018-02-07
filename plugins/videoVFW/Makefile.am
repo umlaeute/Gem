@@ -15,7 +15,7 @@ dist_gemhelp_DATA +=VFW-videoplugin.pd
 endif
 
 gem_videoVFW_la_CXXFLAGS =
-gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoVFW_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoVFW_la_LDFLAGS += -no-undefined
 endif

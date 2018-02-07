@@ -8,7 +8,7 @@ pkglib_LTLIBRARIES+= gem_recordV4L2.la
 endif
 
 gem_recordV4L2_la_CXXFLAGS =
-gem_recordV4L2_la_LDFLAGS  = -module -avoid-version -shared 
+gem_recordV4L2_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_recordV4L2_la_LDFLAGS += -no-undefined
 endif
@@ -23,7 +23,7 @@ gem_recordV4L2_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_recordV4L2_la @MOREFLAGS@
 
 # Dependencies
-gem_recordV4L2_la_CXXFLAGS += @GEM_LIB_LIBV4L2_CFLAGS@ 
+gem_recordV4L2_la_CXXFLAGS += @GEM_LIB_LIBV4L2_CFLAGS@
 gem_recordV4L2_la_LIBADD   += @GEM_LIB_LIBV4L2_LIBS@
 
 # convenience symlinks

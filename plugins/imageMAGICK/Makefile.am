@@ -17,7 +17,7 @@ endif
 endif
 
 gem_imageMAGICK_la_CXXFLAGS =
-gem_imageMAGICK_la_LDFLAGS  = -module -avoid-version -shared 
+gem_imageMAGICK_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_imageMAGICK_la_LDFLAGS += -no-undefined
 endif

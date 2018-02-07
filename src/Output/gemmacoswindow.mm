@@ -31,13 +31,13 @@ static NSDate *distantFuture, *distantPast;
 
 #if 0
 // LATER figure out how ObjC's delegation works
-@interface WindowResponder 
+@interface WindowResponder
 @end
 @implementation WindowResponder
-- (void)windowDidMove:(NSNotification*)notification { 
+- (void)windowDidMove:(NSNotification*)notification {
   ::post ("window moved");
 }
-- (void)windowDidResize:(NSNotification*)notification { 
+- (void)windowDidResize:(NSNotification*)notification {
   ::post ("window resized");
 }
 @end
@@ -118,7 +118,7 @@ struct gemmacoswindow :: PIMPL {
     window=NULL;
 
     if(view) {
-      [view release]; 
+      [view release];
     }
     view=NULL;
 #if 0
@@ -242,7 +242,7 @@ void gemmacoswindow :: dispatchEvent(NSEvent*e) {
   int devID=0;
 
   switch(type) {
-  case(NSEventTypeLeftMouseUp): 
+  case(NSEventTypeLeftMouseUp):
   case(NSEventTypeRightMouseUp):
   case(NSEventTypeOtherMouseUp):
     button(devID, [e buttonNumber], false);
@@ -352,15 +352,15 @@ bool gemmacoswindow :: create(void)
   if(m_fullscreen) {
     contentRect=screenRect;
   }
-  window = [[NSWindow alloc] initWithContentRect:contentRect 
-	  styleMask:m_border?( 	
+  window = [[NSWindow alloc] initWithContentRect:contentRect
+	  styleMask:m_border?(
 		  NSWindowStyleMaskTitled |
 		  NSWindowStyleMaskResizable |
 		  NSWindowStyleMaskMiniaturizable |
 		  NSWindowStyleMaskClosable )
-		  :NSWindowStyleMaskBorderless 
+		  :NSWindowStyleMaskBorderless
 		  backing:NSBackingStoreBuffered defer:YES];
- 
+
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
@@ -382,7 +382,7 @@ bool gemmacoswindow :: create(void)
   for(i=0; i<attrvec.size(); i++) {
     attr[i]=attrvec[i];
   }
-  
+
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
   m_pimpl->view = [[GemCocoaView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
   m_pimpl->view->parent=this;
@@ -400,7 +400,7 @@ bool gemmacoswindow :: create(void)
 
   titleMess(m_title);
 
-  bool cgw=  createGemWindow(); 
+  bool cgw=  createGemWindow();
   return cgw;
 }
 void gemmacoswindow :: createMess(const std::string&s) {
@@ -440,7 +440,7 @@ void gemmacoswindow :: dimensionsMess(unsigned int width, unsigned int height) {
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -494,7 +494,7 @@ void gemmacoswindow :: fullscreenMess(int on) {
     if (m_fullscreen) {
 		[[m_pimpl->view openGLContext] setFullScreen];  // replace depreciated setFullScreen with toggleFullScreen?
 	  //[[m_pimpl->view openGLContext] setView:[window contentView]];
-	  
+
     } else {
       [[m_pimpl->view openGLContext] clearDrawable];
     }
@@ -537,20 +537,20 @@ void gemmacoswindow :: menubarMess(int state) {
 void gemmacoswindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
-  
+
   // An attempt to replace depreciated SetFrontProcess
   NSRunningApplication *proc = [NSRunningApplication currentApplication];
   [proc  activateWithOptions: (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
-  
+
   //ProcessSerialNumber proc;
   //GetCurrentProcess(&proc); // Depreciated ... now what?
   //TransformProcessType(&proc, kProcessTransformToForegroundApplication);
   //SetFrontProcess(&proc); // Depreciated ... now what?
-  
+
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
-  
+
   distantFuture = [NSDate distantFuture];
   distantPast = [NSDate distantPast];
 

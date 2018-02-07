@@ -7,7 +7,7 @@ EXTRA_DIST+= win-vs2008/pix_artoolkit.sln  win-vs2008/pix_artoolkit.vcproj
 EXTRA_DIST+= win-vs2008/ARToolKit.vsprops
 
 extradir=$(libdir)/pix_artoolkit
-dist_extra_DATA  = 
+dist_extra_DATA  =
 
 extra_LTLIBRARIES  =
 if HAVE_LIB_ARTOOLKIT
@@ -21,7 +21,7 @@ endif
 
 ## some default flags
 pix_artoolkit_la_CXXFLAGS =
-pix_artoolkit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@ 
+pix_artoolkit_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
 if WINDOWS
 pix_artoolkit_la_LDFLAGS += -no-undefined
 endif

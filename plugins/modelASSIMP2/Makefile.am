@@ -14,7 +14,7 @@ pkglib_LTLIBRARIES += gem_modelASSIMP2.la
 endif
 
 gem_modelASSIMP2_la_CXXFLAGS =
-gem_modelASSIMP2_la_LDFLAGS  = -module -avoid-version -shared 
+gem_modelASSIMP2_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_modelASSIMP2_la_LDFLAGS += -no-undefined
 endif

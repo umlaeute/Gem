@@ -16,7 +16,7 @@ endif
 endif
 
 gem_videoDarwin_la_CXXFLAGS =
-gem_videoDarwin_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoDarwin_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoDarwin_la_LDFLAGS += -no-undefined
 endif

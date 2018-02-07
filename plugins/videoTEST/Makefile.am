@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 
-pkglib_LTLIBRARIES= 
+pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
@@ -10,7 +10,7 @@ pkglib_LTLIBRARIES+=gem_videoTEST.la
 dist_gemhelp_DATA +=test-videoplugin.pd
 
 gem_videoTEST_la_CXXFLAGS =
-gem_videoTEST_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoTEST_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoTEST_la_LDFLAGS += -no-undefined
 endif

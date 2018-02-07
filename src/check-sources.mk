@@ -9,7 +9,7 @@ all-local:: check-sources
 _check_sources_all=$(wildcard *.cpp *.h)
 _check_sources_unused=$(filter-out $(DIST_SOURCES) $(CHECKUNUSED_IGNORE), $(_check_sources_all))
 
-check-sources: 
+check-sources:
 	@echo "UNUSED SOURCES: $(_check_sources_unused)"
 
 

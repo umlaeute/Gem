@@ -12,7 +12,7 @@ pkglib_LTLIBRARIES+= gem_recordQT4L.la
 endif
 
 gem_recordQT4L_la_CXXFLAGS =
-gem_recordQT4L_la_LDFLAGS  = -module -avoid-version -shared 
+gem_recordQT4L_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_recordQT4L_la_LDFLAGS += -no-undefined
 endif

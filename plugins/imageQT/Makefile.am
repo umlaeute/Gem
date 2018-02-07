@@ -12,7 +12,7 @@ pkglib_LTLIBRARIES+= gem_imageQT.la
 endif
 
 gem_imageQT_la_CXXFLAGS =
-gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared 
+gem_imageQT_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_imageQT_la_LDFLAGS += -no-undefined
 endif

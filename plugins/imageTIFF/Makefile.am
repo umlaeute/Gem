@@ -14,7 +14,7 @@ endif
 
 
 gem_imageTIFF_la_CXXFLAGS =
-gem_imageTIFF_la_LDFLAGS  = -module -avoid-version -shared 
+gem_imageTIFF_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_imageTIFF_la_LDFLAGS += -no-undefined
 endif

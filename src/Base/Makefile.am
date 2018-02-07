@@ -52,7 +52,7 @@ libBase_la_include_HEADERS= \
 
 libBase_la_include_HEADERS+= \
 	GemWindow.h \
-	GemContext.h 
+	GemContext.h
 
 libBase_la_SOURCES=  \
     CPPExtern.cpp \

@@ -28,13 +28,13 @@ static NSDate *distantFuture, *distantPast;
 
 #if 0
 // LATER figure out how ObjC's delegation works
-@interface WindowResponder 
+@interface WindowResponder
 @end
 @implementation WindowResponder
-- (void)windowDidMove:(NSNotification*)notification { 
+- (void)windowDidMove:(NSNotification*)notification {
   ::post ("window moved");
 }
-- (void)windowDidResize:(NSNotification*)notification { 
+- (void)windowDidResize:(NSNotification*)notification {
   ::post ("window resized");
 }
 @end
@@ -120,7 +120,7 @@ struct gemcocoawindow :: PIMPL {
     window=NULL;
 
     if(view) {
-      [view release]; 
+      [view release];
     }
     view=NULL;
 #if 0
@@ -244,12 +244,12 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   int devID=0;
 
   switch(type) {
-  case(NSLeftMouseUp): 
+  case(NSLeftMouseUp):
   case(NSRightMouseUp):
   case(NSOtherMouseUp):
     button(devID, [e buttonNumber], false);
     break;
-  case(NSLeftMouseDown): 
+  case(NSLeftMouseDown):
   case(NSRightMouseDown):
   case(NSOtherMouseDown):
     button(devID, [e buttonNumber], [e pressure]);
@@ -353,7 +353,7 @@ bool gemcocoawindow :: create(void)
     contentRect=screenRect;
   }
   window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
- 
+
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
@@ -390,7 +390,7 @@ bool gemcocoawindow :: create(void)
 
   titleMess(m_title);
 
-  bool cgw=  createGemWindow(); 
+  bool cgw=  createGemWindow();
   return cgw;
 }
 void gemcocoawindow :: createMess(const std::string&s) {
@@ -430,7 +430,7 @@ void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -534,7 +534,7 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
-  
+
   distantFuture = [NSDate distantFuture];
   distantPast = [NSDate distantPast];
 

@@ -12,7 +12,7 @@ dist_gemhelp_DATA +=unicap-videoplugin.pd
 endif
 
 gem_videoUNICAP_la_CXXFLAGS =
-gem_videoUNICAP_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoUNICAP_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoUNICAP_la_LDFLAGS += -no-undefined
 endif
@@ -27,7 +27,7 @@ gem_videoUNICAP_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 # gem_videoUNICAP_la @MOREFLAGS@
 
 # Dependencies
-gem_videoUNICAP_la_CXXFLAGS += @GEM_LIB_LIBUNICAP_CFLAGS@ 
+gem_videoUNICAP_la_CXXFLAGS += @GEM_LIB_LIBUNICAP_CFLAGS@
 gem_videoUNICAP_la_LIBADD   += @GEM_LIB_LIBUNICAP_LIBS@
 
 # convenience symlinks

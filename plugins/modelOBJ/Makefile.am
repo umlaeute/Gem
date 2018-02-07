@@ -9,7 +9,7 @@ EXTRA_DIST += win-vs2008/modelOBJ.sln win-vs2008/modelOBJ.vcproj
 pkglib_LTLIBRARIES= gem_modelOBJ.la
 
 gem_modelOBJ_la_CXXFLAGS =
-gem_modelOBJ_la_LDFLAGS  = -module -avoid-version -shared 
+gem_modelOBJ_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_modelOBJ_la_LDFLAGS += -no-undefined
 endif
