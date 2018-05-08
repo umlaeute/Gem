@@ -253,8 +253,7 @@ void TextBase :: setJustification(JustifyWidth wType)
 }
 
 
-void TextBase :: getBBox(float&x0,float&y0,float&z0,
-                         float&x1,float&y1,float&z1)
+void TextBase :: getBBox()
 {
 
 }

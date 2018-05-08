@@ -202,15 +202,11 @@ protected:
   static std::string DEFAULT_FONT;
 
   //////////
-  // get the bounding-box for the current text/font/...
-  void getBBox(float&x0,float&y0,float&z0, float&x1,float&y1,float&z1);
-  //////////
   // output information about the current font/text
   // including the bbox
   void fontInfo(void);
   // an outlet to send font/text/...-info back to the patch
   gem::RTE::Outlet m_infoOut;
-
 
   //////////
   // The font structure
@@ -243,6 +239,9 @@ private:
   // helper to make the
   // line distance vector
   void makeLineDist();
+  //////////
+  // get the bounding-box for the current text/font/... (per line and total) and output it
+  void getBBox();
 
   //////////
   // Static member functions
