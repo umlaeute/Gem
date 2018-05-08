@@ -443,12 +443,11 @@ void TextBase :: textMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 void TextBase :: makeLineDist()
 {
-  unsigned int i=0;
   m_lineDist.clear();
   if (m_heightJus == BOTTOM || m_heightJus == BASEH) {
     // so the offset will be a simple
     // [0 1 2 3 ... n] sequence
-    for(i=0; i<m_theText.size(); i++) {
+    for(unsigned int i=0; i<m_theText.size(); i++) {
       m_lineDist.push_back(i);
     }
     return;
@@ -457,8 +456,7 @@ void TextBase :: makeLineDist()
   if (m_heightJus == TOP) {
     // now in the other direction:
     // [-n ... -2 -1 0]
-    signed long j;
-    for(j=m_theText.size()-1; j>=0; j--) {
+    for(signed long j=m_theText.size()-1; j>=0; j--) {
       m_lineDist.push_back(-j);
     }
     return;
@@ -477,7 +475,7 @@ void TextBase :: makeLineDist()
   */
 
   float diff = (m_theText.size()-1)*0.5;
-  for(i=0; i<m_theText.size(); i++) {
+  for(unsigned int i=0; i<m_theText.size(); i++) {
     m_lineDist.push_back((i-diff));
   }
 }
