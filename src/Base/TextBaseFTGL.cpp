@@ -22,6 +22,7 @@
  */
 
 #include "TextBase.h"
+#include "Utils/Functions.h"
 #include "Gem/Settings.h"
 
 #include <stdio.h>
@@ -255,6 +256,47 @@ void TextBase :: setJustification(JustifyWidth wType)
 
 void TextBase :: getBBox()
 {
+  if(!m_font || m_theText.empty())
+    return;
+
+  std::vector<gem::any>atoms;
+  float x0, y0, z0, x1, y1, z1;
+  x0 = y0 = z0 =  x1 = y1 = z1 = 0.f;
+
+  for(int i=0; i<m_theText.size(); i++) {
+    float _x0, _y0, _z0, _x1, _y1, _z1;
+    float dist =  m_lineDist[i]*m_fontSize*m_dist*m_precision;
+    m_font->BBox(m_theText[i].c_str(), _x0, _y0, _z0, _x1, _y1, _z1);
+    Justification just=justifyFont(_x0, _y0, _z0, _x1, _y1, _z1, dist);
+#define JUST(var, offset) var = (var - offset) * just.scale
+    JUST(_x0, just.width);  JUST(_x1, just.width);
+    JUST(_y0, just.height); JUST(_y1, just.height);
+    JUST(_z0, just.depth);  JUST(_z1, just.depth);
+
+    atoms.clear();
+    atoms.push_back(i);
+    atoms.push_back(_x0);
+    atoms.push_back(_y0);
+    atoms.push_back(_z0);
+    atoms.push_back(_x1);
+    atoms.push_back(_y1);
+    atoms.push_back(_z1);
+    m_infoOut.send("bboxline", atoms);
+
+    // get the bounding box for all lines
+    x0 = MIN(x0, _x0);  x1 = MAX(x1, _x1);
+    y0 = MIN(y0, _y0);  y1 = MAX(y1, _y1);
+    z0 = MIN(z0, _z0);  z1 = MAX(z1, _z1);
+  }
+  atoms.clear();
+  atoms.push_back(x0);
+  atoms.push_back(y0);
+  atoms.push_back(z0);
+  atoms.push_back(x1);
+  atoms.push_back(y1);
+  atoms.push_back(z1);
+  m_infoOut.send("bbox", atoms);
+
 
 }
 void TextBase :: fontInfo(void)
@@ -281,18 +323,7 @@ void TextBase :: fontInfo(void)
   m_infoOut.send("height", atoms);
 
   if(!m_theText.empty()) {
-    float x0, y0, z0, x1, y1, z1;
-    x0=y0=z0=0;
-    x1=y1=z1=0;
-    getBBox(x0, y0, z0, x1, y1, z1);
-    atoms.clear();
-    atoms.push_back(x0);
-    atoms.push_back(y0);
-    atoms.push_back(z0);
-    atoms.push_back(x1);
-    atoms.push_back(y1);
-    atoms.push_back(z1);
-    m_infoOut.send("bbox", atoms);
+    getBBox();
   }
 }
 
