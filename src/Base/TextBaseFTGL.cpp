@@ -296,9 +296,10 @@ void TextBase :: fontInfo(void)
   }
 }
 
-TextBase::Justification TextBase :: justifyFont(float x1, float y1,
-    float z1,
-    float x2, float y2, float z2, float y_offset)
+TextBase::Justification TextBase :: justifyFont(
+  float x1, float y1, float z1,
+  float x2, float y2, float z2,
+  float y_offset)
 {
   float width  = 0.f;
   float height = 0.f;
@@ -309,17 +310,17 @@ TextBase::Justification TextBase :: justifyFont(float x1, float y1,
 
   switch (m_widthJus) {
   case LEFT:
-    width=x1;
+    width = x1;
     break;
   case RIGHT:
-    width=x2-x1;
+    width = x2 - x1;
     break;
   default:
   case CENTER:
-    width=x2 / 2.f;
+    width = x2 / 2.f;
     break;
   case BASEW:
-    width=0;
+    width = 0;
     break;
   }
 
