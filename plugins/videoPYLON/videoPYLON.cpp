@@ -33,37 +33,35 @@ using namespace gem::plugins;
 
 class gem::plugins::videoPYLON::ImageEventHandler : public Pylon::CImageEventHandler
 {
-  videoPYLON*m_parent;
 public:
-  IEH(videoPYLON*parent)
+  videoPYLON*m_parent;
+  Pylon::CImageFormatConverter m_converter;
+  Pylon::CLock m_colorlock, m_pixlock;
+  pixBlock m_pix;
+  GLenum m_color;
+  ImageEventHandler(videoPYLON*parent)
     : CImageEventHandler()
     , m_parent(parent)
-  {  }
+    , m_color(GL_RGBA)
+  {
+    m_converter.OutputBitAlignment = Pylon::OutputBitAlignment_LsbAligned;
+    setFormat(m_color);
+  }
   virtual void OnImageGrabbed( Pylon::CInstantCamera& camera, const Pylon::CGrabResultPtr& ptrGrabResult)
     {
-MARK();
-        std::cout << "IEH::OnImageGrabbed called." << std::endl;
-        std::cout << "IEH::MaxNumBuffer=" << camera.MaxNumBuffer()
-                  << " MaxNumQueuedBuffer=" << camera.MaxNumQueuedBuffer()
-                  << " MaxNumGrabResults=" << camera.MaxNumGrabResults()
-                  << std::endl;
-        std::cout << "IEH::NumReadyBuffers=" << camera.NumReadyBuffers()
-                  << " NumQueuedBuffers=" << camera.NumQueuedBuffers()
-                  << " NumEmptyBuffers=" << camera.NumEmptyBuffers()
-                  << std::endl;
-
-
         if(ptrGrabResult->GrabSucceeded()) {
-          std::cout << "SizeX: " << ptrGrabResult->GetWidth() << std::endl;
-          std::cout << "SizeY: " << ptrGrabResult->GetHeight() << std::endl;
-          const uint8_t *pImageBuffer = (uint8_t *) ptrGrabResult->GetBuffer();
-          std::cout << "Gray value of first pixel: " << (uint32_t) pImageBuffer[0] << std::endl << std::endl;
-
+          // convert
+          Pylon::AutoLock pixlock(m_pixlock);
+          m_pix.newimage = true;
+          m_pix.image.xsize = ptrGrabResult->GetWidth();
+          m_pix.image.ysize = ptrGrabResult->GetHeight();
+          m_pix.image.setCsizeByFormat(m_color);
+          m_pix.image.reallocate();
+          m_converter.Convert (m_pix.image.data, m_pix.image.xsize*m_pix.image.ysize*m_pix.image.csize, ptrGrabResult);
         } else
           std::cerr << "OOPS[" << ptrGrabResult->GetErrorCode() << "] " << ptrGrabResult->GetErrorDescription() << std::endl;
-        std::cout << std::endl;
 
-        camera.ExecuteSoftwareTrigger();
+        //camera.ExecuteSoftwareTrigger();
 
     }
 };
