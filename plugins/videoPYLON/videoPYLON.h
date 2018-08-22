@@ -17,7 +17,9 @@
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOPYLON_VIDEOPYLON_H_
 #define _INCLUDE_GEMPLUGIN__VIDEOPYLON_VIDEOPYLON_H_
 
-#include "plugins/videoBase.h"
+#include "plugins/video.h"
+#include "Gem/Image.h"
+
 #include <map>
 
 #ifdef Status
@@ -31,33 +33,28 @@
 #endif
 
 #include "pylon/PylonIncludes.h"
-#include <pylon/gige/BaslerGigECamera.h>
-typedef Pylon::CBaslerGigECamera Camera_t;
+#if 1
+# define MARK()
+#else
+# define MARK() std::cerr << "!!! " << __func__ << "[" << __LINE__ << "]" << std::endl
+#endif
+
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-        pix_video
+        videoPYLON
 
-    Loads in a video
+    access video-devices through the Pylon API (Industrial grade cameras, e.g. GigE)
 
 KEYWORDS
     pix
-
-DESCRIPTION
-
-    "dimen" (int, int) - set the x,y dimensions
-    "zoom" (int, int) - the zoom factor (1.0 is nominal) (num / denom)
-    "bright" (int) - the brightnes
-    "contrast" (int) - the contrast
-    "hue" (int) - the hue
-    "sat" (int) - the saturation
 
 -----------------------------------------------------------------*/
 namespace gem
 {
 namespace plugins
 {
-class GEM_EXPORT videoPYLON : public videoBase
+class GEM_EXPORT videoPYLON : public video
 {
 public:
   //////////
@@ -68,33 +65,55 @@ public:
   // Destructor
   virtual ~videoPYLON(void);
 
-  ////////
-  // open the video-device
-  virtual bool           openDevice(gem::Properties&writeprops);
-  virtual void          closeDevice(void);
+  /* information about capabilities */
+  virtual const std::string getName(void);
+  virtual bool provides(const std::string&);
+  virtual std::vector<std::string>provides(void);
 
-  //////////
-  // Start up the video device
-  // [out] bool - returns FALSE if bad
-  bool                startTransfer(void);
-  //////////
-  // Stop the video device
-  // [out] bool - returns FALSE if bad
-  bool                stopTransfer(void);
+  /* dialog handling: none */
+  virtual std::vector<std::string>dialogs(void)
+  {
+    return std::vector<std::string>();
+  }
+  virtual bool dialog(std::vector<std::string>names=
+                      std::vector<std::string>())
+  {
+    return false;
+  }
 
-  //////////
-  // get the next frame
-  bool grabFrame(void);
-
-  virtual std::vector<std::string>enumerate(void);
-
-
-
+  /* property handling */
   virtual bool enumProperties(gem::Properties&readable,
                               gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
+  virtual std::vector<std::string>enumerate(void);
+  virtual bool setDevice(int ID);
+  virtual bool setDevice(const std::string&);
+
+  ////////
+  // open the video-device
+  virtual bool open(gem::Properties&writeprops);
+  virtual void close(void);
+
+  //////////
+  // Start/Stop capturing
+  virtual bool start(void);
+  virtual bool stop(void);
+
+  virtual bool reset(void);
+
+  //////////
+  // get the next frame
+  virtual pixBlock *getFrame(void);
+  virtual void releaseFrame(void);
+
+  // threading
+  virtual bool isThreadable(void) { MARK(); return false; }
+  virtual bool grabAsynchronous(bool);
+
+  // color conversion
+  virtual bool         setColor(int);
 
 protected:
   class CGrabBuffer;
@@ -102,15 +121,23 @@ protected:
   Pylon::PylonAutoInitTerm autoInitTerm;
   Pylon::CTlFactory*m_factory;
 
-  Pylon::CBaslerGigECamera*m_camera;
-  Pylon::CPylonGigEStreamGrabber*m_grabber;
-
-  class Converter;
-  Converter*m_converter;
-
-  uint32_t m_numBuffers;
-  std::vector<CGrabBuffer*> m_buffers;
+ public:
+  Pylon::CInstantCamera m_camera;
+ protected:
   std::map<std::string, Pylon::CDeviceInfo>m_id2device;
+
+
+
+  std::string m_name;
+  std::vector<std::string>m_provides;
+  /* device selection by name/number */
+  std::string m_devicename; // "Mini Recorder #1"?
+  int m_devicenum; // selected device number (or -1)
+
+  pixBlock m_pixBlock;
+  unsigned int m_width, m_height;
+  bool m_async;
+  Pylon::EGrabLoop m_grabloop;
 };
 };
 };
