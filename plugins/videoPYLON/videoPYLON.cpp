@@ -269,7 +269,7 @@ namespace {
       }
     }
   }
-
+};
 bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable)
 {
