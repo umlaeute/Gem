@@ -260,17 +260,19 @@ void videoPYLON::getProperties(gem::Properties&props)
   auto&streamnodes = m_camera.GetStreamGrabberNodeMap();
 
   std::vector<std::string>keys=props.keys();
-  for(auto key = keys.begin(); key != keys.end(); ++key) {
+  for(auto keyptr = keys.begin(); keyptr != keys.end(); ++keyptr) {
+    std::string key = *keyptr;
     gem::any result;
+    props.erase(*keyptr);
     result.reset();
-    auto node = camnodes.GetNode(key->c_str());
-    if(!node) node = streamnodes.GetNode(key->c_str());
+    auto node = camnodes.GetNode(key.c_str());
+    if(!node) node = streamnodes.GetNode(key.c_str());
 
     if(node) {
       result = node2any(node);
     }
-    if(result.empty()) props.erase(*key); else
-      props.set(*key, result);
+    if(result.empty()) continue;
+    props.set(*keyptr, result);
   }
 }
 
