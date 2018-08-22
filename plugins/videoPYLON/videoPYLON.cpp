@@ -153,7 +153,6 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable)
 {
 MARK();
-  int i=0;
   gem::Properties props;
   std::vector<std::string>keys;
   gem::any type;
@@ -174,7 +173,7 @@ MARK();
   if(m_camera) {
     GenApi::INodeMap*nodes=m_camera.GetNodeMap();
 
-    for(i=0; i<keys.size(); i++) {
+    for(unsigned int i=0; i<keys.size(); i++) {
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
@@ -194,7 +193,7 @@ MARK();
   if(m_camera) {
     GenApi::INodeMap*nodes=m_camera.GetNodeMap();
 
-    for(i=0; i<keys.size(); i++) {
+    for(unsigned int i=0; i<keys.size(); i++) {
       GenApi::INode *node=nodes->GetNode(keys[i].c_str());
       if(node) {
         switch(node->GetAccessMode()) {
@@ -215,7 +214,7 @@ MARK();
       di.GetPropertyNames (names);
 
       int i=0;
-      for(i=0; i<names.size(); i++) {
+      for(unsigned int i=0; i<names.size(); i++) {
         std::string key=names[i].c_str();
         //        std::cerr << "property#"<<i<<": "<<names[i]<<std::endl;
         writeable.set(key, type);
@@ -237,8 +236,7 @@ MARK();
 #warning setProps
 #if 0
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     bool didit=false;
 
@@ -260,8 +258,7 @@ MARK();
 #warning getProps
 #if 0
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     props.erase(key);
     gem::any result;
