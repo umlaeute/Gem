@@ -31,10 +31,6 @@ using namespace gem::plugins;
 # define debug nop_post
 #endif
 
-namespace {
-  static unsigned int s_instancecount = 0;
-}
-
 class IEH : public Pylon::CImageEventHandler
 {
   videoPYLON*m_parent;
@@ -95,10 +91,7 @@ videoPYLON :: videoPYLON()
 
 {
   MARK();
-  if(!s_instancecount) {
-    Pylon::PylonInitialize();
-  }
-  s_instancecount++;
+
   m_camera.RegisterConfiguration( new Pylon::CSoftwareTriggerConfiguration, Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
   m_camera.RegisterImageEventHandler( new IEH(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
 
@@ -133,10 +126,6 @@ videoPYLON :: ~videoPYLON()
 {
 MARK();
   close();
-  s_instancecount--;
-  if(!s_instancecount) {
-    Pylon::PylonTerminate();
-  }
 }
 
 const std::string videoPYLON::getName(void)
