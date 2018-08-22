@@ -13,7 +13,7 @@ At the time of writing pylon is free as in beer, however it is not OpenSource.
 
 TL;DR quick guide to building the videoPYLON backend
 ====================================================
-0. install a C++-compiler, Pd (with headers) and the Gem-sources
+1. install a C++-compiler, Pd (with headers) and the Gem-sources
 
     $ sudo add-apt-repository -s "http://deb.debian.org/debian/"
     $ sudo apt-get update
@@ -22,29 +22,17 @@ TL;DR quick guide to building the videoPYLON backend
 
     $ git clone https://github.com/umlaeute/Gem
 
-
-1. install Pylon (into /opt/pylon5)
+2. install Pylon (into /opt/pylon5)
     https://www.baslerweb.com/en/products/software/
 
-2. compile Gem
+3. compile Gem
     $ cd Gem
     $ ./autogen.sh
-    $ ./configure
-    $ make
-
-3. compile videoPYLON:
-
-    $ cd plugins/videoPYLON
-    $ autoreconf -fiv
     $ ./configure --with-pylon=/opt/pylon5
     $ make
-    $ cd -
-
-4. install Gem with plugins
-
     $ sudo make install
 
-5. run Gem:
+4. run Gem:
 
     $ pd -lib /usr/local/lib/pd/extra/Gem/Gem
 
