@@ -20,8 +20,6 @@
 #include "plugins/video.h"
 #include "Gem/Image.h"
 
-#include <map>
-
 #ifdef Status
 /* ouch: Xlib.h defines "Status" as "int", but Pylon uses "Status" as a
  * variable name
@@ -130,8 +128,6 @@ protected:
   std::string m_devicename; // "Mini Recorder #1"?
   int m_devicenum; // selected device number (or -1)
 
-  pixBlock m_pixBlock;
-  unsigned int m_width, m_height;
   bool m_async;
   Pylon::EGrabLoop m_grabloop;
 };

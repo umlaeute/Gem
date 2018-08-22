@@ -99,7 +99,6 @@ videoPYLON :: videoPYLON()
   , m_name(std::string("pylon"))
   , m_devicename(std::string(""))
   , m_devicenum(0)
-  , m_width(0), m_height(0)
   , m_async(true), m_grabloop(Pylon::GrabLoop_ProvidedByInstantCamera)
 
 {
