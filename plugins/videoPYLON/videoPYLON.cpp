@@ -392,28 +392,29 @@ MARK();
 
   try {
     if(m_devicename.empty()) {
-      if(m_id2device.empty()) {
-        enumerate();
-      }
-      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.begin();
-      if(m_devicenum>=m_id2device.size())
-        return false;
-      if(m_devicenum>=0) {
-        std::advance( it, m_devicenum );
-      }
-      if(it != m_id2device.end()) {
-        post("creating device '%s'", it->first.c_str());
-        device = m_factory->CreateDevice(it->second);
+      Pylon::DeviceInfoList_t devices;
+      if(m_factory->EnumerateDevices(devices) > m_devicenum ) {
+        device = m_factory->CreateDevice(devices[m_devicenum]);
       }
     } else {
-      std::map<std::string, Pylon::CDeviceInfo>::iterator it=m_id2device.find(
-            m_devicename);
-      if(it!=m_id2device.end()) {
-        post("Creating device '%s'", it->first.c_str());
-        device = m_factory->CreateDevice(it->second);
-      } else {
-        post("Creating device '%s'", m_devicename.c_str());
-        device = m_factory->CreateDevice(Pylon::String_t(m_devicename.c_str()));
+      const char* devname = m_devicename.c_str();
+#define ADDFILTER(filt, prop, value) \
+        filt.push_back(Pylon::CDeviceInfo().SetPropertyValue(prop, value));
+
+      Pylon::DeviceInfoList_t devices, filter;
+      ADDFILTER(filter, "UserDefinedName", devname);
+      ADDFILTER(filter, "FullName", devname);
+      ADDFILTER(filter, "FriendlyName", devname);
+      ADDFILTER(filter, "SerialNumber", devname);
+      ADDFILTER(filter, "IpAddress", devname);
+      ADDFILTER(filter, "MacAddress", devname);
+
+      if(m_factory->EnumerateDevices(devices, filter)) {
+        for(auto dev = devices.begin(); dev != devices.end(); ++dev) {
+          device = m_factory->CreateDevice(*dev);
+          if(device)
+            break;
+        }
       }
     }
   } catch (GenICam::GenericException &e) {
