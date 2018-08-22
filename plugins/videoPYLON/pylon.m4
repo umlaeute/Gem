@@ -27,7 +27,7 @@ if test "x$with_pylon" != "xno"; then
   for d in "${PYLON_ROOT}/lib" "${PYLON_ROOT}/lib64"
   do
     if test -d "${d}"; then
-      tmp_pylon_ldflags="-L${d}"
+      tmp_pylon_ldflags="${tmp_pylon_ldflags} -L${d}"
     fi
   done
 
