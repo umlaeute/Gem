@@ -67,7 +67,7 @@ MARK();
           std::cerr << "OOPS[" << ptrGrabResult->GetErrorCode() << "] " << ptrGrabResult->GetErrorDescription() << std::endl;
         std::cout << std::endl;
 
-        m_parent->m_camera.ExecuteSoftwareTrigger();
+        camera.ExecuteSoftwareTrigger();
 
     }
 };
