@@ -148,6 +148,22 @@ MARK();
 }
 
 namespace {
+  double any2float(const gem::any&value) {
+    try {
+      return gem::any_cast<float>(value);
+    } catch (gem::bad_any_cast&e) {;}
+    try {
+      double d = gem::any_cast<double>(value);
+      return d;
+    } catch (gem::bad_any_cast&e) {throw(e);}
+    return 0.;
+  }
+  int any2int(const gem::any&value) {
+    try {
+      return gem::any_cast<int>(value);
+    } catch (gem::bad_any_cast&e) {;}
+    return any2float(value);
+  }
   gem::any node2any(GenApi::INode*node) {
     gem::any result;
     GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
@@ -190,17 +206,17 @@ namespace {
       switch(interfacetype) {
       case GenApi::intfIBoolean:
         try {
-          GenApi::CBooleanPtr(node)->SetValue(gem::any_cast<double>(value));
+          GenApi::CBooleanPtr(node)->SetValue(any2int(value));
         } catch (gem::bad_any_cast&e) { return false; }
         break;
       case GenApi::intfIInteger:
         try {
-          GenApi::CIntegerPtr(node)->SetValue(gem::any_cast<double>(value));
+          GenApi::CIntegerPtr(node)->SetValue(any2int(value));
         } catch (gem::bad_any_cast&e) { return false; }
         break;
       case GenApi::intfIFloat:
         try {
-          GenApi::CFloatPtr(node)->SetValue(gem::any_cast<double>(value));
+          GenApi::CFloatPtr(node)->SetValue(any2float(value));
         } catch (gem::bad_any_cast&e) { return false; }
         break;
       case GenApi::intfIString:
