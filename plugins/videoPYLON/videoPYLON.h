@@ -124,7 +124,6 @@ protected:
  public:
   Pylon::CInstantCamera m_camera;
  protected:
-  std::map<std::string, Pylon::CDeviceInfo>m_id2device;
 
 
 

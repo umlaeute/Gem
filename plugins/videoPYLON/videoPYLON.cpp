@@ -96,7 +96,6 @@ videoPYLON :: videoPYLON()
   m_camera.RegisterImageEventHandler( new IEH(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
 
   m_provides.push_back(m_name);
-
   try {
     m_factory = &Pylon::CTlFactory::GetInstance();
     Pylon::TlInfoList_t tli;
@@ -281,74 +280,39 @@ MARK();
 std::vector<std::string> videoPYLON::enumerate()
 {
 MARK();
-  m_id2device.clear();
   std::vector<std::string> result;
   if(!m_factory) {
     return result;
   }
 
   Pylon::DeviceInfoList_t devices;
-  if (0 == m_factory->EnumerateDevices(devices))  {
-    verbose(1, "[GEM:videoPYLON] could not enumerate");
-    return result;
-  }
-  if(devices.empty() ) {
+  if (!m_factory->EnumerateDevices(devices))  {
+    verbose(1, "[GEM:videoPYLON] could not enumerate %d", devices.size());
     return result;
   }
 
-  int i=0;
-  for(i=0; i<devices.size(); i++) {
+  for(auto device = devices.begin(); device != devices.end(); ++device) {
     std::string name;
-    Pylon::CDeviceInfo&device=devices[i];
     bool added=false;
-#if 1
-    //#define SHOWNAME(x) std::cerr << x<<"["<<i<<"]: "<<name<<std::endl;
-#define SHOWNAME(x) verbose(0, "%d[%s]\t%s", i, x, name.c_str())
+#if 0
+#define SHOWNAME(x, s) if(!s.empty())verbose(1, "[GEM::videoPYLON] device#%d['%s']\t%s", device - devices.begin(), x, s.c_str())
 #else
-#define SHOWNAME(x)
+#define SHOWNAME(x, s)
 #endif
+#define ADDNAME(dev, prop) do { Pylon::String_t name;         \
+      if (dev->GetPropertyValue(prop, name)) {           \
+        SHOWNAME(prop, name);                                    \
+        if(!added && !name.empty()) {                            \
+          result.push_back(name.c_str());                        \
+          added = true;                                          \
+        } } } while(0);
 
-    name=device.GetUserDefinedName();
-    if(!name.empty()) {
-      m_id2device[name]=device;
-      SHOWNAME("user");
-    }
-    if(!added && !name.empty()) {
-      result.push_back(name);
-      added=true;
-    }
-
-#warning TODO: get GigE-cams by IP
-
-    name=device.GetFullName();
-    if(!name.empty()) {
-      m_id2device[name]=device;
-      SHOWNAME("full");
-    }
-    if(!added && !name.empty()) {
-      result.push_back(name);
-      added=true;
-    }
-
-    name=device.GetSerialNumber();
-    if(!name.empty()) {
-      m_id2device[name]=device;
-      SHOWNAME("serial");
-    }
-    if(!added && !name.empty()) {
-      result.push_back(name);
-      added=true;
-    }
-
-    name=device.GetFriendlyName();
-    if(!name.empty()) {
-      m_id2device[name]=device;
-      SHOWNAME("friendly");
-    }
-    if(!added && !name.empty()) {
-      result.push_back(name);
-      added=true;
-    }
+    ADDNAME(device, "UserDefinedName");
+    ADDNAME(device, "FullName");
+    ADDNAME(device, "SerialNumber");
+    ADDNAME(device, "FriendlyName");
+    ADDNAME(device, "IpAddress");
+    ADDNAME(device, "MacAddress");
   }
 
   return result;
