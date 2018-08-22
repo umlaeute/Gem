@@ -483,6 +483,7 @@ MARK();
     close();
     return false;
   }
+  setProperties(props);
   return true;
 }
 /////////////////////////////////////////////////////////
