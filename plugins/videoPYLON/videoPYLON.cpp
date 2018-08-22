@@ -62,8 +62,22 @@ public:
           std::cerr << "OOPS[" << ptrGrabResult->GetErrorCode() << "] " << ptrGrabResult->GetErrorDescription() << std::endl;
 
         //camera.ExecuteSoftwareTrigger();
-
     }
+
+  void setFormat(int format) {
+    Pylon::AutoLock colorlock(m_colorlock);
+    switch(format) {
+    case(GL_RGBA):
+      m_color = format;
+      m_converter.OutputPixelFormat = Pylon::PixelType_BGRA8packed;
+      break;
+    case(GL_LUMINANCE):
+      m_color = format;
+      m_converter.OutputPixelFormat = Pylon::PixelType_Mono8;
+      break;
+    default: break;
+    }
+  }
 };
 
 
