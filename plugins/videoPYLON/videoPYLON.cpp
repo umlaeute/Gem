@@ -151,30 +151,34 @@ namespace {
   gem::any node2any(GenApi::INode*node) {
     gem::any result;
     GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
-
-    switch(interfacetype) {
-    case GenApi::intfIBoolean:
-      result = (double)GenApi::CBooleanPtr(node)->GetValue();
-      break;
-    case GenApi::intfIInteger:
-      result = (double)GenApi::CIntegerPtr(node)->GetValue();
-      break;
-    case GenApi::intfIFloat:
-      result = (double)(GenApi::CFloatPtr(node)->GetValue());
-      break;
-    case GenApi::intfIString:
-      result = std::string(GenApi::CStringPtr(node)->GetValue().c_str());
-      break;
-    case GenApi::intfIEnumeration:
-      result =
+    try {
+      switch(interfacetype) {
+      case GenApi::intfIBoolean:
+        result = (double)GenApi::CBooleanPtr(node)->GetValue();
+        break;
+      case GenApi::intfIInteger:
+        result = (double)GenApi::CIntegerPtr(node)->GetValue();
+        break;
+      case GenApi::intfIFloat:
+        result = (double)(GenApi::CFloatPtr(node)->GetValue());
+        break;
+      case GenApi::intfIString:
+        result = std::string(GenApi::CStringPtr(node)->GetValue().c_str());
+        break;
+      case GenApi::intfIEnumeration:
+        result =
 #if 1
-        std::string(GenApi::CEnumerationPtr(node)->GetCurrentEntry()->GetSymbolic().c_str());
+          std::string(GenApi::CEnumerationPtr(node)->GetCurrentEntry()->GetSymbolic().c_str());
 #else
         (double)(GenApi::CEnumerationPtr(node)->GetIntValue());
 #endif
-      break;
-    default:    // don't show interfaces we cannot use directly
-      break;
+        break;
+      default:    // don't show interfaces we cannot use directly
+        break;
+      }
+    } catch (GenICam::GenericException &e) {
+      verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+      result.reset();
     }
     return result;
   }
