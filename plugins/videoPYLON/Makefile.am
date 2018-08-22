@@ -40,7 +40,6 @@ include $(srcdir)/../symlink_ltlib.mk
 
 ### SOURCES
 gem_videoPYLON_la_SOURCES= videoPYLON.cpp videoPYLON.h \
-	CameraProperties.cpp CameraProperties.h \
-	StreamGrabberProperties.cpp StreamGrabberProperties.h
+	$(empty)
 
 
