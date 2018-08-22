@@ -148,6 +148,36 @@ MARK();
 }
 
 namespace {
+  gem::any node2any(GenApi::INode*node) {
+    gem::any result;
+    GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
+
+    switch(interfacetype) {
+    case GenApi::intfIBoolean:
+      result = (double)GenApi::CBooleanPtr(node)->GetValue();
+      break;
+    case GenApi::intfIInteger:
+      result = (double)GenApi::CIntegerPtr(node)->GetValue();
+      break;
+    case GenApi::intfIFloat:
+      result = (double)(GenApi::CFloatPtr(node)->GetValue());
+      break;
+    case GenApi::intfIString:
+      result = std::string(GenApi::CStringPtr(node)->GetValue().c_str());
+      break;
+    case GenApi::intfIEnumeration:
+      result =
+#if 1
+        std::string(GenApi::CEnumerationPtr(node)->GetCurrentEntry()->GetSymbolic().c_str());
+#else
+        (double)(GenApi::CEnumerationPtr(node)->GetIntValue());
+#endif
+      break;
+    default:    // don't show interfaces we cannot use directly
+      break;
+    }
+    return result;
+  }
   void nodemap2properties(GenApi::INodeMap&nodemap,
                           gem::Properties&readable,
                           gem::Properties&writeable) {
@@ -160,32 +190,7 @@ namespace {
       if(!node->IsFeature())continue;
 
       GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
-      gem::any result;
-
-      switch(interfacetype) {
-      case GenApi::intfIBoolean:
-        result = (double)GenApi::CBooleanPtr(node)->GetValue();
-        break;
-      case GenApi::intfIInteger:
-        result = (double)GenApi::CIntegerPtr(node)->GetValue();
-        break;
-      case GenApi::intfIFloat:
-        result = (double)(GenApi::CFloatPtr(node)->GetValue());
-        break;
-      case GenApi::intfIString:
-        result = std::string(GenApi::CStringPtr(node)->GetValue().c_str());
-        break;
-      case GenApi::intfIEnumeration:
-        result =
-#if 1
-          std::string(GenApi::CEnumerationPtr(node)->GetCurrentEntry()->GetSymbolic().c_str());
-#else
-        (double)(GenApi::CEnumerationPtr(node)->GetIntValue());
-#endif
-        break;
-      default:    // don't show interfaces we cannot use directly
-        break;
-      }
+      gem::any result = node2any(node);
       if(result.empty() && (GenApi::intfICommand != interfacetype)) {
         continue;
       }
