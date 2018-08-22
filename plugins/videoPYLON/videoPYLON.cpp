@@ -264,6 +264,13 @@ void videoPYLON::getProperties(gem::Properties&props)
     std::string key = *keyptr;
     gem::any result;
     props.erase(*keyptr);
+
+    if(false);
+    else if("width" == key) key = "Width";
+    else if("height" == key) key = "Height";
+    else if("leftmargin" == key) key = "OffsetX";
+    else if("topmargin" == key) key = "OffsetY";
+
     result.reset();
     auto node = camnodes.GetNode(key.c_str());
     if(!node) node = streamnodes.GetNode(key.c_str());
