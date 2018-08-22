@@ -81,7 +81,7 @@ MARK();
 REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
 videoPYLON :: videoPYLON()
-  : m_factory(NULL)
+  : m_factory(0)
 
   , m_name(std::string("pylon"))
   , m_devicename(std::string(""))
@@ -286,7 +286,7 @@ std::vector<std::string> videoPYLON::enumerate()
 MARK();
   m_id2device.clear();
   std::vector<std::string> result;
-  if(NULL==m_factory) {
+  if(!m_factory) {
     return result;
   }
 
@@ -386,11 +386,11 @@ MARK();
     channel=d;
   }
 
-  if(NULL==m_factory) {
+  if(!m_factory) {
     return false;
   }
 
-  Pylon::IPylonDevice *device = NULL;
+  Pylon::IPylonDevice *device = 0;
   post("open '%s' or %d", m_devicename.c_str(), m_devicenum);
 
   try {
@@ -424,8 +424,10 @@ MARK();
     return false;
   }
 
-  if(device==NULL) {
-    verbose(0, "[GEM:videoPYLON] creating device failed!");
+  if(device) {
+    verbose(0, "[GEM:videoPYLON] found device '%s'", device->GetDeviceInfo().GetFullName().c_str());
+  } else {
+    verbose(1, "[GEM:videoPYLON] creating device failed!");
     return false;
   }
 
