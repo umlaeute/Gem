@@ -234,12 +234,12 @@ namespace {
         GenApi::CEnumerationPtr enumptr(node);
         if(!didit)
           try {
-            enumptr->SetIntValue(gem::any_cast<double>(value));
+            enumptr->FromString(gem::any_cast<std::string>(value).c_str());
             didit = true;
           } catch (gem::bad_any_cast&e) { didit=false; }
         if(!didit)
           try {
-            enumptr->FromString(gem::any_cast<std::string>(value).c_str());
+            enumptr->SetIntValue(any2int(value));
             didit = true;
           } catch (gem::bad_any_cast&e) { didit=false; }
         if(!didit) return false;
