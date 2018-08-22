@@ -3,20 +3,61 @@ videoPYLON
 
 PYLON-backend for pix_video
 
-PYLON is a proprietary library that can do image-acquisition from 
+PYLON is a proprietary library that can do image-acquisition from
 a number of  GigE-cameras, available from Basler Vision Technologies.
 You have to download pylon yourself.
-At time o writing pylon is free as in beer, however it is not OpenSource.
+At the time of writing pylon is free as in beer, however it is not OpenSource.
 
 	http://www.baslerweb.com/ (and search for "pylon")
+
+
+TL;DR quick guide to building the videoPYLON backend
+====================================================
+0. install a C++-compiler, Pd (with headers) and the Gem-sources
+
+    $ sudo add-apt-repository -s "http://deb.debian.org/debian/"
+    $ sudo apt-get update
+    $ sudo apt-get build-dep gem
+    $ sudo apt-get install git
+
+    $ git clone https://github.com/umlaeute/Gem
+
+
+1. install Pylon (into /opt/pylon5)
+    https://www.baslerweb.com/en/products/software/
+
+2. compile Gem
+    $ cd Gem
+    $ ./autogen.sh
+    $ ./configure
+    $ make
+
+3. compile videoPYLON:
+
+    $ cd plugins/videoPYLON
+    $ autoreconf -fiv
+    $ ./configure --with-pylon=/opt/pylon5
+    $ make
+    $ cd -
+
+4. install Gem with plugins
+
+    $ sudo make install
+
+5. run Gem:
+
+    $ pd -lib /usr/local/lib/pd/extra/Gem/Gem
+
+if anything goes wrong, see below.
+
 
 
 installation instructions for linux
 ===================================
 0. obvious prerequisites
-you need a C++-compiler, Pd (inclusing headers) and the Gem-sources (including
+you need a C++-compiler, Pd (including headers) and the Gem-sources (including
 the videoPYLON plugin)
-you should have Gem running (preferrably self-compiled)
+you should have Gem running (preferably self-compiled)
 
 1. getting PYLON
 
@@ -24,28 +65,27 @@ get PYLON and install it onto your computer (and make sure to read their
 installation instructions).
 the directory you installed into shall henceforward be referred to as PYLON_ROOT
 
-note: when running anything PYLONic, you will need to set PYLON_ROOT, GENICAM_ROOT_V1_1 as
-environment-variables; 
-you will also have to set your library path, so the dynamic linker will find the 
+note: when running anything PYLONic, you will need to set PYLON_ROOT as
+environment-variables;
+you will also have to set your library path, so the dynamic linker will find the
 pylon libraries as needed.
 for testing it makes also sense to add the pylon's bin-path to your PATH.
 it's a good idea to do so right now:
 e.g.
-$ export PYLON_ROOT=${HOME}/lib/pylon
-$ export GENICAM_ROOT_V1_1=${PYLON_ROOT}
+$ export PYLON_ROOT=/opt/pylon5
 $ export PATH=${PYLON_ROOT}/bin/:${PATH}
-$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib
+$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib64
 $ PylonViewerApp
 
 if all went well, you should see a number of files from the pylon installation.
 if not, adapt PYLON_ROOT to your system (and/or read PYLON's README again)
 
 notes on LD_LIBRARY_PATH:
-- if you already have set the LD_LIBRARY_PATH to something else before, make 
+- if you already have set the LD_LIBRARY_PATH to something else before, make
 sure _add_ to it:
-$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib:${LD_LIBRARY_PATH}
-- on 64bit systems, you might need to set it to 
-$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib64
+$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib64:${LD_LIBRARY_PATH}
+- on 32bit systems, you might need to set it to
+$ export LD_LIBRARY_PATH=${PYLON_ROOT}/lib
 instead
 
 2. compiling videoPYLON
@@ -65,7 +105,7 @@ $ ./configure
 
 if you haven't set the environment variables, you can specify them via
 configure-flags, e.g.:
-$ ./configure --with-pylon=${HOME}/lib/pylon
+$ ./configure --with-pylon=/opt/pylon5
 
 you might also have to tell configure where to find the Pd-sources by specifying
 the /path/to/pd with the "--with-pd=" flag.
@@ -106,7 +146,7 @@ $ LD_LIBRARY_PATH=${PYLON_ROOT}/lib pd -lib Gem
 should do the trick. (see above, section 2)
 
 once the plugin loaded correctly, you can start using it.
-tell [pix_video] to open a device named like 
+tell [pix_video] to open a device named like
 "Basler scA640-120gm#0030530F8E64#192.168.1.100:3956"
 (that's a single long symbol with _spaces_ (and without quotes)!)
 The name consists of vendor, modelname, MAC-address, IP-address and port, which
@@ -114,12 +154,9 @@ allows one to quite uniquely identify your camera.
 Since such names are a bit awkward to use, you probably want to:
 1: connect to your camera with something like "PylonViewerApp" and change
 "user defined name" to something like "mycam"
-2: enumerate all available devices (using the "enumerate" message to 
+2: enumerate all available devices (using the "enumerate" message to
 [pix_video]
 3: access the device with it's short name "mycam".
-
-you really have to run the "enumerate" in order to make [pix_video] aware of the 
-user definee name!
 
 examples:
 [list Basler scA640-120gm#0030530F8E64#192.168.1.100:3956(
@@ -127,7 +164,7 @@ examples:
 [symbol2list]
 |
 [device $1(
-will search for a GigE-camera (scout scA640-120g) at the specified IP/MAC-address 
+will search for a GigE-camera (scout scA640-120g) at the specified IP/MAC-address
 and connect.
 
 [enumerate, device mycam(
@@ -135,6 +172,10 @@ will search for the cam named "mycam"
 
 possible issues (FAQ)
 =====================
+
+Q0: which version of Pylon is supposed to work?
+A0: the last update of videoPYLON made it work with
+    - Pylon-5.0.12.11829
 
 Q1: my image quality is bad (white stripes)
 A1: make sure you have a Gigabit-Ethernet card and enable "Jumbo Frames"
@@ -153,7 +194,7 @@ A2: make sure you have "Jumbo Frames" also enabled on the _camera_!
 Q3: it doesn't work reliably (e.g. it works a bit, and then stops)
 A3: make sure you have "Jumbo Frames" on both your network card and your camera
 
-    
+
 
 
 
@@ -162,7 +203,7 @@ A3: make sure you have "Jumbo Frames" on both your network card and your camera
 
 fmgasdr
 IOhannes m zmölnig
-Graz, 18.11.2010
+Graz, 22.08.2018
 
 
 
