@@ -120,12 +120,7 @@ protected:
 
   Pylon::PylonAutoInitTerm autoInitTerm;
   Pylon::CTlFactory*m_factory;
-
- public:
   Pylon::CInstantCamera m_camera;
- protected:
-
-
 
   std::string m_name;
   std::vector<std::string>m_provides;
