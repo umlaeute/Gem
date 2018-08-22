@@ -182,6 +182,62 @@ namespace {
     }
     return result;
   }
+  bool any2node(GenApi::INode*node, const gem::any&value) {
+    GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
+    try {
+      double d;
+      std::string s;
+      switch(interfacetype) {
+      case GenApi::intfIBoolean:
+        try {
+          GenApi::CBooleanPtr(node)->SetValue(gem::any_cast<double>(value));
+        } catch (gem::bad_any_cast&e) { return false; }
+        break;
+      case GenApi::intfIInteger:
+        try {
+          GenApi::CIntegerPtr(node)->SetValue(gem::any_cast<double>(value));
+        } catch (gem::bad_any_cast&e) { return false; }
+        break;
+      case GenApi::intfIFloat:
+        try {
+          GenApi::CFloatPtr(node)->SetValue(gem::any_cast<double>(value));
+        } catch (gem::bad_any_cast&e) { return false; }
+        break;
+      case GenApi::intfIString:
+        try {
+          GenApi::CStringPtr(node)->SetValue(gem::any_cast<std::string>(value).c_str());
+        } catch (gem::bad_any_cast&e) { return false; }
+        break;
+      case GenApi::intfICommand:
+        if(!value.empty())
+          error("[GEM::videoPYLON] ignoring argument to command");
+        GenApi::CCommandPtr(node)->Execute();
+        break;
+      case GenApi::intfIEnumeration: {
+        bool didit = false;
+        GenApi::CEnumerationPtr enumptr(node);
+        if(!didit)
+          try {
+            enumptr->SetIntValue(gem::any_cast<double>(value));
+            didit = true;
+          } catch (gem::bad_any_cast&e) { didit=false; }
+        if(!didit)
+          try {
+            enumptr->FromString(gem::any_cast<std::string>(value).c_str());
+            didit = true;
+          } catch (gem::bad_any_cast&e) { didit=false; }
+        if(!didit) return false;
+        break;
+      }
+      default:    // ignore interfaces we cannot use directly
+        break;
+      }
+    } catch (GenICam::GenericException &e) {
+      verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+      return false;
+    }
+    return true;
+  }
   void nodemap2properties(GenApi::INodeMap&nodemap,
                           gem::Properties&readable,
                           gem::Properties&writeable) {
