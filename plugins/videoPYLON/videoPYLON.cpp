@@ -271,7 +271,6 @@ void videoPYLON::getProperties(gem::Properties&props)
     else if("leftmargin" == key) key = "OffsetX";
     else if("topmargin" == key) key = "OffsetY";
 
-    result.reset();
     auto node = camnodes.GetNode(key.c_str());
     if(!node) node = streamnodes.GetNode(key.c_str());
 
