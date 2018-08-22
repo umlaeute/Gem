@@ -565,7 +565,7 @@ pixBlock*videoPYLON::getFrame(void)
 
       post("grabbing failed");
   } else {
-    post("trigger");
+    //post("trigger");
     m_camera.ExecuteSoftwareTrigger();
   }
 
