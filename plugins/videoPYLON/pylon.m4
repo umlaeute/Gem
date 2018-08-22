@@ -13,6 +13,7 @@ AC_ARG_VAR([PYLON_ROOT], [root-directory where you installed PYLON (override thi
 AC_ARG_WITH([pylon],
              AC_HELP_STRING([--with-pylon], [enable PYLON video capturing (overrides $PYLON_ROOT)]))
 
+tmp_pylon_rpath=""
 have_pylon="no"
 if test "x$with_pylon" != "xno"; then
   if test -d "${with_pylon}" ; then
@@ -27,6 +28,7 @@ if test "x$with_pylon" != "xno"; then
   for d in "${PYLON_ROOT}/lib" "${PYLON_ROOT}/lib64"
   do
     if test -d "${d}"; then
+      tmp_pylon_rpath="${tmp_pylon_rpath} -R${d}"
       tmp_pylon_ldflags="${tmp_pylon_ldflags} -L${d}"
     fi
   done
@@ -56,7 +58,7 @@ if test "x$with_pylon" != "xno"; then
   if test "x$have_pylon" = "xyes"; then
     AC_DEFINE([HAVE_PYLON], [1], [video capturing using Basler's PYLON])
     GEM_PYLON_CXXFLAGS="${tmp_pylon_includes}"
-    GEM_PYLON_LIBS="${tmp_pylon_ldflags}"
+    GEM_PYLON_LIBS="${tmp_pylon_ldflags} ${tmp_pylon_rpath}"
   fi
 
   AC_MSG_CHECKING([for PYLON])
