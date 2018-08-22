@@ -147,11 +147,68 @@ MARK();
   return m_provides;
 }
 
+namespace {
+  void nodemap2properties(GenApi::INodeMap&nodemap,
+                          gem::Properties&readable,
+                          gem::Properties&writeable) {
+    GenApi::NodeList_t nodes;
+    nodemap.GetNodes(nodes);
+    for(uint64_t nodecount = 0; nodecount < nodes.size(); nodecount++) {
+      auto node = nodes[nodecount];
+      if(node->GetVisibility()  == GenApi::Invisible) continue;
+      // it seems that only features are interesting...
+      if(!node->IsFeature())continue;
+
+      GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
+      gem::any result;
+
+      switch(interfacetype) {
+      case GenApi::intfIBoolean:
+        result = (double)GenApi::CBooleanPtr(node)->GetValue();
+        break;
+      case GenApi::intfIInteger:
+        result = (double)GenApi::CIntegerPtr(node)->GetValue();
+        break;
+      case GenApi::intfIFloat:
+        result = (double)(GenApi::CFloatPtr(node)->GetValue());
+        break;
+      case GenApi::intfIString:
+        result = std::string(GenApi::CStringPtr(node)->GetValue().c_str());
+        break;
+      case GenApi::intfIEnumeration:
+        result =
+#if 1
+          std::string(GenApi::CEnumerationPtr(node)->GetCurrentEntry()->GetSymbolic().c_str());
+#else
+        (double)(GenApi::CEnumerationPtr(node)->GetIntValue());
+#endif
+        break;
+      default:    // don't show interfaces we cannot use directly
+        break;
+      }
+      if(result.empty() && (GenApi::intfICommand != interfacetype)) {
+        continue;
+      }
+      Pylon::String_t name(node->GetName());
+      switch(node->GetAccessMode()) {
+      case GenApi::RO:
+        readable.set(name.c_str(), result);
+        break;
+      case GenApi::WO:
+        writeable.set(name.c_str(), result);
+        break;
+      case GenApi::RW:
+        readable.set(name.c_str(), result);
+        writeable.set(name.c_str(), result);
+        break;
+      default: break;
+      }
+    }
+  }
 
 bool videoPYLON::enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable)
 {
-MARK();
   gem::Properties props;
   std::vector<std::string>keys;
   gem::any type;
@@ -159,75 +216,13 @@ MARK();
   readable.clear();
   writeable.clear();
 
-#warning enumProps
-#if 0
-  props=gem::pylon::streamgrabberproperties::getKeys();
-  keys=props.keys();
+  nodemap2properties(m_camera.GetStreamGrabberNodeMap(), readable, writeable);
+  //nodemap2properties(m_camera.GetTLNodeMap(), readable, writeable);
+  //nodemap2properties(m_camera.GetEventGrabberNodeMap(), readable, writeable);
+  //nodemap2properties(m_camera.GetInstantCameraNodeMap(), readable, writeable);
 
-  props=gem::pylon::streamgrabberproperties::setKeys();
-  keys=props.keys();
-
-  props=gem::pylon::cameraproperties::getKeys();
-  keys=props.keys();
-  if(m_camera) {
-    GenApi::INodeMap*nodes=m_camera.GetNodeMap();
-
-    for(unsigned int i=0; i<keys.size(); i++) {
-      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
-      if(node) {
-        switch(node->GetAccessMode()) {
-        case GenApi::RO:
-        case GenApi::RW:
-          readable.set(keys[i], props.get(keys[i]));
-        default:
-          break;
-        }
-      }
-    }
-  }
-
-  props=gem::pylon::cameraproperties::setKeys();
-  keys=props.keys();
-
-  if(m_camera) {
-    GenApi::INodeMap*nodes=m_camera.GetNodeMap();
-
-    for(unsigned int i=0; i<keys.size(); i++) {
-      GenApi::INode *node=nodes->GetNode(keys[i].c_str());
-      if(node) {
-        switch(node->GetAccessMode()) {
-        case GenApi::WO:
-        case GenApi::RW:
-          writeable.set(keys[i], props.get(keys[i]));
-        default:
-          break;
-        }
-      }
-    }
-  }
-
-#if 0
-    try {
-      const Pylon::CDeviceInfo & di=m_camera.GetDeviceInfo();
-      Pylon::StringList_t names;
-      di.GetPropertyNames (names);
-
-      int i=0;
-      for(unsigned int i=0; i<names.size(); i++) {
-        std::string key=names[i].c_str();
-        //        std::cerr << "property#"<<i<<": "<<names[i]<<std::endl;
-        writeable.set(key, type);
-        readable.set (key, type);
-      }
-    } catch (GenICam::GenericException &e) {
-      error("[GEM:videoPYLON] %s", e.GetDescription());
-      return false;
-    }
-#endif
-
-#endif
-
-  return false;
+  nodemap2properties(m_camera.GetNodeMap(), readable, writeable);
+  return true;
 }
 void videoPYLON::setProperties(gem::Properties&props)
 {
