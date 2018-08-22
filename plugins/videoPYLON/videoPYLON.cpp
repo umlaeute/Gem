@@ -311,6 +311,7 @@ void videoPYLON::setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   for(auto keyptr = keys.begin(); keyptr != keys.end(); ++keyptr) {
     std::string key = *keyptr;
+
     if(false);
     else if("width" == key) key = "Width";
     else if("height" == key) key = "Height";
@@ -430,7 +431,6 @@ MARK();
   }
 
   Pylon::IPylonDevice *device = 0;
-  post("open '%s' or %d", m_devicename.c_str(), m_devicenum);
 
   try {
     if(m_devicename.empty()) {
