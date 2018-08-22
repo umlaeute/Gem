@@ -517,13 +517,6 @@ MARK();
 bool videoPYLON :: start()
 {
 MARK();
-#if 0
-  if(!m_camera.IsPylonDeviceAttached()
-     || m_camera.IsCameraDeviceRemoved()) {
-    return false;
-  }
-#endif
-
   if (!m_camera.CanWaitForFrameTriggerReady()) {
     error("[GEM:videoPYLON] camera cannot be queried whether it's ready to accept the next frame trigger");
   }
@@ -604,7 +597,6 @@ void videoPYLON::releaseFrame(void)
 {
 MARK();
   m_pixBlock.newimage=false;
-  //m_mutex.unlock();
 }
 
 
