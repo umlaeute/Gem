@@ -564,39 +564,15 @@ MARK();
 pixBlock*videoPYLON::getFrame(void)
 {
   MARK();
-
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
-  m_pixBlock.image.xsize = m_width;
-  m_pixBlock.image.ysize = m_height;
-  m_pixBlock.image.reallocate();
-  m_pixBlock.newimage = true;
-
-  if(m_grabloop == Pylon::GrabLoop_ProvidedByUser) {
-    bool didit;
-    Pylon::CGrabResultPtr grabResult;
-    post("manual grabbing");
-    try {
-      didit = m_camera.RetrieveResult(0, grabResult, Pylon::TimeoutHandling_Return);
-    } catch (GenICam::GenericException &e) {
-      error("grabbing: %s", e.GetDescription());
-    }
-
-    if(didit && grabResult->GrabSucceeded())
-      post("grabbing done");
-    else      post("grabbing done");
-
-      post("grabbing failed");
-  } else {
-    //post("trigger");
-    m_camera.ExecuteSoftwareTrigger();
-  }
-
-  return &m_pixBlock;
+  m_ieh->m_pixlock.Lock();
+  return &m_ieh->m_pix;
 }
 void videoPYLON::releaseFrame(void)
 {
 MARK();
-  m_pixBlock.newimage=false;
+  m_ieh->m_pix.newimage = false;
+  m_ieh->m_pixlock.Unlock();
+  m_camera.ExecuteSoftwareTrigger();
 }
 
 
@@ -606,7 +582,8 @@ bool videoPYLON::grabAsynchronous(bool async) {
   m_async = async;
   return ret;
 }
-bool videoPYLON::setColor(int) {
+bool videoPYLON::setColor(int format) {
   MARK();
-  return false;
+  m_ieh->setFormat(format);
+  return true;
 }
