@@ -193,9 +193,8 @@ namespace {
       // it seems that only features are interesting...
       if(!node->IsFeature())continue;
 
-      GenApi::EInterfaceType interfacetype = node->GetPrincipalInterfaceType();
       gem::any result = node2any(node);
-      if(result.empty() && (GenApi::intfICommand != interfacetype)) {
+      if(result.empty() && (GenApi::intfICommand != node->GetPrincipalInterfaceType())) {
         continue;
       }
       Pylon::String_t name(node->GetName());
