@@ -290,24 +290,25 @@ bool videoPYLON::enumProperties(gem::Properties&readable,
 }
 void videoPYLON::setProperties(gem::Properties&props)
 {
-MARK();
-#warning setProps
-#if 0
+  GenApi::INodeMap&camnodes = m_camera.GetNodeMap();
+  auto&streamnodes = m_camera.GetStreamGrabberNodeMap();
   std::vector<std::string>keys=props.keys();
-  for(unsigned int i=0; i<keys.size(); i++) {
-    const std::string key=keys[i];
-    bool didit=false;
+  for(auto keyptr = keys.begin(); keyptr != keys.end(); ++keyptr) {
+    std::string key = *keyptr;
+    if(false);
+    else if("width" == key) key = "Width";
+    else if("height" == key) key = "Height";
+    else if("leftmargin" == key) key = "OffsetX";
+    else if("topmargin" == key) key = "OffsetY";
 
-    if(!didit && m_camera)
-      try {
-        didit=gem::pylon::cameraproperties::set(m_camera, key, props);
-      } catch (GenICam::GenericException &e) {
-        verbose(0, "[GEM:videoPYLON] [%s] %s", key.c_str(), e.GetDescription());
-        didit=false;
-      }
-
+    auto node = camnodes.GetNode(key.c_str());
+    if(!node) node = streamnodes.GetNode(key.c_str());
+    if(node) {
+      any2node(node, props.get(key));
+      if(node->GetPrincipalInterfaceType() == GenApi::intfICommand)
+        props.erase(*keyptr);
+    }
   }
-#endif
 }
 
 void videoPYLON::getProperties(gem::Properties&props)
