@@ -31,7 +31,7 @@ using namespace gem::plugins;
 # define debug nop_post
 #endif
 
-class IEH : public Pylon::CImageEventHandler
+class gem::plugins::videoPYLON::ImageEventHandler : public Pylon::CImageEventHandler
 {
   videoPYLON*m_parent;
 public:
@@ -82,6 +82,7 @@ REGISTER_VIDEOFACTORY("pylon", videoPYLON);
 
 videoPYLON :: videoPYLON()
   : m_factory(0)
+  , m_ieh(new ImageEventHandler(this))
 
   , m_name(std::string("pylon"))
   , m_devicename(std::string(""))
@@ -91,9 +92,8 @@ videoPYLON :: videoPYLON()
 
 {
   MARK();
-
   m_camera.RegisterConfiguration( new Pylon::CSoftwareTriggerConfiguration, Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
-  m_camera.RegisterImageEventHandler( new IEH(this), Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
+  m_camera.RegisterImageEventHandler( m_ieh, Pylon::RegistrationMode_ReplaceAll, Pylon::Cleanup_Delete);
 
   m_provides.push_back(m_name);
   try {

@@ -117,10 +117,12 @@ public:
 
 protected:
   class CGrabBuffer;
+  class ImageEventHandler;
 
   Pylon::PylonAutoInitTerm autoInitTerm;
   Pylon::CTlFactory*m_factory;
   Pylon::CInstantCamera m_camera;
+  ImageEventHandler*m_ieh;
 
   std::string m_name;
   std::vector<std::string>m_provides;
