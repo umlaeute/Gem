@@ -256,28 +256,22 @@ MARK();
 
 void videoPYLON::getProperties(gem::Properties&props)
 {
-MARK();
-#warning getProps
-#if 0
+  GenApi::INodeMap&camnodes = m_camera.GetNodeMap();
+  auto&streamnodes = m_camera.GetStreamGrabberNodeMap();
+
   std::vector<std::string>keys=props.keys();
-  for(unsigned int i=0; i<keys.size(); i++) {
-    const std::string key=keys[i];
-    props.erase(key);
+  for(auto key = keys.begin(); key != keys.end(); ++key) {
     gem::any result;
+    result.reset();
+    auto node = camnodes.GetNode(key->c_str());
+    if(!node) node = streamnodes.GetNode(key->c_str());
 
-    if(result.empty() && m_camera)
-      try {
-        gem::pylon::cameraproperties::get(m_camera, key, result);
-      } catch (GenICam::GenericException &e) {
-        result.reset();
-      }
-
-    if(result.empty()) {
-      continue;
+    if(node) {
+      result = node2any(node);
     }
-    props.set(key, result);
+    if(result.empty()) props.erase(*key); else
+      props.set(*key, result);
   }
-#endif
 }
 
 std::vector<std::string> videoPYLON::enumerate()
