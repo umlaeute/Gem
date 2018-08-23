@@ -133,26 +133,23 @@ inline void _PUnLock()
 #endif
 
 _ParticleState::_ParticleState()
+  : dt(1.0f)
+  , in_call_list(false)
+  , in_new_list(false)
+  , vertexB_tracks(true)
+  , group_id(-1)
+  , list_id(-1)
+  , pgrp(NULL)
+  , pact(NULL)
+  , tid(0) // This will be filled in above if we're MP.
+  , Size(pDomain(PDPoint, 1.0f, 1.0f, 1.0f))
+  , Vel(pDomain(PDPoint, 0.0f, 0.0f, 0.0f))
+  , VertexB(pDomain(PDPoint, 0.0f, 0.0f, 0.0f))
+  , Color(pDomain(PDPoint, 1.0f, 1.0f, 1.0f))
+  , Alpha(1.0f)
+  , Age(0.0f)
+  , AgeSigma(0.0f)
 {
-  in_call_list = false;
-  in_new_list = false;
-  vertexB_tracks = true;
-
-  dt = 1.0f;
-
-  group_id = -1;
-  list_id = -1;
-  pgrp = NULL;
-  pact = NULL;
-  tid = 0; // This will be filled in above if we're MP.
-
-  Size = pDomain(PDPoint, 1.0f, 1.0f, 1.0f);
-  Vel = pDomain(PDPoint, 0.0f, 0.0f, 0.0f);
-  VertexB = pDomain(PDPoint, 0.0f, 0.0f, 0.0f);
-  Color = pDomain(PDPoint, 1.0f, 1.0f, 1.0f);
-  Alpha = 1.0f;
-  Age = 0.0f;
-  AgeSigma = 0.0f;
 }
 
 ParticleGroup *_ParticleState::GetGroupPtr(int p_group_num)
