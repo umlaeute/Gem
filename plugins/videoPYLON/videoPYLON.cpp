@@ -524,6 +524,8 @@ MARK();
     //grabstrategy = Pylon::GrabLoop_ProvidedByInstantCamera;
     m_grabloop = m_async?(Pylon::GrabLoop_ProvidedByInstantCamera):(Pylon::GrabLoop_ProvidedByUser);
     m_camera.StartGrabbing(grabstrategy, m_grabloop);
+    if (m_camera.IsGrabbing())
+      m_camera.ExecuteSoftwareTrigger();
   } catch (GenICam::GenericException &e) {
     error("[GEM:videoPYLON] %s", e.GetDescription());
     return false;
@@ -570,7 +572,12 @@ void videoPYLON::releaseFrame(void)
 MARK();
   m_ieh->m_pix.newimage = false;
   m_ieh->m_pixlock.Unlock();
-  m_camera.ExecuteSoftwareTrigger();
+  try {
+    if (m_camera.IsGrabbing())
+      m_camera.ExecuteSoftwareTrigger();
+  } catch (GenICam::GenericException &e) {
+    error("[GEM:videoPYLON] %s", e.GetDescription());
+  }
 }
 
 
