@@ -715,7 +715,7 @@ private:
 
 
 public:
-  FFPlugin(std::string name, const t_canvas*canvas=NULL)
+  FFPlugin(const std::string&name, const t_canvas*canvas=NULL)
     : m_plugin(NULL)
     , m_instance(NULL)
     , m_rgba(false)
