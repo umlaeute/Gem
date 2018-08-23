@@ -546,7 +546,7 @@ MARK();
 bool videoPYLON :: reset()
 {
 MARK();
-#warning TODO reset
+  verbose(0, "[GEM:videoPYLON] 'reset' not implemented");
   return false;
 }
 
