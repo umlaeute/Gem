@@ -331,7 +331,7 @@ void videoPYLON::setProperties(gem::Properties&props)
     auto node = camnodes.GetNode(key.c_str());
     if(!node) node = streamnodes.GetNode(key.c_str());
     if(node) {
-      any2node(node, props.get(key));
+      any2node(node, props.get(*keyptr));
       if(node->GetPrincipalInterfaceType() == GenApi::intfICommand)
         props.erase(*keyptr);
     }
