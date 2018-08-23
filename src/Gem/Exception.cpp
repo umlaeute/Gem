@@ -19,26 +19,27 @@
 // for error()
 #include "m_pd.h"
 #include <string.h>
-
+#include <stdlib.h>
 
 GemException::GemException(const char *error)
   : ErrorString(strdup(error))
 {}
 
 GemException::GemException(const std::string&error)
-  : GemException(error.c_str())
+  : ErrorString(strdup(error.c_str()))
 {}
 
 GemException::GemException()
-  : GemException("")
+  : ErrorString(0)
 {}
 GemException::~GemException()
 {
-  free(const_cast<char*>(ErrorString));
+  if(ErrorString)
+    free(const_cast<char*>(ErrorString));
 }
 const char *GemException::what() const
 {
-  return ErrorString;
+  return ErrorString?ErrorString:"";
 }
 
 void GemException::report(const char*origin) const
