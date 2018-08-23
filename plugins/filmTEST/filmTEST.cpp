@@ -37,6 +37,8 @@ REGISTER_FILMFACTORY("test", filmTEST);
 /////////////////////////////////////////////////////////
 
 filmTEST :: filmTEST(void)
+  : m_fps(20)
+  , m_numFrames(100)
 {
   m_image.image.setCsizeByFormat(GL_RGBA);
   m_image.image.xsize=320;
@@ -51,9 +53,6 @@ filmTEST :: filmTEST(void)
 bool filmTEST :: open(const std::string&filename,
                       const gem::Properties&wantProps)
 {
-  m_numFrames=100;
-  m_fps=20;
-
   changeImage(0,0);
 
   return true;

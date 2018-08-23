@@ -50,8 +50,10 @@ struct PBuffer_data {
 /*
  * constructor (linux specific)
  */
-PBuffer::PBuffer(int width,int height,int flags) : width(width),
-  height(height), data(NULL)
+PBuffer::PBuffer(int width,int height,int flags)
+  : width(width)
+  , height(height)
+  , data(NULL)
 {
   Display *display = glXGetCurrentDisplay();
   int screen = DefaultScreen(display);
@@ -551,8 +553,11 @@ void PBuffer::disable()
 #endif /* OS */
 
 /* dummy implementations */
-PBuffer::PBuffer(const PBuffer&org) : width(org.width), height(org.height),
-  data(NULL) {}
+PBuffer::PBuffer(const PBuffer&org)
+  : width(org.width)
+  , height(org.height)
+  , data(NULL)
+{}
 PBuffer&PBuffer::operator=(const PBuffer&org)
 {
   return (*this);

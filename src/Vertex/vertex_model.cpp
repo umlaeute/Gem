@@ -32,24 +32,18 @@ CPPEXTERN_NEW(vertex_model);
 //
 /////////////////////////////////////////////////////////
 vertex_model :: vertex_model()
-{
-  m_VertexArray = new float [16];
-  m_ColorArray = new float [16];
-  m_TexCoordArray = new float [16];
-  m_NormalArray = new float [16];
-  m_tempTA = new float [16];
-  m_tempVA = new float [16];
-  m_tempCA = new float [16];
-  m_tempNA = new float [16];
-  m_vertcount = 4;
-  m_rescaleModel = 1;
-  m_haveModel = 0;
-  m_oldVSize = m_oldCSize = 0;
-  maxX = 1;
-  maxY = 1;
-  oldmaxX = 1;
-  oldmaxY = 1;
-}
+  : m_ColorArray(new float [16]), m_VertexArray(new float [16])
+  , m_tempCA(new float [16]), m_tempVA(new float [16])
+  , m_TexCoordArray(new float [16]), m_tempTA(new float [16])
+  , m_NormalArray(new float [16]), m_tempNA(new float [16])
+  , m_model(0)
+  , m_vertcount(4)
+  , m_haveModel(0)
+  , m_oldVSize(0), m_oldCSize(0)
+  , maxX(1), maxY(1)
+  , oldmaxX(1), oldmaxY(1)
+  , m_rescaleModel(1)
+{}
 
 /////////////////////////////////////////////////////////
 // Destructor

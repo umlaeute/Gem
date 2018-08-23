@@ -38,9 +38,9 @@ CPPEXTERN_NEW_WITH_GIMME(pix_writer);
 //
 /////////////////////////////////////////////////////////
 pix_writer :: pix_writer(int argc, t_atom *argv)
-  : m_banged(false),
-    m_automatic(false), m_autocount(0),
-    m_filetype(0)
+  : m_banged(false)
+  , m_automatic(false), m_autocount(0)
+  , m_filetype(0)
 {
   snprintf(m_pathname, MAXPDSTRING, "gem");
 }
