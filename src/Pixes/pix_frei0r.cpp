@@ -404,9 +404,8 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   unsigned int numparams = m_plugin->m_parameterNames.size();
   char tempVt[5];
 
-  unsigned int i;
-  for(i=1; i<numparams; i++) {
-    snprintf(tempVt, 5, "#%d", i);
+  for(unsigned int i=1; i<numparams; i++) {
+    snprintf(tempVt, 5, "#%u", i);
     tempVt[4]=0;
     unsigned int parmType=0;
     t_symbol*s_inletType;

@@ -280,7 +280,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
           xsize,ysize,dummy.csize, m_size);
 
 #ifdef _WIN32
-  int segmentSize=m_size+sizeof(t_pixshare_header);
+  size_t segmentSize=m_size+sizeof(t_pixshare_header);
 
   m_MapFile = CreateFileMapping(
                 INVALID_HANDLE_VALUE,    // use paging file
