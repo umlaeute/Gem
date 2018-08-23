@@ -154,7 +154,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
   videoFormat->bmiHeader.biSizeImage = 0;
   if (!capSetVideoFormat(m_hWndC, videoFormat, formSize)) {
     verbose(0, "[GEM:videoVFW] Unable to set video format");
-    delete videoFormat;
+    delete[]videoFormat;
     closeDevice();
     return false;
   }
