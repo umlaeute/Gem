@@ -71,6 +71,8 @@ SUBDIRS+=Vertex
 Gem_la_LIBADD += Vertex/libVertex.la
 endif
 
+sublibs = $(Gem_la_LIBADD)
+
 SUBDIRS+=deprecated
 
 # RTE flags
@@ -106,9 +108,9 @@ libtool: $(LIBTOOL_DEPS)
 
 FORCE:
 
-Version.cpp: version_current.h FORCE
+Version.cpp: version_current.h
 
-version_current.h: $(srcdir)/version.h.in FORCE
+version_current.h: $(srcdir)/version.h.in $(sublibs)
 	$(SHELL) $(srcdir)/pkgversion.sh $< > $@
 
 DISTCLEANFILES += version_current.h
