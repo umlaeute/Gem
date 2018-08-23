@@ -430,12 +430,6 @@ MARK();
 bool videoPYLON :: open(gem::Properties&props)
 {
 MARK();
-  double d;
-  uint32_t channel=0;
-  if(props.get("channel", d)) {
-    channel=d;
-  }
-
   if(!m_factory) {
     return false;
   }
