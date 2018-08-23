@@ -521,7 +521,6 @@ MARK();
 
   try {
     Pylon::EGrabStrategy grabstrategy = Pylon::GrabStrategy_LatestImageOnly;
-    //grabstrategy = Pylon::GrabLoop_ProvidedByInstantCamera;
     m_grabloop = m_async?(Pylon::GrabLoop_ProvidedByInstantCamera):(Pylon::GrabLoop_ProvidedByUser);
     m_camera.StartGrabbing(grabstrategy, m_grabloop);
     if (m_camera.IsGrabbing())
