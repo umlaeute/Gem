@@ -61,18 +61,18 @@ void pix_drum :: processGrayImage(imageStruct &image)
   int ysize = image.ysize;
   unsigned char *base = image.data;
   int x2, y2, xcoord, ycoord, xcount, ycount;
-  int i, j, n, totalyes, totalyesx, totalyesy, xval, yval;
+  int i, n, totalyes, totalyesx, totalyesy, xval;
   int *yesx=new int[image.xsize]();
   int *yesy=new int[image.ysize]();
   float c2f, L_area, R_area;
-  int hor, ver, L_peakx, L_peaky, R_peakx, R_peaky;
+  int hor, ver, L_peaky, R_peakx, R_peaky;
   t_atom ap[4];
   t_atom as[4];
   t_atom at[4];
   t_atom aq[4];
 
-  totalyes = i = j = xval = yval = hor = ver = 0;
-  L_peakx = L_peaky = R_peakx = R_peaky = 0;
+  totalyes = i = xval = hor = ver = 0;
+  L_peaky = R_peakx = R_peaky = 0;
   L_area = R_area = 0;	// = totalyesx = totalyesy
   for (n=0;n<image.xsize;n++)
     yesx[n] = 0; //clear histograms
@@ -120,7 +120,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((right - hor) * (ver));
-    xval = yval = 0;
+    xval = 0;
 
     for (i = left;	i < right; i++) {
       if		(i< pix_dist) px[i] = 0;
@@ -244,7 +244,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
   R_area  = (totalyes - L_area);
   L_area /= ((hor)       * (ver));
   R_area /= ((320 - hor) * (ver));
-  xval = yval = 0;
+  xval = 0;
   for (i = 15 ;	i < hor; i++)
   if ((yesx[i+1]-yesx[i]) <= 0)
   if ((yesx[i+2]-yesx[i+1]) <= 0)
@@ -349,7 +349,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((320 - hor) * (ver));
-    xval = yval = 0;
+    xval = 0;
 
     for (i = left;	i < hor; i++)
       if ((yesx[i+1]-yesx[i]) <= 0)
@@ -375,9 +375,9 @@ void pix_drum :: processGrayImage(imageStruct &image)
     int tempint, prevtempint;
     tempint = 0;
     for (i=left+1; i<right; i++) {
-      prevtempint = tempint;
+      // prevtempint = tempint;
       tempint = yesx[i] - yesx[i-1];
-      //		if(sqrt(tempint*0.25 > sqrt(prevtempint*prevtempint)) tempint = 0;
+      // if(sqrt(tempint*0.25 > sqrt(prevtempint*prevtempint)) tempint = 0;
       SETFLOAT(&aq[0], i);
       SETFLOAT(&aq[1], tempint);
       outlet_list(outlet4, 0, 2, aq);
@@ -472,7 +472,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((right - hor) * (ver));
-    xval = yval = 0;
+    xval = 0;
 
     for (i = left;	i < right; i++) {
       if		(i< pix_dist) px[i] = 0;
