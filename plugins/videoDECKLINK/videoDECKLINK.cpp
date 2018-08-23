@@ -17,6 +17,7 @@
 
 #include "videoDECKLINK.h"
 #include "plugins/PluginFactory.h"
+#include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
 #include <stdio.h>
