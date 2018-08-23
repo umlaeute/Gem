@@ -102,7 +102,7 @@ protected:
   virtual void  render(GemState *state);
   virtual void  startRendering();
 
-  void copyArray(const std::vector<std::vector<float> > tab,
+  void copyArray(const std::vector<std::vector<float> >&tab,
                  gem::VertexBuffer&vb);
   void copyAllArrays();
   void getVBOarray();

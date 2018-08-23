@@ -335,7 +335,7 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(const std::vector<std::vector<float> > tab,
+void model :: copyArray(const std::vector<std::vector<float> >&tab,
                         gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);

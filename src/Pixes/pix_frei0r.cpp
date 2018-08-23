@@ -246,7 +246,7 @@ public:
     }
   }
 
-  F0RPlugin(std::string name) :
+  F0RPlugin(const std::string&name) :
     m_width(0), m_height(0),
     m_instance(NULL),
     m_name(""), m_author(""),
@@ -509,7 +509,7 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
   image.setCsizeByFormat(m_image.format);
 }
 
-void pix_frei0r :: parmMess(const std::string key, int argc, t_atom *argv)
+void pix_frei0r :: parmMess(const std::string&key, int argc, t_atom *argv)
 {
   if(!m_plugin) {
     error("no plugin present! forgetting parameter....");

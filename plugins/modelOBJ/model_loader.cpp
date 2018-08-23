@@ -50,7 +50,7 @@ typedef struct _GLMgroup {
   GLuint            material;       /* index to material for group */
   struct _GLMgroup* next;           /* pointer to next group in model */
 
-  _GLMgroup(std::string _name, struct _GLMgroup*_next=0)
+  _GLMgroup(const std::string&_name, struct _GLMgroup*_next=0)
     : name(_name)
     , numtriangles(0)
     , triangles(0)

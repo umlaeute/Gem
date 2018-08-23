@@ -79,7 +79,7 @@ public:
 
   static HGLRC sharedContext;
   Window(gemw32window*parent, HINSTANCE hInstance, int buffer,
-         bool fullscreen, bool border, std::string title, int &x, int &y,
+         bool fullscreen, bool border, const std::string&title, int &x, int &y,
          unsigned int &w, unsigned int &h) :
     win(NULL),
     dc(NULL),
@@ -139,7 +139,7 @@ public:
 private:
   static std::map<HWND, gemw32window*>s_winmap;
   void create(HINSTANCE hInstance, int buffer, bool fullscreen, bool border,
-              std::string title, int &x, int &y, unsigned int &w, unsigned int &h)
+              const std::string&title, int &x, int &y, unsigned int &w, unsigned int &h)
   {
     DWORD dwExStyle;
     DWORD style;

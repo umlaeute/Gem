@@ -39,44 +39,44 @@ Blob::Blob() :
   m_ymin(0.), m_ymax(0.)
 {}
 
-double Blob:: xmin()
+double Blob:: xmin() const
 {
   return m_xmin;
 }
-double Blob:: xmax()
+double Blob:: xmax() const
 {
   return m_xmax;
 }
-double Blob:: ymin()
+double Blob:: ymin() const
 {
   return m_ymin;
 }
-double Blob:: ymax()
+double Blob:: ymax() const
 {
   return m_ymax;
 }
-double Blob:: xmid()
+double Blob:: xmid() const
 {
   return m_xaccum/m_xyaccum;
 }
-double Blob:: ymid()
+double Blob:: ymid() const
 {
   return m_yaccum/m_xyaccum;
 }
-double Blob:: diameter2()
+double Blob:: diameter2() const
 {
   return (m_xmax-m_xmin)*(m_xmax-m_xmin)+(m_ymax-m_ymin)*(m_ymax-m_ymin);
 }
-double Blob:: diameter()
+double Blob:: diameter() const
 {
   return sqrt(diameter2());
 }
-double Blob:: distance2(Blob b)
+double Blob:: distance2(const Blob&b) const
 {
   return (b.xmid()-xmid())*(b.xmid()-xmid())+(b.ymid()-ymid())*
          (b.ymid()-ymid());
 }
-double Blob:: distance(Blob b)
+double Blob:: distance(const Blob&b) const
 {
   return sqrt(distance2(b));
 }
