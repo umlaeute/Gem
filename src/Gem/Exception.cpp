@@ -18,21 +18,24 @@
 
 // for error()
 #include "m_pd.h"
+#include <string.h>
 
 
 GemException::GemException(const char *error)
-  : ErrorString(error)
+  : ErrorString(strdup(error))
 {}
 
 GemException::GemException(const std::string&error)
-  : ErrorString(error.c_str())
+  : GemException(error.c_str())
 {}
 
 GemException::GemException()
-  : ErrorString("")
+  : GemException("")
 {}
 GemException::~GemException()
-{}
+{
+  free(const_cast<char*>(ErrorString));
+}
 const char *GemException::what() const
 {
   return ErrorString;
