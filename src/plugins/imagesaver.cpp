@@ -271,7 +271,7 @@ public:
       priorities.insert( std::multimap<float, int>::value_type(prio, i));
     }
 
-    for(rit=priorities.rbegin(); rit != priorities.rend(); rit++) {
+    for(rit=priorities.rbegin(); rit != priorities.rend(); ++rit) {
       float prio=rit->first;
       int index=rit->second;
       verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);

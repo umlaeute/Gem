@@ -174,7 +174,7 @@ struct PIMPL {
     std::map <std::string, t_atom>::iterator it;
     for(it = data.begin();
         it != data.end();
-        it++) {
+        ++it) {
       if(!it->first.empty()) {
         startpost("key ['%s']: '", it->first.c_str());
         postatom(1, &it->second);
