@@ -161,13 +161,12 @@ MARK();
 namespace {
   double any2float(const gem::any&value) {
     try {
+      return gem::any_cast<double>(value);
+    } catch (gem::bad_any_cast&e) {throw(e);}
+    try {
       return gem::any_cast<float>(value);
     } catch (gem::bad_any_cast&e) {;}
-    try {
-      double d = gem::any_cast<double>(value);
-      return d;
-    } catch (gem::bad_any_cast&e) {throw(e);}
-    return 0.;
+    return gem::any_cast<int>(value);
   }
   int any2int(const gem::any&value) {
     try {
