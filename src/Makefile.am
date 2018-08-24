@@ -27,11 +27,12 @@ if WINDOWS
 Gem_la_LDFLAGS += -no-undefined
 endif
 Gem_la_LIBADD   =
+sublibs =
 
 
 # LIBADD or LDADD for convenience libraries?
 #Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
-Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
+sublibs += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
 ## Output: get's build directly from $(topsrcdir)
 #if DISABLED
@@ -40,38 +41,38 @@ Gem_la_LIBADD += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la p
 
 if TARGET_CONTROLS
 SUBDIRS+=Controls
-Gem_la_LIBADD += Controls/libControls.la
+sublibs += Controls/libControls.la
 endif
 if TARGET_GEOS
 SUBDIRS+=Geos
-Gem_la_LIBADD += Geos/libGeos.la
+sublibs += Geos/libGeos.la
 endif
 if TARGET_MANIPS
 SUBDIRS+=Manips
-Gem_la_LIBADD += Manips/libManips.la
+sublibs += Manips/libManips.la
 endif
 if TARGET_NONGEOS
 SUBDIRS+=Nongeos
-Gem_la_LIBADD += Nongeos/libNongeos.la
+sublibs += Nongeos/libNongeos.la
 endif
 if TARGET_OPENGL
 SUBDIRS+=openGL
-Gem_la_LIBADD += openGL/libopenGL.la
+sublibs += openGL/libopenGL.la
 endif
 if TARGET_PARTICLES
 SUBDIRS+=Particles
-Gem_la_LIBADD += Particles/libParticles.la
+sublibs += Particles/libParticles.la
 endif
 if TARGET_PIXES
 SUBDIRS+=Pixes
-Gem_la_LIBADD += Pixes/libPixes.la
+sublibs += Pixes/libPixes.la
 endif
 if TARGET_VERTEX
 SUBDIRS+=Vertex
-Gem_la_LIBADD += Vertex/libVertex.la
+sublibs += Vertex/libVertex.la
 endif
 
-sublibs = $(Gem_la_LIBADD)
+Gem_la_LIBADD += $(sublibs)
 
 SUBDIRS+=deprecated
 
