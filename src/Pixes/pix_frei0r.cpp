@@ -614,7 +614,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
   ::verbose(2, "frei0r_loader: %s",s->s_name);
   try {
     Obj_header *obj = new (pd_new(pix_frei0r_class),(void *)NULL) Obj_header;
-    char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
+    const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
     CPPExtern::m_holdname=s->s_name;
     obj->data = new pix_frei0r(gensym(realname));

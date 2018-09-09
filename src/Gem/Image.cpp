@@ -2057,7 +2057,7 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r,
 {
   unsigned char red=0, green=0, blue=0, alpha=255;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
-  unsigned char*pixels=data+position*csize;
+  const unsigned char*pixels=data+position*csize;
 
   switch(format) {
   case GL_LUMINANCE:
@@ -2128,7 +2128,7 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
 {
   unsigned char grey=0;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
-  unsigned char*pixels=data+position*csize;
+  const unsigned char*pixels=data+position*csize;
   switch(format) {
   case GL_LUMINANCE:
     grey=pixels[0];
@@ -2167,7 +2167,7 @@ GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y,
 {
   unsigned char luma=0, chromaU=128, chromaV=128;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
-  unsigned char*pixels=data+position*csize;
+  const unsigned char*pixels=data+position*csize;
   switch(format) {
   case GL_LUMINANCE:
     luma=pixels[0];

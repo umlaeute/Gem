@@ -116,7 +116,7 @@ public:
 
   //////////
   // my name
-  static char          *m_holdname;
+  static const char    *m_holdname;
   t_symbol             *m_objectname;
 
 protected:

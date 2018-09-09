@@ -449,7 +449,7 @@ void TextBase :: textMess(int argc, t_atom *argv)
         line+=c;
       }
     } else {
-      char*sp=atom_getsymbol(&argv[i])->s_name;
+      const char*sp=atom_getsymbol(&argv[i])->s_name;
       try {
         std::wstring ws=gem::string::toWstring(sp);
         line+=ws;

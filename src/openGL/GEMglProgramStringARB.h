@@ -50,7 +50,7 @@ protected:
   GLsizei               len;            // VAR
   virtual void  lenMess(t_float);       // FUN
 
-  GLvoid        *string;                // VAR
+  const GLvoid *string;                // VAR
   virtual void  stringMess(t_symbol*);  // FUN
 
 

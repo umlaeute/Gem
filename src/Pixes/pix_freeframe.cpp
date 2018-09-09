@@ -909,7 +909,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     m_canopen=true;
     return;
   }
-  char *pluginname = s->s_name;
+  const char *pluginname = s->s_name;
 
   m_plugin = new FFPlugin(pluginname, getCanvas());
   m_image.setCsizeByFormat(m_plugin->GLformat());
@@ -1118,7 +1118,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
     \
     Obj_header *obj = new (pd_new(pix_freeframe_class),
                            (void *)NULL) Obj_header;
-    char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
+    const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     CPPExtern::m_holder = &obj->pd_obj;
     CPPExtern::m_holdname=s->s_name;
     obj->data = new pix_freeframe(gensym(realname));

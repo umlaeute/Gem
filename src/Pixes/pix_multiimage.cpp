@@ -127,7 +127,7 @@ void pix_multiimage :: openMess(t_symbol *filename, int baseImage,
   char postName[256];
 
   int i = 0;
-  char *strPtr = filename->s_name;
+  const char *strPtr = filename->s_name;
   while (strPtr[i] && strPtr[i] != '*') {
     preName[i] = strPtr[i];
     i++;

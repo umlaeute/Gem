@@ -289,11 +289,11 @@ struct GEM_EXTERN pixBlock {
 ///////////////////////////////////////////////////////////////////////////////
 //////////
 // copies all of the data over and mallocs memory
-GEM_EXTERN extern void copy2Image(imageStruct *to, imageStruct *from);
+GEM_EXTERN extern void copy2Image(imageStruct *to, const imageStruct *from);
 
 //////////
 // assumes that it only has to refresh the data
-GEM_EXTERN extern void refreshImage(imageStruct *to, imageStruct *from);
+GEM_EXTERN extern void refreshImage(imageStruct *to, const imageStruct *from);
 
-GEM_EXTERN extern int getPixFormat(char*);
+GEM_EXTERN extern int getPixFormat(const char*);
 #endif // GEMPIXUTIL_H_

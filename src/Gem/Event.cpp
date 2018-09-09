@@ -265,7 +265,7 @@ typedef enum {
 typedef struct _event_queue_item {
   gem_event_t type;
   struct _event_queue_item*next;
-  char*string;
+  const char*string;
   int x;
   int y;
   int state;
@@ -283,7 +283,7 @@ typedef struct _gem_event_queue_t {
 
 gem_event_queue_t*event_queue = NULL;
 
-static gem_event_queue_item_t* createEvent(gem_event_t type, char*string,
+static gem_event_queue_item_t* createEvent(gem_event_t type, const char*string,
     int x, int y, int state, int axis, int value, int which)
 {
   gem_event_queue_item_t*ret=new gem_event_queue_item_t;
@@ -324,7 +324,7 @@ static void deleteEvent( gem_event_queue_item_t* event)
 
 static void eventClock(void *x);
 
-static void addEvent(gem_event_t type, char*string, int x, int y,
+static void addEvent(gem_event_t type, const char*string, int x, int y,
                      int state, int axis, int value, int which)
 {
   if (NULL==event_queue) {

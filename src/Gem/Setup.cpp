@@ -164,7 +164,7 @@ static void addownpath(const char*filename)
     return;
   }
 
-  char*mypath=0;
+  const char*mypath=0;
 #ifdef HAVE_M_IMP_H
   t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
   mypath=c->c_externdir->s_name;

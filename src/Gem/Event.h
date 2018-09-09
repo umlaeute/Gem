@@ -71,7 +71,7 @@ GEM_EXTERN extern void removeWheelCallback(WHEEL_CB callback, void *data);
 // Keyboard callback
 //
 //////////////////////////////////////////////////////////////////
-typedef void (*KEYBOARD_CB)(char *,int, int, void *);
+typedef void (*KEYBOARD_CB)(const char *,int, int, void *);
 //////////
 // Set a keyboard callback
 GEM_EXTERN extern void setKeyboardCallback(KEYBOARD_CB callback,
@@ -103,7 +103,7 @@ GEM_EXTERN extern void triggerMotionEvent(int x, int y);
 GEM_EXTERN extern void triggerButtonEvent(int which, int state, int x,
     int y);
 GEM_EXTERN extern void triggerWheelEvent(int axis, int value);
-GEM_EXTERN extern void triggerKeyboardEvent(char *string, int value,
+GEM_EXTERN extern void triggerKeyboardEvent(const char *string, int value,
     int state);
 GEM_EXTERN extern void triggerResizeEvent(int xSize, int ySize);
 

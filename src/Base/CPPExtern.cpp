@@ -38,7 +38,7 @@ void *Obj_header::operator new(size_t, void *location, void *)
 }
 
 t_object * CPPExtern::m_holder=NULL;
-char* CPPExtern::m_holdname=NULL;
+const char* CPPExtern::m_holdname=NULL;
 
 /////////////////////////////////////////////////////////
 //
@@ -158,7 +158,7 @@ void CPPExtern :: error(const char*fmt,...) const
   va_end(ap);
   if(NULL!=m_objectname && NULL!=m_objectname->s_name
       && &s_ != m_objectname) {
-    char*objname=m_objectname->s_name;
+    const char*objname=m_objectname->s_name;
     if(x_obj) {
       pd_error(x_obj, "[%s]: %s", objname, buf);
     } else if (m_holder) {
