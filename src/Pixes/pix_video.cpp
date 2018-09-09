@@ -556,7 +556,8 @@ static gem::any atom2any(t_atom*ap)
       result=atom_getfloat(ap);
       break;
     case A_SYMBOL:
-      result=atom_getsymbol(ap)->s_name;
+#warning gem::any doesnt like "const char*"
+      result=const_cast<char*>(atom_getsymbol(ap)->s_name);
       break;
     default:
       result=ap->a_w.w_gpointer;
