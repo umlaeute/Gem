@@ -1976,7 +1976,7 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata)
   }
 }
 
-GEM_EXTERN extern int getPixFormat(char*cformat)
+GEM_EXTERN extern int getPixFormat(const char*cformat)
 {
   char c=tolower(*cformat);
   switch(c) {
