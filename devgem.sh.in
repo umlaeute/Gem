@@ -1,0 +1,31 @@
+#!/bin/sh
+## simple script to run Gem from the build
+
+
+## PD binary can be overriden by setting the PD environment
+PD=${PD:-$(which pd)}
+
+## search abstractions (both static ones and built ones)
+srcdir=$(realpath @abs_top_srcdir@)
+builddir=$(realpath @abs_top_builddir@)
+
+gempath=
+
+if [ -d "${srcdir}/abstractions" ]; then
+  gempath=${srcdir}/abstractions:${gempath}
+fi
+if [ -d "${builddir}" ]; then
+ if [ "x${srcdir}" != "x${builddir}" ]; then
+  gempath=${builddir}/abstractions:${gempath}
+ fi
+  gempath=${builddir}:${gempath}
+else
+ builddir=${0%/*}
+fi
+
+gempath=${gempath%:}
+if [ "x${gempath}" = "x" ]; then
+  gempath=${builddir}
+fi
+
+"${PD}" -stderr -oss -nosound -path "${gempath}" -lib ${builddir}/Gem "$@"

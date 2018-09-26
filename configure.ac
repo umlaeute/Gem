@@ -75,6 +75,7 @@ AC_CONFIG_FILES([extra/pix_hit/Makefile])
 # other stuff
 AC_CONFIG_FILES([build/Makefile])
 AC_CONFIG_FILES([Gem.pc Gem-meta.pd])
+AC_CONFIG_FILES([devgem.sh], [chmod +x devgem.sh])
 
 
 ##########################
