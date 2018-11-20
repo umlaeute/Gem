@@ -277,6 +277,10 @@ public:
   static const char * getDeviceName(int deviceID);
   static int getDeviceIDFromName(const char * name);
 
+  //needs to be called after listDevices - otherwise returns empty string
+  static const std::wstring& getUniqueDeviceName(int deviceID);
+  static int getDeviceIDFromUniqueName(const std::wstring& uniqueName);
+
   //choose to use callback based capture - or single threaded
   void setUseCallback(bool useCallback);
 
@@ -418,6 +422,8 @@ private:
   static void __cdecl basicThread(void * objPtr);
 
   static char deviceNames[VI_MAX_CAMERAS][255];
+
+  static std::vector<std::wstring> deviceUniqueNames;
 
 };
 

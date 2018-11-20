@@ -6,6 +6,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 #include  <iostream>
+#include <algorithm>
 
 #include "videoInput.h"
 #include <tchar.h>
@@ -596,7 +597,7 @@ videoInput::videoInput()
   }
 
   //added for the pixelink firewire camera
-  // 	MEDIASUBTYPE_Y800 = (GUID)FOURCCMap(FCC('Y800'));
+// 	MEDIASUBTYPE_Y800 = (GUID)FOURCCMap(FCC('Y800'));
   makeGUID( &MEDIASUBTYPE_Y800, 0x30303859, 0x0000, 0x0010, 0x80, 0x00, 0x00,
             0xAA, 0x00, 0x38, 0x9B, 0x71 );
   makeGUID( &MEDIASUBTYPE_Y8, 0x20203859, 0x0000, 0x0010, 0x80, 0x00, 0x00,
@@ -915,6 +916,7 @@ const char * videoInput::getDeviceName(int deviceID)
   return deviceNames[deviceID];
 }
 
+std::vector<std::wstring> videoInput::deviceUniqueNames;
 
 // ----------------------------------------------------------------------
 // Our static function for finding num devices available etc
@@ -938,6 +940,32 @@ int videoInput::getDeviceIDFromName(const char * name)
   }
 
   return deviceID;
+}
+
+const std::wstring& videoInput::getUniqueDeviceName(int deviceID)
+{
+  static const std::wstring dummy;
+  if (deviceID < 0 || deviceID >= (int)deviceUniqueNames.size()) {
+    if (verbose) {
+      printf("ERROR: Unknown device unique name - device index is out of range\n");
+    }
+    return dummy;
+  }
+  return deviceUniqueNames[deviceID];
+}
+
+int videoInput::getDeviceIDFromUniqueName(const std::wstring &uniqueName)
+{
+  std::vector<std::wstring>::const_iterator iter =
+    std::find(deviceUniqueNames.begin(), deviceUniqueNames.end(), uniqueName);
+
+  if (iter != deviceUniqueNames.end()) {
+    return iter - deviceUniqueNames.begin();
+  } else if (verbose) {
+    printf("ERROR: Unknown unique device name requested\n");
+  }
+
+  return -1;
 }
 
 std::vector <std::string> videoInput::getDeviceList()
@@ -987,7 +1015,18 @@ int videoInput::listDevices(bool silent)
       }
       IMoniker *pMoniker = NULL;
 
+      deviceUniqueNames.clear();
+
       while (pEnum->Next(1, &pMoniker, NULL) == S_OK) {
+
+        if (deviceCounter >= VI_MAX_CAMERAS) {
+          if (!silent) {
+            printf("SETUP: Too many video inputs! Stop listing at %d\n",
+                   deviceCounter);
+          }
+          pMoniker->Release();
+          break;			// Stop enumerating, hit limit
+        }
 
         IPropertyBag *pPropBag;
         hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag,
@@ -997,7 +1036,6 @@ int videoInput::listDevices(bool silent)
           pMoniker->Release();
           continue;  // Skip this one, maybe the next one will work.
         }
-
 
         // Find the description or friendly name.
         VARIANT varName;
@@ -1023,6 +1061,27 @@ int videoInput::listDevices(bool silent)
 
           if(!silent) {
             printf("SETUP: %i) %s \n",deviceCounter, deviceNames[deviceCounter]);
+          }
+
+          // Find unique name
+          bool hasUniqueName = false;
+
+          IMalloc *pMalloc = NULL;
+          hr = CoGetMalloc(1, (LPMALLOC*)&pMalloc);
+
+          if (SUCCEEDED(hr)) {
+            BSTR uniqueName = NULL;
+            hr = pMoniker->GetDisplayName(NULL, NULL, &uniqueName);
+            if (SUCCEEDED(hr)) {
+              deviceUniqueNames.push_back(uniqueName);
+              hasUniqueName = true;
+              pMalloc->Free(uniqueName);
+            }
+            pMalloc->Release();
+          }
+
+          if (!hasUniqueName) {
+            deviceUniqueNames.push_back(std::wstring());
           }
         }
 
