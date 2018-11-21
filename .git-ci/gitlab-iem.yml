@@ -26,8 +26,8 @@ variables:
   stage: build
   before_script:
     - apt-get update && apt-get install -y --no-install-recommends make puredata-dev puredata-core
-    - apt-get build-dep gem || true
-    - apt-get install libassimp-dev
+    - apt-get build-dep -y --no-install-recommends gem || true
+    - apt-get install -y --no-install-recommends libassimp-dev
   script:
     - ./autogen.sh
     - ./configure
