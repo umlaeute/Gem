@@ -72,7 +72,7 @@ variables:
     - date
   script:
     - ./autogen.sh
-    - ./configure
+    - ./configure --with-pd="${PROGRAMFILESX86}/pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
@@ -95,7 +95,7 @@ variables:
     - date
   script:
     - ./autogen.sh
-    - ./configure
+    - ./configure --with-pd="${PROGRAMFILES}/pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
