@@ -68,7 +68,7 @@ variables:
     - mv -v "${PROGRAMFILESX86}/pd"/*/* "${PROGRAMFILESX86}/pd"
     - rm -f Pd.zip
     - export PD="${PROGRAMFILESX86}/pd/bin/pd.com"
-    - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick ${PACMAN_PREFIX}vlc
+    - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
   script:
     - ./autogen.sh
     - ./configure
@@ -90,7 +90,7 @@ variables:
     - mv -v "${PROGRAMFILES}/pd"/*/* "${PROGRAMFILES}/pd"
     - rm -f Pd.zip
     - export PD="${PROGRAMFILES}/pd/bin/pd.com"
-    - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick ${PACMAN_PREFIX}vlc
+    - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
   script:
     - ./autogen.sh
     - ./configure
