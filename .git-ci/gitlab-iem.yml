@@ -28,6 +28,7 @@ variables:
     - apt-get update && apt-get install -y --no-install-recommends make puredata-dev puredata-core
     - apt-get build-dep -y --no-install-recommends gem || true
     - apt-get install -y --no-install-recommends libassimp-dev
+    - date
   script:
     - ./autogen.sh
     - ./configure
@@ -45,6 +46,7 @@ variables:
     - rm -f Pd.tgz
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - brew bundle .git-ci/macOS.brew
+    - date
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
@@ -67,6 +69,7 @@ variables:
     - rm -f Pd.zip
     - export PD="${PROGRAMFILESX86}/pd/bin/pd.com"
     - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
+    - date
   script:
     - ./autogen.sh
     - ./configure
@@ -89,6 +92,7 @@ variables:
     - rm -f Pd.zip
     - export PD="${PROGRAMFILES}/pd/bin/pd.com"
     - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
+    - date
   script:
     - ./autogen.sh
     - ./configure
