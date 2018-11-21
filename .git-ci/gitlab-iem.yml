@@ -44,9 +44,7 @@ variables:
     - tar xvf Pd.tgz -C /Applications/
     - rm -f Pd.tgz
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
-    - brew install pkg-config automake libtool gettext
-    - brew install jpeg libtiff ftgl sdl glfw glfw@2
-    - brew install assimp libquicktime
+    - brew bundle .git-ci/macOS.brew
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
