@@ -1,23 +1,23 @@
 # build-system
-install pkg-config
-install automake
-install libtool
-install gettext
+brew "pkg-config"
+brew "automake"
+brew "libtool"
+brew "gettext"
 
 # additional window providers
-install sdl
-install glfw
+brew "sdl"
+brew "glfw"
 
 # font rendering
-install ftgl
+brew "ftgl"
 
 # image reading
-install jpeg
-install libtiff
+brew "jpeg"
+brew "libtiff"
 
 # additional video support
-install libquicktime
+brew "libquicktime"
 
 # model loading
-install assimp
+brew "assimp"
 
