@@ -44,7 +44,7 @@ variables:
   before_script:
     - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
     - rm -rf /Applications/Pd*.app/
-    - tar xvf Pd.tgz -C /Applications/
+    - tar xf Pd.tgz -C /Applications/
     - rm -f Pd.tgz
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - brew bundle .git-ci/macOS.brew
