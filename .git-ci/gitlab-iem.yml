@@ -73,7 +73,7 @@ variables:
     - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
     - date
   script:
-    - ./autogen.sh
+    - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="${PROGRAMFILESX86}/pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
@@ -96,7 +96,7 @@ variables:
     - pacman --noconfirm -S ${PACMAN_PREFIX}ftgl ${PACMAN_PREFIX}fribidi ${PACMAN_PREFIX}imagemagick
     - date
   script:
-    - ./autogen.sh
+    - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="${PROGRAMFILES}/pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
