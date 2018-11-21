@@ -64,6 +64,7 @@ variables:
     IEMCI_CONFIGURATIONS: mingw32
     PACMAN_PREFIX: mingw32/mingw-w64-i686-
   before_script:
+    - set | grep mingw-w
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
     - rm -rf "${PROGRAMFILESX86}/pd" && mkdir -p "${PROGRAMFILESX86}/pd"
     - unzip -q Pd.zip -d "${PROGRAMFILESX86}/pd"
