@@ -7,7 +7,6 @@ install gettext
 # additional window providers
 install sdl
 install glfw
-install glfw@2
 
 # font rendering
 install ftgl
