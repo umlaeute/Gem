@@ -1,0 +1,24 @@
+# build-system
+install pkg-config
+install automake
+install libtool
+install gettext
+
+# additional window providers
+install sdl
+install glfw
+install glfw@2
+
+# font rendering
+install ftgl
+
+# image reading
+install jpeg
+install libtiff
+
+# additional video support
+install libquicktime
+
+# model loading
+install assimp
+
