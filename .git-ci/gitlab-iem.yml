@@ -25,6 +25,8 @@ variables:
   image: gcc
   stage: build
   before_script:
+    - mkdir -p /etc/apt/sources.list.d/
+    - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
     - apt-get update && apt-get install -y --no-install-recommends make puredata-dev puredata-core
     - apt-get build-dep -y --no-install-recommends gem || true
     - apt-get install -y --no-install-recommends libassimp-dev
