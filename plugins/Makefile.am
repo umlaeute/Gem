@@ -19,6 +19,7 @@ endif
 SUBDIRS += recordQT recordQT4L recordV4L recordV4L2
 
 ## video capture plugins
+SUBDIRS += videoAVF
 SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP
 SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
 
