@@ -50,6 +50,7 @@ AC_CONFIG_FILES([plugins/recordQT4L/Makefile])
 AC_CONFIG_FILES([plugins/recordV4L/Makefile])
 AC_CONFIG_FILES([plugins/recordV4L2/Makefile])
 
+AC_CONFIG_FILES([plugins/videoAVF/Makefile])
 AC_CONFIG_FILES([plugins/videoDC1394/Makefile])
 AC_CONFIG_FILES([plugins/videoDS/Makefile])
 AC_CONFIG_FILES([plugins/videoDV4L/Makefile])
@@ -496,6 +497,10 @@ AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plu
 #   with_video="Darwin"
 # fi
 #fi
+
+GEM_ARG_DISABLE([videoAVF], [enable AVFoundation video-capturing (experimental,broken)])
+AM_CONDITIONAL([ENABLE_VIDEOAVF], test "x${enable_videoAVF}" = "xyes")
+
 
 if test "x$with_video" = "x"; then
  with_video="plugins"
