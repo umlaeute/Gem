@@ -71,16 +71,16 @@ variables:
   before_script:
     - set | grep mingw-w
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
-    - rm -rf "${PROGRAMFILESX86}/pd" && mkdir -p "${PROGRAMFILESX86}/pd"
-    - unzip -q Pd.zip -d "${PROGRAMFILESX86}/pd"
-    - mv -v "${PROGRAMFILESX86}/pd"/*/* "${PROGRAMFILESX86}/pd"
+    - mkdir -p _pd
+    - unzip -q Pd.zip -d "_pd"
+    - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
-    - export PD="${PROGRAMFILESX86}/pd/bin/pd.com"
+    - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S ${MPP}glfw ${MPP}ftgl ${MPP}fribidi ${MPP}imagemagick
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="${PROGRAMFILESX86}/pd"
+    - ./configure --with-pd="$(pwd)/_pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
@@ -94,16 +94,16 @@ variables:
     MPP: mingw64/mingw-w64-x86_64-
   before_script:
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
-    - rm -rf "${PROGRAMFILES}/pd" && mkdir -p "${PROGRAMFILES}/pd"
-    - unzip -q Pd.zip -d "${PROGRAMFILES}/pd"
-    - mv -v "${PROGRAMFILES}/pd"/*/* "${PROGRAMFILES}/pd"
+    - mkdir -p _pd
+    - unzip -q Pd.zip -d "_pd"
+    - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
-    - export PD="${PROGRAMFILES}/pd/bin/pd.com"
+    - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S ${MPP}glfw ${MPP}ftgl ${MPP}fribidi ${MPP}imagemagick
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="${PROGRAMFILES}/pd"
+    - ./configure --with-pd="$(pwd)/_pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
