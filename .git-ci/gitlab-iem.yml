@@ -49,12 +49,15 @@ variables:
     - tar xf Pd.tgz -C /Applications/
     - rm -f Pd.tgz
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
+    - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
+    - echo "PD=${PD}"
+    - echo "PDDIR=${PDDIR}"
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - date
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd=/Applications/Pd.app/Contents/Resources --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow
+    - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
 
