@@ -41,6 +41,9 @@
     if(deviceID>[devices count]-1) {
       deviceID = [devices count]-1;
     }
+    if(deviceID < 0) {
+      deviceID = 0;
+    }
 
 
     // We set the device
