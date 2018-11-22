@@ -5,10 +5,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/src @GEM_EXTERNAL_CPPFLAGS@
 EXTRA_DIST =
 
 pkglib_LTLIBRARIES=
-if ENABLE_VIDEOAVF
 if HAVE_FRAMEWORK_AVFOUNDATION
 pkglib_LTLIBRARIES += gem_videoAVF.la
-endif
 endif
 
 gem_videoAVF_la_OBJCFLAGS = @GEM_EXTERNAL_CFLAGS@ -fobjc-arc
