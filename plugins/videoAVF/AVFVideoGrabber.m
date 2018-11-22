@@ -151,7 +151,8 @@
 
     // We setup the output
     captureOutput = [[AVCaptureVideoDataOutput alloc] init];
-    // While a frame is processes in -captureOutput:didOutputSampleBuffer:fromConnection: delegate methods no other frames are added in the queue.
+    // While a frame is processed in -captureOutput:didOutputSampleBuffer:fromConnection: delegate methods,
+    //   no other frames are added to the queue.
     // If you don't want this behaviour set the property to NO
     captureOutput.alwaysDiscardsLateVideoFrames = YES;
 
