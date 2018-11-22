@@ -59,6 +59,7 @@ variables:
     - autoreconf -fiv
     - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow
     - make check
+    - make check -C plugins/videoAVF/ -k || true
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
 
 .build:w32: &build_w32
