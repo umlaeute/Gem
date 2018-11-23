@@ -31,6 +31,8 @@ typedef void (callback_t)(void *x);
 
   int width;
   int height;
+  unsigned int capformat;
+  int glformat;
 
   BOOL bInitCalled;
   int deviceID;
@@ -41,7 +43,7 @@ typedef void (callback_t)(void *x);
   AVCaptureSession *captureSession;
 }
 
--(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h;
+-(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h capFormat:(int)fmt;
 -(void)startCapture;
 -(void)stopCapture;
 -(void)lockExposureAndFocus;

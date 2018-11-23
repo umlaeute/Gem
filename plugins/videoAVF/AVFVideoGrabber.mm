@@ -10,6 +10,8 @@
 
 #include "Gem/RTE.h"
 
+#include <iostream>
+
 @interface AVFVideoGrabber ()
 @property (nonatomic,retain) AVCaptureSession *captureSession;
 @end
@@ -36,14 +38,22 @@
   return self;
 }
 
-- (BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h
+- (BOOL)initCapture:(int)framerate
+                     capWidth:(int)w capHeight:(int)h
+                     capFormat:(int)fmt
 {
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
-
-  unsigned int fmt = kCVPixelFormatType_32BGRA;
-// numberWithUnsignedInt:kCVPixelFormatType_32BGRA;
-
+std::cerr << "initcapture" << std::endl;
+  switch(fmt) {
+      case GL_RGBA_GEM:
+         glformat=fmt;
+         capformat=kCVPixelFormatType_32BGRA;
+      default:
+         glformat=fmt;
+         capformat=kCVPixelFormatType_422YpCbCr8;
+      break;
+  }
   if([devices count] > 0) {
     if(deviceID>[devices count]-1) {
       deviceID = [devices count]-1;
@@ -171,7 +181,7 @@
     NSDictionary* videoSettings =[NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithDouble:width], (id)kCVPixelBufferWidthKey,
                                                [NSNumber numberWithDouble:height], (id)kCVPixelBufferHeightKey,
-                                               [NSNumber numberWithUnsignedInt:fmt], (id)kCVPixelBufferPixelFormatTypeKey,
+                                               [NSNumber numberWithUnsignedInt:capformat], (id)kCVPixelBufferPixelFormatTypeKey,
                                                nil];
     [captureOutput setVideoSettings:videoSettings];
 
@@ -218,6 +228,7 @@
 
 -(void) startCapture
 {
+std::cerr << "startCapture" << std::endl;
 
   [self.captureSession startRunning];
 
@@ -287,6 +298,7 @@
   didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   fromConnection:(AVCaptureConnection *)connection
 {
+std::cerr << "captureOutput" << std::endl;
     @autoreleasepool {
       CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
       // Lock the image buffer
@@ -295,15 +307,28 @@
       unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
       size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
       size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
+std::cerr << "get image " << widthIn << "x" << heightIn << " @ " << isrc4 << std::endl;
+
 
       lock.lock();
       pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
       pixes.newimage = true;
       pixes.image.xsize = widthIn;
       pixes.image.ysize = heightIn;
-      pixes.image.setCsizeByFormat(GL_RGBA);
+
+      pixes.image.setCsizeByFormat(glformat);
       pixes.image.reallocate();
-      pixes.image.fromRGBA(isrc4);
+      switch(capformat) {
+      case kCVPixelFormatType_32BGRA:
+        pixes.image.fromRGBA(isrc4);
+        break;
+      case kCVPixelFormatType_422YpCbCr8:
+        pixes.image.fromYUV422(isrc4);
+        break;
+      default:
+        pixes.image.setBlack();
+        break;
+      }
       lock.unlock();
 
       // Unlock the image buffer

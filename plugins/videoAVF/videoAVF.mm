@@ -158,9 +158,10 @@ bool videoAVF::open(gem::Properties &props)
 {
   int fps=-1, w=VIDEOAVF_DEFAULT_WIDTH, h=VIDEOAVF_DEFAULT_HEIGHT;
   double d;
+  
 #if 0
   if(props.get("colorspace", d)) {
-    m_wantedFormat = (GLenum)d;
+    m_wantedFormat = (GLenum)d;			
   }
 #endif
   if(props.get("width", d) && d>=1.) {
@@ -181,7 +182,7 @@ bool videoAVF::open(gem::Properties &props)
   }
 
   [m_videoGrabber setDevice:m_device];
-  if(! [m_videoGrabber initCapture:fps capWidth:w capHeight:h] ) {
+  if(! [m_videoGrabber initCapture:fps capWidth:w capHeight:h capFormat:m_wantedFormat] ) {
     return false;
   }
 
@@ -254,7 +255,18 @@ pixBlock* videoAVF::getFrame(void)
     return 0;
   }
   m_videoGrabber->lock.lock();
-  return &[m_videoGrabber getCurrentFrame];
+  pixBlock*img = &[m_videoGrabber getCurrentFrame];
+  post("get image %p", img);
+  if(img) {
+
+     post("image size: %dx%dx%d"
+	, img->image.xsize
+	, img->image.ysize
+	, img->image.csize
+        );
+
+  }
+  return img;
 }
 void videoAVF::releaseFrame(void)
 {
@@ -286,7 +298,8 @@ std::vector<std::string> videoAVF::dialogs(void)
 
 bool videoAVF::setColor(int col)
 {
-  return false;
+  m_wantedFormat = col;
+  return(!bIsInit);
 }
 
 bool videoAVF::provides(const std::string&name)
