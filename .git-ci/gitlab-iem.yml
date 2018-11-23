@@ -56,9 +56,8 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow
+    - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow --enable-videoAVF
     - make check
-    - make check -C plugins/videoAVF/ -k || true
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
 
 .build:w32: &build_w32
