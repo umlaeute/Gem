@@ -44,7 +44,6 @@
 {
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
-std::cerr << "initcapture" << std::endl;
   switch(fmt) {
       case GL_RGBA_GEM:
          glformat=fmt;
@@ -228,8 +227,6 @@ std::cerr << "initcapture" << std::endl;
 
 -(void) startCapture
 {
-std::cerr << "startCapture" << std::endl;
-
   [self.captureSession startRunning];
 
   [captureInput.device lockForConfiguration:nil];
@@ -298,7 +295,6 @@ std::cerr << "startCapture" << std::endl;
   didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   fromConnection:(AVCaptureConnection *)connection
 {
-std::cerr << "captureOutput" << std::endl;
     @autoreleasepool {
       CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
       // Lock the image buffer
@@ -307,8 +303,6 @@ std::cerr << "captureOutput" << std::endl;
       unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
       size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
       size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
-std::cerr << "get image " << widthIn << "x" << heightIn << " @ " << isrc4 << std::endl;
-
 
       lock.lock();
       pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
