@@ -1,9 +1,14 @@
 /*
  *  ofAVFoundationGrabber.mm
  */
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "videoAVF.h"
+#include "AVFVideoGrabber.h"
 #import <Accelerate/Accelerate.h>
+
+#include "Gem/RTE.h"
 
 @interface AVFVideoGrabber ()
 @property (nonatomic,retain) AVCaptureSession *captureSession;
@@ -23,7 +28,6 @@
     device = nil;
 
     bInitCalled = NO;
-    grabberPtr = NULL;
     deviceID = 0;
     width = 0;
     height = 0;
@@ -36,6 +40,9 @@
 {
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
+
+  unsigned int fmt = kCVPixelFormatType_32BGRA;
+// numberWithUnsignedInt:kCVPixelFormatType_32BGRA;
 
   if([devices count] > 0) {
     if(deviceID>[devices count]-1) {
@@ -80,7 +87,7 @@
         float dw = tw - width;
         float dh = th = height;
 
-        float dist = ((dw*dw) + (dh*dh);
+        float dist = (dw*dw) + (dh*dh);
         if( dist < smallestDist ) {
         smallestDist = dist;
         bestW = tw;
@@ -119,7 +126,7 @@
           if( (floor(range.minFrameRate) <= framerate
                && ceil(range.maxFrameRate) >= framerate) ) {
             verbose(1,
-                    "[GEM:videoAVF] found good framerate range %f .. %f for requrest %f ",
+                    "[GEM:videoAVF] found good framerate range %f .. %f for requrest %d",
                     range.minFrameRate, range.maxFrameRate, framerate);
             desiredRange = range;
             numMatch++;
@@ -131,13 +138,12 @@
           device.activeVideoMinFrameDuration = desiredRange.minFrameDuration;
           device.activeVideoMaxFrameDuration = desiredRange.maxFrameDuration;
         } else {
-          verbose(1, "[GEM:videoAVF] could not set framerate to %f. Device supports",
+          verbose(1, "[GEM:videoAVF] could not set framerate to %d. Device supports",
                   framerate);
           for(AVFrameRateRange * range in supportedFrameRates) {
             verbose(1, "\t%f .. %f", range.minFrameRate, range.maxFrameRate);
           }
         }
-
       }
 
       [device unlockForConfiguration];
@@ -160,13 +166,12 @@
     dispatch_queue_t queue;
     queue = dispatch_queue_create("cameraQueue", NULL);
     [captureOutput setSampleBufferDelegate:self queue:queue];
-    dispatch_release(queue);
+    //dispatch_release(queue);
 
     NSDictionary* videoSettings =[NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithDouble:width], (id)kCVPixelBufferWidthKey,
                                                [NSNumber numberWithDouble:height], (id)kCVPixelBufferHeightKey,
-                                               [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
-                                               (id)kCVPixelBufferPixelFormatTypeKey,
+                                               [NSNumber numberWithUnsignedInt:fmt], (id)kCVPixelBufferPixelFormatTypeKey,
                                                nil];
     [captureOutput setVideoSettings:videoSettings];
 
@@ -174,7 +179,8 @@
     if(self.captureSession) {
       self.captureSession = nil;
     }
-    self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
+    //self.captureSession = [[[AVCaptureSession alloc] init] autorelease];
+    self.captureSession = [[AVCaptureSession alloc] init];
 
     [self.captureSession beginConfiguration];
 
@@ -217,8 +223,8 @@
 
   [captureInput.device lockForConfiguration:nil];
 
-  // SETSUPPORTED(captureInput.device ExposureMode, AVCaptureExposureModeAutoExpose);
-  SETSUPPORTED(captureInput.device FocusMode, AVCaptureFocusModeAutoFocus);
+  // SETSUPPORTED(captureInput.device, ExposureMode, AVCaptureExposureModeAutoExpose);
+  SETSUPPORTED(captureInput.device, FocusMode, AVCaptureFocusModeAutoFocus);
 }
 
 -(void) lockExposureAndFocus
@@ -226,8 +232,8 @@
 
   [captureInput.device lockForConfiguration:nil];
 
-  // SETSUPPORTED(captureInput.device ExposureMode, AVCaptureExposureModeLocked);
-  SETSUPPORTED(captureInput.device FocusMode, AVCaptureFocusModeLocked);
+  // SETSUPPORTED(captureInput.device, ExposureMode, AVCaptureExposureModeLocked);
+  SETSUPPORTED(captureInput.device, FocusMode, AVCaptureFocusModeLocked);
 }
 
 -(void)stopCapture
@@ -251,9 +257,9 @@
   }
 }
 
--(CGImageRef)getCurrentFrame
+-(pixBlock&)getCurrentFrame
 {
-  return currentFrame;
+  return pixes;
 }
 
 -(std::vector <std::string>)listDevices
@@ -264,7 +270,7 @@
   int i=0;
   for (AVCaptureDevice * captureDevice in devices) {
     deviceNames.push_back([captureDevice.localizedName UTF8String]);
-    verbose(0, "[GEM:videoAVF] device #%d: %s", i, deviceName,back().c_str());
+    verbose(0, "[GEM:videoAVF] device #%d: %s", i, deviceNames.back().c_str());
     i++;
   }
   return deviceNames;
@@ -281,77 +287,27 @@
   didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   fromConnection:(AVCaptureConnection *)connection
 {
-  if(grabberPtr != NULL) {
     @autoreleasepool {
       CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
       // Lock the image buffer
       CVPixelBufferLockBaseAddress(imageBuffer,0);
 
-      if( grabberPtr != NULL && !grabberPtr->bLock )
-      {
+      unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
+      size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
+      size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
 
-        unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(
-          imageBuffer);
-        size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
-        size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
+      lock.lock();
+      pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
+      pixes.newimage = true;
+      pixes.image.xsize = widthIn;
+      pixes.image.ysize = heightIn;
+      pixes.image.setCsizeByFormat(GL_RGBA);
+      pixes.image.reallocate();
+      pixes.image.fromRGBA(isrc4);
+      lock.unlock();
 
-        if( widthIn != grabberPtr->getWidth()
-            || heightIn != grabberPtr->getHeight() ) {
-#warning ignore dimension change
-          error("[GEM:videoAVF] dimension changed from %dx%d t %dx%d", widthIn,
-                heightIn, grabberPtr->getWidth(), grabberPtr->getHeight());
-          return;
-        }
-
-        if( grabberPtr->pixelFormat == OF_PIXELS_BGRA ) {
-#warning FIXXXME threading and color-conversion
-          /* TODO color-conversion should be done in the thread */
-          if( grabberPtr->capMutex.try_lock() ) {
-            grabberPtr->pixelsTmp.setFromPixels(isrc4, widthIn, heightIn, 4);
-            grabberPtr->updatePixelsCB();
-            grabberPtr->capMutex.unlock();
-          }
-
-        } else {
-#if 0
-          ofPixels rgbConvertPixels;
-          rgbConvertPixels.allocate(widthIn, heightIn, 3);
-
-          vImage_Buffer srcImg;
-          srcImg.width = widthIn;
-          srcImg.height = heightIn;
-          srcImg.data = isrc4;
-          srcImg.rowBytes = CVPixelBufferGetBytesPerRow(imageBuffer);
-
-          vImage_Buffer dstImg;
-          dstImg.width = srcImg.width;
-          dstImg.height = srcImg.height;
-          dstImg.rowBytes = width*3;
-          dstImg.data = rgbConvertPixels.getData();
-
-          vImage_Error err;
-          err = vImageConvert_BGRA8888toRGB888(&srcImg, &dstImg, kvImageNoFlags);
-          if(err != kvImageNoError) {
-            verbose(1,
-                    "[GEM:videoAVF] Error using accelerate to convert bgra to rgb with vImageConvert_BGRA8888toRGB888 error: %s",
-                    err)
-          } else {
-
-            if( grabberPtr->capMutex.try_lock() ) {
-              grabberPtr->pixelsTmp = rgbConvertPixels;
-              grabberPtr->updatePixelsCB();
-              grabberPtr->capMutex.unlock();
-            }
-
-          }
-#endif
-        }
-
-        // Unlock the image buffer
-        CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-
-      }
-    }
+      // Unlock the image buffer
+      CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
   }
 }
 
@@ -369,28 +325,19 @@
     if(captureOutput.sampleBufferDelegate != nil) {
       [captureOutput setSampleBufferDelegate:nil queue:NULL];
     }
-    [captureOutput release];
+    //[captureOutput release];
     captureOutput = nil;
   }
 
   captureInput = nil;
   device = nil;
 
-  if(grabberPtr) {
-    [self eraseGrabberPtr];
-  }
-  grabberPtr = nil;
   if(currentFrame) {
     // release the currentFrame image
     CGImageRelease(currentFrame);
     currentFrame = nil;
   }
-  [super dealloc];
-}
-
-- (void)eraseGrabberPtr
-{
-  grabberPtr = NULL;
+  //[super dealloc];
 }
 
 @end

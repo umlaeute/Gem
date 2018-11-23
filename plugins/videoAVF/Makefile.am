@@ -33,4 +33,4 @@ gem_videoAVF_la_LIBADD += @GEM_FRAMEWORK_AVFOUNDATION_LIBS@
 include $(srcdir)/../symlink_ltlib.mk
 
 ### SOURCES
-gem_videoAVF_la_SOURCES= AVFVideoGrabber.h AVFVideoGrabber.m videoAVF.h videoAVF.mm
+gem_videoAVF_la_SOURCES= AVFVideoGrabber.h AVFVideoGrabber.mm videoAVF.h videoAVF.mm

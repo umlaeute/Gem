@@ -3,6 +3,7 @@
  */
 
 #pragma once
+#include <Gem/Image.h>
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -10,13 +11,22 @@
 #import <CoreMedia/CoreMedia.h>
 #import <CoreVideo/CoreVideo.h>
 
-class videoAVF;
+#include <mutex>
+#include <vector>
+#include <string>
+
+
+
+typedef void (callback_t)(void *x);
 
 @interface AVFVideoGrabber : NSObject
   <AVCaptureVideoDataOutputSampleBufferDelegate>
 {
 
 @public
+  pixBlock pixes;
+  std::mutex lock;
+
   CGImageRef currentFrame;
 
   int width;
@@ -29,8 +39,6 @@ class videoAVF;
   AVCaptureVideoDataOutput *captureOutput;
   AVCaptureDevice *device;
   AVCaptureSession *captureSession;
-
-  videoAVF *grabberPtr;
 }
 
 -(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h;
@@ -39,8 +47,7 @@ class videoAVF;
 -(void)lockExposureAndFocus;
 -(std::vector <std::string>)listDevices;
 -(void)setDevice:(int)_device;
--(void)eraseGrabberPtr;
 
--(CGImageRef)getCurrentFrame;
+-(pixBlock&)getCurrentFrame;
 
 @end

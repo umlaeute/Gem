@@ -101,6 +101,7 @@ public:
   virtual std::vector<std::string>provides(void);
   virtual const std::string getName(void);
 
+  void updatePixels();
 protected:
   std::string m_name;
   int m_device;
@@ -111,19 +112,17 @@ protected:
 
   pixBlock m_image;             //< frame storage
   GLenum m_wantedFormat;        //< requested color space
-  bool m_readNext;              //< should the frame be read next getFrame call?
 
-
-  bool newFrame = false;
-  bool bHavePixelsChanged = false;
-  void clear();
+  bool newFrame;
+  bool bHavePixelsChanged;
   int width, height;
 
-  int device = 0;
-  bool bIsInit = false;
-  int fps  = -1;
-  bool bLock = false;
-  std::mutex = capMutex;
+  int device;
+  bool bIsInit;
+  int fps;
+  bool bLock;
+  //std::mutex = capMutex;
+  static void updatePixelsCB(videoAVF*);
 };
 };
 };
