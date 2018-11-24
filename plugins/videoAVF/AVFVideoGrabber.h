@@ -1,6 +1,18 @@
-/*
- *  AVFVideoGrabber.h
- */
+/*-----------------------------------------------------------------
+
+GEM - Graphics Environment for Multimedia
+
+grab live video using AVFoundation
+
+Copyright (c) 2018 IOhannes m zmölnig
+
+Adapted from the openFrameworks ofAVFoundationGrabber class:
+Jordan C. Parsons, Paul Gafton, Ryuichi Yamamoto, Seb Lee-Delisle,
+Arturo Castro & Theodore Watson 2016-2018
+
+For information on usage and redistribution, and for a DISCLAIMER OF ALL
+WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+-----------------------------------------------------------------*/
 
 #pragma once
 #include <Gem/Image.h>

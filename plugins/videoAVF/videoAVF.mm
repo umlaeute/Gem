@@ -5,8 +5,11 @@ GEM - Graphics Environment for Multimedia
 
 Implementation file
 
-Copyright (c) 2016-2018 Dan Wilcox.
-        2018 IOhannes m zmölnig
+Copyright (c) 2018 IOhannes m zmölnig
+
+Adapted from the openFrameworks ofAVFoundationGrabber class:
+Jordan C. Parsons, Paul Gafton, Ryuichi Yamamoto, Seb Lee-Delisle,
+Arturo Castro & Theodore Watson 2016-2018
 
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
