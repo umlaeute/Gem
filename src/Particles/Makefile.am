@@ -17,8 +17,8 @@ libPAPI_la_LIBADD   =
 libPAPI_la_LDFLAGS  =
 
 # RTE flags
-libParticles_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libParticles_la_LIBADD   += @GEM_RTE_LIBS@
+libParticles_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libParticles_la_LIBADD   += $(GEM_RTE_LIBS)
 libParticles_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libParticles_la_LIBADD   += libPAPI.la

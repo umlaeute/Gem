@@ -13,8 +13,8 @@ libGeos_la_LIBADD   =
 libGeos_la_LDFLAGS  =
 
 # RTE flags
-libGeos_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libGeos_la_LIBADD   += @GEM_RTE_LIBS@
+libGeos_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libGeos_la_LIBADD   += $(GEM_RTE_LIBS)
 libGeos_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # FTGL

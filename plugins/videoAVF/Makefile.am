@@ -15,9 +15,9 @@ gem_videoAVF_la_LDFLAGS = -module -avoid-version -shared @GEM_ARCH_LDFLAGS@
 gem_videoAVF_la_LIBADD =
 
 # RTE
-gem_videoAVF_la_OBJCFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-gem_videoAVF_la_OBJCXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-gem_videoAVF_la_LDFLAGS += @GEM_RTE_LIBS@ @GEM_ARCH_LDFLAGS@
+gem_videoAVF_la_OBJCFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+gem_videoAVF_la_OBJCXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+gem_videoAVF_la_LDFLAGS += $(GEM_RTE_LIBS) @GEM_ARCH_LDFLAGS@
 # flags for building Gem externals
 gem_videoAVF_la_OBJCFLAGS += @GEM_EXTERNAL_CFLAGS@
 gem_videoAVF_la_OBJCXXFLAGS += @GEM_EXTERNAL_CFLAGS@

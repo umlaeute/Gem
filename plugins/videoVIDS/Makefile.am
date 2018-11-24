@@ -24,8 +24,8 @@ endif
 gem_videoVIDS_la_LIBADD   =
 
 # RTE
-gem_videoVIDS_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-gem_videoVIDS_la_LDFLAGS  += @GEM_RTE_LIBS@   @GEM_ARCH_LDFLAGS@
+gem_videoVIDS_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+gem_videoVIDS_la_LDFLAGS  += $(GEM_RTE_LIBS)   @GEM_ARCH_LDFLAGS@
 # flags for building Gem externals
 gem_videoVIDS_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
 gem_videoVIDS_la_LIBADD   += -L$(top_builddir) @GEM_EXTERNAL_LIBS@

@@ -13,8 +13,8 @@ libopenGL_la_LIBADD   =
 libopenGL_la_LDFLAGS  =
 
 # RTE flags
-libopenGL_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libopenGL_la_LIBADD   += @GEM_RTE_LIBS@
+libopenGL_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libopenGL_la_LIBADD   += $(GEM_RTE_LIBS)
 libopenGL_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 libopenGL_la_SOURCES=  \

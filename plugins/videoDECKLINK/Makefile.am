@@ -22,8 +22,8 @@ endif
 gem_videoDECKLINK_la_LIBADD   =
 
 # RTE
-gem_videoDECKLINK_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gem_videoDECKLINK_la_LDFLAGS  += @GEM_RTE_LIBS@
+gem_videoDECKLINK_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gem_videoDECKLINK_la_LDFLAGS  += $(GEM_RTE_LIBS)
 #gem_videoDECKLINK_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 #gem_videoDECKLINK_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 # #gem_videoDECKLINK_la @MOREFLAGS@

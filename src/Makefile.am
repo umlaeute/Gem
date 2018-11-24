@@ -22,7 +22,7 @@ Gem_la_SOURCES = Version.cpp
 
 ## some default flags
 Gem_la_CXXFLAGS = -DHAVE_VERSION_H -DGEM_INTERNAL @GEM_CPPFLAGS@
-Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+Gem_la_LDFLAGS  = -module -avoid-version -shared -shrext .$(GEM_RTE_EXTENSION)
 if WINDOWS
 Gem_la_LDFLAGS += -no-undefined
 endif
@@ -76,8 +76,8 @@ Gem_la_LIBADD += $(sublibs)
 SUBDIRS+=deprecated
 
 # RTE flags
-Gem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-Gem_la_LIBADD   += @GEM_RTE_LIBS@
+Gem_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+Gem_la_LIBADD   += $(GEM_RTE_LIBS)
 Gem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
 
 # openGL
@@ -120,18 +120,18 @@ CHECKUNUSED_IGNORE = version_current.h
 
 
 ## uha, this is ugly
-$(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@: Gem.la
+$(abs_builddir)/.libs/Gem.$(GEM_RTE_EXTENSION): Gem.la
 
-$(top_builddir)/Gem.@GEM_RTE_EXTENSION@: $(abs_builddir)/.libs/Gem.@GEM_RTE_EXTENSION@
-		rm -f $@ && cd $(top_builddir) && test -e $< && $(LN_S) $< Gem.@GEM_RTE_EXTENSION@ || true
+$(top_builddir)/Gem.$(GEM_RTE_EXTENSION): $(abs_builddir)/.libs/Gem.$(GEM_RTE_EXTENSION)
+		rm -f $@ && cd $(top_builddir) && test -e $< && $(LN_S) $< Gem.$(GEM_RTE_EXTENSION) || true
 
 .PHONY: clean-conveniencelink
 
 clean-conveniencelink:
-	test -L $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ && rm -f $(top_builddir)/Gem.@GEM_RTE_EXTENSION@ || true
+	test -L $(top_builddir)/Gem.$(GEM_RTE_EXTENSION) && rm -f $(top_builddir)/Gem.$(GEM_RTE_EXTENSION) || true
 
 
-all-local:: $(top_builddir)/Gem.@GEM_RTE_EXTENSION@
+all-local:: $(top_builddir)/Gem.$(GEM_RTE_EXTENSION)
 
 clean-local:: clean-conveniencelink
 

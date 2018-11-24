@@ -16,15 +16,15 @@ dist_extra_DATA += pix_mano-help.pd
 
 ## some default flags
 pix_mano_la_CXXFLAGS =
-pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+pix_mano_la_LDFLAGS  = -module -avoid-version -shared -shrext .$(GEM_RTE_EXTENSION)
 if WINDOWS
 pix_mano_la_LDFLAGS += -no-undefined
 endif
 pix_mano_la_LIBADD   =
 
 # RTE flags
-pix_mano_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-pix_mano_la_LIBADD   += @GEM_RTE_LIBS@
+pix_mano_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+pix_mano_la_LIBADD   += $(GEM_RTE_LIBS)
 
 pix_mano_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
 
@@ -35,17 +35,17 @@ pix_mano_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
 
 # convenience symlinks
 ## uha, this is ugly
-pix_mano.@GEM_RTE_EXTENSION@: pix_mano.la
+pix_mano.$(GEM_RTE_EXTENSION): pix_mano.la
 	rm -f $@
 	test -f .libs/$@ && $(LN_S) .libs/$@ $@ || true
 
 .PHONY: clean-conviencesymlink
 
 clean-conviencesymlink:
-	rm -f pix_mano.@GEM_RTE_EXTENSION@
+	rm -f pix_mano.$(GEM_RTE_EXTENSION)
 
 
-all-local:: pix_mano.@GEM_RTE_EXTENSION@
+all-local:: pix_mano.$(GEM_RTE_EXTENSION)
 
 clean-local:: clean-conviencesymlink
 

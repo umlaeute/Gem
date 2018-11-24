@@ -49,7 +49,7 @@ endif
 
 
 
-COMMON_LDFLAGS  = -module -avoid-version -shared -shrext .@GEM_RTE_EXTENSION@
+COMMON_LDFLAGS  = -module -avoid-version -shared -shrext .$(GEM_RTE_EXTENSION)
 if WINDOWS
 COMMON_LDFLAGS += -no-undefined
 endif
@@ -60,8 +60,8 @@ gemcocoawindow_la_CXXFLAGS =
 gemcocoawindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemcocoawindow_la_LIBADD   =
 # RTE flags
-gemcocoawindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemcocoawindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemcocoawindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemcocoawindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemcocoawindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemcocoawindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -87,8 +87,8 @@ gemmacoswindow_la_CXXFLAGS =
 gemmacoswindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemmacoswindow_la_LIBADD   =
 # RTE flags
-gemmacoswindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemmacoswindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemmacoswindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemmacoswindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemmacoswindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemmacoswindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -139,8 +139,8 @@ gemglutwindow_la_CXXFLAGS =
 gemglutwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglutwindow_la_LIBADD   =
 # RTE flags
-gemglutwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemglutwindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemglutwindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemglutwindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemglutwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglutwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -166,8 +166,8 @@ gemglxwindow_la_CXXFLAGS =
 gemglxwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglxwindow_la_LIBADD   =
 # RTE flags
-gemglxwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemglxwindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemglxwindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemglxwindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemglxwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglxwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -193,8 +193,8 @@ gemmacwindow_la_CXXFLAGS =
 gemmacwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemmacwindow_la_LIBADD   =
 # RTE flags
-gemmacwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemmacwindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemmacwindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemmacwindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemmacwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemmacwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -220,8 +220,8 @@ gemsdlwindow_la_CXXFLAGS =
 gemsdlwindow_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemsdlwindow_la_LIBADD   =
 # RTE flags
-gemsdlwindow_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemsdlwindow_la_LIBADD   += @GEM_RTE_LIBS@
+gemsdlwindow_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemsdlwindow_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemsdlwindow_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemsdlwindow_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -248,8 +248,8 @@ gemw32window_la_CXXFLAGS =
 gemw32window_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemw32window_la_LIBADD   =
 # RTE flags
-gemw32window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemw32window_la_LIBADD   += @GEM_RTE_LIBS@
+gemw32window_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemw32window_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemw32window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemw32window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -279,8 +279,8 @@ gemglfw2window_la_CXXFLAGS =
 gemglfw2window_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglfw2window_la_LIBADD   =
 # RTE flags
-gemglfw2window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemglfw2window_la_LIBADD   += @GEM_RTE_LIBS@
+gemglfw2window_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemglfw2window_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemglfw2window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglfw2window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -306,8 +306,8 @@ gemglfw3window_la_CXXFLAGS =
 gemglfw3window_la_LDFLAGS  = $(COMMON_LDFLAGS)
 gemglfw3window_la_LIBADD   =
 # RTE flags
-gemglfw3window_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gemglfw3window_la_LIBADD   += @GEM_RTE_LIBS@
+gemglfw3window_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemglfw3window_la_LIBADD   += $(GEM_RTE_LIBS)
 # arch flags
 gemglfw3window_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
 gemglfw3window_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
@@ -331,17 +331,17 @@ gemglfw3window_la_SOURCES = \
 # convenience symlinks for pkglib_LTLIBRARIES
 
 ## uha, this is ugly
-#%.@GEM_RTE_EXTENSION@: %.la
+#%.$(GEM_RTE_EXTENSION): %.la
 #	rm -f $@
 #	test -f .libs/$@ && $(LN_S) .libs/$@ $@ || true
 #
 #.PHONY: clean-conviencesymlink
 #
 #clean-conviencesymlink:
-#	rm -f *.@GEM_RTE_EXTENSION@
+#	rm -f *.$(GEM_RTE_EXTENSION)
 #
 #
-#all-local:: $(pkglib_LTLIBRARIES:.la=.@GEM_RTE_EXTENSION@)
+#all-local:: $(pkglib_LTLIBRARIES:.la=.$(GEM_RTE_EXTENSION))
 #
 #clean-local:: clean-conviencesymlink
 
