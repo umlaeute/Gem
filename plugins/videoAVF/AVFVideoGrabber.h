@@ -43,7 +43,8 @@ typedef void (callback_t)(void *x);
   AVCaptureSession *captureSession;
 }
 
--(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:(int)h capFormat:(int)fmt;
+-(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:
+  (int)h capFormat:(int)fmt;
 -(void)startCapture;
 -(void)stopCapture;
 -(void)lockExposureAndFocus;

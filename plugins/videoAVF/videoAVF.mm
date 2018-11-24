@@ -162,10 +162,10 @@ bool videoAVF::start(void)
 {
   int fps=-1, w=VIDEOAVF_DEFAULT_WIDTH, h=VIDEOAVF_DEFAULT_HEIGHT;
   double d;
-  
+
 #if 0
   if(m_props.get("colorspace", d)) {
-    m_wantedFormat = (GLenum)d;			
+    m_wantedFormat = (GLenum)d;
   }
 #endif
   if(m_props.get("width", d) && d>=1.) {
@@ -189,7 +189,8 @@ bool videoAVF::start(void)
   }
 
   [m_videoGrabber setDevice:m_device];
-  if(! [m_videoGrabber initCapture:fps capWidth:w capHeight:h capFormat:m_wantedFormat] ) {
+  if(! [m_videoGrabber initCapture:fps capWidth:w capHeight:h capFormat:
+                       m_wantedFormat] ) {
     return false;
   }
 
@@ -298,6 +299,6 @@ const std::string videoAVF::getName(void)
 }
 bool videoAVF::reset(void)
 {
-	  return false;
+  return false;
 }
 

@@ -40,19 +40,19 @@
 }
 
 - (BOOL)initCapture:(int)framerate
-                     capWidth:(int)w capHeight:(int)h
-                     capFormat:(int)fmt
+  capWidth:(int)w capHeight:(int)h
+  capFormat:(int)fmt
 {
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
   switch(fmt) {
-      case GL_RGBA_GEM:
-         glformat=fmt;
-         capformat=kCVPixelFormatType_32BGRA;
-      default:
-         glformat=fmt;
-         capformat=kCVPixelFormatType_422YpCbCr8;
-      break;
+  case GL_RGBA_GEM:
+    glformat=fmt;
+    capformat=kCVPixelFormatType_32BGRA;
+  default:
+    glformat=fmt;
+    capformat=kCVPixelFormatType_422YpCbCr8;
+    break;
   }
   if([devices count] > 0) {
     if(deviceID>[devices count]-1) {
@@ -99,19 +99,19 @@
 
         float dist = (dw*dw) + (dh*dh);
         if( dist < smallestDist ) {
-        smallestDist = dist;
-        bestW = tw;
-        bestH = th;
-        bestFormat = format;
+          smallestDist = dist;
+          bestW = tw;
+          bestH = th;
+          bestFormat = format;
+        }
+
+
+        verbose(1, "[GEM:videoAVF] supported dimensions are: %dx%d",
+                dimensions.width, dimensions.height);
       }
 
-
-      verbose(1, "[GEM:videoAVF] supported dimensions are: %dx%d",
-              dimensions.width, dimensions.height);
-    }
-
-    // Set the new dimensions and format
-    if( bestFormat != nullptr && bestW != 0 && bestH != 0 ) {
+      // Set the new dimensions and format
+      if( bestFormat != nullptr && bestW != 0 && bestH != 0 ) {
         if( bestW != width || bestH != height ) {
           verbose(1,
                   "[GEM:videoAVF] dimension %dx%d not supported. using %dx%d instead", width,
@@ -181,7 +181,8 @@
     NSDictionary* videoSettings =[NSDictionary dictionaryWithObjectsAndKeys:
                                                [NSNumber numberWithDouble:width], (id)kCVPixelBufferWidthKey,
                                                [NSNumber numberWithDouble:height], (id)kCVPixelBufferHeightKey,
-                                               [NSNumber numberWithUnsignedInt:capformat], (id)kCVPixelBufferPixelFormatTypeKey,
+                                               [NSNumber numberWithUnsignedInt:capformat],
+                                               (id)kCVPixelBufferPixelFormatTypeKey,
                                                nil];
     [captureOutput setVideoSettings:videoSettings];
 
@@ -296,38 +297,39 @@
   didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
   fromConnection:(AVCaptureConnection *)connection
 {
-    @autoreleasepool {
-      CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-      // Lock the image buffer
-      CVPixelBufferLockBaseAddress(imageBuffer,0);
+  @autoreleasepool {
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    // Lock the image buffer
+    CVPixelBufferLockBaseAddress(imageBuffer,0);
 
-      unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
-      size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
-      size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
+    unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
+    size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
+    size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
 
-      lock.lock();
-      pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
-      pixes.newimage = true;
-      pixes.image.xsize = widthIn;
-      pixes.image.ysize = heightIn;
+    lock.lock();
+    pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
+    pixes.newimage = true;
+    pixes.image.xsize = widthIn;
+    pixes.image.ysize = heightIn;
 
-      pixes.image.setCsizeByFormat(glformat);
-      pixes.image.reallocate();
-      switch(capformat) {
-      case kCVPixelFormatType_32BGRA:
-        pixes.image.fromRGBA(isrc4);
-        break;
-      case kCVPixelFormatType_422YpCbCr8:
-        pixes.image.fromYUV422(isrc4);
-        break;
-      default:
-        pixes.image.setBlack();
-        break;
-      }
-      lock.unlock();
+    pixes.image.setCsizeByFormat(glformat);
+    pixes.image.reallocate();
+    switch(capformat)
+    {
+    case kCVPixelFormatType_32BGRA:
+      pixes.image.fromRGBA(isrc4);
+      break;
+    case kCVPixelFormatType_422YpCbCr8:
+      pixes.image.fromYUV422(isrc4);
+      break;
+    default:
+      pixes.image.setBlack();
+      break;
+    }
+    lock.unlock();
 
-      // Unlock the image buffer
-      CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
+    // Unlock the image buffer
+    CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
   }
 }
 
