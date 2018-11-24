@@ -31,7 +31,6 @@ sublibs =
 
 
 # LIBADD or LDADD for convenience libraries?
-#Gem_la_LIBADD = Base/libBase.la RTE/libRTE.la @GEM_RTE_LIBS@
 sublibs += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
 ## Output: get's build directly from $(topsrcdir)
