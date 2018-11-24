@@ -75,6 +75,7 @@ bool videoAVF::enumProperties(gem::Properties&readable,
 }
 void videoAVF::setProperties(gem::Properties&props)
 {
+#if 0
   //m_props=props;
 
   double d;
@@ -88,9 +89,11 @@ void videoAVF::setProperties(gem::Properties&props)
       m_image.image.ysize = d;
     }
   }
+#endif
 }
 void videoAVF::getProperties(gem::Properties&props)
 {
+#if 0
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
@@ -101,6 +104,7 @@ void videoAVF::getProperties(gem::Properties&props)
       props.set(keys[i], m_image.image.ysize);
     }
   }
+#endif
 }
 
 ///////////
