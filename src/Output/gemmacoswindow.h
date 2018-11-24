@@ -17,7 +17,7 @@
 #include "Base/GemWindow.h"
 
 
-class GEM_EXTERN gemmacoswindow : public GemWindow
+class GEM_EXPORT gemmacoswindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemmacoswindow, GemWindow);
 

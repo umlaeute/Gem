@@ -51,7 +51,7 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglxwindow : public GemWindow
+class GEM_EXPORT gemglxwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemglxwindow, GemWindow);
 
