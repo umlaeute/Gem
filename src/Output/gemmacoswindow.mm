@@ -1,3 +1,4 @@
+/*  -*- mode: ObjC; -*- */
 ///////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia

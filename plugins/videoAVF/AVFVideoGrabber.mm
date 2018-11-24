@@ -1,3 +1,4 @@
+/*  -*- mode: ObjC; -*- */
 /*
  *  ofAVFoundationGrabber.mm
  */
