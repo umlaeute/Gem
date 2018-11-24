@@ -67,7 +67,6 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw32
   before_script:
-    - export MPP="${MINGW_PACKAGE_PREFIX:+$MINGW_PACKAGE_PREFIX-}"
     - set | grep mingw-w
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
     - mkdir -p _pd
@@ -75,7 +74,7 @@ variables:
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S ${MPP}glfw ${MPP}ftgl ${MPP}fribidi ${MPP}imagemagick
+    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick}
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
@@ -91,14 +90,13 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw64
   before_script:
-    - export MPP="${MINGW_PACKAGE_PREFIX:+$MINGW_PACKAGE_PREFIX-}"
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S ${MPP}glfw ${MPP}ftgl ${MPP}fribidi ${MPP}imagemagick
+    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick}
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
