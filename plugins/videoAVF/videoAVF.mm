@@ -155,21 +155,25 @@ bool videoAVF::setDevice(const std::string&devname)
 /////////////////////////////////////////////////////////
 bool videoAVF::open(gem::Properties &props)
 {
+  m_props = props;
+}
+bool videoAVF::start(void)
+{
   int fps=-1, w=VIDEOAVF_DEFAULT_WIDTH, h=VIDEOAVF_DEFAULT_HEIGHT;
   double d;
   
 #if 0
-  if(props.get("colorspace", d)) {
+  if(m_props.get("colorspace", d)) {
     m_wantedFormat = (GLenum)d;			
   }
 #endif
-  if(props.get("width", d) && d>=1.) {
+  if(m_props.get("width", d) && d>=1.) {
     w = d;
   }
-  if(props.get("height", d) && d>=1.) {
+  if(m_props.get("height", d) && d>=1.) {
     h = d;
   }
-  if(props.get("fps", d) && d>=1.) {
+  if(m_props.get("fps", d) && d>=1.) {
     fps = d;
   }
 
@@ -179,16 +183,23 @@ bool videoAVF::open(gem::Properties &props)
   if( !m_videoGrabber) {
     m_videoGrabber = [AVFVideoGrabber alloc];
   }
+  if( !m_videoGrabber) {
+    return false;
+  }
 
   [m_videoGrabber setDevice:m_device];
   if(! [m_videoGrabber initCapture:fps capWidth:w capHeight:h capFormat:m_wantedFormat] ) {
     return false;
   }
 
-
   //update the pixel dimensions based on what the camera supports
   width = m_videoGrabber->width;
   height = m_videoGrabber->height;
+
+  [m_videoGrabber startCapture];
+
+  newFrame=false;
+  bIsInit = true;
 
   return true;
 }
@@ -197,8 +208,9 @@ bool videoAVF::open(gem::Properties &props)
 // close
 //
 /////////////////////////////////////////////////////////
-void videoAVF::close(void)
+bool videoAVF::stop(void)
 {
+  bool isinit = bIsInit;
   bLock = true;
   if(m_videoGrabber) {
     [m_videoGrabber stopCapture];
@@ -213,33 +225,12 @@ void videoAVF::close(void)
   newFrame = false;
   bHavePixelsChanged = false;
   bLock = false;
+  return isinit;
 }
 
-
-bool videoAVF::start(void)
+void videoAVF::close(void)
 {
-  if(!m_videoGrabber) {
-    return false;
-  }
-
-  [m_videoGrabber startCapture];
-
-  newFrame=false;
-  bIsInit = true;
-  return true;
-}
-bool videoAVF::stop(void)
-{
-  if(!bIsInit) {
-    return false;
-  }
-  if(!m_videoGrabber) {
-    return false;
-  }
-
-  [m_videoGrabber stopCapture];
-  bIsInit = false;
-  return true;
+  stop();
 }
 
 

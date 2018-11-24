@@ -107,6 +107,8 @@ protected:
   int m_device;
   std::vector<std::string>m_devices;
 
+  gem::Properties m_props;
+
   // PIMPL pointer to the Obj-C object behind this class
   AVFVideoGrabber* m_videoGrabber;
 
