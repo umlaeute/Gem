@@ -32,11 +32,6 @@ REGISTER_VIDEOFACTORY("AVF", videoAVF);
 #define VIDEOAVF_DEFAULT_WIDTH 1280
 #define VIDEOAVF_DEFAULT_HEIGHT 720
 
-void clear(void)
-{
-  error("clear(): unimplemented)");
-}
-
 videoAVF::videoAVF(void)
   : m_name(std::string("AVF"))
   , m_device(0)
@@ -207,7 +202,6 @@ void videoAVF::close(void)
     m_videoGrabber = nil;
     m_image.image.clear();
   }
-  clear();
   bIsInit = false;
   width = 0;
   height = 0;
