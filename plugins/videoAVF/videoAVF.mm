@@ -254,16 +254,6 @@ pixBlock* videoAVF::getFrame(void)
   }
   m_videoGrabber->lock.lock();
   pixBlock*img = &[m_videoGrabber getCurrentFrame];
-  post("get image %p", img);
-  if(img) {
-
-     post("image size: %dx%dx%d"
-	, img->image.xsize
-	, img->image.ysize
-	, img->image.csize
-        );
-
-  }
   return img;
 }
 void videoAVF::releaseFrame(void)
