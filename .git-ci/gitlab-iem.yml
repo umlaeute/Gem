@@ -67,7 +67,6 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw32
   before_script:
-    - set | grep mingw-w
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
