@@ -79,7 +79,7 @@ variables:
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
-    - make check GEM_RTE_LIBS="-Wl,--enable-auto-import -L$(pwd)/_pd/bin/ -lpd"
+    - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
 
@@ -101,7 +101,7 @@ variables:
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
-    - make check GEM_RTE_LIBS="-Wl,--enable-auto-import -L$(pwd)/_pd/bin/ -lpd"
+    - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
     - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
 
