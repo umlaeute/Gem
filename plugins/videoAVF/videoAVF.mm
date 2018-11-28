@@ -41,20 +41,11 @@ videoAVF::videoAVF(void)
   , m_device(0)
   , m_videoGrabber(0)
   , m_wantedFormat(VIDEOAVF_DEFAULT_PIXELFORMAT)
-  , newFrame(false)
-  , bHavePixelsChanged(false)
-  , width(VIDEOAVF_DEFAULT_WIDTH)
-  , height(VIDEOAVF_DEFAULT_HEIGHT)
-  , device(0)
-  , bIsInit(false)
-  , fps(-1)
-  , bLock(false)
+  , m_width(VIDEOAVF_DEFAULT_WIDTH)
+  , m_height(VIDEOAVF_DEFAULT_HEIGHT)
+  , m_isInit(false)
 {
   m_videoGrabber = [AVFVideoGrabber alloc];
-  m_image.image.xsize = width;
-  m_image.image.ysize = height;
-  m_image.image.setCsizeByFormat(m_wantedFormat);
-  m_image.image.reallocate();
 }
 
 videoAVF::~videoAVF(void)
@@ -198,13 +189,12 @@ bool videoAVF::start(void)
   }
 
   //update the pixel dimensions based on what the camera supports
-  width = m_videoGrabber->width;
-  height = m_videoGrabber->height;
+  m_width = m_videoGrabber->width;
+  m_height = m_videoGrabber->height;
 
   [m_videoGrabber startCapture];
 
-  newFrame=false;
-  bIsInit = true;
+  m_isInit = true;
 
   return true;
 }
@@ -215,21 +205,15 @@ bool videoAVF::start(void)
 /////////////////////////////////////////////////////////
 bool videoAVF::stop(void)
 {
-  bool isinit = bIsInit;
-  bLock = true;
+  bool isinit = m_isInit;
   if(m_videoGrabber) {
     [m_videoGrabber stopCapture];
     //[m_videoGrabber release];
     m_videoGrabber = nil;
-    m_image.image.clear();
   }
-  bIsInit = false;
-  width = 0;
-  height = 0;
-  fps = -1;
-  newFrame = false;
-  bHavePixelsChanged = false;
-  bLock = false;
+  m_isInit = false;
+  m_width = 0;
+  m_height = 0;
   return isinit;
 }
 
@@ -250,6 +234,10 @@ pixBlock* videoAVF::getFrame(void)
   }
   m_videoGrabber->lock.lock();
   pixBlock*img = &[m_videoGrabber getCurrentFrame];
+  if(img) {
+    m_width = img->image.xsize;
+    m_height = img->image.ysize;
+  }
   return img;
 }
 void videoAVF::releaseFrame(void)
@@ -283,7 +271,7 @@ std::vector<std::string> videoAVF::dialogs(void)
 bool videoAVF::setColor(int col)
 {
   m_wantedFormat = col;
-  return(!bIsInit);
+  return(!m_isInit);
 }
 
 bool videoAVF::provides(const std::string&name)

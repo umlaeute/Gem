@@ -115,19 +115,11 @@ protected:
   // PIMPL pointer to the Obj-C object behind this class
   AVFVideoGrabber* m_videoGrabber;
 
-  pixBlock m_image;             //< frame storage
   GLenum m_wantedFormat;        //< requested color space
 
-  bool newFrame;
-  bool bHavePixelsChanged;
-  int width, height;
+  int m_width, m_height;
 
-  int device;
   bool bIsInit;
-  int fps;
-  bool bLock;
-  //std::mutex = capMutex;
-  static void updatePixelsCB(videoAVF*);
 };
 };
 };
