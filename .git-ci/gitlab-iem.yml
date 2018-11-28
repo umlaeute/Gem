@@ -81,7 +81,8 @@ variables:
     - ./configure --with-pd="$(pwd)/_pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
-    - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
+  after_script:
+    - find artifcats -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
@@ -103,7 +104,8 @@ variables:
     - ./configure --with-pd="$(pwd)/_pd"
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
-    - .git-ci/localdeps.win.sh artifacts/${CI_JOB_NAME%_*}/zexy/*.dll || true
+  after_script:
+    - find artifcats -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
