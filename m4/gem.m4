@@ -353,7 +353,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_CFLAGS)
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
-  AC_ARG_WITH([Name]-framework,
+  AC_ARG_WITH([]Name[]-framework,
              AC_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
   AC_ARG_WITH([]Name[]-framework-CFLAGS,
              AC_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
