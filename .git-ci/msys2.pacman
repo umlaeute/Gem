@@ -1,0 +1,12 @@
+# model loading
+@MINGW@assimp
+
+# windowing
+@MINGW@glfw
+
+# font renderind
+@MINGW@ftgl
+@MINGW@fribidi
+
+# image reading
+@MINGW@imagemagick
