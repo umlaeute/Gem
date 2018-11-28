@@ -47,7 +47,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     deviceID = 0;
     width = 0;
     height = 0;
-    currentFrame = 0;
   }
   return self;
 }
@@ -367,11 +366,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   captureInput = nil;
   device = nil;
 
-  if(currentFrame) {
-    // release the currentFrame image
-    CGImageRelease(currentFrame);
-    currentFrame = nil;
-  }
   //[super dealloc];
 }
 

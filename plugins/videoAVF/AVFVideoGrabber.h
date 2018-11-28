@@ -39,8 +39,6 @@ typedef void (callback_t)(void *x);
   pixBlock pixes;
   std::mutex lock;
 
-  CGImageRef currentFrame;
-
   int width;
   int height;
   unsigned int capformat;
