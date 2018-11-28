@@ -3,6 +3,7 @@
 variables:
   PDVERSION: 0.49-0
   LANG: C
+  ARTIFACTSDIR: ${CI_JOB_NAME%_*}
   # mingw arch prefix: shorten the variable name and add a dash
 
 .build:snapshot: &snapshot
@@ -11,7 +12,7 @@ variables:
   artifacts: &snapshot_artifacts
     name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
     paths:
-      - artifacts/
+      - ${ARTIFACTSDIR}
     expire_in: 1 week
 
 .build:release: &release
@@ -20,7 +21,7 @@ variables:
   artifacts: &release_artifacts
     name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
     paths:
-      - artifacts/
+      - ${ARTIFACTSDIR}
 
 .build:linux: &build_linux
   image: gcc
@@ -36,7 +37,7 @@ variables:
     - ./autogen.sh
     - ./configure
     - make check
-    - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
 .build:macos: &build_macos
   tags:
@@ -58,7 +59,7 @@ variables:
     - autoreconf -fiv
     - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow --enable-videoAVF
     - make check
-    - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
 .build:w32: &build_w32
   stage: build
@@ -80,9 +81,9 @@ variables:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
     - make check
-    - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - find artifacts -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
@@ -103,9 +104,9 @@ variables:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
     - make check
-    - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - find artifcats -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
