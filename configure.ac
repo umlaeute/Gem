@@ -311,16 +311,14 @@ AC_CHECK_LIB([stdc++],[main],[predeps_CXX="$predeps_CXX -lstdc++"])
 LIBS=$stdcxx_LIBS
 
 dnl some checks for osX
-AC_LANG_PUSH([Objective C])
-AC_CHECK_HEADERS([Cocoa/Cocoa.h],[], [ with_Cocoa_framework="no" ])
+dnl AC_CHECK_HEADERS([Cocoa/Cocoa.h],[], [ with_Cocoa_framework="no" ])
 GEM_CHECK_FRAMEWORK([Cocoa],
                         [have_cocoa_framework="yes"],
                         [have_cocoa_framework="no"])
-AC_CHECK_HEADERS([AVFoundation/AVFoundation.h],[], [ with_AVFoundation_framework="no" ])
+dnl AC_CHECK_HEADERS([AVFoundation/AVFoundation.h],[], [ with_AVFoundation_framework="no" ])
 GEM_CHECK_FRAMEWORK([AVFoundation],
                         [have_avfoundation_framework="yes"],
                         [have_avfoundation_framework="no"])
-AC_LANG_POP([Objective C])
 
 AC_CHECK_HEADERS([Carbon/Carbon.h],[], [ with_Carbon_framework="no" ])
 GEM_CHECK_FRAMEWORK([Carbon],
