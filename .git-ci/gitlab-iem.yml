@@ -82,7 +82,7 @@ variables:
     - make check
     - make install DESTDIR=$(pwd)/artifacts/${CI_JOB_NAME%_*} pkglibdir=/
   after_script:
-    - find artifcats -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find artifacts -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
