@@ -74,7 +74,7 @@ variables:
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick}
+    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick,assimp}
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
@@ -97,7 +97,7 @@ variables:
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick}
+    - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick,assimp}
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
