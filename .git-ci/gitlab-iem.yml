@@ -72,6 +72,7 @@ variables:
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
+    - rm -f _pd/bin/msvcr*.dll
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S ${MINGW_PACKAGE_PREFIX}-{glfw,ftgl,fribidi,imagemagick}
     - date
