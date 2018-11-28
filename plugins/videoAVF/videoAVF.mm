@@ -60,9 +60,8 @@ bool videoAVF::enumProperties(gem::Properties&readable,
   readable.clear();
   writeable.clear();
 
-
-  writeable.set("width", VIDEOAVF_DEFAULT_WIDTH);
-  writeable.set("height", VIDEOAVF_DEFAULT_HEIGHT);
+  writeable.set("width", m_width);
+  writeable.set("height", m_height);
   writeable.set("fps", -1);
 
 
@@ -70,36 +69,22 @@ bool videoAVF::enumProperties(gem::Properties&readable,
 }
 void videoAVF::setProperties(gem::Properties&props)
 {
-#if 0
-  //m_props=props;
-
-  double d;
-  if(props.get("width", d)) {
-    if(d>0) {
-      m_image.image.xsize = d;
-    }
-  }
-  if(props.get("height", d)) {
-    if(d>0) {
-      m_image.image.ysize = d;
-    }
-  }
-#endif
+  m_props=props;
 }
 void videoAVF::getProperties(gem::Properties&props)
 {
-#if 0
   std::vector<std::string>keys=props.keys();
   unsigned int i;
   for(i=0; i<keys.size(); i++) {
-    if("width"==keys[i]) {
-      props.set(keys[i], m_image.image.xsize);
-    }
-    if("height"==keys[i]) {
-      props.set(keys[i], m_image.image.ysize);
+    if(m_videoGrabber) {
+      if("width"==keys[i]) {
+        props.set(keys[i], m_width);
+      }
+      if("height"==keys[i]) {
+        props.set(keys[i], m_height);
+      }
     }
   }
-#endif
 }
 
 ///////////
@@ -157,11 +142,6 @@ bool videoAVF::start(void)
   int fps=-1, w=VIDEOAVF_DEFAULT_WIDTH, h=VIDEOAVF_DEFAULT_HEIGHT;
   double d;
 
-#if 0
-  if(m_props.get("colorspace", d)) {
-    m_wantedFormat = (GLenum)d;
-  }
-#endif
   if(m_props.get("width", d) && d>=1.) {
     w = d;
   }
