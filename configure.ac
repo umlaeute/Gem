@@ -314,12 +314,18 @@ dnl some checks for osX
 GEM_CHECK_FRAMEWORK([Cocoa],
                         [have_cocoa_framework="yes"],
                         [have_cocoa_framework="no"])
+
+AC_CHECK_HEADERS([Carbon/Carbon.h],[], [ with_Carbon_framework="no" ])
 GEM_CHECK_FRAMEWORK([Carbon],
                         [have_carbon_framework="yes"],
                         [have_carbon_framework="no"])
+
+AC_CHECK_HEADERS([QuickTime/QuickTime.h], [], [with_QuickTime_framework="no"])
 GEM_CHECK_FRAMEWORK([QuickTime],
                         [have_quicktime_framework="yes"],
                         [have_quicktime_framework="no"])
+
+AC_CHECK_HEADERS([AVFoundation/AVFoundation.h],[], [ with_AVFoundation_framework="no" ])
 GEM_CHECK_FRAMEWORK([AVFoundation],
                         [have_avfoundation_framework="yes"],
                         [have_avfoundation_framework="no"])
