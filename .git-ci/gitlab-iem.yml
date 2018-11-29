@@ -37,7 +37,7 @@ variables:
   script:
     - ./autogen.sh
     - ./configure
-    - make check
+    - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
 .build:macos: &build_macos
@@ -60,7 +60,7 @@ variables:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
     - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow
-    - make check
+    - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
 .build:w32: &build_w32
@@ -83,7 +83,7 @@ variables:
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
-    - make check
+    - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
@@ -108,7 +108,7 @@ variables:
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd"
-    - make check
+    - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
