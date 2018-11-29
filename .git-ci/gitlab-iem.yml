@@ -84,6 +84,7 @@ variables:
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
@@ -106,6 +107,7 @@ variables:
     - make check
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
+    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
     - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
