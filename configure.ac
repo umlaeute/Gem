@@ -787,8 +787,8 @@ Configuration:
 
   image-support
     use ImageMagick      : ${have_ImageMagick}
-    use QuickTime        : ${have_quicktime_framework}
-    use AVFoundation     : ${have_avfoundation_framework}
+    use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
@@ -807,8 +807,8 @@ Configuration:
     use DV               : ${have_libdv}
     use Unicap           : ${have_unicap}
     use Video-for-WinDOS : ${have_vfw32}
-    use QuickTime        : ${have_quicktime_framework}
-    use AVFoundation     : ${have_avfoundation_framework}
+    use QuickTime        : ${have_libquicktime}
+    use AVFoundation     : ${have_libavfoundation}
 ])
 
 if test "x$have_pd" = "xno"; then
