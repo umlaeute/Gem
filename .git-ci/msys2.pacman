@@ -10,3 +10,5 @@
 
 # image reading
 @MINGW@imagemagick
+@MINGW@libtiff
+@MINGW@libjpeg-turbo

@@ -14,6 +14,7 @@ brew "ftgl"
 # image reading
 brew "jpeg"
 brew "libtiff"
+brew "imagemagick"
 
 # additional video support
 brew "libquicktime"
