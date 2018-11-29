@@ -119,7 +119,7 @@ protected:
 
   int m_width, m_height;
 
-  bool bIsInit;
+  bool m_isInit;
 };
 };
 };
