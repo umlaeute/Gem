@@ -504,10 +504,6 @@ AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plu
 # fi
 #fi
 
-GEM_ARG_DISABLE([videoAVF], [enable AVFoundation video-capturing (experimental,broken)])
-AM_CONDITIONAL([ENABLE_VIDEOAVF], test "x${enable_videoAVF}" = "xyes")
-
-
 if test "x$with_video" = "x"; then
  with_video="plugins"
 elif test "x$with_video" = "xyes"; then
