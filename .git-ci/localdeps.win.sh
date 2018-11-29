@@ -36,7 +36,7 @@ fi
 list_deps "$1" | while read dep; do
   depfile=$(basename "${dep}")
   if [ -e "${outdir}/${depfile}" ]; then
-    error "skipping already localized depdendency ${dep}"
+    error "skipping already localized dependency ${dep}"
   else
     cp -v "${dep}" "${outdir}"
   fi
