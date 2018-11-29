@@ -18,6 +18,7 @@ brew "imagemagick"
 
 # additional video support
 brew "libquicktime"
+brew "x11vnc"
 
 # model loading
 brew "assimp"

@@ -12,3 +12,6 @@
 @MINGW@imagemagick
 @MINGW@libtiff
 @MINGW@libjpeg-turbo
+
+# video input
+@MINGW@libvncserver
