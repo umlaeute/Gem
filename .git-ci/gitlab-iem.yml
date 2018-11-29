@@ -57,7 +57,7 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd="${PDDIR}" --without-QuickTime-framework --without-Carbon-framework --with-defaultwindow=gemmacoswindow --enable-videoAVF
+    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --enable-videoAVF
     - make check
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
