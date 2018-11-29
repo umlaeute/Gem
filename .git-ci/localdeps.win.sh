@@ -27,9 +27,9 @@ list_deps() {
 install_deps () {
 outdir=$2
 if [ "x${outdir}" = "x" ]; then
-  outdir=${1%/*}
+  outdir=$(dirname "$1")
 fi
-if [ "x${outdir}" = "x" ]; then
+if [ ! -d "${outdir}" ]; then
   outdir=.
 fi
 
