@@ -39,6 +39,8 @@ list_deps "$1" | while read dep; do
     error "skipping already localized dependency ${dep}"
   else
     cp -v "${dep}" "${outdir}"
+    # recursively call ourselves, to resolve higher-order dependencies
+    $0 "${outdir}/${depfile}"
   fi
 done
 
