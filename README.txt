@@ -69,13 +69,16 @@ INSTALLATION:
 =============
 
 -------------------------------------
-To install GEM on linux/OSX/...:
-run
+To build & install GEM run:
 $ ./configure
 $ make
 $ make install
 
-note that you might want to help Gem to find the Pd-headers, e.g. by doing
+
+note: when using a git-clone of the Gem sources, you first need to run
+`./autogen.sh` (which is a wrapper around `autoreconf -fiv`).
+
+note: that you might want to help Gem to find the Pd-headers, e.g. by doing
 $ ./configure --with-pd=/usr/include/pd
 try
 $ ./configure --help to see more options
