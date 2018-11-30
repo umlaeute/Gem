@@ -1,18 +1,22 @@
 This is GEM - Graphics Environment for Multimedia
 =================================================
 You can get the current distribution from:
-http://gem.iem.at
-http://sourceforge.net/projects/pd-gem
+https://gem.iem.at
+https://git.iem.at/pd/Gem
+https://github.com/umlaeute/Gem
 
 if you want to compile the newest (bleeding edge, and possibly unstable) source
-code yourself, you can get a copy from the public git repository on sourceforge:
+code yourself, you can get a copy from the public git repository:
 
- read-only  access: https://github.com/umlaeute/Gem.git
- read-write access: ssh://git@github.com:umlaeute/Gem.git
+ read-only  access: https://git.iem.at/pd/Gem.git
+ read-write access: ssh://git@git.iem.at:pd/Gem.git
+
+There is also a mirror on github:
+  https://github.com/umlaeute/Gem
 
 usually, you will only need the read-only repository, which you can get with
 
-$ git clone https://github.com/umlaeute/Gem.git
+$ git clone https://git.iem.at/pd/Gem.git
 
 =============================================
 NEW:::
@@ -161,8 +165,7 @@ bug-report (see below)
 BUG-REPORTS:
 ============
 please do not hesitate to report any crashes, weirdnesses or other issues, using
-the bugtracker at sourceforge:
-http://sourceforge.net/projects/pd-gem/
+our bugtracker at https://bugs.gem.iem.at
 or the gem-dev mailinglist (subscription at http://lists.puredata.info)
 
 if your mail only says "hey, it does not work !", it is an annoyance and no bug-report
