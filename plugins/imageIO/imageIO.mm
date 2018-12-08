@@ -53,6 +53,7 @@ imageIO :: ~imageIO(void)
 bool imageIO :: load(std::string filename, imageStruct&result,
                        gem::Properties&props)
 {
+  bool success = false;
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
   // Get the URL for the pathname passed to the function.
   NSURL *url = [NSURL fileURLWithPath:path];
@@ -97,9 +98,37 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   }
   
   fprintf(stderr, "JMZ-TODO: convert CGImage to imageStruct\n");
+  size_t w = CGImageGetWidth(myImage);
+  size_t h = CGImageGetHeight(myImage);
+  result.xsize = w;
+  result.ysize = h;
+  result.setCsizeByFormat(GL_RGBA_GEM);
+  result.reallocate();
+  CGRect rect = {{0,0},{w,h}}; 
+  
+  CGColorSpaceRef colorSpace;
+  CGContextRef context;
+  void*data;
+  colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+  if(!colorSpace)
+    goto done;
+  context = CGBitmapContextCreate(result.data,
+    result.xsize, result.ysize, 8, result.xsize * result.csize,
+    colorSpace, kCGImageAlphaPremultipliedFirst);
+  if(!context)
+    goto done;
 
+  CGContextDrawImage(context, rect, myImage);
+  if(CGBitmapContextGetData (context) == result.data)
+     success=true;
+  
+done:
+  if(context)
+    CGContextRelease(context);
+  if(colorSpace)
+    CGColorSpaceRelease(colorSpace);
   CFRelease(myImage);
-  return false;
+  return success;
 }
 bool imageIO::save(const imageStruct&constimage,
                      const std::string&filename, const std::string&mimetype,
