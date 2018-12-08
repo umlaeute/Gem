@@ -22,6 +22,7 @@
 #include "plugins/PluginFactory.h"
 
 #include "Gem/RTE.h"
+#import <Foundation/Foundation.h>
 #import <ImageIO/ImageIO.h>
 
 using namespace gem::plugins;
@@ -95,9 +96,9 @@ bool imageIO :: load(std::string filename, imageStruct&result,
     return false;
   }
   
-  fprintf(stderr, "JMZTODO: convert CGImage to imageStruct\n");
+  fprintf(stderr, "JMZ-TODO: convert CGImage to imageStruct\n");
 
-  CFRelease(myImage)
+  CFRelease(myImage);
   return false;
 }
 bool imageIO::save(const imageStruct&constimage,
@@ -107,7 +108,8 @@ bool imageIO::save(const imageStruct&constimage,
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
   NSURL *url = [NSURL fileURLWithPath:path];
 
-  CFString imageType = kUTTypeImage;
+  CGImageRef myImage = NULL;
+  fprintf(stderr, "JMZ-TODO: convert imageStruct to CGImage\n");
 
   float compression = 1.0; // Lossless compression if available.
   int orientation = 4; // Origin is at bottom, left.
@@ -124,8 +126,8 @@ bool imageIO::save(const imageStruct&constimage,
                                  &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
 
-  CGImageDestinationRef myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, imageType, 1, nil);
-  CGImageDestinationAddImage(myImageDest, image, options);
+  CGImageDestinationRef myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypeImage, 1, nil);
+	  CGImageDestinationAddImage(myImageDest, myImage, myOptions);
   CGImageDestinationFinalize(myImageDest);
   CFRelease(myImageDest);
   
@@ -191,21 +193,21 @@ void imageIO::getWriteCapabilities(std::vector<std::string>&mimetypes,
   mimetypes.clear();
   props.clear();
 
-  mimetype.push_back("image/jpeg");
-  mimetype.push_back("image/jp2");
-  mimetype.push_back("image/jpx");
-  mimetype.push_back("image/jpm");
-  mimetype.push_back("image/tiff");
-  mimetype.push_back("image/x-tiff");
-  mimetype.push_back("image/pict");
-  mimetype.push_back("image/x-pict");
-  mimetype.push_back("image/gif");
-  mimetype.push_back("image/png");
-  mimetype.push_back("image/bmp");
-  mimetype.push_back("image/x-windows-bmp");
-  mimetype.push_back("image/x-quicktime");
-  mimetype.push_back("image/x-icon");
-  mimetype.push_back("image/icns");
+  mimetypes.push_back("image/jpeg");
+  mimetypes.push_back("image/jp2");
+  mimetypes.push_back("image/jpx");
+  mimetypes.push_back("image/jpm");
+  mimetypes.push_back("image/tiff");
+  mimetypes.push_back("image/x-tiff");
+  mimetypes.push_back("image/pict");
+  mimetypes.push_back("image/x-pict");
+  mimetypes.push_back("image/gif");
+  mimetypes.push_back("image/png");
+  mimetypes.push_back("image/bmp");
+  mimetypes.push_back("image/x-windows-bmp");
+  mimetypes.push_back("image/x-quicktime");
+  mimetypes.push_back("image/x-icon");
+  mimetypes.push_back("image/icns");
   
 #if 0
   gem::any value;

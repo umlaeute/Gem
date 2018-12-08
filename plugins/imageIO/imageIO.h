@@ -15,6 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__IMAGEIO_IMAGEIO_H_
 #include "plugins/imageloader.h"
 #include "plugins/imagesaver.h"
+
 #include <stdio.h>
 
 /*-----------------------------------------------------------------
