@@ -96,22 +96,22 @@ bool imageIO :: load(std::string filename, imageStruct&result,
     fprintf(stderr, "Image not created from image source.");
     return false;
   }
-  
-  fprintf(stderr, "JMZ-TODO: convert CGImage to imageStruct\n");
+
   size_t w = CGImageGetWidth(myImage);
   size_t h = CGImageGetHeight(myImage);
   result.xsize = w;
   result.ysize = h;
   result.setCsizeByFormat(GL_RGBA_GEM);
   result.reallocate();
-  CGRect rect = {{0,0},{w,h}}; 
-  
+  CGRect rect = {{0,0},{w,h}};
+
   CGColorSpaceRef colorSpace;
   CGContextRef context;
   void*data;
   colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
   if(!colorSpace)
     goto done;
+#warning get rid of premultiplied alpha channel
   context = CGBitmapContextCreate(result.data,
     result.xsize, result.ysize, 8, result.xsize * result.csize,
     colorSpace, kCGImageAlphaPremultipliedFirst);
@@ -121,7 +121,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CGContextDrawImage(context, rect, myImage);
   if(CGBitmapContextGetData (context) == result.data)
      success=true;
-  
+
 done:
   if(context)
     CGContextRelease(context);
@@ -130,15 +130,13 @@ done:
   CFRelease(myImage);
   return success;
 }
-bool imageIO::save(const imageStruct&constimage,
+bool imageIO::save(const imageStruct&img,
                      const std::string&filename, const std::string&mimetype,
                      const gem::Properties&props)
 {
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
   NSURL *url = [NSURL fileURLWithPath:path];
-
-  CGImageRef myImage = NULL;
-  fprintf(stderr, "JMZ-TODO: convert imageStruct to CGImage\n");
+  bool success = false;
 
   float compression = 1.0; // Lossless compression if available.
   int orientation = 4; // Origin is at bottom, left.
@@ -154,15 +152,43 @@ bool imageIO::save(const imageStruct&constimage,
   myOptions = CFDictionaryCreate(NULL, (const void **)myKeys, (const void **)myValues, sizeof(myKeys)/sizeof(*myKeys),
                                  &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
+  CGImageRef myImage = NULL;
+  CGImageDestinationRef myImageDest = NULL;
+  fprintf(stderr, "JMZ-TODO: convert imageStruct to CGImage\n");
+  CGDataProviderRef data = CGDataProviderCreateWithData(NULL,
+    img.data,
+    img.xsize * img.ysize * img.csize,
+    NULL);
+  if(!data)
+    goto done;
+  myImage = CGImageCreate(img.xsize, img.ysize,
+    8, 8 * img.csize,
+    img.xsize * img.csize,
+    CGColorSpaceCreateDeviceRGB(), CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaFirst),
+    data,
+    NULL, false, kCGRenderingIntentDefault);
+  if(!myImage)
+    goto done;
 
-  CGImageDestinationRef myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypeImage, 1, nil);
+  myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
 	  CGImageDestinationAddImage(myImageDest, myImage, myOptions);
-  CGImageDestinationFinalize(myImageDest);
-  CFRelease(myImageDest);
-  
-  CFRelease(myOptions);
+  if(!myImageDest)
+    goto done;
 
-  return false;
+fprintf(stderr, "saving %p to %p via %p\n", myImage, myImageDest, myOptions);
+  CGImageDestinationFinalize(myImageDest);
+  success=true;
+
+done:
+  if(myImageDest)
+    CFRelease(myImageDest);
+  if(myImage)
+    CFRelease(myImage);
+  if(data)
+    CFRelease(data);
+  if(myOptions)
+    CFRelease(myOptions);
+  return success;
 }
 
 
@@ -191,7 +217,7 @@ float imageIO::estimateSave(const imageStruct&img,
     result += 100;
   else if ((mimetype == "image/icns"))
     result += 100;
-  
+
 #if 0
   if(gem::Properties::UNSET != props.type("xresolution")) {
     result+=1.;
@@ -237,7 +263,7 @@ void imageIO::getWriteCapabilities(std::vector<std::string>&mimetypes,
   mimetypes.push_back("image/x-quicktime");
   mimetypes.push_back("image/x-icon");
   mimetypes.push_back("image/icns");
-  
+
 #if 0
   gem::any value;
 
