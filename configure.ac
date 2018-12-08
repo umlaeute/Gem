@@ -319,6 +319,9 @@ dnl AC_CHECK_HEADERS([AVFoundation/AVFoundation.h],[], [ with_AVFoundation_frame
 GEM_CHECK_FRAMEWORK([AVFoundation],
                         [have_avfoundation_framework="yes"],
                         [have_avfoundation_framework="no"])
+GEM_CHECK_FRAMEWORK([ImageIO],
+                        [have_imageio_framework="yes"],
+                        [have_imageio_framework="no"])
 
 AC_CHECK_HEADERS([Carbon/Carbon.h],[], [ with_Carbon_framework="no" ])
 GEM_CHECK_FRAMEWORK([Carbon],
@@ -715,6 +718,11 @@ if test "x$have_avfoundation_framework" = "xyes"; then
  GEM_FRAMEWORK_AVFOUNDATION_LIBS="$GEM_FRAMEWORK_AVFOUNDATION_LIBS -framework Accelerate -framework CoreMedia"
 fi
 
+if test "x$have_imageio_framework" = "x"; then have_imageio_framework="no"; fi
+if test "x$have_imageio_framework" = "xyes"; then
+ have_libimageio="yes (framework)"
+fi
+
 have_ieee1394=""
 if test "x$have_libdc1394_2" = "xyes"; then
  have_ieee1394="$have_ieee1394 libdc1394"
@@ -784,7 +792,7 @@ Configuration:
   image-support
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_libquicktime}
-    use AVFoundation     : ${have_libavfoundation}
+    use ImageIO          : ${have_libimageio}
     use TIFF             : ${have_tiff}
     use JPEG             : ${have_jpeg}
   moviefile-support
