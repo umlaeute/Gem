@@ -4,7 +4,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 SUBDIRS  =
 
 ## image loading/saving plugins
-SUBDIRS += imageMAGICK imageTIFF imageJPEG imageSGI imageQT
+SUBDIRS += imageMAGICK imageTIFF imageJPEG imageSGI
+SUBDIRS += imageQT imageIO
 
 
 ## film loading plugins
