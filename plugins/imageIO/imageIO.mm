@@ -51,7 +51,7 @@ imageIO :: ~imageIO(void)
 //
 /////////////////////////////////////////////////////////
 bool imageIO :: load(std::string filename, imageStruct&result,
-                       gem::Properties&props)
+                     gem::Properties&props)
 {
   bool success = false;
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
@@ -81,7 +81,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CFRelease(myOptions);
   // Make sure the image source exists before continuing
   if (!myImageSource){
-    fprintf(stderr, "Image source is NULL.");
+    fprintf(stderr, "Image source '%s' is NULL.", filename.c_str());
     return false;
   }
 
@@ -113,14 +113,14 @@ bool imageIO :: load(std::string filename, imageStruct&result,
     goto done;
 #warning get rid of premultiplied alpha channel
   context = CGBitmapContextCreate(result.data,
-    result.xsize, result.ysize, 8, result.xsize * result.csize,
-    colorSpace, kCGImageAlphaPremultipliedFirst);
+                                  result.xsize, result.ysize, 8, result.xsize * result.csize,
+                                  colorSpace, kCGImageAlphaPremultipliedFirst);
   if(!context)
     goto done;
 
   CGContextDrawImage(context, rect, myImage);
   if(CGBitmapContextGetData (context) == result.data)
-     success=true;
+    success=true;
 
 done:
   if(context)
@@ -131,8 +131,8 @@ done:
   return success;
 }
 bool imageIO::save(const imageStruct&img,
-                     const std::string&filename, const std::string&mimetype,
-                     const gem::Properties&props)
+                   const std::string&filename, const std::string&mimetype,
+                   const gem::Properties&props)
 {
   NSString *path = [NSString stringWithUTF8String:filename.c_str()];
   NSURL *url = [NSURL fileURLWithPath:path];
@@ -154,28 +154,30 @@ bool imageIO::save(const imageStruct&img,
 
   CGImageRef myImage = NULL;
   CGImageDestinationRef myImageDest = NULL;
-  fprintf(stderr, "JMZ-TODO: convert imageStruct to CGImage\n");
   CGDataProviderRef data = CGDataProviderCreateWithData(NULL,
-    img.data,
-    img.xsize * img.ysize * img.csize,
-    NULL);
+                                                        img.data,
+                                                        img.xsize * img.ysize * img.csize,
+                                                        NULL);
   if(!data)
     goto done;
   myImage = CGImageCreate(img.xsize, img.ysize,
-    8, 8 * img.csize,
-    img.xsize * img.csize,
-    CGColorSpaceCreateDeviceRGB(), CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaFirst),
-    data,
-    NULL, false, kCGRenderingIntentDefault);
-  if(!myImage)
+                          8, 8 * img.csize,
+                          img.xsize * img.csize,
+                          CGColorSpaceCreateDeviceRGB(), CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaFirst),
+                          data,
+                          NULL, false, kCGRenderingIntentDefault);
+  if(!myImage) {
+    fprintf(stderr, "unable to create CGImage from data\n");
     goto done;
+  }
 
   myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
-	  CGImageDestinationAddImage(myImageDest, myImage, myOptions);
-  if(!myImageDest)
+  CGImageDestinationAddImage(myImageDest, myImage, myOptions);
+  if(!myImageDest) {
+    fprintf(stderr, "unable to create destination image for %s\n", filename.c_str());
     goto done;
+  }
 
-fprintf(stderr, "saving %p to %p via %p\n", myImage, myImageDest, myOptions);
   CGImageDestinationFinalize(myImageDest);
   success=true;
 
@@ -193,8 +195,8 @@ done:
 
 
 float imageIO::estimateSave(const imageStruct&img,
-                              const std::string&filename, const std::string&mimetype,
-                              const gem::Properties&props)
+                            const std::string&filename, const std::string&mimetype,
+                            const gem::Properties&props)
 {
   float result=0;
   if(mimetype == "image/jpeg")
@@ -243,7 +245,7 @@ float imageIO::estimateSave(const imageStruct&img,
 
 
 void imageIO::getWriteCapabilities(std::vector<std::string>&mimetypes,
-                                     gem::Properties&props)
+                                   gem::Properties&props)
 {
   mimetypes.clear();
   props.clear();
