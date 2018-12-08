@@ -28,6 +28,7 @@ AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
+AC_CONFIG_FILES([plugins/imageIO/Makefile])
 
 AC_CONFIG_FILES([plugins/filmAVF/Makefile])
 AC_CONFIG_FILES([plugins/filmAVI/Makefile])
