@@ -30,6 +30,32 @@ using namespace gem::plugins;
 REGISTER_IMAGELOADERFACTORY("imageIO", imageIO);
 REGISTER_IMAGESAVERFACTORY("imageIO", imageIO);
 
+CFStringRef mime2uti(const std::string&mimetype) {
+  if(mimetype == "image/jpeg")
+    return kUTTypeJPEG;
+  else if ((mimetype == "image/jp2") || (mimetype == "image/jpx") || (mimetype == "image/jpm"))
+    return kUTTypeJPEG2000;
+  else if ((mimetype == "image/tiff") || (mimetype == "image/x-tiff"))
+    return kUTTypeTIFF;
+  else if ((mimetype == "image/pict") || (mimetype == "image/x-pict"))
+    return kUTTypePICT;
+  else if ((mimetype == "image/gif"))
+    return kUTTypeGIF;
+  else if ((mimetype == "image/png"))
+    return kUTTypePNG;
+  else if ((mimetype == "image/x-quicktime"))
+    return kUTTypeQuickTimeImage;
+  else if ((mimetype == "image/icns"))
+    return kUTTypeAppleICNS;
+  else if ((mimetype == "image/bmp") || (mimetype == "image/x-windows-bmp"))
+    return kUTTypeBMP;
+  else if ((mimetype == "image/x-icon"))
+    return kUTTypeICO;
+
+  return 0;
+}
+
+
 /////////////////////////////////////////////////////////
 //
 // imageIO
@@ -141,7 +167,7 @@ bool imageIO::save(const imageStruct&img,
   float compression = 1.0; // Lossless compression if available.
   int orientation = 4; // Origin is at bottom, left.
 
-  CFStringRef uti = kUTTypePNG;
+  CFStringRef uti = mime2uti(mimetype);
 
   CFStringRef myKeys[3];
   CFTypeRef   myValues[3];
@@ -202,25 +228,9 @@ float imageIO::estimateSave(const imageStruct&img,
                             const gem::Properties&props)
 {
   float result=0;
-  if(mimetype == "image/jpeg")
-    result += 100;
-  else if ((mimetype == "image/jp2") || (mimetype == "image/jpx") || (mimetype == "image/jpm"))
-    result += 100;
-  else if ((mimetype == "image/tiff") || (mimetype == "image/x-tiff"))
-    result += 100;
-  else if ((mimetype == "image/pict") || (mimetype == "image/x-pict"))
-    result += 100;
-  else if ((mimetype == "image/gif"))
-    result += 100;
-  else if ((mimetype == "image/png"))
-    result += 100;
-  else if ((mimetype == "image/bmp") || (mimetype == "image/x-windows-bmp"))
-    result += 100;
-  else if ((mimetype == "image/x-quicktime"))
-    result += 100;
-  else if ((mimetype == "image/x-icon"))
-    result += 100;
-  else if ((mimetype == "image/icns"))
+  CFStringRef uti = mime2uti(mimetype);
+
+  if(uti)
     result += 100;
 
 #if 0
