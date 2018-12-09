@@ -33,11 +33,11 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
     , CMSampleBufferIsValid(sampleBuffer)
     , CMSampleBufferDataIsReady(sampleBuffer)
     );
-  fprintf(stderr, "\tdecode@: %d\t%d\n"
-    , (int)CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value
-    , (int)CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value
+  fprintf(stderr, "\tdecode@: %lld\t%lld\n"
+    , CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value
+    , CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value
     );
-  fprintf(stderr, "\tpresen@: %d\t%d\n"
+  fprintf(stderr, "\tpresen@: %lld\t%lld\n"
     , CMSampleBufferGetPresentationTimeStamp(sampleBuffer).value
     , CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer).value
     );
@@ -331,6 +331,12 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
     // Lock the image buffer
     CVPixelBufferLockBaseAddress(imageBuffer,0);
     printSampleBuffer(sampleBuffer);
+
+    CMTime ts = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
+    if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
+      lastSeen=ts;
+      fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
+    }
     unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
     size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
     size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);

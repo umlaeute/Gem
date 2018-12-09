@@ -51,6 +51,8 @@ typedef void (callback_t)(void *x);
   AVCaptureVideoDataOutput *captureOutput;
   AVCaptureDevice *device;
   AVCaptureSession *captureSession;
+
+  CMTime lastSeen;
 }
 
 -(BOOL)initCapture:(int)framerate capWidth:(int)w capHeight:
