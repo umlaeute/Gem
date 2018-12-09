@@ -140,6 +140,9 @@ bool imageIO::save(const imageStruct&img,
 
   float compression = 1.0; // Lossless compression if available.
   int orientation = 4; // Origin is at bottom, left.
+
+  CFStringRef uti = kUTTypePNG;
+
   CFStringRef myKeys[3];
   CFTypeRef   myValues[3];
   CFDictionaryRef myOptions = NULL;
@@ -171,7 +174,7 @@ bool imageIO::save(const imageStruct&img,
     goto done;
   }
 
-  myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, kUTTypePNG, 1, nil);
+  myImageDest = CGImageDestinationCreateWithURL((CFURLRef)url, uti, 1, nil);
   CGImageDestinationAddImage(myImageDest, myImage, myOptions);
   if(!myImageDest) {
     fprintf(stderr, "unable to create destination image for %s\n", filename.c_str());
