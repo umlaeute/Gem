@@ -28,13 +28,19 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 
 void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
-  fprintf(stderr, "sampleBuffer: %p", sampleBuffer);
-  fprintf(stderr, "\tvalid?: %d", CMSampleBufferIsValid(sampleBuffer));
-  fprintf(stderr, "\tready?: %d", CMSampleBufferDataIsReady(sampleBuffer));
-  fprintf(stderr, "\tdecode-timestamp: %d", CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value);
-  fprintf(stderr, "\toutput-decode-timestamp: %d", CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value);
-  fprintf(stderr, "\tpresentation-timestamp: %d", CMSampleBufferGetPresentationTimeStamp(sampleBuffer));
-  fprintf(stderr, "\toutput-presentation-timestamp: %d", CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer));
+  fprintf(stderr, "sampleBuffer: %p\tvalid:%d\tready:%d\n"
+    , sampleBuffer
+    , CMSampleBufferIsValid(sampleBuffer)
+    , CMSampleBufferDataIsReady(sampleBuffer)
+    );
+  fprintf(stderr, "\tdecode@: %d\t%d\n"
+    , (int)CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value
+    , (int)CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value
+    );
+  fprintf(stderr, "\tpresen@: %d\t%d\n"
+    , CMSampleBufferGetPresentationTimeStamp(sampleBuffer).value
+    , CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer).value
+    );
 };
 
 @interface AVFVideoGrabber ()
