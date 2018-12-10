@@ -18,7 +18,7 @@ videoTEST::videoTEST(void) :
 {
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
   m_pixBlock.image.reallocate();
 }
 
@@ -36,10 +36,11 @@ static void setNoise(unsigned char*data, unsigned int count)
 {
   unsigned int i=0;
   for(i=0; i<count; i++) {
-    *data++=(255*getRandom());
-    *data++=(255*getRandom());
-    *data++=(255*getRandom());
-    *data++=255;
+    data[chRed]=(255*getRandom());
+    data[chGreen]=(255*getRandom());
+    data[chBlue]=(255*getRandom());
+    data[chAlpha]=255;
+    data+=4;
   }
 }
 static void setRed(unsigned char*data, unsigned int count)
@@ -78,7 +79,7 @@ static void setBlue(unsigned char*data, unsigned int count)
 
 pixBlock*videoTEST::getFrame(void)
 {
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
   m_pixBlock.image.reallocate();
   const unsigned int count = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
   unsigned int i=0;
