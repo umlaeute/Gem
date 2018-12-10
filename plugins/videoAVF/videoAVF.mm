@@ -136,6 +136,11 @@ bool videoAVF::setDevice(const std::string&devname)
 bool videoAVF::open(gem::Properties &props)
 {
   m_props = props;
+  if (!m_devices.size()) {
+    enumerate();
+  }
+  return (m_device>=0 && m_device < m_devices.size());
+
 }
 bool videoAVF::start(void)
 {
@@ -272,4 +277,3 @@ bool videoAVF::reset(void)
 {
   return false;
 }
-
