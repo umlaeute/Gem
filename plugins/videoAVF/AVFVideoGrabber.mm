@@ -26,6 +26,17 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include <iostream>
 
+
+void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
+  fprintf(stderr, "sampleBuffer: %p", sampleBuffer);
+  fprintf(stderr, "\tvalid?: %d", CMSampleBufferIsValid(sampleBuffer));
+  fprintf(stderr, "\tready?: %d", CMSampleBufferDataIsReady(sampleBuffer));
+  fprintf(stderr, "\tdecode-timestamp: %d", CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value);
+  fprintf(stderr, "\toutput-decode-timestamp: %d", CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value);
+  fprintf(stderr, "\tpresentation-timestamp: %d", CMSampleBufferGetPresentationTimeStamp(sampleBuffer));
+  fprintf(stderr, "\toutput-presentation-timestamp: %d", CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer));
+};
+
 @interface AVFVideoGrabber ()
 @property (nonatomic,retain) AVCaptureSession *captureSession;
 @end
@@ -313,7 +324,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     // Lock the image buffer
     CVPixelBufferLockBaseAddress(imageBuffer,0);
-
+    printSampleBuffer(sampleBuffer);
     unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
     size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
     size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
