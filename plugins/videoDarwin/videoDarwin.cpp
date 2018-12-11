@@ -53,7 +53,7 @@ videoDarwin :: videoDarwin()
   : videoBase("darwin", 0)
   , m_newFrame(false)
   , m_srcGWorld(NULL)
-  , m_rowbytes(0)
+  , m_rowBytes(0)
   , m_quality(channelPlayNormal)
   , m_colorspace(GL_YCBCR_422_GEM)
   , m_inputDevice(0)   //set to the first input device
