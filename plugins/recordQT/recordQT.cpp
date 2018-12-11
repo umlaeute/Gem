@@ -242,7 +242,7 @@ void recordQT :: setupQT(
   case noErr:
     break;
   case -37:
-    error("[GEM:recordQT] invalid filename '%s'", filename);
+    error("[GEM:recordQT] invalid filename '%s'", m_filename);
     return;
   default:
     error("[GEM:recordQT] CreateMovieFile failed with error %d",err);
@@ -614,7 +614,7 @@ bool recordQT :: dialog(void)
             "\ttemporalQualitye %d\n"
             "\tframeRate %d\n"
             "\tkeyFrameRate %d",
-            ,TemporalSettings.temporalQuality, TemporalSettings.frameRate,
+            TemporalSettings.temporalQuality, TemporalSettings.frameRate,
             TemporalSettings.keyFrameRate);
     return(true);
   }
