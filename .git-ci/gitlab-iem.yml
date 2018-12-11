@@ -62,6 +62,8 @@ variables:
     - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+  after_script:
+    - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32: &build_w32
   stage: build

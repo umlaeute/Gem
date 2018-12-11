@@ -55,6 +55,8 @@ fi
 list_deps "$1" | while read dep; do
   infile=$(basename "$1")
   depfile=$(basename "${dep}")
+  install_name_tool -change "${dep}" "@loader_path/${depfile}" "$1"
+
   if [ -e "${outdir}/${depfile}" ]; then
     error "skipping already localized dependency ${dep}"
   else
@@ -62,8 +64,6 @@ list_deps "$1" | while read dep; do
     chmod u+w "${outdir}/${depfile}"
     install_name_tool -id "@loader_path/${depfile}" "${outdir}/${depfile}"
 
-    install_name_tool -change "${dep}" "@loader_path/${depfile}" "$1"
-    
     # recursively call ourselves, to resolve higher-order dependencies
     $0 "${outdir}/${depfile}"
   fi
