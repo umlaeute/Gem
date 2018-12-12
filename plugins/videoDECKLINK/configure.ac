@@ -18,9 +18,27 @@ GEM_CHECK_RTE
 
 AC_LANG(C++)
 
+system=""
+AS_CASE([${host}]
+        , [*-darwin*], [system=Darwin]
+        , [*-linux*], [system=Linux]
+        , [*mingw*], [system=Windows]
+        )
+
+AS_IF([test "x${with_DeckLink}" = "xlocal"],[
+ sdkdir=${srcdir}/SDK/${system}/
+ AS_IF([test -e ${sdkdir}/DeckLinkAPI.h], [
+ with_DeckLink=yes
+ with_DeckLink_CFLAGS="-I${sdkdir}"
+ AC_MSG_NOTICE([using embedded copy of DeckLink-SDK in ${sdkdir}])
+],[
+ AC_MSG_WARN([requested to use embedded copy of DeckLink-SDK, but none found])
+ with_DeckLink=no
+]
+)])
 
 dnl GEM_CHECK_DECKLINK
-GEM_CHECK_LIB([DeckLink],[], [DeckLinkAPI.h],[CreateDeckLinkIteratorInstance], ,,,[video input])
+GEM_CHECK_LIB([DeckLink],[], [DeckLinkAPI.h],[CreateDeckLinkIteratorInstance], ,,,[video input; use 'local' to use an embedded copy pf the SDK])
 AS_IF([test "x${PKG_DECKLINK_LIBS}" != "x" ],[],[
  AC_DEFINE_UNQUOTED(AS_TR_CPP(MUST_DLOPEN_DECKLINKAPI),[1], [Define to 1 to open DeckLinkAPI via dlopen()])
  ])
