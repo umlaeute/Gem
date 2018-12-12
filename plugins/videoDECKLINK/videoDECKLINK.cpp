@@ -17,16 +17,78 @@
 
 #include "videoDECKLINK.h"
 
-#ifdef _WIN32
-# include "DeckLinkAPI_i.c"
-#endif
-
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
 #include <stdio.h>
 #define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
+
+#ifdef _WIN32
+#include <windows.h>
+typedef wchar_t* deckstring_t;
+namespace {
+  deckstring_t string2deckstring(const std::string&s) {
+    int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), NULL, 0);
+    deckstring_t buf = new wchar_t[n];
+    MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), &buf[0], n);
+    return buf;
+  }
+  std::string deckstring2string(deckstring_t s) {
+    if (!s){
+      return std::string();
+    }
+    size_t l = wcslen(s);
+    int n = WideCharToMultiByte(CP_UTF8, 0, s, l, NULL, 0, NULL, NULL);
+    std::string buf;
+    buf.resize(n);
+    WideCharToMultiByte(CP_UTF8, 0, s, l, &buf[0], n, NULL, NULL);
+    return buf;
+  }
+  void free_deckstring(deckstring_t s) {
+    wchar_t*b=s;
+    delete[]b;
+  }
+};
+#elif defined __APPLE__
+typedef CFStringRef deckstring_t;
+namespace {
+  deckstring_t string2deckstring(const std::string&s) {
+    return CFStringCreateWithCString(NULL, s.c_str(), kCFStringEncodingUTF8);
+  }
+  std::string deckstring2string(deckstring_t s) {
+    if (const char* fastCString = CFStringGetCStringPtr(s, kCFStringEncodingUTF8))
+    {
+      return std::string(fastCString);
+    }
+    CFIndex utf16length = CFStringGetLength(s);
+    CFIndex maxUtf8len = CFStringGetMaximumSizeForEncoding(utf16length, kCFStringEncodingUTF8);
+    char*cstr = new char[maxUtf8len+1];
+    cstr[maxUtf8len] = 0;
+    CFStringGetCString(s, cstr, maxUtf8len, kCFStringEncodingUTF8);
+    std::string converted(cstr);
+    delete[]cstr;
+    return converted;
+  }
+  void free_deckstring(deckstring_t s) {
+    CFRelease(s);
+  }
+};
+#else /* linux */
+# include <string.h>
+typedef const char* deckstring_t;
+namespace {
+  deckstring_t string2deckstring(const std::string&s) {
+    return strdup(s.c_str());
+  }
+  std::string deckstring2string(deckstring_t s) {
+    return std::string(s);
+  }
+  void free_deckstring(deckstring_t s) {
+    free((void*)s);
+  }
+};
+#endif
 
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
@@ -168,17 +230,14 @@ public:
     // This only gets called if bmdVideoInputEnableFormatDetection was set
     // when enabling video input
     HRESULT     result;
-    char*       displayModeName = NULL;
+    deckstring_t displayModeName = NULL;
 
     if (!(events & bmdVideoInputDisplayModeChanged)) {
       return S_OK;
     }
 
-    mode->GetName((const char**)&displayModeName);
-
-    if (displayModeName) {
-      free(displayModeName);
-    }
+    mode->GetName(&displayModeName);
+    free_deckstring(displayModeName);
 
     if (m_deckLinkInput) {
       m_deckLinkInput->StopStreams();
@@ -218,11 +277,12 @@ IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
 
       // if we have set the format name, check that
       if(!formatname.empty()) {
-        const char*dmn = NULL;
+        deckstring_t dmn = NULL;
         if (S_OK == displayMode->GetName(&dmn)) {
-          bool found=(formatname == dmn);
-          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmn);
-          free((void*)dmn);
+          std::string dmns = deckstring2string(dmn);
+          bool found=(formatname == dmns);
+          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
+          free_deckstring(dmn);
           if(found) {
             break;
           }
@@ -348,20 +408,20 @@ bool videoDECKLINK::open(gem::Properties&props)
           break;
         }
         if(!m_devname.empty()) {
-          char*deckLinkName = NULL;
-          if(S_OK == m_dl->GetDisplayName((const char**)&deckLinkName)) {
-            if (m_devname == deckLinkName) {
-              free(deckLinkName);
+          deckstring_t deckLinkName = NULL;
+          if(S_OK == m_dl->GetDisplayName(&deckLinkName)) {
+            if (m_devname == deckstring2string(deckLinkName)) {
+              free_deckstring(deckLinkName);
               break;
             }
-            free(deckLinkName);
+            free_deckstring(deckLinkName);
           }
-          if(S_OK == m_dl->GetModelName((const char**)&deckLinkName)) {
-            if (m_devname == deckLinkName) {
-              free(deckLinkName);
+          if(S_OK == m_dl->GetModelName(&deckLinkName)) {
+            if (m_devname == deckstring2string(deckLinkName)) {
+              free_deckstring(deckLinkName);
               break;
             }
-            free(deckLinkName);
+            free_deckstring(deckLinkName);
           }
         }
         m_dl->Release();
@@ -482,11 +542,11 @@ std::vector<std::string>videoDECKLINK::enumerate(void)
   if(dli) {
     IDeckLink*deckLink = NULL;
     while (dli->Next(&deckLink) == S_OK) {
-      char*deckLinkName = NULL;
-      HRESULT res = deckLink->GetDisplayName((const char**)&deckLinkName);
+      deckstring_t deckLinkName = NULL;
+      HRESULT res = deckLink->GetDisplayName(&deckLinkName);
       if (res == S_OK) {
-        result.push_back(std::string(deckLinkName));
-        free(deckLinkName);
+        result.push_back(deckstring2string(deckLinkName));
+        free_deckstring(deckLinkName);
       }
       deckLink->Release();
     }
