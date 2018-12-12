@@ -16,6 +16,11 @@
 #endif
 
 #include "videoDECKLINK.h"
+
+#ifdef _WIN32
+# include "DeckLinkAPI_i.c"
+#endif
+
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
