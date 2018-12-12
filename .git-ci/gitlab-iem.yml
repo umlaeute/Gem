@@ -38,7 +38,7 @@ variables:
     - date
   script:
     - ./autogen.sh
-    - ./configure
+    - ./configure --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
@@ -61,7 +61,7 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow
+    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -86,7 +86,7 @@ variables:
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd"
+    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -110,7 +110,7 @@ variables:
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd"
+    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
