@@ -101,7 +101,7 @@ a per-channel (RGB) basis or uniformly for all channels. You need to
 specify the lowest/highest values of both input and output. There is
 also an auto-mode available;
 #X text 33 247 Inlet 1: message: auto [1|0] (turns automatic level-correction
-on/off=default);
+on/off)(default:0);
 #X msg 546 193 0 0.1 1 0.5;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);

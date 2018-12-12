@@ -104,14 +104,14 @@ have no more access to the other windows of your system.;
 #X connect 9 0 12 0;
 #X connect 11 0 9 0;
 #X restore 356 288 pd fullscreen;
-#X text 57 253 the x and y dimensions of the window. (default 500 500)
+#X text 57 253 the x and y dimensions of the window. (default: 500 500)
 ;
 #X text 29 508 frame <number> : number of frames per second (default
 20);
-#X text 30 268 FSAA <number> : anti aliasing (default 0);
+#X text 30 268 FSAA <number> : anti aliasing (default:0);
 #X text 30 318 border 1|0 : create a window with/out borders (default
 1);
-#X text 57 350 the x and y offset of the window. (default 0 0);
+#X text 57 350 the x and y offset of the window. (default: 0 0);
 #N canvas 641 438 406 148 offset 0;
 #X text 53 8 OFFSET SUPPORT;
 #X text 21 28 offset might not work on some window managers if the
@@ -165,7 +165,7 @@ the window is created in order to take effect:;
 #X connect 16 0 14 0;
 #X connect 17 0 14 0;
 #X restore 30 367 pd more window properties;
-#X text 29 558 lighting 0|1 : turn lighting off/on (default 0);
+#X text 29 558 lighting 0|1 : turn lighting off/on (default:0);
 #N canvas 190 228 580 527 more 0;
 #X text 105 134 lighting 1/0 : turn lighting on/off;
 #X text 263 186 ambient R G B : the ambient lighting color;
@@ -453,7 +453,7 @@ window, f 32;
 #X text 54 61 off;
 #X msg 48 210 stereoSep \$1;
 #X floatatom 48 188 5 0 0 0 - - -, f 5;
-#X text 137 209 set the stereo-separation (default: -15);
+#X text 137 209 set the stereo-separation (default:-15);
 #X msg 66 258 stereoFoc \$1;
 #X text 150 259 set the stereo-focal;
 #X floatatom 66 234 5 0 0 0 - - -, f 5;
@@ -480,11 +480,11 @@ window, f 32;
 #X restore 354 641 pd stereo-3D;
 #X text 464 132 basic create and start rendering;
 #X text 513 241 change background color;
-#X text 56 538 set the background color of the window (default 0 0
+#X text 56 538 set the background color of the window (default: 0 0
 0);
 #X text 30 238 dimen <x> <y>:;
 #X text 30 333 offset <x> <y>:;
-#X text 29 593 view <x> <y> <z> : translate the camera (default 0 0
+#X text 29 593 view <x> <y> <z> : translate the camera (default: 0 0
 4);
 #N canvas 124 233 762 647 more 0;
 #X text 43 11 messages to [gemwin] regarding the view-point ("camera")

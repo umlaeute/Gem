@@ -61,7 +61,7 @@
 #X text 509 118 (JPEG \, TIFF \, ..);
 #X obj 468 166 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X text 63 275 Inlet 1: 1|0: turn conversion on/off;
+#X text 63 275 Inlet 1: 1|0: turn conversion on/off (default:1);
 #X text 62 339 see also:;
 #X obj 248 338 pix_grey;
 #X obj 451 196 pix_yuv;

@@ -71,8 +71,8 @@ can be modified (since there is no hue);
 #X floatatom 530 175 5 0 0 0 saturation - -;
 #X text 21 141 A contrast (or saturation) of "1" will not change the
 image. Both contrast and saturation modifiers must be >=0!;
-#X text 63 261 Inlet 2: float: contrast (>=0.f default=1.f);
-#X text 63 274 Inlet 3: float: saturation (>=0.f default=1.f);
+#X text 63 261 Inlet 2: float: contrast (>=0. default:1);
+#X text 63 274 Inlet 3: float: saturation (>=0. default:1);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

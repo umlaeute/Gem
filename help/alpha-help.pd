@@ -40,7 +40,7 @@
 #X obj 451 197 cnv 15 80 60 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 579 186 color 1 0 0 0.5;
-#X text 60 219 Inlet 1: float: turn alpha blending on/off;
+#X text 60 219 Inlet 1: float: turn alpha blending on/off (default:1);
 #X text 50 12 Synopsis: [alpha];
 #X text 29 77 Description: enable alpha blending;
 #X obj 458 310 square;
@@ -65,7 +65,7 @@ depth detection;
 the rendering order matters \, so you probably want to set the gemhead
 order number high so that the object is rendered after all of the non-alpha
 blended ones.;
-#X text 63 171 float : blending function (default: GL_ONE_MINUS_SRC_ALPHA)
+#X text 63 171 float : blending function (default:GL_ONE_MINUS_SRC_ALPHA)
 ;
 #X text 60 260 Inlet 2: float: blending function;
 #X text 70 272 0=GL_ONE_MINUS_SOURCE_ALPHA;

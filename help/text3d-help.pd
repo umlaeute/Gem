@@ -71,7 +71,6 @@ justification;
 #X text 10 94 [text3d] renders one line of a text with the current
 color \, and all 3D-transformation;
 #X text 33 14 Synopsis: [text3d];
-#X text 27 464 Inlet 2: float: size (in points). default: 20;
 #X obj 30 531 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
 #X text 43 535 Note: on some systems it might be necessary to turn
@@ -88,6 +87,7 @@ on the command-line and load fonts with just "font times.ttf".;
 #X text 470 417 see also:;
 #X obj 541 442 textextruded;
 #X obj 541 465 textoutline;
+#X text 27 464 Inlet 2: float: size (in points) (default:20);
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 36 0;
@@ -101,4 +101,4 @@ on the command-line and load fonts with just "font times.ttf".;
 #X connect 30 0 36 3;
 #X connect 31 0 36 1;
 #X connect 36 0 37 0;
-#X connect 43 0 37 0;
+#X connect 42 0 37 0;

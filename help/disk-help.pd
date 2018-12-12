@@ -54,9 +54,9 @@
 middle at the current position with current color. The look of the
 disk can be changed with the draw message \, its size can be changed
 via the second inlet \, the size of the hole via the third inlet.;
-#X text 26 286 Inlet 4: float: inner radius (default: 0);
+#X text 26 286 Inlet 4: float: inner radius (default:0);
 #X obj 553 199 disk 1;
-#X text 27 273 Inlet 3: int: number of segments (default: 10);
+#X text 27 273 Inlet 3: int: number of segments (default:10);
 #X text 28 177 disk size(=outer radius) \, segments \, hole size(=inner
 radius);
 #X text 29 191 defaults: 1 \, 10 \, 0;

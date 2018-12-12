@@ -72,7 +72,6 @@ on the command-line and load fonts with just "font times.ttf".;
 #X text 27 428 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
 justification;
 #X obj 472 89 rotateXYZ;
-#X text 27 457 Inlet 2: float: size (in points). default: 20;
 #X obj 20 523 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
 #X text 33 527 Note: on some systems it might be necessary to turn
@@ -91,18 +90,19 @@ this to work;
 #X text 472 418 see also:;
 #X obj 545 418 text2d;
 #X obj 592 418 text3d;
+#X text 27 457 Inlet 2: float: size (in points). (default:20);
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;
-#X connect 18 0 41 1;
-#X connect 19 0 41 0;
+#X connect 18 0 40 1;
+#X connect 19 0 40 0;
 #X connect 20 0 19 0;
 #X connect 21 0 20 0;
-#X connect 22 0 41 0;
-#X connect 23 0 41 0;
-#X connect 30 0 41 0;
+#X connect 22 0 40 0;
+#X connect 23 0 40 0;
+#X connect 30 0 40 0;
 #X connect 31 0 37 3;
 #X connect 32 0 37 1;
-#X connect 37 0 41 0;
-#X connect 43 0 41 0;
-#X connect 44 0 43 0;
+#X connect 37 0 40 0;
+#X connect 42 0 40 0;
+#X connect 43 0 42 0;

@@ -70,7 +70,7 @@ Alias/Wavefront's OBJ-format.;
 -1 0;
 #X text 27 350 Inlet 1: message: open <filename.obj>;
 #X text 27 367 Inlet 1: message: rescale 1|0 :: normalize the model
-(must be set PRIOR to opening a model (default: 1);
+(must be set PRIOR to opening a model (default:1);
 #X text 26 444 Inlet 1: message: material 1|0 :: use material-information
 (from the .MTL-file);
 #X text 27 512 Inlet 1: message: group <int> :: draw only specified
@@ -90,7 +90,7 @@ to be displayed.;
 #X obj 486 254 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 27 397 Inlet 1: message: smooth <float> :: set smoothing factor
-( 0.0==flat. 1.0==smooth. default=0.5);
+( 0.0==flat. 1.0==smooth. default:0.5);
 #X text 27 474 Inlet 1: message: texture 0|1|2 :: 0==linear texturing
 \, 1==sphere mapping \, 2==UV-mapping (default);
 #X obj 574 254 hradio 15 1 0 3 empty empty empty 0 -6 0 8 -262144 -1

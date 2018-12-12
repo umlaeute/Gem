@@ -797,7 +797,7 @@ at default offset=0);
 #X msg 234 316 positionX X;
 #X msg 314 316 positionY Y;
 #X msg 394 316 positionZ Z;
-#X text 51 453 offset is always optional (default=0) \, and comes after
+#X text 51 453 offset is always optional (default:0) \, and comes after
 the table names;
 #X text 50 507 unset table data is initialized to 0.f;
 #X restore 464 333 pd tabledata;

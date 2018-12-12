@@ -20,7 +20,7 @@ domain (like "x y z" for "point" \, "x1 y1 z1 x2 y2 z2" for "line"
 the system \, where they will vanish. You can set the sink-domain (shape)
 and the corresponding arguments.;
 #X obj 269 199 part_sink <domain> [<arguments>...];
-#X text 56 297 you can turn on/off the killing of particles (default==off)
+#X text 56 297 you can turn on/off the killing of particles (default:off)
 ;
 #X connect 0 0 9 0;
 #X connect 5 0 9 1;

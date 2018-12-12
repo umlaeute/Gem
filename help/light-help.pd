@@ -49,7 +49,7 @@
 (unlike [world_light] which is at an infinite distance). Because light
 is local light \, there is more computation required. Use a world_light
 if you don't mind parallel light rays.;
-#X text 27 373 Inlet 1: message: debug 1|0;
+#X text 27 373 Inlet 1: message: debug 1|0 (default:0);
 #X text 28 388 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X obj 483 235 light;
 #X msg 570 213 1 1 1;
@@ -80,7 +80,7 @@ sphere.;
 #X text 63 307 light-number;
 #X obj 492 175 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
 -1 0 1;
-#X text 27 362 Inlet 1: float: turn light on(1)/off(0);
+#X text 27 362 Inlet 1: float: turn light on/off (default:1);
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 31 0;

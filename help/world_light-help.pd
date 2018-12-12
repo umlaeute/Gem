@@ -44,8 +44,9 @@
 #X obj 481 84 gemhead;
 #X text 53 30 Class: non-geometric object;
 #X text 7 69 Description: adds a point-light to the scene;
-#X text 44 361 Inlet 1: message: debug 1|0;
-#X text 45 376 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
+#X text 44 360 Inlet 1: message: debug 1|0 : show debugging object
+(default:0), f 66;
+#X text 44 373 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X msg 568 182 1 1 1;
 #X obj 495 157 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
@@ -76,10 +77,10 @@ use "debug" to display the light source as a small cone.;
 #X text 33 14 Synopsis: [world_light];
 #X obj 490 134 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
 -1 0 1;
-#X text 44 348 Inlet 1: float: turn light on(1)/off(0);
 #X text 40 425 see also:;
 #X obj 145 425 spot_light;
 #X obj 103 425 light;
+#X text 44 347 Inlet 1: float: turn light on/off (default:1);
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 27 0;

@@ -66,7 +66,7 @@ the movie <filename> and decodes it into the specified color-space.
 #X text 18 346 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
 the current film into the specified colorspace.;
 #X text 18 375 Inlet 1: message : auto 1|0 : starts/stops automatic
-playback.;
+playback. (default:0);
 #X text 16 455 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering.;
 #X text 17 576 Outlet 3: bang: indicates that the last frame has been

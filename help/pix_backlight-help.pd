@@ -71,9 +71,9 @@ on their luminance value \, thus producing a backlighting effect. You
 can set the amount of the displacement as well as floor/ceiling limits
 \, to produce displacements only within the specified range.;
 #X obj 451 207 pix_backlight;
-#X text 64 254 Inlet 2: float: scale-factor (default: 0.5);
-#X text 64 268 Inlet 3: float: floor (default: 0);
-#X text 64 282 Inlet 4: float: ceiling (default: 1);
+#X text 64 254 Inlet 2: float: scale-factor (default:0.5);
+#X text 64 268 Inlet 3: float: floor (default:0);
+#X text 64 282 Inlet 4: float: ceiling (default:1);
 #X obj 469 172 / 100;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);

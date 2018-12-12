@@ -54,7 +54,7 @@ with the draw message \, its size can be changed via the second inlet.
 #X msg 535 138 draw point;
 #X obj 593 54 gemhead;
 #X floatatom 626 130 5 0 0 2 size - -;
-#X text 64 191 default: 1;
+#X text 64 191 default:1;
 #X text 27 247 Inlet 1: message: draw [line|fill|point|default];
 #X connect 18 0 19 0;
 #X connect 19 0 18 0;

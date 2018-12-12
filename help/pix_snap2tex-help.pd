@@ -62,7 +62,7 @@ attached. You can specify the close-up you want to be grabbed via offset/dimensi
 #X text 12 135 When grabbing \, be sure that something is in the rendering-buffer
 \, else you will get a black texture.;
 #X text 33 245 Inlet 1: bang: do grab!;
-#X text 33 257 Inlet 1: [1|0]: turn texturing on(default)/off;
+#X text 33 257 Inlet 1: [1|0]: turn texturing on/off (default:1);
 #X text 33 269 Inlet 1: message: quality [0|1]: turn texture-resampling
 on(default)/off;
 #X text 33 295 Inlet 2: list: offsetX offsetY (in pixels \; default:
