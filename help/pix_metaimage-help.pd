@@ -74,14 +74,7 @@
 #X text 49 12 Synopsis: [pix_metaimage];
 #X text 22 103 The output image is composed of many smaller versions
 of the input image \, altered to match the colors of the area they
-cover in the original image.;
-#X text 23 205 This controls how the size of the images is changed
-by the 'Size' message. If turned on \, then the size doesn't scale
-linearly \, but is used as if the images were on a plane in 3D space
-\, and controls the distance from the plane.;
-#X text 24 148 Part of the scaling down process on the images involves
-properly smoothing them \; turning this parameter on skips that step
-\, giving a more jagged output but speeding up the processing.;
+cover in the original image., f 67;
 #X text 50 350 Inlet 1: cheap 1|0 : use cheap and nasty algorithm (default:0)
 , f 62;
 #X text 50 364 Inlet 1: distance 1|0 : use distance-based algorithm
@@ -91,6 +84,14 @@ properly smoothing them \; turning this parameter on skips that step
 #X text 44 450 (ported from "pete's plugins" \, www.petewarden.com)
 ;
 #X text 49 381 Inlet 2: <float> : size;
+#X text 22 148 Part of the scaling down process on the images involves
+properly smoothing them \; turning the "cheap" parameter ON skips that
+step \, giving a more jagged output but speeding up the processing.
+, f 67;
+#X text 22 205 The "distance" parameter controls how the size of the
+images is changed by the 'size' message. If turned on \, then the size
+doesn't scale linearly \, but is used as if the images were on a plane
+in 3D space \, and controls the distance from the plane., f 67;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
