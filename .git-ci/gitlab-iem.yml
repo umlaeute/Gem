@@ -4,7 +4,7 @@ variables:
   PDVERSION: 0.49-0
   LANG: C
   # compatibility for older OSX-builds
-  MACOSX_DEPLOYMENT_TARGET: 10.6
+  MACOSX_DEPLOYMENT_TARGET: "10.6"
   # however, it seems that CI_JOB_NAME is not expanded here!
   ARTIFACTSDIR: artifacts/${CI_JOB_NAME%_*}
 
