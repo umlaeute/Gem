@@ -13,7 +13,6 @@ SUBDIRS += filmAVF filmAVI filmAVIPLAY filmDS filmDarwin filmGMERLIN filmMPEG1 f
 if DISABLED
 SUBDIRS += filmDSATL
 SUBDIRS += filmTEST
-SUBDIRS += videoTEST
 endif
 
 ## Pix output (continuous) plugins
@@ -26,11 +25,15 @@ SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
 
 ## proprietary video capture plugins
 SUBDIRS += videoAVT videoHALCON videoPYLON videoDECKLINK
+if DISABLED
+SUBDIRS += videoTEST
+endif
 
 ## asset loading plugins
 SUBDIRS += modelOBJ modelASSIMP2 modelASSIMP3
 
 
 ## filmTEST is not built by default, but we want to ship it
-DIST_SUBDIRS = $(SUBDIRS) filmTEST videoTEST
-
+DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS += filmTEST filmDSATL
+DIST_SUBDIRS += videoTEST
