@@ -976,7 +976,7 @@ bool gemglxwindow :: create(void)
       m_context = createContext();
     } catch (GemException&x) {
       m_context = NULL;
-      error("creationg of gem::context failed: %s", x.what());
+      error("creation of gem::context failed: %s", x.what());
     }
   }
 
