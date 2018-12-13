@@ -526,11 +526,9 @@ AC_ARG_WITH([pd],
 AS_IF([ test "x${with_pd}" = "x" ],[
  AS_CASE([$host_os],
  [*-darwin*], [
-    AS_IF([ test -d "/Applications/Pd-extended.app/Contents/Resources" ], [ with_pd="/Applications/Pd-extended.app/Contents/Resources" ])
     AS_IF([ test -d "/Applications/Pd.app/Contents/Resources" ], [ with_pd="/Applications/Pd.app/Contents/Resources" ])
     ],
  [*mingw* | *cygwin*], [
-    AS_IF([ test -d "${PROGRAMFILES}/Pd-extended" ], [ with_pd="${PROGRAMFILES}/Pd-extended" ])
     AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
 ],)])
 
