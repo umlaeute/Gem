@@ -449,7 +449,7 @@ AS_IF([test "x$fat_binary" != "xno" ],[
        TARGET_ARCHS=$(echo "$fat_binary" | tr ',' ' ')
      ],[
        # Choose a default set of architectures based upon platform.
-       TARGET_ARCHS="ppc i386"
+       TARGET_ARCHS="i386 x86_64"
      ])
     ])
     AC_MSG_RESULT([$TARGET_ARCHS])
