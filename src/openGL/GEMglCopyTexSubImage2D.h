@@ -10,8 +10,8 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef _INCLUDE__GEM_OPENGL_GEMGLCOPYTEXSUBIMAGE_D_H_
-#define _INCLUDE__GEM_OPENGL_GEMGLCOPYTEXSUBIMAGE_D_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLCOPYTEXSUBIMAGE2D_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLCOPYTEXSUBIMAGE2D_H_
 
 #include "Base/GemGLBase.h"
 

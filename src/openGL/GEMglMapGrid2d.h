@@ -10,8 +10,8 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef _INCLUDE__GEM_OPENGL_GEMGLMAPGRID_D_H_
-#define _INCLUDE__GEM_OPENGL_GEMGLMAPGRID_D_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLMAPGRID2D_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLMAPGRID2D_H_
 
 #include "Base/GemGLBase.h"
 

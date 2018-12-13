@@ -10,8 +10,8 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef _INCLUDE__GEM_OPENGL_GEMGLEVALMESH__H_
-#define _INCLUDE__GEM_OPENGL_GEMGLEVALMESH__H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLEVALMESH1_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLEVALMESH1_H_
 
 #include "Base/GemGLBase.h"
 

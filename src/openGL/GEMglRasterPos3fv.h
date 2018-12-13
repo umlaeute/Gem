@@ -10,8 +10,8 @@
  * ------------------------------------------------------------------
  */
 
-#ifndef _INCLUDE__GEM_OPENGL_GEMGLRASTERPOS_FV_H_
-#define _INCLUDE__GEM_OPENGL_GEMGLRASTERPOS_FV_H_
+#ifndef _INCLUDE__GEM_OPENGL_GEMGLRASTERPOS3FV_H_
+#define _INCLUDE__GEM_OPENGL_GEMGLRASTERPOS3FV_H_
 
 #include "Base/GemGLBase.h"
 
