@@ -485,7 +485,8 @@ AS_IF([test "x$fat_binary" != "xno" ],[
     []Name[]_LDFLAGS+=$[]Name
     LDFLAGS="$tmp_arch_ldflags"
    ])
-
+   AC_SUBST([]Name[]_CXXFLAGS)
+   AC_SUBST([]Name[]_LDFLAGS)
    undefine([Name])
 ])
 ])# GEM_CHECK_FAT

@@ -552,8 +552,6 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 
 GEM_CHECK_FAT(GEM_ARCH)
 AC_MSG_RESULT($GEM_ARCH)
-AC_SUBST(GEM_ARCH_CXXFLAGS)
-AC_SUBST(GEM_ARCH_LDFLAGS)
 
 AS_IF([test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686" || test "x${ARCH}" = "xx86_64"], [
  AS_IF([test "x$enable_altivec" != "xyes"], [enable_altivec="no"])
