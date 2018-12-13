@@ -145,16 +145,9 @@ AC_SUBST(GEM_CFLAGS)
 AC_SUBST(GEM_CXXFLAGS)
 AC_SUBST(GEM_LIBS)
 
-AC_SUBST(GEM_EXTERNAL_CPPFLAGS)
-AC_SUBST(GEM_EXTERNAL_CFLAGS)
-AC_SUBST(GEM_EXTERNAL_LIBS)
-
 GEM_CHECK_WERROR
 GEM_CPPFLAGS=""
-
-if test "x$have_pddll" = "xyes"; then
- GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll"
-fi
+GEM_CHECK_EXTERNAL
 
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
@@ -515,10 +508,7 @@ AS_IF([test "x$enable_registerstruct" = "xyes" ], [
    might break things, if you are using several different compilers])
 ])])
 
-if test "x$WINDOWS" = "xyes"; then
- GEM_CHECK_CXXFLAGS([-mms-bitfields], [GEM_EXTERNAL_CFLAGS+="-mms-bitfields"])
-fi
-
+AS_IF([test "x$WINDOWS" = "xyes"], [GEM_CHECK_CXXFLAGS([-mms-bitfields])])
 AS_IF([test "x$KERN" = "xDarwin"], [
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
 ], [
