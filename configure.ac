@@ -257,13 +257,13 @@ GEM_CHECK_LIB([glew], [GLEW],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangl
 GEM_CHECK_LIB([glewmx], [GLEWmx],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
 
 
-if test "x$enable_multicontext" = "xyes"; then
+AS_IF([test "x$enable_multicontext" = "xyes"], [
   have_glew="${have_glewmx}"
   GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
   GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
 
   AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
-fi
+])
 AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
 
 AS_IF([test "x${have_glew}" != "xyes"], [
