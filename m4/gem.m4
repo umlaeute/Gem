@@ -652,3 +652,19 @@ AS_IF([ test "x$enable_threads" != "xno" ],[
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
 ])
 ])
+
+
+# GEM_CHECK_EXTERNAL()
+#
+# checks for Gem (for building externals depending on Gem)
+# if so, they are added to the LDFLAGS, CFLAGS and whatelse
+AC_DEFUN([GEM_CHECK_EXTERNAL],
+[
+  AC_REQUIRE([GEM_CHECK_RTE])
+  AC_SUBST(GEM_EXTERNAL_CPPFLAGS)
+  AC_SUBST(GEM_EXTERNAL_CFLAGS)
+  AC_SUBST(GEM_EXTERNAL_LIBS)
+
+  AS_IF([test "x$have_pddll" = "xyes" ], [ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll" ])
+  AS_IF([test "x$WINDOWS" = "xyes" ], [GEM_CHECK_CXXFLAGS([-mms-bitfields], [GEM_EXTERNAL_CFLAGS+="-mms-bitfields"])])
+])
