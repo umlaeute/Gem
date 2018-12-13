@@ -469,16 +469,6 @@ LIBS="$gem_tmp_lqt_libs"
 # using pix_videoOS rather than pix_video
 AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
 
-## on OSX we still default to the olde way
-#if test "x$KERN" = "xDarwin"; then
-# if test "x$with_film" = "x"; then
-#   with_film="Darwin"
-# fi
-# if test "x$with_video" = "x"; then
-#   with_video="Darwin"
-# fi
-#fi
-
 AS_IF(
  [test "x$with_video" = "x"], [with_video="plugins"],
  [test "x$with_video" = "xyes"], [with_video="plugins"],
