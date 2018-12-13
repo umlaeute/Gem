@@ -15,10 +15,11 @@ endif
 
 gem_videoDECKLINK_la_CXXFLAGS =
 gem_videoDECKLINK_la_LDFLAGS  = -module -avoid-version -shared
+gem_videoDECKLINK_la_LIBADD   =
+
 if WINDOWS
 gem_videoDECKLINK_la_LDFLAGS += -no-undefined
 endif
-gem_videoDECKLINK_la_LIBADD   =
 
 # RTE
 gem_videoDECKLINK_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
