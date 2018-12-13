@@ -33,6 +33,10 @@ gem_videoDECKLINK_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 gem_videoDECKLINK_la_CXXFLAGS += $(GEM_LIB_DECKLINK_CFLAGS)
 gem_videoDECKLINK_la_LIBADD   += $(GEM_LIB_DECKLINK_LIBS)
 
+if WINDOWS
+gem_videoDECKLINK_la_LIBADD   += -lole32
+endif
+
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
 
