@@ -3,8 +3,8 @@
 variables:
   PDVERSION: 0.49-0
   LANG: C
-  # compatibility for older OSX-builds
-  MACOSX_DEPLOYMENT_TARGET: "10.6"
+  # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
+  MACOSX_DEPLOYMENT_TARGET: "10.9"
   # however, it seems that CI_JOB_NAME is not expanded here!
   ARTIFACTSDIR: artifacts/${CI_JOB_NAME%_*}
 
