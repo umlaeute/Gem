@@ -26,6 +26,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+typedef BOOL deckbool_t;
 typedef wchar_t* deckstring_t;
 namespace {
   deckstring_t string2deckstring(const std::string&s) {
@@ -51,6 +52,7 @@ namespace {
   }
 };
 #elif defined __APPLE__
+typedef bool deckbool_t;
 typedef CFStringRef deckstring_t;
 namespace {
   deckstring_t string2deckstring(const std::string&s) {
@@ -76,6 +78,7 @@ namespace {
 };
 #else /* linux */
 # include <string.h>
+typedef bool deckbool_t;
 typedef const char* deckstring_t;
 namespace {
   deckstring_t string2deckstring(const std::string&s) {
@@ -445,7 +448,7 @@ bool videoDECKLINK::open(gem::Properties&props)
   if (m_formatnum<0 && formatname.empty()) {
     // no format specified; try auto-detection
     IDeckLinkAttributes*dlAttribs=0;
-    bool formatDetectionSupported = false;
+    deckbool_t formatDetectionSupported = false;
     if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes,
                                      (void**)&dlAttribs)) {
       if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection,
