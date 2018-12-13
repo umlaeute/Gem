@@ -24,15 +24,16 @@ endif
 gem_videoAVT_la_LIBADD   =
 
 # RTE
-gem_videoAVT_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
-gem_videoAVT_la_LDFLAGS  += $(GEM_RTE_LIBS)
-#gem_videoAVT_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
-#gem_videoAVT_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+gem_videoAVT_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+gem_videoAVT_la_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
+# flags for building Gem externals
+gem_videoAVT_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+gem_videoAVT_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 # #gem_videoAVT_la @MOREFLAGS@
 
 # Dependencies
-gem_videoAVT_la_CXXFLAGS += @GEM_LIB_LIBPVAPI_CFLAGS@
-gem_videoAVT_la_LIBADD   += @GEM_LIB_LIBPVAPI_LIBS@
+gem_videoAVT_la_CXXFLAGS += $(GEM_LIB_LIBPVAPI_CFLAGS)
+gem_videoAVT_la_LIBADD   += $(GEM_LIB_LIBPVAPI_LIBS)
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk

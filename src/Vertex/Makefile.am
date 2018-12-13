@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libVertex.la
@@ -13,9 +13,9 @@ libVertex_la_LIBADD   =
 libVertex_la_LDFLAGS  =
 
 # RTE flags
-libVertex_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libVertex_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libVertex_la_LIBADD   += $(GEM_RTE_LIBS)
-libVertex_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libVertex_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 # Dependencies
 ## none

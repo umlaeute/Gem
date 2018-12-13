@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libGeos.la
@@ -13,13 +13,13 @@ libGeos_la_LIBADD   =
 libGeos_la_LDFLAGS  =
 
 # RTE flags
-libGeos_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libGeos_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libGeos_la_LIBADD   += $(GEM_RTE_LIBS)
-libGeos_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libGeos_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 # FTGL
-libGeos_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
-libGeos_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
+libGeos_la_CXXFLAGS += $(GEM_LIB_FTGL_CFLAGS)
+libGeos_la_LIBADD   += $(GEM_LIB_FTGL_LIBS)
 
 
 libGeos_la_SOURCES=  \

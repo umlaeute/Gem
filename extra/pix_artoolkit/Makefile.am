@@ -28,10 +28,10 @@ endif
 pix_artoolkit_la_LIBADD   =
 
 # RTE flags
-pix_artoolkit_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+pix_artoolkit_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 pix_artoolkit_la_LIBADD   += $(GEM_RTE_LIBS)
 
-pix_artoolkit_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
+pix_artoolkit_la_LDFLAGS += $(GEM_ARCH_LDFLAGS)
 
 
 # convenience symlinks

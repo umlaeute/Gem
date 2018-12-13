@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libUtils.la
@@ -13,14 +13,14 @@ libUtils_la_LIBADD   =
 libUtils_la_LDFLAGS  =
 
 # RTE flags
-libUtils_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@ @GEM_THREADS_CFLAGS@
-libUtils_la_LIBADD   += $(GEM_RTE_LIBS) @GEM_THREADS_LIBS@
-libUtils_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libUtils_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS) $(GEM_THREADS_CFLAGS)
+libUtils_la_LIBADD   += $(GEM_RTE_LIBS) $(GEM_THREADS_LIBS)
+libUtils_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 
 # BiDirectional text output
-libUtils_la_CXXFLAGS += @GEM_LIB_FRIBIDI_CFLAGS@
-libUtils_la_LIBADD   += @GEM_LIB_FRIBIDI_LIBS@
+libUtils_la_CXXFLAGS += $(GEM_LIB_FRIBIDI_CFLAGS)
+libUtils_la_LIBADD   += $(GEM_LIB_FRIBIDI_LIBS)
 
 
 

@@ -22,14 +22,14 @@ endif
 pix_hit_la_LIBADD   =
 
 # RTE flags
-pix_hit_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+pix_hit_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 pix_hit_la_LIBADD   += $(GEM_RTE_LIBS)
 
-pix_hit_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
+pix_hit_la_LDFLAGS += $(GEM_ARCH_LDFLAGS)
 
 # special flags for building externals
-pix_hit_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
-pix_hit_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+pix_hit_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+pix_hit_la_LIBADD += -L$(top_builddir) $(GEM_EXTERNAL_LIBS)
 
 
 # convenience symlinks

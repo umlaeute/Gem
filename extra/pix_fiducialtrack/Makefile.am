@@ -24,14 +24,14 @@ endif
 pix_fiducialtrack_la_LIBADD   =
 
 # RTE flags
-pix_fiducialtrack_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+pix_fiducialtrack_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 pix_fiducialtrack_la_LIBADD   += $(GEM_RTE_LIBS)
 
-pix_fiducialtrack_la_LDFLAGS += @GEM_ARCH_LDFLAGS@
+pix_fiducialtrack_la_LDFLAGS += $(GEM_ARCH_LDFLAGS)
 
 # special flags for building externals
-pix_fiducialtrack_la_CXXFLAGS += @GEM_EXTERNAL_CFLAGS@
-pix_fiducialtrack_la_LIBADD += -L$(top_builddir) @GEM_EXTERNAL_LIBS@
+pix_fiducialtrack_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+pix_fiducialtrack_la_LIBADD += -L$(top_builddir) $(GEM_EXTERNAL_LIBS)
 
 pix_fiducialtrack_la_LIBADD   += libfidtrack.la
 
@@ -41,10 +41,10 @@ libfidtrack_la_LIBADD    =
 libfidtrack_la_LDFLAGS   =
 
 ## libfidtrack links against RTE because it uses "error"
-libfidtrack_la_CFLAGS   += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
-libfidtrack_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libfidtrack_la_CFLAGS   += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+libfidtrack_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libfidtrack_la_LIBADD   += $(GEM_RTE_LIBS)
-libfidtrack_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libfidtrack_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 ### SOURCES
 pix_fiducialtrack_la_SOURCES = \

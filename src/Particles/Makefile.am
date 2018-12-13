@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign subdir-objects
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libParticles.la libPAPI.la
@@ -17,15 +17,15 @@ libPAPI_la_LIBADD   =
 libPAPI_la_LDFLAGS  =
 
 # RTE flags
-libParticles_la_CXXFLAGS += $(GEM_RTE_CFLAGS) @GEM_ARCH_CXXFLAGS@
+libParticles_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libParticles_la_LIBADD   += $(GEM_RTE_LIBS)
-libParticles_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libParticles_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 libParticles_la_LIBADD   += libPAPI.la
 
-libPAPI_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
+libPAPI_la_CXXFLAGS += $(GEM_ARCH_CXXFLAGS)
 libPAPI_la_LIBADD   +=
-libPAPI_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libPAPI_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 libPAPI_la_SOURCES=  \
     papi/papi.h \
