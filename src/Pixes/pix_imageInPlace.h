@@ -34,68 +34,71 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_imageInPlace : public pix_multiimage
 {
-    CPPEXTERN_HEADER(pix_imageInPlace, pix_multiimage);
+  CPPEXTERN_HEADER(pix_imageInPlace, pix_multiimage);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_imageInPlace(t_symbol *filename, t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate);
+  //////////
+  // Constructor
+  pix_imageInPlace(t_symbol *filename, t_floatarg baseImage,
+                   t_floatarg topImage, t_floatarg skipRate);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_imageInPlace();
+  //////////
+  // Destructor
+  virtual ~pix_imageInPlace();
 
-      ////////
-      // extension check
-      virtual bool isRunnable(void);
+  ////////
+  // extension check
+  virtual bool isRunnable(void);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	virtual void	startRendering();
+  //////////
+  virtual void    startRendering();
 
-    	//////////
-    	virtual void	stopRendering();
+  //////////
+  virtual void    stopRendering();
 
-    	//////////
-    	// When a preload is received
-    	virtual void	preloadMess(t_symbol *filename, int baseImage, int topImage, int skipRate);
+  //////////
+  // When a preload is received
+  virtual void    preloadMess(t_symbol *filename, int baseImage,
+                              int topImage, int skipRate);
 
-    	//////////
-    	// When a download is received
-    	virtual void	downloadMess();
-	bool m_wantDownload;
+  //////////
+  // When a download is received
+  virtual void    downloadMess();
+  bool m_wantDownload;
 
-    	//////////
-    	// When a purge is received
-    	virtual void	purgeMess();
+  //////////
+  // When a purge is received
+  virtual void    purgeMess();
 
-    	//////////
-    	// quality message
-    	virtual void	textureQuality(int type);
+  //////////
+  // quality message
+  virtual void    textureQuality(int type);
 
-    	//////////
-    	// repeat message
-    	virtual void	repeatMess(int type);
+  //////////
+  // repeat message
+  virtual void    repeatMess(int type);
 
-	//////////
-	int				mInPreload;
-	GLuint          m_textureQuality, m_repeat;
+  //////////
+  int                             mInPreload;
+  GLuint          m_textureQuality, m_repeat;
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	preloadMessCallback(void *data, t_symbol *filename, t_float baseImage, t_float topImage, t_float skipRate);
+  //////////
+  // static member functions
+  static void     preloadMessCallback(void *data, t_symbol *filename,
+                                      t_float baseImage, t_float topImage, t_float skipRate);
 };
 
-#endif	// for header file
+#endif  // for header file

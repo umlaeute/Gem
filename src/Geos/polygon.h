@@ -43,51 +43,53 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN polygon : public GemShape
 {
-    CPPEXTERN_HEADER(polygon, GemShape);
+  CPPEXTERN_HEADER(polygon, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	polygon(t_floatarg numInputs);
+  //////////
+  // Constructor
+  polygon(t_floatarg numInputs);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~polygon();
+  //////////
+  // Destructor
+  virtual ~polygon();
 
-    	//////////
-    	// Do the renderShapeing
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the renderShapeing
+  virtual void    renderShape(GemState *state);
 
-    	//////////
-    	// Set the vertices
-    	void	    	setVert(int whichOne, float x, float y, float z);
+  //////////
+  // Set the vertices
+  void            setVert(int whichOne, float x, float y, float z);
 
-    	void	    	listMess(int,t_atom*);
+  void            listMess(int,t_atom*);
 
-	    //-----------------------------------
-	    // GROUP:	Member variables
-	    //-----------------------------------
+  //-----------------------------------
+  // GROUP:   Member variables
+  //-----------------------------------
 
-    	//////////
-    	// The vertices
-			void createVertices(int);
-    	int 	    	m_numVertices;
-      float  *m_vertarray;
-    	float **m_vert;
+  //////////
+  // The vertices
+  void createVertices(int);
+  int             m_numVertices;
+  float  *m_vertarray;
+  float **m_vert;
 
-    	//////////
-    	// The number of inlets (one per vertex)
-    	int 	    	m_numInputs;
-			t_inlet**m_inlet;
+  //////////
+  // The number of inlets (one per vertex)
+  int             m_numInputs;
+  t_inlet**m_inlet;
 
-    private:
-    	//////////
-    	// Static member functions
-    	static void 	vertCallback(void *data, t_symbol *type, int argc, t_atom*argv);
-    	static void 	listCallback(void *data, t_symbol *type, int argc, t_atom*argv);
+private:
+  //////////
+  // Static member functions
+  static void     vertCallback(void *data, t_symbol *type, int argc,
+                               t_atom*argv);
+  static void     listCallback(void *data, t_symbol *type, int argc,
+                               t_atom*argv);
 };
 
-#endif	// for header file
+#endif  // for header file

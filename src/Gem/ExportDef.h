@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Export crap
+        Export crap
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -68,4 +68,4 @@ LOG
 # define GEM_EXTERN GEM_IMPORT
 #endif
 
-#endif	// for header file
+#endif  // for header file

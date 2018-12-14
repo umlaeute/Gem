@@ -238,7 +238,7 @@ requested a window size with "dimen # #", then the window
 size was likely to be wrong.  This is now fixed.
 
 Fixed a bug in the view message to gemwin.  There was an offset
-which should not have occured.  You might need to change your
+which should not have occurred.  You might need to change your
 view messages to account for it.  Just subtract 4 from any
 Z values.
 

@@ -40,13 +40,13 @@ typedef _w64 long        ssize_t;
 #endif
 
 #ifdef HAVE_MAGICK_MAGICKCORE_H
-# include <magick/MagickCore.h>
+# ifdef HAVE_MAGICK7
+#  include <MagickCore/MagickCore.h>
+# else
+#  include <magick/MagickCore.h>
+# endif
 #else
 # include <Magick++.h>
-#endif
-
-#ifndef HAVE_ISMAGICKINSTANTIATED
-# define USE_GRAPHICSMAGICK
 #endif
 
 // hmm, the GetMimeList() function has changed!
@@ -62,6 +62,24 @@ typedef _w64 long        ssize_t;
 #ifndef MagickLibVersion
 # define MagickLibVersion 0
 #endif
+
+#ifndef HAVE_MAGICK7
+# ifndef HAVE_ISMAGICKINSTANTIATED
+#  define USE_GRAPHICSMAGICK
+# endif
+#endif
+
+#ifdef HAVE_ISMAGICKINSTANTIATED
+// IsMagickInstantiated() has been deprecated,
+// instead IsMagickCoreInstantiated() should be used
+// (available since MagickCore-6.8.8.2)
+# if MagickLibVersion >= 0x688
+// use IsMagickCoreInstantiated() directly
+# else
+#  define IsMagickCoreInstantiated() IsMagickInstantiated()
+# endif
+#endif
+
 
 // this won't catch ImageMagick>=6.6.2-0, but what can I do?
 // ubuntu/natty ships with 6.6.2-6!
@@ -99,18 +117,29 @@ REGISTER_IMAGESAVERFACTORY("magick", imageMAGICK);
 imageMAGICK :: imageMAGICK(void)
 {
 #ifdef HAVE_ISMAGICKINSTANTIATED
-  if(!IsMagickInstantiated())MagickCoreGenesis(NULL,MagickTrue);
+  if(!IsMagickCoreInstantiated()) {
+    MagickCoreGenesis(NULL,MagickTrue);
+  }
 #else
   InitializeMagick(0);
 #endif
 
   char**mimelist=0;
   mimelistlength_t  length=0;
-  ExceptionInfo exception;
-  GetExceptionInfo(&exception);
-#ifndef USE_GRAPHICSMAGICK
-  mimelist=GetMimeList("image/*", &length, &exception);
+
+  ExceptionInfo*exception;
+
+#ifdef USE_GRAPHICSMAGICK
+  exception = new ExceptionInfo;
+  GetExceptionInfo(exception);
+#else
+  exception = AcquireExceptionInfo();
 #endif
+
+  mimelist=GetMimeList("image/*", &length, exception);
+
+  DestroyExceptionInfo(exception);
+
   unsigned int i;
   for(i=0; i<length; i++) {
     m_mimetypes.push_back(mimelist[i]);
@@ -119,12 +148,14 @@ imageMAGICK :: imageMAGICK(void)
 }
 imageMAGICK :: ~imageMAGICK(void)
 {
-  //post("~imageMAGICK");
 }
 
 
 
-float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+float imageMAGICK::estimateSave(const imageStruct&image,
+                                const std::string&filename, const std::string&mimetype,
+                                const gem::Properties&props)
+{
   float result=0.5; // slightly preference for MAGICK
   unsigned int i;
   for(i=0; i<m_mimetypes.size(); i++) {
@@ -134,13 +165,16 @@ float imageMAGICK::estimateSave(const imageStruct&image, const std::string&filen
     }
   }
 
-  if(gem::Properties::UNSET != props.type("quality"))
+  if(gem::Properties::UNSET != props.type("quality")) {
     result += 1.;
+  }
 
   return result;
 }
 
-void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+void imageMAGICK::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                       gem::Properties&props)
+{
   mimetypes.clear();
   props.clear();
 

@@ -323,7 +323,7 @@ empty 0 -8 0 14 -204786 -1 -1 0 256;
 ;
 #X text 161 372 set a (writable) property via a message "set <prop>
 <value>";
-#X text 70 224 this will return 2 lists of readable and writeable properties
+#X text 70 224 this will return 2 lists of readable and writable properties
 through the "info" outlet of [pix_video].;
 #X text 72 257 NOTE that propertynames are always single symbols that
 might contain spaces (and other weird characters);

@@ -47,14 +47,14 @@ void pix_2grey :: processRGBAImage(imageStruct &image)
   unsigned char *pixels = image.data;
   int count = image.ysize * image.xsize;
 
-     while (count--)    {
-     int grey = (pixels[chRed  ] * RGB2GRAY_RED  +
-                 pixels[chGreen] * RGB2GRAY_GREEN +
-                 pixels[chBlue ] * RGB2GRAY_BLUE
-                 ) >> 8;
-     pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
-     pixels += 4;
-     }
+  while (count--)    {
+    int grey = (pixels[chRed  ] * RGB2GRAY_RED  +
+                pixels[chGreen] * RGB2GRAY_GREEN +
+                pixels[chBlue ] * RGB2GRAY_BLUE
+               ) >> 8;
+    pixels[chRed] = pixels[chGreen] = pixels[chBlue] = (unsigned char)grey;
+    pixels += 4;
+  }
 }
 
 void pix_2grey :: processYUVImage(imageStruct &image)
@@ -63,7 +63,8 @@ void pix_2grey :: processYUVImage(imageStruct &image)
   int count = image.ysize * image.xsize / 2;
 
   while (count--)    {
-    pixels[chU]=0x80; pixels[chV]=0x80;
+    pixels[chU]=0x80;
+    pixels[chV]=0x80;
     pixels+=4;
   }
 }
@@ -71,22 +72,24 @@ void pix_2grey :: processYUVImage(imageStruct &image)
 #ifdef __MMX__
 # ifndef __APPLE__
 /* LATER: implement MMX code for GL_BGRA_EXT */
-void pix_2grey :: processRGBAMMX(imageStruct &image){
+void pix_2grey :: processRGBAMMX(imageStruct &image)
+{
   __m64*data      =(__m64*)image.data;
 
   register __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
-					 (unsigned char)0x00,
-					 (unsigned char)0x00,
-					 (unsigned char)0xFF,
-					 (unsigned char)0x00,
-					 (unsigned char)0x00,
-					 (unsigned char)0x00,
-					 (unsigned char)0xFF);
-  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN, RGB2GRAY_BLUE, 0);
+                                         (unsigned char)0x00,
+                                         (unsigned char)0x00,
+                                         (unsigned char)0xFF,
+                                         (unsigned char)0x00,
+                                         (unsigned char)0x00,
+                                         (unsigned char)0x00,
+                                         (unsigned char)0xFF);
+  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN,
+                                          RGB2GRAY_BLUE, 0);
   register __m64 pixel, y1, y2, y1_2;
   register int pixsize = (image.ysize * image.xsize)>>1;
 
-  while(pixsize--){
+  while(pixsize--) {
     pixel=data[pixsize]; /* RGBARGBA */
 
     y1_2= _mm_setzero_si64 ();
@@ -124,87 +127,89 @@ void pix_2grey :: processRGBAMMX(imageStruct &image){
   _mm_empty();
 }
 # endif /* APPLE */
-void pix_2grey :: processYUVMMX(imageStruct &image){
- register int pixsize = (image.ysize * image.xsize)>>2;
+void pix_2grey :: processYUVMMX(imageStruct &image)
+{
+  register int pixsize = (image.ysize * image.xsize)>>2;
 
- register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
-					 (unsigned char)0xFF,
-					 (unsigned char)0x00,
-					 (unsigned char)0xFF,
-					 (unsigned char)0x00,
-					 (unsigned char)0xFF,
-					 (unsigned char)0x00,
-					 (unsigned char)0xFF);
- register __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
-					 (unsigned char)0x00,
-					 (unsigned char)0x80,
-					 (unsigned char)0x00,
-					 (unsigned char)0x80,
-					 (unsigned char)0x00,
-					 (unsigned char)0x80,
-					 (unsigned char)0x00);
- __m64*data_p= (__m64*)image.data;
+  register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
+                                          (unsigned char)0xFF,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0xFF,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0xFF,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0xFF);
+  register __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0x80,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0x80,
+                                          (unsigned char)0x00,
+                                          (unsigned char)0x80,
+                                          (unsigned char)0x00);
+  __m64*data_p= (__m64*)image.data;
 
- register __m64 pixel;
- while(pixsize--) {
-   pixel = *data_p;
-   pixel = _mm_and_si64(pixel, mask_64);
-   pixel = _mm_add_pi8 (pixel, offset_64);
-   *data_p++=pixel;
- }
- _mm_empty();
+  register __m64 pixel;
+  while(pixsize--) {
+    pixel = *data_p;
+    pixel = _mm_and_si64(pixel, mask_64);
+    pixel = _mm_add_pi8 (pixel, offset_64);
+    *data_p++=pixel;
+  }
+  _mm_empty();
 }
 #endif
 #ifdef __SSE2__
-void pix_2grey :: processYUVSSE2(imageStruct &image){
- register int pixsize = (image.ysize * image.xsize)>>3;
+void pix_2grey :: processYUVSSE2(imageStruct &image)
+{
+  register int pixsize = (image.ysize * image.xsize)>>3;
 
- register __m128i mask_128   = _mm_set_epi8(
-                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                   (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
- register __m128i offset_128 = _mm_set_epi8(
-                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                   (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
- __m128i *data_p= (__m128i*)image.data;
+  register __m128i mask_128   = _mm_set_epi8(
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
+  register __m128i offset_128 = _mm_set_epi8(
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
+  __m128i *data_p= (__m128i*)image.data;
 
- register __m128i pixel;
- while(pixsize--) {
-   pixel = *data_p;
-   pixel = _mm_and_si128(pixel, mask_128);
-   pixel = _mm_or_si128 (pixel, offset_128);
-   *data_p++=pixel;
- }
+  register __m128i pixel;
+  while(pixsize--) {
+    pixel = *data_p;
+    pixel = _mm_and_si128(pixel, mask_128);
+    pixel = _mm_or_si128 (pixel, offset_128);
+    *data_p++=pixel;
+  }
 }
 #endif /* SSE2 */
 #ifdef __VEC__
 void pix_2grey :: processRGBAAltivec(imageStruct &image)
 {
 
-  union{
-    unsigned char		c[16];
-    vector unsigned char	v;
-  }charBuffer;
+  union {
+    unsigned char               c[16];
+    vector unsigned char        v;
+  } charBuffer;
 
-  union{
-    unsigned short		s[8];
-    vector unsigned short	v;
-  }shortBuffer;
+  union {
+    unsigned short              s[8];
+    vector unsigned short       v;
+  } shortBuffer;
 
-  vector unsigned char 	factors;
-  vector unsigned short	oddS, evenS, one,lo,hi,lo1,hi1;
-  vector unsigned int	R, G, B, A,shift,grey;
+  vector unsigned char  factors;
+  vector unsigned short oddS, evenS, one,lo,hi,lo1,hi1;
+  vector unsigned int   R, G, B, A,shift,grey;
   vector unsigned char *pixels = (vector unsigned char *)image.data;
   int count = image.ysize * image.xsize / 4;
 
-  #ifndef PPC970
-   	UInt32			prefetchSize = GetPrefetchConstant( 16, 1, 256 );
-	vec_dst( pixels, prefetchSize, 0 );
-	vec_dst( pixels, prefetchSize, 1 );
-  #endif
+#ifndef PPC970
+  UInt32                  prefetchSize = GetPrefetchConstant( 16, 1, 256 );
+  vec_dst( pixels, prefetchSize, 0 );
+  vec_dst( pixels, prefetchSize, 1 );
+#endif
 
   charBuffer.c[0] = 1;
   charBuffer.c[1] = RGB2GRAY_RED;
@@ -239,10 +244,10 @@ void pix_2grey :: processRGBAAltivec(imageStruct &image)
   shift = vec_splat_u32(8);
 
   while (count--)    {
-    #ifndef PPC970
-	vec_dst( pixels, prefetchSize, 0 );
-        vec_dst( pixels+256, prefetchSize, 1 );
-    #endif
+#ifndef PPC970
+    vec_dst( pixels, prefetchSize, 0 );
+    vec_dst( pixels+256, prefetchSize, 1 );
+#endif
 
     //mult to short vector of R and B
     oddS = vec_mulo(pixels[0],factors);
@@ -273,24 +278,24 @@ void pix_2grey :: processRGBAAltivec(imageStruct &image)
     pixels++;
 
   }
-  # ifndef PPC970
-    //stop the cache streams
-    vec_dss( 0 );
-    vec_dss( 1 );
-  # endif
+# ifndef PPC970
+  //stop the cache streams
+  vec_dss( 0 );
+  vec_dss( 1 );
+# endif
 
 }
 
 void pix_2grey :: processYUVAltivec(imageStruct &image)
 {
-  union{
-    unsigned char		c[16];
-    vector unsigned char	v;
-  }charBuffer;
+  union {
+    unsigned char               c[16];
+    vector unsigned char        v;
+  } charBuffer;
 
   vector unsigned char *pixels = (vector unsigned char *)image.data;
   int count = image.ysize * image.xsize / 8;
-  vector unsigned char	permmask,fill;
+  vector unsigned char  permmask,fill;
 
   charBuffer.c[0] = 127;
   fill = charBuffer.v;
@@ -316,8 +321,8 @@ void pix_2grey :: processYUVAltivec(imageStruct &image)
   permmask = charBuffer.v;
 
   while (count--)    {
-   pixels[0] = vec_perm(pixels[0],fill,permmask);
-   pixels++;
+    pixels[0] = vec_perm(pixels[0],fill,permmask);
+    pixels++;
 
   }
 }
@@ -331,5 +336,5 @@ void pix_2grey :: processYUVAltivec(imageStruct &image)
 void pix_2grey :: obj_setupCallback(t_class *)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_2grey),
-		   gensym("pix_2gray"), A_NULL);
+                   gensym("pix_2gray"), A_NULL);
 }

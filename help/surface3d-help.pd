@@ -1578,7 +1578,7 @@ the displayed curve (X Y are 2 int);
 #X text 53 349 This message can be use to set the position of a control
 point. (Mx \, My : position of the point in the matrix. X \, Y \, Z
 : position of this control point;
-#X text 21 507 exemples :;
+#X text 21 507 examples :;
 #X obj 494 520 surface3d 5 5;
 #X obj 504 561 r curve3d;
 #X obj 494 585 surface3d 5 5;

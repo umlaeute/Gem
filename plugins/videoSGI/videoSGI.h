@@ -26,7 +26,7 @@ Linux version by Miller Puckette. msp@ucsd.edu
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-	pix_video
+        pix_video
 
   captures a video on SGI machines
 
@@ -34,50 +34,56 @@ Linux version by Miller Puckette. msp@ucsd.edu
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoSGI : public videoBase {
-  public:
-    //////////
-    // Constructor
-    videoSGI(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoSGI : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoSGI(void);
 
-    //////////
-    // Destructor
-    virtual ~videoSGI(void);
+  //////////
+  // Destructor
+  virtual ~videoSGI(void);
 
 #ifdef HAVE_VL_VL_H
-    ////////
-    // open the video-device
-    virtual bool           openDevice(void);
-    virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(void);
+  virtual void          closeDevice(void);
 
-    //////////
-    // Start up the video device
-    // [out] int - returns 0 if bad
-    bool	    	startTransfer(void);
-    //////////
-    // Stop the video device
-    // [out] int - returns 0 if bad
-    bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool                startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  bool                stopTransfer(void);
 
-    //////////
-    // get the next frame
-    pixBlock *getFrame(void);
+  //////////
+  // get the next frame
+  pixBlock *getFrame(void);
 
-    //////////
-    // Set the video dimensions
-    virtual bool	    	setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
+  //////////
+  // Set the video dimensions
+  virtual bool                setDimen(int x, int y, int leftmargin,
+                                       int rightmargin, int topmargin, int bottommargin);
 
 
-  protected:
+protected:
 
-		VLServer    	m_svr;
-		VLPath      	m_path;
-		VLNode      	m_src;
-		VLNode	    	m_drn;
-		VLBuffer    	m_buffer;
+  VLServer        m_svr;
+  VLPath          m_path;
+  VLNode          m_src;
+  VLNode          m_drn;
+  VLBuffer        m_buffer;
 #endif /*HAVE_VL_VL_H */
-  };
-};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

@@ -33,34 +33,34 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN mesh_line : public GemShape
 {
-    CPPEXTERN_HEADER(mesh_line, GemShape);
+  CPPEXTERN_HEADER(mesh_line, GemShape);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    mesh_line(t_floatarg sizeX);
+  //////////
+  // Constructor
+  mesh_line(t_floatarg sizeX);
 
-    protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~mesh_line(void);
+  //////////
+  // Destructor
+  virtual ~mesh_line(void);
 
 
-    //////////
-    // Do the rendering
-    virtual void   renderShape(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void   renderShape(GemState *state);
 
-    void    setGrid( int valueX);
-    void    getTexCoords(void);
+  void    setGrid( int valueX);
+  void    getTexCoords(void);
 
-    //////////
-    // getStuff
-    int     gridX;
-    float    xsize, xsize0;
-    int     alreadyInit;
-    std::vector<float>    texCoords;
+  //////////
+  // getStuff
+  int     gridX;
+  float    xsize, xsize0;
+  int     alreadyInit;
+  std::vector<float>    texCoords;
 };
 
 #endif  // for header file

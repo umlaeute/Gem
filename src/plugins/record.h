@@ -32,8 +32,11 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXTERN record
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXTERN record
 {
 public:
 
@@ -54,11 +57,12 @@ public:
   /**
    * get a human readable description of the given codec (e.g. "Motion Jpeg A")
    */
-  virtual const std::string getCodecDescription(const std::string codecname) = 0;
+  virtual const std::string getCodecDescription(const std::string&codecname)
+    = 0;
   /**
    * set the current codec
    */
-  virtual bool setCodec(const std::string name) = 0;
+  virtual bool setCodec(const std::string&name) = 0;
 
   /**
    * list all properties the currently selected codec supports
@@ -76,7 +80,7 @@ public:
   /*
    * returns TRUE if opening was successful, FALSE otherwise
    */
-  virtual bool start(const std::string filename, gem::Properties&props) = 0;
+  virtual bool start(const std::string&filename, gem::Properties&props) = 0;
 
   //////////
   // record a frame
@@ -86,8 +90,9 @@ public:
   // stop recording
   virtual void stop (void) = 0;
 
- };
-}; };
+};
+};
+};
 
 
 
@@ -105,4 +110,4 @@ public:
  */
 #define REGISTER_RECORDFACTORY(id, TYP) static gem::PluginFactoryRegistrar::registrar<TYP, gem::plugins::record> fac_record_ ## TYP (id)
 
-#endif	// for header file
+#endif  // for header file

@@ -41,18 +41,19 @@ pix_filmOS :: pix_filmOS(t_symbol *filename) :
   m_newFilm(0),
   m_colorspace(GL_RGBA_GEM), m_format(GL_RGBA_GEM)
 {
- // setting the current frame
- inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("img_num"));
- // create an outlet to send out how many frames are in the movie + bang when we reached the end
- m_outNumFrames = outlet_new(this->x_obj, 0);
- m_outEnd       = outlet_new(this->x_obj, 0);
+  // setting the current frame
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("img_num"));
+  // create an outlet to send out how many frames are in the movie + bang when we reached the end
+  m_outNumFrames = outlet_new(this->x_obj, 0);
+  m_outEnd       = outlet_new(this->x_obj, 0);
 
- // initialize the pix block data
- m_pixBlock.image=m_imageStruct;
- m_pixBlock.image.setCsizeByFormat(m_format);
+  // initialize the pix block data
+  m_pixBlock.image=m_imageStruct;
+  m_pixBlock.image.setCsizeByFormat(m_format);
 
- // make sure that there are some characters
- x_filename=gensym("");
+  // make sure that there are some characters
+  x_filename=gensym("");
 }
 
 /////////////////////////////////////////////////////////
@@ -69,7 +70,7 @@ pix_filmOS :: ~pix_filmOS()
 void pix_filmOS :: deleteBuffer()
 {
   //post("deleting buffer %x", m_data);
-  if (m_data){
+  if (m_data) {
     delete [] m_data;
     //post("deleted");
   }
@@ -83,30 +84,30 @@ void pix_filmOS :: createBuffer()
 {
   const int neededXSize = m_xsize;
   const int neededYSize = m_ysize;
-  int	oldx, oldy;
+  int   oldx, oldy;
 
   oldx = 0;
   oldy = 0;
 
-    if (neededXSize != oldx || neededYSize != oldy)
-    {
-      m_pixBlock.image.setCsizeByFormat(m_format);
-      m_pixBlock.image.xsize = neededXSize;
-      m_pixBlock.image.ysize = neededYSize;
+  if (neededXSize != oldx || neededYSize != oldy) {
+    m_pixBlock.image.setCsizeByFormat(m_format);
+    m_pixBlock.image.xsize = neededXSize;
+    m_pixBlock.image.ysize = neededYSize;
 
-      int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize * m_pixBlock.image.csize+4; /* +4 from MPEG */
+    int dataSize = m_pixBlock.image.xsize * m_pixBlock.image.ysize *
+                   m_pixBlock.image.csize+4; /* +4 from MPEG */
 
-      m_data = new unsigned char[dataSize];
-      // memset(m_data, 0, dataSize);
+    m_data = new unsigned char[dataSize];
+    // memset(m_data, 0, dataSize);
 
-      m_pixBlock.image.data = m_data;
-      m_pixBlock.image.notowned = 1;
-      m_frame =  m_data;
+    m_pixBlock.image.data = m_data;
+    m_pixBlock.image.notowned = 1;
+    m_frame =  m_data;
 
-      oldx = m_pixBlock.image.xsize;
-      oldy = m_pixBlock.image.ysize;
-    }
-    //post("created buffer @ %x", m_data);
+    oldx = m_pixBlock.image.xsize;
+    oldy = m_pixBlock.image.ysize;
+  }
+  //post("created buffer @ %x", m_data);
 }
 
 /////////////////////////////////////////////////////////
@@ -118,17 +119,22 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
 {
   //  if (filename==x_filename)return;
   x_filename=filename;
-  if (format)m_colorspace=format;
+  if (format) {
+    m_colorspace=format;
+  }
 
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name, buf, MAXPDSTRING);
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), filename->s_name,
+                      buf, MAXPDSTRING);
 
   // Clean up any open files
   closeMess();
 
   m_haveMovie = GEM_MOVIE_NONE;
   realOpen(buf);
-  if (m_haveMovie == GEM_MOVIE_NONE)return;
+  if (m_haveMovie == GEM_MOVIE_NONE) {
+    return;
+  }
 
 #ifndef __APPLE__
   createBuffer();
@@ -141,7 +147,8 @@ void pix_filmOS :: openMess(t_symbol *filename, int format)
   SETFLOAT(ap+2, m_ysize);
 
   m_newFilm = 1;
-  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize, m_ysize);
+  post("loaded file: %s with %d frames (%dx%d)", buf, m_numFrames, m_xsize,
+       m_ysize);
   outlet_list(m_outNumFrames, 0, 3, ap);
 }
 
@@ -157,28 +164,32 @@ void pix_filmOS :: startRendering()
 }
 void pix_filmOS :: render(GemState *state)
 {
-  if(!state)return;
+  if(!state) {
+    return;
+  }
   //  m_oldImage = state->image;
   m_oldImage=NULL;
   state->get(GemState::_PIX, m_oldImage);
 
   /* get the current frame from the file */
   newImage = 0;
-  if (!m_haveMovie || !m_pixBlock.image.data)return;
+  if (!m_haveMovie || !m_pixBlock.image.data) {
+    return;
+  }
   // do we actually need to get a new frame from the movie ?
 
   if (m_reqFrame != m_curFrame) {
     //newImage = 1;
     getFrame();
     m_curFrame = m_reqFrame;
-    if (m_film)m_pixBlock.image.data = m_frame; // this is mainly for windows
-  }
-  else
-  {
-  newImage = 0;
+    if (m_film) {
+      m_pixBlock.image.data = m_frame;  // this is mainly for windows
+    }
+  } else {
+    newImage = 0;
   }
 
-  if (m_newFilm){
+  if (m_newFilm) {
     m_pixBlock.newfilm = 1;
     m_newFilm = 0;
   }
@@ -192,15 +203,17 @@ void pix_filmOS :: render(GemState *state)
 #ifdef __APPLE__
   if (m_reqFrame == m_curFrame)
 
-      //  ::MoviesTask(NULL, 0);
+    //  ::MoviesTask(NULL, 0);
 #endif
 
 
-  /* texture it, if needed */
-  texFrame(state, newImage);
+    /* texture it, if needed */
+    texFrame(state, newImage);
   m_pixBlock.newimage = newImage;
   // automatic proceeding
-  if (m_auto)m_reqFrame++;
+  if (m_auto) {
+    m_reqFrame++;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -214,7 +227,7 @@ void pix_filmOS :: postrender(GemState *state)
     state->set(GemState::_PIX, m_oldImage);
   }
   m_pixBlock.newimage = 0;
-  if (m_numFrames>0 && m_reqFrame>m_numFrames){
+  if (m_numFrames>0 && m_reqFrame>m_numFrames) {
     m_reqFrame = m_numFrames;
     outlet_bang(m_outEnd);
   }
@@ -229,17 +242,17 @@ void pix_filmOS :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_filmOS :: changeImage(int imgNum, int trackNum)
 {
-  if (imgNum < 0){
+  if (imgNum < 0) {
     error("selection number must be > 0");
     imgNum=0;
   }
-  if (trackNum < 0){
+  if (trackNum < 0) {
     error("track number must be > 0");
     trackNum=0;
   }
 
 
-  switch (m_haveMovie){
+  switch (m_haveMovie) {
   case GEM_MOVIE_MPG:
 #ifdef HAVE_LIBMPEG3
 #else
@@ -249,17 +262,25 @@ void pix_filmOS :: changeImage(int imgNum, int trackNum)
 #endif
 #endif
   case GEM_MOVIE_MOV:
-    if (trackNum > m_numTracks-1) error("track %d number too high (max %d) ", trackNum, m_numTracks-1);
-    else m_track = trackNum;
+    if (trackNum > m_numTracks-1) {
+      error("track %d number too high (max %d) ", trackNum, m_numTracks-1);
+    } else {
+      m_track = trackNum;
+    }
   case GEM_MOVIE_AVI:
   default:
     if (imgNum > m_numFrames) {
-      if (m_numFrames<0) m_reqFrame = imgNum;
-      else m_reqFrame=m_numFrames;
+      if (m_numFrames<0) {
+        m_reqFrame = imgNum;
+      } else {
+        m_reqFrame=m_numFrames;
+      }
       //      else error("frame %d exceeds max (%d)", imgNum, m_numFrames);
       //m_reqFrame = imgNum;
       return;
-    } else m_reqFrame = imgNum;
+    } else {
+      m_reqFrame = imgNum;
+    }
   }
 }
 
@@ -267,11 +288,12 @@ void pix_filmOS :: changeImage(int imgNum, int trackNum)
 // changeImage
 //
 /////////////////////////////////////////////////////////
-void pix_filmOS :: csMess(int format){
-	if(format && format != m_colorspace){
-		m_colorspace=format;
-		post("colorspace change will take effect the next time you load a film");
-	}
+void pix_filmOS :: csMess(int format)
+{
+  if(format && format != m_colorspace) {
+    m_colorspace=format;
+    post("colorspace change will take effect the next time you load a film");
+  }
 }
 
 
@@ -283,34 +305,42 @@ void pix_filmOS :: csMess(int format){
 /////////////////////////////////////////////////////////
 void pix_filmOS :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
-		  gensym("open"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
-		  gensym("img_num"), A_GIMME, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
-		  gensym("auto"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
-		  gensym("colorspace"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
-		  gensym("colourspace"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::openMessCallback),
+                  gensym("open"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::changeImageCallback),
+                  gensym("img_num"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::autoCallback),
+                  gensym("auto"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
+                  gensym("colorspace"), A_SYMBOL, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_filmOS::colorspaceCallback),
+                  gensym("colourspace"), A_SYMBOL, A_NULL);
 }
-void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
+void pix_filmOS :: openMessCallback(void *data, t_symbol*, int argc,
+                                    t_atom*argv)
 {
-	int format=0;
-	switch(argc){
-	case 2:
-		format=getPixFormat(atom_getsymbol(argv+1)->s_name);
-	case 1:
-	    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
-		break;
-	default:
-	  GetMyClass(data)->error("open <filename> [<format>]");
-	}
+  int format=0;
+  switch(argc) {
+  case 2:
+    format=getPixFormat(atom_getsymbol(argv+1)->s_name);
+  case 1:
+    GetMyClass(data)->openMess(atom_getsymbol(argv), format);
+    break;
+  default:
+    GetMyClass(data)->error("open <filename> [<format>]");
+  }
 }
 
-void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void pix_filmOS :: changeImageCallback(void *data, t_symbol *, int argc,
+                                       t_atom *argv)
 {
-    GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv), (argc<2)?0:atom_getint(argv+1));
+  GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
+                                (argc<2)?0:atom_getint(argv+1));
 }
 
 void pix_filmOS :: autoCallback(void *data, t_float state)
@@ -322,4 +352,3 @@ void pix_filmOS :: colorspaceCallback(void *data, t_symbol *state)
 {
   GetMyClass(data)->csMess(getPixFormat(state->s_name));
 }
-

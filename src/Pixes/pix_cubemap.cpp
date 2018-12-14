@@ -21,16 +21,16 @@
 #include "Gem/Image.h"
 #include <string.h>
 
+//#define DEBUG_ME
+
 #ifdef debug
 # undef debug
 #endif
-
-//#define DEBUG_ME
-
 #ifdef DEBUG_ME
 # define debug post
 #else
-# define debug
+# include "Utils/nop.h"
+# define debug nop_post
 #endif
 
 CPPEXTERN_NEW(pix_cubemap);
@@ -44,18 +44,18 @@ CPPEXTERN_NEW(pix_cubemap);
 //
 /////////////////////////////////////////////////////////
 pix_cubemap :: pix_cubemap()
-: m_textureOnOff(1),
-  m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
-  m_didTexture(false), m_rebuildList(0),
-  m_textureObj(0),
-  m_realTextureObj(0),
-  m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
-  m_textureType(GL_TEXTURE_CUBE_MAP),
-  m_xRatio(1.), m_yRatio(1.),
-  m_env(GL_MODULATE),
-  m_texunit(0),
-  m_numTexUnits(0),
-  m_map(0)
+  : m_textureOnOff(1),
+    m_textureQuality(GL_LINEAR), m_repeat(GL_REPEAT),
+    m_didTexture(false), m_rebuildList(0),
+    m_textureObj(0),
+    m_realTextureObj(0),
+    m_oldTexCoords(NULL), m_oldNumCoords(0), m_oldTexture(0),
+    m_textureType(GL_TEXTURE_CUBE_MAP),
+    m_xRatio(1.), m_yRatio(1.),
+    m_env(GL_MODULATE),
+    m_texunit(0),
+    m_numTexUnits(0),
+    m_map(0)
 {
   error("this object is likely to vanish! do not use!!");
 
@@ -73,13 +73,18 @@ pix_cubemap :: pix_cubemap()
 
   // create an inlet to receive external texture IDs
   //  m_imgIn[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageX+"));
-  m_imgIn[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageX-"));
+  m_imgIn[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageX-"));
 
-  m_imgIn[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageY+"));
-  m_imgIn[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageY-"));
+  m_imgIn[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageY+"));
+  m_imgIn[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageY-"));
 
-  m_imgIn[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageZ+"));
-  m_imgIn[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_imageZ-"));
+  m_imgIn[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageZ+"));
+  m_imgIn[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("gem_state"), gensym("gem_imageZ-"));
 
   // create an outlet to send texture ID
   m_outTexID = outlet_new(this->x_obj, &s_float);
@@ -93,11 +98,14 @@ pix_cubemap :: ~pix_cubemap()
 {
   int i=0;
   for(i=0; i<6; i++) {
-    if(m_imgIn[i])
+    if(m_imgIn[i]) {
       inlet_free(m_imgIn[i]);
+    }
     m_imgIn[i]=NULL;
   }
-  if(m_outTexID)outlet_free(m_outTexID);
+  if(m_outTexID) {
+    outlet_free(m_outTexID);
+  }
 
   m_outTexID=NULL;
 }
@@ -106,7 +114,8 @@ pix_cubemap :: ~pix_cubemap()
 // setUpTextureState
 //
 /////////////////////////////////////////////////////////
-void pix_cubemap :: setUpTextureState() {
+void pix_cubemap :: setUpTextureState()
+{
   glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
 
   glTexParameterf(m_textureType, GL_TEXTURE_MIN_FILTER, m_textureQuality);
@@ -121,7 +130,8 @@ void pix_cubemap :: setUpTextureState() {
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool pix_cubemap :: isRunnable(void) {
+bool pix_cubemap :: isRunnable(void)
+{
   /* for simplicity's sake, i have dropped support for very old openGL-versions */
   if(!GLEW_VERSION_1_3) {
     error("need at least openGL-1.3 for cube mapping! refusing to work");
@@ -129,28 +139,33 @@ bool pix_cubemap :: isRunnable(void) {
   }
 
   m_numTexUnits=0;
-  if(GLEW_ARB_multitexture)
+  if(GLEW_ARB_multitexture) {
     glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &m_numTexUnits );
+  }
 
   return true;
 }
 
-void pix_cubemap :: pushTexCoords(GemState*state) {
+void pix_cubemap :: pushTexCoords(GemState*state)
+{
   state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
 }
 
-void pix_cubemap :: popTexCoords(GemState*state) {
+void pix_cubemap :: popTexCoords(GemState*state)
+{
   state->set(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
 }
 
 
-void pix_cubemap :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown) {
+void pix_cubemap :: sendExtTexture(GLuint texobj, GLfloat xRatio,
+                                   GLfloat yRatio, GLint texType, GLboolean upsidedown)
+{
   // send textureID to outlet
-  if(texobj){
+  if(texobj) {
     t_atom ap[5];
     SETFLOAT(ap,   (t_float)texobj);
     SETFLOAT(ap+1, (t_float)xRatio);
@@ -161,24 +176,38 @@ void pix_cubemap :: sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio
   }
 }
 
-void pix_cubemap :: applyTex(GLint textype, imageStruct*img) {
+void pix_cubemap :: applyTex(GLint textype, imageStruct*img)
+{
   //if the texture is a power of two in size then there is no need to subtexture
   if(img) {
     glTexImage2D(textype, 0,
-		 img->csize, img->xsize, img->ysize,
-		 0, img->format, img->type, img->data);
+                 img->csize, img->xsize, img->ysize,
+                 0, img->format, img->type, img->data);
     verbose(1, "tex:%d\timg=%d %d %d %d %d %d %d %x",
-	    textype, 0,
-	    GL_RGBA8, img->xsize, img->ysize,
-	    0, img->format, img->type, img->data);
+            textype, 0,
+            GL_RGBA8, img->xsize, img->ysize,
+            0, img->format, img->type, img->data);
     switch(textype) {
-    case(GL_TEXTURE_CUBE_MAP_POSITIVE_X): post("X+"); break;
-    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_X): post("X-"); break;
-    case(GL_TEXTURE_CUBE_MAP_POSITIVE_Y): post("Y+"); break;
-    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y): post("Y-"); break;
-    case(GL_TEXTURE_CUBE_MAP_POSITIVE_Z): post("Z+"); break;
-    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z): post("Z-"); break;
-    default: post("???");
+    case(GL_TEXTURE_CUBE_MAP_POSITIVE_X):
+      post("X+");
+      break;
+    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_X):
+      post("X-");
+      break;
+    case(GL_TEXTURE_CUBE_MAP_POSITIVE_Y):
+      post("Y+");
+      break;
+    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y):
+      post("Y-");
+      break;
+    case(GL_TEXTURE_CUBE_MAP_POSITIVE_Z):
+      post("Z+");
+      break;
+    case(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z):
+      post("Z-");
+      break;
+    default:
+      post("???");
     }
   }
 }
@@ -187,18 +216,22 @@ void pix_cubemap :: applyTex(GLint textype, imageStruct*img) {
 // render
 //
 /////////////////////////////////////////////////////////
-void pix_cubemap :: render(GemState *state) {
+void pix_cubemap :: render(GemState *state)
+{
   m_didTexture=false;
   pushTexCoords(state);
 
-  if(!m_textureOnOff)return;
+  if(!m_textureOnOff) {
+    return;
+  }
 
-  /* here comes the work: a new image has to be transfered from main memory to GPU and attached to a texture object */
+  /* here comes the work: a new image has to be transferred from main memory to GPU and attached to a texture object */
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
   if(img) {
-    if(img->newimage)
+    if(img->newimage) {
       m_img[0]=&img->image;
+    }
   }
 
 
@@ -212,14 +245,21 @@ void pix_cubemap :: render(GemState *state) {
   for(i=0; i<6; i++) {
     applyTex(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, m_img[i]);
     m_img[i]=NULL;
-    }
+  }
 
   int mode = GL_NORMAL_MAP;
   switch(m_map) {
-  case 0: mode = GL_NORMAL_MAP; break;
-  case 1: mode = GL_REFLECTION_MAP; break;
-  case 2: mode = GL_SPHERE_MAP; break;
-  default: mode=m_map;
+  case 0:
+    mode = GL_NORMAL_MAP;
+    break;
+  case 1:
+    mode = GL_REFLECTION_MAP;
+    break;
+  case 2:
+    mode = GL_SPHERE_MAP;
+    break;
+  default:
+    mode=m_map;
   }
 
 
@@ -240,8 +280,11 @@ void pix_cubemap :: render(GemState *state) {
   //  sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType, upsidedown);
 }
 
-void pix_cubemap :: rightImage(int id, GemState *state) {
-  if(!state)return;
+void pix_cubemap :: rightImage(int id, GemState *state)
+{
+  if(!state) {
+    return;
+  }
   if(id<0 || id>=6) {
     error("not a valid image-slot %d", id);
   }
@@ -263,10 +306,11 @@ void pix_cubemap :: rightImage(int id, GemState *state) {
 // postrender
 //
 /////////////////////////////////////////////////////////
-void pix_cubemap :: postrender(GemState *state){
+void pix_cubemap :: postrender(GemState *state)
+{
   popTexCoords(state);
 
-  if (m_didTexture){
+  if (m_didTexture) {
     if(GLEW_VERSION_1_3) {
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
     }
@@ -296,7 +340,7 @@ void pix_cubemap :: startRendering()
 
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
 
-  if (!m_realTextureObj)	{
+  if (!m_realTextureObj)        {
     error("Unable to allocate texture object");
     return;
   }
@@ -332,10 +376,11 @@ void pix_cubemap :: textureOnOff(int on)
 /////////////////////////////////////////////////////////
 void pix_cubemap :: textureQuality(int type)
 {
-  if (type)
+  if (type) {
     m_textureQuality = GL_LINEAR;
-  else
+  } else {
     m_textureQuality = GL_NEAREST;
+  }
 
   if (m_textureObj) {
     if(GLEW_VERSION_1_3) {
@@ -354,13 +399,14 @@ void pix_cubemap :: textureQuality(int type)
 /////////////////////////////////////////////////////////
 void pix_cubemap :: repeatMess(int type)
 {
-  if (type)
+  if (type) {
     m_repeat = GL_REPEAT;
-  else {
-    if((getState()!=INIT) && GLEW_EXT_texture_edge_clamp)
+  } else {
+    if((getState()!=INIT) && GLEW_EXT_texture_edge_clamp) {
       m_repeat = GL_CLAMP_TO_EDGE;
-    else
+    } else {
       m_repeat = GL_CLAMP;
+    }
   }
 
   if (m_textureObj) {
@@ -439,16 +485,32 @@ void pix_cubemap :: mapMess(int unit)
 void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
 {
   int id=-1;
-  if(gensym("gem_imageX+")==s)id=0;
-  if(gensym("gem_imageX-")==s)id=1;
-  if(gensym("gem_imageY+")==s)id=2;
-  if(gensym("gem_imageY-")==s)id=3;
-  if(gensym("gem_imageZ+")==s)id=4;
-  if(gensym("gem_imageZ-")==s)id=5;
-  if (argc==1 && argv->a_type==A_FLOAT){
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
-    if(id>=0)rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
-    else error("unknown message '%s'" ,s->s_name);
+  if(gensym("gem_imageX+")==s) {
+    id=0;
+  }
+  if(gensym("gem_imageX-")==s) {
+    id=1;
+  }
+  if(gensym("gem_imageY+")==s) {
+    id=2;
+  }
+  if(gensym("gem_imageY-")==s) {
+    id=3;
+  }
+  if(gensym("gem_imageZ+")==s) {
+    id=4;
+  }
+  if(gensym("gem_imageZ-")==s) {
+    id=5;
+  }
+  if (argc==1 && argv->a_type==A_FLOAT) {
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
+    if(id>=0) {
+      rightImage(id, (GemState *)(argv+1)->a_w.w_gpointer);
+    } else {
+      error("unknown message '%s'",s->s_name);
+    }
   } else {
     error("wrong righthand arguments...");
     ::error("post: %d", argc);

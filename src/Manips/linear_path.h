@@ -29,23 +29,24 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN linear_path : public GemPathBase
 {
-    CPPEXTERN_HEADER(linear_path, GemPathBase);
+  CPPEXTERN_HEADER(linear_path, GemPathBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	linear_path(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  linear_path(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~linear_path();
+  //////////
+  // Destructor
+  virtual ~linear_path();
 
-        //////////
-        // When a float val is received
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts);
+  //////////
+  // When a float val is received
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
+                          t_float *pnts);
 };
 
-#endif	// for header file
+#endif  // for header file

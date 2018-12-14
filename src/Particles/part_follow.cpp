@@ -29,9 +29,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(part_follow, t_floatarg, A_DEFFLOAT);
 part_follow :: part_follow(t_floatarg num)
   : m_accel(1.f)
 {
-  if (num != 0)
+  if (num != 0) {
     m_accel = num;
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("accel"));
+  }
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("accel"));
 }
 
 /////////////////////////////////////////////////////////
@@ -47,10 +49,9 @@ part_follow :: ~part_follow(void)
 /////////////////////////////////////////////////////////
 void part_follow :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pFollow(m_accel);
-    }
+  if (m_tickTime > 0.f) {
+    pFollow(m_accel);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -62,6 +63,7 @@ void part_follow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "accel", accelMess, float);
 }
 
-void part_follow :: accelMess(float accel) {
+void part_follow :: accelMess(float accel)
+{
   m_accel=accel;
 }

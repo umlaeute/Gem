@@ -37,15 +37,15 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 {
-    CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
+  CPPEXTERN_HEADER(pix_movieOS, pix_filmDarwin);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movieOS(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -78,12 +78,12 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
   virtual void setUpTextureState();
 
   //-----------------------------------
-  // GROUP:	Texture data
+  // GROUP:     Texture data
   //-----------------------------------
 
   //////////
   // The texture coordinates
-  TexCoord    	m_coords[4];
+  TexCoord      m_coords[4];
 
   //////////
   // this is what we get from upstream
@@ -93,19 +93,20 @@ class GEM_EXTERN pix_movieOS : public pix_filmDarwin
 
   //////////
   // The size of the texture (so we can use sub image)
-  int		m_dataSize[3];
+  int           m_dataSize[3];
 
-  GLuint	m_textureObj;
-  float		m_xRatio;
-  float		m_yRatio;
+  GLuint        m_textureObj;
+  float         m_xRatio;
+  float         m_yRatio;
 
- protected:
+protected:
 
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol *filename);
-  static void changeImageCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  static void changeImageCallback(void *data, t_symbol *, int argc,
+                                  t_atom *argv);
   static void autoCallback       (void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

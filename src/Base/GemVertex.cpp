@@ -44,5 +44,7 @@ GemVertex :: ~GemVertex()
 void GemVertex :: setModified()
 {
   GemBase::setModified();
-  if(m_cache)m_cache->vertexDirty = 1;
+  if(m_cache) {
+    m_cache->vertexDirty = 1;
+  }
 }

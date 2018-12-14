@@ -51,17 +51,17 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglutwindow : public GemWindow
+class GEM_EXPORT gemglutwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemglutwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglutwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -74,10 +74,9 @@ class GEM_EXTERN gemglutwindow : public GemWindow
 
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string s);
+  virtual void titleMess(const std::string&s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
@@ -88,7 +87,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   virtual bool        create(void);
   virtual void destroy(void);
 
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
@@ -105,7 +104,7 @@ class GEM_EXTERN gemglutwindow : public GemWindow
   // dispatch events
   virtual void dispatch(void);
 
- private:
+private:
 
   /* the GLUT window id */
   int m_window;

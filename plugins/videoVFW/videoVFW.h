@@ -22,7 +22,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
-	pix_video
+        pix_video
 
   captures a video on NT machines
 
@@ -30,49 +30,55 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoVFW : public videoBase {
-  public:
-    //////////
-    // Constructor
-    videoVFW(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoVFW : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoVFW(void);
 
-    //////////
-    // Destructor
-    virtual ~videoVFW(void);
+  //////////
+  // Destructor
+  virtual ~videoVFW(void);
 
-    ////////
-    // open the video-device
-    virtual bool           openDevice(gem::Properties&);
-    virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&);
+  virtual void          closeDevice(void);
 
-    //////////
-    // Start up the video device
-    // [out] int - returns 0 if bad
-    bool startTransfer(void);
-    //////////
-    // Stop the video device
-    // [out] int - returns 0 if bad
-    bool stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  bool startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  bool stopTransfer(void);
 
-    //////////
-    // get the next frame
-    bool grabFrame(void);
+  //////////
+  // get the next frame
+  bool grabFrame(void);
 
-    //////////
-    // Set the video dimensions
-    virtual bool	    	setColor(int);
+  //////////
+  // Set the video dimensions
+  virtual bool                setColor(int);
 
-    virtual bool enumProperties(gem::Properties&readable, gem::Properties&writeable);
-    virtual void setProperties(gem::Properties&);
-    virtual void getProperties(gem::Properties&);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
+  virtual void setProperties(gem::Properties&);
+  virtual void getProperties(gem::Properties&);
 
-  protected:
-    HWND		m_hWndC;
-    void		videoFrame(LPVIDEOHDR lpVHdr);
-  private:
-    static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
-  };
-};};
+protected:
+  HWND                m_hWndC;
+  void                videoFrame(LPVIDEOHDR lpVHdr);
+private:
+  static void videoFrameCallback(HWND hWnd, LPVIDEOHDR lpVHdr);
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

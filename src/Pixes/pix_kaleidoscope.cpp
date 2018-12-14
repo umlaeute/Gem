@@ -68,13 +68,20 @@ pix_kaleidoscope :: pix_kaleidoscope() :
   m_inOAngle(0), m_inOCtr(0), m_inRlp(0),
   m_inSap(0)
 {
-  m_inDiv=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("div"));
-  m_inSAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("sourceAngle"));
-  m_inSCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("sourceCtr"));
-  m_inOAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("outputAngle"));
-  m_inOCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("outputCtr"));
-  m_inRlp=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("rlp"));
-  m_inSap=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("sap"));
+  m_inDiv=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("div"));
+  m_inSAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                       gensym("sourceAngle"));
+  m_inSCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+                       gensym("sourceCtr"));
+  m_inOAngle=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                       gensym("outputAngle"));
+  m_inOCtr  =inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+                       gensym("outputCtr"));
+  m_inRlp=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("rlp"));
+  m_inSap=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                    gensym("sap"));
 }
 
 /////////////////////////////////////////////////////////
@@ -139,8 +146,11 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
-  if (pLinesStart==NULL)return;
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  if (pLinesStart==NULL) {
+    return;
+  }
 
   const float Width=static_cast<float>(nWidth);
   //const float HalfWidth=(Width/2.0f);
@@ -185,13 +195,13 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
       nLinesGroupCount=PartitionData.nYNegLinesCount;
       pFirstLineOtherGroup=PartitionData.pYPosLines;
       pLastLineOtherGroup=
-	PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
+        PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
     } else {
       pLinesGroupStart=PartitionData.pYPosLines;
       nLinesGroupCount=PartitionData.nYPosLinesCount;
       pFirstLineOtherGroup=PartitionData.pYNegLines;
       pLastLineOtherGroup=
-	PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
+        PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
     }
 
     SPete_Kaleidoscope_Line* pLinesGroupEnd=pLinesGroupStart+nLinesGroupCount;
@@ -210,303 +220,322 @@ void pix_kaleidoscope :: processRGBAImage(imageStruct &image)
       float IntersectionT;
 
       if (bIsFinalSpan) {
-	IntersectionT=0.0f;
-	IntersectionX=RightX;
+        IntersectionT=0.0f;
+        IntersectionX=RightX;
       } else if (fabsf(pCurrentLine->Y)<Pete_Kaleidoscope_Epsilon) {
-	if (pCurrentLine->Y<0.0f)
-	  IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
-	else
-	  IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        if (pCurrentLine->Y<0.0f) {
+          IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
+        } else {
+          IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
+        }
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       } else {
-	IntersectionT=(CurrentY/pCurrentLine->Y);
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        IntersectionT=(CurrentY/pCurrentLine->Y);
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       }
 
       float RowEndU;
       float RowEndV;
-      bool bDebugIsHalfLine;
 
       if (bIsFirstSpan) {
-	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
-	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
+        SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine1->X<0.0f)
-	    Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  else
-	    Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  Line1IntersectionY=(pLine1->Y*IntersectionT);
-	} else {
-	  Line1IntersectionT=(LeftX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine1->X<0.0f) {
+            Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line1IntersectionY=(pLine1->Y*IntersectionT);
+        } else {
+          Line1IntersectionT=(LeftX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine2->X<0.0f)
-	    Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  else
-	    Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(LeftX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine2->X<0.0f) {
+            Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(LeftX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=(Line2IntersectionY-Line1IntersectionY);
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float YDist=(Line2IntersectionY-Line1IntersectionY);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon)
-	  if (pLine1->X<0.0f)
-	    PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	  else
-	    PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	else
-	  PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon)
+          if (pLine1->X<0.0f) {
+            PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          } else {
+            PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          } else {
+          PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
+        }
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
 
       } else if (bIsFinalSpan) {
-	SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
-	SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
+        SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line1IntersectionT=10000.0f;
-	  Line1IntersectionY=(pLine1->Y*10000.0f);
-	} else {
-	  Line1IntersectionT=(RightX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          Line1IntersectionT=10000.0f;
+          Line1IntersectionY=(pLine1->Y*10000.0f);
+        } else {
+          Line1IntersectionT=(RightX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line2IntersectionT=10000.0f;
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(RightX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          Line2IntersectionT=10000.0f;
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(RightX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=(Line2IntersectionY-Line1IntersectionY);
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float YDist=(Line2IntersectionY-Line1IntersectionY);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
       } else {
 
-	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
       }
 
       if (IntersectionX>LeftX) {
-	int nRowStartX;
-	if (PreviousIntersectionX<LeftX) {
-	  nRowStartX=0;
+        int nRowStartX;
+        if (PreviousIntersectionX<LeftX) {
+          nRowStartX=0;
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
+        } else {
+          nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
+        }
 
-	int nRowEndX;
+        int nRowEndX;
 
-	if (bIsFinalSpan) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
-	} else if (IntersectionX>RightX) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
+        if (bIsFinalSpan) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
+        } else if (IntersectionX>RightX) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else
-	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
+        } else {
+          nRowEndX=static_cast<int>(IntersectionX-LeftX);
+        }
 
-	U32* pRowStart=pOutputLineStart+nRowStartX;
-	int nRowLength=(nRowEndX-nRowStartX);
-	if (nRowLength<=0) nRowLength=1;
-	U32*const pSpanEnd=(pRowStart+nRowLength);
+        U32* pRowStart=pOutputLineStart+nRowStartX;
+        int nRowLength=(nRowEndX-nRowStartX);
+        if (nRowLength<=0) {
+          nRowLength=1;
+        }
+        U32*const pSpanEnd=(pRowStart+nRowLength);
 
-	const int nFPShift=16;
-	const int nFPMult=(1<<nFPShift);
+        const int nFPShift=16;
+        const int nFPMult=(1<<nFPShift);
 
-	float CurrentU=PreviousRowU;
-	float CurrentV=PreviousRowV;
-	float DeltaU  =(RowEndU-PreviousRowU)/nRowLength;
-	float DeltaV  =(RowEndV-PreviousRowV)/nRowLength;
+        float CurrentU=PreviousRowU;
+        float CurrentV=PreviousRowV;
+        float DeltaU  =(RowEndU-PreviousRowU)/nRowLength;
+        float DeltaV  =(RowEndV-PreviousRowV)/nRowLength;
 
-	int nCurrentU=static_cast<int>(CurrentU*nFPMult);
-	int nCurrentV=static_cast<int>(CurrentV*nFPMult);
+        int nCurrentU=static_cast<int>(CurrentU*nFPMult);
+        int nCurrentV=static_cast<int>(CurrentV*nFPMult);
 
-	const int nWidthFP=(nWidth<<nFPShift);
-	const int nHeightFP=(nHeight<<nFPShift);
+        const int nWidthFP=(nWidth<<nFPShift);
+        const int nHeightFP=(nHeight<<nFPShift);
 
-	nCurrentU+=(nWidthFP*10);
-	nCurrentV+=(nHeightFP*10);
+        nCurrentU+=(nWidthFP*10);
+        nCurrentV+=(nHeightFP*10);
 
-	int nDeltaU=static_cast<int>(DeltaU*nFPMult);
-	int nDeltaV=static_cast<int>(DeltaV*nFPMult);
+        int nDeltaU=static_cast<int>(DeltaU*nFPMult);
+        int nDeltaV=static_cast<int>(DeltaV*nFPMult);
 
-	const int nTwoWidth=(nWidth*2)<<nFPShift;
-	const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
+        const int nTwoWidth=(nWidth*2)<<nFPShift;
+        const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
 
-	const int nTwoHeight=(nHeight*2)<<nFPShift;
-	const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
+        const int nTwoHeight=(nHeight*2)<<nFPShift;
+        const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
 
-	U32* pCurrentOutput=pRowStart;
-	while (pCurrentOutput<pSpanEnd) {
-	  int nNextU;
-	  if (nDeltaU>=0) nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
-	  else nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
+        U32* pCurrentOutput=pRowStart;
+        while (pCurrentOutput<pSpanEnd) {
+          int nNextU;
+          if (nDeltaU>=0) {
+            nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
+          } else {
+            nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
+          }
 
-	  int nUDist;
-	  if (nDeltaU!=0) {
-	    nUDist=(nNextU-nCurrentU)/nDeltaU;
-	    nUDist+=1;
-	  } else nUDist=cnBiggestSignedInt;
+          int nUDist;
+          if (nDeltaU!=0) {
+            nUDist=(nNextU-nCurrentU)/nDeltaU;
+            nUDist+=1;
+          } else {
+            nUDist=cnBiggestSignedInt;
+          }
 
-	  int nNextV;
-	  if (nDeltaV>=0)  nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
-	  else nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
+          int nNextV;
+          if (nDeltaV>=0) {
+            nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
+          } else {
+            nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
+          }
 
-	  int nVDist;
-	  if (nDeltaV!=0) {
-	    nVDist=(nNextV-nCurrentV)/nDeltaV;
-	    nVDist+=1;
-	  } else nVDist=cnBiggestSignedInt;
+          int nVDist;
+          if (nDeltaV!=0) {
+            nVDist=(nNextV-nCurrentV)/nDeltaV;
+            nVDist+=1;
+          } else {
+            nVDist=cnBiggestSignedInt;
+          }
 
-	  int nMinDist = (nUDist<nVDist)?nUDist:nVDist;
+          int nMinDist = (nUDist<nVDist)?nUDist:nVDist;
 
-	  int nStartU=nCurrentU%nTwoWidth;
-	  if (nStartU>=nWidthFP)
-	    nStartU=(nTwoWidthMinusOne-nStartU);
-	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
+          int nStartU=nCurrentU%nTwoWidth;
+          if (nStartU>=nWidthFP) {
+            nStartU=(nTwoWidthMinusOne-nStartU);
+          }
+          nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
-	  int nStartV=nCurrentV%nTwoHeight;
-	  if (nStartV>=nHeightFP)
-	    nStartV=(nTwoHeightMinusOne-nStartV);
-	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
+          int nStartV=nCurrentV%nTwoHeight;
+          if (nStartV>=nHeightFP) {
+            nStartV=(nTwoHeightMinusOne-nStartV);
+          }
+          nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 
-	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
-	  if (nEndU>=nWidthFP)
-	    nEndU=(nTwoWidthMinusOne-nEndU);
-	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
+          int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
+          if (nEndU>=nWidthFP) {
+            nEndU=(nTwoWidthMinusOne-nEndU);
+          }
+          nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
-	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
-	  if (nEndV>=nHeightFP)
-	    nEndV=(nTwoHeightMinusOne-nEndV);
-	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
+          int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
+          if (nEndV>=nHeightFP) {
+            nEndV=(nTwoHeightMinusOne-nEndV);
+          }
+          nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
-	  int nLocalDeltaU;
-	  int nLocalDeltaV;
-	  if (nMinDist<1) {
-	    nLocalDeltaU=0;
-	    nLocalDeltaV=0;
-	  } else {
-	    nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
-	    nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
-	  }
-	  int nLocalCurrentU=nStartU;
-	  int nLocalCurrentV=nStartV;
+          int nLocalDeltaU;
+          int nLocalDeltaV;
+          if (nMinDist<1) {
+            nLocalDeltaU=0;
+            nLocalDeltaV=0;
+          } else {
+            nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
+            nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
+          }
+          int nLocalCurrentU=nStartU;
+          int nLocalCurrentV=nStartV;
 
-	  U32* pLocalSpanEnd=(pCurrentOutput+nMinDist);
-	  if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
-	    pLocalSpanEnd=pSpanEnd;
-	  }
+          U32* pLocalSpanEnd=(pCurrentOutput+nMinDist);
+          if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
+            pLocalSpanEnd=pSpanEnd;
+          }
 
-	  while (pCurrentOutput<pLocalSpanEnd) {
-	    const int nUIntegral=(nLocalCurrentU>>nFPShift);
-	    const int nVIntegral=(nLocalCurrentV>>nFPShift);
+          while (pCurrentOutput<pLocalSpanEnd) {
+            const int nUIntegral=(nLocalCurrentU>>nFPShift);
+            const int nVIntegral=(nLocalCurrentV>>nFPShift);
 
-	    U32* pCurrentSource=
-	      pSource+(nVIntegral*nWidth)+nUIntegral;
+            U32* pCurrentSource=
+              pSource+(nVIntegral*nWidth)+nUIntegral;
 
-	    *pCurrentOutput=*pCurrentSource;
+            *pCurrentOutput=*pCurrentSource;
 
-	    pCurrentOutput+=1;
-	    nLocalCurrentU+=nLocalDeltaU;
-	    nLocalCurrentV+=nLocalDeltaV;
-	  }
+            pCurrentOutput+=1;
+            nLocalCurrentU+=nLocalDeltaU;
+            nLocalCurrentV+=nLocalDeltaV;
+          }
 
-	  if (nMinDist<1) {
-	    nCurrentU+=nDeltaU;
-	    nCurrentV+=nDeltaV;
-	  } else {
-	    nCurrentU+=(nMinDist*nDeltaU);
-	    nCurrentV+=(nMinDist*nDeltaV);
-	  }
-	}
+          if (nMinDist<1) {
+            nCurrentU+=nDeltaU;
+            nCurrentV+=nDeltaV;
+          } else {
+            nCurrentU+=(nMinDist*nDeltaU);
+            nCurrentV+=(nMinDist*nDeltaV);
+          }
+        }
       }
 
       PreviousIntersectionX=IntersectionX;
@@ -541,7 +570,7 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
 
     myImage.allocate(dataSize);
   }
-*/
+  */
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
@@ -571,8 +600,11 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
-  if (pLinesStart==NULL)return;
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  if (pLinesStart==NULL) {
+    return;
+  }
 
   const float Width=static_cast<float>(nWidth);
   //const float HalfWidth=(Width/2.0f);
@@ -616,13 +648,13 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
       nLinesGroupCount=PartitionData.nYNegLinesCount;
       pFirstLineOtherGroup=PartitionData.pYPosLines;
       pLastLineOtherGroup=
-	PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
+        PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
     } else {
       pLinesGroupStart=PartitionData.pYPosLines;
       nLinesGroupCount=PartitionData.nYPosLinesCount;
       pFirstLineOtherGroup=PartitionData.pYNegLines;
       pLastLineOtherGroup=
-	PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
+        PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
     }
 
     SPete_Kaleidoscope_Line* pLinesGroupEnd=pLinesGroupStart+nLinesGroupCount;
@@ -641,331 +673,327 @@ void pix_kaleidoscope :: processYUVImage(imageStruct &image)
       float IntersectionX;
       float IntersectionT;
       if (bIsFinalSpan) {
-	IntersectionT=0.0f;
-	IntersectionX=RightX;
+        IntersectionT=0.0f;
+        IntersectionX=RightX;
       } else if (fabsf(pCurrentLine->Y)<Pete_Kaleidoscope_Epsilon) {
-	if (pCurrentLine->Y<0.0f) {
-	  IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
-	} else {
-	  IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
-	}
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        if (pCurrentLine->Y<0.0f) {
+          IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
+        } else {
+          IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
+        }
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       } else {
-	IntersectionT=(CurrentY/pCurrentLine->Y);
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        IntersectionT=(CurrentY/pCurrentLine->Y);
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       }
 
       float RowEndU;
       float RowEndV;
 
-      bool bDebugIsHalfLine;
       if (bIsFirstSpan) {
-	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
-	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
+        SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine1->X<0.0f) {
-	    Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  } else {
-	    Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  }
-	  Line1IntersectionY=(pLine1->Y*IntersectionT);
-	} else {
-	  Line1IntersectionT=(LeftX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine1->X<0.0f) {
+            Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line1IntersectionY=(pLine1->Y*IntersectionT);
+        } else {
+          Line1IntersectionT=(LeftX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine2->X<0.0f) {
-	    Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  } else {
-	    Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  }
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(LeftX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine2->X<0.0f) {
+            Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(LeftX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=
-	  (Line2IntersectionY-Line1IntersectionY);
+        const float YDist=
+          (Line2IntersectionY-Line1IntersectionY);
 
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine1->X<0.0f) {
-	    PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	  } else {
-	    PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	  }
-	} else {
-	  PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
-	}
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine1->X<0.0f) {
+            PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          } else {
+            PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          }
+        } else {
+          PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
+        }
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
 
       } else if (bIsFinalSpan) {
-	SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
-	SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
+        SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line1IntersectionT=10000.0f;
-	  Line1IntersectionY=(pLine1->Y*10000.0f);
-	} else {
-	  Line1IntersectionT=(RightX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          Line1IntersectionT=10000.0f;
+          Line1IntersectionY=(pLine1->Y*10000.0f);
+        } else {
+          Line1IntersectionT=(RightX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line2IntersectionT=10000.0f;
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(RightX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          Line2IntersectionT=10000.0f;
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(RightX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=
-	  (Line2IntersectionY-Line1IntersectionY);
+        const float YDist=
+          (Line2IntersectionY-Line1IntersectionY);
 
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
       } else {
-	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
 
       }
       if (IntersectionX>LeftX) {
-	int nRowStartX;
+        int nRowStartX;
 
-	if (PreviousIntersectionX<LeftX) {
-	  nRowStartX=0;
+        if (PreviousIntersectionX<LeftX) {
+          nRowStartX=0;
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else {
-	  nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
-	}
+        } else {
+          nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
+        }
 
-	int nRowEndX;
-	if (bIsFinalSpan) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
-	} else if (IntersectionX>RightX) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
+        int nRowEndX;
+        if (bIsFinalSpan) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
+        } else if (IntersectionX>RightX) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else {
-	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
-	}
+        } else {
+          nRowEndX=static_cast<int>(IntersectionX-LeftX);
+        }
 
-	U32* pRowStart=pOutputLineStart+nRowStartX;
-	int nRowLength=(nRowEndX-nRowStartX);
-	if (nRowLength<=0) {
-	  nRowLength=1;
-	}
-	U32*const pSpanEnd=(pRowStart+nRowLength);
+        U32* pRowStart=pOutputLineStart+nRowStartX;
+        int nRowLength=(nRowEndX-nRowStartX);
+        if (nRowLength<=0) {
+          nRowLength=1;
+        }
+        U32*const pSpanEnd=(pRowStart+nRowLength);
 
-	const int nFPShift=16;
-	const int nFPMult=(1<<nFPShift);
+        const int nFPShift=16;
+        const int nFPMult=(1<<nFPShift);
 
-	float CurrentU=PreviousRowU;
-	float CurrentV=PreviousRowV;
+        float CurrentU=PreviousRowU;
+        float CurrentV=PreviousRowV;
 
-	float DeltaU=(RowEndU-PreviousRowU)/nRowLength;
-	float DeltaV=(RowEndV-PreviousRowV)/nRowLength;
+        float DeltaU=(RowEndU-PreviousRowU)/nRowLength;
+        float DeltaV=(RowEndV-PreviousRowV)/nRowLength;
 
-	int nCurrentU=static_cast<int>(CurrentU*nFPMult);
-	int nCurrentV=static_cast<int>(CurrentV*nFPMult);
+        int nCurrentU=static_cast<int>(CurrentU*nFPMult);
+        int nCurrentV=static_cast<int>(CurrentV*nFPMult);
 
-	const int nWidthFP=(nWidth<<nFPShift);
-	const int nHeightFP=(nHeight<<nFPShift);
+        const int nWidthFP=(nWidth<<nFPShift);
+        const int nHeightFP=(nHeight<<nFPShift);
 
-	nCurrentU+=(nWidthFP*10);
-	nCurrentV+=(nHeightFP*10);
+        nCurrentU+=(nWidthFP*10);
+        nCurrentV+=(nHeightFP*10);
 
-	int nDeltaU=static_cast<int>(DeltaU*nFPMult);
-	int nDeltaV=static_cast<int>(DeltaV*nFPMult);
+        int nDeltaU=static_cast<int>(DeltaU*nFPMult);
+        int nDeltaV=static_cast<int>(DeltaV*nFPMult);
 
-	const int nTwoWidth=(nWidth*2)<<nFPShift;
-	const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
+        const int nTwoWidth=(nWidth*2)<<nFPShift;
+        const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
 
-	const int nTwoHeight=(nHeight*2)<<nFPShift;
-	const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
+        const int nTwoHeight=(nHeight*2)<<nFPShift;
+        const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
 
-	U32* pCurrentOutput=pRowStart;
+        U32* pCurrentOutput=pRowStart;
 
-	while (pCurrentOutput<pSpanEnd) {
-	  int nNextU;
-	  if (nDeltaU>=0) {
-	    nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
-	  } else {
-	    nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
-	  }
+        while (pCurrentOutput<pSpanEnd) {
+          int nNextU;
+          if (nDeltaU>=0) {
+            nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
+          } else {
+            nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
+          }
 
-	  int nUDist;
-	  if (nDeltaU!=0) {
-	    nUDist=(nNextU-nCurrentU)/nDeltaU;
-	    nUDist+=1;
-	  } else {
-	    nUDist=cnBiggestSignedInt;
-	  }
-	  int nNextV;
-	  if (nDeltaV>=0) {
-	    nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
-	  } else {
-	    nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
-	  }
-	  int nVDist;
-	  if (nDeltaV!=0) {
-	    nVDist=(nNextV-nCurrentV)/nDeltaV;
-	    nVDist+=1;
-	  } else {
-	    nVDist=cnBiggestSignedInt;
-	  }
+          int nUDist;
+          if (nDeltaU!=0) {
+            nUDist=(nNextU-nCurrentU)/nDeltaU;
+            nUDist+=1;
+          } else {
+            nUDist=cnBiggestSignedInt;
+          }
+          int nNextV;
+          if (nDeltaV>=0) {
+            nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
+          } else {
+            nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
+          }
+          int nVDist;
+          if (nDeltaV!=0) {
+            nVDist=(nNextV-nCurrentV)/nDeltaV;
+            nVDist+=1;
+          } else {
+            nVDist=cnBiggestSignedInt;
+          }
 
-	  int nMinDist;
-	  if (nUDist<nVDist) {
-	    nMinDist=nUDist;
-	  } else {
-	    nMinDist=nVDist;
-	  }
+          int nMinDist;
+          if (nUDist<nVDist) {
+            nMinDist=nUDist;
+          } else {
+            nMinDist=nVDist;
+          }
 
-	  int nStartU=nCurrentU%nTwoWidth;
-	  if (nStartU>=nWidthFP) {
-	    nStartU=(nTwoWidthMinusOne-nStartU);
-	  }
-	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
+          int nStartU=nCurrentU%nTwoWidth;
+          if (nStartU>=nWidthFP) {
+            nStartU=(nTwoWidthMinusOne-nStartU);
+          }
+          nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
-	  int nStartV=nCurrentV%nTwoHeight;
-	  if (nStartV>=nHeightFP) {
-	    nStartV=(nTwoHeightMinusOne-nStartV);
-	  }
-	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
+          int nStartV=nCurrentV%nTwoHeight;
+          if (nStartV>=nHeightFP) {
+            nStartV=(nTwoHeightMinusOne-nStartV);
+          }
+          nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 
-	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
-	  if (nEndU>=nWidthFP) {
-	    nEndU=(nTwoWidthMinusOne-nEndU);
-	  }
-	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
+          int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
+          if (nEndU>=nWidthFP) {
+            nEndU=(nTwoWidthMinusOne-nEndU);
+          }
+          nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
-	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
-	  if (nEndV>=nHeightFP) {
-	    nEndV=(nTwoHeightMinusOne-nEndV);
-	  }
-	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
+          int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
+          if (nEndV>=nHeightFP) {
+            nEndV=(nTwoHeightMinusOne-nEndV);
+          }
+          nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
-	  int nLocalDeltaU;
-	  int nLocalDeltaV;
-	  if (nMinDist<1) {
-	    nLocalDeltaU=0;
-	    nLocalDeltaV=0;
-	  } else {
-	    nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
-	    nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
-	  }
-	  int nLocalCurrentU=nStartU;
-	  int nLocalCurrentV=nStartV;
+          int nLocalDeltaU;
+          int nLocalDeltaV;
+          if (nMinDist<1) {
+            nLocalDeltaU=0;
+            nLocalDeltaV=0;
+          } else {
+            nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
+            nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
+          }
+          int nLocalCurrentU=nStartU;
+          int nLocalCurrentV=nStartV;
 
-	  U32* pLocalSpanEnd=(pCurrentOutput+nMinDist);
-	  if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
-	    pLocalSpanEnd=pSpanEnd;
-	  }
-	  while (pCurrentOutput<pLocalSpanEnd) {
-	    const int nUIntegral=(nLocalCurrentU>>nFPShift);
-	    const int nVIntegral=(nLocalCurrentV>>nFPShift);
-	    U32* pCurrentSource=
-	      pSource+(nVIntegral*nWidth)+nUIntegral;
-	    *pCurrentOutput=*pCurrentSource;
-	    pCurrentOutput+=1;
-	    nLocalCurrentU+=nLocalDeltaU;
-	    nLocalCurrentV+=nLocalDeltaV;
-	  }
-	  if (nMinDist<1) {
-	    nCurrentU+=nDeltaU;
-	    nCurrentV+=nDeltaV;
-	  } else {
-	    nCurrentU+=(nMinDist*nDeltaU);
-	    nCurrentV+=(nMinDist*nDeltaV);
-	  }
-	}
+          U32* pLocalSpanEnd=(pCurrentOutput+nMinDist);
+          if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
+            pLocalSpanEnd=pSpanEnd;
+          }
+          while (pCurrentOutput<pLocalSpanEnd) {
+            const int nUIntegral=(nLocalCurrentU>>nFPShift);
+            const int nVIntegral=(nLocalCurrentV>>nFPShift);
+            U32* pCurrentSource=
+              pSource+(nVIntegral*nWidth)+nUIntegral;
+            *pCurrentOutput=*pCurrentSource;
+            pCurrentOutput+=1;
+            nLocalCurrentU+=nLocalDeltaU;
+            nLocalCurrentV+=nLocalDeltaV;
+          }
+          if (nMinDist<1) {
+            nCurrentU+=nDeltaU;
+            nCurrentV+=nDeltaV;
+          } else {
+            nCurrentU+=(nMinDist*nDeltaU);
+            nCurrentV+=(nMinDist*nDeltaV);
+          }
+        }
       }
       PreviousIntersectionX=IntersectionX;
       PreviousRowU=RowEndU;
@@ -1026,7 +1054,8 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
   int nLinesCount;
   Pete_Kaleidoscope_SetupLines(&nLinesCount);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1073,13 +1102,13 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
       nLinesGroupCount=PartitionData.nYNegLinesCount;
       pFirstLineOtherGroup=PartitionData.pYPosLines;
       pLastLineOtherGroup=
-	PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
+        PartitionData.pYPosLines+(PartitionData.nYPosLinesCount-1);
     } else {
       pLinesGroupStart=PartitionData.pYPosLines;
       nLinesGroupCount=PartitionData.nYPosLinesCount;
       pFirstLineOtherGroup=PartitionData.pYNegLines;
       pLastLineOtherGroup=
-	PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
+        PartitionData.pYNegLines+(PartitionData.nYNegLinesCount-1);
     }
 
     SPete_Kaleidoscope_Line* pLinesGroupEnd=pLinesGroupStart+nLinesGroupCount;
@@ -1098,331 +1127,327 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
       float IntersectionX;
       float IntersectionT;
       if (bIsFinalSpan) {
-	IntersectionT=0.0f;
-	IntersectionX=RightX;
+        IntersectionT=0.0f;
+        IntersectionX=RightX;
       } else if (fabsf(pCurrentLine->Y)<Pete_Kaleidoscope_Epsilon) {
-	if (pCurrentLine->Y<0.0f) {
-	  IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
-	} else {
-	  IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
-	}
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        if (pCurrentLine->Y<0.0f) {
+          IntersectionT=CurrentY/-Pete_Kaleidoscope_Epsilon;
+        } else {
+          IntersectionT=CurrentY/Pete_Kaleidoscope_Epsilon;
+        }
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       } else {
-	IntersectionT=(CurrentY/pCurrentLine->Y);
-	IntersectionX=(pCurrentLine->X*IntersectionT);
+        IntersectionT=(CurrentY/pCurrentLine->Y);
+        IntersectionX=(pCurrentLine->X*IntersectionT);
       }
 
       float RowEndU;
       float RowEndV;
 
-      bool bDebugIsHalfLine;
       if (bIsFirstSpan) {
-	SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
-	SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
+        SPete_Kaleidoscope_Line* pLine1=pFirstLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine2=pCurrentLine;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine1->X<0.0f) {
-	    Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  } else {
-	    Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  }
-	  Line1IntersectionY=(pLine1->Y*IntersectionT);
-	} else {
-	  Line1IntersectionT=(LeftX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine1->X<0.0f) {
+            Line1IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line1IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line1IntersectionY=(pLine1->Y*IntersectionT);
+        } else {
+          Line1IntersectionT=(LeftX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine2->X<0.0f) {
-	    Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
-	  } else {
-	    Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
-	  }
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(LeftX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine2->X<0.0f) {
+            Line2IntersectionT=LeftX/-Pete_Kaleidoscope_Epsilon;
+          } else {
+            Line2IntersectionT=LeftX/Pete_Kaleidoscope_Epsilon;
+          }
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(LeftX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=
-	  (Line2IntersectionY-Line1IntersectionY);
+        const float YDist=
+          (Line2IntersectionY-Line1IntersectionY);
 
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        PreviousRowU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        PreviousRowV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  if (pLine1->X<0.0f) {
-	    PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	  } else {
-	    PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
-	  }
-	} else {
-	  PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
-	}
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          if (pLine1->X<0.0f) {
+            PreviousIntersectionX=-Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          } else {
+            PreviousIntersectionX=Pete_Kaleidoscope_Epsilon*Line1IntersectionT;
+          }
+        } else {
+          PreviousIntersectionX=(pLine1->X*Line1IntersectionT);
+        }
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
 
       } else if (bIsFinalSpan) {
-	SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
-	SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
+        SPete_Kaleidoscope_Line* pLine1=(pCurrentLine-1);
+        SPete_Kaleidoscope_Line* pLine2=pLastLineOtherGroup;
 
-	float Line1IntersectionY;
-	float Line1IntersectionT;
-	if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line1IntersectionT=10000.0f;
-	  Line1IntersectionY=(pLine1->Y*10000.0f);
-	} else {
-	  Line1IntersectionT=(RightX/pLine1->X);
-	  Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
-	}
+        float Line1IntersectionY;
+        float Line1IntersectionT;
+        if (fabsf(pLine1->X)<Pete_Kaleidoscope_Epsilon) {
+          Line1IntersectionT=10000.0f;
+          Line1IntersectionY=(pLine1->Y*10000.0f);
+        } else {
+          Line1IntersectionT=(RightX/pLine1->X);
+          Line1IntersectionY=(pLine1->Y*Line1IntersectionT);
+        }
 
-	float Line2IntersectionY;
-	float Line2IntersectionT;
-	if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
-	  Line2IntersectionT=10000.0f;
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	} else {
-	  Line2IntersectionT=(RightX/pLine2->X);
-	  Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
-	}
+        float Line2IntersectionY;
+        float Line2IntersectionT;
+        if (fabsf(pLine2->X)<Pete_Kaleidoscope_Epsilon) {
+          Line2IntersectionT=10000.0f;
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        } else {
+          Line2IntersectionT=(RightX/pLine2->X);
+          Line2IntersectionY=(pLine2->Y*Line2IntersectionT);
+        }
 
 
-	bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pLine2->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	float Line1U;
-	float Line1V;
-	float Line2U;
-	float Line2V;
-	if (bIsHalfLine) {
-	  Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
-	  Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
-	  Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
-	  Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
-	} else {
-	  Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
-	  Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
-	  Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
-	  Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
-	}
+        float Line1U;
+        float Line1V;
+        float Line2U;
+        float Line2V;
+        if (bIsHalfLine) {
+          Line1U=StartUOffset+(Line1IntersectionT*StartUGradient);
+          Line1V=StartVOffset+(Line1IntersectionT*StartVGradient);
+          Line2U=HalfUOffset+(Line2IntersectionT*HalfUGradient);
+          Line2V=HalfVOffset+(Line2IntersectionT*HalfVGradient);
+        } else {
+          Line1U=HalfUOffset+(Line1IntersectionT*HalfUGradient);
+          Line1V=HalfVOffset+(Line1IntersectionT*HalfVGradient);
+          Line2U=StartUOffset+(Line2IntersectionT*StartUGradient);
+          Line2V=StartVOffset+(Line2IntersectionT*StartVGradient);
+        }
 
-	const float YDist=
-	  (Line2IntersectionY-Line1IntersectionY);
+        const float YDist=
+          (Line2IntersectionY-Line1IntersectionY);
 
-	const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
-	const float LerpValue=(1.0f-OneMinusLerpValue);
+        const float OneMinusLerpValue=(CurrentY-Line1IntersectionY)/YDist;
+        const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
-	RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
+        RowEndU=(Line1U*LerpValue)+(Line2U*OneMinusLerpValue);
+        RowEndV=(Line1V*LerpValue)+(Line2V*OneMinusLerpValue);
 
       } else {
-	bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
-	bDebugIsHalfLine=bIsHalfLine;
+        bool bIsHalfLine=(pCurrentLine->Flags&PETE_KALEIDOSCOPE_HALFLINE_BIT);
 
-	if (bIsHalfLine) {
-	  RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
-	  RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
-	} else {
-	  RowEndU=StartUOffset+(IntersectionT*StartUGradient);
-	  RowEndV=StartVOffset+(IntersectionT*StartVGradient);
-	}
+        if (bIsHalfLine) {
+          RowEndU=HalfUOffset+(IntersectionT*HalfUGradient);
+          RowEndV=HalfVOffset+(IntersectionT*HalfVGradient);
+        } else {
+          RowEndU=StartUOffset+(IntersectionT*StartUGradient);
+          RowEndV=StartVOffset+(IntersectionT*StartVGradient);
+        }
 
       }
       if (IntersectionX>LeftX) {
-	int nRowStartX;
+        int nRowStartX;
 
-	if (PreviousIntersectionX<LeftX) {
-	  nRowStartX=0;
+        if (PreviousIntersectionX<LeftX) {
+          nRowStartX=0;
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(LeftX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          PreviousRowU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          PreviousRowV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else {
-	  nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
-	}
+        } else {
+          nRowStartX=static_cast<int>(PreviousIntersectionX-LeftX);
+        }
 
-	int nRowEndX;
-	if (bIsFinalSpan) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
-	} else if (IntersectionX>RightX) {
-	  nRowEndX=static_cast<int>(RightX-LeftX);
+        int nRowEndX;
+        if (bIsFinalSpan) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
+        } else if (IntersectionX>RightX) {
+          nRowEndX=static_cast<int>(RightX-LeftX);
 
-	  const float XDist=(IntersectionX-PreviousIntersectionX);
-	  const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
-	  const float LerpValue=(1.0f-OneMinusLerpValue);
+          const float XDist=(IntersectionX-PreviousIntersectionX);
+          const float OneMinusLerpValue=(RightX-PreviousIntersectionX)/XDist;
+          const float LerpValue=(1.0f-OneMinusLerpValue);
 
-	  RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
-	  RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
+          RowEndU=(PreviousRowU*LerpValue)+(RowEndU*OneMinusLerpValue);
+          RowEndV=(PreviousRowV*LerpValue)+(RowEndV*OneMinusLerpValue);
 
-	} else {
-	  nRowEndX=static_cast<int>(IntersectionX-LeftX);
-	}
+        } else {
+          nRowEndX=static_cast<int>(IntersectionX-LeftX);
+        }
 
-	unsigned char* pRowStart=pOutputLineStart+nRowStartX;
-	int nRowLength=(nRowEndX-nRowStartX);
-	if (nRowLength<=0) {
-	  nRowLength=1;
-	}
-	unsigned char*const pSpanEnd=(pRowStart+nRowLength);
+        unsigned char* pRowStart=pOutputLineStart+nRowStartX;
+        int nRowLength=(nRowEndX-nRowStartX);
+        if (nRowLength<=0) {
+          nRowLength=1;
+        }
+        unsigned char*const pSpanEnd=(pRowStart+nRowLength);
 
-	const int nFPShift=16;
-	const int nFPMult=(1<<nFPShift);
+        const int nFPShift=16;
+        const int nFPMult=(1<<nFPShift);
 
-	float CurrentU=PreviousRowU;
-	float CurrentV=PreviousRowV;
+        float CurrentU=PreviousRowU;
+        float CurrentV=PreviousRowV;
 
-	float DeltaU=(RowEndU-PreviousRowU)/nRowLength;
-	float DeltaV=(RowEndV-PreviousRowV)/nRowLength;
+        float DeltaU=(RowEndU-PreviousRowU)/nRowLength;
+        float DeltaV=(RowEndV-PreviousRowV)/nRowLength;
 
-	int nCurrentU=static_cast<int>(CurrentU*nFPMult);
-	int nCurrentV=static_cast<int>(CurrentV*nFPMult);
+        int nCurrentU=static_cast<int>(CurrentU*nFPMult);
+        int nCurrentV=static_cast<int>(CurrentV*nFPMult);
 
-	const int nWidthFP=(nWidth<<nFPShift);
-	const int nHeightFP=(nHeight<<nFPShift);
+        const int nWidthFP=(nWidth<<nFPShift);
+        const int nHeightFP=(nHeight<<nFPShift);
 
-	nCurrentU+=(nWidthFP*10);
-	nCurrentV+=(nHeightFP*10);
+        nCurrentU+=(nWidthFP*10);
+        nCurrentV+=(nHeightFP*10);
 
-	int nDeltaU=static_cast<int>(DeltaU*nFPMult);
-	int nDeltaV=static_cast<int>(DeltaV*nFPMult);
+        int nDeltaU=static_cast<int>(DeltaU*nFPMult);
+        int nDeltaV=static_cast<int>(DeltaV*nFPMult);
 
-	const int nTwoWidth=(nWidth*2)<<nFPShift;
-	const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
+        const int nTwoWidth=(nWidth*2)<<nFPShift;
+        const int nTwoWidthMinusOne=(nTwoWidth-(1<<nFPShift));
 
-	const int nTwoHeight=(nHeight*2)<<nFPShift;
-	const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
+        const int nTwoHeight=(nHeight*2)<<nFPShift;
+        const int nTwoHeightMinusOne=(nTwoHeight-(1<<nFPShift));
 
-	unsigned char* pCurrentOutput=pRowStart;
+        unsigned char* pCurrentOutput=pRowStart;
 
-	while (pCurrentOutput<pSpanEnd) {
-	  int nNextU;
-	  if (nDeltaU>=0) {
-	    nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
-	  } else {
-	    nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
-	  }
+        while (pCurrentOutput<pSpanEnd) {
+          int nNextU;
+          if (nDeltaU>=0) {
+            nNextU=((nCurrentU+nWidthFP)/nWidthFP)*nWidthFP;
+          } else {
+            nNextU=((nCurrentU-(1<<nFixedShift))/nWidthFP)*nWidthFP;
+          }
 
-	  int nUDist;
-	  if (nDeltaU!=0) {
-	    nUDist=(nNextU-nCurrentU)/nDeltaU;
-	    nUDist+=1;
-	  } else {
-	    nUDist=cnBiggestSignedInt;
-	  }
-	  int nNextV;
-	  if (nDeltaV>=0) {
-	    nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
-	  } else {
-	    nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
-	  }
-	  int nVDist;
-	  if (nDeltaV!=0) {
-	    nVDist=(nNextV-nCurrentV)/nDeltaV;
-	    nVDist+=1;
-	  } else {
-	    nVDist=cnBiggestSignedInt;
-	  }
+          int nUDist;
+          if (nDeltaU!=0) {
+            nUDist=(nNextU-nCurrentU)/nDeltaU;
+            nUDist+=1;
+          } else {
+            nUDist=cnBiggestSignedInt;
+          }
+          int nNextV;
+          if (nDeltaV>=0) {
+            nNextV=((nCurrentV+nHeightFP)/nHeightFP)*nHeightFP;
+          } else {
+            nNextV=((nCurrentV-(1<<nFixedShift))/nHeightFP)*nHeightFP;
+          }
+          int nVDist;
+          if (nDeltaV!=0) {
+            nVDist=(nNextV-nCurrentV)/nDeltaV;
+            nVDist+=1;
+          } else {
+            nVDist=cnBiggestSignedInt;
+          }
 
-	  int nMinDist;
-	  if (nUDist<nVDist) {
-	    nMinDist=nUDist;
-	  } else {
-	    nMinDist=nVDist;
-	  }
+          int nMinDist;
+          if (nUDist<nVDist) {
+            nMinDist=nUDist;
+          } else {
+            nMinDist=nVDist;
+          }
 
-	  int nStartU=nCurrentU%nTwoWidth;
-	  if (nStartU>=nWidthFP) {
-	    nStartU=(nTwoWidthMinusOne-nStartU);
-	  }
-	  nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
+          int nStartU=nCurrentU%nTwoWidth;
+          if (nStartU>=nWidthFP) {
+            nStartU=(nTwoWidthMinusOne-nStartU);
+          }
+          nStartU=clampFunc(nStartU,0,nWidthFP-(1<<nFPShift));
 
-	  int nStartV=nCurrentV%nTwoHeight;
-	  if (nStartV>=nHeightFP) {
-	    nStartV=(nTwoHeightMinusOne-nStartV);
-	  }
-	  nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
+          int nStartV=nCurrentV%nTwoHeight;
+          if (nStartV>=nHeightFP) {
+            nStartV=(nTwoHeightMinusOne-nStartV);
+          }
+          nStartV=clampFunc(nStartV,0,nHeightFP-(1<<nFPShift));
 
-	  int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
-	  if (nEndU>=nWidthFP) {
-	    nEndU=(nTwoWidthMinusOne-nEndU);
-	  }
-	  nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
+          int nEndU=(nCurrentU+(nMinDist*nDeltaU))%nTwoWidth;
+          if (nEndU>=nWidthFP) {
+            nEndU=(nTwoWidthMinusOne-nEndU);
+          }
+          nEndU=clampFunc(nEndU,0,nWidthFP-(1<<nFPShift));
 
-	  int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
-	  if (nEndV>=nHeightFP) {
-	    nEndV=(nTwoHeightMinusOne-nEndV);
-	  }
-	  nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
+          int nEndV=(nCurrentV+(nMinDist*nDeltaV))%nTwoHeight;
+          if (nEndV>=nHeightFP) {
+            nEndV=(nTwoHeightMinusOne-nEndV);
+          }
+          nEndV=clampFunc(nEndV,0,nHeightFP-(1<<nFPShift));
 
-	  int nLocalDeltaU;
-	  int nLocalDeltaV;
-	  if (nMinDist<1) {
-	    nLocalDeltaU=0;
-	    nLocalDeltaV=0;
-	  } else {
-	    nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
-	    nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
-	  }
-	  int nLocalCurrentU=nStartU;
-	  int nLocalCurrentV=nStartV;
+          int nLocalDeltaU;
+          int nLocalDeltaV;
+          if (nMinDist<1) {
+            nLocalDeltaU=0;
+            nLocalDeltaV=0;
+          } else {
+            nLocalDeltaU=(nEndU/nMinDist)-(nStartU/nMinDist);
+            nLocalDeltaV=(nEndV/nMinDist)-(nStartV/nMinDist);
+          }
+          int nLocalCurrentU=nStartU;
+          int nLocalCurrentV=nStartV;
 
-	  unsigned char* pLocalSpanEnd=(pCurrentOutput+nMinDist);
-	  if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
-	    pLocalSpanEnd=pSpanEnd;
-	  }
-	  while (pCurrentOutput<pLocalSpanEnd) {
-	    const int nUIntegral=(nLocalCurrentU>>nFPShift);
-	    const int nVIntegral=(nLocalCurrentV>>nFPShift);
-	    unsigned char* pCurrentSource=
-	      pSourceP+(nVIntegral*nWidth)+nUIntegral;
-	    *pCurrentOutput=*pCurrentSource;
-	    pCurrentOutput+=1;
-	    nLocalCurrentU+=nLocalDeltaU;
-	    nLocalCurrentV+=nLocalDeltaV;
-	  }
-	  if (nMinDist<1) {
-	    nCurrentU+=nDeltaU;
-	    nCurrentV+=nDeltaV;
-	  } else {
-	    nCurrentU+=(nMinDist*nDeltaU);
-	    nCurrentV+=(nMinDist*nDeltaV);
-	  }
-	}
+          unsigned char* pLocalSpanEnd=(pCurrentOutput+nMinDist);
+          if ((pLocalSpanEnd>pSpanEnd)||(nMinDist==cnBiggestSignedInt)) {
+            pLocalSpanEnd=pSpanEnd;
+          }
+          while (pCurrentOutput<pLocalSpanEnd) {
+            const int nUIntegral=(nLocalCurrentU>>nFPShift);
+            const int nVIntegral=(nLocalCurrentV>>nFPShift);
+            unsigned char* pCurrentSource=
+              pSourceP+(nVIntegral*nWidth)+nUIntegral;
+            *pCurrentOutput=*pCurrentSource;
+            pCurrentOutput+=1;
+            nLocalCurrentU+=nLocalDeltaU;
+            nLocalCurrentV+=nLocalDeltaV;
+          }
+          if (nMinDist<1) {
+            nCurrentU+=nDeltaU;
+            nCurrentV+=nDeltaV;
+          } else {
+            nCurrentU+=(nMinDist*nDeltaU);
+            nCurrentV+=(nMinDist*nDeltaV);
+          }
+        }
       }
       PreviousIntersectionX=IntersectionX;
       PreviousRowU=RowEndU;
@@ -1438,14 +1463,16 @@ void pix_kaleidoscope :: processGrayImage(imageStruct &image)
   image.data = myImage.data;
 }
 
-inline int pix_kaleidoscope :: Pete_Kaleidoscope_CosFA(int nAngleFA) {
+inline int pix_kaleidoscope :: Pete_Kaleidoscope_CosFA(int nAngleFA)
+{
   const int nGatedAngleFA=nAngleFA&nFixedMask;
   const int nEntryIndex=(nGatedAngleFA>>nFAToCosTableShift);
 
   return g_pCurrentCosTable[nEntryIndex];
 }
 
-inline int pix_kaleidoscope :: Pete_Kaleidoscope_SinFA(int nAngleFA) {
+inline int pix_kaleidoscope :: Pete_Kaleidoscope_SinFA(int nAngleFA)
+{
   const int nIncrementedAngleFA=(nAngleFA+nHalfPiFA);
   const int nGatedAngleFA=nIncrementedAngleFA&nFixedMask;
   const int nEntryIndex=(nGatedAngleFA>>nFAToCosTableShift);
@@ -1453,7 +1480,8 @@ inline int pix_kaleidoscope :: Pete_Kaleidoscope_SinFA(int nAngleFA) {
   return g_pCurrentCosTable[nEntryIndex];
 }
 
-int pix_kaleidoscope :: Pete_Kaleidoscope_Init() {
+int pix_kaleidoscope :: Pete_Kaleidoscope_Init()
+{
   Pete_Kaleidoscope_DeInit();
 
   const int nNumberOfPixels=nWidth*nHeight;
@@ -1489,8 +1517,9 @@ int pix_kaleidoscope :: Pete_Kaleidoscope_Init() {
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_DeInit() {
-  if(init){
+void pix_kaleidoscope :: Pete_Kaleidoscope_DeInit()
+{
+  if(init) {
     if (hAngleTable!=NULL) {
       Pete_FreeHandle(hAngleTable);
       hAngleTable=NULL;
@@ -1508,9 +1537,11 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_DeInit() {
   }
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
+void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable()
+{
 
-  SPete_AngleTable_Entry* pTableStart=reinterpret_cast<SPete_AngleTable_Entry*>(Pete_LockHandle(hAngleTable));
+  SPete_AngleTable_Entry* pTableStart=
+    reinterpret_cast<SPete_AngleTable_Entry*>(Pete_LockHandle(hAngleTable));
   if (pTableStart==NULL) {
     return;
   }
@@ -1534,7 +1565,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
       float Angle=atan2(YPos,XPos);
       if (Angle<0.0f) {
-	    Angle+=Pete_TwoPi;
+        Angle+=Pete_TwoPi;
       }
       float Dist=sqrt((XPos*XPos)+(YPos*YPos));
 
@@ -1552,7 +1583,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupAngleTable() {
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_SetupCosTable() {
+void pix_kaleidoscope :: Pete_Kaleidoscope_SetupCosTable()
+{
 
   int* pTableStart=reinterpret_cast<int*>(Pete_LockHandle(hCosTable));
   if (pTableStart==NULL) {
@@ -1572,7 +1604,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupCosTable() {
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
+void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount)
+{
 
   const float MaxDivisions=((nMaxLines/2)-1.0f);
 
@@ -1592,7 +1625,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
 
   const int nLinesCount=(nDivisionsInt*2);
 
-  SPete_Kaleidoscope_Line* pLinesStart=reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
+  SPete_Kaleidoscope_Line* pLinesStart=
+    reinterpret_cast<SPete_Kaleidoscope_Line*>(Pete_LockHandle(hLines));
   if (pLinesStart==NULL) {
     return;
   }
@@ -1601,7 +1635,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
   SPete_Kaleidoscope_Line* pCurrentLine=pLinesStart;
 
   int nCurrentDivision;
-  for (nCurrentDivision=0; nCurrentDivision<nDivisionsInt; nCurrentDivision+=1) {
+  for (nCurrentDivision=0; nCurrentDivision<nDivisionsInt;
+       nCurrentDivision+=1) {
 
     float StartAngle=
       AnglePreIncrement+(nCurrentDivision*AngleInterval);
@@ -1628,7 +1663,9 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_SetupLines(int* poutLinesCount) {
 
 }
 
-extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void* pElem2) {
+extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,
+    const void* pElem2)
+{
 
   const SPete_Kaleidoscope_Line* pFirstLine;
   pFirstLine = reinterpret_cast<const SPete_Kaleidoscope_Line*>(pElem1);
@@ -1663,12 +1700,15 @@ extern "C" int Pete_Kaleidoscope_LinesSortFunction(const void* pElem1,const void
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,SPete_Kaleidoscope_PartitionData* poutPartitionData) {
+void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(
+  SPete_Kaleidoscope_Line* pLinesStart,int nLinesCount,
+  SPete_Kaleidoscope_PartitionData* poutPartitionData)
+{
 
   qsort(reinterpret_cast<void*>(pLinesStart),
-	nLinesCount,
-	sizeof(SPete_Kaleidoscope_Line),
-	&Pete_Kaleidoscope_LinesSortFunction);
+        nLinesCount,
+        sizeof(SPete_Kaleidoscope_Line),
+        &Pete_Kaleidoscope_LinesSortFunction);
 
   SPete_Kaleidoscope_Line* pLinesEnd=pLinesStart+nLinesCount;
 
@@ -1686,7 +1726,9 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_PartitionLines(SPete_Kaleidoscope_Lin
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* pTransforms) {
+void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(
+  SPete_2dMatrix* pTransforms)
+{
 
   int nDivisionCount=static_cast<int>(m_Divisions);
   nDivisionCount=clampFunc(nDivisionCount,1,(nMaxDivisions-1));
@@ -1703,19 +1745,22 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
   const float OriginY=m_SourceCentreY;
 
   SPete_2dMatrix PanTransform;
-  Pete_2dMatrix_SetToTranslation(-(OriginX*nWidth),-(OriginY*nHeight),&PanTransform);
+  Pete_2dMatrix_SetToTranslation(-(OriginX*nWidth),-(OriginY*nHeight),
+                                 &PanTransform);
 
   const float ScaleNormalX=cos(-DivisionAngle);
   const float ScaleNormalY=sin(-DivisionAngle);
 
   SPete_2dMatrix DirectionalScaleTransform;
-  Pete_2dMatrix_SetToDirectionalScale(ScaleNormalX,ScaleNormalY,-1.0f,&DirectionalScaleTransform);
+  Pete_2dMatrix_SetToDirectionalScale(ScaleNormalX,ScaleNormalY,-1.0f,
+                                      &DirectionalScaleTransform);
 
   SPete_2dMatrix WorldToScreen;
   Pete_2dMatrix_SetToTranslation(HalfWidth,HalfHeight,&WorldToScreen);
 
   int nCurrentDivision;
-  for (nCurrentDivision=0; nCurrentDivision<nDivisionCount; nCurrentDivision+=1) {
+  for (nCurrentDivision=0; nCurrentDivision<nDivisionCount;
+       nCurrentDivision+=1) {
 
     SPete_2dMatrix* pCurrentTransform=&pTransforms[nCurrentDivision];
 
@@ -1733,28 +1778,34 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_CreateAllTransforms(SPete_2dMatrix* p
 
     Pete_2dMatrix_SetToIdentity(pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&ScreenToWorld,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&ScreenToWorld,
+                              pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&RotationTransform,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&RotationTransform,
+                              pCurrentTransform);
 
     if (bIsMirroredDivision) {
-      Pete_2dMatrix_Concatenate(pCurrentTransform,&DirectionalScaleTransform,pCurrentTransform);
+      Pete_2dMatrix_Concatenate(pCurrentTransform,&DirectionalScaleTransform,
+                                pCurrentTransform);
     }
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&PanTransform,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&PanTransform,
+                              pCurrentTransform);
 
-    Pete_2dMatrix_Concatenate(pCurrentTransform,&WorldToScreen,pCurrentTransform);
+    Pete_2dMatrix_Concatenate(pCurrentTransform,&WorldToScreen,
+                              pCurrentTransform);
 
   }
 
 }
 
-void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
+void pix_kaleidoscope :: Pete_Kaleidoscope_Dev()
+{
 
   U32* pCurrentOutput=pOutput;
 
-  SPete_2dVector GridA={1.0f,0.0f};
-  SPete_2dVector GridB={0.0f,1.0f};
+  SPete_2dVector GridA= {1.0f,0.0f};
+  SPete_2dVector GridB= {0.0f,1.0f};
 
   const float Angle=m_OutputAnglePreIncrement;
 
@@ -1762,7 +1813,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
   Pete_2dMatrix_SetToRotation(Angle,&RotationTransform);
 
   Pete_2dMatrix_TransformVector(&GridA,&RotationTransform,&GridA);
-  //	Pete_2dMatrix_TransformVector(&GridB,&RotationTransform,&GridB);
+  //    Pete_2dMatrix_TransformVector(&GridB,&RotationTransform,&GridB);
 
   const float GridMagA=20.0f;
   const float GridMagB=20.0f;
@@ -1778,7 +1829,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
     float X;
     for (X=0.0f; X<nWidth; X+=1.0f) {
 
-      SPete_2dVector CurrentPos={X,Y};
+      SPete_2dVector CurrentPos= {X,Y};
 
       const float PosDotA=Pete_2dVector_DotProduct(&CurrentPos,&GridA);
       const float PosDotB=Pete_2dVector_DotProduct(&CurrentPos,&GridB);
@@ -1809,7 +1860,7 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
       nSourceY=GetMirrored(nSourceY,nHeight);
 
       U32* pCurrentSource=
-	pSource+(nSourceY*nWidth)+nSourceX;
+        pSource+(nSourceY*nWidth)+nSourceX;
 
       *pCurrentOutput=*pCurrentSource;
 
@@ -1821,7 +1872,8 @@ void pix_kaleidoscope :: Pete_Kaleidoscope_Dev() {
 
 }
 
-inline int pix_kaleidoscope :: GetMirrored(int inValue,const int nMax) {
+inline int pix_kaleidoscope :: GetMirrored(int inValue,const int nMax)
+{
 
   const int nTwoMax=(nMax*2);
 
@@ -1834,7 +1886,9 @@ inline int pix_kaleidoscope :: GetMirrored(int inValue,const int nMax) {
   return nOutValue;
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatrix* poutResult) {
+void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,
+    SPete_2dMatrix* poutResult)
+{
 
   const float CosRotation=cos(Rotation);
   const float SinRotation=sin(Rotation);
@@ -1852,7 +1906,9 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToRotation(float Rotation,SPete_2dMatr
   poutResult->m[2][2]=1.0f;
 
 }
-void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult) {
+void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix*
+    pinFirst,SPete_2dMatrix* pinSecond,SPete_2dMatrix* poutResult)
+{
 
   SPete_2dMatrix TempResult;
 
@@ -1863,9 +1919,9 @@ void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPet
     for (nX=0; nX<3; nX+=1) {
 
       TempResult.m[nY][nX]=
-	(pinSecond->m[nY][0]*pinFirst->m[0][nX])+
-	(pinSecond->m[nY][1]*pinFirst->m[1][nX])+
-	(pinSecond->m[nY][2]*pinFirst->m[2][nX]);
+        (pinSecond->m[nY][0]*pinFirst->m[0][nX])+
+        (pinSecond->m[nY][1]*pinFirst->m[1][nX])+
+        (pinSecond->m[nY][2]*pinFirst->m[2][nX]);
 
     }
 
@@ -1874,7 +1930,9 @@ void pix_kaleidoscope :: Pete_2dMatrix_Concatenate(SPete_2dMatrix* pinFirst,SPet
   *poutResult=TempResult;
 
 }
-void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix) {
+void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(
+  SPete_2dMatrix* pMatrix)
+{
 
   pMatrix->m[0][0]=1.0f;
   pMatrix->m[0][1]=0.0f;
@@ -1890,7 +1948,9 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToIdentity(SPete_2dMatrix* pMatrix) {
 
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToDirectionalScale(float NormalX,float NormalY,float Scale,SPete_2dMatrix* poutResult) {
+void pix_kaleidoscope :: Pete_2dMatrix_SetToDirectionalScale(float NormalX,
+    float NormalY,float Scale,SPete_2dMatrix* poutResult)
+{
 
   const float ScaleMinusOne=(Scale-1.0f);
 
@@ -1908,7 +1968,8 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToDirectionalScale(float NormalX,float
 
 }
 
-void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
+void pix_kaleidoscope :: Pete_SimpleMirror_Render()
+{
 
   const float Width=nWidth;
   const float Height=nHeight;
@@ -1965,27 +2026,27 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
 
       if ((VDotNMinusD>0.0f)&&(!bSimpleMirrorEverything)) {
 
-	*pCurrentOutput=*pCurrentSource;
+        *pCurrentOutput=*pCurrentSource;
 
       } else {
 
-	const float TwoVDotNMinusD=2.0f*VDotNMinusD;
+        const float TwoVDotNMinusD=2.0f*VDotNMinusD;
 
-	const float SourceX=CurrentX-(TwoVDotNMinusD*NormalX);
-	const float SourceY=CurrentY-(TwoVDotNMinusD*NormalY);
+        const float SourceX=CurrentX-(TwoVDotNMinusD*NormalX);
+        const float SourceY=CurrentY-(TwoVDotNMinusD*NormalY);
 
-	int nSourceX=static_cast<int>(SourceX+HalfWidth);
-	int nSourceY=static_cast<int>(SourceY+HalfHeight);
+        int nSourceX=static_cast<int>(SourceX+HalfWidth);
+        int nSourceY=static_cast<int>(SourceY+HalfHeight);
 
-	nSourceX=GetMirrored(nSourceX,nWidth);
-	nSourceY=GetMirrored(nSourceY,nHeight);
+        nSourceX=GetMirrored(nSourceX,nWidth);
+        nSourceY=GetMirrored(nSourceY,nHeight);
 
-	U32* pSimpleMirrorSource=
-	  pSource+
-	  (nSourceY*nWidth)+
-	  nSourceX;
+        U32* pSimpleMirrorSource=
+          pSource+
+          (nSourceY*nWidth)+
+          nSourceX;
 
-	*pCurrentOutput=*pSimpleMirrorSource;
+        *pCurrentOutput=*pSimpleMirrorSource;
 
       }
 
@@ -2002,7 +2063,9 @@ void pix_kaleidoscope :: Pete_SimpleMirror_Render() {
   }
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,float TranslationY,SPete_2dMatrix* poutResult) {
+void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,
+    float TranslationY,SPete_2dMatrix* poutResult)
+{
 
   poutResult->m[0][0]=1.0f;
   poutResult->m[0][1]=0.0f;
@@ -2018,7 +2081,10 @@ void pix_kaleidoscope :: Pete_2dMatrix_SetToTranslation(float TranslationX,float
 
 }
 
-void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,SPete_2dVector* poutResult) {
+void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(
+  SPete_2dVector* pinVector,SPete_2dMatrix* pinMatrix,
+  SPete_2dVector* poutResult)
+{
 
   SPete_2dVector Result;
 
@@ -2042,24 +2108,33 @@ void pix_kaleidoscope :: Pete_2dMatrix_TransformVector(SPete_2dVector* pinVector
 /////////////////////////////////////////////////////////
 void pix_kaleidoscope :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceCtrCallback),
-		  gensym("sourceCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputCtrCallback),
-		  gensym("outputCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngCallback),
-		  gensym("outputAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngCallback),
-		  gensym("sourceAng"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngleCallback),
-		  gensym("outputAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngleCallback),
-		  gensym("sourceAngle"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::divCallback),
-		  gensym("div"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::sapCallback),
-		  gensym("sap"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
-		  gensym("rlp"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceCtrCallback),
+                  gensym("sourceCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputCtrCallback),
+                  gensym("outputCtr"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngCallback),
+                  gensym("outputAng"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngCallback),
+                  gensym("sourceAng"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::outputAngleCallback),
+                  gensym("outputAngle"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sourceAngleCallback),
+                  gensym("sourceAngle"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::divCallback),
+                  gensym("div"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::sapCallback),
+                  gensym("sap"), A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_kaleidoscope::rlpCallback),
+                  gensym("rlp"), A_DEFFLOAT, A_NULL);
 }
 void pix_kaleidoscope :: divCallback(void *data, t_float m_Divisions)
 {
@@ -2067,46 +2142,56 @@ void pix_kaleidoscope :: divCallback(void *data, t_float m_Divisions)
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputAngCallback(void *data, t_float m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngCallback(void *data,
+    t_float m_OutputAnglePreIncrement)
 {
   GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngCallback(void *data, t_float m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngCallback(void *data,
+    t_float m_SourceAnglePreIncrement)
 {
   GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: outputAngleCallback(void *data, t_float m_OutputAnglePreIncrement)
+void pix_kaleidoscope :: outputAngleCallback(void *data,
+    t_float m_OutputAnglePreIncrement)
 {
-  GetMyClass(data)->m_OutputAnglePreIncrement=(m_OutputAnglePreIncrement*deg2rad);
+  GetMyClass(data)->m_OutputAnglePreIncrement=
+    (m_OutputAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceAngleCallback(void *data, t_float m_SourceAnglePreIncrement)
+void pix_kaleidoscope :: sourceAngleCallback(void *data,
+    t_float m_SourceAnglePreIncrement)
 {
-  GetMyClass(data)->m_SourceAnglePreIncrement=(m_SourceAnglePreIncrement*deg2rad);
+  GetMyClass(data)->m_SourceAnglePreIncrement=
+    (m_SourceAnglePreIncrement*deg2rad);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: sourceCtrCallback(void *data, t_float m_SourceCentreX, t_float m_SourceCentreY)
+void pix_kaleidoscope :: sourceCtrCallback(void *data,
+    t_float m_SourceCentreX, t_float m_SourceCentreY)
 {
   GetMyClass(data)->m_SourceCentreX=(m_SourceCentreX);
   GetMyClass(data)->m_SourceCentreY=(m_SourceCentreY);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: outputCtrCallback(void *data, t_float m_OutputCentreX, t_float m_OutputCentreY)
+void pix_kaleidoscope :: outputCtrCallback(void *data,
+    t_float m_OutputCentreX, t_float m_OutputCentreY)
 {
   GetMyClass(data)->m_OutputCentreX=(m_OutputCentreX);
   GetMyClass(data)->m_OutputCentreY=(m_OutputCentreY);
   GetMyClass(data)->setPixModified();
 }
-void pix_kaleidoscope :: rlpCallback(void *data, t_float m_ReflectionLineProportion)
+void pix_kaleidoscope :: rlpCallback(void *data,
+                                     t_float m_ReflectionLineProportion)
 {
   GetMyClass(data)->m_ReflectionLineProportion=(m_ReflectionLineProportion);
   GetMyClass(data)->setPixModified();
 }
 
-void pix_kaleidoscope :: sapCallback(void *data, t_float m_SourceAngleProportion)
+void pix_kaleidoscope :: sapCallback(void *data,
+                                     t_float m_SourceAngleProportion)
 {
   GetMyClass(data)->m_SourceAngleProportion=(m_SourceAngleProportion);
   GetMyClass(data)->setPixModified();

@@ -81,7 +81,7 @@ the same image-data. Thus is is also called [pix_separator];
 #X text 22 362 Inlet 1: bang: copy of input-data to the output and
 force all subsequent [pix_]-objects to process.;
 #X text 22 391 Inlet 1: auto 1|0: force image-processing in subsequent
-objects each render-cycle;
+objects each render-cycle (default:0);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

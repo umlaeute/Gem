@@ -36,10 +36,13 @@ model :: model(t_symbol *filename) :
   m_position(256,3),
   m_texture (256,2),
   m_color   (256,4),
-  m_normal  (256,3)
+  m_normal  (256,3),
+  m_infoOut(gem::RTE::Outlet(this))
 {
   // make sure that there are some characters
-  if (filename&&filename->s_name&&*filename->s_name) openMess(filename->s_name);
+  if (filename&&filename->s_name&&*filename->s_name) {
+    openMess(filename->s_name);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -67,8 +70,9 @@ void model :: applyProperties(void)
   }
 #endif
 
-  if(m_loader)
+  if(m_loader) {
     m_loader->setProperties(m_properties);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -153,6 +157,59 @@ void model :: groupMess(int state)
   applyProperties();
 }
 
+/////////////////////////////////////////////////////////
+// backendMess
+//
+/////////////////////////////////////////////////////////
+void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
+{
+#if 0
+  gem::any value=ids;
+  m_properties.set("backends", value);
+  applyProperties();
+#endif
+  int i;
+
+  m_backends.clear();
+  if(argc) {
+    for(i=0; i<argc; i++) {
+      if(A_SYMBOL == argv->a_type) {
+        t_symbol *b=atom_getsymbol(argv+i);
+        m_backends.push_back(b->s_name);
+      } else {
+        error("%s must be symbolic", s->s_name);
+      }
+    }
+  } else {
+    /* no backend requested, just enumerate them */
+    if(m_loader) {
+      std::vector<gem::any>atoms;
+      gem::any value;
+      t_atom at;
+      t_atom*ap=&at;
+      gem::Properties props;
+      std::vector<std::string> backends;
+      props.set("backends", value);
+      m_loader->getProperties(props);
+      if(props.type("backends")!=gem::Properties::UNSET) {
+        props.get("backends", backends);
+      }
+      atoms.clear();
+      atoms.push_back(value=(int)(backends.size()));
+      m_infoOut.send("loaders", atoms);
+      if(!backends.empty()) {
+        for(i=0; i<backends.size(); i++) {
+          atoms.clear();
+          atoms.push_back(value=backends[i]);
+          post("loader[%d] %s", i, backends[i].c_str());
+          m_infoOut.send("loader", atoms);
+        }
+      } else {
+        post("no model-loading backends found!");
+      }
+    }
+  }
+}
 
 /////////////////////////////////////////////////////////
 // openMess
@@ -160,6 +217,8 @@ void model :: groupMess(int state)
 /////////////////////////////////////////////////////////
 void model :: openMess(const std::string&filename)
 {
+  gem::Properties wantProps = m_properties;
+
   if(!m_loader) {
     error("no model loader backends found");
     return;
@@ -167,11 +226,16 @@ void model :: openMess(const std::string&filename)
   m_loader->close();
   m_loaded=false;
 
+  if(!m_backends.empty()) {
+    wantProps.set("backends", m_backends);
+  }
+
   char buf[MAXPDSTRING];
-  canvas_makefilename(const_cast<t_canvas*>(getCanvas()), const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
-  if(!m_loader->open(buf, m_properties)) {
-      error("unable to read model '%s'", buf);
-      return;
+  canvas_makefilename(const_cast<t_canvas*>(getCanvas()),
+                      const_cast<char*>(filename.c_str()), buf, MAXPDSTRING);
+  if(!m_loader->open(buf, wantProps)) {
+    error("unable to read model '%s'", buf);
+    return;
   }
 
   m_loaded=true;
@@ -179,8 +243,9 @@ void model :: openMess(const std::string&filename)
   setModified();
 }
 
-void model :: startRendering() {
-  if (m_loaded){
+void model :: startRendering()
+{
+  if (m_loaded) {
     copyArray(m_loader->getVector("vertices"), m_position);
     copyArray(m_loader->getVector("texcoords"), m_texture);
     copyArray(m_loader->getVector("normals"), m_normal);
@@ -193,9 +258,12 @@ void model :: startRendering() {
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
-  if(!m_loaded)return;
+  if(!m_loaded) {
+    return;
+  }
 
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo || m_size_change_flag ) {
+  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
+       || m_size_change_flag ) {
     createVBO();
     m_size_change_flag = false;
   }
@@ -256,6 +324,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
+  CPPEXTERN_MSG (classPtr, "loader", backendMess);
 }
 
 void model :: createVBO(void)
@@ -266,12 +335,15 @@ void model :: createVBO(void)
   m_normal  .create();
 }
 
-void model :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexBuffer&vb)
+void model :: copyArray(const std::vector<std::vector<float> >&tab,
+                        gem::VertexBuffer&vb)
 {
   unsigned int size(0), i(0), npts(0);
 
   //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
-  if ( tab.empty() ) return;
+  if ( tab.empty() ) {
+    return;
+  }
   size=tab.size();
 
   if(size!=vb.size) {
@@ -288,8 +360,9 @@ void model :: copyArray(const std::vector<std::vector<float> > tab, gem::VertexB
   vb.enabled=true;
 }
 
-void model :: copyAllArrays(){
-  if (m_loader && m_loader->needRefresh()){
+void model :: copyAllArrays()
+{
+  if (m_loader && m_loader->needRefresh()) {
     copyArray(m_loader->getVector("vertices"), m_position);
     copyArray(m_loader->getVector("texcoords"), m_texture);
     copyArray(m_loader->getVector("normals"), m_normal);
@@ -298,32 +371,35 @@ void model :: copyAllArrays(){
   }
 }
 
-void model :: getVBOarray(){
-  if (m_loader && m_loader->needRefresh()){
+void model :: getVBOarray()
+{
+  if (m_loader && m_loader->needRefresh()) {
 
-    std::vector<gem::plugins::modelloader::VBOarray>  vboArray = m_loader->getVBOarray();
+    std::vector<gem::plugins::modelloader::VBOarray>  vboArray =
+      m_loader->getVBOarray();
 
-    if ( vboArray.empty() ){
+    if ( vboArray.empty() ) {
       copyAllArrays();
     } else {
-      for (int i = 0; i<vboArray.size(); i++){
-        switch (vboArray[i].type){
-          case gem::VertexBuffer::GEM_VBO_VERTICES:
-            copyArray(*vboArray[i].data, m_position);
-            break;
-          case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
-            copyArray(*vboArray[i].data, m_texture);
-            break;
-          case gem::VertexBuffer::GEM_VBO_NORMALS:
-            copyArray(*vboArray[i].data, m_normal);
-            break;
-          case gem::VertexBuffer::GEM_VBO_COLORS:
-            copyArray(*vboArray[i].data, m_color);
-            break;
-          default:
-            error("VBO type %d not supported\n",vboArray[i].type);
+      for (int i = 0; i<vboArray.size(); i++) {
+        switch (vboArray[i].type) {
+        case gem::VertexBuffer::GEM_VBO_VERTICES:
+          copyArray(*vboArray[i].data, m_position);
+          break;
+        case gem::VertexBuffer::GEM_VBO_TEXCOORDS:
+          copyArray(*vboArray[i].data, m_texture);
+          break;
+        case gem::VertexBuffer::GEM_VBO_NORMALS:
+          copyArray(*vboArray[i].data, m_normal);
+          break;
+        case gem::VertexBuffer::GEM_VBO_COLORS:
+          copyArray(*vboArray[i].data, m_color);
+          break;
+        default:
+          error("VBO type %d not supported\n",vboArray[i].type);
         }
       }
+      m_loader->unsetRefresh();
     }
   }
 }

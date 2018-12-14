@@ -29,7 +29,8 @@
 #include "pix_tIIR.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_tIIR, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -49,8 +50,10 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 {
   int fb_num = (fb_numf>0.)?static_cast<int>(fb_numf):0;
   int ff_num = (ff_numf>0.)?static_cast<int>(ff_numf):0;
-  ff_count=ff_num;fb_count=fb_num;
-  fb_num++;ff_num++;
+  ff_count=ff_num;
+  fb_count=fb_num;
+  fb_num++;
+  ff_num++;
   m_inlet = new t_inlet*[fb_num+ff_num];
   t_inlet **inlet = m_inlet;
 
@@ -59,14 +62,14 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
   m_inletCount=fb_num+ff_num;
 
   int i=0;
-  while(i<fb_num){
+  while(i<fb_num) {
     m_fb[i]=0.0;
     *inlet++=floatinlet_new(this->x_obj, m_fb+i);
     i++;
   }
   m_fb[0]=1.0;
   i=0;
-  while(i<ff_num){
+  while(i<ff_num) {
     m_ff[i]=0.0;
     *inlet++=floatinlet_new(this->x_obj, m_ff+i);
     i++;
@@ -113,7 +116,8 @@ void pix_tIIR :: processImage(imageStruct &image)
   // if (oldsize<newsize){}
   m_buffer.reallocate(image.xsize*image.ysize*image.csize*m_bufnum);
 
-  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize || m_buffer.format!=image.format){
+  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize
+      || m_buffer.format!=image.format) {
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
     m_buffer.csize=image.csize;
@@ -124,14 +128,18 @@ void pix_tIIR :: processImage(imageStruct &image)
   }
 
   // set!(if needed)
-  if (set){
-    if (set_zero)m_buffer.setBlack();
-    else{
+  if (set) {
+    if (set_zero) {
+      m_buffer.setBlack();
+    } else {
       j=m_bufnum;
-      while(j--){
+      while(j--) {
         source=image.data;
         dest=m_buffer.data+j*imagesize;
-        i=imagesize;while(i--)*dest++=*source++;
+        i=imagesize;
+        while(i--) {
+          *dest++=*source++;
+        }
       }
     }
     set=false;
@@ -144,14 +152,21 @@ void pix_tIIR :: processImage(imageStruct &image)
   source=image.data;
   dest=m_buffer.data+m_counter*imagesize;
   int factor=static_cast<int>(f*256.);
-  i=imagesize;while(i--)    *dest++ = (unsigned char)((factor**source++)>>8);
-  j=fb_count;while(j--){
+  i=imagesize;
+  while(i--) {
+    *dest++ = (unsigned char)((factor**source++)>>8);
+  }
+  j=fb_count;
+  while(j--) {
     f=m_fb[j+1];
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
     dest=m_buffer.data+m_counter*imagesize;
     factor=static_cast<int>(f*256.);
-    if (factor!=0){
-      i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
+    if (factor!=0) {
+      i=imagesize;
+      while(i--) {
+        *dest++ += (unsigned char)((factor**source++)>>8);
+      }
     }
   }
 
@@ -160,14 +175,21 @@ void pix_tIIR :: processImage(imageStruct &image)
   source=m_buffer.data+m_counter*imagesize;
   dest=image.data;
   factor=static_cast<int>(f*256.);
-  i=imagesize;while(i--)*dest++ = (unsigned char)((factor**source++)>>8);
-  j=ff_count;while(j--){
+  i=imagesize;
+  while(i--) {
+    *dest++ = (unsigned char)((factor**source++)>>8);
+  }
+  j=ff_count;
+  while(j--) {
     f=m_ff[j+1];
     dest=image.data;
     source=m_buffer.data+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
     factor=static_cast<int>(f*256.);
-    if (factor!=0){
-      i=imagesize;while(i--)*dest++ += (unsigned char)((factor**source++)>>8);
+    if (factor!=0) {
+      i=imagesize;
+      while(i--) {
+        *dest++ += (unsigned char)((factor**source++)>>8);
+      }
     }
   }
 
@@ -183,10 +205,12 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   short *s_ff = new short[ff_count+1];
   short *s_fb = new short[fb_count+1];
 
-  i=ff_count+1;while(i--){
+  i=ff_count+1;
+  while(i--) {
     s_ff[i]=static_cast<short>(m_ff[i]*256.+0.5);
   }
-  i=fb_count+1;while(i--){
+  i=fb_count+1;
+  while(i--) {
     s_fb[i]=static_cast<short>(m_fb[i]*256.+0.5);
   }
 
@@ -197,7 +221,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
   // assume that the pix_size does not change !
   // if (oldsize<newsize){}
-  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize || m_buffer.format!=image.format){
+  if (m_buffer.xsize!=image.xsize || m_buffer.ysize!=image.ysize
+      || m_buffer.format!=image.format) {
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
     m_buffer.setCsizeByFormat(image.format);
@@ -209,14 +234,18 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   dest=(__m64*)m_buffer.data;
 
   // set!(if needed)
-  if (set){
-    if (set_zero)m_buffer.setBlack();
-    else{
+  if (set) {
+    if (set_zero) {
+      m_buffer.setBlack();
+    } else {
       j=m_bufnum;
-      while(j--){
+      while(j--) {
         source=(__m64*)image.data;
         dest=((__m64*)m_buffer.data)+j*imagesize;
-        i=imagesize;while(i--)dest[i]=source[i];
+        i=imagesize;
+        while(i--) {
+          dest[i]=source[i];
+        }
       }
     }
     set=false;
@@ -232,7 +261,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
   __m64 a0, a1, b0, b1;
   _mm_empty();
-  i=imagesize;while(i--){
+  i=imagesize;
+  while(i--) {
     a0= source[i];
     a1=_mm_unpackhi_pi8 (a0, null_64);
     a0=_mm_unpacklo_pi8 (a0, null_64);
@@ -244,13 +274,16 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
     dest[i] = a0;
   }
 
-  j=fb_count;while(j--){
-    if (s_fb[j+1]!=0){
-      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-(j+1))%m_bufnum);
+  j=fb_count;
+  while(j--) {
+    if (s_fb[j+1]!=0) {
+      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-
+             (j+1))%m_bufnum);
       dest=  ((__m64*)m_buffer.data)+m_counter*imagesize;
       factor =_mm_set1_pi16(s_fb[j+1]);
       null_64=_mm_setzero_si64();
-      i=imagesize;while(i--){
+      i=imagesize;
+      while(i--) {
         a0 = source[i];
         b0 = dest[i];
 
@@ -282,7 +315,8 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   dest=(__m64*)image.data;
   factor =_mm_set1_pi16(s_ff[0]);
   null_64=_mm_setzero_si64();
-  i=imagesize;while(i--){
+  i=imagesize;
+  while(i--) {
     a0= source[i];
     a1=_mm_unpackhi_pi8 (a0, null_64);
     a0=_mm_unpacklo_pi8 (a0, null_64);
@@ -297,13 +331,16 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
   _mm_empty();
 
 
-  j=ff_count;while(j--){
-    if (s_ff[j+1]!=0){
+  j=ff_count;
+  while(j--) {
+    if (s_ff[j+1]!=0) {
       dest=(__m64*)image.data;
-      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-j-1)%m_bufnum);
+      source=((__m64*)m_buffer.data)+imagesize*((m_bufnum+m_counter-j-1)
+             %m_bufnum);
       factor =_mm_set1_pi16(s_ff[j+1]);
       null_64=_mm_setzero_si64();
-      i=imagesize;while(i--){
+      i=imagesize;
+      while(i--) {
         a0 = source[i];
         b0 = dest[i];
 
@@ -339,9 +376,13 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
 
 }
 void pix_tIIR :: processYUVMMX(imageStruct &image)
-{ processRGBAMMX(image); }
+{
+  processRGBAMMX(image);
+}
 void pix_tIIR :: processGrayMMX(imageStruct &image)
-{ processRGBAMMX(image); }
+{
+  processRGBAMMX(image);
+}
 #endif
 
 /////////////////////////////////////////////////////////

@@ -41,9 +41,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   -----------------------------------------------------------------*/
 #if defined HAVE_VIDEO4LINUX2
 
-namespace gem { namespace plugins {
- class GEM_EXPORT recordV4L2 : public record {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT recordV4L2 : public record
+{
+public:
 
   //////////
   // Constructor
@@ -64,7 +68,7 @@ namespace gem { namespace plugins {
   // open a movie up
   // open the recordV4L2 "filename" (or URI)
   // returns TRUE if opening was successfull, FALSE otherwise
-  virtual bool start(const std::string filename, gem::Properties&);
+  virtual bool start(const std::string&filename, gem::Properties&);
 
 
   //////////
@@ -84,25 +88,29 @@ namespace gem { namespace plugins {
    */
   virtual bool write(imageStruct*);
 
-  virtual bool setCodec(const std::string name);
+  virtual bool setCodec(const std::string&name);
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
    */
   virtual std::vector<std::string>getCodecs(void);
-  virtual const std::string getCodecDescription(const std::string);
+  virtual const std::string getCodecDescription(const std::string&);
   virtual bool enumProperties(gem::Properties&);
 
-  virtual bool dialog(void) {return false;}
+  virtual bool dialog(void)
+  {
+    return false;
+  }
 
 
- private:
+private:
   int m_fd;
   imageStruct m_image;
   bool m_init;
   int m_palette;
- };
-};};
+};
+};
+};
 #endif /* V4L2 */
 
-#endif	// for header file
+#endif  // for header file

@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libGem.la
@@ -13,18 +13,18 @@ libGem_la_LIBADD   =
 libGem_la_LDFLAGS  =
 
 # RTE flags
-libGem_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libGem_la_LIBADD   += @GEM_RTE_LIBS@
-libGem_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libGem_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+libGem_la_LIBADD   += $(GEM_RTE_LIBS)
+libGem_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 
 # GLEW
 if ENABLE_MULTICONTEXT
-libGem_la_CXXFLAGS += @GEM_LIB_GLEWMX_CFLAGS@
-libGem_la_LIBADD   += @GEM_LIB_GLEWMX_LIBS@
+libGem_la_CXXFLAGS += $(GEM_LIB_GLEWMX_CFLAGS)
+libGem_la_LIBADD   += $(GEM_LIB_GLEWMX_LIBS)
 else !ENABLE_MULTICONTEXT
-libGem_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
-libGem_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
+libGem_la_CXXFLAGS += $(GEM_LIB_GLEW_CFLAGS)
+libGem_la_LIBADD   += $(GEM_LIB_GLEW_LIBS)
 endif !ENABLE_MULTICONTEXT
 
 libGem_la_CFLAGS    = $(libGem_la_CXXFLAGS)

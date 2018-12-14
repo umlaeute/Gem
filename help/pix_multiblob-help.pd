@@ -1,4 +1,4 @@
-#N canvas 807 462 690 540 10;
+#N canvas 93 136 690 540 10;
 #X text 452 8 GEM object;
 #X obj 9 323 cnv 15 430 145 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -12,9 +12,9 @@
 #X text 24 339 Inlet 1: gemlist;
 #X text 71 31 Class: pix object (analysis);
 #X text 24 354 Inlet 1: threshold <float>: minimum luminance of a pixel
-to be considered part of a blob. (default=0.04);
+to be considered part of a blob. (default:0.04);
 #X text 24 383 Inlet 1: blobSize <float>: minimum relative size of
-a blob. (default=0.1);
+a blob. (default:0.1);
 #X text 50 12 Synopsis: [pix_multiblob];
 #X text 64 295 int: max number N of blobs to detect;
 #X text 20 484 for motion-tracking you will also need;
@@ -76,7 +76,7 @@ minimum size of a blob that is needed to be detected.;
 #X text 511 56 open a supported;
 #X text 512 67 movie-clip;
 #X text 529 93 macOS: quicktime;
-#X text 522 83 windos: *.AVI;
+#X text 522 83 MS Windows: *.AVI;
 #X text 529 103 linux: depends...;
 #X floatatom 469 169 3 0 100 2 threshold - -;
 #X obj 469 186 / 100;
@@ -175,15 +175,15 @@ minimum size of a blob that is needed to be detected.;
 #X floatatom 573 433 5 0 0 1 angle* - -;
 #X text 17 439 Outlet 2: (k \, 9) matrix: describing k detected blobs
 (with 0<=k<N);
+#X text 461 464 * angle converted to degrees but is originally in radians
+;
 #X text 18 154 the output is a matrix following the conventions of
 the mtx-objects from zexy/iemmatrix. each row describes one detected
 blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
 \, minX \, minY \, maxX \, maxY \, size \, angle. "weighted" here means
 each pixel is weighted by its luminance value during the calculation.
 "angle" is the (weighted) orientation of the principal axis of the
-blob.in the [-pi/2 \, pi/2] range.;
-#X text 461 464 * angle converted to degrees but is originally in radians
-;
+blob in the [-pi/2 \, pi/2] range.;
 #X connect 22 0 23 0;
 #X connect 23 0 22 0;
 #X connect 26 0 28 0;

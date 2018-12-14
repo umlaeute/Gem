@@ -51,17 +51,17 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemglfw3window : public GemWindow
+class GEM_EXPORT gemglfw3window : public GemWindow
 {
   CPPEXTERN_HEADER(gemglfw3window, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemglfw3window(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -74,10 +74,9 @@ class GEM_EXTERN gemglfw3window : public GemWindow
 
   /* render context (pre creation) */
   virtual void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string s);
+  virtual void titleMess(const std::string&s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
@@ -88,7 +87,7 @@ class GEM_EXTERN gemglfw3window : public GemWindow
   virtual bool create (void);
   virtual void destroy(void);
 
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
@@ -108,7 +107,7 @@ class GEM_EXTERN gemglfw3window : public GemWindow
   bool m_gles;
   GLFWwindow *m_window;
 
- private:
+private:
 
   //////////
   // glfw callbacks
@@ -123,7 +122,8 @@ class GEM_EXTERN gemglfw3window : public GemWindow
   static void windowsizeCb(GLFWwindow*, int width, int height);
   static void windowcloseCb(GLFWwindow*);
   static void windowrefreshCb(GLFWwindow*);
-  static void keyCb(GLFWwindow*, int key, int scancode, int action, int mods);
+  static void keyCb(GLFWwindow*, int key, int scancode, int action,
+                    int mods);
   static void charCb(GLFWwindow*, unsigned int character);
   static void mousebuttonCb(GLFWwindow*, int button, int action, int mods);
   static void mouseposCb(GLFWwindow*, double x, double y);

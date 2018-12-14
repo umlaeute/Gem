@@ -34,22 +34,22 @@ LOG
 ///////////////////////////////////////////////////////////////////////////////
 inline int powerOfTwo(int value)
 {
-/*
-    int x = 1;
-    //    while(x <= value) x <<= 1;
-    while(x < value) x <<= 1;
-    return(x);
-*/
+  /*
+      int x = 1;
+      //    while(x <= value) x <<= 1;
+      while(x < value) x <<= 1;
+      return(x);
+  */
 // optimization from "Hacker's Delight"
 // - above loop executes in 4n+3 instructions, where n is the power of 2 of returned int
 // - below code is branch-free and only 12 instructions!
-	value = value - 1;
-	value = value | (value >> 1);
-	value = value | (value >> 2);
-	value = value | (value >> 4);
-	value = value | (value >> 8);
-	value = value | (value >> 16);
-	return (value + 1);
+  value = value - 1;
+  value = value | (value >> 1);
+  value = value | (value >> 2);
+  value = value | (value >> 4);
+  value = value | (value >> 8);
+  value = value | (value >> 16);
+  return (value + 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,23 +58,39 @@ inline int powerOfTwo(int value)
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef MIN
 template <class T>
-inline T MIN(T x, T y) {  return (x<y)?x:y; }
+inline T MIN(T x, T y)
+{
+  return (x<y)?x:y;
+}
 #endif
 #ifndef MAX
 template <class T>
-inline T MAX(T x, T y) {  return (x>y)?x:y; }
+inline T MAX(T x, T y)
+{
+  return (x>y)?x:y;
+}
 #endif
 
 template <class T>
-inline T TRI_MAX(T v1, T v2, T v3){
-  if (v1 > v2 && v1 > v3) return(v1);
-  if (v2 > v3) return(v2);
+inline T TRI_MAX(T v1, T v2, T v3)
+{
+  if (v1 > v2 && v1 > v3) {
+    return(v1);
+  }
+  if (v2 > v3) {
+    return(v2);
+  }
   return(v3);
 }
 template <class T>
-inline T TRI_MIN(T v1, T v2, T v3){
-  if (v1 < v2 && v1 < v3) return(v1);
-  if (v2 < v3) return(v2);
+inline T TRI_MIN(T v1, T v2, T v3)
+{
+  if (v1 < v2 && v1 < v3) {
+    return(v1);
+  }
+  if (v2 < v3) {
+    return(v2);
+  }
   return(v3);
 }
 
@@ -85,34 +101,46 @@ inline T TRI_MIN(T v1, T v2, T v3){
 //////////
 // Clamp a value high
 inline unsigned char CLAMP_HIGH(int x)
-	{ return((unsigned char )((x > 255) ? 255 : x)); }
+{
+  return((unsigned char )((x > 255) ? 255 : x));
+}
 
 //////////
 // Clamp a value low
 inline unsigned char CLAMP_LOW(int x)
-	{ return((unsigned char )((x < 0) ? 0 : x)); }
+{
+  return((unsigned char )((x < 0) ? 0 : x));
+}
 
 //////////
 // Clamp an int to the range of an unsigned char
 inline unsigned char CLAMP(int x)
-    { return((unsigned char)((x > 255) ? 255 : ( (x < 0) ? 0 : x))); }
+{
+  return((unsigned char)((x > 255) ? 255 : ( (x < 0) ? 0 : x)));
+}
 
 //////////
 // Clamp a float to the range of an unsigned char
 template <class T>
 inline unsigned char CLAMP(T x)
-{ return((unsigned char)((x > (T)255) ? (T)255 : ( (x < (T)0) ? (T)0 : x))); }
+{
+  return((unsigned char)((x > (T)255) ? (T)255 : ( (x < (T)0) ? (T)0 : x)));
+}
 
 //////////
 // Clamp a float to 0. <= x <= 1.0
 template <class T>
 inline float FLOAT_CLAMP(T x)
-    { return((x > 1.) ? 1. : ( (x < 0.) ? 0. : x)); }
+{
+  return((x > 1.) ? 1. : ( (x < 0.) ? 0. : x));
+}
 
 /////////
 // Clamp the Y channel of YUV (16%235)
 inline unsigned char CLAMP_Y(int x)
-    { return((unsigned char)((x > 235) ? 235 : ( (x < 16) ? 16 : x))); }
+{
+  return((unsigned char)((x > 235) ? 235 : ( (x < 16) ? 16 : x)));
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Multiply and interpolation
@@ -123,21 +151,28 @@ inline unsigned char CLAMP_Y(int x)
 // This avoids a float value (important on Intel...)
 // From Alvy Ray Smith paper
 inline unsigned char INT_MULT(unsigned int a, unsigned int b)
-	{ int t = (unsigned int)a * (unsigned int)b + 0x80;
-      return((unsigned char)(((t >> 8) + t) >> 8)); }
+{
+  int t = (unsigned int)a * (unsigned int)b + 0x80;
+  return((unsigned char)(((t >> 8) + t) >> 8));
+}
 
 //////////
 // Exactly LERPs two values
 // This avoids a float value (important on Intel...)
 // From Alvy Ray Smith paper
-inline unsigned char INT_LERP(unsigned int p, unsigned int q, unsigned int a)
-	{ return((unsigned char)(p + INT_MULT(a, q - p))); }
+inline unsigned char INT_LERP(unsigned int p, unsigned int q,
+                              unsigned int a)
+{
+  return((unsigned char)(p + INT_MULT(a, q - p)));
+}
 
 //////////
 // Floating point LERP
 template <class T>
 inline T FLOAT_LERP(T p, T q, T a)
-	{ return( a * (q - p) + p); }
+{
+  return( a * (q - p) + p);
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,7 +181,9 @@ inline T FLOAT_LERP(T p, T q, T a)
 ///////////////////////////////////////////////////////////////////////////////
 template <class T>
 inline int stepFunc(T x, T a)
-    { return(x >= a); }
+{
+  return(x >= a);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Pulse function
@@ -154,7 +191,9 @@ inline int stepFunc(T x, T a)
 ///////////////////////////////////////////////////////////////////////////////
 template <class T>
 inline int pulseFunc(T x, T a, T b)
-    { return(stepFunc(a, x) - stepFunc(b, x)); }
+{
+  return(stepFunc(a, x) - stepFunc(b, x));
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Clamp function
@@ -162,7 +201,9 @@ inline int pulseFunc(T x, T a, T b)
 ///////////////////////////////////////////////////////////////////////////////
 template <class T>
 inline T clampFunc(T x, T a, T b)
-    { return(x < a ? a : (x > b ? b : x)); }
+{
+  return(x < a ? a : (x > b ? b : x));
+}
 /*
 inline void* clampFunc(void* x, void* a, void* b)
     { return(x < a ? a : (x > b ? b : x)); }
@@ -178,24 +219,36 @@ inline void* clampFunc(void* x, void* a, void* b)
 // absolute integer
 //
 ///////////////////////////////////////////////////////////////////////////////
-inline int AbsInt(int inValue)         { return (inValue>0)?inValue:-inValue; }
-static inline int GetSign(int inValue) { return (inValue<0)?-1:1;             }
+inline int AbsInt(int inValue)
+{
+  return (inValue>0)?inValue:-inValue;
+}
+static inline int GetSign(int inValue)
+{
+  return (inValue<0)?-1:1;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // wrapping functions for integers
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-inline int GetTiled(int inValue,const int nMax) {
+inline int GetTiled(int inValue,const int nMax)
+{
   int nOutValue=(inValue%nMax);
-  if (nOutValue<0)nOutValue=((nMax-1)+nOutValue);
+  if (nOutValue<0) {
+    nOutValue=((nMax-1)+nOutValue);
+  }
   return nOutValue;
 }
 
-inline int GetMirrored(int inValue,const int nMax) {
+inline int GetMirrored(int inValue,const int nMax)
+{
   const int nTwoMax=(nMax*2);
   int nOutValue=GetTiled(inValue,nTwoMax);
-  if (nOutValue>=nMax)nOutValue=((nTwoMax-1)-nOutValue);
+  if (nOutValue>=nMax) {
+    nOutValue=((nTwoMax-1)-nOutValue);
+  }
   return nOutValue;
 }
 
@@ -204,36 +257,41 @@ inline int GetMirrored(int inValue,const int nMax) {
 // 2D-algebra
 //
 ///////////////////////////////////////////////////////////////////////////////
-static inline void Get2dTangent(float inX,float inY,float* poutX,float* poutY) {
-	*poutX=inY;
-	*poutY=-inX;
+static inline void Get2dTangent(float inX,float inY,float* poutX,
+                                float* poutY)
+{
+  *poutX=inY;
+  *poutY=-inX;
 }
 ///////////////////////////////////////////////////////////////////////////////
 // 2D-dot product
 ///////////////////////////////////////////////////////////////////////////////
-static inline float Dot2d(float Ax,float Ay,float Bx,float By) {
-	return ((Ax*Bx)+(Ay*By));
+static inline float Dot2d(float Ax,float Ay,float Bx,float By)
+{
+  return ((Ax*Bx)+(Ay*By));
 }
 ///////////////////////////////////////////////////////////////////////////////
 // 2D-vector normalization
 ///////////////////////////////////////////////////////////////////////////////
-static inline void Normalise2d(float* pX,float* pY) {
-	const float MagSqr=Dot2d(*pX,*pY,*pX,*pY);
-	float Magnitude=(float)sqrt(MagSqr);
-	if (Magnitude<=0.0f) {
-		Magnitude=0.001f;
-	}
-	const float RecipMag=1.0f/Magnitude;
+static inline void Normalise2d(float* pX,float* pY)
+{
+  const float MagSqr=Dot2d(*pX,*pY,*pX,*pY);
+  float Magnitude=(float)sqrt(MagSqr);
+  if (Magnitude<=0.0f) {
+    Magnitude=0.001f;
+  }
+  const float RecipMag=1.0f/Magnitude;
 
-	*pX*=RecipMag;
-	*pY*=RecipMag;
+  *pX*=RecipMag;
+  *pY*=RecipMag;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // higher algebra
 //
 ///////////////////////////////////////////////////////////////////////////////
-inline float GetRandomFloat(void) {
+inline float GetRandomFloat(void)
+{
   return rand()/static_cast<float>(RAND_MAX);
 }
 
@@ -244,7 +302,8 @@ inline float GetRandomFloat(void) {
 ///////////////////////////////////////////////////////////////////////////////
 GEM_EXTERN extern float         smoothStep(float x, float a, float b);
 GEM_EXTERN extern int           smoothStep(int x, int a, int b);
-GEM_EXTERN extern unsigned char smoothStep(unsigned char x, unsigned char a, unsigned char b);
+GEM_EXTERN extern unsigned char smoothStep(unsigned char x,
+    unsigned char a, unsigned char b);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Bias function
@@ -273,8 +332,10 @@ GEM_EXTERN extern float gainFunc(float x, float a);
 // npnts is the number of points per dimension.
 //
 ///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen, int npnts, float *pnts);
-GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen, int npnts, double *pnts);
+GEM_EXTERN extern void linearFunc(float val, float *ret, int numDimen,
+                                  int npnts, float *pnts);
+GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen,
+                                  int npnts, double *pnts);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Spline function
@@ -290,8 +351,10 @@ GEM_EXTERN extern void linearFunc(double val, double *ret, int numDimen, int npn
 //      _Texturing and Modeling: A Procedural Approach_
 //          David S. Ebert, Ed.
 ///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen, int nknots, float *knot);
-GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nknots, double *knot);
+GEM_EXTERN extern void splineFunc(float val, float *ret, int numDimen,
+                                  int nknots, float *knot);
+GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen,
+                                  int nknots, double *knot);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -346,12 +409,13 @@ GEM_EXTERN extern void splineFunc(double val, double *ret, int numDimen, int nkn
 //Ian Ollman's function to determine the cache prefetch for altivec vec_dst()
 #include <inttypes.h>
 
-inline uint32_t GetPrefetchConstant( int blockSizeInVectors, int blockCount, int blockStride )
+inline uint32_t GetPrefetchConstant( int blockSizeInVectors,
+                                     int blockCount, int blockStride )
 {
-	return ((blockSizeInVectors << 24) & 0x1F000000) | ((blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
+  return ((blockSizeInVectors << 24) & 0x1F000000) | ((
+           blockCount << 16) & 0x00FF0000) | (blockStride & 0xFFFF);
 }
 #endif
 
 
 #endif  // for header file
-

@@ -1,4 +1,4 @@
-#N canvas 91 80 650 590 10;
+#N canvas 91 80 650 640 10;
 #X text 54 30 Class: geometric object;
 #X obj 465 65 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -35,8 +35,8 @@
 #X text 17 294 Arguments:;
 #X text 304 2 GEM object;
 #X text 27 352 Inlet 1: gemlist;
-#X text 9 476 Outlets:;
-#X text 21 489 Outlet 1: gemlist;
+#X text 9 480 Outlets:;
+#X text 21 493 Outlet 1: gemlist;
 #X text 471 47 Example:;
 #X obj 468 112 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -63,44 +63,81 @@
 color \, but without(!) 3D-transformation;
 #X obj 479 89 translateXYZ;
 #X floatatom 583 72 5 -10 10 0 - - -;
-#X floatatom 542 67 3 -3.5 3.5 0 - - -;
+#X floatatom 542 67 3 -3.5 3.5 0 - #0-X -;
 #X text 27 366 Inlet 1: message: font <.TTF-file> : load a TrueType-font
 ;
 #X text 27 380 Inlet 1: message: text [<blah>] : render the given text
 ;
-#X text 27 393 Inlet 1: message: list [<blah>] : render the given text
-;
-#X text 27 406 Inlet 1: message: alias 1|0 : anti-aliasing on/off;
-#X text 27 421 Inlet 1: message: justify <hor> [<vert>] : horizontal&vertical
-justification;
+#X text 27 395 Inlet 1: message: list [<blah>] : render the given text
+, f 59;
+#X text 27 410 Inlet 1: message: alias 1|0 : anti-aliasing on/off (default:1)
+, f 66;
 #X obj 479 308 text2d;
-#X text 27 450 Inlet 2: float: size (in points) \; default: 20;
-#X obj 30 531 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
+#X obj 30 535 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
 0;
-#X text 43 535 Note: on some systems it might be necessary to turn
+#X text 43 539 Note: on some systems it might be necessary to turn
 rendering ON before loading a font.;
 #X text 33 14 Synopsis: [text2d];
 #X text 10 123 Any TrueType-font can be rendered. Per default a file
 "vera.ttf" is searched in the paths. If it is not found you will not
 see anything unless you load a valid font via the "font"-message. The
 font-loader uses Pd's search-paths \, so you could specify your path
-aon the command-line and load fonts with just "font times.ttf".;
+on the command-line and load fonts with just "font times.ttf".;
 #X obj 538 420 text3d;
 #X text 468 419 see also:;
 #X obj 538 443 textextruded;
 #X obj 538 466 textoutline;
+#X obj 30 591 cnv 15 400 40 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X text 43 595 Note2: The text will disappear completely once the pivot
+point of the text moves out of the window;
+#X obj 459 591 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#N canvas 69 240 450 369 disappearing 0;
+#X obj 43 27 inlet;
+#X obj 43 266 s \$0-X;
+#X obj 43 92 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
+;
+#X obj 43 116 pack 0 1000;
+#X obj 43 238 line;
+#X obj 43 70 metro 1000;
+#X obj 43 138 t f f;
+#X obj 43 208 pack 0 1000;
+#X obj 43 160 * 1;
+#X obj 43 183 - 4.2;
+#X obj 43 49 t f f;
+#X obj 127 70 select 0;
+#X msg 127 92 0;
+#X connect 0 0 10 0;
+#X connect 2 0 3 0;
+#X connect 3 0 6 0;
+#X connect 4 0 1 0;
+#X connect 5 0 2 0;
+#X connect 6 0 8 0;
+#X connect 7 0 4 0;
+#X connect 8 0 9 0;
+#X connect 9 0 7 0;
+#X connect 10 0 5 0;
+#X connect 10 1 11 0;
+#X connect 11 0 12 0;
+#X connect 12 0 7 0;
+#X restore 459 611 pd disappearing text;
+#X text 27 454 Inlet 2: float: size (in points) default:20, f 56;
+#X text 27 425 Inlet 1: message: justify <hor> [<vert>]: horizontal&vertical
+justification;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 33 0;
-#X connect 18 0 41 1;
-#X connect 19 0 41 0;
+#X connect 18 0 40 1;
+#X connect 19 0 40 0;
 #X connect 20 0 19 0;
 #X connect 21 0 20 0;
-#X connect 22 0 41 0;
-#X connect 23 0 41 0;
-#X connect 24 0 41 0;
+#X connect 22 0 40 0;
+#X connect 23 0 40 0;
+#X connect 24 0 40 0;
 #X connect 25 0 24 0;
-#X connect 31 0 41 0;
-#X connect 33 0 41 0;
+#X connect 31 0 40 0;
+#X connect 33 0 40 0;
 #X connect 34 0 33 3;
 #X connect 35 0 33 1;
+#X connect 51 0 52 0;

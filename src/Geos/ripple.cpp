@@ -14,7 +14,8 @@
 #include "ripple.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(ripple, t_floatarg, A_DEFFLOAT, t_floatarg,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -40,9 +41,12 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
   m_gridY=(gridYi>0&&gridXi<GRID_MAX_Y)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("Ht"));
-  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cX"));
-  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("cY"));
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                       gensym("Ht"));
+  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("cX"));
+  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+                        gensym("cY"));
 
   m_drawType = GL_POLYGON;
   precalc_ripple_amp();
@@ -50,7 +54,8 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
 
   m_drawTypes.clear();
   m_drawTypes["default"]=GL_POLYGON;
-  m_drawTypes["point"]=GL_POINTS; m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["point"]=GL_POINTS;
+  m_drawTypes["points"]=GL_POINTS;
   m_drawTypes["line"]=GL_LINE_LOOP;
   m_drawTypes["fill"]=GL_POLYGON;
 }
@@ -77,39 +82,38 @@ void ripple :: renderShape(GemState *state)
 
   glScalef(2.*m_size, 2.*m_size, 2.*m_size);
 
-  if (GemShape::m_texType && GemShape::m_texNum>=3)
-    {
-      if ((m_sizeX  != GemShape::m_texCoords[1].s) ||
-          (m_sizeY  != GemShape::m_texCoords[1].t) ||
-          (m_sizeY0 != GemShape::m_texCoords[2].t))
-        m_alreadyInit = false;
+  if (GemShape::m_texType && GemShape::m_texNum>=3) {
+    if ((m_sizeX  != GemShape::m_texCoords[1].s) ||
+        (m_sizeY  != GemShape::m_texCoords[1].t) ||
+        (m_sizeY0 != GemShape::m_texCoords[2].t)) {
+      m_alreadyInit = false;
+    }
 
-      if (!m_alreadyInit)
-        {
-          m_sizeX  = GemShape::m_texCoords[1].s;
-          m_sizeY0 = GemShape::m_texCoords[2].t;
-          m_sizeY  = GemShape::m_texCoords[1].t;
+    if (!m_alreadyInit) {
+      m_sizeX  = GemShape::m_texCoords[1].s;
+      m_sizeY0 = GemShape::m_texCoords[2].t;
+      m_sizeY  = GemShape::m_texCoords[1].t;
 
-          ripple_init();
-          precalc_ripple_vector();
-          m_alreadyInit = true;
-        }
-      for (i = 0; i < m_gridX - 1; i++)  {
-        for (j = 0; j < m_gridY - 1; j++)  {
-          glBegin(m_drawType);
-          glTexCoord2fv(m_rippleVertex[i][j].t);
-          glVertex2fv(m_rippleVertex[i][j].x);
-          glTexCoord2fv(m_rippleVertex[i][j + 1].t);
-          glVertex2fv(m_rippleVertex[i][j + 1].x);
-          glTexCoord2fv(m_rippleVertex[i + 1][j + 1].t);
-          glVertex2fv(m_rippleVertex[i + 1][j + 1].x);
-          glTexCoord2fv(m_rippleVertex[i + 1][j].t);
-          glVertex2fv(m_rippleVertex[i + 1][j].x);
-          glEnd();
-        }
+      ripple_init();
+      precalc_ripple_vector();
+      m_alreadyInit = true;
+    }
+    for (i = 0; i < m_gridX - 1; i++)  {
+      for (j = 0; j < m_gridY - 1; j++)  {
+        glBegin(m_drawType);
+        glTexCoord2fv(m_rippleVertex[i][j].t);
+        glVertex2fv(m_rippleVertex[i][j].x);
+        glTexCoord2fv(m_rippleVertex[i][j + 1].t);
+        glVertex2fv(m_rippleVertex[i][j + 1].x);
+        glTexCoord2fv(m_rippleVertex[i + 1][j + 1].t);
+        glVertex2fv(m_rippleVertex[i + 1][j + 1].x);
+        glTexCoord2fv(m_rippleVertex[i + 1][j].t);
+        glVertex2fv(m_rippleVertex[i + 1][j].x);
+        glEnd();
       }
-      ripple_dynamics();
-    }  else  {
+    }
+    ripple_dynamics();
+  }  else  {
     if (!m_alreadyInit)   {
       m_sizeX = 1;
       m_sizeY = 1;
@@ -142,11 +146,11 @@ void ripple :: renderShape(GemState *state)
 }
 /////////////////////////////////////////////////////////
 //
-//	ripple_init
-//	Initialize ripple location and age information.
+//      ripple_init
+//      Initialize ripple location and age information.
 //
-//	Also, precompute the vertex coordinates and the default texture
-//	coordinates assigned to them.
+//      Also, precompute the vertex coordinates and the default texture
+//      coordinates assigned to them.
 /////////////////////////////////////////////////////////
 
 void ripple :: ripple_init(void)
@@ -155,27 +159,26 @@ void ripple :: ripple_init(void)
   glDisable(GL_DEPTH_TEST);
 
   m_rippleMax = (int)sqrt(m_sizeX * (m_sizeY+m_sizeY0) + m_sizeX * m_sizeX);
-  for (i = 0; i < RIPPLE_COUNT; i++)
-    {
-      m_t[i] = m_rippleMax + RIPPLE_LENGTH;
-      m_cx[i] = 0;
-      m_cy[i] = 0;
-      m_max[i] = 0;
-    }
+  for (i = 0; i < RIPPLE_COUNT; i++) {
+    m_t[i] = m_rippleMax + RIPPLE_LENGTH;
+    m_cx[i] = 0;
+    m_cy[i] = 0;
+    m_max[i] = 0;
+  }
 
   for (i = 0; i < m_gridX; i++)
-    for (j = 0; j < m_gridY; j++)
-      {
+    for (j = 0; j < m_gridY; j++) {
 
-        m_rippleVertex[i][j].x[0] = (i/(m_gridX - 1.0 ))-0.5;
-        m_rippleVertex[i][j].x[1] = (j/(m_gridY - 1.0 ))-0.5;
-        m_rippleVertex[i][j].dt[0] = m_sizeX*(i/(m_gridX - 1.0 ));
-        m_rippleVertex[i][j].dt[1] = (m_sizeY0-m_sizeY)*(j/(m_gridY - 1.0 ))+m_sizeY;
-      }
+      m_rippleVertex[i][j].x[0] = (i/(m_gridX - 1.0 ))-0.5;
+      m_rippleVertex[i][j].x[1] = (j/(m_gridY - 1.0 ))-0.5;
+      m_rippleVertex[i][j].dt[0] = m_sizeX*(i/(m_gridX - 1.0 ));
+      m_rippleVertex[i][j].dt[1] = (m_sizeY0-m_sizeY)*(j/(m_gridY - 1.0 ))
+                                   +m_sizeY;
+    }
 }
 
 /////////////////////////////////////////////////////////
-//	Precompute ripple displacement vectors.
+//      Precompute ripple displacement vectors.
 /////////////////////////////////////////////////////////
 
 void ripple :: precalc_ripple_vector(void)
@@ -183,57 +186,46 @@ void ripple :: precalc_ripple_vector(void)
   int i, j, z;
   float x, y, l;
 
-   for (i = 0; i < m_gridX; i++)
-    {
-      for (j = 0; j < m_gridY; j++)
-        {
-          x = (float) i/(m_gridX - 1);
-          y = (float) j/(m_gridY - 1);
-          l = (float) sqrt(x*x + y*y);
-          if (l == 0.0)
-            {
-              x = 0.0f;
-              y = 0.0f;
-            }
-          else
-            {
-              x /= l;
-              y /= l;
-            }
-          z = (int)(l*m_sizeX*2);
-          m_rippleVector[i][j].dx[0] = x*m_sizeX;
-          m_rippleVector[i][j].dx[1] = y*(m_sizeY+m_sizeY0);
-          m_rippleVector[i][j].r = z;
-        }
+  for (i = 0; i < m_gridX; i++) {
+    for (j = 0; j < m_gridY; j++) {
+      x = (float) i/(m_gridX - 1);
+      y = (float) j/(m_gridY - 1);
+      l = (float) sqrt(x*x + y*y);
+      if (l == 0.0) {
+        x = 0.0f;
+        y = 0.0f;
+      } else {
+        x /= l;
+        y /= l;
+      }
+      z = (int)(l*m_sizeX*2);
+      m_rippleVector[i][j].dx[0] = x*m_sizeX;
+      m_rippleVector[i][j].dx[1] = y*(m_sizeY+m_sizeY0);
+      m_rippleVector[i][j].r = z;
     }
+  }
 }
 
 /////////////////////////////////////////////////////////
-//	Precompute ripple amplitude decay.
+//      Precompute ripple amplitude decay.
 /////////////////////////////////////////////////////////
 
 void ripple :: precalc_ripple_amp(void)
 {
   int i;
-  double t;
-  double a;
-
-  for (i = 0; i < RIPPLE_LENGTH; i++)
-    {
-      t = 1.0 - i/(RIPPLE_LENGTH - 1.0);
-      a = (-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)
-        *RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t;
-      if (i == 0)
-        a = 0.0;
-      m_rippleAmp[i].amplitude = a;
-    }
+  for (i = 0; i < RIPPLE_LENGTH; i++) {
+    double t = 1.0 - i/(RIPPLE_LENGTH - 1.0);
+    double a = i?((-cos(t*2.0*3.1428571*RIPPLE_CYCLES)*0.5 + 0.5)
+                  *RIPPLE_AMPLITUDE*t*t*t*t*t*t*t*t):0.;
+    m_rippleAmp[i].amplitude = a;
+  }
 }
 
 /////////////////////////////////////////////////////////
 //
-//	ripple_dynamics
-//	Advance one time step and compute new texture coordinates
-//	for the next frame of animation.
+//      ripple_dynamics
+//      Advance one time step and compute new texture coordinates
+//      for the next frame of animation.
 /////////////////////////////////////////////////////////
 
 void ripple :: ripple_dynamics(void)
@@ -245,7 +237,9 @@ void ripple :: ripple_dynamics(void)
   float sx, sy;
   float amp;
 
-  for (i = 0; i < RIPPLE_COUNT; i++) m_t[i] += RIPPLE_STEP;
+  for (i = 0; i < RIPPLE_COUNT; i++) {
+    m_t[i] += RIPPLE_STEP;
+  }
 
   for (i = 0; i < m_gridX; i++)
     for (j = 0; j < m_gridY; j++)    {
@@ -254,43 +248,61 @@ void ripple :: ripple_dynamics(void)
       for (k = 0; k < RIPPLE_COUNT; k++)      {
         x = i - m_cx[k];
         y = j - m_cy[k];
-        if (x < 0){
+        if (x < 0) {
           x *= -1;
           sx = -1.0;
-        }else
+        } else {
           sx = 1.0;
-        if (y < 0){
+        }
+        if (y < 0) {
           y *= -1;
           sy = -1.0;
-        }else
+        } else {
           sy = 1.0;
+        }
         mi = x;
         mj = y;
-	/* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
-        if(mi<0)mi=0;if(mi>=m_gridX)mi=m_gridX-1;
-	/* coverity[dead_error_line] <0 is a safety check (see above) */
-        if(mj<0)mj=0;if(mj>=m_gridY)mj=m_gridY-1;
+        /* coverity[dead_error_line] <0 is a safety check (even if it never triggers) */
+        if(mi<0) {
+          mi=0;
+        }
+        if(mi>=m_gridX) {
+          mi=m_gridX-1;
+        }
+        /* coverity[dead_error_line] <0 is a safety check (see above) */
+        if(mj<0) {
+          mj=0;
+        }
+        if(mj>=m_gridY) {
+          mj=m_gridY-1;
+        }
 
         r = m_t[k] - m_rippleVector[mi][mj].r;
-        if (r < 0)  r = 0;
-        if (r > RIPPLE_LENGTH - 1)  r = RIPPLE_LENGTH - 1;
+        if (r < 0) {
+          r = 0;
+        }
+        if (r > RIPPLE_LENGTH - 1) {
+          r = RIPPLE_LENGTH - 1;
+        }
 
         amp = 1.0 - 1.0*m_t[k]/RIPPLE_LENGTH;
         amp *= amp;
-        if (amp < 0.0)  amp = 0.0;
+        if (amp < 0.0) {
+          amp = 0.0;
+        }
         /* jmz: added m_height */
         m_rippleVertex[i][j].t[0]
-          += m_rippleVector[mi][mj].dx[0]*sx*m_rippleAmp[r].amplitude*amp*m_height;
+        += m_rippleVector[mi][mj].dx[0]*sx*m_rippleAmp[r].amplitude*amp*m_height;
         m_rippleVertex[i][j].t[1]
-          += m_rippleVector[mi][mj].dx[1]*sy*m_rippleAmp[r].amplitude*amp*m_height;
+        += m_rippleVector[mi][mj].dx[1]*sy*m_rippleAmp[r].amplitude*amp*m_height;
       }
     }
 }
 /////////////////////////////////////////////////////////
 //
-//	ripple_distance
+//      ripple_distance
 //
-//	Calculate the distance between two points.
+//      Calculate the distance between two points.
 //
 /////////////////////////////////////////////////////////
 float ripple :: ripple_distance(int gx, int gy, int cx, int cy)
@@ -300,10 +312,10 @@ float ripple :: ripple_distance(int gx, int gy, int cx, int cy)
 
 /////////////////////////////////////////////////////////
 //
-//	ripple_max_distance
+//      ripple_max_distance
 //
-//	Compute the distance of the given window coordinate
-//	to the nearest window corner, in pixels.
+//      Compute the distance of the given window coordinate
+//      to the nearest window corner, in pixels.
 /////////////////////////////////////////////////////////
 int ripple :: ripple_max_distance(int gx, int gy)
 {
@@ -312,29 +324,34 @@ int ripple :: ripple_max_distance(int gx, int gy)
 
   d = ripple_distance(gx, gy, 0, 0);
   temp_d = ripple_distance(gx, gy, m_gridX, 0);
-  if (temp_d > d)
+  if (temp_d > d) {
     d = temp_d;
+  }
   temp_d = ripple_distance(gx, gy, m_gridX, m_gridY);
-  if (temp_d > d)
+  if (temp_d > d) {
     d = temp_d;
+  }
   temp_d = ripple_distance(gx, gy, 0, m_gridY);
-  if (temp_d > d)
+  if (temp_d > d) {
     d = temp_d;
+  }
 
   return (int)((d/m_gridX)*m_sizeX + RIPPLE_LENGTH/6.);
 }
 /////////////////////////////////////////////////////////
-//	ripple_bang
+//      ripple_bang
 //
-//	Generate a new ripple when the mouse is pressed.  There's
-//	a limit on the number of ripples that can be simultaneously
-//	generated.
+//      Generate a new ripple when the mouse is pressed.  There's
+//      a limit on the number of ripples that can be simultaneously
+//      generated.
 /////////////////////////////////////////////////////////
 void ripple :: ripple_bang(void)
 {
   int index = 0;
 
-  while (index < RIPPLE_COUNT && m_t[index] < m_max[index])    index++;
+  while (index < RIPPLE_COUNT && m_t[index] < m_max[index]) {
+    index++;
+  }
 
   if (index < RIPPLE_COUNT)    {
     m_cx[index] = (int)(1.0*m_ctrX/m_sizeX*m_gridX);

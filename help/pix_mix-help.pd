@@ -100,7 +100,7 @@ You can supply mixing factors A and B \, and the result will be out=in1*A+in2*B.
 If you supply only one factor A \, the result will be out=in1*(1-A)+in2*A.
 ;
 #X text 22 255 Inlet 3: float: weight for left image. right weight
-will be the reciproque value (for crossfading);
+will be the reciprocal value (for crossfading);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

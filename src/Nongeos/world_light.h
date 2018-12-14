@@ -36,13 +36,13 @@ class GEM_EXTERN world_light : public GemBase
 {
   CPPEXTERN_HEADER(world_light, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   world_light(t_floatarg lightNum);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -66,7 +66,8 @@ class GEM_EXTERN world_light : public GemBase
 
   //////////
   // Set the light's color
-  void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+  void            lightColorMess(GLfloat red, GLfloat green, GLfloat blue,
+                                 GLfloat alpha);
   void            lightColorMess(t_symbol*, int, t_atom*);
 
   //////////

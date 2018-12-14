@@ -22,30 +22,32 @@
 
 struct PBuffer_data;
 
-class PBuffer {
+class PBuffer
+{
 public:
 
-	enum {
-		GEM_PBUFLAG_RGB = 1 << 0,
-		GEM_PBUFLAG_RGBA = 1 << 1,
-		GEM_PBUFLAG_DEPTH = 1 << 2,
-		GEM_PBUFLAG_STENCIL = 1 << 3,
-		GEM_PBUFLAG_FLOAT = 1 << 4,
-		GEM_PBUFLAG_MULTISAMPLE_2 = 1 << 5,
-		GEM_PBUFLAG_MULTISAMPLE_4 = 1 << 6
-	};
+  enum {
+    GEM_PBUFLAG_RGB = 1 << 0,
+    GEM_PBUFLAG_RGBA = 1 << 1,
+    GEM_PBUFLAG_DEPTH = 1 << 2,
+    GEM_PBUFLAG_STENCIL = 1 << 3,
+    GEM_PBUFLAG_FLOAT = 1 << 4,
+    GEM_PBUFLAG_MULTISAMPLE_2 = 1 << 5,
+    GEM_PBUFLAG_MULTISAMPLE_4 = 1 << 6
+  };
 
-	PBuffer(int width,int height,int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
-	~PBuffer(void);
+  PBuffer(int width,int height,
+          int flags = GEM_PBUFLAG_RGBA | GEM_PBUFLAG_DEPTH | GEM_PBUFLAG_STENCIL);
+  ~PBuffer(void);
 
-	void enable(void);
-	void disable(void);
+  void enable(void);
+  void disable(void);
 
-	int width;
-	int height;
+  int width;
+  int height;
 
 private:
-	struct PBuffer_data *data;
+  struct PBuffer_data *data;
 
   PBuffer(const PBuffer&);
   PBuffer&operator=(const PBuffer&);

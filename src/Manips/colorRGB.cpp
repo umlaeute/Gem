@@ -29,37 +29,30 @@ CPPEXTERN_NEW_WITH_GIMME(colorRGB);
 /////////////////////////////////////////////////////////
 colorRGB :: colorRGB(int argc, t_atom *argv)
 {
-    if (argc == 4)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[1]);
-        m_vector[2] = atom_getfloat(&argv[2]);
-        m_vector[3] = atom_getfloat(&argv[3]);
-    }
-    else if (argc == 3)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[1]);
-        m_vector[2] = atom_getfloat(&argv[2]);
-        m_vector[3] = 1;
-    }
-    else if (argc == 0)
-    {
-        m_vector[0] = 1.f;
-        m_vector[1] = 1.f;
-        m_vector[2] = 1.f;
-        m_vector[3] = 1.f;
-    }
-    else
-    {
-      throw(GemException("needs 0, 3 or 4 arguments"));
-    }
+  if (argc == 4) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[1]);
+    m_vector[2] = atom_getfloat(&argv[2]);
+    m_vector[3] = atom_getfloat(&argv[3]);
+  } else if (argc == 3) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[1]);
+    m_vector[2] = atom_getfloat(&argv[2]);
+    m_vector[3] = 1;
+  } else if (argc == 0) {
+    m_vector[0] = 1.f;
+    m_vector[1] = 1.f;
+    m_vector[2] = 1.f;
+    m_vector[3] = 1.f;
+  } else {
+    throw(GemException("needs 0, 3 or 4 arguments"));
+  }
 
-    // create the new inlets
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aVal"));
+  // create the new inlets
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aVal"));
 }
 
 /////////////////////////////////////////////////////////
@@ -75,7 +68,7 @@ colorRGB :: ~colorRGB()
 /////////////////////////////////////////////////////////
 void colorRGB :: render(GemState *)
 {
-    glColor4f(m_vector[0], m_vector[1], m_vector[2], m_vector[3]);
+  glColor4f(m_vector[0], m_vector[1], m_vector[2], m_vector[3]);
 }
 
 /////////////////////////////////////////////////////////
@@ -84,8 +77,8 @@ void colorRGB :: render(GemState *)
 /////////////////////////////////////////////////////////
 void colorRGB :: rMess(float val)
 {
-    m_vector[0] = val;
-    setModified();
+  m_vector[0] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -94,8 +87,8 @@ void colorRGB :: rMess(float val)
 /////////////////////////////////////////////////////////
 void colorRGB :: gMess(float val)
 {
-    m_vector[1] = val;
-    setModified();
+  m_vector[1] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -104,8 +97,8 @@ void colorRGB :: gMess(float val)
 /////////////////////////////////////////////////////////
 void colorRGB :: bMess(float val)
 {
-    m_vector[2] = val;
-    setModified();
+  m_vector[2] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -114,8 +107,8 @@ void colorRGB :: bMess(float val)
 /////////////////////////////////////////////////////////
 void colorRGB :: aMess(float val)
 {
-    m_vector[3] = val;
-    setModified();
+  m_vector[3] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -125,7 +118,7 @@ void colorRGB :: aMess(float val)
 void colorRGB :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_colorRGB),
-		   gensym("colourRGB"), A_GIMME, A_NULL);
+                   gensym("colourRGB"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "rVal", rMess, float);
   CPPEXTERN_MSG1(classPtr, "gVal", gMess, float);
   CPPEXTERN_MSG1(classPtr, "bVal", bMess, float);

@@ -44,18 +44,20 @@ static int snglBuf24[] = {GLX_RGBA,
                           GLX_ACCUM_RED_SIZE, 8,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
-                          None};
+                          None
+                         };
 static int snglBuf24Stereo[] = {GLX_RGBA,
-                          GLX_RED_SIZE, 8,
-                          GLX_GREEN_SIZE, 8,
-                          GLX_BLUE_SIZE, 8,
-                          GLX_DEPTH_SIZE, 16,
-                          GLX_STENCIL_SIZE, 8,
-                          GLX_ACCUM_RED_SIZE, 8,
-                          GLX_ACCUM_GREEN_SIZE, 8,
-                          GLX_ACCUM_BLUE_SIZE, 8,
-								  GLX_STEREO,
-                          None};
+                                GLX_RED_SIZE, 8,
+                                GLX_GREEN_SIZE, 8,
+                                GLX_BLUE_SIZE, 8,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_STENCIL_SIZE, 8,
+                                GLX_ACCUM_RED_SIZE, 8,
+                                GLX_ACCUM_GREEN_SIZE, 8,
+                                GLX_ACCUM_BLUE_SIZE, 8,
+                                GLX_STEREO,
+                                None
+                               };
 static int dblBuf24[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 4,
                           GLX_GREEN_SIZE, 4,
@@ -66,63 +68,71 @@ static int dblBuf24[] =  {GLX_RGBA,
                           GLX_ACCUM_GREEN_SIZE, 8,
                           GLX_ACCUM_BLUE_SIZE, 8,
                           GLX_DOUBLEBUFFER,
-                          None};
+                          None
+                         };
 static int dblBuf24Stereo[] =  {GLX_RGBA,
-                          GLX_RED_SIZE, 4,
-                          GLX_GREEN_SIZE, 4,
-                          GLX_BLUE_SIZE, 4,
-                          GLX_DEPTH_SIZE, 16,
-                          GLX_STENCIL_SIZE, 8,
-                          GLX_ACCUM_RED_SIZE, 8,
-                          GLX_ACCUM_GREEN_SIZE, 8,
-                          GLX_ACCUM_BLUE_SIZE, 8,
-                          GLX_DOUBLEBUFFER,
-								  GLX_STEREO,
-                          None};
+                                GLX_RED_SIZE, 4,
+                                GLX_GREEN_SIZE, 4,
+                                GLX_BLUE_SIZE, 4,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_STENCIL_SIZE, 8,
+                                GLX_ACCUM_RED_SIZE, 8,
+                                GLX_ACCUM_GREEN_SIZE, 8,
+                                GLX_ACCUM_BLUE_SIZE, 8,
+                                GLX_DOUBLEBUFFER,
+                                GLX_STEREO,
+                                None
+                               };
 static int snglBuf8[] =  {GLX_RGBA,
                           GLX_RED_SIZE, 3,
                           GLX_GREEN_SIZE, 3,
                           GLX_BLUE_SIZE, 2,
                           GLX_DEPTH_SIZE, 16,
-                          None};
+                          None
+                         };
 static int snglBuf8Stereo[] =  {GLX_RGBA,
-                          GLX_RED_SIZE, 3,
-                          GLX_GREEN_SIZE, 3,
-                          GLX_BLUE_SIZE, 2,
-                          GLX_DEPTH_SIZE, 16,
-								  GLX_STEREO,
-                          None};
+                                GLX_RED_SIZE, 3,
+                                GLX_GREEN_SIZE, 3,
+                                GLX_BLUE_SIZE, 2,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_STEREO,
+                                None
+                               };
 static int dblBuf8[] =   {GLX_RGBA,
                           GLX_RED_SIZE, 1,
                           GLX_GREEN_SIZE, 2,
                           GLX_BLUE_SIZE, 1,
                           GLX_DEPTH_SIZE, 16,
                           GLX_DOUBLEBUFFER,
-                          None};
+                          None
+                         };
 
 static int dblBuf8Stereo[] =   {GLX_RGBA,
-                          GLX_RED_SIZE, 1,
-                          GLX_GREEN_SIZE, 2,
-                          GLX_BLUE_SIZE, 1,
-                          GLX_DEPTH_SIZE, 16,
-                          GLX_DOUBLEBUFFER,
-								  GLX_STEREO,
-                          None};
+                                GLX_RED_SIZE, 1,
+                                GLX_GREEN_SIZE, 2,
+                                GLX_BLUE_SIZE, 1,
+                                GLX_DEPTH_SIZE, 16,
+                                GLX_DOUBLEBUFFER,
+                                GLX_STEREO,
+                                None
+                               };
 
 static int xerr=0;
 int ErrorHandler (Display *dpy, XErrorEvent *event)
 {
   // we don't really care about the error
   // let's hope for the best
-  if(event)
+  if(event) {
     xerr=event->error_code;
+  }
 
   if ( xerr != BadWindow ) {
     char buf[256];
     XGetErrorText (dpy, xerr, buf, sizeof(buf));
     error("GEM-Xwin: %s\n", buf);
-  } else
+  } else {
     error("GEM-Xwin: BadWindow (%d)\n", xerr);
+  }
   return (0);
 }
 
@@ -137,21 +147,21 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XF86VidModeModeInfo **modes;
 #endif
   int modeNum=4;
-  int bestMode=0;
   int fullscreen=hints.fullscreen;
 
   char svalue[3];
   int fsaa=(int)hints.fsaa;
   sprintf(svalue, "%d", fsaa);
-  if (fsaa!=0) setenv("__GL_FSAA_MODE", svalue, 1); // this works only for NVIDIA-cards
+  if (fsaa!=0) {
+    setenv("__GL_FSAA_MODE", svalue, 1);  // this works only for NVIDIA-cards
+  }
 
   XSetErrorHandler (ErrorHandler);
 
-  if ( (info.dpy = XOpenDisplay(hints.display)) == NULL)
-    {
-      error("GEM: Could not open display %s",hints.display);
-      return(0);
-    }
+  if ( (info.dpy = XOpenDisplay(hints.display)) == NULL) {
+    error("GEM: Could not open display %s",hints.display);
+    return(0);
+  }
 
   info.screen  = DefaultScreen(info.dpy);
 
@@ -161,15 +171,14 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
    * however, i have currently no way to test what really happens
    * if the X-server has no glx extension
    */
-  if ( !glXQueryExtension(info.dpy, NULL, NULL) )
-    {
-      error("GEM: X server has no OpenGL GLX extension");
-      destroyGemWindow(info);
-      return 0;
-    }
+  if ( !glXQueryExtension(info.dpy, NULL, NULL) ) {
+    error("GEM: X server has no OpenGL GLX extension");
+    destroyGemWindow(info);
+    return 0;
+  }
 
-  if (fullscreen){
-    if (hints.display){
+  if (fullscreen) {
+    if (hints.display) {
       error("GEM: fullscreen not available on remote display");
       fullscreen=0;
     } else {
@@ -187,17 +196,19 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   if (hints.buffer == 2) {
     // try for a double-buffered on 24bit machine (try stereo first)
     vi = glXChooseVisual(info.dpy, info.screen, dblBuf24Stereo);
-	 if (vi == NULL)
-		 vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
+    if (vi == NULL) {
+      vi = glXChooseVisual(info.dpy, info.screen, dblBuf24);
+    }
     if (vi == NULL) {
       // try for a double buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(info.dpy, info.screen, dblBuf8Stereo);
-		if(vi == NULL)
-			vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
+      if(vi == NULL) {
+        vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
+      }
       if (vi == NULL) {
-	error("GEM: Unable to create double buffer window");
-	destroyGemWindow(info);
-	return(0);
+        error("GEM: Unable to create double buffer window");
+        destroyGemWindow(info);
+        return(0);
       }
       post("GEM: Only using 8 color bits");
     }
@@ -206,17 +217,19 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   else {
     // try for a single buffered on a 24bit machine (try stereo first)
     vi = glXChooseVisual(info.dpy, info.screen, snglBuf24Stereo);
-	 if (vi == NULL)
-		 vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
+    if (vi == NULL) {
+      vi = glXChooseVisual(info.dpy, info.screen, snglBuf24);
+    }
     if (vi == NULL) {
       // try for a single buffered on a 8bit machine (try stereo first)
       vi = glXChooseVisual(info.dpy, info.screen, snglBuf8Stereo);
-		if (vi == NULL)
-			vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
       if (vi == NULL) {
-	error("GEM: Unable to create single buffer window");
-	destroyGemWindow(info);
-	return(0);
+        vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
+      }
+      if (vi == NULL) {
+        error("GEM: Unable to create single buffer window");
+        destroyGemWindow(info);
+        return(0);
       }
       post("GEM: Only using 8 color bits");
     }
@@ -224,14 +237,15 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
 
   if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-    error("GEM: TrueColor visual required for this program (got %d)", vi->c_class);
+    error("GEM: TrueColor visual required for this program (got %d)",
+          vi->c_class);
     destroyGemWindow(info);
     return(0);
   }
   // create the rendering context
   try {
     info.context = glXCreateContext(info.dpy, vi, hints.shared, GL_TRUE);
-  } catch(void*e){
+  } catch(void*e) {
     info.context=NULL;
   }
   if (info.context == NULL) {
@@ -241,7 +255,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
   // create the X color map
   info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen),
-			      vi->visual, AllocNone);
+                              vi->visual, AllocNone);
   if (!info.cmap) {
     error("GEM: Could not create X colormap");
     destroyGemWindow(info);
@@ -261,11 +275,13 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int x = hints.x_offset;
   int y = hints.y_offset;
 #ifdef HAVE_LIBXXF86VM
-  if (fullscreen){
+  if (fullscreen) {
+    int bestMode=0;
     /* look for mode with requested resolution */
     for (int i = 0; i < modeNum; i++) {
-      if ((modes[i]->hdisplay == hints.width) && (modes[i]->vdisplay == hints.height)) {
-	bestMode = i;
+      if ((modes[i]->hdisplay == hints.width)
+          && (modes[i]->vdisplay == hints.height)) {
+        bestMode = i;
       }
     }
 
@@ -280,9 +296,10 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     x=y=0;
   } else
 #endif
-  { // !fullscren
+  {
+    // !fullscren
     info.have_border = hints.border;
-    if (hints.border){
+    if (hints.border) {
       swa.override_redirect = False;
       flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     } else {
@@ -293,15 +310,14 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   info.fs = fullscreen;
   info.win = XCreateWindow(info.dpy, RootWindow(info.dpy, vi->screen),
-			   x, y, hints.real_w, hints.real_h,
-			   0, vi->depth, InputOutput,
-			   vi->visual, flags, &swa);
-  if (!info.win)
-    {
-      error("GEM: Could not create X window");
-      destroyGemWindow(info);
-      return(0);
-    }
+                           x, y, hints.real_w, hints.real_h,
+                           0, vi->depth, InputOutput,
+                           vi->visual, flags, &swa);
+  if (!info.win) {
+    error("GEM: Could not create X window");
+    destroyGemWindow(info);
+    return(0);
+  }
 
   XSelectInput(info.dpy, info.win, EVENT_MASK);
 
@@ -310,13 +326,14 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
    * LATER think about reacting on this event...
    */
   info.delete_atom = XInternAtom(info.dpy, "WM_DELETE_WINDOW", True);
-  if (info.delete_atom != None)
+  if (info.delete_atom != None) {
     XSetWMProtocols(info.dpy, info.win, &info.delete_atom,1);
+  }
 
   XSetStandardProperties(info.dpy, info.win,
-			 hints.title, "gem",
-			 None, 0, 0, NULL);
-  try{
+                         hints.title, "gem",
+                         None, 0, 0, NULL);
+  try {
     xerr=0;
     glXMakeCurrent(info.dpy, info.win, info.context);
 
@@ -330,18 +347,22 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
       destroyGemWindow(info);
       return(0);
     }
-  }catch(void*e){
+  } catch(void*e) {
     error("GEM: Could not make glX-context current");
     destroyGemWindow(info);
     return(0);
   }
 
-  if (!hints.actuallyDisplay) return(1);
+  if (!hints.actuallyDisplay) {
+    return(1);
+  }
   XMapRaised(info.dpy, info.win);
   //  XMapWindow(info.dpy, info.win);
   XEvent report;
   XIfEvent(info.dpy, &report, WaitForNotify, (char*)info.win);
-  if (glXIsDirect(info.dpy, info.context))post("GEM: Direct Rendering enabled!");
+  if (glXIsDirect(info.dpy, info.context)) {
+    post("GEM: Direct Rendering enabled!");
+  }
 
   return(1);
 }
@@ -356,19 +377,20 @@ int cursorGemWindow(WindowInfo &info, int state)
     XColor dummy;
 
     blank = XCreateBitmapFromData(info.dpy, info.win,
-				  data, 1, 1);
+                                  data, 1, 1);
 
     cursor = XCreatePixmapCursor(info.dpy, blank, blank,
-				 &dummy, &dummy, 0, 0);
+                                 &dummy, &dummy, 0, 0);
     XFreePixmap(info.dpy, blank);
     XDefineCursor(info.dpy, info.win,cursor);
-  }
-  else
+  } else {
     XUndefineCursor(info.dpy, info.win);
+  }
   return 0; //?
 }
 
-int topmostGemWindow(WindowInfo &info, int state){
+int topmostGemWindow(WindowInfo &info, int state)
+{
   /* we don't give a warning to not be annoying */
   return 1;
 }
@@ -379,36 +401,42 @@ void destroyGemWindow(WindowInfo &info)
    * if the handler of the display (info.dpy) is invalid, e.g. because
    * somebody closed the Gem-window with xkill or by clicking on the "x" of the window
    */
-  if (info.dpy)
-    {
-      int err=0;
-      /* patch by cesare marilungo to prevent the crash "on my laptop" */
-      glXMakeCurrent(info.dpy, None, NULL); /* this crashes if no window is there! */
+  if (info.dpy) {
+    int err=0;
+    /* patch by cesare marilungo to prevent the crash "on my laptop" */
+    glXMakeCurrent(info.dpy, None,
+                   NULL); /* this crashes if no window is there! */
 
-      if (info.win)
-	err=XDestroyWindow(info.dpy, info.win);
-      if (info.have_constContext && info.context) {
-        // this crashes sometimes on my laptop:
-	glXDestroyContext(info.dpy, info.context);
-      }
-      if (info.cmap)
-	err=XFreeColormap(info.dpy, info.cmap);
+    if (info.win) {
+      err=XDestroyWindow(info.dpy, info.win);
+    }
+    if (info.have_constContext && info.context) {
+      // this crashes sometimes on my laptop:
+      glXDestroyContext(info.dpy, info.context);
+    }
+    if (info.cmap) {
+      err=XFreeColormap(info.dpy, info.cmap);
+    }
 
 #ifdef HAVE_LIBXXF86VM
-      if (info.fs){
-	XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
-	XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
-	info.fs=0;
-      }
+    if (info.fs) {
+      XF86VidModeSwitchToMode(info.dpy, info.screen, &info.deskMode);
+      XF86VidModeSetViewPort(info.dpy, info.screen, 0, 0);
+      info.fs=0;
+    }
 #endif
 
-      err=XCloseDisplay(info.dpy); /* this crashes if no window is there */
+    if(XCloseDisplay(info.dpy)) { /* this crashes if no window is there */
+      verbose(1, "XCloseDisplay returned %d", err);
     }
+  }
   info.dpy = NULL;
   info.win = 0;
   info.cmap = 0;
   info.context = NULL;
-  if(info.delete_atom)info.delete_atom=0; /* not very sophisticated destruction...*/
+  if(info.delete_atom) {
+    info.delete_atom=0;  /* not very sophisticated destruction...*/
+  }
 }
 
 void gemWinSwapBuffers(WindowInfo&nfo)
@@ -418,12 +446,15 @@ void gemWinSwapBuffers(WindowInfo&nfo)
 
 void gemWinMakeCurrent(WindowInfo&nfo)
 {
-  if (!nfo.dpy && !nfo.win && !nfo.context)return; // do not crash
+  if (!nfo.dpy && !nfo.win && !nfo.context) {
+    return;  // do not crash
+  }
   glXMakeCurrent(nfo.dpy, nfo.win, nfo.context);
 }
 
 
-bool initGemWin(void) {
+bool initGemWin(void)
+{
   /* nothing to be done here... */
   return 1;
 }
@@ -452,56 +483,55 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
                            ButtonMotionMask |
                            ButtonPressMask |
                            ButtonReleaseMask,
-                           &event))
-    {
-      switch (event.type)
-        {
-        case ButtonPress:
-          triggerButtonEvent(eb->button-1, 1, eb->x, eb->y);
-          break;
-        case ButtonRelease:
-          triggerButtonEvent(eb->button-1, 0, eb->x, eb->y);
-          break;
-        case MotionNotify:
-          triggerMotionEvent(eb->x, eb->y);
-          if(!win.have_border) {
-            int err=XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime);
-            err=0;
-          }
-          break;
-        case KeyPress:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          }
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
-          } else {
-            triggerKeyboardEvent(keystring, kb->keycode, 1);
-          }
-          break;
-        case KeyRelease:
-          if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
-            //modifier key:use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-          }
-
-          if ( (keysym_return & 0xff00)== 0xff00 ) {
-            //non alphanumeric key: use keysym
-            triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
-          } else {
-            triggerKeyboardEvent(keystring, kb->keycode, 0);
-          }
-          break;
-        case ResizeRequest:
-          triggerResizeEvent(res->width, res->height);
-          XResizeWindow(win.dpy, win.win, res->width, res->height);
-          break;
-        default:
+                           &event)) {
+    switch (event.type) {
+    case ButtonPress:
+      triggerButtonEvent(eb->button-1, 1, eb->x, eb->y);
+      break;
+    case ButtonRelease:
+      triggerButtonEvent(eb->button-1, 0, eb->x, eb->y);
+      break;
+    case MotionNotify:
+      triggerMotionEvent(eb->x, eb->y);
+      if(!win.have_border) {
+        if(XSetInputFocus(win.dpy, win.win, RevertToParent, CurrentTime)) {
           break;
         }
+      }
+      break;
+    case KeyPress:
+      if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+        //modifier key:use keysym
+        //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+      }
+      if ( (keysym_return & 0xff00)== 0xff00 ) {
+        //non alphanumeric key: use keysym
+        triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
+      } else {
+        triggerKeyboardEvent(keystring, kb->keycode, 1);
+      }
+      break;
+    case KeyRelease:
+      if (XLookupString(kb,keystring,2,&keysym_return,NULL)==0) {
+        //modifier key:use keysym
+        triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+      }
+
+      if ( (keysym_return & 0xff00)== 0xff00 ) {
+        //non alphanumeric key: use keysym
+        triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 0);
+      } else {
+        triggerKeyboardEvent(keystring, kb->keycode, 0);
+      }
+      break;
+    case ResizeRequest:
+      triggerResizeEvent(res->width, res->height);
+      XResizeWindow(win.dpy, win.win, res->width, res->height);
+      break;
+    default:
+      break;
     }
+  }
 
   if (XCheckTypedEvent(win.dpy,  ClientMessage, &event)) {
     GemMan::destroyWindowSoon();

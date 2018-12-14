@@ -44,13 +44,13 @@ class GEM_EXTERN pix_video : public GemBase
 {
   CPPEXTERN_HEADER(pix_video, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_video(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -58,15 +58,15 @@ class GEM_EXTERN pix_video : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
   //////////
   // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
   //////////
-  virtual void	startRendering();
+  virtual void  startRendering();
   //////////
   // If you care about the stop of rendering
-  virtual void	stopRendering();
+  virtual void  stopRendering();
 
 
   //////////
@@ -75,76 +75,79 @@ class GEM_EXTERN pix_video : public GemBase
   // returns true, if a new backend could be found
   virtual bool restart(void);
 
-  virtual void	deviceMess(std::string);
-  virtual void	deviceMess(int dev);
+  virtual void  deviceMess(std::string);
+  virtual void  deviceMess(int dev);
 
-  virtual void	closeMess(void);
-  virtual void	resetMess(void);
+  virtual void  closeMess(void);
+  virtual void  resetMess(void);
 
   // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
-  virtual void	driverMess(int dev);
-  virtual void	driverMess(std::string);
-  virtual void	driverMess(void);
+  virtual void  driverMess(int dev);
+  virtual void  driverMess(std::string);
+  virtual void  driverMess(void);
 
   // List the available devices
-  virtual void 	enumerateMess();
+  virtual void  enumerateMess();
 
   // fire the format dialogs
-  virtual void	dialogMess(int,t_atom*);
+  virtual void  dialogMess(int,t_atom*);
 
 
-  virtual void	asynchronousMess(bool);
+  virtual void  asynchronousMess(bool);
 
-  virtual void	colorMess(t_atom*);
+  virtual void  colorMess(t_atom*);
   // Set the device
 
   //////////
   // Set the video dimensions
-  virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-                          int topmargin = 0 , int bottommargin = 0);
+  virtual void  dimenMess(int x, int y, int leftmargin = 0,
+                          int rightmargin = 0,
+                          int topmargin = 0, int bottommargin = 0);
   // Set the channel of the capturing device
-  virtual void	channelMess(int channel, t_float freq=0);
+  virtual void  channelMess(int channel, t_float freq=0);
   // Set the channel of the capturing device
-  virtual void	normMess(std::string);
+  virtual void  normMess(std::string);
   // Set the color-space
 
   // Set the quality for DV decoding
-  virtual void	qualityMess(int dev);
+  virtual void  qualityMess(int dev);
 
   gem::Properties m_readprops, m_writeprops;
-  virtual void	setPropertyMess(int argc, t_atom*argv);
-  virtual void	getPropertyMess(int argc, t_atom*argv);
-  virtual void	enumPropertyMess(void);
+  virtual void  setPropertyMess(int argc, t_atom*argv);
+  virtual void  getPropertyMess(int argc, t_atom*argv);
+  virtual void  enumPropertyMess(void);
 
-  virtual void	setPropertiesMess(int argc, t_atom*argv);
-  virtual void	applyPropertiesMess(void);
-  virtual void	clearPropertiesMess(void);
+  virtual void  setPropertiesMess(int argc, t_atom*argv);
+  virtual void  applyPropertiesMess(void);
+  virtual void  clearPropertiesMess(void);
 
 
   //-----------------------------------
-  // GROUP:	Video data
+  // GROUP:     Video data
   //-----------------------------------
 
   gem::plugins::video *m_videoHandle;
   std::vector<std::string>m_ids;
   std::vector<gem::plugins::video*>m_videoHandles;
 
-  virtual bool addHandle(std::vector<std::string>available_ids, std::string id=std::string(""));
+  virtual bool addHandle(std::vector<std::string>available_ids,
+                         std::string id=std::string(""));
 
   int    m_driver;
 
   enum runningState {
     UNKNOWN=-1,
     STOPPED=0,
-    STARTED=1};
+    STARTED=1
+  };
   runningState m_running;
-  virtual void	runningMess(bool);
+  virtual void  runningMess(bool);
 
 
   /* an outlet for status messages */
   t_outlet *m_infoOut;
 
- private:
+private:
 
   //////////
   // static member functions
@@ -180,4 +183,4 @@ class GEM_EXTERN pix_video : public GemBase
   static void qualityMessCallback(void *data, t_float dev);
 };
 
-#endif	// for header file
+#endif  // for header file

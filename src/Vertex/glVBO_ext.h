@@ -18,15 +18,20 @@ extern void glDeleteBuffersARB(GLsizei n, const GLuint *buffers);
 extern void glGenBuffersARB(GLsizei n, GLuint *buffers);
 extern GLboolean glIsBufferARB(GLuint buffer);
 
-extern void glBufferDataARB(GLenum target, GLsizeiptrARB size, const GLvoid *data, GLenum usage);
-extern void glBufferSubDataARB(GLenum target, GLintptrARB offset, GLsizeiptrARB size, const GLvoid *data);
-extern void glGetBufferSubDataARB(GLenum target, GLintptrARB offset, GLsizeiptrARB size, GLvoid *data);
+extern void glBufferDataARB(GLenum target, GLsizeiptrARB size,
+                            const GLvoid *data, GLenum usage);
+extern void glBufferSubDataARB(GLenum target, GLintptrARB offset,
+                               GLsizeiptrARB size, const GLvoid *data);
+extern void glGetBufferSubDataARB(GLenum target, GLintptrARB offset,
+                                  GLsizeiptrARB size, GLvoid *data);
 
 extern void *glMapBufferARB(GLenum target, GLenum access);
 extern GLboolean glUnmapBufferARB(GLenum target);
 
-extern void glGetBufferParameterivARB(GLenum target, GLenum pname, GLint *params);
-extern void glGetBufferPointervARB(GLenum target, GLenum pname, GLvoid **params);
+extern void glGetBufferParameterivARB(GLenum target, GLenum pname,
+                                      GLint *params);
+extern void glGetBufferPointervARB(GLenum target, GLenum pname,
+                                   GLvoid **params);
 
 #define GL_ARRAY_BUFFER_ARB                             0x8892
 #define GL_ELEMENT_ARRAY_BUFFER_ARB                     0x8893

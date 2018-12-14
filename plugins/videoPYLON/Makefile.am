@@ -17,22 +17,23 @@ dist_plugin_DATA  += pylon-videoplugin.pd
 endif
 
 gem_videoPYLON_la_CXXFLAGS =
-gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared 
+gem_videoPYLON_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS
 gem_videoPYLON_la_LDFLAGS += -no-undefined
 endif
 gem_videoPYLON_la_LIBADD   =
 
 # RTE
-gem_videoPYLON_la_CXXFLAGS += @GEM_RTE_CFLAGS@
-gem_videoPYLON_la_LDFLAGS  += @GEM_RTE_LIBS@
-#gem_videoPYLON_la_CXXFLAGS += @GEM_ARCH_CXXFLAGS@
-#gem_videoPYLON_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+gem_videoPYLON_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+gem_videoPYLON_la_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
+# flags for building Gem externals
+gem_videoPYLON_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+gem_videoPYLON_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 # #gem_videoPYLON_la @MOREFLAGS@
 
 # Dependencies
-gem_videoPYLON_la_CXXFLAGS += @GEM_PYLON_CXXFLAGS@
-gem_videoPYLON_la_LIBADD   += @GEM_PYLON_LIBS@
+gem_videoPYLON_la_CXXFLAGS += $(GEM_PYLON_CXXFLAGS)
+gem_videoPYLON_la_LIBADD   += $(GEM_PYLON_LIBS)
 
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
@@ -40,7 +41,6 @@ include $(srcdir)/../symlink_ltlib.mk
 
 ### SOURCES
 gem_videoPYLON_la_SOURCES= videoPYLON.cpp videoPYLON.h \
-	CameraProperties.cpp CameraProperties.h \
-	StreamGrabberProperties.cpp StreamGrabberProperties.h
+	$(empty)
 
 

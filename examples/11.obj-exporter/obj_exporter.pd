@@ -52,8 +52,9 @@
 #X connect 8 0 6 1;
 #X connect 9 0 6 2;
 #X restore 90 380 pd remove_cam_offset;
-#X obj 90 30 route save groupe triangulate;
+#X obj 90 30 route save group triangulate;
 #X obj 223 51 s global_obj_triangulate;
+#X obj 309 30 route groupe;
 #X connect 0 0 29 0;
 #X connect 1 0 5 0;
 #X connect 2 0 6 0;
@@ -94,3 +95,5 @@
 #X connect 29 0 15 0;
 #X connect 29 1 26 0;
 #X connect 29 2 30 0;
+#X connect 29 3 31 0;
+#X connect 31 0 26 0;

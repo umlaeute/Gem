@@ -32,10 +32,13 @@
 using namespace gem;
 using namespace gem::utils::gl;
 
-namespace gem {
-  class GLStack::Data {
+namespace gem
+{
+class GLStack::Data
+{
 public:
-  Data(void) {
+  Data(void)
+  {
     int i=0;
     for(i=0; i<4; i++) {
       stackDepth[i]=0;
@@ -49,15 +52,17 @@ public:
 };
 };
 
-namespace {
-  static std::map<enum GLStack::GemStackId, GLenum>s_id2mode;
-  static std::map<enum GLStack::GemStackId, GLenum>s_id2depth;
-  static std::map<enum GLStack::GemStackId, GLenum>s_id2maxdepth;
-  static std::map<enum GLStack::GemStackId, bool>s_id2init;
+namespace
+{
+static std::map<enum GLStack::GemStackId, GLenum>s_id2mode;
+static std::map<enum GLStack::GemStackId, GLenum>s_id2depth;
+static std::map<enum GLStack::GemStackId, GLenum>s_id2maxdepth;
+static std::map<enum GLStack::GemStackId, bool>s_id2init;
 }
 
 
-GLStack:: GLStack(bool haveValidContext) : data(new Data()) {
+GLStack:: GLStack(bool haveValidContext) : data(new Data())
+{
   static bool firsttime=true;
   if(firsttime) {
     s_id2mode[MODELVIEW] =GL_MODELVIEW;
@@ -86,15 +91,16 @@ GLStack:: GLStack(bool haveValidContext) : data(new Data()) {
     reset();
   }
 }
-GLStack::~GLStack() {
+GLStack::~GLStack()
+{
 }
 
 #ifdef __GNUC__
 # warning push/pop texture matrix has to be done per texunit
-  // each texunit has it's own matrix to be pushed/popped
-  // changing the texunit (e.g. in [pix_texture]) makes the
-  // local depthcounter a useless, and we get a lot of
-  // stack under/overflows
+// each texunit has it's own matrix to be pushed/popped
+// changing the texunit (e.g. in [pix_texture]) makes the
+// local depthcounter a useless, and we get a lot of
+// stack under/overflows
 #endif
 
 
@@ -102,9 +108,12 @@ GLStack::~GLStack() {
  *   returns true on success and false otherwise (stack overflow)
  * NOTE: needs valid openGL context
  */
-bool GLStack::push(enum GemStackId id) {
+bool GLStack::push(enum GemStackId id)
+{
   GLenum mode=s_id2mode[id];
-  if(!mode)return false;
+  if(!mode) {
+    return false;
+  }
   if(data->stackDepth[id]<data->maxDepth[id]) {
     glMatrixMode(mode);
     glPushMatrix();
@@ -116,7 +125,8 @@ bool GLStack::push(enum GemStackId id) {
   return false;
 }
 
-void GLStack::push() {
+void GLStack::push()
+{
   push(COLOR);
   push(TEXTURE);
   push(PROJECTION);
@@ -128,9 +138,12 @@ void GLStack::push() {
  *   returns true on success and false otherwise (stack underlow)
  * NOTE: needs valid openGL context
  */
-bool GLStack::pop(enum GemStackId id) {
+bool GLStack::pop(enum GemStackId id)
+{
   GLenum mode=s_id2mode[id];
-  if(!mode)return false;
+  if(!mode) {
+    return false;
+  }
 
   data->stackDepth[id]--;
   if(data->stackDepth[id]<data->maxDepth[id]) {
@@ -141,7 +154,8 @@ bool GLStack::pop(enum GemStackId id) {
   return false;
 }
 
-void GLStack::pop() {
+void GLStack::pop()
+{
   pop(COLOR);
   pop(TEXTURE);
   pop(PROJECTION);
@@ -151,7 +165,8 @@ void GLStack::pop() {
  * reset the maximum stack depth of the given stack
  * NOTE: needs valid openGL context
  */
-void GLStack::reset() {
+void GLStack::reset()
+{
   reset(MODELVIEW);
   reset(PROJECTION);
   reset(TEXTURE);
@@ -162,7 +177,8 @@ void GLStack::reset() {
  * reset the maximum stack depth of all stacks
  * NOTE: needs valid openGL context
  */
-int GLStack::reset(enum GemStackId id) {
+int GLStack::reset(enum GemStackId id)
+{
   bool firsttime=!(s_id2init[id]);
   if(firsttime) {
     s_id2init[id]=true;
@@ -180,12 +196,16 @@ int GLStack::reset(enum GemStackId id) {
 
   if(maxdepth && depth) {
     /* hmm, some ati-cards (with fglrx) report GLEW_ARB_imaging support but fail the 'depth' test for COLOR */
-    
+
     glGetIntegerv(maxdepth, data->maxDepth+id);
-    if(firsttime && glReportError())s_id2maxdepth[id]=0;
+    if(firsttime && glReportError()) {
+      s_id2maxdepth[id]=0;
+    }
 
     glGetIntegerv(depth, data->stackDepth+id);
-    if(firsttime && glReportError())s_id2depth[id]=0;
+    if(firsttime && glReportError()) {
+      s_id2depth[id]=0;
+    }
 
     data->orgDepth[id]=data->stackDepth[id];
     return data->stackDepth[id];
@@ -193,9 +213,13 @@ int GLStack::reset(enum GemStackId id) {
   return -1;
 }
 
-void GLStack::print() {
-  post("MODELVIEW: %02d/%02d",  data->stackDepth[MODELVIEW], data->maxDepth[MODELVIEW]);
-  post("PROJECTION: %02d/%02d",  data->stackDepth[PROJECTION], data->maxDepth[PROJECTION]);
-  post("TEXTURE: %02d/%02d",  data->stackDepth[TEXTURE], data->maxDepth[TEXTURE]);
+void GLStack::print()
+{
+  post("MODELVIEW: %02d/%02d",  data->stackDepth[MODELVIEW],
+       data->maxDepth[MODELVIEW]);
+  post("PROJECTION: %02d/%02d",  data->stackDepth[PROJECTION],
+       data->maxDepth[PROJECTION]);
+  post("TEXTURE: %02d/%02d",  data->stackDepth[TEXTURE],
+       data->maxDepth[TEXTURE]);
   post("COLOR: %02d/%02d",  data->stackDepth[COLOR], data->maxDepth[COLOR]);
 }

@@ -53,7 +53,7 @@
 #X text 27 272 Inlet 3: int: number of segments;
 #X text 33 14 Synopsis: [sphere];
 #X text 16 69 Description: Renders a sphere.;
-#X text 30 85 The sphere object renders a segemented sphere at the
+#X text 30 85 The sphere object renders a segmented sphere at the
 current position with current color. The look of the sphere can be
 changed with the draw message \, its size can be changed via the second
 inlet.;

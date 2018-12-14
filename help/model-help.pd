@@ -1,10 +1,10 @@
-#N canvas 407 65 710 632 10;
+#N canvas 404 93 710 647 10;
 #X text 54 30 Class: geometric object;
-#X obj 464 77 cnv 15 200 280 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 464 77 cnv 15 200 380 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X obj 466 364 cnv 15 200 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 466 464 cnv 15 200 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#N canvas 0 22 450 300 gemwin 0;
+#N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -22,13 +22,13 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 471 403 pd gemwin;
-#X msg 471 384 create;
-#X text 468 365 Create window:;
+#X restore 471 503 pd gemwin;
+#X msg 471 484 create;
+#X text 468 465 Create window:;
 #X text 475 59 Example:;
 #X obj 7 67 cnv 15 450 210 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 8 316 cnv 15 450 280 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 8 316 cnv 15 450 320 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 9 321 Inlets:;
 #X obj 8 282 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
@@ -36,23 +36,21 @@
 #X text 17 281 Arguments:;
 #X text 452 8 GEM object;
 #X text 27 333 Inlet 1: gemlist;
-#X text 9 560 Outlets:;
-#X text 21 573 Outlet 1: gemlist;
-#X obj 472 136 cnv 15 180 165 empty empty empty 20 12 0 14 -106458
+#X text 9 600 Outlets:;
+#X text 21 613 Outlet 1: gemlist;
+#X obj 472 136 cnv 15 180 265 empty empty empty 20 12 0 14 -106458
 -66577 0;
 #X text 33 14 Synopsis: [model];
 #X text 7 69 Description: Renders an Alias/Wavefront-Model.;
 #X text 16 86 The model object renders 3D-models that are saved in
 Alias/Wavefront's OBJ-format.;
 #X text 63 292 optional: name of a OBJ-file to be loaded;
-#X obj 470 313 cnv 15 50 30 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 470 413 cnv 15 50 30 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 583 384 gemhead;
-#X obj 583 403 world_light;
-#X obj 552 302 cnv 15 100 50 empty empty empty 20 12 0 14 -106458 -66577
-0;
+#X obj 583 484 gemhead;
+#X obj 583 503 world_light;
 #X obj 473 84 gemhead;
-#X obj 473 319 model;
+#X obj 473 419 model;
 #X obj 486 140 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #X obj 486 158 openpanel;
@@ -66,16 +64,16 @@ Alias/Wavefront's OBJ-format.;
 #X msg 486 274 material \$1;
 #X msg 574 274 texture \$1;
 #X msg 576 326 group \$1;
-#X floatatom 490 206 5 0 1 0 - - -;
+#X floatatom 490 206 5 0 1 0 - - -, f 5;
 #X msg 486 179 open \$1;
 #X obj 576 308 hradio 15 1 0 3 empty empty empty 0 -6 0 8 -262144 -1
 -1 0;
 #X text 27 350 Inlet 1: message: open <filename.obj>;
 #X text 27 367 Inlet 1: message: rescale 1|0 :: normalize the model
-(must be set PRIOR to opening a model (default: 1);
+(must be set PRIOR to opening a model (default:1);
 #X text 26 444 Inlet 1: message: material 1|0 :: use material-information
 (from the .MTL-file);
-#X text 27 522 Inlet 1: message: group <int> :: draw only specified
+#X text 27 512 Inlet 1: message: group <int> :: draw only specified
 part of the model (0==all groups);
 #X text 16 114 To normalize the size and pivot-point of a loaded model
 use the "rescale"-message prior(!) to loading the model.;
@@ -92,30 +90,36 @@ to be displayed.;
 #X obj 486 254 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 27 397 Inlet 1: message: smooth <float> :: set smoothing factor
-( 0.0==flat. 1.0==smooth. default=0.5);
+( 0.0==flat. 1.0==smooth. default:0.5);
 #X text 27 474 Inlet 1: message: texture 0|1|2 :: 0==linear texturing
 \, 1==sphere mapping \, 2==UV-mapping (default);
 #X obj 574 254 hradio 15 1 0 3 empty empty empty 0 -6 0 8 -262144 -1
 -1 0;
-#X text 17 210 Images can be applied either as linear \, spheric or
+#X text 17 210 Images can be applied either as linear \, spherical or
 UV textures.;
+#X msg 511 351 backends OBJ;
+#X msg 521 371 backends ASSIMP3;
+#X text 27 542 Inlet 1: message: backends <symbol> :: choose which
+backend to use first to open the model;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 22 0 23 0;
-#X connect 25 0 49 0;
-#X connect 27 0 28 0;
-#X connect 28 0 38 0;
-#X connect 29 0 30 0;
-#X connect 30 0 26 0;
-#X connect 31 0 26 0;
-#X connect 32 0 33 0;
-#X connect 33 0 26 0;
-#X connect 34 0 26 0;
-#X connect 35 0 26 0;
-#X connect 36 0 26 0;
-#X connect 37 0 31 0;
-#X connect 38 0 26 0;
-#X connect 39 0 36 0;
-#X connect 49 0 26 0;
-#X connect 50 0 34 0;
-#X connect 53 0 35 0;
+#X connect 24 0 48 0;
+#X connect 26 0 27 0;
+#X connect 27 0 37 0;
+#X connect 28 0 29 0;
+#X connect 29 0 25 0;
+#X connect 30 0 25 0;
+#X connect 31 0 32 0;
+#X connect 32 0 25 0;
+#X connect 33 0 25 0;
+#X connect 34 0 25 0;
+#X connect 35 0 25 0;
+#X connect 36 0 30 0;
+#X connect 37 0 25 0;
+#X connect 38 0 35 0;
+#X connect 48 0 25 0;
+#X connect 49 0 33 0;
+#X connect 52 0 34 0;
+#X connect 54 0 25 0;
+#X connect 55 0 25 0;

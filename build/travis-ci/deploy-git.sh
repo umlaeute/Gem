@@ -69,9 +69,16 @@ BUILDDIR=$(pwd)
 
 DESTDIR=$(mktemp -d /tmp/geminstall.XXXXXX)
 
-git clone ${GITDEPLOYTARGET} "${DESTDIR}"
+## shallow clone of the repository (of the desired branch if possible)
+git clone -b "${DEPLOY_BRANCH}" --depth 1 ${GITDEPLOYTARGET} "${DESTDIR}" \
+|| git clone --depth 1 ${GITDEPLOYTARGET} "${DESTDIR}"
 cd "${DESTDIR}"
-git checkout "${DEPLOY_BRANCH}" || git checkout -b "${DEPLOY_BRANCH}"
+## if the shallow clone (above) managed to clone the proper branch, the
+## following is a nop.
+## else it will create the branch for us
+git checkout "${DEPLOY_BRANCH}" \
+|| git checkout -b "${DEPLOY_BRANCH}"
+## cleanup, we don't want content from the olde commits
 rm -rf *
 cd "${BUILDDIR}"
 

@@ -21,7 +21,7 @@
 CPPEXTERN_NEW_WITH_GIMME(linear_path);
 
 linear_path :: linear_path(int argc, t_atom *argv)
-             : GemPathBase(argc, argv)
+  : GemPathBase(argc, argv)
 { }
 linear_path :: ~linear_path()
 { }
@@ -30,9 +30,10 @@ linear_path :: ~linear_path()
 // floatMess
 //
 /////////////////////////////////////////////////////////
-void linear_path :: lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts)
+void linear_path :: lookupFunc(t_float x, t_float *ret, int numDimen,
+                               int npnts, t_float *pnts)
 {
-    linearFunc(x, ret, numDimen, npnts, pnts);
+  linearFunc(x, ret, numDimen, npnts, pnts);
 }
 
 void linear_path :: obj_setupCallback(t_class *)

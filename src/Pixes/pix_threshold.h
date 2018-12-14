@@ -39,56 +39,57 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_threshold : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_threshold, GemPixObj);
+  CPPEXTERN_HEADER(pix_threshold, GemPixObj);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_threshold();
+  //////////
+  // Constructor
+  pix_threshold();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_threshold();
+  //////////
+  // Destructor
+  virtual ~pix_threshold();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processGrayImage(imageStruct &image);
 
-        //////////
-    	// Do the processing
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processYUVImage(imageStruct &image);
 
 #ifdef __VEC__
-	//////////
-    	// Do the processing
-    	virtual void 	processYUVAltivec(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processYUVAltivec(imageStruct &image);
 #endif
-    	//////////
-    	// Set the new threshold vector
-    	void	    	vecThreshMess(int argc, t_atom *argv);
+  //////////
+  // Set the new threshold vector
+  void            vecThreshMess(int argc, t_atom *argv);
 
-    	//////////
-    	// Set the new threshold value
-    	void	    	floatThreshMess(float thresh);
+  //////////
+  // Set the new threshold value
+  void            floatThreshMess(float thresh);
 
-    	//////////
-    	// The new color
-    	unsigned char  	m_thresh[4];
-        unsigned char	m_Y;
+  //////////
+  // The new color
+  unsigned char   m_thresh[4];
+  unsigned char   m_Y;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	vecThreshMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
-    	static void 	floatThreshMessCallback(void *data, t_float thresh);
+  //////////
+  // Static member functions
+  static void     vecThreshMessCallback(void *data, t_symbol *, int argc,
+                                        t_atom *argv);
+  static void     floatThreshMessCallback(void *data, t_float thresh);
 };
 
-#endif	// for header file
+#endif  // for header file

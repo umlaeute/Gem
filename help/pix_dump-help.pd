@@ -63,7 +63,7 @@
 #X obj 502 213 print DATA;
 #X msg 487 162 bang;
 #X text 29 76 Description: dump all the pixel-data of an image;
-#X text 21 111 [pix_dump] will output one long list of (m*n) Pixel-Tupel.
+#X text 21 111 [pix_dump] will output one long list of (m*n) pixel-tuples.
 ;
 #X text 22 142 For a RGBA-image the list will have the form:;
 #X text 42 162 R1 G1 B1 A1 R2 G2 B2 A2 R3 G3 ... B(m*n) A(m*n);
@@ -76,7 +76,7 @@
 #X obj 451 245 pix_texture;
 #X obj 451 267 rectangle 3 3;
 #X msg 530 186 bytemode \$1;
-#X text 63 286 Inlet 1: bytemode: set normlisation on or off;
+#X text 63 286 Inlet 1: bytemode: set normalization on or off;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

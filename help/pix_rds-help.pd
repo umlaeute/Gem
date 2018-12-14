@@ -78,7 +78,7 @@ is basically an invertation (front becomes back) of cross-eyed.;
 #X obj 451 196 pix_rds;
 #X floatatom 495 139 5 10 100 1 stride - -;
 #X text 63 245 Inlet 1: method [0|1] (crosseyed|walleyed);
-#X text 63 259 Inlet 1: stride <int> distance (default: 40);
+#X text 63 259 Inlet 1: stride <int> distance (default:40);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

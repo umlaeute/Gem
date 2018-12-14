@@ -50,12 +50,14 @@ void pix_rgba :: processImage(imageStruct &image)
   // note: [pix_yuv] and [pix_grey] inherit this function from [pix_rgba]
   // thus you shouldn't undefine anything below for performance reasons
 
-  if (image.format==m_image.format)return; // we don't need to convert as we are already there
+  if (image.format==m_image.format) {
+    return;  // we don't need to convert as we are already there
+  }
 
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
 
-  switch (image.format){
+  switch (image.format) {
   case GL_RGBA:
     m_image.fromRGBA(image.data);
     break;
@@ -77,7 +79,7 @@ void pix_rgba :: processImage(imageStruct &image)
   default:
     error("no method for this format !!!");
     error("if you know how to convert this format (%X),\n"
-	 "please contact the authors of this software", image.format);
+          "please contact the authors of this software", image.format);
     return;
   }
 

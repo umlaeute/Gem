@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_GEOS_TEXT_D_H_
-#define _INCLUDE__GEM_GEOS_TEXT_D_H_
+#ifndef _INCLUDE__GEM_GEOS_TEXT3D_H_
+#define _INCLUDE__GEM_GEOS_TEXT3D_H_
 
 #include "Base/TextBase.h"
 
@@ -31,31 +31,31 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN text3d : public TextBase
 {
-    CPPEXTERN_HEADER(text3d, TextBase);
+  CPPEXTERN_HEADER(text3d, TextBase);
 
-    public:
+public:
 
-		//////////
-		// Constructor
-    	text3d(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  text3d(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~text3d();
+  //////////
+  // Destructor
+  virtual ~text3d();
 
 #ifdef FTGL
-	virtual void setFontSize(void);
-	virtual FTFont* selectFont(void);
-	virtual FTFont*makeFont(const char*fontname);
-	FTGLTextureFont*m_aafont;
-	FTGLPolygonFont*m_pyfont;
+  virtual void setFontSize(void);
+  virtual FTFont* selectFont(void);
+  virtual FTFont*makeFont(const char*fontname);
+  FTGLTextureFont*m_aafont;
+  FTGLPolygonFont*m_pyfont;
 #endif
-	//////
-	// anti aliasing (aka: pixmap instead of bitmap)
-	bool m_antialias;
-	void aliasMess(int io);
+  //////
+  // anti aliasing (aka: pixmap instead of bitmap)
+  bool m_antialias;
+  void aliasMess(int io);
 };
 
-#endif	// for header file
+#endif  // for header file

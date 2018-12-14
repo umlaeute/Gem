@@ -20,7 +20,7 @@ LOG
 
 #include "Utils/Vector.h"
 
-#define PI	3.1415926535897932384626433832795
+#define PI      3.1415926535897932384626433832795
 
 #ifndef _WIN32
 using namespace std;
@@ -41,104 +41,104 @@ DESCRIPTION
 class GEM_EXTERN camera : public GemBase
 //class GEM_EXTERN camera : public CPPExtern
 {
-    CPPEXTERN_HEADER(camera, GemBase);
-    //CPPEXTERN_HEADER(camera, CPPExtern);
+  CPPEXTERN_HEADER(camera, GemBase);
+  //CPPEXTERN_HEADER(camera, CPPExtern);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	camera(int argc, t_atom *argv);
-	//CCamera	g_Camera;
+  //////////
+  // Constructor
+  camera(int argc, t_atom *argv);
+  //CCamera       g_Camera;
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~camera();
+  //////////
+  // Destructor
+  virtual ~camera();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Angles changed
-    	void	    	hAngleMess(float val);
-    	void	    	vAngleMess(float val);
-	void	    	distanceMess(float val);
+  //////////
+  // Angles changed
+  void            hAngleMess(float val);
+  void            vAngleMess(float val);
+  void            distanceMess(float val);
 
-    	//////////
-    	// roll value changed
-    	void	    	rollMess(float val);
+  //////////
+  // roll value changed
+  void            rollMess(float val);
 
-    	//////////
-    	// value changed
-    	void	    	forwardMess(float val);
-	void	    	reverseMess(float val);
+  //////////
+  // value changed
+  void            forwardMess(float val);
+  void            reverseMess(float val);
 
-    	//////////
-    	// Pitch value changed
-    	void	    	leftMess(bool val);
-	void		rightMess(bool val);
-    	void	    	slideLeftMess(bool val);
-	void		slideRightMess(bool val);
-    	//////////
-    	// roll value changed
-    	void	    	upMess(bool val);
-	void		downMess( bool val );
-	void		resetState();
+  //////////
+  // Pitch value changed
+  void            leftMess(bool val);
+  void            rightMess(bool val);
+  void            slideLeftMess(bool val);
+  void            slideRightMess(bool val);
+  //////////
+  // roll value changed
+  void            upMess(bool val);
+  void            downMess( bool val );
+  void            resetState();
 
-	int	left, right, up, down, forward, reverse, m_mode;
-	float	lookX, lookY, lookZ, m_speed;
-	float 	hAngle, vAngle, distance;
-	int	slideLeft, slideRight;
+  int     left, right, up, down, forward, reverse, m_mode;
+  float   lookX, lookY, lookZ, m_speed;
+  float   hAngle, vAngle, distance;
+  int     slideLeft, slideRight;
 
-	// This changes the position, view, and up vector of the camera.
-	// (Used for initialization)
-	void PositionCamera(float positionX, float positionY, float positionZ,
-			    float viewX,     float viewY,     float viewZ,
-			    float upVectorX, float upVectorY, float upVectorZ);
+  // This changes the position, view, and up vector of the camera.
+  // (Used for initialization)
+  void PositionCamera(float positionX, float positionY, float positionZ,
+                      float viewX,     float viewY,     float viewZ,
+                      float upVectorX, float upVectorY, float upVectorZ);
 
-	// This rotates the camera's view around the position using axis-angle rotation
-	void RotateView(float angle, float x, float y, float z);
+  // This rotates the camera's view around the position using axis-angle rotation
+  void RotateView(float angle, float x, float y, float z);
 
-	// This will move the camera forward or backward depending on the speed
-	void MoveCamera( float speed );
-	void SlideCamera( float speed );
-	void calcCameraVals( void );
-	void calcUpVector( void );
-	void incHRot( float val );
-	void decHRot( float val );
-	void incVRot( float val );
-	void decVRot( float val );
+  // This will move the camera forward or backward depending on the speed
+  void MoveCamera( float speed );
+  void SlideCamera( float speed );
+  void calcCameraVals( void );
+  void calcUpVector( void );
+  void incHRot( float val );
+  void decHRot( float val );
+  void incVRot( float val );
+  void decVRot( float val );
 
 
-    private:
+private:
 
-	CVector3 m_vPosition;                   // The camera's position
-	CVector3 m_vView;                       // The camera's View
-	CVector3 m_vUpVector;                   // The camera's UpVector
-	CVector3 m_vSlide;			// The camera's slide
+  CVector3 m_vPosition;                   // The camera's position
+  CVector3 m_vView;                       // The camera's View
+  CVector3 m_vUpVector;                   // The camera's UpVector
+  CVector3 m_vSlide;                      // The camera's slide
 
-    	//////////
-    	// static member functions
-    	static void 	hAngleMessCallback(void *data, t_float val);
-    	static void 	vAngleMessCallback(void *data, t_float val);
-    	static void 	distanceMessCallback(void *data, t_float val);
-    	static void 	speedMessCallback(void *data, t_float val);
-    	static void 	forwardMessCallback(void *data, t_float val);
-	static void	reverseMessCallback(void *data, t_float val);
-    	static void 	leftMessCallback(void *data, t_float val);
-	static void 	rightMessCallback(void *data, t_float val);
-    	static void 	slideLeftMessCallback(void *data, t_float val);
-	static void 	slideRightMessCallback(void *data, t_float val);
-    	static void 	upMessCallback(void *data, t_float val);
-	static void 	downMessCallback(void *data, t_float val);
-	static void 	resetMessCallback(void *);
-	static void 	modeMessCallback(void *data, t_float val);
-	static void 	lookXMessCallback(void *data, t_float val);
-    	static void 	lookYMessCallback(void *data, t_float val);
-	static void 	lookZMessCallback(void *data, t_float val);
+  //////////
+  // static member functions
+  static void     hAngleMessCallback(void *data, t_float val);
+  static void     vAngleMessCallback(void *data, t_float val);
+  static void     distanceMessCallback(void *data, t_float val);
+  static void     speedMessCallback(void *data, t_float val);
+  static void     forwardMessCallback(void *data, t_float val);
+  static void     reverseMessCallback(void *data, t_float val);
+  static void     leftMessCallback(void *data, t_float val);
+  static void     rightMessCallback(void *data, t_float val);
+  static void     slideLeftMessCallback(void *data, t_float val);
+  static void     slideRightMessCallback(void *data, t_float val);
+  static void     upMessCallback(void *data, t_float val);
+  static void     downMessCallback(void *data, t_float val);
+  static void     resetMessCallback(void *);
+  static void     modeMessCallback(void *data, t_float val);
+  static void     lookXMessCallback(void *data, t_float val);
+  static void     lookYMessCallback(void *data, t_float val);
+  static void     lookZMessCallback(void *data, t_float val);
 };
 
-#endif	// for header file
+#endif  // for header file

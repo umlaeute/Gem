@@ -30,31 +30,34 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN textextruded : public TextBase
 {
-    CPPEXTERN_HEADER(textextruded, TextBase);
+  CPPEXTERN_HEADER(textextruded, TextBase);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    textextruded(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  textextruded(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~textextruded();
+  //////////
+  // Destructor
+  virtual ~textextruded();
 
 #ifdef FTGL
-    virtual FTFont*makeFont(const char*fontname);
+  virtual FTFont*makeFont(const char*fontname);
 #else
-    virtual void    destroyFont(){}
-    virtual int     makeFontFromFace(){return 0;}
-    virtual void    render(GemState*){}
+  virtual void    destroyFont() {}
+  virtual int     makeFontFromFace()
+  {
+    return 0;
+  }
+  virtual void    render(GemState*) {}
 #endif
 
-    //////////
-    // Set the precision for rendering
-    virtual void	setDepth(float depth);
+  //////////
+  // Set the precision for rendering
+  virtual void        setDepth(float depth);
 };
 
-#endif	// for header file
+#endif  // for header file

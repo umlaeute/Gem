@@ -40,12 +40,12 @@ class GEM_EXTERN pqtorusknots : public GemShape
 {
   CPPEXTERN_HEADER(pqtorusknots, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   pqtorusknots(t_floatarg m_P, t_floatarg m_Q);
- protected:
+protected:
 
   //////////
   // Destructor
@@ -54,65 +54,65 @@ class GEM_EXTERN pqtorusknots : public GemShape
 
   //////////
   // The variables of the object
-  void	    	scaleMess(float size);
-  void	    	stepsMess(int size);
-  void	    	facetsMess(int size);
-  void	    	thickMess(float size);
-  virtual void	clumpMess(float clumps, float clumpOffset, float clumpScale);
-  virtual void	uvScaleMess(float uScale, float vScale);
-  virtual void	pqMess(float p, float q);
+  void          scaleMess(float size);
+  void          stepsMess(int size);
+  void          facetsMess(int size);
+  void          thickMess(float size);
+  virtual void  clumpMess(float clumps, float clumpOffset, float clumpScale);
+  virtual void  uvScaleMess(float uScale, float vScale);
+  virtual void  pqMess(float p, float q);
 
   // setup the vertices and normals and...
   virtual void genVert();
 
   //////////
   // Do the renderShapeing
-  virtual void 	renderShape(GemState *state);
-  virtual void 	postrenderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
+  virtual void  postrenderShape(GemState *state);
 
   //////////
   // Number of steps in the torus knot
-  GLint	    	m_steps;
+  GLint         m_steps;
 
   //////////
   // Number of facets in the torus knot
-  GLint	    	m_facets;
+  GLint         m_facets;
 
   //////////
   // The scale of the object
-  GLfloat	m_scale;
+  GLfloat       m_scale;
 
   //////////
   // The thickness of the knot
-  GLfloat	m_thickness;
+  GLfloat       m_thickness;
 
   //////////
   // The thickness of the knot
-  GLfloat	m_clumps;
-  GLfloat	m_clumpOffset;
-  GLfloat	m_clumpScale;
+  GLfloat       m_clumps;
+  GLfloat       m_clumpOffset;
+  GLfloat       m_clumpScale;
 
   //////////
   // The coordinate scale of the knot
-  GLfloat	m_uScale;
-  GLfloat	m_vScale;
+  GLfloat       m_uScale;
+  GLfloat       m_vScale;
 
   //////////
   // The thickness of the knot
-  GLfloat	m_P;
-  GLfloat	m_Q;
+  GLfloat       m_P;
+  GLfloat       m_Q;
 
   //////////
   // Vertex Array Stuff
   GLfloat*      m_Vertex;
-  GLfloat*	m_Normal;
-  GLfloat*	m_Texcoord[4];
+  GLfloat*      m_Normal;
+  GLfloat*      m_Texcoord[4];
   GLfloat*      m_texcoords;
-  GLuint*	m_Index;
-  int		m_Indices;
-  int		m_Vertices;
-  int		m_PrimitiveType;
+  GLuint*       m_Index;
+  int           m_Indices;
+  int           m_Vertices;
+  int           m_PrimitiveType;
 
 };
 
-#endif	// for header file
+#endif  // for header file

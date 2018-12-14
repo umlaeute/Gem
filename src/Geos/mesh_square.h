@@ -34,38 +34,38 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN mesh_square : public GemShape
 {
-    CPPEXTERN_HEADER(mesh_square, GemShape);
+  CPPEXTERN_HEADER(mesh_square, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	mesh_square(t_floatarg sizeX,t_floatarg sizeY);
+  //////////
+  // Constructor
+  mesh_square(t_floatarg sizeX,t_floatarg sizeY);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~mesh_square(void);
+  //////////
+  // Destructor
+  virtual ~mesh_square(void);
 
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    renderShape(GemState *state);
 
-	void	setSize( int valueX, int valueY );
-	void	setSize( int valueXY );
-	void    setGridX(int valX);
-	void    setGridY(int valY);
-	void	getTexCoords(void);
+  void    setSize( int valueX, int valueY );
+  void    setSize( int valueXY );
+  void    setGridX(int valX);
+  void    setGridY(int valY);
+  void    getTexCoords(void);
 
-	//////////
-	// getStuff
-	int 		gridX, gridY;
-	float		xsize, xsize0, ysize, ysize0;
-	int 		alreadyInit;
+  //////////
+  // getStuff
+  int             gridX, gridY;
+  float           xsize, xsize0, ysize, ysize0;
+  int             alreadyInit;
 
-	std::vector<std::vector<std::vector<float> > >		texCoords;
+  std::vector<std::vector<std::vector<float> > >          texCoords;
 };
 
-#endif	// for header file
+#endif  // for header file

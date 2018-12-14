@@ -85,7 +85,7 @@
 #X obj 101 348 gemlist_info;
 #X obj 472 320 gemlist_matrix;
 #X text 14 351 see also :;
-#X text 29 77 Description: get curent transformation matrix of a gemlist
+#X text 29 77 Description: get current transformation matrix of a gemlist
 ;
 #X msg 496 378 \$1 \$2 \$3;
 #X msg 503 398 \$5 \$6 \$7;

@@ -42,13 +42,13 @@ class GEM_EXTERN pix_image : public GemBase
 {
   CPPEXTERN_HEADER(pix_image, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_image(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -56,36 +56,36 @@ class GEM_EXTERN pix_image : public GemBase
 
   //////////
   // When an open is received
-  virtual void	openMess(std::string filename);
+  virtual void  openMess(std::string filename);
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
-  virtual void	startRendering();
+  virtual void  startRendering();
 
   //////////
   // Clean up the image and the pixBlock
-  void	    	cleanImage();
+  void          cleanImage();
 
   //-----------------------------------
-  // GROUP:	Image data
+  // GROUP:     Image data
   //-----------------------------------
 
   //////////
   // do we want threaded reading (default: yes);
-  virtual void	threadMess(bool onoff);
-	bool m_wantThread;
+  virtual void  threadMess(bool onoff);
+  bool m_wantThread;
 
   //////////
   // the full filename of the image
-	std::string            m_filename;
-	gem::image::load::id_t m_id;
+  std::string            m_filename;
+  gem::image::load::id_t m_id;
 
   //////////
   // The original image
@@ -93,23 +93,23 @@ class GEM_EXTERN pix_image : public GemBase
 
   //////////
   // The pixBlock with the current image
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
 
-	void     loaded(const gem::image::load::id_t ID,
+  void     loaded(const gem::image::load::id_t ID,
                   imageStruct*img,
                   const gem::Properties&props);
 
 
   gem::RTE::Outlet m_infoOut;
 
- private:
+private:
 
   //////////
   // static member functions
-	static void     loadCallback(void*data,
+  static void     loadCallback(void*data,
                                gem::image::load::id_t ID,
                                imageStruct*img,
                                const gem::Properties&props);
 };
 
-#endif	// for header file
+#endif  // for header file

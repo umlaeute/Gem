@@ -1,0 +1,17 @@
+# model loading
+@MINGW@assimp
+
+# windowing
+@MINGW@glfw
+
+# font renderind
+@MINGW@ftgl
+@MINGW@fribidi
+
+# image reading
+@MINGW@imagemagick
+@MINGW@libtiff
+@MINGW@libjpeg-turbo
+
+# video input
+@MINGW@libvncserver

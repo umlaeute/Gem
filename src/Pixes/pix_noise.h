@@ -47,79 +47,79 @@ class GEM_EXTERN pix_noise : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_noise, GemPixObj);
 
- public:
+public:
 
-	//////////
-	// Constructor
-	pix_noise(t_floatarg xsize, t_floatarg ysize);
+  //////////
+  // Constructor
+  pix_noise(t_floatarg xsize, t_floatarg ysize);
 
- protected:
+protected:
 
-	//////////
-	// Destructor
-	virtual ~pix_noise(void);
+  //////////
+  // Destructor
+  virtual ~pix_noise(void);
 
-	//////////
-	// Do the rendering
-	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-	//////////
-	// Clear the dirty flag on the pixBlock
-	virtual void 	postrender(GemState *state);
+  //////////
+  // Clear the dirty flag on the pixBlock
+  virtual void    postrender(GemState *state);
 
-	//////////
-	virtual void	startRendering(void);
+  //////////
+  virtual void    startRendering(void);
 
-	//////////
-	// Clean up the pixBlock
-	void	    	cleanPixBlock(void);
+  //////////
+  // Clean up the pixBlock
+  void            cleanPixBlock(void);
 
-	//////////
-	// Generate noise texture
-	void	    	generateNoise(void);
-	//////////
-	// initialize random generator
-	void	    	initRandom(int seed);
-	//////////
-	// compute random
-	unsigned char	random(void);
+  //////////
+  // Generate noise texture
+  void            generateNoise(void);
+  //////////
+  // initialize random generator
+  void            initRandom(int seed);
+  //////////
+  // compute random
+  unsigned char   random(void);
 
-	//////////
-	// trigger new images
-	void	    	bang(void);
-	void	    	autoMess(bool);
-	void        seed(int);
-	void	    	debug(void);
+  //////////
+  // trigger new images
+  void            bang(void);
+  void            autoMess(bool);
+  void        seed(int);
+  void            debug(void);
 
-	//////////
-	// Set color mode
-	void	    	RGBAMess(void);
-	void	    	RGBMess(void);
-	void	    	GREYMess(void);
-	//////////
-	// Set a new image size
-	void	    	SETMess(int xsize, int ysize);
+  //////////
+  // Set color mode
+  void            RGBAMess(void);
+  void            RGBMess(void);
+  void            GREYMess(void);
+  //////////
+  // Set a new image size
+  void            SETMess(int xsize, int ysize);
 
-	//////////
-	// Manual writing
-	bool            m_banged;
+  //////////
+  // Manual writing
+  bool            m_banged;
 
-	//////////
-	// Automatic writing
-	bool            m_automatic;
+  //////////
+  // Automatic writing
+  bool            m_automatic;
 
-	//////////
-	// paint mode
-	int 	    	m_mode;
+  //////////
+  // paint mode
+  int             m_mode;
 
-	//////////
-	// internal random value
-	int				m_rand[55];
-	int				m_rand_p,m_rand_k;
+  //////////
+  // internal random value
+  int                             m_rand[55];
+  int                             m_rand_p,m_rand_k;
 
-	//////////
-	// The pixBlock with the current image
-	pixBlock    	m_pixBlock;
+  //////////
+  // The pixBlock with the current image
+  pixBlock        m_pixBlock;
 };
 
-#endif	// for header file
+#endif  // for header file

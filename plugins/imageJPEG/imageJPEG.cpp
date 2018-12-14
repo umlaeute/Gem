@@ -59,7 +59,7 @@ REGISTER_IMAGESAVERFACTORY("jpeg", imageJPEG);
 /***************************************************************************
  *
  * We have to do some funky error handling to keep the jpeg library
- *		from exiting on us.
+ *              from exiting on us.
  *
  ***************************************************************************/
 
@@ -68,10 +68,9 @@ REGISTER_IMAGESAVERFACTORY("jpeg", imageJPEG);
  * Here is the error handler
  *
  *****************************/
-struct my_error_mgr
-{
-  struct jpeg_error_mgr pub;	// "public" fields
-  jmp_buf setjmp_buffer;	// for return to caller
+struct my_error_mgr {
+  struct jpeg_error_mgr pub;    // "public" fields
+  jmp_buf setjmp_buffer;        // for return to caller
 };
 
 typedef struct my_error_mgr * my_error_ptr;
@@ -94,24 +93,23 @@ METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 
 imageJPEG :: imageJPEG(void)
 {
-  //post("imageJPEG");
 }
 imageJPEG :: ~imageJPEG(void)
 {
-  //post("~imageJPEG");
 }
 
 /////////////////////////////////////////////////////////
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageJPEG :: load(std::string filename, imageStruct&result,
+                       gem::Properties&props)
 {
   // open up the file
   FILE * infile;
-  ::verbose(2, "reading '%s' with libJPEG", filename.c_str());
   if ((infile = fopen(filename.c_str(), "rb")) == NULL) {
-    //verbose(2, "GemImageLoad(JPEG): Unable to open image file: %s", filename.c_str());
+    fprintf(stderr, "[GEM:imageJPEG] Unable to open image file: %s\n",
+            filename.c_str());
     return(false);
   }
 
@@ -179,12 +177,12 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
       jpeg_read_scanlines(&cinfo, &src, 1);
       pixes = xSize;
       while (pixes--) {
-	dst[chRed]   = src[0];
-	dst[chGreen] = src[1];
-	dst[chBlue]  = src[2];
-	dst[chAlpha] = 255;
-	dst += 4;
-	src += 3;
+        dst[chRed]   = src[0];
+        dst[chGreen] = src[1];
+        dst[chBlue]  = src[2];
+        dst[chAlpha] = 255;
+        dst += 4;
+        src += 3;
       }
       dstLine += yStride;
     }
@@ -196,7 +194,7 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
       jpeg_read_scanlines(&cinfo, &src, 1);
       pixes = xSize;
       while (pixes--) {
-	*dst++ = *src++;
+        *dst++ = *src++;
       }
       dstLine += yStride;
     }
@@ -212,13 +210,16 @@ bool imageJPEG :: load(std::string filename, imageStruct&result, gem::Properties
 
   return true;
 }
-bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+bool imageJPEG::save(const imageStruct&constimage,
+                     const std::string&filename, const std::string&mimetype,
+                     const gem::Properties&props)
+{
   struct jpeg_compress_struct cinfo;
 
   /* More stuff */
-  FILE * outfile=NULL;		/* target file */
-  JSAMPROW row_pointer;	/* pointer to JSAMPLE row[s] */
-  int row_stride;		/* physical row width in image buffer */
+  FILE * outfile=NULL;          /* target file */
+  JSAMPROW row_pointer; /* pointer to JSAMPLE row[s] */
+  int row_stride;               /* physical row width in image buffer */
 
   // We set up the normal JPEG error routines, then override error_exit
   my_error_mgr jerr;
@@ -230,19 +231,21 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
     // If we get here, the JPEG code has signaled an error.
     // We need to clean up the JPEG object, close the input file, and return.
     jpeg_destroy_compress(&cinfo);
-    if(outfile)
+    if(outfile) {
       fclose(outfile);
+    }
     return(false);
   }
 
   double fquality=100;
   int quality=fquality;
 
-  if(props.get("quality", fquality))
-     quality=fquality;
+  if(props.get("quality", fquality)) {
+    quality=fquality;
+  }
 
   if(GL_YUV422_GEM==constimage.format) {
-    error("don't know how to write YUV-images with libJPEG");
+    fprintf(stderr, "[GEM:imageJPEG] don't know how to write YUV-images\n");
     return false;
   }
 
@@ -250,7 +253,7 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   jpeg_create_compress(&cinfo);
 
   if ((outfile = fopen(filename.c_str(), "wb")) == NULL) {
-    error("can't open %s\n", filename.c_str());
+    fprintf(stderr, "[GEM:imageJPEG] can't open %s\n", filename.c_str());
     return (false);
   }
   jpeg_stdio_dest(&cinfo, outfile);
@@ -260,16 +263,19 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
 
-  cinfo.image_width = image.xsize; 	/* image width and height, in pixels */
+  cinfo.image_width =
+    image.xsize;      /* image width and height, in pixels */
   cinfo.image_height = image.ysize;
-  cinfo.input_components = 3;		/* # of color components per pixel */
-  cinfo.in_color_space = JCS_RGB; 	/* colorspace of input image */
+  cinfo.input_components = 3;           /* # of color components per pixel */
+  cinfo.in_color_space = JCS_RGB;       /* colorspace of input image */
 
   jpeg_set_defaults(&cinfo);
-  jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
+  jpeg_set_quality(&cinfo, quality,
+                   TRUE /* limit to baseline-JPEG values */);
   jpeg_start_compress(&cinfo, TRUE);
 
-  row_stride = image.xsize * image.csize;	/* JSAMPLEs per row in image_buffer */
+  row_stride = image.xsize *
+               image.csize;       /* JSAMPLEs per row in image_buffer */
 
   while (cinfo.next_scanline < cinfo.image_height) {
     /* jpeg_write_scanlines expects an array of pointers to scanlines.
@@ -277,12 +283,14 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
      * more than one scanline at a time if that's more convenient.
      */
     int rowindex=cinfo.next_scanline;
-    if(!image.upsidedown)
+    if(!image.upsidedown) {
       rowindex=(cinfo.image_height-cinfo.next_scanline-1);
+    }
     row_pointer = & image_buffer[rowindex * row_stride];
 
-    if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) <= 0){
-      error("GEM: could not write line %d to image %s", cinfo.next_scanline, filename.c_str());
+    if(jpeg_write_scanlines(&cinfo, &row_pointer, 1) <= 0) {
+      fprintf(stderr, "[GEM:imageJPEG] could not write line %d to image %s\n",
+              cinfo.next_scanline, filename.c_str());
       jpeg_finish_compress(&cinfo);
       fclose(outfile);
       jpeg_destroy_compress(&cinfo);
@@ -297,19 +305,26 @@ bool imageJPEG::save(const imageStruct&constimage, const std::string&filename, c
   return true;
 }
 
-float imageJPEG::estimateSave(const imageStruct&img, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
+float imageJPEG::estimateSave(const imageStruct&img,
+                              const std::string&filename, const std::string&mimetype,
+                              const gem::Properties&props)
+{
   float result=0.;
-  if(mimetype == "image/jpeg")// || mimetype == "image/pjpeg")
+  if(mimetype == "image/jpeg") { // || mimetype == "image/pjpeg")
     result += 100.;
+  }
 
   // LATER check some properties....
-  if(gem::Properties::UNSET != props.type("quality"))
+  if(gem::Properties::UNSET != props.type("quality")) {
     result += 1.;
+  }
 
   return result;
 }
 
-void imageJPEG::getWriteCapabilities(std::vector<std::string>&mimetypes, gem::Properties&props) {
+void imageJPEG::getWriteCapabilities(std::vector<std::string>&mimetypes,
+                                     gem::Properties&props)
+{
   mimetypes.clear();
   props.clear();
 

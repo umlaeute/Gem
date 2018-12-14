@@ -22,7 +22,8 @@
 #include "RTE/RTE.h"
 
 
-class gem::RTE::Array::PIMPL {
+class gem::RTE::Array::PIMPL
+{
 public:
   t_float f;
   t_garray*A;
@@ -39,21 +40,26 @@ public:
     name(std::string())
   {
   }
-  ~PIMPL(void) {
+  ~PIMPL(void)
+  {
   }
 
-  bool check(void) {
+  bool check(void)
+  {
     pointer=NULL;
     length=0;
     A=NULL;
 
     A = (t_garray *)pd_findbyclass(gensym(name.c_str()), garray_class);
-    if(!A)return false;
+    if(!A) {
+      return false;
+    }
 
     int size=0;
     t_word *words;
-    if(!garray_getfloatwords(A, &size, &words))
+    if(!garray_getfloatwords(A, &size, &words)) {
       return false;
+    }
 
     length=size;
     pointer=words;
@@ -61,17 +67,21 @@ public:
     return true;
   }
 
-  bool setName(const std::string&s) {
+  bool setName(const std::string&s)
+  {
     name=s;
     return check();
   }
 
-  inline t_float&get(const unsigned int&index) {
-    if(pointer)
+  inline t_float&get(const unsigned int&index)
+  {
+    if(pointer) {
       return pointer[index].w_float;
+    }
 
-    else
+    else {
       return f;
+    }
   }
 };
 
@@ -105,50 +115,59 @@ gem::RTE::Array& gem::RTE::Array :: operator=(const gem::RTE::Array&org)
 }
 
 
-bool gem::RTE::Array :: isValid(void) {
+bool gem::RTE::Array :: isValid(void)
+{
   return m_pimpl->check();
 }
 
-bool gem::RTE::Array :: name(const std::string&s) {
+bool gem::RTE::Array :: name(const std::string&s)
+{
   return m_pimpl->setName(s);
 }
-const std::string gem::RTE::Array :: name(void) {
+const std::string gem::RTE::Array :: name(void)
+{
   return m_pimpl->name;
 }
 typedef void (*rte_resize_t)(t_garray *x, long n);
-bool gem::RTE::Array :: resize(const size_t newsize) {
+bool gem::RTE::Array :: resize(const size_t newsize)
+{
   if(m_pimpl->A) {
     static rte_resize_t rte_resize=NULL;
     static bool rte_resize_checked=false;
     if(false==rte_resize_checked) {
       gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
       if(rte) {
-	rte_resize=(rte_resize_t)rte->getFunction("garray_resize_long");
+        rte_resize=(rte_resize_t)rte->getFunction("garray_resize_long");
       }
     }
     rte_resize_checked=true;
-    if(rte_resize)
+    if(rte_resize) {
       rte_resize(m_pimpl->A, newsize);
-    else
+    } else {
       garray_resize(m_pimpl->A, newsize);
+    }
 
     return (size()==newsize);
   }
 
   return false;
 }
-size_t gem::RTE::Array :: size(void) {
+size_t gem::RTE::Array :: size(void)
+{
   m_pimpl->check();
   return m_pimpl->length;
 }
 
-t_float&gem::RTE::Array :: operator[](const unsigned int&index) {
+t_float&gem::RTE::Array :: operator[](const unsigned int&index)
+{
   return m_pimpl->get(index);
 }
 
-void gem::RTE::Array :: set(const t_float f) {
-  if(!m_pimpl->check())
+void gem::RTE::Array :: set(const t_float f)
+{
+  if(!m_pimpl->check()) {
     return;
+  }
 
   t_word*wp=m_pimpl->pointer;
   unsigned int i;

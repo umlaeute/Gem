@@ -44,13 +44,13 @@ class GEM_EXTERN pix_videoOS : public GemBase
 {
   CPPEXTERN_HEADER(pix_videoOS, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_videoOS(t_floatarg num = 0);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -58,68 +58,69 @@ class GEM_EXTERN pix_videoOS : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Clean up the pixBlock
-  void	    	cleanPixBlock();
+  void          cleanPixBlock();
 
   //////////
   // Set the video dimensions
-  virtual void	dimenMess(int x, int y, int leftmargin = 0, int rightmargin = 0 ,
-			  int topmargin = 0 , int bottommargin = 0) {}
+  virtual void  dimenMess(int x, int y, int leftmargin = 0,
+                          int rightmargin = 0,
+                          int topmargin = 0, int bottommargin = 0) {}
 
   //////////
   // Set the video offset
-  virtual void	offsetMess(int x, int y);
+  virtual void  offsetMess(int x, int y);
 
   //////////
   // Start up the video device
   // [out] int - returns 0 if bad
-  virtual int	startTransfer();
+  virtual int   startTransfer();
 
   //////////
   // Stop the video device
   // [out] int - returns 0 if bad
-  virtual int	stopTransfer();
+  virtual int   stopTransfer();
 
   //////////
   // swap the image (upside down ?)
-  virtual void	swapMess(int state);
+  virtual void  swapMess(int state);
 
   //////////
   // enumerate the devices
-  virtual void	enumerateMess();
+  virtual void  enumerateMess();
   //////////
   // colorspace-message
-  virtual void	csMess(int format);
-  virtual void	csMess(t_symbol*format);
+  virtual void  csMess(int format);
+  virtual void  csMess(t_symbol*format);
   //////////
   // property-dialog
-  virtual void	dialogMess(int,t_atom*);
+  virtual void  dialogMess(int,t_atom*);
 
   //-----------------------------------
-  // GROUP:	Video data
+  // GROUP:     Video data
   //-----------------------------------
 
   //////////
   // If video is connected
-  int 	    	m_haveVideo;
+  int           m_haveVideo;
 
   //////////
   // The pixBlock with the current image
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
   imageStruct   m_imageStruct;
 
   //////////
   // Should swap the pixels?
-  int 	    	m_swap;
+  int           m_swap;
 
   //////////
   // Do we have to color swap?
-  int 	    	m_colorSwap;
+  int           m_colorSwap;
 
- private:
+private:
 
   //////////
   // static member functions
@@ -134,4 +135,4 @@ class GEM_EXTERN pix_videoOS : public GemBase
   static void csMessCallback(void *data, t_symbol*colorspace);
 };
 
-#endif	// for header file
+#endif  // for header file

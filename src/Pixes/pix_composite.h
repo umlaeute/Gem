@@ -33,27 +33,30 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_composite : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_composite, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_composite, GemPixDualObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_composite();
+  //////////
+  // Constructor
+  pix_composite();
 
- protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~pix_composite();
+  //////////
+  // Destructor
+  virtual ~pix_composite();
 
-    //////////
-    // Do the processing
-    virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-    virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void        processRGBA_RGBA(imageStruct &image,
+                                       imageStruct &right);
+  virtual void        processRGBA_Gray(imageStruct &image,
+                                       imageStruct &right);
 #ifdef __MMX__
-    virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
+  virtual void        processRGBA_MMX(imageStruct &image,
+                                      imageStruct &right);
 #endif
 };
 
-#endif	// for header file
+#endif  // for header file

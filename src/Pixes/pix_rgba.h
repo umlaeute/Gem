@@ -36,26 +36,26 @@ DESCRIPTION
 
 class GEM_EXTERN pix_rgba : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_rgba, GemPixObj);
+  CPPEXTERN_HEADER(pix_rgba, GemPixObj);
 
-    public:
+public:
 
-    //////////
-    // Constructor
-    pix_rgba();
+  //////////
+  // Constructor
+  pix_rgba();
 
- protected:
+protected:
 
-    //////////
-    // Destructor
-    virtual ~pix_rgba();
+  //////////
+  // Destructor
+  virtual ~pix_rgba();
 
-    //////////
-    // Do the processing
-    void 	processImage(imageStruct &image);
+  //////////
+  // Do the processing
+  void        processImage(imageStruct &image);
 
-    imageStruct m_image;
- private:
+  imageStruct m_image;
+private:
 };
 
-#endif	// for header file
+#endif  // for header file

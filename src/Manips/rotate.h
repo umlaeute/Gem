@@ -35,39 +35,39 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rotate : public GemBase
 {
-    CPPEXTERN_HEADER(rotate, GemBase);
+  CPPEXTERN_HEADER(rotate, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	rotate(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  rotate(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~rotate();
+  //////////
+  // Destructor
+  virtual ~rotate();
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The rotation angle
-    	float	    	m_angle;
+  //////////
+  // The rotation angle
+  float           m_angle;
 
-    	//////////
-    	// The rotation values (x, y, z)
-    	float	    	m_vector[3];
+  //////////
+  // The rotation values (x, y, z)
+  float           m_vector[3];
 
-    	//////////
-    	// Angle changed
-    	void	    	angleMess(float angle);
+  //////////
+  // Angle changed
+  void            angleMess(float angle);
 
-    	//////////
-    	// Vector changed
-    	void	    	vectorMess(float x, float y, float z);
+  //////////
+  // Vector changed
+  void            vectorMess(float x, float y, float z);
 };
 
-#endif	// for header file
+#endif  // for header file

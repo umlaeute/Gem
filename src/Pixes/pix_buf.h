@@ -32,50 +32,50 @@ KEYWORDS
 
 DESCRIPTION
     This makes an assumption that the size of the image doesn't
-    	change once the rendering has started
+        change once the rendering has started
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buf : public GemBase
 {
-    CPPEXTERN_HEADER(pix_buf, GemBase);
+  CPPEXTERN_HEADER(pix_buf, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_buf(t_floatarg);
+  //////////
+  // Constructor
+  pix_buf(t_floatarg);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_buf();
+  //////////
+  // Destructor
+  virtual ~pix_buf();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// After the rendering
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // After the rendering
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// Clean everything up
-    	void	    	cleanImage();
+  //////////
+  // Clean everything up
+  void            cleanImage();
 
-	//////////
-	// the pixBlock-cache
-	pixBlock    cachedPixBlock;
-	pixBlock    *orgPixBlock;
+  //////////
+  // the pixBlock-cache
+  pixBlock    cachedPixBlock;
+  pixBlock    *orgPixBlock;
 
-	//////////
-	// force output of the buffer:
-	void            bangMess();
-	bool            m_banged;
+  //////////
+  // force output of the buffer:
+  void            bangMess();
+  bool            m_banged;
 
-	void            autoMess(int);
-	bool            m_auto;
+  void            autoMess(int);
+  bool            m_auto;
 
 };
 
-#endif	// for header file
+#endif  // for header file

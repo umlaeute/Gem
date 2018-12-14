@@ -40,7 +40,8 @@ gemlist :: gemlist(void)
     m_inlet(NULL)
 {
   // create the cold inlet
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"), gensym("gem_right"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("gem_state"),
+                      gensym("gem_right"));
 }
 
 ////////////////////////////////////////////////////////
@@ -49,8 +50,14 @@ gemlist :: gemlist(void)
 /////////////////////////////////////////////////////////
 gemlist :: ~gemlist()
 {
-  if(m_mycache)delete m_mycache; m_mycache=NULL;
-  if(m_inlet)inlet_free(m_inlet); m_inlet=NULL;
+  if(m_mycache) {
+    delete m_mycache;
+  }
+  m_mycache=NULL;
+  if(m_inlet) {
+    inlet_free(m_inlet);
+  }
+  m_inlet=NULL;
 }
 
 /////////////////////////////////////////////////////////
@@ -69,7 +76,7 @@ void gemlist :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void gemlist :: postrender(GemState *)
 {
-  //	m_validState=false;
+  //    m_validState=false;
 
   // this is to early to reset the m_validState
   // when should we call this???
@@ -80,15 +87,16 @@ void gemlist :: sendCacheState(GemCache *cache, GemState*state)
 {
   if  ( !GemMan::windowExists() ) {
     // LATER: shouldn't this test for a valid context rather than an existing window??
-    //	error("you should not bang the gemlist now");
+    //  error("you should not bang the gemlist now");
     return;
   }
 
   if(state) {
     t_atom ap[2];
 
-    if(!cache)
+    if(!cache) {
       cache=m_mycache;
+    }
 
     ap->a_type=A_POINTER;
     ap->a_w.w_gpointer=reinterpret_cast<t_gpointer*>(cache);
@@ -132,24 +140,29 @@ void gemlist :: drawMess(t_atom&arg)
   if(A_SYMBOL==arg.a_type) {
     t_symbol*type=atom_getsymbol(&arg);
     char c=*type->s_name;
-    switch (c){
-    case 'D': case 'd': // default
+    switch (c) {
+    case 'D':
+    case 'd': // default
       m_drawType = GL_DEFAULT_GEM;
       break;
-    case 'L': case 'l': // line
+    case 'L':
+    case 'l': // line
       m_drawType = GL_LINE;
       break;
-    case 'F': case 'f': // fill
+    case 'F':
+    case 'f': // fill
       m_drawType = GL_FILL;
       break;
-    case 'P': case 'p': // point
+    case 'P':
+    case 'p': // point
       m_drawType = GL_POINT;
       break;
     default:
       m_drawType = static_cast<GLenum>(gem::utils::gl::getGLdefine(&arg));
     }
+  } else {
+    m_drawType=atom_getint(&arg);
   }
-  else m_drawType=atom_getint(&arg);
   m_mystate.set(GemState::_GL_DRAWTYPE, m_drawType);
 }
 
@@ -184,18 +197,22 @@ void gemlist :: obj_setupCallback(t_class *classPtr)
 }
 void gemlist :: drawMess(t_symbol*s, int argc, t_atom*argv)
 {
-  if(argc==1)
+  if(argc==1) {
     drawMess(argv[0]);
+  }
 }
 void gemlist::rightMess(t_symbol *s, int argc, t_atom *argv)
 {
   GemCache*cache=NULL;
   GemState*state=NULL;
-  if (argc==1 && argv->a_type==A_FLOAT){
+  if (argc==1 && argv->a_type==A_FLOAT) {
     rightRender(cache, state);
-  } else if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER){
+  } else if (argc==2 && argv->a_type==A_POINTER
+             && (argv+1)->a_type==A_POINTER) {
     cache=reinterpret_cast<GemCache*>(argv->a_w.w_gpointer);
     state=reinterpret_cast<GemState*>((argv+1)->a_w.w_gpointer);
     rightRender( cache, state );
-  } else error("wrong righthand arguments....");
+  } else {
+    error("wrong righthand arguments....");
+  }
 }

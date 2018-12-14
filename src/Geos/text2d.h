@@ -13,8 +13,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_GEOS_TEXT_D_H_
-#define _INCLUDE__GEM_GEOS_TEXT_D_H_
+#ifndef _INCLUDE__GEM_GEOS_TEXT2D_H_
+#define _INCLUDE__GEM_GEOS_TEXT2D_H_
 
 #include "Base/TextBase.h"
 
@@ -30,38 +30,38 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN text2d : public TextBase
 {
-    CPPEXTERN_HEADER(text2d, TextBase);
+  CPPEXTERN_HEADER(text2d, TextBase);
 
-    public:
+public:
 
   /////////
-		// Constructor
-    	text2d(int argc, t_atom *argv);
+  // Constructor
+  text2d(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~text2d();
+  //////////
+  // Destructor
+  virtual ~text2d();
 
-	//////
-	// anti aliasing (aka: pixmap instead of bitmap)
-	bool m_antialias;
-	void aliasMess(int io);
+  //////
+  // anti aliasing (aka: pixmap instead of bitmap)
+  bool m_antialias;
+  void aliasMess(int io);
 
 #ifdef FTGL
-	/////////
-	// Do the rendering
-	virtual void renderLine(const char*line,float dist);
-	virtual void renderLine(const wchar_t*line,float dist);
+  /////////
+  // Do the rendering
+  virtual void renderLine(const char*line,float dist);
+  virtual void renderLine(const wchar_t*line,float dist);
 
-	virtual void            setFontSize(void);
+  virtual void            setFontSize(void);
 
-	virtual FTFont*	makeFont(const char*fontname);
-	virtual FTFont* selectFont(void);
-	FTGLPixmapFont *m_aafont;
-	FTGLBitmapFont *m_bmfont;
+  virtual FTFont* makeFont(const char*fontname);
+  virtual FTFont* selectFont(void);
+  FTGLPixmapFont *m_aafont;
+  FTGLBitmapFont *m_bmfont;
 #endif
 };
 
-#endif	// for header file
+#endif  // for header file

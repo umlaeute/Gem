@@ -56,13 +56,13 @@ class GEM_EXTERN rubber : public GemShape
 {
   CPPEXTERN_HEADER(rubber, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   rubber( t_floatarg width, t_floatarg height);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -70,49 +70,49 @@ class GEM_EXTERN rubber : public GemShape
 
   //////////
   // The height of the object
-  float		ctrX, ctrY;
-  void		heightMess(float height);
-  void		ctrXMess(float center);
-  void		ctrYMess(float center);
+  float         ctrX, ctrY;
+  void          heightMess(float height);
+  void          ctrXMess(float center);
+  void          ctrYMess(float center);
 
   //////////
   // Do the rendering
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
-  virtual void	rubber_init();
-  virtual void	rubber_dynamics();
-  virtual void	rubber_bang();
-  virtual int	rubber_grab();
+  virtual void  rubber_init();
+  virtual void  rubber_dynamics();
+  virtual void  rubber_bang();
+  virtual int   rubber_grab();
 
   //////////
   // The height of the object
-  GLfloat	    	m_height;
+  GLfloat               m_height;
 
   //////////
   // The height inlet
   t_inlet       *m_inletH;
-  t_inlet		*inletcX;
-  t_inlet		*inletcY;
+  t_inlet               *inletcX;
+  t_inlet               *inletcY;
 
   //////////
   // member variables
 
-  int		m_speed;
+  int           m_speed;
   // index of grabbed mass point
-  int		m_grab;
-  int		m_alreadyInit;
-  float		m_springKS;
-  float		m_drag;
-  float 	xsize, ysize, ysize0;
+  int           m_grab;
+  int           m_alreadyInit;
+  float         m_springKS;
+  float         m_drag;
+  float         xsize, ysize, ysize0;
 
   // number of grid-segments in X/Y direction (defaults: 32);
   int           m_grid_sizeX,m_grid_sizeY;
-  MASS		*m_mass;
-  SPRING	*m_spring;
-  int		m_spring_count;
+  MASS          *m_mass;
+  SPRING        *m_spring;
+  int           m_spring_count;
 
-  void 	dragMess(float);
-  void 	springMess(float);
+  void  dragMess(float);
+  void  springMess(float);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -29,43 +29,44 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPathBase : public CPPExtern
 {
-    CPPEXTERN_HEADER(GemPathBase, CPPExtern);
+  CPPEXTERN_HEADER(GemPathBase, CPPExtern);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	GemPathBase(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  GemPathBase(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~GemPathBase();
+  //////////
+  // Destructor
+  virtual ~GemPathBase();
 
-    	//////////
-    	// When an open is received
-    	virtual void	openMess(t_symbol *arrayname);
+  //////////
+  // When an open is received
+  virtual void    openMess(t_symbol *arrayname);
 
-        //////////
-        // When a float val is received
-        virtual void    floatMess(t_float val);
+  //////////
+  // When a float val is received
+  virtual void    floatMess(t_float val);
 
-	///////////
-	// do the actual interpolation
-	virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts, t_float *pnts) = 0;
+  ///////////
+  // do the actual interpolation
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
+                          t_float *pnts) = 0;
 
-        //////////
-        // The number of dimensions
-        int             m_numDimens;
+  //////////
+  // The number of dimensions
+  int             m_numDimens;
 
-        //////////
-        // The array
-        t_garray         *m_array;
+  //////////
+  // The array
+  t_garray         *m_array;
 
-        //////////
-        // The outlet
-        t_outlet        *m_out1;
+  //////////
+  // The outlet
+  t_outlet        *m_out1;
 };
 
-#endif	// for header file
+#endif  // for header file

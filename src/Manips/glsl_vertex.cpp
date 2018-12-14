@@ -85,15 +85,20 @@ glsl_vertex :: ~glsl_vertex()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: closeMess(void)
 {
-  if(m_shaderString)delete [] m_shaderString;
+  if(m_shaderString) {
+    delete [] m_shaderString;
+  }
   m_shaderString=NULL;
   m_size=0;
-  if(m_shader)
+  if(m_shader) {
     glDeleteShader( m_shader );
-  if(m_shaderARB)
+  }
+  if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
+  }
 
-  m_idmapper.del(m_idmapped);m_idmapped=0.;
+  m_idmapper.del(m_idmapped);
+  m_idmapped=0.;
 
   m_shader=0;
   m_shaderARB = 0;
@@ -109,21 +114,21 @@ bool glsl_vertex :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
-    m_idmapper.del(m_idmapped);m_idmapped=0.;
+    m_idmapper.del(m_idmapped);
+    m_idmapped=0.;
   }
   m_shader = glCreateShader(m_shaderTarget);
 
-  if (!m_shader)
-    {
-      error("could not create GLSL shader object");
-      return false;
-    }
+  if (!m_shader) {
+    error("could not create GLSL shader object");
+    return false;
+  }
   const char * vs = m_shaderString;
   glShaderSource( m_shader, 1, &vs, NULL );
   glCompileShader( m_shader );
   glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
   if (!m_compiled) {
-    GLint	length;
+    GLint       length;
     GLchar* log;
     glGetShaderiv( m_shader, GL_INFO_LOG_LENGTH, &length );
     log = (GLchar*)malloc( length * sizeof(GLchar) );
@@ -147,23 +152,25 @@ bool glsl_vertex :: openMessARB(void)
 {
   if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
-    m_idmapper.del(m_idmapped);m_idmapped=0.;
+    m_idmapper.del(m_idmapped);
+    m_idmapped=0.;
   }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
-  if (!m_shaderARB)
-    {
-      error("could not create ARB shader object");
-      return false;
-    }
+  if (!m_shaderARB) {
+    error("could not create ARB shader object");
+    return false;
+  }
   const char * vs = m_shaderString;
   glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
   glCompileShaderARB( m_shaderARB );
-  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB, &m_compiled );
+  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
+                             &m_compiled );
   if (!m_compiled) {
-    GLint	length;
+    GLint       length;
     GLcharARB* log;
-    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length );
+    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
+                               &length );
     log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
     glGetInfoLogARB( m_shaderARB, length, NULL, log );
     post("compile Info_log:");
@@ -185,18 +192,26 @@ bool glsl_vertex :: openMessARB(void)
 
 void glsl_vertex :: openMess(t_symbol *filename)
 {
-  if(NULL==filename || NULL==filename->s_name)return;
-  if(&s_==filename)return;
+  if(NULL==filename || NULL==filename->s_name) {
+    return;
+  }
+  if(&s_==filename) {
+    return;
+  }
 
   m_shaderFilename=filename;
 
-  if (getState()==RENDERING) loadShader();
+  if (getState()==RENDERING) {
+    loadShader();
+  }
   return;
 }
 
 void glsl_vertex :: loadShader()
 {
-  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name) {
+    return;
+  }
 
   if(!isRunnable()) {
     return;
@@ -212,7 +227,11 @@ void glsl_vertex :: loadShader()
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
-    if(size<0){fclose(file);error("error reading filesize");return;}
+    if(size<0) {
+      fclose(file);
+      error("error reading filesize");
+      return;
+    }
     m_shaderString = new char[size + 1];
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
@@ -220,7 +239,10 @@ void glsl_vertex :: loadShader()
     m_shaderString[size]='\0';
     int err=ferror(file);
     fclose(file);
-    if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
+    if(err) {
+      error("error %d reading file (%d<%d)", err, count, size);
+      return;
+    }
   } else {
     error("could not find shader-file: '%s'", buf);
     return;
@@ -232,10 +254,11 @@ void glsl_vertex :: loadShader()
   }
   m_size=strlen(m_shaderString);
 
-  if(GLEW_VERSION_2_0)
+  if(GLEW_VERSION_2_0) {
     openMessGL2();
-  else if (GLEW_ARB_vertex_shader)
+  } else if (GLEW_ARB_vertex_shader) {
     openMessARB();
+  }
 
   verbose(1, "Loaded file: %s", buf);
   //m_shaderFilename=NULL;
@@ -245,7 +268,8 @@ void glsl_vertex :: loadShader()
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool glsl_vertex :: isRunnable() {
+bool glsl_vertex :: isRunnable()
+{
   if(GLEW_VERSION_2_0) {
     m_shaderTarget = GL_VERTEX_SHADER;
     return true;
@@ -341,7 +365,9 @@ void glsl_vertex :: printInfo()
         post("compiled last shaderARB to ID: %d", m_shaderARB);
       }
     }
-  } else post("no GLSL support");
+  } else {
+    post("no GLSL support");
+  }
 }
 
 ////////////////////////////////////////////////////////

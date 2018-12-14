@@ -303,19 +303,36 @@ undefine([Name])
 undefine([NAME])
 ])# GEM_CHECK_LIB
 
+# GEM_CHECK_ERRORFLAG()
+# checks whether we can apply "-Werror" to the compiler
+# this is taken from ax_pthread.m4
+AC_DEFUN([GEM_CHECK_WERROR],
+[
+AC_MSG_CHECKING([whether $CC needs -Werror to reject unknown flags])
+save_CFLAGS="$CFLAGS"
+GEM_CFLAGS_WERROR="-Werror"
+CFLAGS="$CFLAGS $GEM_CFLAGS_WERROR -Wunknown-warning-option -Wsizeof-array-argument"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([int foo(void);],[foo()])],
+                  [AC_MSG_RESULT([yes])],
+                  [GEM_CFLAGS_WERROR=
+                   AC_MSG_RESULT([no])])
+CFLAGS="$save_CFLAGS"
+])
+
 # GEM_CHECK_CXXFLAGS(ADDITIONAL-CXXFLAGS, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
 #
 # checks whether the $(CXX) compiler accepts the ADDITIONAL-CXXFLAGS
 # if so, they are added to the CXXFLAGS
 AC_DEFUN([GEM_CHECK_CXXFLAGS],
 [
+  AC_REQUIRE([GEM_CHECK_WERROR])
   AC_MSG_CHECKING([whether compiler accepts "$1"])
 cat > conftest.c++ << EOF
 int main(){
   return 0;
 }
 EOF
-AS_IF([ $CXX $CPPFLAGS $CXXFLAGS -o conftest.o conftest.c++ [$1] > /dev/null 2>&1 ],[
+AS_IF([ $CXX $CPPFLAGS $CXXFLAGS $GEM_CFLAGS_WERROR -o conftest.o conftest.c++ [$1] > /dev/null 2>&1 ],[
   AC_MSG_RESULT([yes])
   CXXFLAGS="${CXXFLAGS} [$1]"
   [$2]
@@ -336,7 +353,7 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_CFLAGS)
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
-  AC_ARG_WITH([Name]-framework,
+  AC_ARG_WITH([]Name[]-framework,
              AC_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
   AC_ARG_WITH([]Name[]-framework-CFLAGS,
              AC_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
@@ -432,7 +449,7 @@ AS_IF([test "x$fat_binary" != "xno" ],[
        TARGET_ARCHS=$(echo "$fat_binary" | tr ',' ' ')
      ],[
        # Choose a default set of architectures based upon platform.
-       TARGET_ARCHS="ppc i386"
+       TARGET_ARCHS="i386 x86_64"
      ])
     ])
     AC_MSG_RESULT([$TARGET_ARCHS])
@@ -468,7 +485,8 @@ AS_IF([test "x$fat_binary" != "xno" ],[
     []Name[]_LDFLAGS+=$[]Name
     LDFLAGS="$tmp_arch_ldflags"
    ])
-
+   AC_SUBST([]Name[]_CXXFLAGS)
+   AC_SUBST([]Name[]_LDFLAGS)
    undefine([Name])
 ])
 ])# GEM_CHECK_FAT
@@ -501,39 +519,55 @@ GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
 GEM_RTE="Pure Data"
 
+have_pd=no
 AC_ARG_WITH([pd], 
 	        AS_HELP_STRING([--with-pd=<path/to/pd>],[where to find pd-binary (./bin/pd.exe) and pd-sources]))
-
 ## some default paths
 AS_IF([ test "x${with_pd}" = "x" ],[
- case $host_os in
- *darwin*)
-    AS_IF([ test -d "/Applications/Pd-extended.app/Contents/Resources" ], [ with_pd="/Applications/Pd-extended.app/Contents/Resources" ])
+ AS_CASE([$host_os],
+ [*-darwin*], [
     AS_IF([ test -d "/Applications/Pd.app/Contents/Resources" ], [ with_pd="/Applications/Pd.app/Contents/Resources" ])
- ;;
- *mingw* | *cygwin*)
-    AS_IF([ test -d "${PROGRAMFILES}/Pd-extended" ], [ with_pd="${PROGRAMFILES}/Pd-extended" ])
+    ],
+ [*mingw* | *cygwin*], [
     AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
- ;;
- esac
+],)])
+
+AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
+   PKG_CHECK_MODULES([PD], [pd], [have_pd="yes"])
+   GEM_RTE_CPPFLAGS="${GEM_RTE_CPPFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_CXXFLAGS="${GEM_RTE_CXXFLAGS} ${PD_CFLAGS}"
+   GEM_RTE_LIBS="${GEM_RTE_LIBS} ${PD_LIBS}"
+   with_pd=""
 ])
 
 AS_IF([ test -d "$with_pd"  ],[
+ AC_MSG_CHECKING([include paths for Pd])
  if test -d "${with_pd}/src" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/src")
+   AC_MSG_RESULT([${with_pd}/src])
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/src"
  elif test -d "${with_pd}/include/pd" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include/pd")
+   AC_MSG_RESULT([${with_pd}/include/pd])
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include/pd"
  elif test -d "${with_pd}/include" ; then
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}/include")
+   AC_MSG_RESULT([${with_pd}/include])
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}/include"
  else
-   AC_LIB_APPENDTOVAR([GEM_RTE_CFLAGS],"-I${with_pd}")
+   AC_MSG_RESULT([${with_pd}])
+   GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} -I${with_pd}"
  fi
+ AC_MSG_CHECKING([library paths for Pd])
  AS_IF([ test -d "${with_pd}/bin"  ],[
+   AC_MSG_RESULT([${with_pd}/bin])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}/bin"
  ],[
+   AC_MSG_RESULT([${with_pd}])
    GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-L${with_pd}"
  ])
+ have_pd=yes
+])
 
+AS_IF([ test "x${have_pd}" = "xyes" ],[
  CPPFLAGS="$CPPFLAGS ${GEM_RTE_CFLAGS}"
  CFLAGS="$CFLAGS ${GEM_RTE_CFLAGS}"
  CXXFLAGS="$CXXFLAGS ${GEM_RTE_CFLAGS}"
@@ -549,9 +583,14 @@ AS_IF([ test "x$have_pddll" = "xyes" ], [
 
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
 
-dnl LATER check why this doesn't use the --with-pd includes
 dnl for now it will basically disable anything that needs s_stuff.h if it cannot be found in /usr[/local]/include
 AC_CHECK_HEADERS([s_stuff.h], [], [],
+[#ifdef HAVE_M_PD_H
+# define PD
+# include "m_pd.h"
+#endif
+])
+AC_CHECK_HEADERS([m_imp.h], [], [],
 [#ifdef HAVE_M_PD_H
 # define PD
 # include "m_pd.h"
@@ -608,8 +647,23 @@ AS_IF([ test "x$enable_threads" != "xno" ],[
    ])
  ])
 
- GEM_THREADS_CFLAGS=""
- AC_LIB_APPENDTOVAR([GEM_THREADS_CFLAGS], "${PTHREAD_CFLAGS}")
+ GEM_THREADS_CFLAGS="${PTHREAD_CFLAGS}"
  GEM_THREADS_LIBS="${GEM_THREADS_LIBS}${GEM_THREADS_LIBS:+ }${PTHREAD_LIBS}"
 ])
+])
+
+
+# GEM_CHECK_EXTERNAL()
+#
+# checks for Gem (for building externals depending on Gem)
+# if so, they are added to the LDFLAGS, CFLAGS and whatelse
+AC_DEFUN([GEM_CHECK_EXTERNAL],
+[
+  AC_REQUIRE([GEM_CHECK_RTE])
+  AC_SUBST(GEM_EXTERNAL_CPPFLAGS)
+  AC_SUBST(GEM_EXTERNAL_CFLAGS)
+  AC_SUBST(GEM_EXTERNAL_LIBS)
+
+  AS_IF([test "x$have_pddll" = "xyes" ], [ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll" ])
+  AS_IF([test "x$WINDOWS" = "xyes" ], [GEM_CHECK_CXXFLAGS([-mms-bitfields], [GEM_EXTERNAL_CFLAGS+="-mms-bitfields"])])
 ])

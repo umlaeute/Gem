@@ -61,7 +61,7 @@
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 523 114 macOS: quicktime;
-#X text 516 104 windos: *.AVI;
+#X text 516 104 MS Windows: *.AVI;
 #X text 523 124 linux: depends...;
 #X floatatom 463 190 3 0 100 2 threshold - -;
 #X obj 463 207 / 100;
@@ -387,7 +387,7 @@
 #X restore 541 301 pd showblobs;
 #X text 17 78 [pix_blobtracker] is able to detect multiple blobs within
 an image and tries to keep track of which blob is which to keep indices
-consistant while the blobs are moving.;
+consistent while the blobs are moving.;
 #X text 16 127 [pix_blobtracker] is an abstraction based on [pix_multiblob]
 for blob-detection and some mtx-objects from "iemmatrix" (which you
 need to have installed on your system!) to do the actual tracking.

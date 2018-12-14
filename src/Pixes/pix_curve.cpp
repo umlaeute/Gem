@@ -34,7 +34,7 @@
 CPPEXTERN_NEW_WITH_GIMME(pix_curve);
 
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // pix_curve
 //
@@ -46,8 +46,9 @@ pix_curve :: pix_curve(int argc, t_atom *argv):
   name_R(0), name_G(0), name_B(0), name_A(0),
   m_mode(0)
 {
-  if(argc)
+  if(argc) {
     setMess(0, argc, argv);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ void pix_curve :: setMess(t_symbol*,int argc, t_atom *argv)
     return;
   }
 
-  while(n--){
+  while(n--) {
     if (ap->a_type != A_SYMBOL) {
       error("only symbolic table-names are accepted");
       return;
@@ -90,7 +91,7 @@ void pix_curve :: setMess(t_symbol*,int argc, t_atom *argv)
     name_R=name_G=name_B=name_A=atom_getsymbol(ap);
     m_mode=1;
     break;
-    /* coverity[unterminated_case] */
+  /* coverity[unterminated_case] */
   case 4:
     name_A=atom_getsymbol(ap+3);
     m_mode=4;
@@ -115,9 +116,13 @@ void pix_curve :: processRGBAImage(imageStruct &image)
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
 
-  switch(m_mode){
-  case 4: case 3: case 1:  break;
-  default:                 return;
+  switch(m_mode) {
+  case 4:
+  case 3:
+  case 1:
+    break;
+  default:
+    return;
   }
 
   gem::RTE::Array tabR, tabG, tabB, tabA;
@@ -177,9 +182,11 @@ void pix_curve :: processGrayImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize;
   unsigned char *base = image.data;
-  switch(m_mode){
-  case 1: break;
-  default: return;
+  switch(m_mode) {
+  case 1:
+    break;
+  default:
+    return;
   }
 
   gem::RTE::Array tabY;
@@ -196,9 +203,12 @@ void pix_curve :: processYUVImage(imageStruct &image)
 {
   int i=image.xsize*image.ysize/2;
   unsigned char *base = image.data;
-  switch(m_mode){
-  case 3: case 1:  break;
-  default:         return;
+  switch(m_mode) {
+  case 3:
+  case 1:
+    break;
+  default:
+    return;
   }
 
   gem::RTE::Array tabY, tabU, tabV;

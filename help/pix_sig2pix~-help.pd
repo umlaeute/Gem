@@ -71,7 +71,7 @@ factor with [block~] to get decent framerates.;
 #X msg 525 214 dimen 512 4;
 #X obj 451 270 pix_texture;
 #X obj 451 236 pix_sig2pix~ 64 64;
-#X text 12 74 [pix_sig2pix~] will interprete the 4 incoming audio-streams
+#X text 12 74 [pix_sig2pix~] will interpret the 4 incoming audio-streams
 as values for the red \, green \, blue and alpha channel of an image.
 Each image corresponds to an audio-block (signal-vector). The default
 blocksize in Pd is 64 samples. If you want images with more than 64

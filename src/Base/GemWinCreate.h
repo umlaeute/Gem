@@ -45,14 +45,14 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   WindowInfo
 
-  All of the relavent information about an OpenGL window
+  All of the relevant information about an OpenGL window
 
   DESCRIPTION
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowInfo
 {
- public:
+public:
 
   // Constructor
   WindowInfo() :
@@ -61,21 +61,22 @@ class GEM_EXTERN WindowInfo
     win(NULL), dc(NULL), context(NULL),
 #elif defined __APPLE__
     pWind(NULL), context(NULL), offscreen(NULL), pixelSize(32),
-    pixMap(NULL), rowBytes(0), baseAddr(NULL),
+    pixMap(NULL), rowBytes(0), baseAddr(NULL), fontList(0),
 #elif defined __linux__ || defined HAVE_GL_GLX_H
-    dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0), have_border(false),
+    dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0),
+    have_border(false),
 #else
 #endif
     have_constContext(0)
-    {
+  {
 #if defined _WIN32
 #elif defined __APPLE__
 #elif defined __linux__ || defined HAVE_GL_GLX_H
 # ifdef HAVE_LIBXXF86VM
-      memset(&deskMode, 0, sizeof(deskMode));
+    memset(&deskMode, 0, sizeof(deskMode));
 # endif
 #endif
-    }
+  }
   int         fs;                 // FullScreen
 
 #if defined _WIN32
@@ -86,15 +87,15 @@ class GEM_EXTERN WindowInfo
 
 #elif defined __APPLE__
 
-    WindowPtr		pWind;		// GEM window reference for gemwin
-    AGLContext		context;	// OpenGL context
-    GWorldPtr		offscreen;	// Macintosh offscreen buffer
-    long		pixelSize;	//
-    Rect		r;		//
-    PixMapHandle	pixMap;		// PixMap Handle
-    long		rowBytes;	//
-    void 		*baseAddr;	//
-    short		fontList;	// Font
+  WindowPtr           pWind;          // GEM window reference for gemwin
+  AGLContext          context;        // OpenGL context
+  GWorldPtr           offscreen;      // Macintosh offscreen buffer
+  long                pixelSize;      //
+  Rect                r;              //
+  PixMapHandle        pixMap;         // PixMap Handle
+  long                rowBytes;       //
+  void                *baseAddr;      //
+  short               fontList;       // Font
 
 #elif defined __linux__ || defined HAVE_GL_GLX_H
 
@@ -130,7 +131,7 @@ class GEM_EXTERN WindowInfo
   -----------------------------------------------------------------*/
 class GEM_EXTERN WindowHints
 {
- public:
+public:
 
   //////////
   // Should the window be realized
@@ -160,15 +161,15 @@ class GEM_EXTERN WindowHints
 
   //////////
   // Should we do fullscreen ?
-  int			fullscreen;
+  int                   fullscreen;
 
   //////////
   // Is there a second screen ?
-  int			secondscreen;
+  int                   secondscreen;
 
   //////////
   // Should there be a window border?
-  int			border;
+  int                   border;
 
   //////////
   // mode for full-screen antialiasing
@@ -184,11 +185,11 @@ class GEM_EXTERN WindowHints
   //////////
   // The GLXcontext to share rendering with
 #if defined _WIN32
-    HGLRC       shared;
+  HGLRC       shared;
 #elif defined __APPLE__
-    AGLContext	shared;
+  AGLContext  shared;
 #elif defined __linux__ || defined HAVE_GL_GLX_H
-    GLXContext  shared;
+  GLXContext  shared;
 #else
 #error Define OS specific OpenGL context
 #endif
@@ -196,7 +197,8 @@ class GEM_EXTERN WindowHints
 
 //////////
 // Create a new window
-GEM_EXTERN extern int createGemWindow(WindowInfo &info, WindowHints &hints);
+GEM_EXTERN extern int createGemWindow(WindowInfo &info,
+                                      WindowHints &hints);
 
 //////////
 // Destroy a window
@@ -223,7 +225,8 @@ GEM_EXTERN extern bool initGemWin(void);
 
 /////////
 // prepare a WindowInfo for context-sharing
-GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints);
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info,
+                                      WindowHints &hints);
 
 
 

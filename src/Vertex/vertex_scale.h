@@ -34,20 +34,20 @@ class GEM_EXTERN vertex_scale : public GemBase
 {
   CPPEXTERN_HEADER(vertex_scale, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_scale(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~vertex_scale(void);
 
   virtual void paramMess(int,t_atom*);
-  float	m_x,m_y,m_z,m_w;
+  float m_x,m_y,m_z,m_w;
 
   virtual void vertexMess(int offset, int count);
   int  m_offset,m_count;
@@ -61,14 +61,14 @@ class GEM_EXTERN vertex_scale : public GemBase
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
-  static void 	paramMessCallback(void *data, t_symbol*, int, t_atom*);
+  static void   paramMessCallback(void *data, t_symbol*, int, t_atom*);
 
- private:
+private:
 
-  static void 	modeMessCallback(void *data, t_symbol*, int, t_atom*);
-  static void 	vertexMessCallback(void *data, t_float num, t_float counter);
+  static void   modeMessCallback(void *data, t_symbol*, int, t_atom*);
+  static void   vertexMessCallback(void *data, t_float num, t_float counter);
 };
 
-#endif	// for header file
+#endif  // for header file

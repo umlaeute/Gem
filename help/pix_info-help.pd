@@ -82,7 +82,7 @@ YUV (not standardized);
 ;
 #X obj 451 166 pix_info . . . .;
 #X text 57 380 Outlet 8: pointer: image-data;
-#X text 57 349 Outlet 6: list: <type> <upsidedown> <notowed>;
+#X text 57 349 Outlet 6: list: <type> <upsidedown> <notowned>;
 #X text 57 366 Outlet 7: list: <newimage> <newfilm>;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;

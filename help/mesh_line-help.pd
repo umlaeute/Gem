@@ -52,14 +52,14 @@
 #X obj 478 292 t a;
 #X obj 476 167 t a;
 #X text 7 69 Description: Renders a mesh;
-#X text 27 247 Inlet 1: message: draw [line|defaulf|point];
+#X text 27 247 Inlet 1: message: draw [line|default|point];
 #X text 27 261 Inlet 1: list: grid float : change the grid resolution
 ;
 #X obj 544 340 mesh_line 3;
 #X text 32 14 Synopsis: [mesh_line];
 #X text 16 86 The [mesh_line] object renders a mesh in a line at the
 current position with current color. The size of the line can be changed
-via the second inlet. This object is usefull when working with vertex_shader
+via the second inlet. This object is useful when working with vertex_shader
 ;
 #X text 63 186 resolution of the line mesh;
 #X text 575 107 (draw line);

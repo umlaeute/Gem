@@ -32,39 +32,39 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN curve : public polygon
 {
-    CPPEXTERN_HEADER(curve, polygon);
+  CPPEXTERN_HEADER(curve, polygon);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	curve(t_floatarg numInputs);
+  //////////
+  // Constructor
+  curve(t_floatarg numInputs);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~curve();
+  //////////
+  // Destructor
+  virtual ~curve();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Resolution callback
-    	void	    	resolutionMess(int res);
+  //////////
+  // Resolution callback
+  void            resolutionMess(int res);
 
-    	//////////
-    	// The rendering resolution
-    	int 	    	m_resolution;
+  //////////
+  // The rendering resolution
+  int             m_resolution;
 
-	GLfloat m_texCoords[4][2];
+  GLfloat m_texCoords[4][2];
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-     	static void 	resolutionMessCallback(void *data, t_float res);
+  //////////
+  // Static member functions
+  static void     resolutionMessCallback(void *data, t_float res);
 };
 
-#endif	// for header file
+#endif  // for header file

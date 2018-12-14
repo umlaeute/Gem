@@ -30,10 +30,10 @@ CPPEXTERN_NEW(gemkeyboard);
 /////////////////////////////////////////////////////////
 gemkeyboard :: gemkeyboard()
 {
-    m_outKeyVal = outlet_new(this->x_obj, 0);
+  m_outKeyVal = outlet_new(this->x_obj, 0);
 
-    // register event callback
-    setKeyboardCallback(&gemkeyboard::keyboardCallback, this);
+  // register event callback
+  setKeyboardCallback(&gemkeyboard::keyboardCallback, this);
 }
 
 /////////////////////////////////////////////////////////
@@ -42,10 +42,10 @@ gemkeyboard :: gemkeyboard()
 /////////////////////////////////////////////////////////
 gemkeyboard :: ~gemkeyboard()
 {
-    // remove event callback
-    removeKeyboardCallback(&gemkeyboard::keyboardCallback, this);
+  // remove event callback
+  removeKeyboardCallback(&gemkeyboard::keyboardCallback, this);
 
-    outlet_free(m_outKeyVal);
+  outlet_free(m_outKeyVal);
 }
 
 
@@ -55,7 +55,9 @@ gemkeyboard :: ~gemkeyboard()
 /////////////////////////////////////////////////////////
 void gemkeyboard :: KeyBoardPressed(int val, int state)
 {
-  if (state==0)return;
+  if (state==0) {
+    return;
+  }
   outlet_float(m_outKeyVal, static_cast<t_float>(val));
 }
 

@@ -38,20 +38,22 @@ typedef struct _text t_object;
 
 class GEM_EXTERN GemException
 {
- public:
-  GemException(void) throw();
-  GemException(const char*error) throw();
-  GemException(const std::string error) throw();
-  virtual ~GemException(void) throw();
+public:
+  GemException(void);
+  explicit GemException(const char*error);
+  explicit GemException(const std::string&error);
+  virtual ~GemException(void);
 
-  virtual const char *what(void) const throw();
-  virtual void report(const char*origin=0) const throw();
- private:
-  const std::string ErrorString;
+  virtual const char *what(void) const;
+  virtual void report(const char*origin=0) const;
+private:
+  const char*ErrorString;
 };
 
-namespace gem {
-  GEM_EXTERN void catchGemException(const char*name=NULL, const t_object*obj=NULL);
+namespace gem
+{
+GEM_EXTERN void catchGemException(const char*name=NULL,
+                                  const t_object*obj=NULL);
 };
 
 

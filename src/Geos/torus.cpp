@@ -35,13 +35,13 @@ CPPEXTERN_NEW_WITH_GIMME(torus);
 //
 /////////////////////////////////////////////////////////
 torus :: torus(int argc, t_atom *argv)
-      : GemGluObj(1.f)
+  : GemGluObj(1.f)
 {
   float size = 1.f;
   int numSlices = 10;
   m_innerRadius = 0.5f;
 
-  switch(argc){
+  switch(argc) {
   case 3:
     size = atom_getfloat(&argv[0]);
     numSlices = atom_getint(&argv[1]);
@@ -61,7 +61,8 @@ torus :: torus(int argc, t_atom *argv)
 
   sizeMess(size);
   numSlicesMess(numSlices);
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("inner"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("inner"));
 }
 
 /////////////////////////////////////////////////////////
@@ -77,8 +78,8 @@ torus :: ~torus(void)
 /////////////////////////////////////////////////////////
 void torus :: innerRadius(float radius)
 {
-    m_innerRadius = radius;
-    setModified();
+  m_innerRadius = radius;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -97,23 +98,35 @@ void torus :: render(GemState *state)
   state->get(GemState::_GL_LIGHTING, lighting);
 
   GLenum type = m_drawType;
-  switch(m_drawType){
-  case GL_LINE_LOOP: type=GL_LINE;  break;
-  case GL_POINTS   : type=GL_POINT; break;
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+    type=GL_LINE;
+    break;
+  case GL_POINTS   :
+    type=GL_POINT;
+    break;
   case GL_DEFAULT_GEM: // default
-  case GL_POLYGON  : type=GL_FILL;  break;
+  case GL_POLYGON  :
+    type=GL_FILL;
+    break;
   }
 #ifdef GLU_TRUE
-  switch(m_drawType){
-  case GLU_LINE : type=GL_LINE;  break;
-  case GLU_POINT: type=GL_POINT; break;
-  case GLU_FILL : type=GL_FILL;  break;
+  switch(m_drawType) {
+  case GLU_LINE :
+    type=GL_LINE;
+    break;
+  case GLU_POINT:
+    type=GL_POINT;
+    break;
+  case GLU_FILL :
+    type=GL_FILL;
+    break;
   }
 #endif
 
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
-  if(texType && texNum>=3){
+  if(texType && texNum>=3) {
     xsize0 = texCoords[0].s;
     xsize  = texCoords[1].s-xsize0;
     ysize0 = texCoords[1].t;
@@ -161,12 +174,20 @@ void torus :: render(GemState *state)
       sinPhi = sin(phi);
       dist = R + r * cosPhi;
 
-      if(lighting)glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
-      if(texType)glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+      if(lighting) {
+        glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
+      }
+      if(texType) {
+        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+      }
       glVertex3f(cosTheta1 * dist, -sinTheta1 * dist, r * sinPhi);
 
-      if(lighting)glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
-      if(texType)glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+      if(lighting) {
+        glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
+      }
+      if(texType) {
+        glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+      }
       glVertex3f(cosTheta * dist, -sinTheta * dist,  r * sinPhi);
 
       s+=ds;
@@ -188,5 +209,3 @@ void torus :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "inner", innerRadius, float);
 }
-
-

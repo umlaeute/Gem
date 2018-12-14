@@ -1,3 +1,4 @@
+/*  -*- mode: ObjC; -*- */
 ///////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -28,13 +29,13 @@ static NSDate *distantFuture, *distantPast;
 
 #if 0
 // LATER figure out how ObjC's delegation works
-@interface WindowResponder 
+@interface WindowResponder
 @end
 @implementation WindowResponder
-- (void)windowDidMove:(NSNotification*)notification { 
+- (void)windowDidMove:(NSNotification*)notification {
   ::post ("window moved");
 }
-- (void)windowDidResize:(NSNotification*)notification { 
+- (void)windowDidResize:(NSNotification*)notification {
   ::post ("window resized");
 }
 @end
@@ -120,7 +121,7 @@ struct gemcocoawindow :: PIMPL {
     window=NULL;
 
     if(view) {
-      [view release]; 
+      [view release];
     }
     view=NULL;
 #if 0
@@ -134,7 +135,7 @@ struct gemcocoawindow :: PIMPL {
 };
 
 
-CPPEXTERN_NEW(gemcocoawindow)
+CPPEXTERN_NEW(gemcocoawindow);
 
 /////////////////////////////////////////////////////////
 //
@@ -244,12 +245,12 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   int devID=0;
 
   switch(type) {
-  case(NSLeftMouseUp): 
+  case(NSLeftMouseUp):
   case(NSRightMouseUp):
   case(NSOtherMouseUp):
     button(devID, [e buttonNumber], false);
     break;
-  case(NSLeftMouseDown): 
+  case(NSLeftMouseDown):
   case(NSRightMouseDown):
   case(NSOtherMouseDown):
     button(devID, [e buttonNumber], [e pressure]);
@@ -353,7 +354,7 @@ bool gemcocoawindow :: create(void)
     contentRect=screenRect;
   }
   window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
- 
+
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
@@ -390,10 +391,10 @@ bool gemcocoawindow :: create(void)
 
   titleMess(m_title);
 
-  bool cgw=  createGemWindow(); 
+  bool cgw=  createGemWindow();
   return cgw;
 }
-void gemcocoawindow :: createMess(std::string s) {
+void gemcocoawindow :: createMess(const std::string&s) {
   if(m_pimpl->view) {
     error("window already made!");
     return;
@@ -419,7 +420,7 @@ void gemcocoawindow :: destroyMess(void)
 
 /////////////////////////////////////////////////////////
 // messages
-void gemcocoawindow :: titleMess(std::string s) {
+void gemcocoawindow :: titleMess(const std::string&s) {
   m_title = s;
   if(m_pimpl->window) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
@@ -430,7 +431,7 @@ void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
     error("width must be greater than 0");
     return;
   }
-    
+
   if (height <= 0 ) {
     error ("height must be greater than 0");
     return;
@@ -534,7 +535,7 @@ void gemcocoawindow :: obj_setupCallback(t_class *classPtr)
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
   }
-  
+
   distantFuture = [NSDate distantFuture];
   distantPast = [NSDate distantPast];
 

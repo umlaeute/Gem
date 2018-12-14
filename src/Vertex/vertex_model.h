@@ -33,48 +33,48 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN vertex_model : public GemBase
 {
-    CPPEXTERN_HEADER(vertex_model, GemBase);
+  CPPEXTERN_HEADER(vertex_model, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	vertex_model(void);
+  //////////
+  // Constructor
+  vertex_model(void);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~vertex_model(void);
+  //////////
+  // Destructor
+  virtual ~vertex_model(void);
 
-        //int	m_blend;
-        float	*m_ColorArray;
-        float	*m_VertexArray;
-        float	*m_tempCA;
-        float	*m_tempVA;
-        float	*m_TexCoordArray;
-        float	*m_tempTA;
-        float	*m_NormalArray;
-        float	*m_tempNA;
-        GLMmodel       *m_model;
-        int	m_vertcount;
-        int	m_haveModel;
-        int	m_oldVSize,m_oldCSize;
-        float	maxX, maxY, oldmaxX, oldmaxY;
+  //int   m_blend;
+  float   *m_ColorArray;
+  float   *m_VertexArray;
+  float   *m_tempCA;
+  float   *m_tempVA;
+  float   *m_TexCoordArray;
+  float   *m_tempTA;
+  float   *m_NormalArray;
+  float   *m_tempNA;
+  GLMmodel       *m_model;
+  int     m_vertcount;
+  int     m_haveModel;
+  int     m_oldVSize,m_oldCSize;
+  float   maxX, maxY, oldmaxX, oldmaxY;
 
-        //////////
-	// Should we rescale the model when loaded
-	// Default is yes
-	int		m_rescaleModel;
+  //////////
+  // Should we rescale the model when loaded
+  // Default is yes
+  int             m_rescaleModel;
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
-        virtual void	openMess(t_symbol *filename);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
+  virtual void    openMess(t_symbol *filename);
 
-        private:
-        static void	openMessCallback(void *data, t_symbol *filename);
+private:
+  static void     openMessCallback(void *data, t_symbol *filename);
 
 };
 
-#endif	// for header file
+#endif  // for header file

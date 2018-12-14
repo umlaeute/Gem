@@ -32,8 +32,8 @@ GemPixObj :: GemPixObj() :
   m_simd(GemSIMD::getCPU()),
   m_doROI(false)
 {
-    cachedPixBlock.newimage=0;
-    cachedPixBlock.newfilm =0;
+  cachedPixBlock.newimage=0;
+  cachedPixBlock.newfilm =0;
 }
 
 
@@ -43,21 +43,28 @@ GemPixObj :: GemPixObj() :
 /////////////////////////////////////////////////////////
 void GemPixObj :: setPixModified()
 {
-  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC)m_cache=NULL;
-  if(m_cache)m_cache->resendImage = 1;
+  if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC) {
+    m_cache=NULL;
+  }
+  if(m_cache) {
+    m_cache->resendImage = 1;
+  }
 }
 
 /////////////////////////////////////////////////////////
 // render
 //
 /////////////////////////////////////////////////////////
-void GemPixObj :: render(GemState *state){
+void GemPixObj :: render(GemState *state)
+{
   // We save all information of our image, so the pix-processors can do what they want:
   //   change formats, sizes, databuffer, whatever
   // the data is restored in the <postrender> call,
   // so that the objects can rely on their (buffered) images
   pixBlock*image=NULL;
-  if (!state || !state->get(GemState::_PIX, image))return;
+  if (!state || !state->get(GemState::_PIX, image)) {
+    return;
+  }
   gem::Rectangle*roi=NULL;
   state->get(GemState::getKey("pix.roi.rectangle"),roi);
   if(roi) {
@@ -67,21 +74,24 @@ void GemPixObj :: render(GemState *state){
     m_doROI=false;
   }
   if(!image ||
-     !&image->image)  return;
+      !&image->image) {
+    return;
+  }
   cachedPixBlock.newimage=image->newimage;
   if (!image->newimage) {
     image = &cachedPixBlock;
   } else {
     orgPixBlock = image;
     cachedPixBlock.newimage = image->newimage;
-    cachedPixBlock.newfilm = image->newfilm; //added for newfilm copy from cache cgc 6-21-03
+    cachedPixBlock.newfilm =
+      image->newfilm; //added for newfilm copy from cache cgc 6-21-03
     image->image.copy2ImageStruct(&cachedPixBlock.image);
     image = &cachedPixBlock;
-    if (m_processOnOff){
-      switch(image->image.format){
+    if (m_processOnOff) {
+      switch(image->image.format) {
       case GL_RGBA:
       case GL_BGRA_EXT:
-        switch(m_simd){
+        switch(m_simd) {
         case(GEM_SIMD_MMX):
           processRGBAMMX(image->image);
           break;
@@ -100,7 +110,7 @@ void GemPixObj :: render(GemState *state){
         processRGBImage(image->image);
         break;
       case GL_LUMINANCE:
-        switch(m_simd){
+        switch(m_simd) {
         case(GEM_SIMD_MMX):
           processGrayMMX(image->image);
           break;
@@ -115,7 +125,7 @@ void GemPixObj :: render(GemState *state){
         }
         break;
       case GL_YCBCR_422_GEM:
-        switch(m_simd){
+        switch(m_simd) {
         case(GEM_SIMD_MMX):
           processYUVMMX(image->image);
           break;
@@ -139,7 +149,8 @@ void GemPixObj :: render(GemState *state){
 
 //////////
 // get the original state back
-void GemPixObj :: postrender(GemState *state){
+void GemPixObj :: postrender(GemState *state)
+{
   state->set(GemState::_PIX, orgPixBlock);
 }
 
@@ -157,7 +168,7 @@ void GemPixObj :: processImage(imageStruct &image)
   case GL_RGB:
   case GL_BGR_EXT:
     error("cannot handle RGB image");
-	break;
+    break;
   case GL_LUMINANCE:
     error("cannot handle Grey image");
     break;
@@ -174,36 +185,62 @@ void GemPixObj :: processImage(imageStruct &image)
 //
 /////////////////////////////////////////////////////////
 void GemPixObj :: processRGBAImage(imageStruct &image)
-{  processImage(image); }
+{
+  processImage(image);
+}
 void GemPixObj :: processRGBImage(imageStruct &image)
-{  processImage(image); }
+{
+  processImage(image);
+}
 void GemPixObj :: processGrayImage(imageStruct &image)
-{  processImage(image); }
+{
+  processImage(image);
+}
 void GemPixObj :: processYUVImage(imageStruct &image)
-{  processImage(image); }
+{
+  processImage(image);
+}
 
 /////////////////////////////////////////////////////////
 // processImage - SIMD (typed)
 //
 /////////////////////////////////////////////////////////
 void GemPixObj :: processRGBAMMX    (imageStruct &image)
-{  processRGBAImage(image); }
+{
+  processRGBAImage(image);
+}
 void GemPixObj :: processGrayMMX    (imageStruct &image)
-{  processGrayImage(image); }
+{
+  processGrayImage(image);
+}
 void GemPixObj :: processYUVMMX     (imageStruct &image)
-{  processYUVImage(image); }
+{
+  processYUVImage(image);
+}
 void GemPixObj :: processRGBASSE2   (imageStruct &image)
-{  processRGBAMMX(image); }
+{
+  processRGBAMMX(image);
+}
 void GemPixObj :: processGraySSE2   (imageStruct &image)
-{  processGrayMMX(image); }
+{
+  processGrayMMX(image);
+}
 void GemPixObj :: processYUVSSE2    (imageStruct &image)
-{  processYUVMMX(image); }
+{
+  processYUVMMX(image);
+}
 void GemPixObj :: processRGBAAltivec(imageStruct &image)
-{  processRGBAImage(image); }
+{
+  processRGBAImage(image);
+}
 void GemPixObj :: processGrayAltivec(imageStruct &image)
-{  processGrayImage(image); }
+{
+  processGrayImage(image);
+}
 void GemPixObj :: processYUVAltivec (imageStruct &image)
-{  processYUVImage(image); }
+{
+  processYUVImage(image);
+}
 
 
 /////////////////////////////////////////////////////////
@@ -212,8 +249,8 @@ void GemPixObj :: processYUVAltivec (imageStruct &image)
 /////////////////////////////////////////////////////////
 void GemPixObj :: processOnOff(int on)
 {
-    m_processOnOff = on;
-    setPixModified();
+  m_processOnOff = on;
+  setPixModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -223,7 +260,7 @@ void GemPixObj :: processOnOff(int on)
 void GemPixObj :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "float", processOnOff, int);
-  CPPEXTERN_MSG1(classPtr, "simd" , SIMD    , int);
+  CPPEXTERN_MSG1(classPtr, "simd", SIMD, int);
 }
 void GemPixObj :: SIMD(int n)
 {

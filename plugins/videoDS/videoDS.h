@@ -30,91 +30,99 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoDS : public videoBase {
-  public:
-    //////////
-    // Constructor
-    videoDS(void);
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoDS : public videoBase
+{
+public:
+  //////////
+  // Constructor
+  videoDS(void);
 
-    //////////
-    // Destructor
-    virtual ~videoDS(void);
+  //////////
+  // Destructor
+  virtual ~videoDS(void);
 
 #ifdef HAVE_DIRECTSHOW
-    ////////
-    // open the video-device
-    virtual bool           openDevice(gem::Properties&props);
-    // and close the video-device
-    virtual void          closeDevice(void);
+  ////////
+  // open the video-device
+  virtual bool           openDevice(gem::Properties&props);
+  // and close the video-device
+  virtual void          closeDevice(void);
 
-    //////////
-    // Start up the video device
-    // [out] int - returns 0 if bad
-    virtual bool	    	startTransfer(void);
-    //////////
-    // Stop the video device
-    // [out] int - returns 0 if bad
-    virtual bool	   	stopTransfer(void);
+  //////////
+  // Start up the video device
+  // [out] int - returns 0 if bad
+  virtual bool                startTransfer(void);
+  //////////
+  // Stop the video device
+  // [out] int - returns 0 if bad
+  virtual bool                stopTransfer(void);
 
-    //////////
-    // get the next frame
-    virtual pixBlock* getFrame(void);
-    virtual void releaseFrame(void);
+  //////////
+  // get the next frame
+  virtual pixBlock* getFrame(void);
+  virtual void releaseFrame(void);
 
-    //////////
-    // Set the video dimensions
-    virtual bool setDimen(int x, int y, int leftmargin, int rightmargin, int topmargin, int bottommargin);
-    virtual bool setColor(int d);
-    virtual bool dialog(std::vector<std::string>);
-    virtual std::vector<std::string>dialogs(void);
-    virtual std::vector<std::string>videoDS :: enumerate(void);
+  //////////
+  // Set the video dimensions
+  virtual bool setDimen(int x, int y, int leftmargin, int rightmargin,
+                        int topmargin, int bottommargin);
+  virtual bool setColor(int d);
+  virtual bool dialog(std::vector<std::string>);
+  virtual std::vector<std::string>dialogs(void);
+  virtual std::vector<std::string>videoDS :: enumerate(void);
 
-  protected:
-    //-----------------------------------
-    // GROUP:	Video data
-    //-----------------------------------
+protected:
+  //-----------------------------------
+  // GROUP:   Video data
+  //-----------------------------------
 
-    //////////
-    // The pixBlocks for the captured and rendered image
-    void copyBuffer(void);
-    pixBlock    m_pixBlockBuf[3];
-    int		m_nPixDataSize[3];
+  //////////
+  // The pixBlocks for the captured and rendered image
+  void copyBuffer(void);
+  pixBlock    m_pixBlockBuf[3];
+  int         m_nPixDataSize[3];
 
-    // Index to read latest image.
-    int		m_readIdx;
-    int		m_lastreadIdx;
-    int		m_writeIdx;
-    int		m_lastwriteIdx;
+  // Index to read latest image.
+  int         m_readIdx;
+  int         m_lastreadIdx;
+  int         m_writeIdx;
+  int         m_lastwriteIdx;
 
-    int		m_format;
+  int         m_format;
 #ifdef USE_RECORDING
-    bool	m_recording;
-    char        m_filename[MAXPDSTRING];
+  bool        m_recording;
+  char        m_filename[MAXPDSTRING];
 #endif
 
-    // DirectShow Interfaces that we may need
-    IGraphBuilder*	m_pGB;
-    IMediaControl*	m_pMC;
-    IMediaEvent*      	m_pME;
-    IMediaFilter*	m_pMF;
-    IMediaSeeking*	m_pMS;
-    IMediaPosition*	m_pMP;
-    IBaseFilter		*SampleFilter;		// Sample filter
-    IBaseFilter		*NullFilter;		// Null render base Filter for video
-    IBaseFilter		*FileFilter;		// File filter for writing video
-    ISampleGrabber	*SampleGrabber;		// Sample grabber
+  // DirectShow Interfaces that we may need
+  IGraphBuilder*      m_pGB;
+  IMediaControl*      m_pMC;
+  IMediaEvent*        m_pME;
+  IMediaFilter*       m_pMF;
+  IMediaSeeking*      m_pMS;
+  IMediaPosition*     m_pMP;
+  IBaseFilter         *SampleFilter;          // Sample filter
+  IBaseFilter
+  *NullFilter;            // Null render base Filter for video
+  IBaseFilter
+  *FileFilter;            // File filter for writing video
+  ISampleGrabber      *SampleGrabber;         // Sample grabber
 #ifdef DIRECTSHOW_LOGGING
-    HFILE		  LogFileHandle;
+  HFILE                 LogFileHandle;
 #endif
 
-    IBaseFilter*	  m_pCDbase;
-    ICaptureGraphBuilder2*m_pCG;
+  IBaseFilter*          m_pCDbase;
+  ICaptureGraphBuilder2*m_pCG;
 
-    unsigned long	  m_GraphRegister;
+  unsigned long         m_GraphRegister;
 #endif /*HAVE_DIRECTSHOW */
-  };
-};};
+};
+};
+};
 
 
-#endif	// for header file
+#endif  // for header file

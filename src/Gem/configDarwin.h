@@ -9,4 +9,3 @@
 /* types, structures, compiler characteristics, ... */
 #define SIZEOF_VOID_P 4
 #define SIZEOF_UNSIGNED_INT 4
-

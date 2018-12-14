@@ -52,17 +52,17 @@
   -----------------------------------------------------------------*/
 
 
-class GEM_EXTERN gemsdlwindow : public GemWindow
+class GEM_EXPORT gemsdlwindow : public GemWindow
 {
   CPPEXTERN_HEADER(gemsdlwindow, GemWindow);
 
-    public:
+public:
 
   //////////
   // Constructor
   gemsdlwindow(void);
 
- private:
+private:
 
   //////////
   // Destructor
@@ -75,26 +75,22 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
 
   /* render context (pre creation) */
   void  bufferMess(int buf);
-  virtual void    fsaaMess(int value);
 
   /* window decoration (pre creation) */
-  virtual void titleMess(std::string s);
+  virtual void titleMess(const std::string&s);
 
   /* window position/dimension (pre creation) */
   virtual void    dimensionsMess(unsigned int width, unsigned int height);
   virtual void    fullscreenMess(int on);
-  virtual void        offsetMess(int x, int y);
 
   /* creation/destruction */
   virtual bool        create(void);
   virtual void destroy(void);
 
-  virtual void        createMess(std::string);
+  virtual void        createMess(const std::string&);
   virtual void       destroyMess(void);
 
   /* post creation */
-  virtual void        cursorMess(bool on);
-
   void menuMess(void);
   void addMenuMess(t_symbol*, int, t_atom*);
 
@@ -106,7 +102,7 @@ class GEM_EXTERN gemsdlwindow : public GemWindow
   // dispatch events
   virtual void dispatch(void);
 
- private:
+private:
 
   /* the SDL surface */
   SDL_Surface*m_surface;

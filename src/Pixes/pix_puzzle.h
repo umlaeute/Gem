@@ -33,13 +33,13 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_puzzle, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_puzzle();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -47,14 +47,14 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
   virtual void processYUVImage(imageStruct &image);
 
   imageStruct    myImage;
 
   //////////
   // Make a puzzle
-  virtual void 	makePuzzleBlocks(int xsize, int ysize, int csize);
+  virtual void  makePuzzleBlocks(int xsize, int ysize, int csize);
   virtual void  shuffle();
   virtual void  sizeMess(int width, int height);
   virtual void  moveMess(int direction);
@@ -71,7 +71,7 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   // anyone wants to play the famous puzzle game ?
   int m_game;
 
- private:
+private:
 
   //////////
   // static member functions
@@ -80,4 +80,4 @@ class GEM_EXTERN pix_puzzle : public GemPixObj
   static void moveMessCallback(void *data, t_float state);
 };
 
-#endif	// for header file
+#endif  // for header file

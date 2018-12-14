@@ -1,4 +1,4 @@
-#N canvas 509 22 641 529 10;
+#N canvas 509 51 641 529 10;
 #X text 462 20 GEM object;
 #X obj 18 324 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -55,13 +55,11 @@
 1;
 #X text 28 327 Inlet 1:;
 #X text 42 343 gemlist;
-#X text 42 376 bang : generate new image;
-#X text 42 392 auto 1|0 : generate new image for each frame on/off
-(default off);
-#X text 42 421 set <width> <height> : change size of the image (default
-: 64*64 );
-#X text 28 474 Outlet 1:;
-#X text 44 489 gemlist;
+#X text 42 382 bang : generate new image;
+#X text 42 402 auto 1|0 : generate new image for each frame on/off
+(default:0), f 64;
+#X text 28 482 Outlet 1:;
+#X text 44 495 gemlist;
 #X text 42 360 RGBA|RGB|GREY : set format of input-data (default :
 RGBA);
 #X text 41 251 You might want to deactivate the interpolation of the
@@ -83,19 +81,21 @@ It defaults to 64*64. It can be dynamically changed by the set message.
 #X text 41 163 Each time you send a bang \, a new noise is generated.
 You can send an [auto 1( message to generate a noise for each render
 frame.;
-#X text 42 453 seed <int> : change the initalization of the random
-function;
+#X text 42 447 seed <int> : change the initialization of the random
+function, f 62;
+#X text 42 425 set <width> <height> : change size of the image (default
+: 64*64), f 66;
 #X connect 8 0 9 0;
 #X connect 9 0 8 0;
-#X connect 12 0 41 0;
+#X connect 12 0 40 0;
 #X connect 14 0 20 0;
-#X connect 15 0 41 0;
-#X connect 16 0 41 0;
-#X connect 17 0 41 0;
-#X connect 19 0 41 0;
+#X connect 15 0 40 0;
+#X connect 16 0 40 0;
+#X connect 17 0 40 0;
+#X connect 19 0 40 0;
 #X connect 21 0 14 0;
 #X connect 22 0 21 0;
-#X connect 25 0 41 0;
+#X connect 25 0 40 0;
 #X connect 26 0 25 0;
-#X connect 41 0 14 0;
-#X connect 42 0 41 0;
+#X connect 40 0 14 0;
+#X connect 41 0 40 0;

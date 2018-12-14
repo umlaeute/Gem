@@ -61,7 +61,7 @@
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 523 114 macOS: quicktime;
-#X text 516 104 windos: *.AVI;
+#X text 516 104 MS Windows: *.AVI;
 #X text 523 124 linux: depends...;
 #X floatatom 560 196 3 0 9 2 index - -;
 #X text 50 12 Synopsis: [pix_buffer_write];

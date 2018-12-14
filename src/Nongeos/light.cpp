@@ -47,16 +47,15 @@ light :: ~light()
 void light :: renderDebug()
 {
   const GLfloat size=0.2f;
-  if (m_debug)
-    {
-      glPushMatrix();
-      glDisable(GL_LIGHTING);
-      glColor3fv(m_color);
-      glTranslatef(m_position[0], m_position[1], m_position[2]);
-      gluSphere(m_thing, size, 10, 10);
-      glEnable(GL_LIGHTING);
-      glPopMatrix();
-    }
+  if (m_debug) {
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glColor3fv(m_color);
+    glTranslatef(m_position[0], m_position[1], m_position[2]);
+    gluSphere(m_thing, size, 10, 10);
+    glEnable(GL_LIGHTING);
+    glPopMatrix();
+  }
 }
 
 ////////////////////////////////////////////////////////

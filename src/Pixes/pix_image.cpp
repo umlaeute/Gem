@@ -55,7 +55,9 @@ pix_image :: pix_image(t_symbol *filename) :
   gem::Settings::get("image.loading.thread", ival);
   m_wantThread=(ival!=0);
 
-  if(filename!=&s_)openMess(filename->s_name);
+  if(filename!=&s_) {
+    openMess(filename->s_name);
+  }
   gem::image::load::poll();
 }
 
@@ -81,7 +83,9 @@ void pix_image :: threadMess(bool onoff)
 /////////////////////////////////////////////////////////
 void pix_image :: openMess(std::string filename)
 {
-  if(filename.empty())return;
+  if(filename.empty()) {
+    return;
+  }
 
   gem::image::load::cancel(m_id);
 
@@ -98,8 +102,9 @@ void pix_image :: openMess(std::string filename)
   } else {
     success=gem::image::load:: sync(cb, userdata, m_filename, m_id);
   }
-  if(gem::image::load::INVALID == m_id)
+  if(gem::image::load::INVALID == m_id) {
     success=false;
+  }
 
   std::vector<gem::any>atoms;
   gem::any value;
@@ -122,15 +127,17 @@ void pix_image :: openMess(std::string filename)
 
 
 void    pix_image:: loaded(const gem::image::load::id_t ID,
-			   imageStruct*img,
-			   const gem::Properties&props) {
+                           imageStruct*img,
+                           const gem::Properties&props)
+{
   std::vector<gem::any>atoms;
   gem::any value;
 
   if(ID!=m_id || ID == gem::image::load::INVALID) {
     atoms.push_back(value=std::string("discard"));
-    if(ID!=gem::image::load::INVALID)
+    if(ID!=gem::image::load::INVALID) {
       atoms.push_back(value=(int)ID);
+    }
     verbose(1, "discarding image with ID %d", ID);
     m_infoOut.send("load", atoms);
     return;
@@ -153,9 +160,10 @@ void    pix_image:: loaded(const gem::image::load::id_t ID,
   }
 }
 void    pix_image:: loadCallback(void*data,
-				 gem::image::load::id_t ID,
-				 imageStruct*img,
-				 const gem::Properties&props) {
+                                 gem::image::load::id_t ID,
+                                 imageStruct*img,
+                                 const gem::Properties&props)
+{
   pix_image*me=reinterpret_cast<pix_image*>(data);
   me->loaded(ID, img, props);
 }
@@ -173,17 +181,16 @@ void pix_image :: render(GemState *state)
   gem::image::load::poll();
 
   // if we don't have an image, just return
-  if (!m_loadedImage){
+  if (!m_loadedImage) {
     return;
   }
 
   // do we need to reload the image?
-  if (m_cache&&m_cache->resendImage)
-    {
-      m_loadedImage->refreshImage(&m_pixBlock.image);
-      m_pixBlock.newimage = 1;
-      m_cache->resendImage = 0;
-    }
+  if (m_cache&&m_cache->resendImage) {
+    m_loadedImage->refreshImage(&m_pixBlock.image);
+    m_pixBlock.newimage = 1;
+    m_cache->resendImage = 0;
+  }
   state->set(GemState::_PIX, &m_pixBlock);
 }
 
@@ -203,7 +210,9 @@ void pix_image :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void pix_image :: startRendering()
 {
-  if (!m_loadedImage) return;
+  if (!m_loadedImage) {
+    return;
+  }
   m_loadedImage->refreshImage(&m_pixBlock.image);
   m_pixBlock.newimage = 1;
 }
@@ -215,13 +224,12 @@ void pix_image :: startRendering()
 void pix_image :: cleanImage()
 {
   // release previous data
-  if (m_loadedImage)
-    {
-      delete m_loadedImage;
-      m_loadedImage = NULL;
-      m_pixBlock.image.clear();
-      m_pixBlock.image.data = NULL;
-    }
+  if (m_loadedImage) {
+    delete m_loadedImage;
+    m_loadedImage = NULL;
+    m_pixBlock.image.clear();
+    m_pixBlock.image.data = NULL;
+  }
 }
 
 /////////////////////////////////////////////////////////

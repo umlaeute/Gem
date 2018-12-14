@@ -27,8 +27,8 @@
 #define RIPPLE_LENGTH     2048
 #define RIPPLE_CYCLES     18
 #define RIPPLE_AMPLITUDE  0.125
-#define RIPPLE_STEP	  7
-#define RIPPLE_COUNT	  7
+#define RIPPLE_STEP       7
+#define RIPPLE_COUNT      7
 
 #define GRID_SIZE_X   32
 #define GRID_SIZE_Y   32
@@ -39,19 +39,19 @@
 #define CLIP_NEAR  0.0
 #define CLIP_FAR   1000.0
 
-typedef struct {	/* precomputed displacement vector table */
+typedef struct {        /* precomputed displacement vector table */
   float dx[2];
-  int r;		/* distance from origin, in pixels */
+  int r;                /* distance from origin, in pixels */
 } RIPPLE_VECTOR;
 
-typedef struct {	/* precomputed ripple amplitude table */
+typedef struct {        /* precomputed ripple amplitude table */
   float amplitude;
 } RIPPLE_AMP;
 
 typedef struct {
-  float x[2];		/* initial vertex location */
-  float t[2];		/* texture coordinate */
-  float dt[2];		/* default texture coordinate */
+  float x[2];           /* initial vertex location */
+  float t[2];           /* texture coordinate */
+  float dt[2];          /* default texture coordinate */
 } RIPPLE_VERTEX;
 
 /*-----------------------------------------------------------------
@@ -71,13 +71,13 @@ class GEM_EXTERN ripple : public GemShape
 {
   CPPEXTERN_HEADER(ripple, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   ripple( t_floatarg width, t_floatarg height);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -85,38 +85,38 @@ class GEM_EXTERN ripple : public GemShape
 
   //////////
   // The height of the object
-  short		m_ctrX, m_ctrY;
-  void	 	heightMess(float height);
-  void		ctrXMess(float center);
-  void		ctrYMess(float center);
+  short         m_ctrX, m_ctrY;
+  void          heightMess(float height);
+  void          ctrXMess(float center);
+  void          ctrYMess(float center);
   //////////
   // Do the rendering
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
-  void	ripple_dynamics(void);
-  void	ripple_init(void);
-  float	ripple_distance( int gx, int gy, int cx, int cy);
-  int	ripple_max_distance( int gx, int gy );
-  void	ripple_bang(void);
-  void	precalc_ripple_vector(void);
-  void	precalc_ripple_amp(void);
+  void  ripple_dynamics(void);
+  void  ripple_init(void);
+  float ripple_distance( int gx, int gy, int cx, int cy);
+  int   ripple_max_distance( int gx, int gy );
+  void  ripple_bang(void);
+  void  precalc_ripple_vector(void);
+  void  precalc_ripple_amp(void);
 
   //////////
   // The height of the object
-  GLfloat	    	m_height;
+  GLfloat               m_height;
 
   //////////
   // The height inlet
   t_inlet   *m_inletH;
-  t_inlet		*m_inletcX;
-  t_inlet		*m_inletcY;
+  t_inlet               *m_inletcX;
+  t_inlet               *m_inletcY;
 
   //////////
   // getStuff
   int m_gridX, m_gridY;
 
-  bool		m_alreadyInit;
-  float		m_sizeX, m_sizeY, m_sizeY0;
+  bool          m_alreadyInit;
+  float         m_sizeX, m_sizeY, m_sizeY0;
   RIPPLE_VECTOR m_rippleVector[GRID_MAX_X][GRID_MAX_Y];
   RIPPLE_AMP m_rippleAmp[RIPPLE_LENGTH];
   RIPPLE_VERTEX m_rippleVertex[GRID_MAX_X][GRID_MAX_Y];
@@ -129,4 +129,4 @@ class GEM_EXTERN ripple : public GemShape
   int m_rippleMax;
 };
 
-#endif	// for header file
+#endif  // for header file

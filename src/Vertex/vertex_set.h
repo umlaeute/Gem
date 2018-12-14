@@ -34,24 +34,24 @@ class GEM_EXTERN vertex_set : public vertex_scale
 {
   CPPEXTERN_HEADER(vertex_set, vertex_scale);
 
-    public:
+public:
 
   //////////
   // Constructor
   vertex_set(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~vertex_set(void);
 
   virtual void paramMess(int,t_atom*);
-  float	m_x,m_y,m_z,m_w;
+  float m_x,m_y,m_z,m_w;
 
   //////////
   // Do the rendering
   virtual void  vertexProcess(int,GLfloat *);
 };
 
-#endif	// for header file
+#endif  // for header file

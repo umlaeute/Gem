@@ -86,15 +86,20 @@ glsl_geometry :: ~glsl_geometry()
 /////////////////////////////////////////////////////////
 void glsl_geometry :: closeMess(void)
 {
-  if(m_shaderString)delete [] m_shaderString;
+  if(m_shaderString) {
+    delete [] m_shaderString;
+  }
   m_shaderString=NULL;
   m_size=0;
-  if(m_shader)
+  if(m_shader) {
     glDeleteShader( m_shader );
-  if(m_shaderARB)
+  }
+  if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
+  }
 
-  m_idmapper.del(m_idmapped);m_idmapped=0.;
+  m_idmapper.del(m_idmapped);
+  m_idmapped=0.;
 
   m_shader=0;
   m_shaderARB = 0;
@@ -110,21 +115,21 @@ bool glsl_geometry :: openMessGL2(void)
 {
   if (m_shader) {
     glDeleteShader( m_shader );
-    m_idmapper.del(m_idmapped);m_idmapped=0.;
+    m_idmapper.del(m_idmapped);
+    m_idmapped=0.;
   }
   m_shader = glCreateShader(m_shaderTarget);
 
-  if (!m_shader)
-    {
-      error("could not create GLSL shader object");
-      return false;
-    }
+  if (!m_shader) {
+    error("could not create GLSL shader object");
+    return false;
+  }
   const char * vs = m_shaderString;
   glShaderSource( m_shader, 1, &vs, NULL );
   glCompileShader( m_shader );
   glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
   if (!m_compiled) {
-    GLint	length;
+    GLint       length;
     GLchar* log;
     glGetShaderiv( m_shader, GL_INFO_LOG_LENGTH, &length );
     log = (GLchar*)malloc( length * sizeof(GLchar) );
@@ -148,23 +153,25 @@ bool glsl_geometry :: openMessARB(void)
 {
   if(m_shaderARB) {
     glDeleteObjectARB( m_shaderARB );
-    m_idmapper.del(m_idmapped);m_idmapped=0.;
+    m_idmapper.del(m_idmapped);
+    m_idmapped=0.;
   }
   m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
 
-  if (!m_shaderARB)
-    {
-      error("could not create ARB shader object");
-      return false;
-    }
+  if (!m_shaderARB) {
+    error("could not create ARB shader object");
+    return false;
+  }
   const char * vs = m_shaderString;
   glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
   glCompileShaderARB( m_shaderARB );
-  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB, &m_compiled );
+  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
+                             &m_compiled );
   if (!m_compiled) {
-    GLint	length;
+    GLint       length;
     GLcharARB* log;
-    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB, &length );
+    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
+                               &length );
     log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
     glGetInfoLogARB( m_shaderARB, length, NULL, log );
     post("compile Info_log:");
@@ -187,18 +194,26 @@ bool glsl_geometry :: openMessARB(void)
 
 void glsl_geometry :: openMess(t_symbol *filename)
 {
-  if(NULL==filename || NULL==filename->s_name)return;
-  if(&s_==filename)return;
+  if(NULL==filename || NULL==filename->s_name) {
+    return;
+  }
+  if(&s_==filename) {
+    return;
+  }
 
   m_shaderFilename=filename;
 
-  if (getState()==RENDERING) loadShader();
+  if (getState()==RENDERING) {
+    loadShader();
+  }
   return;
 }
 
 void glsl_geometry :: loadShader()
 {
-  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name)return;
+  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name) {
+    return;
+  }
   if(!isRunnable()) {
     return;
   }
@@ -213,7 +228,11 @@ void glsl_geometry :: loadShader()
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
-    if(size<0){fclose(file);error("error reading filesize");return;}
+    if(size<0) {
+      fclose(file);
+      error("error reading filesize");
+      return;
+    }
     m_shaderString = new char[size + 1];
     memset(m_shaderString,0,size + 1);
     fseek(file,0,SEEK_SET);
@@ -221,7 +240,10 @@ void glsl_geometry :: loadShader()
     m_shaderString[size]='\0';
     int err=ferror(file);
     fclose(file);
-    if(err){error("error %d reading file (%d<%d)", err, count, size); return;}
+    if(err) {
+      error("error %d reading file (%d<%d)", err, count, size);
+      return;
+    }
   } else {
     error("could not find shader-file: '%s'", buf);
     return;
@@ -233,10 +255,11 @@ void glsl_geometry :: loadShader()
   }
   m_size=strlen(m_shaderString);
 
-  if(GLEW_EXT_geometry_shader4) // GLEW_VERSION_2_1
+  if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1
     openMessGL2();
-  else if (GLEW_ARB_geometry_shader4)
+  } else if (GLEW_ARB_geometry_shader4) {
     openMessARB();
+  }
 
   verbose(1, "Loaded file: %s", buf);
   m_shaderFilename=NULL;
@@ -246,7 +269,8 @@ void glsl_geometry :: loadShader()
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool glsl_geometry :: isRunnable() {
+bool glsl_geometry :: isRunnable()
+{
   if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1 ??
     m_shaderTarget = GL_GEOMETRY_SHADER_EXT;
     return true;
@@ -332,11 +356,13 @@ void glsl_geometry :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
       glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
-     if(m_shaderARB) {
+      if(m_shaderARB) {
         post("compiled last shaderARB to ID: %d", m_shaderARB);
       }
     }
-  } else post("no GLSL support");
+  } else {
+    post("no GLSL support");
+  }
 }
 
 ////////////////////////////////////////////////////////

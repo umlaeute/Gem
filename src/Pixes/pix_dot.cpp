@@ -53,7 +53,8 @@ pix_dot :: pix_dot() :
   DOTDEPTH = 5;
   DOTMAX = (1<<DOTDEPTH);
   yuv_init();
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("scale"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+            gensym("scale"));
 }
 
 /////////////////////////////////////////////////////////
@@ -62,10 +63,10 @@ pix_dot :: pix_dot() :
 /////////////////////////////////////////////////////////
 pix_dot :: ~pix_dot()
 {
-    myImage.clear();
-    sharedbuffer_length = 0;
-    free(sharedbuffer);
-    free(pattern);
+  myImage.clear();
+  sharedbuffer_length = 0;
+  free(sharedbuffer);
+  free(pattern);
 }
 
 /////////////////////////////////////////////////////////
@@ -74,109 +75,98 @@ pix_dot :: ~pix_dot()
 /////////////////////////////////////////////////////////
 void pix_dot :: makePattern(int format)
 {
-  int i, x, y, c;
-  int u, v;
-  double p, q, r;
-
-  switch(format){
-  default: // RGBA
-    {
-      U32 *pat;
-      for (i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
-	  pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
-	      *pat-- = (c<<SHIFT_RED)|(c<<SHIFT_GREEN)|(c<<SHIFT_BLUE);
-	    }
-	  }
-	}
+  switch(format) {
+  default: { // RGBA
+    for (int i=0; i<DOTMAX; i++) {
+      /* Generated pattern is a quadrant of a disk. */
+      U32 *pat = pattern + (i+1) * dot_hsize * dot_hsize - 1;
+      double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+      r = r*r;
+      for(int y=0; y<dot_hsize; y++) {
+        for(int x=0; x<dot_hsize; x++) {
+          int c = 0;
+          for(int u=0; u<4; u++) {
+            double p = static_cast<double>(u)/4.0 + y;
+            p = p*p;
+            for(int v=0; v<4; v++) {
+              double q = static_cast<double>(v)/4.0 + x;
+              if(p+q*q<r) {
+                c++;
+              }
+            }
+          }
+          c = (c>15)?15:c;
+          c<<=4;
+          *pat-- = (c<<SHIFT_RED)|(c<<SHIFT_GREEN)|(c<<SHIFT_BLUE);
+        }
+      }
     }
-    break;
-  case GL_LUMINANCE:
-    {
-      unsigned char *pat;
-      for (i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
-	  pat = (reinterpret_cast<unsigned char*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
-	      *pat-- = c;
-	    }
-	  }
-	}
+  }
+  break;
+  case GL_LUMINANCE: {
+    for (int i=0; i<DOTMAX; i++) {
+      /* Generated pattern is a quadrant of a disk. */
+      unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) +
+                           (i+1) * dot_hsize * dot_hsize - 1;
+      double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+      r = r*r;
+      for(int y=0; y<dot_hsize; y++) {
+        for(int x=0; x<dot_hsize; x++) {
+          int c = 0;
+          for(int u=0; u<4; u++) {
+            double p = static_cast<double>(u)/4.0 + y;
+            p = p*p;
+            for(int v=0; v<4; v++) {
+              double q = static_cast<double>(v)/4.0 + x;
+              if(p+q*q<r) {
+                c++;
+              }
+            }
+          }
+          c = (c>15)?15:c;
+          c<<=4;
+          *pat-- = c;
+        }
+      }
     }
-    break;
-  case GL_YUV422_GEM:
-      {
-      U16 *pat;
-      const unsigned char chroma = 128;
+  }
+  break;
+  case GL_YUV422_GEM: {
+    const unsigned char chroma = 128;
 
-      for (i=0; i<DOTMAX; i++)
-	{
-	  /* Generated pattern is a quadrant of a disk. */
-	  pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize * dot_hsize - 1;
-	  r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
-	  r = r*r;
-	  for(y=0; y<dot_hsize; y++) {
-	    for(x=0; x<dot_hsize; x++) {
-	      c = 0;
-	      for(u=0; u<4; u++) {
-		p = static_cast<double>(u)/4.0 + y;
-		p = p*p;
-		for(v=0; v<4; v++) {
-		  q = static_cast<double>(v)/4.0 + x;
-		  if(p+q*q<r) {
-		    c++;
-		  }
-		}
-	      }
-	      c = (c>15)?15:c;
-	      c<<=4;
+    for (int i=0; i<DOTMAX; i++) {
+      /* Generated pattern is a quadrant of a disk. */
+      U16 *pat = (reinterpret_cast<U16*>(pattern)) + (i+1) * dot_hsize *
+                 dot_hsize - 1;
+      double r = (0.2 * i / DOTMAX + 0.8) * dot_hsize;
+      r = r*r;
+      for(int y=0; y<dot_hsize; y++) {
+        for(int x=0; x<dot_hsize; x++) {
+          int c = 0;
+          for(int u=0; u<4; u++) {
+            double p = static_cast<double>(u)/4.0 + y;
+            p = p*p;
+            for(int v=0; v<4; v++) {
+              double q = static_cast<double>(v)/4.0 + x;
+              if(p+q*q<r) {
+                c++;
+              }
+            }
+          }
+          c = (c>15)?15:c;
+          c<<=4;
 #ifdef __APPLE__
-/* LATER fix the defines in GemPixPete.h instead of the code here ...*/
-/* (the same goes for pix_halftone.cpp) */
-	      *pat-- = (chroma<<SHIFT_V)|((c&0xff)<<SHIFT_Y2);
+          /* LATER fix the defines in GemPixPete.h instead of the code here ...*/
+          /* (the same goes for pix_halftone.cpp) */
+          *pat-- = (chroma<<SHIFT_V)|((c&0xff)<<SHIFT_Y2);
 #else
-	      *pat-- = (chroma<<SHIFT_U)|((c&0xff)<<SHIFT_Y1);
+          *pat-- = (chroma<<SHIFT_U)|((c&0xff)<<SHIFT_Y1);
 #endif
-	    }
-	  }
-	}
+        }
+      }
     }
-    break;
+  }
+  break;
   }
 
   /* The upper left part of a disk is needed, but generated pattern is a bottom
@@ -185,30 +175,29 @@ void pix_dot :: makePattern(int format)
 
 void pix_dot :: drawDot(int xx, int yy, unsigned char c, U32 *dest)
 {
-  int x, y;
   U32 *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = pattern + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -218,30 +207,29 @@ void pix_dot :: drawDot(int xx, int yy, unsigned char c, U32 *dest)
 
 void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
 {
-  int x, y;
   U16 *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = (reinterpret_cast<U16*>(pattern)) + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -249,32 +237,32 @@ void pix_dot :: drawDotYUV(int xx, int yy, unsigned char c, U16 *dest)
   }
 }
 
-void pix_dot :: drawDotGray(int xx, int yy, unsigned char c, unsigned char *dest)
+void pix_dot :: drawDotGray(int xx, int yy, unsigned char c,
+                            unsigned char *dest)
 {
-  int x, y;
   unsigned char *pat;
 
   c = (c>>(8-DOTDEPTH));
   pat = ((unsigned char*)pattern) + c * dot_hsize * dot_hsize;
   dest = dest + yy * dot_size * m_xsize + xx * dot_size;
-  for(y=0; y<dot_hsize; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
     pat += dot_hsize + 1;
   }
   pat -= dot_hsize*2;
-  for(y=0; y<dot_hsize-1; y++) {
-    for(x=0; x<dot_hsize; x++) {
+  for(int y=0; y<dot_hsize-1; y++) {
+    for(int x=0; x<dot_hsize; x++) {
       *dest++ = *pat++;
     }
     pat -= 2;
-    for(x=0; x<dot_hsize-1; x++) {
+    for(int x=0; x<dot_hsize-1; x++) {
       *dest++ = *pat--;
     }
     dest += m_xsize - dot_size + 1;
@@ -289,10 +277,16 @@ void pix_dot :: drawDotGray(int xx, int yy, unsigned char c, unsigned char *dest
 /////////////////////////////////////////////////////////
 void pix_dot :: sizeMess(int width, int height)
 {
-  if(width>0)dots_width=width;
-  else  error("width must be > 0!");
-  if(height>0)dots_height=height;
-  else  error("height must be > 0!");
+  if(width>0) {
+    dots_width=width;
+  } else {
+    error("width must be > 0!");
+  }
+  if(height>0) {
+    dots_height=height;
+  } else {
+    error("height must be > 0!");
+  }
   m_useScale=false;
   alreadyInit=0;
   myImage.setBlack();
@@ -301,12 +295,12 @@ void pix_dot :: sizeMess(int width, int height)
 
 unsigned char pix_dot :: inline_RGB2Y(int rgb)
 {
-	int i;
+  int i;
 
-	i = R2Y[(rgb>>16)&0xff];
-	i += G2Y[(rgb>>8)&0xff];
-	i += B2Y[rgb&0xff];
-	return i;
+  i = R2Y[(rgb>>16)&0xff];
+  i += G2Y[(rgb>>8)&0xff];
+  i += B2Y[rgb&0xff];
+  return i;
 }
 
 /////////////////////////////////////////////////////////
@@ -318,63 +312,65 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   U32 *src = reinterpret_cast<U32*>(image.data);
   U32 *dest;
 
-  int x, y, sx, sy;
+  if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) {
+    alreadyInit = 0;
+  }
 
-  if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
+  if (!alreadyInit)    {
+    m_xsize = image.xsize;
+    m_ysize = image.ysize;
+    m_csize = image.csize;
 
-    if (!alreadyInit)    {
-        m_xsize = image.xsize;
-        m_ysize = image.ysize;
-	m_csize = image.csize;
-
-	if(m_useScale){
-	  dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
-	  if(dot_hsize<1)dot_hsize=1;
-	  dot_size = dot_hsize * 2;
-	  dots_width = m_xsize / dot_size;
-	  dots_height = m_ysize / dot_size;
-	} else {
-	  dot_size=m_xsize / dots_width;
-	  if(dot_size==0){
-	    dot_size=2;
-	    dots_width  = m_xsize / dot_size;
-	    dots_height = m_ysize / dot_size;
-	  }
-	}
-	dot_hsize = dot_size / 2;
-
-        pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
-        if (pattern == NULL) {
-            error("couldn't make RGBA pattern");
-            return;
-        }
-
-        sharedbuffer_init();
-        sharedbuffer_reset();
-        sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
-        sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
-        if (sampx == NULL || sampy == NULL ){
-            return;
-        }
-        makePattern();
-        sampxy_table_init();
+    if(m_useScale) {
+      dot_hsize =(static_cast<int>(8 * m_scale)) >> 1;
+      if(dot_hsize<1) {
+        dot_hsize=1;
+      }
+      dot_size = dot_hsize * 2;
+      dots_width = m_xsize / dot_size;
+      dots_height = m_ysize / dot_size;
+    } else {
+      dot_size=m_xsize / dots_width;
+      if(dot_size==0) {
+        dot_size=2;
+        dots_width  = m_xsize / dot_size;
+        dots_height = m_ysize / dot_size;
+      }
     }
+    dot_hsize = dot_size / 2;
+
+    pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
+    if (pattern == NULL) {
+      error("couldn't make RGBA pattern");
+      return;
+    }
+
+    sharedbuffer_init();
+    sharedbuffer_reset();
+    sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
+    sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
+    if (sampx == NULL || sampy == NULL ) {
+      return;
+    }
+    makePattern();
+    sampxy_table_init();
+  }
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
   myImage.setCsizeByFormat(image.format);
   myImage.reallocate();
 
-  if(!alreadyInit){
+  if(!alreadyInit) {
     myImage.setBlack();
     alreadyInit = 1;
   }
 
   dest = reinterpret_cast<U32*>(myImage.data);
-  for ( y=0; y<dots_height; y++) {
-    sy = sampy[y];
-    for ( x=0; x<dots_width; x++){
-        sx = sampx[x];
-        drawDot(x, y, inline_RGB2Y( src[sy*image.xsize+sx]), dest);
+  for (int y=0; y<dots_height; y++) {
+    int sy = sampy[y];
+    for (int x=0; x<dots_width; x++) {
+      int sx = sampx[x];
+      drawDot(x, y, inline_RGB2Y( src[sy*image.xsize+sx]), dest);
     }
   }
 
@@ -387,66 +383,65 @@ void pix_dot :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_dot :: processYUVImage(imageStruct &image)
 {
-    U16 *dest;
-    U16 *src = reinterpret_cast<U16*>(image.data);
-    int x, y, sx, sy;
-    int luma = 0;
-    int luma2 = 0;
-    int avgluma = 0;
+  U16 *dest;
+  U16 *src = reinterpret_cast<U16*>(image.data);
 
-    if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
+  if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) {
+    alreadyInit = 0;
+  }
 
-    if (!alreadyInit)
-    {
-        m_xsize = image.xsize;
-        m_ysize = image.ysize;
-	m_csize = image.csize;
+  if (!alreadyInit) {
+    m_xsize = image.xsize;
+    m_ysize = image.ysize;
+    m_csize = image.csize;
 
-        dot_hsize = (static_cast<int>(8 * m_scale)) >> 1;
-        if(dot_hsize<1)dot_hsize=1;
-        dot_size = dot_hsize * 2;
-        dots_width = m_xsize / dot_size;
-        dots_height = m_ysize / dot_size;
+    dot_hsize = (static_cast<int>(8 * m_scale)) >> 1;
+    if(dot_hsize<1) {
+      dot_hsize=1;
+    }
+    dot_size = dot_hsize * 2;
+    dots_width = m_xsize / dot_size;
+    dots_height = m_ysize / dot_size;
 
-        pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
-        if (pattern == NULL) {
-            error("couldn't make YUV pattern");
-            return;
-        }
-
-        sharedbuffer_init();
-        sharedbuffer_reset();
-        sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
-        sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
-        if (sampx == NULL || sampy == NULL ){
-            return;
-        }
-        makePattern(GL_YUV422_GEM);
-        sampxy_table_init();
+    pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
+    if (pattern == NULL) {
+      error("couldn't make YUV pattern");
+      return;
     }
 
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
-    myImage.reallocate();
-
-    if(!alreadyInit){
-      myImage.setBlack();
-      alreadyInit = 1;
+    sharedbuffer_init();
+    sharedbuffer_reset();
+    sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
+    sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
+    if (sampx == NULL || sampy == NULL ) {
+      return;
     }
+    makePattern(GL_YUV422_GEM);
+    sampxy_table_init();
+  }
+
+  myImage.xsize = image.xsize;
+  myImage.ysize = image.ysize;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
+
+  if(!alreadyInit) {
+    myImage.setBlack();
+    alreadyInit = 1;
+  }
 
 
-    dest = reinterpret_cast<U16*>(myImage.data);
+  dest = reinterpret_cast<U16*>(myImage.data);
 
-    for ( y=0; y<dots_height; y++) {
-        sy = sampy[y];
-        for ( x=0; x<dots_width; x++){
-            sx = sampx[x];
-            luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
-            drawDotYUV(x, y, luma, dest);
-        }
+  for (int y=0; y<dots_height; y++) {
+    int sy = sampy[y];
+    for (int x=0; x<dots_width; x++) {
+      int sx = sampx[x];
+      int luma  = ((src[sy*image.xsize+sx+1])>>SHIFT_Y1)&0xff;
+      drawDotYUV(x, y, luma, dest);
     }
-    image.data = myImage.data;
+  }
+  image.data = myImage.data;
 }
 
 /////////////////////////////////////////////////////////
@@ -455,78 +450,82 @@ void pix_dot :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_dot :: processGrayImage(imageStruct &image)
 {
-    unsigned char *dest;
-    unsigned char *src = (unsigned char*)image.data;
-    int x, y, sx, sy;
+  unsigned char *dest;
+  unsigned char *src = (unsigned char*)image.data;
 
-    if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) alreadyInit = 0;
+  if (m_xsize!=image.xsize || m_ysize!=image.ysize || m_csize!=image.csize) {
+    alreadyInit = 0;
+  }
 
-    if (!alreadyInit)
-    {
-        m_xsize = image.xsize;
-        m_ysize = image.ysize;
-	m_csize = image.csize;
+  if (!alreadyInit) {
+    m_xsize = image.xsize;
+    m_ysize = image.ysize;
+    m_csize = image.csize;
 
-        dot_hsize = static_cast<int>(8 * m_scale) >> 1;
-        if(dot_hsize<1)dot_hsize=1;
-        dot_size = dot_hsize * 2;
-        dots_width = m_xsize / dot_size;
-        dots_height = m_ysize / dot_size;
+    dot_hsize = static_cast<int>(8 * m_scale) >> 1;
+    if(dot_hsize<1) {
+      dot_hsize=1;
+    }
+    dot_size = dot_hsize * 2;
+    dots_width = m_xsize / dot_size;
+    dots_height = m_ysize / dot_size;
 
-        pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
-        if (pattern == NULL) {
-            error("couldn't make luma pattern");
-            return;
-        }
-
-        sharedbuffer_init();
-        sharedbuffer_reset();
-        sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
-        sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
-        if (sampx == NULL || sampy == NULL ){
-            return;
-        }
-        makePattern(GL_LUMINANCE);
-        sampxy_table_init();
+    pattern = (U32 *)malloc(DOTMAX * dot_hsize * dot_hsize * sizeof(U32));
+    if (pattern == NULL) {
+      error("couldn't make luma pattern");
+      return;
     }
 
-    myImage.xsize = image.xsize;
-    myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
-    myImage.reallocate();
-
-    if(!alreadyInit){
-      myImage.setBlack();
-      alreadyInit = 1;
+    sharedbuffer_init();
+    sharedbuffer_reset();
+    sampx = (int *)sharedbuffer_alloc(m_xsize*sizeof(int));
+    sampy = (int *)sharedbuffer_alloc(m_ysize*sizeof(int));
+    if (sampx == NULL || sampy == NULL ) {
+      return;
     }
+    makePattern(GL_LUMINANCE);
+    sampxy_table_init();
+  }
 
-    dest = (unsigned char*)myImage.data;
+  myImage.xsize = image.xsize;
+  myImage.ysize = image.ysize;
+  myImage.setCsizeByFormat(image.format);
+  myImage.reallocate();
 
-    for ( y=0; y<dots_height; y++) {
-        sy = sampy[y];
-        for ( x=0; x<dots_width; x++){
-            sx = sampx[x];
-            const char luma  = src[sy*image.xsize+sx+1];
-            drawDotGray(x, y, luma, dest);
-        }
+  if(!alreadyInit) {
+    myImage.setBlack();
+    alreadyInit = 1;
+  }
+
+  dest = (unsigned char*)myImage.data;
+
+  for (int y=0; y<dots_height; y++) {
+    int sy = sampy[y];
+    for (int x=0; x<dots_width; x++) {
+      int sx = sampx[x];
+      const char luma  = src[sy*image.xsize+sx+1];
+      drawDotGray(x, y, luma, dest);
     }
-    image.data = myImage.data;
+  }
+  image.data = myImage.data;
 }
 
 
 
 void pix_dot :: scaleMess(float state)
 {
-  if(state<=0.f){
+  if(state<=0.f) {
     error("scale-factor must not be < 0!");
     return;
   }
   m_scale=state; /* used to be as (int)cast, but i have removed this...*/
   alreadyInit = 0;
-  //myImage.reallocate(dataSize);we dont need to reallocate the image, since nothing changed
+  //myImage.reallocate(dataSize);we don't need to reallocate the image, since nothing changed
   myImage.setBlack();
-  free(sharedbuffer); sharedbuffer=NULL;
-  free(pattern); pattern=NULL;
+  free(sharedbuffer);
+  sharedbuffer=NULL;
+  free(pattern);
+  pattern=NULL;
   m_useScale=true;
   setPixModified();
 
@@ -534,38 +533,38 @@ void pix_dot :: scaleMess(float state)
 
 void pix_dot :: sampxy_table_init()
 {
-    int i, j;
+  int i, j;
 
-    j = dot_hsize;
-    for(i=0; i<dots_width; i++) {
-        sampx[i] = j; //* m_xsize;
-        j += dot_size;
-    }
-    j = dot_hsize;
-    for(i=0; i<dots_height; i++) {
-        sampy[i] = j;// * m_ysize / screen_height;
-        j += dot_size;
-    }
+  j = dot_hsize;
+  for(i=0; i<dots_width; i++) {
+    sampx[i] = j; //* m_xsize;
+    j += dot_size;
+  }
+  j = dot_hsize;
+  for(i=0; i<dots_height; i++) {
+    sampy[i] = j;// * m_ysize / screen_height;
+    j += dot_size;
+  }
 }
 
 void pix_dot :: yuv_init()
 {
-    static int initialized = 0;
-    int i;
-    if(!initialized) {
-        for(i=20; i<256; i++) {
+  static int initialized = 0;
+  int i;
+  if(!initialized) {
+    for(i=20; i<256; i++) {
 #if 0
-	  R2Y[i] =  static_cast<int>(0.257f*i);
-	  G2Y[i] =  static_cast<int>(0.504f*i);
-	  B2Y[i] =  static_cast<int>(0.098f*i);
+      R2Y[i] =  static_cast<int>(0.257f*i);
+      G2Y[i] =  static_cast<int>(0.504f*i);
+      B2Y[i] =  static_cast<int>(0.098f*i);
 #else
-	  R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
-	  G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
-	  B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
+      R2Y[i] =  static_cast<int>(RGB2GRAY_RED  *i)>>8;
+      G2Y[i] =  static_cast<int>(RGB2GRAY_GREEN*i)>>8;
+      B2Y[i] =  static_cast<int>(RGB2GRAY_BLUE *i)>>8;
 #endif
-        }
-        initialized = 1;
     }
+    initialized = 1;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -574,14 +573,15 @@ void pix_dot :: yuv_init()
 /////////////////////////////////////////////////////////
 int pix_dot :: sharedbuffer_init()
 {
-	/* maximum size of the frame buffer is for screen size x 2 */
-	sharedbuffer_length = m_xsize * m_ysize * sizeof(U32) * 2;
+  /* maximum size of the frame buffer is for screen size x 2 */
+  sharedbuffer_length = m_xsize * m_ysize * sizeof(U32) * 2;
 
-	sharedbuffer = (unsigned char *)malloc(sharedbuffer_length);
-	if(sharedbuffer == NULL)
-		return -1;
-	else
-		return 0;
+  sharedbuffer = (unsigned char *)malloc(sharedbuffer_length);
+  if(sharedbuffer == NULL) {
+    return -1;
+  } else {
+    return 0;
+  }
 }
 
 /* The effects uses shared buffer must call this function at first in
@@ -589,7 +589,7 @@ int pix_dot :: sharedbuffer_init()
  */
 void pix_dot :: sharedbuffer_reset()
 {
-	tail = 0;
+  tail = 0;
 }
 
 /* Allocates size bytes memory in shared buffer and returns a pointer to the
@@ -597,16 +597,16 @@ void pix_dot :: sharedbuffer_reset()
  */
 unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 {
-	unsigned char *head;
+  unsigned char *head;
 
-	if(sharedbuffer_length - tail < size) {
-		return NULL;
-	}
+  if(sharedbuffer_length - tail < size) {
+    return NULL;
+  }
 
-	head = sharedbuffer + tail;
-	tail += size;
+  head = sharedbuffer + tail;
+  tail += size;
 
-	return head;
+  return head;
 }
 /////////////////////////////////////////////////////////
 // static member function
@@ -614,16 +614,19 @@ unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 /////////////////////////////////////////////////////////
 void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
-  		  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
-                    gensym("scale"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
+                  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
+                  gensym("scale"), A_FLOAT, A_NULL);
 }
 
 
 void pix_dot :: sizeMessCallback(void *data, t_float width, t_float height)
 {
-  GetMyClass(data)->sizeMess(static_cast<int>(width), static_cast<int>(height));
+  GetMyClass(data)->sizeMess(static_cast<int>(width),
+                             static_cast<int>(height));
 }
 
 void pix_dot :: scaleMessCallback(void *data, t_float state)

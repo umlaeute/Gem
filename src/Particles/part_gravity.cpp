@@ -17,9 +17,10 @@
 #include "part_gravity.h"
 
 
-CPPEXTERN_NEW_WITH_THREE_ARGS(part_gravity, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS(part_gravity, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // part_gravity
 //
@@ -27,13 +28,15 @@ CPPEXTERN_NEW_WITH_THREE_ARGS(part_gravity, t_floatarg, A_DEFFLOAT, t_floatarg, 
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_gravity :: part_gravity(t_floatarg xpos, t_floatarg ypos, t_floatarg zpos)
+part_gravity :: part_gravity(t_floatarg xpos, t_floatarg ypos,
+                             t_floatarg zpos)
 {
   m_vector[0] = xpos;
   m_vector[1] = ypos;
   m_vector[2] = zpos;
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("vector"));
 }
 
 /////////////////////////////////////////////////////////
@@ -49,10 +52,9 @@ part_gravity :: ~part_gravity()
 /////////////////////////////////////////////////////////
 void part_gravity :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-    {
-      pGravity(m_vector[0], m_vector[1], m_vector[2]);
-    }
+  if (m_tickTime > 0.f) {
+    pGravity(m_vector[0], m_vector[1], m_vector[2]);
+  }
 }
 
 /////////////////////////////////////////////////////////

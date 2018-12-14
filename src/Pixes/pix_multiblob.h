@@ -30,36 +30,38 @@ pix_multiblob
 #include <stdio.h>
 
 
-class GEM_EXTERN Blob {
+class GEM_EXTERN Blob
+{
 public:
 
   Blob();
-  double xmin();
-  double xmax();
-  double ymin();
-  double ymax();
+  double xmin() const;
+  double xmax() const;
+  double ymin() const;
+  double ymax() const;
 
-  double xmid();
-  double ymid();
+  double xmid() const;
+  double ymid() const;
   // the squared diameter of the blob
-  double diameter2();
+  double diameter2() const;
   // the diamter
-  double diameter();
+  double diameter() const;
 
-  double angle() {
-      double mm_11 = m_11 - xmid()*m_yaccum;
-      double mm_02 = m_02 - ymid()*m_yaccum;
-      double mm_20 = m_20 - xmid()*m_xaccum;
-      return .5*atan2(2.*mm_11,(mm_20-mm_02));
+  double angle()
+  {
+    double mm_11 = m_11 - xmid()*m_yaccum;
+    double mm_02 = m_02 - ymid()*m_yaccum;
+    double mm_20 = m_20 - xmid()*m_xaccum;
+    return .5*atan2(2.*mm_11,(mm_20-mm_02));
   }
 
   // the angular orientation of the principal axis in radians
   double orientation();
 
   // the squared distance to another blob
-  double distance2(Blob b);
+  double distance2(const Blob&b) const;
   // the distance to another blob
-  double distance(Blob b);
+  double distance(const Blob&b) const;
 
   void xmin(double x);
   void xmax(double x);
@@ -120,4 +122,4 @@ protected:
   t_outlet        *m_infoOut;
 };
 
-#endif 	// for header file
+#endif  // for header file

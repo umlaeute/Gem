@@ -37,39 +37,40 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class pix_color : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_color, GemPixObj);
+  CPPEXTERN_HEADER(pix_color, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_color();
+  //////////
+  // Constructor
+  pix_color();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_color();
+  //////////
+  // Destructor
+  virtual ~pix_color();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-      	virtual void 	processGrayImage(imageStruct &image);
-    	virtual void 	processYUVImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processGrayImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
 
-    	//////////
-    	// Set the new color
-    	void	    	vecGainMess(float red, float green, float blue, float alpha=1.0);
+  //////////
+  // Set the new color
+  void            vecGainMess(float red, float green, float blue,
+                              float alpha=1.0);
 
-    	//////////
-    	// The new color
-    	unsigned char  	m_color[4];
+  //////////
+  // The new color
+  unsigned char   m_color[4];
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	vecGainMessCallback(void *data, t_symbol*,int,t_atom*);
+  //////////
+  // Static member functions
+  static void     vecGainMessCallback(void *data, t_symbol*,int,t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

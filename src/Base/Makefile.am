@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libBase.la
@@ -13,9 +13,9 @@ libBase_la_LIBADD   =
 libBase_la_LDFLAGS  =
 
 # RTE flags
-libBase_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@
-libBase_la_LIBADD   += @GEM_RTE_LIBS@
-libBase_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libBase_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+libBase_la_LIBADD   += $(GEM_RTE_LIBS)
+libBase_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 # X
 libBase_la_CXXFLAGS += $(X_CFLAGS)
@@ -27,16 +27,16 @@ libBase_la_LIBADD   += @GLX_LIBS@
 
 # GLEW
 if ENABLE_MULTICONTEXT
-libBase_la_CXXFLAGS += @GEM_LIB_GLEWMX_CFLAGS@
-libBase_la_LIBADD   += @GEM_LIB_GLEWMX_LIBS@
+libBase_la_CXXFLAGS += $(GEM_LIB_GLEWMX_CFLAGS)
+libBase_la_LIBADD   += $(GEM_LIB_GLEWMX_LIBS)
 else !ENABLE_MULTICONTEXT
-libBase_la_CXXFLAGS += @GEM_LIB_GLEW_CFLAGS@
-libBase_la_LIBADD   += @GEM_LIB_GLEW_LIBS@
+libBase_la_CXXFLAGS += $(GEM_LIB_GLEW_CFLAGS)
+libBase_la_LIBADD   += $(GEM_LIB_GLEW_LIBS)
 endif !ENABLE_MULTICONTEXT
 
 # FTGL
-libBase_la_CXXFLAGS += @GEM_LIB_FTGL_CFLAGS@
-libBase_la_LIBADD   += @GEM_LIB_FTGL_LIBS@
+libBase_la_CXXFLAGS += $(GEM_LIB_FTGL_CFLAGS)
+libBase_la_LIBADD   += $(GEM_LIB_FTGL_LIBS)
 
 libBase_la_includedir = $(includedir)/Gem/Base
 libBase_la_include_HEADERS= \
@@ -52,7 +52,7 @@ libBase_la_include_HEADERS= \
 
 libBase_la_include_HEADERS+= \
 	GemWindow.h \
-	GemContext.h 
+	GemContext.h
 
 libBase_la_SOURCES=  \
     CPPExtern.cpp \

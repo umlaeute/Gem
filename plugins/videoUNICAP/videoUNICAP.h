@@ -34,9 +34,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT videoUNICAP : public video {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT videoUNICAP : public video
+{
+public:
   //////////
   // Constructor
   videoUNICAP(void);
@@ -53,11 +57,11 @@ namespace gem { namespace plugins {
   //////////
   // Start up the video device
   // [out] int - returns false if starting failed
-  virtual bool	    	start(void);
+  virtual bool          start(void);
   //////////
   // Stop the video device
   // [out] int - returns 0 if bad
-  virtual bool	   	stop(void);
+  virtual bool          stop(void);
 
   virtual bool reset(void);
 
@@ -68,34 +72,47 @@ namespace gem { namespace plugins {
 
   //////////
   // Set the video properties
-  virtual bool	    	setColor(int);
+  virtual bool          setColor(int);
 
   virtual bool defaultFormat(void);
 
   virtual std::vector<std::string>enumerate(void);
-  virtual bool	    	setDevice(int ID);
-  virtual bool	    	setDevice(const std::string);
+  virtual bool          setDevice(int ID);
+  virtual bool          setDevice(const std::string&);
 
 
   virtual bool enumProperties(gem::Properties&readable,
-			      gem::Properties&writeable);
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&writeprops);
   virtual void getProperties(gem::Properties&readprops);
 
   virtual const std::string getName(void);
 
   virtual std::vector<std::string>provides(void);
-  virtual bool provides(const std::string);
+  virtual bool provides(const std::string&);
 
-  virtual bool	    	dialog(std::vector<std::string>) { return false; }
-  virtual std::vector<std::string>dialogs(void) { std::vector<std::string>result; return result; }
-  virtual bool isThreadable(void) { return false; }
-  virtual bool grabAsynchronous(bool) { return false; }
+  virtual bool          dialog(std::vector<std::string>)
+  {
+    return false;
+  }
+  virtual std::vector<std::string>dialogs(void)
+  {
+    std::vector<std::string>result;
+    return result;
+  }
+  virtual bool isThreadable(void)
+  {
+    return false;
+  }
+  virtual bool grabAsynchronous(bool)
+  {
+    return false;
+  }
 
- protected:
+protected:
   // list of backends we provide:
   std::vector<std::string>m_providers;
-  virtual void provide(const std::string);
+  virtual void provide(const std::string&);
 
   std::vector<unicap_device_t>m_devices;
   std::map<std::string, std::vector<unsigned int> >m_name2devices;
@@ -116,7 +133,7 @@ namespace gem { namespace plugins {
   gem::thread::Mutex mutex;
   gem::Properties m_props;
 
-  private:
+private:
   static void newFrameCB (unicap_event_t event,
                           unicap_handle_t handle,
                           unicap_data_buffer_t * buffer,
@@ -125,8 +142,8 @@ namespace gem { namespace plugins {
   /* are we currently rendering? */
   bool m_running;
 
- };
-};};
+};
+};
+};
 
-#endif	// for header file
-
+#endif  // for header file

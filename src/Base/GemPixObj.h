@@ -34,65 +34,65 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN GemPixObj : public GemBase
 {
-    public:
+public:
 
   //////////
   // Constructor
   GemPixObj();
 
-    protected:
+protected:
 
   //////////
   // Destructor
-  virtual ~GemPixObj()				{ }
+  virtual ~GemPixObj()                          { }
 
   //////////
   // The derived class should override this if it provides
   // processing independent of the image.format
   // This is called whenever a new image comes through.
   // The default is to output an error
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
   //////////
   // The derived class should override this.
   // This is called whenever a new RGB image comes through.
   // The default is to call processImage().
-  virtual void 	processRGBImage(imageStruct &image);
+  virtual void  processRGBImage(imageStruct &image);
 
   //////////
   // The derived class should override this.
   // This is called whenever a new RGBA image comes through.
   // The default is to call processImage().
-  virtual void 	processRGBAImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
   // SIMD-optimized functions: by default the non-optimized function is called
-  virtual void 	processRGBAMMX(imageStruct &image);
-  virtual void 	processRGBASSE2(imageStruct &image);
-  virtual void 	processRGBAAltivec(imageStruct &image);
+  virtual void  processRGBAMMX(imageStruct &image);
+  virtual void  processRGBASSE2(imageStruct &image);
+  virtual void  processRGBAAltivec(imageStruct &image);
 
   //////////
   // The derived class should override this.
   // This is called whenever a new gray8 image comes through.
   // The default is to call processImage().
-  virtual void 	processGrayImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
   // SIMD-optimized functions: by default the non-optimized function is called
-  virtual void 	processGrayMMX(imageStruct &image);
-  virtual void 	processGraySSE2(imageStruct &image);
-  virtual void 	processGrayAltivec(imageStruct &image);
+  virtual void  processGrayMMX(imageStruct &image);
+  virtual void  processGraySSE2(imageStruct &image);
+  virtual void  processGrayAltivec(imageStruct &image);
 
   //////////
   // The derived class should override this.
   // This is called whenever a new YUV422 image comes through.
   // The default is to call processImage().
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
   // SIMD-optimized functions: by default the non-optimized function is called
-  virtual void 	processYUVMMX(imageStruct &image);
-  virtual void 	processYUVSSE2(imageStruct &image);
-  virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void  processYUVMMX(imageStruct &image);
+  virtual void  processYUVSSE2(imageStruct &image);
+  virtual void  processYUVAltivec(imageStruct &image);
 
   //////////
   // If the derived class needs the image resent.
-  //  	This sets the dirty bit on the pixBlock.
-  void	    	setPixModified();
+  //    This sets the dirty bit on the pixBlock.
+  void          setPixModified();
 
   //////////
   // Turn on/off processing
@@ -114,36 +114,41 @@ class GEM_EXTERN GemPixObj : public GemBase
 
   //////////
   // creation callback
-  static void 	real_obj_setupCallback(t_class *classPtr) {
+  static void   real_obj_setupCallback(t_class *classPtr)
+  {
     GemBase::real_obj_setupCallback(classPtr);
     GemPixObj::obj_setupCallback(classPtr);
   }
 
   //////////
   // The derived class should NOT override this unless they have some
-  //		very special behavior.
+  //            very special behavior.
   // Do the rendering, which calls processImage or processGrayImage, etc...
   // save the image-information
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
   // turn the pointer back to the old data after rendering
   virtual void postrender(GemState *state);
 
-  void startRendering(void) {
+  void startRendering(void)
+  {
     //post("start rendering");
     setPixModified();
   }
 
- private:
+private:
 
-  static inline GemPixObj *GetMyClass(void *data) {return((GemPixObj *)((Obj_header *)data)->data);}
+  static inline GemPixObj *GetMyClass(void *data)
+  {
+    return((GemPixObj *)((Obj_header *)data)->data);
+  }
 
   //////////
   // static member functions
   static void     obj_setupCallback(t_class *classPtr);
 
- protected:
+protected:
   virtual void SIMD(int);
 };
 
 
-#endif	// for header file
+#endif  // for header file

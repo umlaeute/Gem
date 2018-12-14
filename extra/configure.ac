@@ -14,30 +14,8 @@ AC_CONFIG_FILES([Makefile])
 AC_PROG_CXX
 AC_SUBST(CXX)
 
-## pix_artoolkit
-if test -d "$srcdir/pix_artoolkit"; then
-  AC_CONFIG_SUBDIRS([pix_artoolkit])
-fi
-
-## pix_drum (Jaime Oliver)
-#if test -d "$srcdir/pix_drum"; then
-#  AC_CONFIG_SUBDIRS([pix_drum])
-#fi
-
-## pix_mano (Jaime Oliver)
-#if test -d "$srcdir/pix_mano"; then
-#  AC_CONFIG_SUBDIRS([pix_mano])
-#fi
-
-## pix_hit (Davide Morelli)
-#if test -d "$srcdir/pix_hit"; then
-#  AC_CONFIG_SUBDIRS([pix_hit])
-#fi
-
-### pix_opencv (Yves Degoyon & Lluis Gomez i Bigorda)
-#if test -d "$srcdir/pix_opencv"; then
-#  AC_CONFIG_SUBDIRS([pix_opencv])
-#fi
+## optional components
+AS_IF([test -d "$srcdir/pix_artoolkit"], [AC_CONFIG_SUBDIRS([pix_artoolkit])])
 
 AC_OUTPUT
 

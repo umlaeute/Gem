@@ -32,48 +32,48 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_backlight : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_backlight, GemPixObj);
+  CPPEXTERN_HEADER(pix_backlight, GemPixObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_backlight();
+  //////////
+  // Constructor
+  pix_backlight();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_backlight();
+  //////////
+  // Destructor
+  virtual ~pix_backlight();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBAImage(imageStruct &image);
-	virtual void	processYUVImage(imageStruct &image);
-	//virtual void	processGrayImage(imageStruct &image);
+  //////////
+  // Do the processing
+  virtual void    processRGBAImage(imageStruct &image);
+  virtual void    processYUVImage(imageStruct &image);
+  //virtual void  processGrayImage(imageStruct &image);
 
-	imageStruct	myImage;
-	int		nHeight;
-	int		nWidth;
-	int		init;
+  imageStruct     myImage;
+  int             nHeight;
+  int             nWidth;
+  int             init;
 
-	U32*		pSource;
-	U32*		pOutput;
+  U32*            pSource;
+  U32*            pOutput;
 
-	float m_SpikeScale;
-	float m_SpikeFloor;
-	float m_SpikeCeiling;
+  float m_SpikeScale;
+  float m_SpikeFloor;
+  float m_SpikeCeiling;
 
-	//int Pete_BackLight_Init();
-	//void Pete_BackLight_DeInit();
+  //int Pete_BackLight_Init();
+  //void Pete_BackLight_DeInit();
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void 	scaleCallback(void *data, t_float m_SpikeScale);
-	static void 	floorCallback(void *data, t_float m_SpikeFloor);
-	static void 	ceilingCallback(void *data, t_float m_SpikeCeiling);
+  //////////
+  // Static member functions
+  static void     scaleCallback(void *data, t_float m_SpikeScale);
+  static void     floorCallback(void *data, t_float m_SpikeFloor);
+  static void     ceilingCallback(void *data, t_float m_SpikeCeiling);
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -46,8 +46,9 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
 
   /* channels inlet */
   int i;
-  for (i=0; i<3; i++)
+  for (i=0; i<3; i++) {
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal);
+  }
 
 }
 
@@ -57,27 +58,35 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
 /////////////////////////////////////////////////////////
 scopeXYZ :: ~scopeXYZ(void)
 {
-  if(m_vertices)delete[]m_vertices;
+  if(m_vertices) {
+    delete[]m_vertices;
+  }
 }
 
-void scopeXYZ :: doLengthMess(unsigned int L) {
+void scopeXYZ :: doLengthMess(unsigned int L)
+{
   // this resizes to m_requestedLength if this is set, or to L otherwise
   // actually, resizing is done to the double-size!
 
   unsigned int length=0;
-  if(m_requestedLength>0)
+  if(m_requestedLength>0) {
     length=m_requestedLength;
-  else if (L>m_requestedLength)
+  } else if (L>m_requestedLength) {
     length=L;
+  }
 
-  if(0==length)return; // oops
+  if(0==length) {
+    return;  // oops
+  }
 
   m_length=length;
 
   //post("length=%d\treal=%d\treqested=%d", m_length, m_realLength, m_requestedLength);
 
   if(m_realLength<length) {
-    if(m_vertices)delete[]m_vertices;
+    if(m_vertices) {
+      delete[]m_vertices;
+    }
     m_realLength=length;
 
     m_vertices = new t_sample[3* length*2];
@@ -95,7 +104,7 @@ void scopeXYZ :: doLengthMess(unsigned int L) {
 
 void scopeXYZ :: lengthMess(int l)
 {
-  if(l<=0){
+  if(l<=0) {
     m_requestedLength=0;
     return;
   }
@@ -113,11 +122,14 @@ void scopeXYZ :: renderShape(GemState *state)
   t_sample*vertices=m_vertices+3*m_position;
   int count=m_length/2;
   GLenum typ=GL_FLOAT;
-  if(sizeof(t_sample)==sizeof(double))
+  if(sizeof(t_sample)==sizeof(double)) {
     typ=GL_DOUBLE;
+  }
 
   GLenum drawtype=m_drawType;
-  if(drawtype==GL_DEFAULT_GEM)drawtype=GL_LINE_STRIP;
+  if(drawtype==GL_DEFAULT_GEM) {
+    drawtype=GL_LINE_STRIP;
+  }
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
 
@@ -150,7 +162,8 @@ void scopeXYZ :: renderShape(GemState *state)
   glLineWidth(1.0);
 }
 
-void scopeXYZ :: bangMess(void){
+void scopeXYZ :: bangMess(void)
+{
   unsigned int i;
   t_sample*vertL=m_vertices;
   t_sample*vertR=m_vertices+m_length;
@@ -192,17 +205,20 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);
   CPPEXTERN_MSG1(classPtr, "length", lengthMess, int);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
                   gensym("dsp"), A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
   GetMyClass(data)->doLengthMess(sp[1]->s_n);
-  dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec, sp[1]->s_n);
+  dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec,
+          sp[1]->s_n);
 }
 
-void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
+void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y,
+                         t_sample*Z)
 {
   int position=m_position;
 
@@ -210,8 +226,9 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y, t_sample*Z)
   unsigned int i=0;
 
   // TODO: add some protection against segfaults when bufer is very small
-  if(m_length<count)
+  if(m_length<count) {
     count=m_length;
+  }
 
   /* fill in the left-side of the double-array */
   for(i=0; i<count; i++) {

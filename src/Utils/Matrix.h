@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-	Matrix class
+        Matrix class
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -26,53 +26,55 @@ CLASS
 
 DESCRIPTION
 
-	Post-concatenation
-	Column-major
+        Post-concatenation
+        Column-major
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN Matrix
 {
-    public:
+public:
 
-        //////////
-        // Constructor
-		// Sets the matrix to identity
-		Matrix(void);
+  //////////
+  // Constructor
+  // Sets the matrix to identity
+  Matrix(void);
 
-        //////////
-		// Set the matrix to the identity
-		void identity(void);
+  //////////
+  // Set the matrix to the identity
+  void identity(void);
 
-		//////////
-		// Post mulitply the matrix
-		void multiply(Matrix *pMatrix);
+  //////////
+  // Post mulitply the matrix
+  void multiply(Matrix *pMatrix);
 
-		//////////
-		void scale(float x, float y, float z);
+  //////////
+  void scale(float x, float y, float z);
 
-		//////////
-		void translate(float x, float y, float z);
+  //////////
+  void translate(float x, float y, float z);
 
-		//////////
-		void rotateX(float degrees);
+  //////////
+  void rotateX(float degrees);
 
-		//////////
-		void rotateY(float degrees);
+  //////////
+  void rotateY(float degrees);
 
-		//////////
-		void rotateZ(float degrees);
+  //////////
+  void rotateZ(float degrees);
 
-		//////////
-		void transform(float srcX, float srcY, float srcZ, float *dstX, float *dstY, float *dstZ) const;
+  //////////
+  void transform(float srcX, float srcY, float srcZ, float *dstX,
+                 float *dstY, float *dstZ) const;
 
-        //////////
-		// The actual matrix values
-		float				mat[4][4];
+  //////////
+  // The actual matrix values
+  float                           mat[4][4];
 
-        //////////
-		// Utility functions
-		static void generateNormal(const float *v1, const float *v2, const float *v3, float *dst);
+  //////////
+  // Utility functions
+  static void generateNormal(const float *v1, const float *v2,
+                             const float *v3, float *dst);
 };
 
 
-#endif	// for header file
+#endif  // for header file

@@ -24,46 +24,46 @@ CLASS
     separator
 
     Separates the effects of the rest of the chain from the what
-    	happens below the separator.
+        happens below the separator.
 
 DESCRIPTION
 
     separator does NOT save the state of the pixes, if they are
-    	being used!
+        being used!
 
     "separatorstate" - whether to use separator blending
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN separator : public GemBase
 {
-    CPPEXTERN_HEADER(separator, GemBase);
+  CPPEXTERN_HEADER(separator, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
+  //////////
+  // Constructor
   separator(int, t_atom*);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~separator();
+  //////////
+  // Destructor
+  virtual ~separator();
 
-    	//////////
-    	// Push the current state
-    	virtual void 	render(GemState *state);
+  //////////
+  // Push the current state
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Pop the state
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Pop the state
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// The current state
-    	GemState    	m_state;
+  //////////
+  // The current state
+  GemState        m_state;
 
-	bool m_pushed[4];
-	bool m_active[4];
+  bool m_pushed[4];
+  bool m_active[4];
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -72,7 +72,7 @@ shader.;
 #X text 11 123 If you want to modify the parameters of the shader-program
 \, you have to set the modification up yourself \, via [GEMglProgramEnvParameter*]
 working on GL_FRAGMENT_PROGRAM_ARB.;
-#X text 35 358 Inlet 1: messsage: open <filename> : fragment shader
+#X text 35 358 Inlet 1: message: open <filename> : fragment shader
 program to load;
 #X text 443 406 see also;
 #X obj 508 406 vertex_program;

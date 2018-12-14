@@ -82,7 +82,7 @@
 #X text 50 12 Synopsis: [pix_multiply];
 #X text 29 67 Description: multiply 2 images;
 #X obj 451 198 pix_multiply;
-#X text 29 91 [pix_mutltiply] simply multiplies two pixes together.
+#X text 29 91 [pix_multiply] simply multiplies two pixes together.
 E.g: where either of the pixels is black \, the resulting image will
 be black too. Thus it is simple to get black images.;
 #X connect 10 0 11 0;

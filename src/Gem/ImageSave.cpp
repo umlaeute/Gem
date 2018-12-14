@@ -22,15 +22,20 @@
 #include "plugins/imagesaver.h"
 #include "plugins/PluginFactory.h"
 
-namespace gem { namespace PixImageSaver {
-  static gem::plugins::imagesaver*s_instance=NULL;
-  static gem::plugins::imagesaver*getInstance(void) {
-    if(NULL==s_instance) {
-      s_instance=gem::plugins::imagesaver::getInstance();
-    }
-    return s_instance;
+namespace gem
+{
+namespace PixImageSaver
+{
+static gem::plugins::imagesaver*s_instance=NULL;
+static gem::plugins::imagesaver*getInstance(void)
+{
+  if(NULL==s_instance) {
+    s_instance=gem::plugins::imagesaver::getInstance();
   }
-}; };
+  return s_instance;
+}
+};
+};
 
 
 /***************************************************************************
@@ -38,11 +43,11 @@ namespace gem { namespace PixImageSaver {
  * mem2image - Save an image to a file
  *
  ***************************************************************************/
-GEM_EXTERN int mem2image(imageStruct* image, const char *filename, const int type)
+GEM_EXTERN int mem2image(imageStruct* image, const char *filename,
+                         const int type)
 {
   gem::plugins::imagesaver*piximagesaver=gem::PixImageSaver::getInstance();
   if(piximagesaver) {
-    std::string fname=filename;
     std::string mimetype;
     gem::Properties props;
     if(type>0) {

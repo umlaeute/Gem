@@ -50,7 +50,8 @@ glsl_fragment :: ~glsl_fragment()
 // extension check
 //
 /////////////////////////////////////////////////////////
-bool glsl_fragment :: isRunnable() {
+bool glsl_fragment :: isRunnable()
+{
   if(GLEW_VERSION_2_0) {
     m_shaderTarget = GL_FRAGMENT_SHADER;
     return true;
@@ -101,7 +102,9 @@ void glsl_fragment :: printInfo()
         post("compiled last shaderARB to ID: %d", m_shaderARB);
       }
     }
-  } else post("no GLSL support");
+  } else {
+    post("no GLSL support");
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -111,4 +114,3 @@ void glsl_fragment :: printInfo()
 void glsl_fragment :: obj_setupCallback(t_class *classPtr)
 {
 }
-

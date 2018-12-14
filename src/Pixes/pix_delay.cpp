@@ -31,7 +31,7 @@ pix_delay :: pix_delay(t_float &f)
   myImage.allocate(1*m_maxframes);
   m_curframe = m_frame = 0;
 
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("delay"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("delay"));
 }
 
 /////////////////////////////////////////////////////////
@@ -49,7 +49,9 @@ pix_delay :: ~pix_delay()
 /////////////////////////////////////////////////////////
 void pix_delay :: delayMess(int frame)
 {
-  if (frame>=0)m_frame=(frame<m_maxframes)?frame:m_maxframes;
+  if (frame>=0) {
+    m_frame=(frame<m_maxframes)?frame:m_maxframes;
+  }
 }
 
 
@@ -65,7 +67,8 @@ void pix_delay :: processImage(imageStruct &image)
   unsigned int dataSize = image.xsize * image.ysize * image.csize;
   int readframe;
 
-  if (myImage.xsize*myImage.ysize*myImage.csize != image.xsize*image.ysize*image.csize){
+  if (myImage.xsize*myImage.ysize*myImage.csize !=
+      image.xsize*image.ysize*image.csize) {
     myImage.reallocate(dataSize*m_maxframes);
     m_curframe=0;
   }
@@ -96,8 +99,9 @@ void pix_delay :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_delay :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_delay::delayMessCallback),
-  		  gensym("delay"), A_FLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_delay::delayMessCallback),
+                  gensym("delay"), A_FLOAT, A_NULL);
 }
 
 

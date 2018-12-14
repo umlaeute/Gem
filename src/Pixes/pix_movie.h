@@ -36,13 +36,13 @@ class GEM_EXTERN pix_movie : public pix_film
 {
   CPPEXTERN_HEADER(pix_movie, pix_film);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_movie(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -64,19 +64,28 @@ class GEM_EXTERN pix_movie : public pix_film
   //////////
   // Set the texture quality
   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
-  void          textureQuality(int type){m_pixtexture.textureQuality(type);}
-  void          repeatMess(int type){m_pixtexture.repeatMess(type);}
-  void          modeMess(int mode){m_pixtexture.m_rectangle=mode;}
+  void          textureQuality(int type)
+  {
+    m_pixtexture.textureQuality(type);
+  }
+  void          repeatMess(int type)
+  {
+    m_pixtexture.repeatMess(type);
+  }
+  void          modeMess(int mode)
+  {
+    m_pixtexture.m_rectangle=mode;
+  }
 
- protected:
+protected:
 
   //////////
   // static member functions
-  static void 	textureMessCallback(void *data, t_float n);
-  static void 	modeCallback(void *data, t_float n);
-  static void 	rectangleCallback(void *data, t_float n);
-  static void 	repeatMessCallback(void *data, t_float n);
+  static void   textureMessCallback(void *data, t_float n);
+  static void   modeCallback(void *data, t_float n);
+  static void   rectangleCallback(void *data, t_float n);
+  static void   repeatMessCallback(void *data, t_float n);
 
 };
 
-#endif	// for header file
+#endif  // for header file

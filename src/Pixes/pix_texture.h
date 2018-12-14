@@ -41,7 +41,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   CPPEXTERN_HEADER(pix_texture, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -58,38 +58,40 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Turn back off texture mapping
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
   // Establish texture object
-  virtual void	startRendering(void);
+  virtual void  startRendering(void);
 
   //////////
   // Delete texture object
-  virtual void	stopRendering(void);
+  virtual void  stopRendering(void);
 
   //////////
   // if we need to rebuild the list
   virtual void   setModified(void);
 
   /* send out our texture through the 2nd outlet to be used by others */
-  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio, GLint texType, GLboolean upsidedown);
+  void sendExtTexture(GLuint texobj, GLfloat xRatio, GLfloat yRatio,
+                      GLint texType, GLboolean upsidedown);
 
 
   //////////
   // Set up the texture state
-  void		setUpTextureState(void);
+  void          setUpTextureState(void);
   void setTexFilters(bool);
   void pushTexCoords(GemState*);
   void popTexCoords(GemState*);
 
 
   void textureOnOff(int on);
-  void textureQuality(int type);   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
+  void textureQuality(int
+                      type);   // [in] type - if == 0, then GL_NEAREST, else GL_LINEAR
   void repeatMess(int type);
   void textureRectangle(int mode);
   void modeMess(int mode);
@@ -104,7 +106,7 @@ class GEM_EXTERN pix_texture : public GemBase
   void extTextureMess(t_symbol*, int, t_atom*);
 
 
- protected:
+protected:
   t_inlet    *m_inTexID;  /* inlet to receive external texture */
   t_outlet   *m_outTexID; /* outlet to pass on our texture */
 
@@ -128,15 +130,16 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // texture environment mode
-  GLint		m_env; // GL_TEXTURE_ENV_MODE
+  GLint         m_env; // GL_TEXTURE_ENV_MODE
 
   /* using PBOs for (hopefully) optimized pixel transfers */
   GLint m_numPbo; // user supplied
 
-  int		m_clientStorage; //for Apple's client storage extension
-  int		m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
+  int           m_clientStorage; //for Apple's client storage extension
+  int
+  m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
-  GLint	m_texunit; // which texture unit to use
+  GLint m_texunit; // which texture unit to use
 
   /* CAPABILITIES */
 
@@ -160,7 +163,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // The texture object number
-  gem::ContextData<GLuint>	    m_textureObj;
+  gem::ContextData<GLuint>          m_textureObj;
 
   ////////
   // the texture object we are creating and destroying
@@ -172,7 +175,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // The size of the texture (so we can use sub image)
-  int	        m_dataSize[3];
+  int           m_dataSize[3];
 
   ////////
   // an external texture (as emitted through the 2nd outlet)
@@ -192,7 +195,7 @@ class GEM_EXTERN pix_texture : public GemBase
 
   //////////
   // The texture coordinates
-  TexCoord    	m_coords[4];
+  TexCoord      m_coords[4];
   TexCoord      m_baseCoord;
 
   //////////
@@ -203,7 +206,8 @@ class GEM_EXTERN pix_texture : public GemBase
   TexCoord        m_oldBaseCoord;
   bool            m_oldOrientation;
 
-  gem::ContextData<int> m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
+  gem::ContextData<int>
+  m_textureType; // GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT
 
   GLfloat m_xRatio, m_yRatio; // x- and y-size if texture
 
@@ -217,4 +221,4 @@ class GEM_EXTERN pix_texture : public GemBase
   gem::ContextData<GLboolean> m_upsidedown;
 };
 
-#endif	// for header file
+#endif  // for header file

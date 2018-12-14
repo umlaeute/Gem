@@ -36,41 +36,43 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN ambient : public GemBase
 {
-    CPPEXTERN_HEADER(ambient, GemBase);
+  CPPEXTERN_HEADER(ambient, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	ambient(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  ambient(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~ambient();
+  //////////
+  // Destructor
+  virtual ~ambient();
 
-    	//////////
-    	// Turn back on the color material
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on the color material
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// When a gem message is received
-    	virtual void	render(GemState *state);
+  //////////
+  // When a gem message is received
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The ambient vector (RGBA)
-    	float	    	m_ambient[4];
+  //////////
+  // The ambient vector (RGBA)
+  float           m_ambient[4];
 
-    	//////////
-    	// ambient changed
-    	void	    	ambientMess(float red, float green, float blue, float alpha);
+  //////////
+  // ambient changed
+  void            ambientMess(float red, float green, float blue,
+                              float alpha);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	ambientMessCallback(void *data, t_symbol *, int argc, t_atom *argv);
+  //////////
+  // static member functions
+  static void     ambientMessCallback(void *data, t_symbol *, int argc,
+                                      t_atom *argv);
 };
 
-#endif	// for header file
+#endif  // for header file

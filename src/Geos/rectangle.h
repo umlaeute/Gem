@@ -32,35 +32,35 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rectangle : public GemShape
 {
-    CPPEXTERN_HEADER(rectangle, GemShape);
+  CPPEXTERN_HEADER(rectangle, GemShape);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-		rectangle(t_floatarg width, t_floatarg height);
+  //////////
+  // Constructor
+  rectangle(t_floatarg width, t_floatarg height);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~rectangle(void);
+  //////////
+  // Destructor
+  virtual ~rectangle(void);
 
-    	//////////
-    	// The height of the object
-    	void	    	heightMess(float size);
+  //////////
+  // The height of the object
+  void            heightMess(float size);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	renderShape(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    renderShape(GemState *state);
 
-    	//////////
-    	// The height of the object
-        GLfloat	    	m_height;
+  //////////
+  // The height of the object
+  GLfloat         m_height;
 
-        //////////
-        // The height inlet
-        t_inlet         *m_inletH;
+  //////////
+  // The height inlet
+  t_inlet         *m_inletH;
 };
 
-#endif	// for header file
+#endif  // for header file

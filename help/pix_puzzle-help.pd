@@ -60,7 +60,7 @@
 #X obj 451 263 pix_draw;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X text 63 375 Inlet 1: 0|1 : apply/don't apply;
+#X text 63 375 Inlet 1: 1|0 : apply/don't apply (default:1);
 #X msg 463 146 bang;
 #X text 50 12 Synopsis: [pix_puzzle];
 #X text 63 77 Description: shuffle an image;
@@ -77,7 +77,7 @@ Fukuchi (http://effectv.sourceforge.net);
 #X msg 509 145 size 4 3;
 #X msg 551 212 move \$1;
 #X floatatom 551 193 5 0 0 0 - - -;
-#X text 63 433 Inlet 1: movee <int>: move the empty field;
+#X text 63 433 Inlet 1: move <int>: move the empty field;
 #X text 192 238 8;
 #X text 175 253 4;
 #X text 209 254 6;

@@ -82,7 +82,7 @@
 #X restore 421 253 pd light;
 #X obj 161 595 rotateXYZ -55 20 0;
 #X floatatom 298 537 5 0 0 0 - - -;
-#X text 235 13 replace triangle with 3 triangles thoses orientation
+#X text 235 13 replace triangle with 3 triangles the orientations of which
 depend on the normal of the original primitive;
 #X obj 161 554 scaleXYZ 0.2 0.2 0.2;
 #X msg 172 129 auto 1;

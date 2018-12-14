@@ -137,7 +137,7 @@
  * @subsection sec_icon_location Icon location
  *
  * The exact location where the application should look for the
- * plugin is platform dependant.
+ * plugin is platform dependent.
  *
  * For Windows platforms, the icon should be at the same place as
  * the plugin containing the effect.
@@ -210,7 +210,7 @@
 #define INCLUDED_FREI0R_H
 
 #ifdef _MSC_VER
- // typedef unsigned long uint32_t;
+// typedef unsigned long uint32_t;
 #else
 # include <inttypes.h>
 #endif
@@ -264,7 +264,7 @@ void f0r_deinit();
  * List of supported color models.
  *
  * Note: the color models are endian independent, because the
- * color components are defined by their positon in memory, not
+ * color components are defined by their position in memory, not
  * by their significance in an uint32_t value.
  *
  * For effects that work on the color components,
@@ -313,7 +313,7 @@ void f0r_deinit();
 
 /**
  * In PACKED32, each pixel is represented by 4 consecutive
- * bytes, but it is not defined how the color componets are
+ * bytes, but it is not defined how the color components are
  * stored. The true color format could be RGBA8888,
  * BGRA8888, a packed 32 bit YUV format, or any other
  * color format that stores pixels in 32 bit.
@@ -342,10 +342,11 @@ void f0r_deinit();
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_plugin_info
-{
-  const char* name;    /**< The (short) name of the plugin                   */
-  const char* author;  /**< The plugin author                                */
+typedef struct f0r_plugin_info {
+  const char*
+  name;    /**< The (short) name of the plugin                   */
+  const char*
+  author;  /**< The plugin author                                */
   /** The plugin type
    * \see PLUGIN_TYPE
    */
@@ -355,7 +356,8 @@ typedef struct f0r_plugin_info
   int major_version;   /**< The major version of the plugin                  */
   int minor_version;   /**< The minor version of the plugin                  */
   int num_params;      /**< The number of parameters of the plugin           */
-  const char* explanation; /**< An optional explanation string               */
+  const char*
+  explanation; /**< An optional explanation string               */
 } f0r_plugin_info_t;
 
 
@@ -417,8 +419,7 @@ typedef double f0r_param_double;
 /**
  * The color type. All three color components are in the range [0, 1].
  */
-typedef struct f0r_param_color
-{
+typedef struct f0r_param_color {
   float r; /**< red color component */
   float g; /**< green color component */
   float b; /**< blue color component */
@@ -427,8 +428,7 @@ typedef struct f0r_param_color
 /**
  * The position type. Both position coordinates are in the range [0, 1].
  */
-typedef struct f0r_param_position
-{
+typedef struct f0r_param_position {
   double x; /**< x coordinate */
   double y; /**< y coordinate */
 } f0r_param_position_t;
@@ -449,8 +449,7 @@ typedef char* f0r_param_string;
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_param_info
-{
+typedef struct f0r_param_info {
   const char* name;         /**<The (short) name of the param */
   int type;                 /**<The type (see the F0R_PARAM_* defines) */
   const char* explanation;  /**<Optional explanation (can be 0) */
@@ -530,7 +529,7 @@ typedef void* f0r_param_t;
  * \see f0r_get_param_value
  */
 void f0r_set_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+                         f0r_param_t param, int param_index);
 
 /**
  * This function allows the application to query the parameter values of an
@@ -550,7 +549,7 @@ void f0r_set_param_value(f0r_instance_t instance,
   * \see f0r_set_param_value
  */
 void f0r_get_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+                         f0r_param_t param, int param_index);
 
 //---------------------------------------------------------------------------
 
@@ -580,7 +579,7 @@ void f0r_get_param_value(f0r_instance_t instance,
  * \see f0r_update2
  */
 void f0r_update(f0r_instance_t instance,
-		double time, const uint32_t* inframe, uint32_t* outframe);
+                double time, const uint32_t* inframe, uint32_t* outframe);
 
 //---------------------------------------------------------------------------
 
@@ -606,11 +605,11 @@ void f0r_update(f0r_instance_t instance,
  * \see f0r_update
  */
 void f0r_update2(f0r_instance_t instance,
-		 double time,
-		 const uint32_t* inframe1,
-		 const uint32_t* inframe2,
-		 const uint32_t* inframe3,
-		 uint32_t* outframe);
+                 double time,
+                 const uint32_t* inframe1,
+                 const uint32_t* inframe2,
+                 const uint32_t* inframe3,
+                 uint32_t* outframe);
 //---------------------------------------------------------------------------
 
 #endif

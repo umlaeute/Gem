@@ -42,13 +42,13 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_biquad, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_biquad(int, t_atom*);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -56,15 +56,15 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processYUVImage(imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processYUVImage(imageStruct &image);
 #ifdef __MMX__
-  virtual void 	processRGBAMMX(imageStruct &image);
-  virtual void 	processYUVMMX (imageStruct &image);
-  virtual void 	processGrayMMX(imageStruct &image);
+  virtual void  processRGBAMMX(imageStruct &image);
+  virtual void  processYUVMMX (imageStruct &image);
+  virtual void  processGrayMMX(imageStruct &image);
 #endif
 #ifdef __VEC__
-  virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void  processYUVAltivec(imageStruct &image);
 #endif
 
   //////////
@@ -76,7 +76,7 @@ class GEM_EXTERN pix_biquad : public GemPixObj
   //////////
   // the image-latches
   imageStruct  prev;
-  imageStruct	 last;
+  imageStruct    last;
 
   //////////
   // set-flag: if "set", the buffers (prev&last) are set to the current image
@@ -93,4 +93,4 @@ class GEM_EXTERN pix_biquad : public GemPixObj
 
 };
 
-#endif	// for header file
+#endif  // for header file

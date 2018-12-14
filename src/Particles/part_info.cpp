@@ -64,11 +64,21 @@ part_info :: ~part_info()
   outlet_free(out_vel);
   outlet_free(out_siz);
   outlet_free(out_age);
-  if(m_pos)delete[]m_pos;
-  if(m_colors)delete[]m_colors;
-  if(m_velo)delete[]m_velo;
-  if(m_sizes)delete[]m_sizes;
-  if(m_ages)delete[]m_ages;
+  if(m_pos) {
+    delete[]m_pos;
+  }
+  if(m_colors) {
+    delete[]m_colors;
+  }
+  if(m_velo) {
+    delete[]m_velo;
+  }
+  if(m_sizes) {
+    delete[]m_sizes;
+  }
+  if(m_ages) {
+    delete[]m_ages;
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -80,15 +90,27 @@ void part_info :: renderParticles(GemState *state)
   if (m_tickTime > 0.f)    {
     pMove();
   }
-  //	pDrawGroupp();
+  //    pDrawGroupp();
   int cnt = pGetGroupCount();
-  if(cnt < 1)return;
-  if (cnt>m_number){
-    if(m_colors)delete[]m_colors;
-    if(m_sizes )delete[]m_sizes;
-    if(m_pos   )delete[]m_pos;
-    if(m_velo  )delete[]m_velo;
-    if(m_ages  )delete[]m_ages;
+  if(cnt < 1) {
+    return;
+  }
+  if (cnt>m_number) {
+    if(m_colors) {
+      delete[]m_colors;
+    }
+    if(m_sizes ) {
+      delete[]m_sizes;
+    }
+    if(m_pos   ) {
+      delete[]m_pos;
+    }
+    if(m_velo  ) {
+      delete[]m_velo;
+    }
+    if(m_ages  ) {
+      delete[]m_ages;
+    }
     m_number = cnt;
     m_pos    = new float[m_number * 3];
     m_colors = new float[m_number * 4];
@@ -102,7 +124,7 @@ void part_info :: renderParticles(GemState *state)
   float *size     = m_sizes;
   float *age      = m_ages;
   pGetParticles(0, cnt, position, color, velo, size, age);
-  for(int i = 0; i < cnt; i++)	{
+  for(int i = 0; i < cnt; i++)  {
     SETFLOAT(m_alist+0, position[0]);
     SETFLOAT(m_alist+1, position[1]);
     SETFLOAT(m_alist+2, position[2]);

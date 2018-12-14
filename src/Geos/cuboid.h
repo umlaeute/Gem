@@ -33,41 +33,41 @@ class GEM_EXTERN cuboid : public GemShape
 {
   CPPEXTERN_HEADER(cuboid, GemShape);
 
-    public:
+public:
 
   //////////
   // Constructor
   cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez);
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~cuboid(void);
 
 
-	//////////
+  //////////
   // The height of the object
-  void	    	heightMess(float sizey);
+  void          heightMess(float sizey);
 
-	//////////
-  // The widht of the object
-  void	    	widthMess(float sizez);
+  //////////
+  // The width of the object
+  void          widthMess(float sizez);
 
   //////////
   // Do the rendering
-  virtual void 	renderShape(GemState *state);
+  virtual void  renderShape(GemState *state);
 
   //////////
   // The height of the object
-  GLfloat	    	m_sizey;
+  GLfloat               m_sizey;
 
   //////////
   // The height inlet
   t_inlet         *m_inletY;
 
-	//////////
+  //////////
   // The height of the object
-  GLfloat	    	m_sizez;
+  GLfloat               m_sizez;
 
   //////////
   // The height inlet
@@ -75,4 +75,4 @@ class GEM_EXTERN cuboid : public GemShape
 
 };
 
-#endif	// for header file
+#endif  // for header file

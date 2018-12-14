@@ -33,9 +33,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
-class GEM_EXPORT filmAVI : public film {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT filmAVI : public film
+{
+public:
 
   //////////
   // Constructor
@@ -47,7 +51,7 @@ class GEM_EXPORT filmAVI : public film {
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -61,14 +65,18 @@ class GEM_EXPORT filmAVI : public film {
   virtual errCode changeImage(int imgNum, int trackNum=-1);
 
   // can be used within a threaded context
-  virtual bool isThreadable(void) { return true; }
+  virtual bool isThreadable(void)
+  {
+    return true;
+  }
 
   // Property handling
-  virtual bool enumProperties(gem::Properties&readable,gem::Properties&writeable);
+  virtual bool enumProperties(gem::Properties&readable,
+                              gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
   virtual void getProperties(gem::Properties&props);
 
- protected:
+protected:
   GLenum  m_wantedFormat; // format requested by the user
   double m_fps;  // the frame-rate
   int m_numFrames; // number of frames in video
@@ -76,10 +84,10 @@ class GEM_EXPORT filmAVI : public film {
   pixBlock m_image; // output image
 
   // the raw buffer for decoding...
-  int			m_nRawBuffSize;
-  unsigned char*	m_RawBuffer;
+  int                   m_nRawBuffSize;
+  unsigned char*        m_RawBuffer;
   GLint   m_format;
-  int 	    	m_reqFrame;
+  int           m_reqFrame;
 
   unsigned char*  m_frame;  /* this points to a buffer for decompression */
 
@@ -88,8 +96,10 @@ class GEM_EXPORT filmAVI : public film {
 
   HIC m_hic;
 
-  PGETFRAME	m_getFrame;		// the frame information
-  PAVISTREAM	m_streamVid;		// the stream itself
-};};};
+  PGETFRAME     m_getFrame;             // the frame information
+  PAVISTREAM    m_streamVid;            // the stream itself
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

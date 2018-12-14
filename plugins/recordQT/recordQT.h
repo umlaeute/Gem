@@ -55,10 +55,13 @@
   "vert_pos" - Set the position of the pix
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT recordQT : public record
+namespace gem
 {
- public:
+namespace plugins
+{
+class GEM_EXPORT recordQT : public record
+{
+public:
 
   //////////
   // Constructor
@@ -69,7 +72,7 @@ namespace gem { namespace plugins {
   virtual ~recordQT(void);
 
   virtual void stop(void);
-  virtual bool start(const std::string filename, gem::Properties&);
+  virtual bool start(const std::string&filename, gem::Properties&);
 
   //////////
   // Do the rendering
@@ -77,42 +80,42 @@ namespace gem { namespace plugins {
 
   ////////
   // call up compression dialog
-  virtual bool	dialog(void);
-  virtual int	getNumCodecs(void);
+  virtual bool  dialog(void);
+  virtual int   getNumCodecs(void);
   virtual const char* getCodecName(int n);
-  virtual bool	setCodec(int num);
-  virtual bool	setCodec(const std::string name);
+  virtual bool  setCodec(int num);
+  virtual bool  setCodec(const std::string&name);
 
 
   virtual std::vector<std::string>getCodecs(void);
-  virtual const std::string getCodecDescription(const std::string codecname);
+  virtual const std::string getCodecDescription(const std::string&codecname);
   virtual bool enumProperties(gem::Properties&props);
 
- private:
+private:
 
-  virtual void	setupQT(void);
+  virtual void  setupQT(void);
 
-  virtual void	compressFrame(void);
+  virtual void  compressFrame(void);
 
   //////
   // is recording setup and ready to go?
-  bool		m_recordSetup;
+  bool          m_recordSetup;
 
-  bool		m_recordStart;
-  bool		m_recordStop;
+  bool          m_recordStart;
+  bool          m_recordStop;
 
 
   //////////
   // current file to write to
-  char	    	m_filename[QT_MAX_FILENAMELENGTH];
+  char          m_filename[QT_MAX_FILENAMELENGTH];
 
   //////////
   // (previous) dimensions to check
   int           m_width, m_height;
-  int		m_prevHeight,m_prevWidth;
+  int           m_prevHeight,m_prevWidth;
 
 
-  imageStruct	*m_compressImage;
+  imageStruct   *m_compressImage;
 
 #ifdef __APPLE__
   UnsignedWide startTime, endTime;
@@ -124,51 +127,52 @@ namespace gem { namespace plugins {
   float seconds;
 
   //number of QT ticks for a frame 600/frameDuration (used by AddMediaSample)
-  int					m_ticks;
+  int                                   m_ticks;
 
-  bool	m_firstRun;
+  bool  m_firstRun;
 
   //////////
   // QT stuff
 
-  GWorldPtr				m_srcGWorld;
-  Rect					m_srcRect;
-  int						m_rowBytes;
-  Movie					m_movie;
-  Track					track;
-  Media					media;
-  ComponentInstance		stdComponent;
-  SCTemporalSettings		TemporalSettings;
-  SCSpatialSettings		SpatialSettings;
-  SCDataRateSettings		DataRateSetting;
-  SCDataRateSettings		datarate;
-  long					dataSize;
-  ImageDescriptionHandle	hImageDesc;
+  GWorldPtr                             m_srcGWorld;
+  Rect                                  m_srcRect;
+  int                                           m_rowBytes;
+  Movie                                 m_movie;
+  Track                                 track;
+  Media                                 media;
+  ComponentInstance             stdComponent;
+  SCTemporalSettings            TemporalSettings;
+  SCSpatialSettings             SpatialSettings;
+  SCDataRateSettings            DataRateSetting;
+  SCDataRateSettings            datarate;
+  long                                  dataSize;
+  ImageDescriptionHandle        hImageDesc;
 
   //these are for the programmatic setting of the compressor
-  CodecType				m_codecType;
-  CodecComponent			m_codec;
-  short					m_depth;
+  CodecType                             m_codecType;
+  CodecComponent                        m_codec;
+  short                                 m_depth;
   float m_frameRate;
   float m_keyFrameRate;
-  CodecQ					m_spatialQuality;
-  short		nFileRefNum;
-  short		nResID;
+  CodecQ                                        m_spatialQuality;
+  short         nFileRefNum;
+  short         nResID;
 
   void resetCodecSettings(void);
 
   //this will hold the ctype value of the codecs listed by getCodecList()
-  struct codecListStorage{
-    int		position;
-    int		ctype;
+  struct codecListStorage {
+    int         position;
+    int         ctype;
     char* name;
-    CodecComponent		codec;
+    CodecComponent              codec;
   };
 
   codecListStorage *codecContainer;
   int numCodecContainer;
 
   //std::map<std::string, std::string>m_codecdescriptions;
- };
-};};
-#endif	// for header file
+};
+};
+};
+#endif  // for header file

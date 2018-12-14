@@ -17,9 +17,10 @@
 
 #include "papi/papi.h"
 
-CPPEXTERN_NEW_WITH_THREE_ARGS(part_vertex, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS(part_vertex, t_floatarg, A_DEFFLOAT,
+                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
-  /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 //
 // part_vertex
 //
@@ -51,10 +52,11 @@ void part_vertex :: renderParticles(GemState *state)
   }
 }
 
-void part_vertex::posMess(t_float x, t_float y, t_float z)	{ 
+void part_vertex::posMess(t_float x, t_float y, t_float z)
+{
   m_x=x;
   m_y=y;
-  m_z=z; 
+  m_z=z;
 }
 
 /////////////////////////////////////////////////////////
@@ -65,4 +67,3 @@ void part_vertex :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG3(classPtr, "", posMess, float, float, float);
 }
-

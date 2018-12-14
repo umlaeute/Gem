@@ -2,7 +2,7 @@
  * GEM - Graphics Environment for Multimedia
  *
  *  Copyright (c) 2002-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- *	zmoelnig@iem.kug.ac.at
+ *      zmoelnig@iem.kug.ac.at
  *  For information on usage and redistribution, and for a DISCLAIMER
  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
  *
@@ -19,7 +19,7 @@
   CLASS
   GEMglClipPlane
   KEYWORDS
-  openGL	0
+  openGL        0
   DESCRIPTION
   wrapper for the openGL-function
   "glClipPlane( GLfloat* v)"
@@ -29,22 +29,22 @@ class GEM_EXTERN GEMglClipPlane : public GemGLBase
 {
   CPPEXTERN_HEADER(GEMglClipPlane, GemGLBase);
 
-    public:
+public:
   // Constructor
-  GEMglClipPlane (t_float, t_float, t_float, t_float);	// CON
- protected:
+  GEMglClipPlane (t_float, t_float, t_float, t_float);  // CON
+protected:
   // Destructor
   virtual ~GEMglClipPlane ();
   // Do the rendering
-  virtual void	render (GemState *state);
+  virtual void  render (GemState *state);
 
   // variable
-  GLdouble	v[4];		// VAR
+  GLdouble      v[4];           // VAR
   GLenum plane;
-  virtual void	vMess(t_float, t_float, t_float, t_float);	// FUN
-  virtual void	planeMess(t_float);	// FUN
+  virtual void  vMess(t_float, t_float, t_float, t_float);      // FUN
+  virtual void  planeMess(t_float);     // FUN
 
- private:
+private:
 
   // we need one inlet
   t_inlet *m_inlet[2];

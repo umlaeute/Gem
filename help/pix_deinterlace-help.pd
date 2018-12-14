@@ -80,7 +80,7 @@ rows.;
 if they appear to be interlaced (this is detected by thresholding the
 difference between adjacent pixels). In mode "1" de-interlacing is
 always enforced.;
-#X text 63 282 Inlet 1: mode <int>: enforce(1) or not(0). default=1
+#X text 63 282 Inlet 1: mode <int>: enforce(1) or not(0) (default:1)
 ;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;

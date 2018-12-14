@@ -68,7 +68,7 @@ trace of the result!;
 #X restore 61 221 pd mtx_rowpermutate;
 #X text 34 383 this algorithm is _far_ from being perfect! the [mtx_rowpermutate]
 does not really guarantee that the trace of the result is a global
-mimimum \; if it is not \, than the match will be sub-optimal! this
+minimum \; if it is not \, than the match will be sub-optimal! this
 will be even worse \, if there are several _equal_ (sub)minima in the
 distance-matrix.;
 #X text 158 194 greater distances have an extra penalty (^2) \; is

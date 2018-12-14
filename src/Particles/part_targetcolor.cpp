@@ -30,19 +30,21 @@ CPPEXTERN_NEW_WITH_GIMME(part_targetcolor);
 /////////////////////////////////////////////////////////
 part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
 {
-	scaleMess(.05f);
+  scaleMess(.05f);
 
-	if (argc == 5) {
-		colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
+  if (argc == 5) {
+    colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
               atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-		scaleMess(atom_getfloat(&argv[4]));
-	}
-  else if (argc == 4) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
-  else if (argc == 3) colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-                                atom_getfloat(&argv[2]), 1.f);
-  else if (argc == 0) colorMess(1.f, 1.f, 1.f, 1.f);
-  else {
+    scaleMess(atom_getfloat(&argv[4]));
+  } else if (argc == 4) colorMess(atom_getfloat(&argv[0]),
+                                    atom_getfloat(&argv[1]),
+                                    atom_getfloat(&argv[2]), atom_getfloat(&argv[3]));
+  else if (argc == 3) colorMess(atom_getfloat(&argv[0]),
+                                  atom_getfloat(&argv[1]),
+                                  atom_getfloat(&argv[2]), 1.f);
+  else if (argc == 0) {
+    colorMess(1.f, 1.f, 1.f, 1.f);
+  } else {
     throw(GemException("needs 0, 3, 4, or 5 arguments"));
   }
 
@@ -64,10 +66,9 @@ part_targetcolor :: ~part_targetcolor(void)
 /////////////////////////////////////////////////////////
 void part_targetcolor :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)
-	{
-		pTargetColor(m_color[0], m_color[1], m_color[2], m_color[3], m_scale);
-	}
+  if (m_tickTime > 0.f) {
+    pTargetColor(m_color[0], m_color[1], m_color[2], m_color[3], m_scale);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -76,21 +77,22 @@ void part_targetcolor :: renderParticles(GemState *state)
 /////////////////////////////////////////////////////////
 void part_targetcolor :: scaleMess(float scale)
 {
-    m_scale = scale;
-    setModified();
+  m_scale = scale;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
 // colorMess
 //
 /////////////////////////////////////////////////////////
-void part_targetcolor :: colorMess(float red, float green, float blue, float alpha)
+void part_targetcolor :: colorMess(float red, float green, float blue,
+                                   float alpha)
 {
-    m_color[0] = red;
-    m_color[1] = green;
-    m_color[2] = blue;
-    m_color[3] = alpha;
-    setModified();
+  m_color[0] = red;
+  m_color[1] = green;
+  m_color[2] = blue;
+  m_color[3] = alpha;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -99,15 +101,19 @@ void part_targetcolor :: colorMess(float red, float green, float blue, float alp
 /////////////////////////////////////////////////////////
 void part_targetcolor :: obj_setupCallback(t_class *classPtr)
 {
-    class_addmethod(classPtr, reinterpret_cast<t_method>(&part_targetcolor::colorMessCallback),
-    	    gensym("color"), A_GIMME, A_NULL);
-    CPPEXTERN_MSG1(classPtr, "ft1", scaleMess, float);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&part_targetcolor::colorMessCallback),
+                  gensym("color"), A_GIMME, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "ft1", scaleMess, float);
 }
-void part_targetcolor :: colorMessCallback(void *data, t_symbol *, int argc, t_atom *argv)
+void part_targetcolor :: colorMessCallback(void *data, t_symbol *,
+    int argc, t_atom *argv)
 {
-    float alpha = 1;
-    if (argc == 4) alpha = atom_getfloat(&argv[3]);
-    GetMyClass(data)->colorMess(atom_getfloat(&argv[0]), atom_getfloat(&argv[1]),
-    	    	    	       atom_getfloat(&argv[2]), alpha);
+  float alpha = 1;
+  if (argc == 4) {
+    alpha = atom_getfloat(&argv[3]);
+  }
+  GetMyClass(data)->colorMess(atom_getfloat(&argv[0]),
+                              atom_getfloat(&argv[1]),
+                              atom_getfloat(&argv[2]), alpha);
 }
-

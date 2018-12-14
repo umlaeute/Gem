@@ -32,23 +32,23 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_draw : public GemBase
 {
-    CPPEXTERN_HEADER(pix_draw, GemBase);
+  CPPEXTERN_HEADER(pix_draw, GemBase);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_draw();
+  //////////
+  // Constructor
+  pix_draw();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_draw();
+  //////////
+  // Destructor
+  virtual ~pix_draw();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 };
 
-#endif	// for header file
+#endif  // for header file

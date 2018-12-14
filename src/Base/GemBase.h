@@ -34,7 +34,7 @@ class GemState;
   -----------------------------------------------------------------*/
 class GEM_EXTERN GemBase : public CPPExtern
 {
- protected:
+protected:
 
   //////////
   // Constructor
@@ -42,10 +42,10 @@ class GEM_EXTERN GemBase : public CPPExtern
 
   //////////
   // Destructor
-  virtual     	~GemBase();
+  virtual       ~GemBase();
 
   //////////
-  virtual void 	render(GemState *state) = 0;
+  virtual void  render(GemState *state) = 0;
 
   //////////
   void    continueRender(GemState *state);
@@ -53,22 +53,25 @@ class GEM_EXTERN GemBase : public CPPExtern
   //////////
   // After objects below you in the chain have finished.
   // You should reset all GEM/OpenGL states here.
-  virtual void 	postrender(GemState *)              { ; }
+  virtual void  postrender(GemState *)              { ; }
 
   //////////
   // Called when rendering stops
 
 #if 1/*(jmz) this seems to be for gem2pdp*/
-  virtual void 	stoprender()			{ realStopRendering(); }
+  virtual void  stoprender()
+  {
+    realStopRendering();
+  }
 #endif
 
   //////////
   // If you care about the start of rendering
-  virtual void	startRendering()                    { ; }
+  virtual void  startRendering()                    { ; }
 
   //////////
   // If you care about the stop of rendering
-  virtual void	stopRendering()    	                { ; }
+  virtual void  stopRendering()                         { ; }
 
 
   //////////
@@ -78,18 +81,18 @@ class GEM_EXTERN GemBase : public CPPExtern
 
   //////////
   // If anything in the object has changed
-  virtual void  	setModified();
+  virtual void          setModified();
 
   //////////
   // Don't mess with this unless you know what you are doing.
-  GemCache    	*m_cache;
+  GemCache      *m_cache;
   //////////
   // check whether this object has changed
   bool             m_modified;
 
   //////////
   // The outlet
-  t_outlet    	*m_out1;
+  t_outlet      *m_out1;
 
 
   //////////
@@ -103,22 +106,28 @@ class GEM_EXTERN GemBase : public CPPExtern
 
   //////////
   // creation callback
-  static void 	real_obj_setupCallback(t_class *classPtr)
-    { CPPExtern::real_obj_setupCallback(classPtr); GemBase::obj_setupCallback(classPtr); }
+  static void   real_obj_setupCallback(t_class *classPtr)
+  {
+    CPPExtern::real_obj_setupCallback(classPtr);
+    GemBase::obj_setupCallback(classPtr);
+  }
 
   enum RenderState {INIT, ENABLED, DISABLED, RENDERING, MODIFIED};
 
- private:
+private:
 
-  void	    	realStopRendering();
+  void          realStopRendering();
   void            gem_startstopMess(int state);
-  void            gem_renderMess(GemCache* state, GemState* state2);
+  void            gem_renderMess(GemCache* cache, GemState* state);
 
-  static inline GemBase *GetMyClass(void *data) {return((GemBase *)((Obj_header *)data)->data);}
+  static inline GemBase *GetMyClass(void *data)
+  {
+    return((GemBase *)((Obj_header *)data)->data);
+  }
 
   friend class    gemhead;
-  static void 	obj_setupCallback(t_class *classPtr);
-  static void 	gem_MessCallback(void *, t_symbol *,int, t_atom*);
+  static void   obj_setupCallback(t_class *classPtr);
+  static void   gem_MessCallback(void *, t_symbol *,int, t_atom*);
 
   /* whether the object is internally disabled or not
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
@@ -126,10 +135,10 @@ class GEM_EXTERN GemBase : public CPPExtern
   gem::ContextData<bool>m_enabled;
   gem::ContextData<enum RenderState>m_state;
 
- protected:
+protected:
   enum RenderState getState(void);
 
   virtual void beforeDeletion(void);
 };
 
-#endif	// for header file
+#endif  // for header file

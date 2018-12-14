@@ -6,6 +6,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //THE SOFTWARE.
 #include  <iostream>
+#include <algorithm>
 
 #include "videoInput.h"
 #include <tchar.h>
@@ -22,13 +23,12 @@
 #include <aviriff.h>
 #include <windows.h>
 
-#ifndef HEADER
-// Returns the address of the BITMAPINFOHEADER from the VIDEOINFOHEADER
-# define HEADER(pVideoInfo) (&(((VIDEOINFOHEADER *) (pVideoInfo))->bmiHeader))
-#endif
-
 //for threading
 #include <process.h>
+
+#ifndef HEADER
+#define HEADER(pVideoInfo) (&(((VIDEOINFOHEADER *) (pVideoInfo))->bmiHeader))
+#endif
 
 // Due to a missing qedit.h in recent Platform SDKs, we've replicated the relevant contents here
 // #include <qedit.h>
@@ -171,7 +171,7 @@ public:
 
 
   //------------------------------------------------
-  STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject)
+  STDMETHODIMP QueryInterface(REFIID /*riid*/, void **ppvObject)
   {
     *ppvObject = static_cast<ISampleGrabberCB*>(this);
     return S_OK;
@@ -180,7 +180,7 @@ public:
 
   //This method is meant to have less overhead
   //------------------------------------------------
-  STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
+  STDMETHODIMP SampleCB(double /*Time*/, IMediaSample *pSample)
   {
     if(WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0) {
       return S_OK;
@@ -207,7 +207,8 @@ public:
 
 
   //This method is meant to have more overhead
-  STDMETHODIMP BufferCB(double Time, BYTE *pBuffer, long BufferLen)
+  STDMETHODIMP BufferCB(double /*Time*/, BYTE * /*pBuffer*/,
+                        long /*BufferLen*/)
   {
     return E_NOTIMPL;
   }
@@ -298,7 +299,7 @@ void videoDevice::setSize(int w, int h)
     pixels				= new unsigned char[videoSize];
     pBuffer				= new char[videoSize];
 
-    memset(pixels, 0 , videoSize);
+    memset(pixels, 0, videoSize);
     sgCallback->setupBuffer(videoSize);
 
   }
@@ -351,14 +352,10 @@ void videoDevice::NukeDownstream(IBaseFilter *pBF)
 
 void videoDevice::destroyGraph()
 {
-  HRESULT hr = NULL;
-  int FuncRetval=0;
-  int NumFilters=0;
+  HRESULT hr = NOERROR;
 
-  int i = 0;
   while (hr == NOERROR) {
-    IEnumFilters * pEnum = 0;
-    ULONG cFetched;
+    IEnumFilters * pEnum = NULL;
 
     // We must get the enumerator again every time because removing a filter from the graph
     // invalidates the enumerator. We always get only the first filter from each enumerator.
@@ -371,22 +368,13 @@ void videoDevice::destroyGraph()
     }
 
     IBaseFilter * pFilter = NULL;
-    if (pEnum->Next(1, &pFilter, &cFetched) == S_OK) {
+    if (pEnum->Next(1, &pFilter, NULL) == S_OK) {
       FILTER_INFO FilterInfo= {0};
       hr = pFilter->QueryFilterInfo(&FilterInfo);
       FilterInfo.pGraph->Release();
 
-      int count = 0;
-      char buffer[255];
-      memset(buffer, 0, 255 * sizeof(char));
-
-      while( FilterInfo.achName[count] != 0x00 ) {
-        buffer[count] = FilterInfo.achName[count];
-        count++;
-      }
-
       if(verbose) {
-        printf("SETUP: removing filter %s...\n", buffer);
+        printf("SETUP: removing filter %ls...\n", FilterInfo.achName);
       }
       hr = pGraph->RemoveFilter(pFilter);
       if (FAILED(hr)) {
@@ -396,20 +384,17 @@ void videoDevice::destroyGraph()
         return;
       }
       if(verbose) {
-        printf("SETUP: filter removed %s  \n",buffer);
+        printf("SETUP: filter removed %ls  \n", FilterInfo.achName);
       }
 
       pFilter->Release();
       pFilter = NULL;
     } else {
-      break;
+      hr = 1;
     }
     pEnum->Release();
     pEnum = NULL;
-    i++;
   }
-
-  return;
 }
 
 
@@ -557,17 +542,6 @@ videoDevice::~videoDevice()
     (pGraph)->Release();
     (pGraph) = 0;
   }
-
-  //delete our pointers
-  delete pDestFilter;
-  delete pVideoInputFilter;
-  delete pGrabberF;
-  delete pGrabber;
-  delete pControl;
-  delete streamConf;
-  delete pMediaEvent;
-  delete pCaptureGraph;
-  delete pGraph;
 
   if(verbose) {
     printf("SETUP: Device %i disconnected and freed\n\n",myID);
@@ -749,7 +723,7 @@ void videoInput::setUseCallback(bool useCallback)
 //
 // ----------------------------------------------------------------------
 
-void videoInput::setIdealFramerate(int deviceNumber, float idealFramerate)
+void videoInput::setIdealFramerate(int deviceNumber, int idealFramerate)
 {
   if(deviceNumber >= VI_MAX_CAMERAS
       || VDList[deviceNumber]->readyToCapture) {
@@ -758,7 +732,7 @@ void videoInput::setIdealFramerate(int deviceNumber, float idealFramerate)
 
   if( idealFramerate > 0 ) {
     VDList[deviceNumber]->requestedFrameTime = (unsigned long)(
-          10000000. / idealFramerate);
+          10000000 / idealFramerate);
   }
 }
 
@@ -934,7 +908,7 @@ bool videoInput::setFormat(int deviceNumber, int format)
 // ----------------------------------------------------------------------
 char videoInput::deviceNames[VI_MAX_CAMERAS][255]= {{0}};
 
-char * videoInput::getDeviceName(int deviceID)
+const char * videoInput::getDeviceName(int deviceID)
 {
   if( deviceID >= VI_MAX_CAMERAS ) {
     return NULL;
@@ -942,13 +916,14 @@ char * videoInput::getDeviceName(int deviceID)
   return deviceNames[deviceID];
 }
 
+std::vector<std::wstring> videoInput::deviceUniqueNames;
 
 // ----------------------------------------------------------------------
 // Our static function for finding num devices available etc
 //
 // ----------------------------------------------------------------------
 
-int videoInput::getDeviceIDFromName(char * name)
+int videoInput::getDeviceIDFromName(const char * name)
 {
 
   if (listDevices(true) == 0) {
@@ -967,12 +942,38 @@ int videoInput::getDeviceIDFromName(char * name)
   return deviceID;
 }
 
+const std::wstring& videoInput::getUniqueDeviceName(int deviceID)
+{
+  static const std::wstring dummy;
+  if (deviceID < 0 || deviceID >= (int)deviceUniqueNames.size()) {
+    if (verbose) {
+      printf("ERROR: Unknown device unique name - device index is out of range\n");
+    }
+    return dummy;
+  }
+  return deviceUniqueNames[deviceID];
+}
+
+int videoInput::getDeviceIDFromUniqueName(const std::wstring &uniqueName)
+{
+  std::vector<std::wstring>::const_iterator iter =
+    std::find(deviceUniqueNames.begin(), deviceUniqueNames.end(), uniqueName);
+
+  if (iter != deviceUniqueNames.end()) {
+    return iter - deviceUniqueNames.begin();
+  } else if (verbose) {
+    printf("ERROR: Unknown unique device name requested\n");
+  }
+
+  return -1;
+}
+
 std::vector <std::string> videoInput::getDeviceList()
 {
   int numDev = videoInput::listDevices(true);
   std::vector <std::string> deviceList;
   for(int i = 0; i < numDev; i++) {
-    char * name =  videoInput::getDeviceName(i);
+    const char * name =  videoInput::getDeviceName(i);
     if( name == NULL ) {
       break;
     }
@@ -1014,7 +1015,18 @@ int videoInput::listDevices(bool silent)
       }
       IMoniker *pMoniker = NULL;
 
+      deviceUniqueNames.clear();
+
       while (pEnum->Next(1, &pMoniker, NULL) == S_OK) {
+
+        if (deviceCounter >= VI_MAX_CAMERAS) {
+          if (!silent) {
+            printf("SETUP: Too many video inputs! Stop listing at %d\n",
+                   deviceCounter);
+          }
+          pMoniker->Release();
+          break;			// Stop enumerating, hit limit
+        }
 
         IPropertyBag *pPropBag;
         hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag,
@@ -1024,7 +1036,6 @@ int videoInput::listDevices(bool silent)
           pMoniker->Release();
           continue;  // Skip this one, maybe the next one will work.
         }
-
 
         // Find the description or friendly name.
         VARIANT varName;
@@ -1042,13 +1053,35 @@ int videoInput::listDevices(bool silent)
           int count = 0;
           int maxLen = sizeof(deviceNames[0])/sizeof(deviceNames[0][0]) - 2;
           while( varName.bstrVal[count] != 0x00 && count < maxLen) {
-            deviceNames[deviceCounter][count] = varName.bstrVal[count];
+            deviceNames[deviceCounter][count] = static_cast<char>
+                                                (varName.bstrVal[count]);
             count++;
           }
           deviceNames[deviceCounter][count] = 0;
 
           if(!silent) {
             printf("SETUP: %i) %s \n",deviceCounter, deviceNames[deviceCounter]);
+          }
+
+          // Find unique name
+          bool hasUniqueName = false;
+
+          IMalloc *pMalloc = NULL;
+          hr = CoGetMalloc(1, (LPMALLOC*)&pMalloc);
+
+          if (SUCCEEDED(hr)) {
+            BSTR uniqueName = NULL;
+            hr = pMoniker->GetDisplayName(NULL, NULL, &uniqueName);
+            if (SUCCEEDED(hr)) {
+              deviceUniqueNames.push_back(uniqueName);
+              hasUniqueName = true;
+              pMalloc->Free(uniqueName);
+            }
+            pMalloc->Release();
+          }
+
+          if (!hasUniqueName) {
+            deviceUniqueNames.push_back(std::wstring());
           }
         }
 
@@ -1340,7 +1373,6 @@ bool videoInput::getVideoSettingFilter(int deviceID, long Property,
   }
 
   HRESULT hr;
-  bool isSuccessful = false;
 
   videoDevice * VD = VDList[deviceID];
 
@@ -1442,10 +1474,8 @@ bool videoInput::setVideoSettingFilterPct(int deviceID, long Property,
     } else {
       rasterValue += stepAmnt - mod;
     }
-    if(verbose) {
-      printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
-              pctValue, value, stepAmnt, mod, rasterValue);
-    }
+    printf("RASTER - pctValue is %f - value is %i - step is %i - mod is %i - rasterValue is %i\n",
+           pctValue, value, stepAmnt, mod, rasterValue);
   }
 
   return setVideoSettingFilter(deviceID, Property, rasterValue, Flags,
@@ -1462,7 +1492,6 @@ bool videoInput::setVideoSettingFilter(int deviceID, long Property,
   }
 
   HRESULT hr;
-  bool isSuccessful = false;
 
   videoDevice * VD = VDList[deviceID];
 
@@ -1642,7 +1671,6 @@ bool videoInput::getVideoSettingCamera(int deviceID, long Property,
   }
 
   HRESULT hr;
-  bool isSuccessful = false;
 
   videoDevice * VD = VDList[deviceID];
 
@@ -1924,10 +1952,6 @@ void videoInput::processPixels(unsigned char * src, unsigned char * dst,
   int numBytes = widthInBytes * height;
 
   if(!bRGB) {
-
-    int x = 0;
-    int y = 0;
-
     if(bFlip) {
       for(int y = 0; y < height; y++) {
         memcpy(dst + (y * widthInBytes), src + ( (height -y -1) * widthInBytes),
@@ -2146,8 +2170,6 @@ static bool setSizeAndSubtype(videoDevice * VD, int attemptWidth,
                            (VD->pAmMediaType->pbFormat);
 
   //store current size
-  int tmpWidth  = HEADER(pVih)->biWidth;
-  int tmpHeight = HEADER(pVih)->biHeight;
   AM_MEDIA_TYPE * tmpType = NULL;
 
   HRESULT	hr = VD->streamConf->GetFormat(&tmpType);
@@ -2861,13 +2883,13 @@ HRESULT videoInput::routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
     }
 
     LONG lInpin, lOutpin;
-    hr = Crossbar->get_PinCounts(&lOutpin , &lInpin);
+    hr = Crossbar->get_PinCounts(&lOutpin, &lInpin);
 
     BOOL IPin=TRUE;
-    LONG pIndex=0 , pRIndex=0 , pType=0;
+    LONG pIndex=0, pRIndex=0, pType=0;
 
     while( pIndex < lInpin) {
-      hr = Crossbar->get_CrossbarPinInfo( IPin , pIndex , &pRIndex , &pType);
+      hr = Crossbar->get_CrossbarPinInfo( IPin, pIndex, &pRIndex, &pType);
 
       if( pType == conType) {
         if(verbose) {
@@ -2912,9 +2934,9 @@ HRESULT videoInput::routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
 
     if(foundDevice) {
       BOOL OPin=FALSE;
-      LONG pOIndex=0 , pORIndex=0 , pOType=0;
+      LONG pOIndex=0, pORIndex=0, pOType=0;
       while( pOIndex < lOutpin) {
-        hr = Crossbar->get_CrossbarPinInfo( OPin , pOIndex , &pORIndex , &pOType);
+        hr = Crossbar->get_CrossbarPinInfo( OPin, pOIndex, &pORIndex, &pOType);
         if( pOType == PhysConn_Video_VideoDecoder) {
           break;
         }
@@ -2947,4 +2969,3 @@ HRESULT videoInput::routeCrossbar(ICaptureGraphBuilder2 **ppBuild,
 
   return hr;
 }
-

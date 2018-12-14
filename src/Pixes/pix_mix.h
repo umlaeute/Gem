@@ -35,51 +35,50 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_mix : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_mix, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_mix, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-    	// Constructor
-    	pix_mix(int,t_atom*);
+  //////////
+  // Constructor
+  pix_mix(int,t_atom*);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_mix();
+  //////////
+  // Destructor
+  virtual ~pix_mix();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-      	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  virtual void    processGray_Gray(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_YUV(imageStruct &image, imageStruct &right);
 #ifdef __MMX__
-	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
-      	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
-    	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processGray_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_MMX(imageStruct &image, imageStruct &right);
 #endif
 #ifdef __VEC__
-        virtual void 	processYUV_Altivec (imageStruct &image, imageStruct &right);
+  virtual void    processYUV_Altivec (imageStruct &image,
+                                      imageStruct &right);
 #endif
 
-        virtual void 	gainMess (float X, float Y);
+  virtual void    gainMess (float X, float Y);
 
-        long imageGain,rightGain;
+  long imageGain,rightGain;
 
 
-         private:
+private:
 
-    	//////////
-    	// Static member functions
+  //////////
+  // Static member functions
 
-        //static void gainCallback       (void *data, t_float X, t_float Y);
-	static void gainCallback       (void *data, t_symbol*,int,t_atom*);
+  //static void gainCallback       (void *data, t_float X, t_float Y);
+  static void gainCallback       (void *data, t_symbol*,int,t_atom*);
 
 
 
 };
 
-#endif	// for header file
-
-
+#endif  // for header file

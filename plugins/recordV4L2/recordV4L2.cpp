@@ -4,7 +4,7 @@
 //
 // zmoelnig@iem.kug.ac.at
 //
-// Implementation file 
+// Implementation file
 //
 //    Copyright (c) 1997-1999 Mark Danks.
 //    Copyright (c) Günther Geiger.
@@ -49,7 +49,7 @@ REGISTER_RECORDFACTORY("V4L2", recordV4L2);
 //
 /////////////////////////////////////////////////////////
 
-recordV4L2 :: recordV4L2(void): 
+recordV4L2 :: recordV4L2(void):
   m_fd(-1),
   m_init(false),
   m_palette(0)
@@ -61,12 +61,19 @@ recordV4L2 :: recordV4L2(void):
   m_image.reallocate();
 
   switch(m_image.format) {
-  case GL_YUV422_GEM: m_palette = V4L2_PIX_FMT_UYVY; break;
-  case GL_LUMINANCE:  m_palette = V4L2_PIX_FMT_GREY; break;
-  case GL_RGBA:       m_palette = V4L2_PIX_FMT_RGB32; break;
-  default: throw(GemException("invalid colorspace"));
+  case GL_YUV422_GEM:
+    m_palette = V4L2_PIX_FMT_UYVY;
+    break;
+  case GL_LUMINANCE:
+    m_palette = V4L2_PIX_FMT_GREY;
+    break;
+  case GL_RGBA:
+    m_palette = V4L2_PIX_FMT_RGB32;
+    break;
+  default:
+    throw(GemException("invalid colorspace"));
   }
-  
+
 
 }
 
@@ -81,80 +88,92 @@ recordV4L2 :: ~recordV4L2(void)
 
 void recordV4L2 :: stop(void)
 {
-  if(m_fd>=0)
+  if(m_fd>=0) {
     ::close(m_fd);
+  }
   m_fd=-1;
 
 }
 
-bool recordV4L2 :: start(const std::string filename, gem::Properties&props)
+bool recordV4L2 :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
   m_fd=::open(filename.c_str(), O_RDWR);
-  if(m_fd<0)
+  if(m_fd<0) {
     return false;
+  }
   struct v4l2_capability vid_caps;
 
 
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
-    perror("VIDIOC_QUERYCAP");
-    stop(); 
+    perror("[GEM:recordV4L2] VIDIOC_QUERYCAP");
+    stop();
     return false;
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
-    verbose(1, "device '%s' is not a video4linux2 output device", filename.c_str());
-    stop(); 
+    error("[GEM:recordV4L2] device '%s' is not a video4linux2 output device",
+          filename.c_str());
+    stop();
     return false;
   }
   m_init=false;
   return true;
 }
 
-bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
-  if(m_init)return true;
-  if(m_fd<0)return false;
+bool recordV4L2::init(const imageStruct* dummyImage, const int framedur)
+{
+  if(m_init) {
+    return true;
+  }
+  if(m_fd<0) {
+    return false;
+  }
 
   unsigned int w=dummyImage->xsize;
   unsigned int h=dummyImage->ysize;
 
-	struct v4l2_capability vid_caps;
+  struct v4l2_capability vid_caps;
   if(ioctl(m_fd, VIDIOC_QUERYCAP, &vid_caps) == -1) {
-    perror("VIDIOC_QUERYCAP");
-    stop(); return false;
+    perror("[GEM:recordV4L2] VIDIOC_QUERYCAP");
+    stop();
+    return false;
   }
-	struct v4l2_format vid_format;
+  struct v4l2_format vid_format;
 
-	memset(&vid_format, 0, sizeof(vid_format));
+  memset(&vid_format, 0, sizeof(vid_format));
 
   vid_format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
-	vid_format.fmt.pix.width = w;
-	vid_format.fmt.pix.height = h;
-	vid_format.fmt.pix.pixelformat = m_palette;
-	vid_format.fmt.pix.sizeimage = w * h * m_image.csize;
-	vid_format.fmt.pix.field = V4L2_FIELD_NONE;
-	vid_format.fmt.pix.bytesperline = w * m_image.csize;
-	//vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
-	vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+  vid_format.fmt.pix.width = w;
+  vid_format.fmt.pix.height = h;
+  vid_format.fmt.pix.pixelformat = m_palette;
+  vid_format.fmt.pix.sizeimage = w * h * m_image.csize;
+  vid_format.fmt.pix.field = V4L2_FIELD_NONE;
+  vid_format.fmt.pix.bytesperline = w * m_image.csize;
+  //vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+  vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
 
   int format= vid_format.fmt.pix.pixelformat;
-  verbose(1, "v4l2-output requested %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+  verbose(1, "[GEM:recordV4L2] v4l2-output requested %dx%d @ '%c%c%c%c'",
+          vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),
           (char)(format>>16),
           (char)(format>>24));
   if(ioctl(m_fd, VIDIOC_S_FMT, &vid_format) == -1) {
-    perror("VIDIOC_S_FMT");
-    stop(); return false;
+    perror("[GEM:recordV4L2] VIDIOC_S_FMT");
+    stop();
+    return false;
   }
 
-  verbose(1, "v4l2-output returned %dx%d @ '%c%c%c%c'", 	vid_format.fmt.pix.width, 	vid_format.fmt.pix.height,
+  verbose(1, "[GEM:recordV4L2] v4l2-output returned %dx%d @ '%c%c%c%c'",
+          vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),
           (char)(format>>16),
           (char)(format>>24));
   /* if the driver returns a format other than requested we should adjust! */
-	w=vid_format.fmt.pix.width;
-	h=vid_format.fmt.pix.height;
+  w=vid_format.fmt.pix.width;
+  h=vid_format.fmt.pix.height;
 
   m_image.xsize=w;
   m_image.ysize=h;
@@ -174,9 +193,10 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur) {
 /////////////////////////////////////////////////////////
 bool recordV4L2 :: write(imageStruct*img)
 {
-  if(!m_init){
-    if(!init(img, 0))
+  if(!m_init) {
+    if(!init(img, 0)) {
       return true;
+    }
   }
   m_image.convertFrom(img);
 
@@ -200,10 +220,11 @@ static const std::string s_codec_desc=std::string("v4l2 loopback device");
 // set codec by name
 //
 /////////////////////////////////////////////////////////
-bool recordV4L2 :: setCodec(const std::string name)
+bool recordV4L2 :: setCodec(const std::string&name)
 {
-  if(name==s_codec_name)
+  if(name==s_codec_name) {
     return true;
+  }
 
   return false;
 }
@@ -212,19 +233,23 @@ bool recordV4L2 :: setCodec(const std::string name)
 // get codecs
 //
 /////////////////////////////////////////////////////////
-std::vector<std::string>recordV4L2::getCodecs(void) {
+std::vector<std::string>recordV4L2::getCodecs(void)
+{
   std::vector<std::string>result;
   result.push_back(s_codec_name);
   return result;
 }
-const std::string recordV4L2::getCodecDescription(const std::string codec) {
+const std::string recordV4L2::getCodecDescription(const std::string&codec)
+{
   std::string result;
-  if(codec==s_codec_name)
+  if(codec==s_codec_name) {
     result=s_codec_desc;
+  }
   return result;
 }
 
-bool recordV4L2::enumProperties(gem::Properties&props) {
+bool recordV4L2::enumProperties(gem::Properties&props)
+{
   props.clear();
   return false;
 }

@@ -20,6 +20,7 @@
 #include "filmDS.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
+#include "Gem/RTE.h"
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -174,7 +175,6 @@ HRESULT ConnectFilters(
   pIn->Release();
   return hr;
 }
-
 
 
 // ConnectFilters
@@ -472,7 +472,7 @@ public:
                                   CLSCTX_INPROC_SERVER,
                                   IID_IGraphBuilder, (void **)&m_pGraph);
     if (FAILED(hr) || !m_pGraph) {
-      printf("unable to create Filter Graph Manager: %d\n", hr);
+      verbose(1, "[GEM::filmDS] unable to create Filter Graph Manager: %d", hr);
       tearDown();
       return false;
     }
@@ -481,7 +481,7 @@ public:
     //printf("step 4\n");
     hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
     if (FAILED(hr) || !m_pControl) {
-      printf("could not get MediaControl interface: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not get MediaControl interface: %d", hr);
       tearDown();
       return false;
     }
@@ -489,14 +489,14 @@ public:
     //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
     if (FAILED(hr) || !m_pSeek) {
-      printf("could not get MediaSeeking interface: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not get MediaSeeking interface: %d", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGraph->QueryInterface(IID_IMediaPosition, (LPVOID *)&m_pPosition);
     if (FAILED(hr) || !m_pPosition) {
-      printf("could not get MediaPosition interface: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not get MediaPosition interface: %d", hr);
       tearDown();
       return false;
     }
@@ -506,21 +506,21 @@ public:
     hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
                           IID_IBaseFilter, (void**)&m_pGrabberF);
     if (FAILED(hr)) {
-      printf("could not create SampleGrabber: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not create SampleGrabber: %d", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGraph->AddFilter(m_pGrabberF, L"Sample Grabber");
     if (FAILED(hr)) {
-      printf("could not add SampleGrabber filter: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not add SampleGrabber filter: %d", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGrabberF->QueryInterface(IID_ISampleGrabber, (void**)&m_pGrabber);
     if (FAILED(hr)) {
-      printf("could not get SampleGrabber interface: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not get SampleGrabber interface: %d", hr);
       tearDown();
       return false;
     }
@@ -537,7 +537,7 @@ public:
     //printf("step 5.5\n");
     hr = m_pGrabber->SetMediaType(&mt);
     if (FAILED(hr)) {
-      printf("could not set MediaType: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not set MediaType: %d", hr);
       tearDown();
       return false;
     }
@@ -549,7 +549,7 @@ public:
     hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source",
                                    &m_pSourceFile);
     if (FAILED(hr)) {
-      printf("could not add Source Filter: %d\n", hr);
+      verbose(1, "[GEM::filmDS] could not add Source Filter: %d", hr);
       tearDown();
       return false;
     }
@@ -557,14 +557,14 @@ public:
     hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
     if (FAILED(hr)) {
 MARK_HR(hr);
-      printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
+      verbose(1,
+              "[GEM::filmDS] unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)");
       tearDown();
       return false;
     }
     //printf("step 7\n");
-    if(!SUCCEEDED(
-          hr)) { // can this ever happen after we just checked for FAILED(hr)??
-      printf("Error occured while playing or pausing or opening the file\n");
+    if(!SUCCEEDED(hr)) { // can this ever happen after we just checked for FAILED(hr)??
+      verbose(1, "[GEM::filmDS] Error occured while playing or pausing or opening the file");
       tearDown();
       return false;
     }
@@ -572,14 +572,14 @@ MARK_HR(hr);
     //Set Params - One Shot should be false unless you want to capture just one buffer
     hr = m_pGrabber->SetOneShot(FALSE);
     if (FAILED(hr)) {
-      printf("unable to set one shot\n");
+      verbose(1, "[GEM::filmDS] unable to set one shot");
       tearDown();
       return false;
     }
 
     hr = m_pGrabber->SetBufferSamples(TRUE);
     if (FAILED(hr)) {
-      printf("unable to set buffer samples\n");
+      verbose(1, "[GEM::filmDS] unable to set buffer samples");
       tearDown();
       return false;
     }
@@ -589,14 +589,14 @@ MARK_HR(hr);
     hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
                           IID_IBaseFilter, (void**)(&m_pNullRenderer));
     if (FAILED(hr) || !m_pNullRenderer) {
-      printf("null renderer error\n");
+      verbose(1, "[GEM::filmDS] null renderer error");
       tearDown();
       return false;
     }
 
     hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
     if (FAILED(hr)) {
-      printf("unable to add null renderer\n");
+      verbose(1, "[GEM::filmDS] unable to add null renderer");
       tearDown();
       return false;
     }
@@ -604,7 +604,7 @@ MARK_HR(hr);
     hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
     if (FAILED(hr)) {
 MARK_HR(hr);
-      printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
+      verbose(1, "[GEM::filmDS] unable to ConnectFilters(%s, %s, %s)", m_pGraph, m_pGrabberF, m_pNullRenderer);
       tearDown();
       return false;
     }
@@ -622,7 +622,7 @@ MARK_HR(hr);
       hr = m_pSeek->SetTimeFormat(&Guid);
 
       if (FAILED(hr)) {
-        printf("Unable to set video time format %d", hr);
+        verbose(1, "[GEM::filmDS] Unable to set video time format %d", hr);
         tearDown();
         return false;
       }
@@ -632,7 +632,7 @@ MARK_HR(hr);
     // compatible with the value returned from GetCurrentPosition
     hr = m_pSeek->GetDuration(&m_Duration);
     if (FAILED(hr)) {
-      printf("Unable to get video duration %d", hr);
+      verbose(1, "[GEM::filmDS] Unable to get video duration %d", hr);
       tearDown();
       return false;
     }
@@ -652,13 +652,13 @@ MARK_HR(hr);
     ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
     m_pGrabber->GetConnectedMediaType(&mt);
     if (FAILED(hr)) {
-      printf("unable to call GetConnectedMediaType %d\n", hr);
+      verbose(1, "[GEM::filmDS] unable to call GetConnectedMediaType %d", hr);
       tearDown();
       return false;
     }
 
     if(FORMAT_VideoInfo != mt.formattype || !mt.pbFormat) {
-      printf("invalid media type\n");
+      verbose(1, "[GEM::filmDS] invalid media type");
       tearDown();
       return false;
     }
@@ -668,9 +668,9 @@ MARK_HR(hr);
     height = infoheader->bmiHeader.biHeight;
     averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
 
-    //printf("video dimensions are %i %i\n", width, height);
+    //verbose(1, "[GEM::filmDS] video dimensions are %dx%d", width, height);
     if( width == 0 || height == 0 ) {
-      printf("illegal frame size %dx%d\n", width, height);
+      verbose(1, "[GEM::filmDS] illegal frame size %dx%d", width, height);
       tearDown();
       return false;
     }
@@ -678,7 +678,7 @@ MARK_HR(hr);
     videoSize = width * height * 4;
     rawBuffer = new unsigned char[videoSize];
     if(!rawBuffer) {
-      printf("unable to allocate memory for video buffer\n");
+      verbose(1, "[GEM::filmDS] unable to allocate memory for video buffer");
       tearDown();
       return false;
     }
@@ -689,12 +689,12 @@ MARK_HR(hr);
     //printf("step 8\n");
     // Run the graph.
 
-    std::string grfile="test_"__TIME__"_";
+    std::string grfile="test_" __TIME__ "_";
     //SaveGraphFile(m_pGraph, grfile+"2.grf");
     hr = m_pControl->Run();
     //SaveGraphFile(m_pGraph, grfile+"3.grf");
     if( FAILED(hr) ) {
-      printf("unable to start film\n", hr);
+      verbose(1, "[GEM::filmDS] unable to start film", hr);
       tearDown();
       return false;
     }
@@ -706,7 +706,7 @@ MARK_HR(hr);
       // Get the state and ensure it's not in an intermediate state
       hr = m_pControl->GetState(0, &FilterState);
       if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE)  {
-        printf("Unable to run film %d", hr);
+        verbose(1, "[GEM::filmDS] Unable to run film %d", hr);
         tearDown();
         return false;
       }
@@ -724,8 +724,6 @@ MARK_HR(hr);
     m_wantFrame=0;
     return true;
   }
-
-
 
   void processPixels(unsigned char * src, unsigned char * dst, int width,
                      int height, bool bRGB, bool bFlip)
@@ -814,13 +812,13 @@ MARK();
     HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
 
     if(FAILED(hr)) {
-      printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n",
+      verbose(1, "ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i",
              bufferSize);
       return false;
     }
 
     if (videoSize != bufferSize) {
-      printf("ERROR: GetPixels() - bufferSizes do not match!\n");
+      verbose(1, "ERROR: GetPixels() - bufferSizes do not match!");
       return false;
     }
 
@@ -874,10 +872,11 @@ MARK();
         // If the video image has changed, copy it to the pixBlock buffer.
         if (pb.newimage) {
           hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
-          if(FAILED(hr)) {MARK_HR(hr);
-	    printf("filmDS: GetCurrentBuffer(auto) failed: state=%d\n", State);
+          if(FAILED(hr)) {
+MARK_HR(hr);
+            verbose(1, "[GEM::filmDS] GetCurrentBuffer(auto) failed: state=%d\n", State);
             pb.image.data = NULL; // FIXXME
-	    MARK();
+MARK();
             return false;
           } else {
             //pb.image.data = rawBuffer;
@@ -895,7 +894,7 @@ MARK();
 
       //check if the playback is 'Paused' and don't keep asking for the same frame
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      printf("current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
+      verbose(1, "[GEM::filmDS] current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
              (int)m_wantFrame);
 
       if (m_wantFrame == m_lastFrame) {
@@ -906,20 +905,22 @@ MARK();
       hr = m_pSeek->SetPositions(&frameSeek,
                                  AM_SEEKING_AbsolutePositioning,
                                  NULL, AM_SEEKING_NoPositioning);
-      printf("new=%d\n", (int)frameSeek);
+      verbose(2, "[GEM::filmDS] new=%d", (int)frameSeek);
 
-      if (FAILED(hr)) {MARK_HR(hr);
-        printf("filmDS: SetPositions failed");
+      if (FAILED(hr)) {
+MARK_HR(hr);
+        verbose(1, "[GEM::filmDS] SetPositions failed");
       }
 
 MARK();
       hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
 
-      if (FAILED(hr))  {MARK_HR(hr);
+      if (FAILED(hr))  {
+MARK_HR(hr);
         pb.image.data = NULL; // FIXXME
-        printf("filmDS: GetCurrentBuffer failed: state=%d\n", State);
+        verbose(1, "[GEM::filmDS] GetCurrentBuffer failed: state=%d\n", State);
         return false;
-      }      else {
+      } else {
         //pb.image.data = rawBuffer;
         processPixels(rawBuffer, pb.image.data, width, height, true, true);
 
@@ -971,7 +972,7 @@ filmDS::~filmDS()
   close();
 }
 
-bool filmDS::open(const std::string path, const gem::Properties&props)
+bool filmDS::open(const std::string&path, const gem::Properties&props)
 {
 MARK();
   close();

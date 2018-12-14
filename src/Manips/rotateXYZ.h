@@ -33,39 +33,39 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN rotateXYZ : public GemBase
 {
-    CPPEXTERN_HEADER(rotateXYZ, GemBase);
+  CPPEXTERN_HEADER(rotateXYZ, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	rotateXYZ(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  rotateXYZ(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~rotateXYZ();
+  //////////
+  // Destructor
+  virtual ~rotateXYZ();
 
-    	//////////
-    	// When rendering occurs
-    	virtual void	render(GemState *state);
+  //////////
+  // When rendering occurs
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// The rotatation vector (x, y, z)
-    	float	    	m_vector[3];
+  //////////
+  // The rotatation vector (x, y, z)
+  float           m_vector[3];
 
-    	//////////
-    	// X value changed
-    	void	    	xMess(float val);
+  //////////
+  // X value changed
+  void            xMess(float val);
 
-    	//////////
-    	// Y value changed
-    	void	    	yMess(float val);
+  //////////
+  // Y value changed
+  void            yMess(float val);
 
-    	//////////
-    	// Z value changed
-    	void	    	zMess(float val);
+  //////////
+  // Z value changed
+  void            zMess(float val);
 };
 
-#endif	// for header file
+#endif  // for header file

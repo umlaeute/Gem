@@ -1,17 +1,17 @@
 /* -----------------------------------------------------------------
 
-GEM - Graphics Environment for Multimedia
+   GEM - Graphics Environment for Multimedia
 
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+   Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
+   (OS independant parent-class)
 
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+   Copyright (c) 1997-1999 Mark Danks. mark@danks.org
+   Copyright (c) Günther Geiger. geiger@epy.co.at
+   Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+   For information on usage and redistribution, and for a DISCLAIMER OF ALL
+   WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
------------------------------------------------------------------*/
+   -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE_GEMPLUGIN__FILMDS_FILMDS_H_
 #define _INCLUDE_GEMPLUGIN__FILMDS_FILMDS_H_
@@ -51,7 +51,7 @@ public:
 
   //////////
   // open a movie up
-  virtual bool open(const std::string filename, const gem::Properties&);
+  virtual bool open(const std::string&filename, const gem::Properties&);
   //////////
   // close the movie file
   virtual void close(void);
@@ -87,4 +87,4 @@ protected:
 };
 };
 
-#endif	// for header file
+#endif  // for header file

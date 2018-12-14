@@ -33,13 +33,13 @@ class GEM_EXTERN pix_background : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_background, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_background(int argc, t_atom*argv);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -47,9 +47,9 @@ class GEM_EXTERN pix_background : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processRGBAImage(imageStruct &image);
-  virtual void 	processGrayImage(imageStruct &image);
-  virtual void 	processYUVImage (imageStruct &image);
+  virtual void  processRGBAImage(imageStruct &image);
+  virtual void  processGrayImage(imageStruct &image);
+  virtual void  processYUVImage (imageStruct &image);
 #ifdef __MMX__
   virtual void processRGBAMMX   (imageStruct &image);
   virtual void processYUVMMX    (imageStruct &image);
@@ -58,23 +58,24 @@ class GEM_EXTERN pix_background : public GemPixObj
 #ifdef __VEC__
   //////////
   // Do the YUV Altivec processing
-  virtual void 	processYUVAltivec(imageStruct &image);
+  virtual void  processYUVAltivec(imageStruct &image);
 #endif
 
   virtual void rangeNMess(int argc, t_atom*argv);
 
   imageStruct   m_savedImage;
-  int		m_Yrange,m_Urange,m_Vrange, m_Arange;
+  int           m_Yrange,m_Urange,m_Vrange, m_Arange;
   t_inlet      *inletRange;
-  int		m_reset;
+  int           m_reset;
 
 
- private:
+private:
 
   //////////
   // Static member functions
 
-  static void rangeCallback       (void *data, t_float Y, t_float U, t_float V);
+  static void rangeCallback       (void *data, t_float Y, t_float U,
+                                   t_float V);
   //  static void rangeNCallback      (void *data, t_float Y, t_float U, t_float V);
   static void rangeNCallback      (void *data, t_symbol*,int,t_atom*);
   static void resetCallback       (void *data);
@@ -83,4 +84,3 @@ class GEM_EXTERN pix_background : public GemPixObj
 };
 
 #endif
-

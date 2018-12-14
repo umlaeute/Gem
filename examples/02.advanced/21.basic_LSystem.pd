@@ -35,7 +35,7 @@ it to the corresponding primitives;
 #X text 397 502 <- size of the system;
 #X msg 15 164 F \, [ \, - \, F \, ] \, F \, [ \, + \, F \, ] \, F;
 #X text 12 640 This is a basic implementation of Lindenmayer System
-(LSystem) in GEM. Wikipedia is a good place for informations about
+(LSystem) in GEM. Wikipedia is a good place for information about
 Lsystems;
 #X obj 15 351 gemlist;
 #X obj 47 110 s \$0-gemlist;

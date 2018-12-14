@@ -83,9 +83,9 @@ static RegionReference* new_region( Segmenter *s, int x, int y, int colour )
     r->children_visited_count = 0;
     r->descendent_count = 0x7FFF;
 
-    r->adjacent_region_count = 0;	
+    r->adjacent_region_count = 0;
 	i = y*(s->width)+x;
-/*	
+/*
 	r->first_span = LOOKUP_SEGMENTER_SPAN( s,  i );
 	r->first_span->start = i;
 	r->first_span->end = i;
@@ -177,7 +177,7 @@ static void remove_adjacent_from( Region *r1, Region *r2 ) // remove r2 from r1
 static void make_saturated( Region* r1 )
 {
     int i;
-    int r1_adjacent_region_count = r1->adjacent_region_count; 
+    int r1_adjacent_region_count = r1->adjacent_region_count;
 
     // remove adjacencies from r1 and mark them as fragmented
     for( i = 0; i < r1_adjacent_region_count; ++i ){
@@ -194,7 +194,7 @@ static void make_saturated( Region* r1 )
 static void make_fragmented( Region* r1 )
 {
     int i;
-    int r1_adjacent_region_count = r1->adjacent_region_count; 
+    int r1_adjacent_region_count = r1->adjacent_region_count;
 
     // remove adjacencies from r1
     for( i = 0; i < r1_adjacent_region_count; ++i ){
@@ -264,7 +264,7 @@ static void replace_adjacent( Region *r1, Region *r2, Region *r3 )  // replace r
         }
     }
 
-    assert( found );    
+    assert( found );
 }
 
 
@@ -274,7 +274,7 @@ static void replace_adjacent( Region *r1, Region *r2, Region *r3 )  // replace r
 static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
 {
     int i;
- 
+
     assert( r1 != r2 );
     assert( !r1_adjacent_contains_r2( r1, r2 ) && !r1_adjacent_contains_r2( r2, r1 ) );
 
@@ -303,7 +303,7 @@ static void merge_regions( Segmenter *s, Region* r1, Region* r2 )
             make_saturated( r2 );
         }else{
             // remove adjacencies from r2 and add them to r1
-            
+
             for( i=0; i < r2->adjacent_region_count; ++i ){
                 Region *a = r2->adjacent_regions[ i ];
 
@@ -444,7 +444,7 @@ static void build_regions( Segmenter *s, const unsigned char *source )
 /*
 				current_row[x-1]->region->last_span->end=i-1; // set the span end, it is more efficient here
 				current_row[x-1]->region->area+=i-current_row[x-1]->region->last_span->start;
-				
+
 				// mark single pixels fragmented
 				if (current_row[x-1]->region->area<=REGION_GATE_AREA) {
 					if (((y+1)==s->height) || (source[i-1]!=source[i-1+s->width]))
@@ -502,10 +502,10 @@ void initialize_segmenter( Segmenter *s, int width, int height, int max_adjacent
     s->regions = (unsigned char*)malloc( s->sizeof_region * width * height );
    // s->spans = (unsigned char*)malloc(  sizeof(Span) * width * height );
     s->region_count = 0;
-	
+
 	s->width = width;
 	s->height = height;
-	
+
     s->regions_under_construction = (RegionReference**)malloc( sizeof(RegionReference*) * width * 2 );
 }
 
@@ -519,6 +519,6 @@ void terminate_segmenter( Segmenter *s )
 
 void step_segmenter( Segmenter *s, const unsigned char *source )
 {
-    if( s->region_refs && s->regions && s->regions_under_construction /*&& s->spans*/) 
+    if( s->region_refs && s->regions && s->regions_under_construction /*&& s->spans*/)
 		build_regions( s, source );
 }

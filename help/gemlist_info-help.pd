@@ -40,7 +40,7 @@
 #X text 10 414 Create window:;
 #X text 50 12 Synopsis: [gemlist_info];
 #X text 71 31 Class: information object;
-#X text 29 77 Description: get curent transformation of a gemlist;
+#X text 29 77 Description: get current transformation of a gemlist;
 #X text 42 94 [gemlist_info] accepts a gemList decompost the transformation
 matrix in basic transformation (translation \, scale \, shear \, rotation)
 ;
@@ -127,7 +127,7 @@ matrix in basic transformation (translation \, scale \, shear \, rotation)
 #X obj 178 610 scaleXYZ;
 #X obj 178 30 loadbang;
 #X msg 178 55 0;
-#X text 50 844 this show the transformation neaded to create a specific
+#X text 50 844 this show the transformation needed to create a specific
 transformation matrix decomposed with gemlist_info;
 #X connect 0 0 33 0;
 #X connect 1 0 33 1;

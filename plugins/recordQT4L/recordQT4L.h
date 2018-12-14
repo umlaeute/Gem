@@ -47,9 +47,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-namespace gem { namespace plugins {
- class GEM_EXPORT recordQT4L : public record {
- public:
+namespace gem
+{
+namespace plugins
+{
+class GEM_EXPORT recordQT4L : public record
+{
+public:
 
   //////////
   // Constructor
@@ -78,7 +82,7 @@ namespace gem { namespace plugins {
   // open a movie up
   // open the recordQT4L "filename" (think better about URIs ?)
   // returns TRUE if opening was successfull, FALSE otherwise
-  virtual bool start(const std::string filename, gem::Properties&props);
+  virtual bool start(const std::string&filename, gem::Properties&props);
 
 
 
@@ -100,14 +104,14 @@ namespace gem { namespace plugins {
    */
   virtual bool write(imageStruct*);
 
-  virtual bool setCodec(const std::string name);
+  virtual bool setCodec(const std::string&name);
 
 
   /**
    * get a list of supported codecs (short-form names, e.g. "mjpa")
    */
   virtual std::vector<std::string>getCodecs(void);
-  virtual const std::string getCodecDescription(const std::string codecname);
+  virtual const std::string getCodecDescription(const std::string&codecname);
 
   /**
    * list all properties the currently selected codec supports
@@ -115,9 +119,12 @@ namespace gem { namespace plugins {
    */
   virtual bool enumProperties(gem::Properties&props);
 
-  virtual bool dialog(void) {return false;}
+  virtual bool dialog(void)
+  {
+    return false;
+  }
 
- private:
+private:
   quicktime_t *m_qtfile;
 
   imageStruct m_image;
@@ -151,7 +158,8 @@ namespace gem { namespace plugins {
 
   size_t m_curFrame;
 #endif /* QT */
- };
-};};
+};
+};
+};
 
-#endif	// for header file
+#endif  // for header file

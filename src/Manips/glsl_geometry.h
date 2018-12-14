@@ -40,14 +40,14 @@ class GEM_EXTERN glsl_geometry : public GemBase
 {
   CPPEXTERN_HEADER(glsl_geometry, GemBase);
 
-    public:
+public:
 
   //////////
   // Constructor
   glsl_geometry(void);
   glsl_geometry(t_symbol *filename);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -85,18 +85,18 @@ class GEM_EXTERN glsl_geometry : public GemBase
 
   //////////
   //
-  GLuint		m_shaderTarget;
-  GLuint		m_shader;
+  GLuint                m_shaderTarget;
+  GLuint                m_shader;
   GLhandleARB   m_shaderARB;
-  GLint			m_compiled;
-  int			  m_size;
-  char*			m_shaderString;
+  GLint                 m_compiled;
+  int                     m_size;
+  char*                 m_shaderString;
   t_symbol* m_shaderFilename;
 
-  GLint			m_shaderID;
-  t_outlet		*m_outShaderID;
+  GLint                 m_shaderID;
+  t_outlet              *m_outShaderID;
   gem::utils::gl::GLuintMap m_idmapper;
   float                 m_idmapped;
 };
 
-#endif	// for header file
+#endif  // for header file

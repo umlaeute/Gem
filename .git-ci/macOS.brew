@@ -1,0 +1,25 @@
+# build-system
+brew "pkg-config"
+brew "automake"
+brew "libtool"
+brew "gettext"
+
+# additional window providers
+brew "sdl"
+brew "glfw"
+
+# font rendering
+brew "ftgl"
+
+# image reading
+brew "jpeg"
+brew "libtiff"
+brew "imagemagick"
+
+# additional video support
+brew "libquicktime"
+#brew "x11vnc"
+
+# model loading
+brew "assimp"
+

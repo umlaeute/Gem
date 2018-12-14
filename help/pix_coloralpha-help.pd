@@ -73,7 +73,7 @@ mean-value of the RGB-triple for each pixel.;
 #X text 16 155 This of course \, makes only sense with RGBA-images.
 ;
 #X obj 452 285 translate 2 0 0 -1;
-#X text 63 275 Inlet 1: 1|0 : turn on/off;
+#X text 63 275 Inlet 1: 1|0 : turn on/off (default:1);
 #X obj 467 142 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
 #X connect 10 0 11 0;

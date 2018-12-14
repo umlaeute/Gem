@@ -11,12 +11,14 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 interface
-ISampleGrabberCB
-:
-	public IUnknown
+  ISampleGrabberCB
+  :
+  public IUnknown
 {
-	virtual STDMETHODIMP SampleCB( double SampleTime, IMediaSample *pSample ) = 0;
-	virtual STDMETHODIMP BufferCB( double SampleTime, BYTE *pBuffer, long BufferLen ) = 0;
+  virtual STDMETHODIMP SampleCB( double SampleTime,
+                                 IMediaSample *pSample ) = 0;
+  virtual STDMETHODIMP BufferCB( double SampleTime, BYTE *pBuffer,
+                                 long BufferLen ) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -28,17 +30,22 @@ IID IID_ISampleGrabberCB = { 0x0579154A, 0x2B53, 0x4994, { 0xB0, 0xD0, 0xE7, 0x7
 ///////////////////////////////////////////////////////////////////////////////////
 
 interface
-ISampleGrabber
-:
-	public IUnknown
+  ISampleGrabber
+  :
+  public IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE SetOneShot( BOOL OneShot ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE SetMediaType( const AM_MEDIA_TYPE *pType ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType( AM_MEDIA_TYPE *pType ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE SetBufferSamples( BOOL BufferThem ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer( long *pBufferSize, long *pBuffer ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE GetCurrentSample( IMediaSample **ppSample ) = 0;
-	virtual HRESULT STDMETHODCALLTYPE SetCallback( ISampleGrabberCB *pCallback, long WhichMethodToCallback ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetOneShot( BOOL OneShot ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetMediaType( const AM_MEDIA_TYPE
+      *pType ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
+    AM_MEDIA_TYPE *pType ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetBufferSamples( BOOL BufferThem ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetCurrentBuffer( long *pBufferSize,
+      long *pBuffer ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE GetCurrentSample( IMediaSample
+      **ppSample ) = 0;
+  virtual HRESULT STDMETHODCALLTYPE SetCallback( ISampleGrabberCB *pCallback,
+      long WhichMethodToCallback ) = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////

@@ -49,7 +49,8 @@ spot_light :: spot_light(t_floatarg lightNum)
   spotExponent = 2.5;
 
   // create the parameters inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("paramlist"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
+            gensym("paramlist"));
 }
 
 ////////////////////////////////////////////////////////
@@ -65,18 +66,26 @@ spot_light :: ~spot_light()
 // lightParamMess
 //
 ////////////////////////////////////////////////////////
-void spot_light :: lightParamMess(float linAtt, float cutoff, float exponent)
+void spot_light :: lightParamMess(float linAtt, float cutoff,
+                                  float exponent)
 {
   // convert from spherical coordinates
   // needs to be positive?
-  if (linAtt >= 0) linearAttenuation = linAtt;
+  if (linAtt >= 0) {
+    linearAttenuation = linAtt;
+  }
 
   // spotCutoff needs to be 0-90 or 180
-  if ( (cutoff >= 0) && (cutoff <= 90) ) spotCutoff = cutoff;
-  else if (cutoff == 180) spotCutoff = cutoff;
+  if ( (cutoff >= 0) && (cutoff <= 90) ) {
+    spotCutoff = cutoff;
+  } else if (cutoff == 180) {
+    spotCutoff = cutoff;
+  }
 
   // only 0-128
-  if ( (exponent >= 0) && (exponent <= 128) ) spotExponent = exponent;
+  if ( (exponent >= 0) && (exponent <= 128) ) {
+    spotExponent = exponent;
+  }
   m_change = 1;
   setModified();
 }
@@ -99,11 +108,13 @@ void spot_light :: renderDebug()
 }
 void spot_light :: render(GemState *state)
 {
-  if (!m_light)return;
+  if (!m_light) {
+    return;
+  }
 
   if (m_change) {
     m_change = 0;
-    if ( !m_on ){
+    if ( !m_on ) {
       glDisable(m_light);
       return;
     }

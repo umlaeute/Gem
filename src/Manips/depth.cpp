@@ -28,13 +28,13 @@ CPPEXTERN_NEW_WITH_GIMME(depth);
 //
 /////////////////////////////////////////////////////////
 depth :: depth(int argc, t_atom*argv)
-       : m_state(1)
+  : m_state(1)
 {
   switch(argc) {
   case 0:
     break;
   case 1:
-    if(A_FLOAT==argv->a_type){
+    if(A_FLOAT==argv->a_type) {
       m_state=(atom_getint(argv)>0);
       break;
     }
@@ -57,8 +57,11 @@ depth :: ~depth()
 /////////////////////////////////////////////////////////
 void depth :: render(GemState *)
 {
-    if (m_state) glDisable(GL_DEPTH_TEST);
-    else         glEnable (GL_DEPTH_TEST);
+  if (m_state) {
+    glDisable(GL_DEPTH_TEST);
+  } else {
+    glEnable (GL_DEPTH_TEST);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -67,7 +70,9 @@ void depth :: render(GemState *)
 /////////////////////////////////////////////////////////
 void depth :: postrender(GemState *)
 {
-    if (m_state) glEnable(GL_DEPTH_TEST);
+  if (m_state) {
+    glEnable(GL_DEPTH_TEST);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -76,8 +81,8 @@ void depth :: postrender(GemState *)
 /////////////////////////////////////////////////////////
 void depth :: depthMess(int state)
 {
-    m_state = state;
-    setModified();
+  m_state = state;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////

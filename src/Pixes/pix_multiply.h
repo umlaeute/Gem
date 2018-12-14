@@ -33,44 +33,44 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_multiply : public GemPixDualObj
 {
-    CPPEXTERN_HEADER(pix_multiply, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_multiply, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-    	// Constructor
-    	pix_multiply();
+  //////////
+  // Constructor
+  pix_multiply();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_multiply();
+  //////////
+  // Destructor
+  virtual ~pix_multiply();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
 
-    	//////////
-    	//  This is called whenever a new image comes through.
-		//	The left image is an RGBA, the right is a gray8
-    	virtual void 	processRGBA_Gray(imageStruct &image, imageStruct &right);
+  //////////
+  //  This is called whenever a new image comes through.
+  //      The left image is an RGBA, the right is a gray8
+  virtual void    processRGBA_Gray(imageStruct &image, imageStruct &right);
 
-    	//////////
-    	//  This is called whenever a new image comes through.
-		//	Both images are gray8
-    	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
+  //////////
+  //  This is called whenever a new image comes through.
+  //      Both images are gray8
+  virtual void    processGray_Gray(imageStruct &image, imageStruct &right);
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processYUV_YUV(imageStruct &image, imageStruct &right);
 
 #ifdef __MMX__
-     	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
-    	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
-   	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
 
 };
 
-#endif	// for header file
+#endif  // for header file

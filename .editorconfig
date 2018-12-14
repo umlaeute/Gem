@@ -1,0 +1,22 @@
+[*.{c,cpp,h,m,mm}]
+root = true
+# indent 2 spaces, one-true-brace-style!
+indent_style = space
+indent_size = 2
+indent_brace_style = 1TBS
+
+# please only ever use utf-8
+charset = utf-8
+
+trim_trailing_whitespace = true
+insert_final_newline = true
+# let git handle proper EOL
+##end_of_line = lf
+
+##continuation_indent_size = 2
+##quote_type = single
+##space_after_anonymous_functions = true
+##space_after_control_statements = true
+spaces_around_operators = true
+##spaces_in_brackets = false
+##curly_bracket_next_line = true

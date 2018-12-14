@@ -28,8 +28,8 @@ CPPEXTERN_NEW(render_trigger);
 /////////////////////////////////////////////////////////
 render_trigger :: render_trigger()
 {
-    m_preOut = outlet_new(this->x_obj, 0);
-    m_postOut = outlet_new(this->x_obj, 0);
+  m_preOut = outlet_new(this->x_obj, 0);
+  m_postOut = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
@@ -38,8 +38,8 @@ render_trigger :: render_trigger()
 /////////////////////////////////////////////////////////
 render_trigger :: ~render_trigger()
 {
-    outlet_free(m_preOut);
-    outlet_free(m_postOut);
+  outlet_free(m_preOut);
+  outlet_free(m_postOut);
 }
 
 /////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ render_trigger :: ~render_trigger()
 /////////////////////////////////////////////////////////
 void render_trigger :: render(GemState *)
 {
-    outlet_bang(m_preOut);
+  outlet_bang(m_preOut);
 }
 
 /////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ void render_trigger :: render(GemState *)
 /////////////////////////////////////////////////////////
 void render_trigger :: postrender(GemState *)
 {
-    outlet_bang(m_postOut);
+  outlet_bang(m_postOut);
 }
 
 /////////////////////////////////////////////////////////

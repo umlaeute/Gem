@@ -18,7 +18,8 @@
 #include "pix_resize.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float,
+                            A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -46,43 +47,51 @@ pix_resize :: ~pix_resize()
 /////////////////////////////////////////////////////////
 void pix_resize :: processImage(imageStruct &image)
 {
-    // do we need to resize the image?
-    // need to check if dimensions are a power of two
+  // do we need to resize the image?
+  // need to check if dimensions are a power of two
 
-    int wN = (m_width>0)?m_width:powerOfTwo(image.xsize);
-    int hN = (m_height>0)?m_height:powerOfTwo(image.ysize);
+  int wN = (m_width>0)?m_width:powerOfTwo(image.xsize);
+  int hN = (m_height>0)?m_height:powerOfTwo(image.ysize);
 
-    if (wN != image.xsize || hN != image.ysize)
-    {
-      GLint gluError;
-      m_image.xsize=wN;
-      m_image.ysize=hN;
-      m_image.setCsizeByFormat(image.format);
-      m_image.reallocate();
-      m_image.reallocate(wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
+  if (wN != image.xsize || hN != image.ysize) {
+    GLint gluError;
+    m_image.xsize=wN;
+    m_image.ysize=hN;
+    m_image.setCsizeByFormat(image.format);
+    m_image.reallocate();
+    m_image.reallocate(
+      wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
 
-      gluError = gluScaleImage(image.format,
-			       image.xsize, image.ysize,
-			       image.type, image.data,
-			       wN, hN,
-			       image.type, m_image.data);
-      if ( gluError )
-	{
-	  post("gluError %d: unable to resize image", gluError);
-	  return;
-	}
-      //      image.clear();
-      image.data  = m_image.data;
-      image.xsize = m_image.xsize;
-      image.ysize = m_image.ysize;
+    gluError = gluScaleImage(image.format,
+                             image.xsize, image.ysize,
+                             image.type, image.data,
+                             wN, hN,
+                             image.type, m_image.data);
+    if ( gluError ) {
+      post("gluError %d: unable to resize image", gluError);
+      return;
     }
+    //      image.clear();
+    image.data  = m_image.data;
+    image.xsize = m_image.xsize;
+    image.ysize = m_image.ysize;
+  }
 }
 
-void pix_resize :: dimenMess(int width, int height) {
-  if (width>32000)width=0;
-  if (height>32000)height=0;
-  if (width  < 0) width  = 0;
-  if (height < 0) height = 0;
+void pix_resize :: dimenMess(int width, int height)
+{
+  if (width>32000) {
+    width=0;
+  }
+  if (height>32000) {
+    height=0;
+  }
+  if (width  < 0) {
+    width  = 0;
+  }
+  if (height < 0) {
+    height = 0;
+  }
 
   m_width =width;
   m_height=height;
@@ -96,8 +105,9 @@ void pix_resize :: dimenMess(int width, int height) {
 /////////////////////////////////////////////////////////
 void pix_resize :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(pix_resize::dimenMessCallback),
-		  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(pix_resize::dimenMessCallback),
+                  gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 }
 
 void pix_resize ::dimenMessCallback(void *data, t_float w, t_float h)

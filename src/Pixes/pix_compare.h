@@ -37,47 +37,46 @@ DESCRIPTION
 
 class GEM_EXTERN pix_compare : public GemPixDualObj
 {
-CPPEXTERN_HEADER(pix_compare, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_compare, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_compare();
+  //////////
+  // Constructor
+  pix_compare();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_compare();
+  //////////
+  // Destructor
+  virtual ~pix_compare();
 
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
-	virtual void 	processYUV_YUV  (imageStruct &image, imageStruct &right);
-	virtual void 	processGray_Gray(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_YUV  (imageStruct &image, imageStruct &right);
+  virtual void    processGray_Gray(imageStruct &image, imageStruct &right);
 
 #ifdef __MMX__
-	virtual void 	processYUV_MMX (imageStruct &image, imageStruct &right);
-	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_MMX (imageStruct &image, imageStruct &right);
+  virtual void    processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
 #ifdef __VEC__
-        //////////
-    	// Do the Altivec processing
-    	virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the Altivec processing
+  virtual void    processYUV_Altivec(imageStruct &image, imageStruct &right);
 #endif
 
-        int m_direction;
+  int m_direction;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void directionCallback       (void *data, t_float state);
+  //////////
+  // Static member functions
+  static void directionCallback       (void *data, t_float state);
 
 
 };
 
 #endif
-

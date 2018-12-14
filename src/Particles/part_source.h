@@ -33,16 +33,16 @@ class GEM_EXTERN part_source : public partlib_base
 {
   CPPEXTERN_HEADER(part_source, partlib_base);
 
-    public:
+public:
 
   //////////
   // Constructor
   part_source(t_floatarg num);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
+  virtual void  renderParticles(GemState *state);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -50,16 +50,16 @@ class GEM_EXTERN part_source : public partlib_base
 
   //////////
   // Number to add
-  void			numberMess(float num);
+  void                  numberMess(float num);
   void      domainMess(const std::string&s);
-  void			vectorMess(t_symbol*s, int argc, t_atom*argv);
+  void                  vectorMess(t_symbol*s, int argc, t_atom*argv);
 
-  t_float			m_numberToAdd;
+  t_float                       m_numberToAdd;
 
   //////////
   // vel.domain
   PDomainEnum           m_domain;
-  float			m_arg[9];
+  float                 m_arg[9];
 };
 
-#endif	// for header file
+#endif  // for header file

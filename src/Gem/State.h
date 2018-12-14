@@ -35,11 +35,11 @@ class TexCoord;
   -----------------------------------------------------------------*/
 class GEM_EXTERN TexCoord
 {
- public:
+public:
   TexCoord() : s(0.f), t(0.f) { }
-    TexCoord(float s_, float t_) : s(s_), t(t_) { }
-      float   	    s;
-      float   	    t;
+  TexCoord(float s_, float t_) : s(s_), t(t_) { }
+  float         s;
+  float         t;
 };
 
 
@@ -57,7 +57,7 @@ class GEM_EXTERN TexCoord
 class GemStateData;
 class GEM_EXTERN GemState
 {
- public:
+public:
   typedef enum {
     _ILLEGAL=-1,
     _DIRTY, /* "dirty" */
@@ -89,17 +89,17 @@ class GEM_EXTERN GemState
   //////////
   // Are we in a display list creation?
   // deprecated: use property 'gl.displaylist' instead
-  GEM_DEPRECATED  bool 	    	    inDisplayList;
+  GEM_DEPRECATED  bool              inDisplayList;
 
   //////////
   // Lighting on?
   // deprecated: use property 'gl.lighting' instead
-  GEM_DEPRECATED  bool 	    	    lighting;
+  GEM_DEPRECATED  bool              lighting;
 
   //////////
   // Smooth shading (flat is other type)
   // deprecated: use property 'gl.smooth' instead
-  GEM_DEPRECATED  bool 	    	    smooth;
+  GEM_DEPRECATED  bool              smooth;
 
   //////////
   // Texture mapping on?
@@ -107,41 +107,41 @@ class GEM_EXTERN GemState
   // 1..normalized texture
   // 2..rectangle texture
   // deprecated: use property 'gl.tex.type' instead
-  GEM_DEPRECATED  int 	    	    texture;
+  GEM_DEPRECATED  int               texture;
 
   //////////
   // The image to texture map
   // deprecated: use property 'pix' instead
-  GEM_DEPRECATED  pixBlock	        *image;
+  GEM_DEPRECATED  pixBlock              *image;
 
   //////////
   // Texture coordinates.
   // This can be NULL if there aren't any coordinates
   // deprecated: use property 'gl.tex.coords' instead
-  GEM_DEPRECATED  TexCoord    	    *texCoords;
+  GEM_DEPRECATED  TexCoord          *texCoords;
 
   //////////
   // The number of TexCoords
   // deprecated: use property 'gl.tex.numcoords' instead
-  GEM_DEPRECATED  int 	    	    numTexCoords;
+  GEM_DEPRECATED  int               numTexCoords;
 
   //////////
   // The number of multiTexUnits
   //   default = 0, max = 7
   // deprecated: use property 'gl.tex.units' instead
-  GEM_DEPRECATED  int 	    	    multiTexUnits;
+  GEM_DEPRECATED  int               multiTexUnits;
 
   //////////
   // Milliseconds since last frame
   // If in Stereoscopic mode, then it is the same number for both left
-  //		and right renderings
+  //            and right renderings
   // deprecated: use property 'timing.tick' instead
-  GEM_DEPRECATED  float				tickTime;
+  GEM_DEPRECATED  float                         tickTime;
 
   //////////////////
   // the default draw-type (might be overridden within a Geo)
   // deprecated: use property 'gl.drawtype' instead
-  GEM_DEPRECATED  GLenum				drawType;
+  GEM_DEPRECATED  GLenum                                drawType;
 
   //////////
   // how deep is the current stack /* 4 fields for the 4 stacks */
@@ -151,28 +151,29 @@ class GEM_EXTERN GemState
   ////////////
   //vertex-array data
   // deprecated: use property 'vertex.dirty' instead
-  GEM_DEPRECATED  int                 VertexDirty; // the vertex-arrays has changed
+  GEM_DEPRECATED  int
+  VertexDirty; // the vertex-arrays has changed
   // deprecated: use property 'vertex.array.vertex' instead
-  GEM_DEPRECATED  GLfloat				*VertexArray;
+  GEM_DEPRECATED  GLfloat                               *VertexArray;
   // deprecated: use property 'vertex.array.vertex' instead
-  GEM_DEPRECATED  int					VertexArraySize;
+  GEM_DEPRECATED  int                                   VertexArraySize;
   // deprecated: use property 'vertex.array.vertex' instead
-  GEM_DEPRECATED  int					VertexArrayStride;
+  GEM_DEPRECATED  int                                   VertexArrayStride;
 
   // deprecated: use property 'vertex.array.color' instead
-  GEM_DEPRECATED  GLfloat				*ColorArray;
+  GEM_DEPRECATED  GLfloat                               *ColorArray;
   // deprecated: use property 'vertex.array.color' instead
-  GEM_DEPRECATED  bool		 			HaveColorArray;
+  GEM_DEPRECATED  bool                                  HaveColorArray;
 
   // deprecated: use property 'vertex.array.normal' instead
-  GEM_DEPRECATED  GLfloat				*NormalArray;
+  GEM_DEPRECATED  GLfloat                               *NormalArray;
   // deprecated: use property 'vertex.array.normal' instead
-  GEM_DEPRECATED  bool					HaveNormalArray;
+  GEM_DEPRECATED  bool                                  HaveNormalArray;
 
   // deprecated: use property 'vertex.array.texcoord' instead
-  GEM_DEPRECATED  GLfloat				*TexCoordArray;
+  GEM_DEPRECATED  GLfloat                               *TexCoordArray;
   // deprecated: use property 'vertex.array.texcoord' instead
-  GEM_DEPRECATED  bool					HaveTexCoordArray;
+  GEM_DEPRECATED  bool                                  HaveTexCoordArray;
 
   //////////
   // Constructor
@@ -199,7 +200,8 @@ class GEM_EXTERN GemState
   virtual bool get(const key_t key, gem::any&value);
 
   template<class T>
-    bool get(const key_t key, T&value) {
+  bool get(const key_t key, T&value)
+  {
     try {
       gem::any val;
       if(!get(key,val)) {
@@ -209,7 +211,8 @@ class GEM_EXTERN GemState
       value=gem::any_cast<T>(val);
       return true;
     } catch (gem::bad_any_cast&x) {
-      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key, x.what());
+      ::verbose(3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key,
+                x.what());
       // type problem
     }
     return false;
@@ -224,8 +227,8 @@ class GEM_EXTERN GemState
 
   static const key_t getKey(const std::string&);
 
- protected:
+protected:
   GemStateData*data;
 };
 
-#endif	// for header file
+#endif  // for header file

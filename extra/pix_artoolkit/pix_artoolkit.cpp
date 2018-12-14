@@ -37,10 +37,10 @@ pix_artoolkit :: pix_artoolkit()
 #ifdef HAVE_ARTOOLKIT
   :
 # ifdef GEM4MAX
-GemPixObj(1), 
+GemPixObj(1),
 # endif
-m_xsize(320), m_ysize(240), m_thresh(100), 
-m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true), 
+m_xsize(320), m_ysize(240), m_thresh(100),
+m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true),
 m_cparam_name(NULL)
 #endif
 {
@@ -108,12 +108,12 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     //    ::argInit(&m_cparam, 1.0, 0, 0, 0, 0);
     post("ARToolKit: image size was changed (%d, %d)", m_xsize, m_ysize);
   }
-  
+
   if (::arDetectMarker(image.data, m_thresh, &marker_info, &marker_num) < 0) {
     error("ARToolKit: arDetectMarker() error");
     return;
   }
-  
+
   for (i=0; i<MAX_OBJECTS; i++) {
     if (m_object[i].patt_id == -1) continue;
     for (k = -1, j = 0; j < marker_num; j++) {
@@ -121,7 +121,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
         if (k == -1) k = j;
         else if (marker_info[k].cf < marker_info[j].cf) k = j;
       }
-      verbose(3, "ID: %d (%f, %f)", 
+      verbose(3, "ID: %d (%f, %f)",
              marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
     }
     m_object[i].visible = k;
@@ -129,23 +129,23 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
       m_object[i].contFlag = false;
     } else if (k >= 0) {
       // get the transformation between the marker and the real camera
-      
+
       if (m_continuous == 0 || m_object[i].contFlag == 0) {
-        ::arGetTransMat(&marker_info[k], 
-                        m_object[i].center, 
-                        m_object[i].width, 
+        ::arGetTransMat(&marker_info[k],
+                        m_object[i].center,
+                        m_object[i].width,
                         m_object[i].trans);
       } else {
-        ::arGetTransMatCont(&marker_info[k], 
-                            m_object[i].trans, 
-                            m_object[i].center, 
-                            m_object[i].width, 
+        ::arGetTransMatCont(&marker_info[k],
+                            m_object[i].trans,
+                            m_object[i].center,
+                            m_object[i].width,
                             m_object[i].trans);
       }
       m_object[i].contFlag = true;
 
-      verbose(3, "ID(%d), pos(%f, %f), center(%f, %f)", 
-             i + 1, 
+      verbose(3, "ID(%d), pos(%f, %f), center(%f, %f)",
+             i + 1,
              marker_info[k].pos[0], marker_info[k].pos[1],
              m_object[i].center[0], m_object[i].center[1]);
       double q[4], p[3], x, y, z, w;
@@ -153,13 +153,13 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
 
 #define NUM_PARAM 8	//ID, positions[3], quaternion[4]
       t_atom ap[MAX_OBJECTS * NUM_PARAM];
-      
+
 #ifdef GEM4MAX
       SETLONG(&ap[NUM_PARAM * i + 0], i + 1);	//ID
 #else
       SETFLOAT(&ap[NUM_PARAM * i + 0], i + 1); //ID
 #endif
-      
+
       SETFLOAT(&ap[NUM_PARAM * i + 1], p[0]);	//positoin.x
       SETFLOAT(&ap[NUM_PARAM * i + 2], p[1]);	//position.y
       SETFLOAT(&ap[NUM_PARAM * i + 3], p[2]);	//position.z
@@ -394,7 +394,7 @@ void pix_artoolkit :: continuousMessCallback(void *data, t_int continuousMode)
 void pix_artoolkit :: thresholdMessCallback(void *data, t_int threshold)
 {
 # ifdef HAVE_ARTOOLKIT
-  GetMyClass(data)->thresholdMess((t_int)threshold);	
+  GetMyClass(data)->thresholdMess((t_int)threshold);
 # endif /* HAVE_ARTOOLKIT */
 }
 #else

@@ -69,9 +69,9 @@
 #X text 63 181 2 : 2nd circle diameter;
 #X text 26 373 Inlet 3: 2nd circle diameter;
 #X text 27 359 Inlet 2: 1st circle diameter;
-#X text 26 387 Inlet 4: hight of the tube;
-#X text 26 403 Inlet 5: X tanslation of 1st circle;
-#X text 26 418 Inlet 6: Y tanslation of 1st circle;
+#X text 26 387 Inlet 4: height of the tube;
+#X text 26 403 Inlet 5: X translation of 1st circle;
+#X text 26 418 Inlet 6: Y translation of 1st circle;
 #X text 26 433 Inlet 7: X rotation of 1st circle;
 #X text 26 448 Inlet 8: Y rotation of 1st circle;
 #X text 26 480 Inlet 10: Y rotation of 2nd circle;
@@ -81,8 +81,8 @@
 #X msg 558 278 numslices \$1;
 #X floatatom 558 257 5 0 100 1 - - -;
 #X text 26 338 Inlet 1: message: numslices <#>;
-#X text 7 72 The tube object generats a shape defined by 2 circles.
-These 2 circles can be rotated and translated independantly to create
+#X text 7 72 The tube object generates a shape defined by 2 circles.
+These 2 circles can be rotated and translated independently to create
 different shapes.;
 #X text 63 217 4 : number of segments;
 #X text 63 199 3 : height of the tube;

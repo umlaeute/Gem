@@ -31,7 +31,7 @@
 #X obj 50 509 translateXYZ;
 #X obj 104 467 r \$0-size;
 #X obj 50 121 t a b;
-#X text 150 143 create new groupe;
+#X text 150 143 create new group;
 #X obj 104 488 * 2;
 #X obj 50 594 t b;
 #X msg 131 232 v \$1 \$2 \$3;

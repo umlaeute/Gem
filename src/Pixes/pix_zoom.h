@@ -36,45 +36,45 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_zoom : public GemBase
 {
-    CPPEXTERN_HEADER(pix_zoom, GemBase);
+  CPPEXTERN_HEADER(pix_zoom, GemBase);
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_zoom();
+  //////////
+  // Constructor
+  pix_zoom();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_zoom();
+  //////////
+  // Destructor
+  virtual ~pix_zoom();
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
-    	//////////
-    	// Turn back on pix_zoom test
-    	virtual void 	postrender(GemState *state);
+  //////////
+  // Turn back on pix_zoom test
+  virtual void    postrender(GemState *state);
 
-    	//////////
-    	// x zoom
-    	float	    	m_xZoom;
+  //////////
+  // x zoom
+  float           m_xZoom;
 
-    	//////////
-    	// y zoom
-    	float	    	m_yZoom;
+  //////////
+  // y zoom
+  float           m_yZoom;
 
-    	//////////
-    	// Zoom mag
-    	void	    	zoomMess(float xMag, float yMag);
+  //////////
+  // Zoom mag
+  void            zoomMess(float xMag, float yMag);
 
-    private:
+private:
 
-    	//////////
-    	// static member functions
-    	static void 	zoomMessCallback(void *data, t_float xZoom, t_float yZoom);
+  //////////
+  // static member functions
+  static void     zoomMessCallback(void *data, t_float xZoom, t_float yZoom);
 };
 
-#endif	// for header file
+#endif  // for header file

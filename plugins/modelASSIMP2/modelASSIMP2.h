@@ -89,8 +89,10 @@ protected:
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 
+  bool m_have_texcoords;
+  std::string m_textype;
 };
 };
 }; // namespace gem::plugins
 
-#endif	// for header file
+#endif  // for header file

@@ -44,11 +44,10 @@ extern "C" {
 #define GLM_COLOR    (1 << 3)       /* render with colors */
 #define GLM_MATERIAL (1 << 4)       /* render with materials */
 
-  /*
-   * types of texturing the model
-   */
-typedef enum
-{
+/*
+ * types of texturing the model
+ */
+typedef enum {
   GLM_TEX_DEFAULT,
   GLM_TEX_UV,
   GLM_TEX_LINEAR,
@@ -127,7 +126,8 @@ glmVertexNormals(GLMmodel* model, GLfloat angle);
  * model - pointer to initialized GLMmodel structure
  */
 GLvoid
-glmTexture(GLMmodel* model, glmtexture_t type=GLM_TEX_DEFAULT, float h=1.0, float w=1.0);
+glmTexture(GLMmodel* model, glmtexture_t type=GLM_TEX_DEFAULT, float h=1.0,
+           float w=1.0);
 
 
 /*
@@ -224,7 +224,11 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode);
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
+glmDraw(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& facetnorms);
 
 
 /* glmDrawGroup: Renders a single group of model to the current OpenGL context using the
@@ -239,7 +243,11 @@ glmDraw(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
+glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& facetnorms);
 
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
@@ -253,7 +261,11 @@ glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber, std::vector<std
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
+glmList(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& facetnorms);
 
 /* glmListGroup: Generates and returns a display list for the model group using
  * the mode specified.
@@ -267,7 +279,11 @@ glmList(const GLMmodel* model, GLuint mode, std::vector<std::vector<float> >& ve
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
 GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber, std::vector<std::vector<float> >& vertices,  std::vector<std::vector<float> >& normals, std::vector<std::vector<float> >& texcoords, std::vector<std::vector<float> >& facetnorms);
+glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber,
+             std::vector<std::vector<float> >& vertices,
+             std::vector<std::vector<float> >& normals,
+             std::vector<std::vector<float> >& texcoords,
+             std::vector<std::vector<float> >& facetnorms);
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.

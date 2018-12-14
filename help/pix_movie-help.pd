@@ -76,7 +76,7 @@ used as a texture \, bitblit or something else.;
 #N canvas 830 50 450 300 demo 0;
 #X obj 23 26 inlet;
 #X text 126 127 win32:;
-#X text 116 190 linux \, os-X:;
+#X text 116 190 linux \, OSX:;
 #X obj 79 257 outlet;
 #X obj 20 50 bng 17 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;

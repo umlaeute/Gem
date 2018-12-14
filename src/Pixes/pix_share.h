@@ -32,4 +32,3 @@ typedef struct _pixshare_header {
 } t_pixshare_header;
 
 #endif
-

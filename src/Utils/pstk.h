@@ -18,44 +18,44 @@ extern "C" {
 #endif
 
 
-/*
- *  Stack of (row,col) point coordinates. More suited for internal
- *  usage in pix_multiblob.
- */
+  /*
+   *  Stack of (row,col) point coordinates. More suited for internal
+   *  usage in pix_multiblob.
+   */
 
-typedef plist_ptr pstk_ptr;
+  typedef plist_ptr pstk_ptr;
 
 #define new_pstk()    NULL
 #define pstk_is_empty(p)   ( (p)==NULL )
 #define pstk_isnt_empty(p)   ( (p)!=NULL )
 
-typedef struct {
-   int x;
-   int y;
-} point;
+  typedef struct {
+    int x;
+    int y;
+  } point;
 
 
-int
-   ptpush(pstk_ptr *stk, point *pt);
+  int
+  ptpush(pstk_ptr *stk, point *pt);
 
-point
-   *ptpop(pstk_ptr *stk);
+  point
+  *ptpop(pstk_ptr *stk);
 
-void
-   free_pstk(pstk_ptr *p);
+  void
+  free_pstk(pstk_ptr *p);
 
-/*
- *   A SIMPLE INTEGER STACK
- *       - used for storing points as single indexes
- *       - number of elements is known in advance
- *       - interface is good enough for use outside Animal
- */
+  /*
+   *   A SIMPLE INTEGER STACK
+   *       - used for storing points as single indexes
+   *       - number of elements is known in advance
+   *       - interface is good enough for use outside Animal
+   */
 
-typedef struct stk {
-   int *data;
-   int top;
-   int n;
-} int_stk;
+  typedef struct stk {
+    int *data;
+    int top;
+    int n;
+  } int_stk;
 
 // Methods for a simple integer stack
 #define free_stk(stk) free(stk);
@@ -64,8 +64,8 @@ typedef struct stk {
 #define pop(stk) stk->data[stk->top--]
 #define stk_isnt_empty(stk) (stk->top != -1)
 
-int_stk
-   *new_stk(int n);
+  int_stk
+  *new_stk(int n);
 
 #if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
 }

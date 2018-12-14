@@ -34,28 +34,28 @@ class GEM_EXTERN part_velocity : public partlib_base
 {
   CPPEXTERN_HEADER(part_velocity, partlib_base);
 
-    public:
+public:
 
   //////////
   // Constructor
   part_velocity(int,t_atom*);
 
   //////////
-  virtual void 	renderParticles(GemState *state);
+  virtual void  renderParticles(GemState *state);
 
- protected:
+protected:
 
   //////////
   // Destructor
   virtual ~part_velocity(void);
 
   //////////
-  void		vectorMess(t_symbol*s, int argc, t_atom*argv);
-  void		domainMess(const std::string&);
+  void          vectorMess(t_symbol*s, int argc, t_atom*argv);
+  void          domainMess(const std::string&);
 
   //////////
-  float		m_arg[9];
-  PDomainEnum	m_domain;
+  float         m_arg[9];
+  PDomainEnum   m_domain;
 };
 
-#endif	// for header file
+#endif  // for header file

@@ -25,23 +25,23 @@
 
 class GEM_EXTERN pix_mean_color : public GemPixObj
 {
-	CPPEXTERN_HEADER(pix_mean_color, GemPixObj);
+  CPPEXTERN_HEADER(pix_mean_color, GemPixObj);
 
- public:
-	// constructor
-	pix_mean_color(int argc, t_atom *argv);
+public:
+  // constructor
+  pix_mean_color(int argc, t_atom *argv);
 
- protected:
-	// destructor
-	virtual ~pix_mean_color();
+protected:
+  // destructor
+  virtual ~pix_mean_color();
 
-	// processing routine
-	virtual void processRGBImage(imageStruct &image);
-	virtual void processRGBAImage(imageStruct &image);
-	virtual void processGrayImage(imageStruct &image);
-	virtual void processYUVImage(imageStruct &image);
+  // processing routine
+  virtual void processRGBImage(imageStruct &image);
+  virtual void processRGBAImage(imageStruct &image);
+  virtual void processGrayImage(imageStruct &image);
+  virtual void processYUVImage(imageStruct &image);
 
-	t_outlet * m_list;
+  t_outlet * m_list;
 };
 
 

@@ -28,6 +28,9 @@ dist_gemhelp_DATA = \
 	emissionRGB-help.pd \
 	fragment_program-help.pd \
 	gemframebuffer-help.pd \
+	gemcubeframebuffer-help.pd \
+	cubemaptosphere.vert \
+	cubemaptosphere.frag \
 	GEMglBegin-help.pd \
 	gemhead-help.pd \
 	gemkeyboard-help.pd \

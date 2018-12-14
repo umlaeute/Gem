@@ -27,7 +27,7 @@ of the blob.;
 <color-weights>. pE: "1 0 2" will give more weight to the blue-channel
 than to the red-channel \, green- and alpha-values will be ignored.
 ;
-#X text 56 617 Specifing only one single color-weight <w> \, is the
+#X text 56 617 Specifying only one single color-weight <w> \, is the
 same as "<w> <w> <w> 0";
 #X connect 0 0 5 0;
 #X connect 5 0 1 0;

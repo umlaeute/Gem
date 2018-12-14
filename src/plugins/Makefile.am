@@ -3,7 +3,7 @@
 #####################################################################
 
 AUTOMAKE_OPTIONS = foreign
-AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL @GEM_CPPFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir)/src -DGEM_INTERNAL $(GEM_CPPFLAGS)
 include ../check-sources.mk
 
 noinst_LTLIBRARIES = libplugins.la
@@ -13,9 +13,9 @@ libplugins_la_LIBADD   =
 libplugins_la_LDFLAGS  =
 
 # RTE flags
-libplugins_la_CXXFLAGS += @GEM_RTE_CFLAGS@ @GEM_ARCH_CXXFLAGS@ @GEM_THREADS_CFLAGS@
-libplugins_la_LIBADD   += @GEM_RTE_LIBS@ @GEM_THREADS_LIBS@
-libplugins_la_LDFLAGS  += @GEM_ARCH_LDFLAGS@
+libplugins_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS) $(GEM_THREADS_CFLAGS)
+libplugins_la_LIBADD   += $(GEM_RTE_LIBS) $(GEM_THREADS_LIBS)
+libplugins_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 libplugins_la_SOURCES= \
         PluginFactory.cpp \
@@ -35,12 +35,6 @@ libplugins_la_SOURCES= \
         video.h
 
 libplugins_la_SOURCES+= \
-        imageBase.cpp \
-        imageBase.h \
-        filmBase.cpp \
-        filmBase.h \
-        recordBase.cpp \
-        recordBase.h \
         videoBase.cpp \
         videoBase.h
 

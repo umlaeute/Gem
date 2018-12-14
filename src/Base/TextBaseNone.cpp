@@ -29,11 +29,12 @@ TextBase :: TextBase(int argc, t_atom *argv) :
   m_infoOut(gem::RTE::Outlet(this))
 {
   static bool first_time=true;
-  if (first_time){
+  if (first_time) {
     post("Gem has been compiled without FONT-support !");
     first_time=false;
   }
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
+                      gensym("ft1"));
 }
 
 /////////////////////////////////////////////////////////
@@ -47,22 +48,26 @@ void TextBase :: render(GemState*)
 // Destructor
 //
 /////////////////////////////////////////////////////////
-TextBase :: ~TextBase(){
+TextBase :: ~TextBase()
+{
   /* textbase deletion */
-  if(m_inlet)inlet_free(m_inlet);
+  if(m_inlet) {
+    inlet_free(m_inlet);
+  }
 }
 
 void TextBase :: textMess(int argc, t_atom *argv)
 { }
 void TextBase :: stringMess(int argc, t_atom *argv)
 { }
-void TextBase :: fontNameMess(std::string s)
+void TextBase :: fontNameMess(const std::string&s)
 { }
 void TextBase :: setPrecision(float prec)
 { }
 void TextBase :: linedistMess(float dist)
 { }
-void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc, t_atom*argv)
+void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc,
+                                     t_atom*argv)
 { }
 
 
@@ -78,7 +83,8 @@ void TextBase::setJustification(JustifyWidth, JustifyHeight)
 { }
 void TextBase::setJustification(JustifyWidth, JustifyHeight, JustifyDepth)
 { }
-TextBase::Justification TextBase::justifyFont(float x1, float, float, float, float, float, float yo)
+TextBase::Justification TextBase::justifyFont(float x1, float, float,
+    float, float, float, float yo)
 {
   TextBase::Justification result;
   result.scale =1;
@@ -108,7 +114,8 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "precision", setPrecision, float);
   CPPEXTERN_MSG1(classPtr, "linedist", linedistMess, float);
 
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
-		  gensym("justify"), A_GIMME, A_NULL);
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&TextBase::justifyMessCallback),
+                  gensym("justify"), A_GIMME, A_NULL);
 }
 #endif

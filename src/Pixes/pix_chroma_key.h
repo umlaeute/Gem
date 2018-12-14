@@ -34,53 +34,54 @@ DESCRIPTION
 
 class GEM_EXTERN pix_chroma_key : public GemPixDualObj
 {
-CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj);
+  CPPEXTERN_HEADER(pix_chroma_key, GemPixDualObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	pix_chroma_key();
+  //////////
+  // Constructor
+  pix_chroma_key();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_chroma_key();
+  //////////
+  // Destructor
+  virtual ~pix_chroma_key();
 
-    	//////////
-    	// Do the processing
-    	virtual void 	processRGBA_RGBA(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the processing
+  virtual void    processRGBA_RGBA(imageStruct &image, imageStruct &right);
 
-        //////////
-    	// Do the YUV processing
-    	virtual void 	processYUV_YUV(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the YUV processing
+  virtual void    processYUV_YUV(imageStruct &image, imageStruct &right);
 
 #ifdef __MMX__
-    	virtual void 	processRGBA_MMX(imageStruct &image, imageStruct &right);
-      	virtual void 	processYUV_MMX(imageStruct &image, imageStruct &right);
-  	virtual void 	processGray_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processRGBA_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processYUV_MMX(imageStruct &image, imageStruct &right);
+  virtual void    processGray_MMX(imageStruct &image, imageStruct &right);
 #endif
 
 #ifdef __VEC__
-        //////////
-    	// Do the YUV Altivec processing
-    	virtual void 	processYUV_Altivec(imageStruct &image, imageStruct &right);
+  //////////
+  // Do the YUV Altivec processing
+  virtual void    processYUV_Altivec(imageStruct &image, imageStruct &right);
 #endif
 
-        int m_direction,m_mode;
-        unsigned char m_Yrange,m_Urange,m_Vrange,m_Yvalue,m_Uvalue,m_Vvalue;
+  int m_direction,m_mode;
+  unsigned char m_Yrange,m_Urange,m_Vrange,m_Yvalue,m_Uvalue,m_Vvalue;
 
-    private:
+private:
 
-    	//////////
-    	// Static member functions
-    	static void directionCallback       (void *data, t_float state);
-        static void modeCallback       (void *data, t_float state);
-        static void rangeCallback       (void *data, t_float Yval, t_float Uval,t_float Vval);
-        static void valueCallback       (void *data, t_float Yval, t_float Uval,t_float Vval);
+  //////////
+  // Static member functions
+  static void directionCallback       (void *data, t_float state);
+  static void modeCallback       (void *data, t_float state);
+  static void rangeCallback       (void *data, t_float Yval, t_float Uval,
+                                   t_float Vval);
+  static void valueCallback       (void *data, t_float Yval, t_float Uval,
+                                   t_float Vval);
 
 };
 
 #endif
-

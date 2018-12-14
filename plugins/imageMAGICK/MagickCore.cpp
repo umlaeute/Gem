@@ -13,6 +13,9 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 /* this implements ImageMagick loading/saving using MagickCore */
 
@@ -33,41 +36,54 @@ typedef __int64         ssize_t;
 typedef _w64 long        ssize_t;
 # endif
 #endif
-#include <magick/MagickCore.h>
+
+#ifdef HAVE_MAGICK7
+# include <MagickCore/MagickCore.h>
+#else
+# include <magick/MagickCore.h>
+#endif
 
 using namespace gem::plugins;
 
-namespace {
-  static bool showException(ExceptionInfo*exception, const std::string&prefix=std::string()) {
-    if(!exception)return true;
-    if (exception->severity == UndefinedException)
-      return false;
-
-    bool iswarning=exception->severity < ErrorException;
-
-    std::string message=prefix;
-    message+="[";
-    message+= SetClientName(0);
-    message+="]";
-
-    if(!iswarning)
-      message+"!";
-
-    message+=": ";
-
-    if ( exception->reason != 0 ) {
-      message += std::string(exception->reason);
-    }
-    if ( exception->description != 0 )
-      message += " (" + std::string(exception->description) + ")";
-
-    if(iswarning) {
-      verbose(1, "%s", message.c_str());
-    } else {
-      verbose(1, "%s", message.c_str());
-    }
-    return (!iswarning);
+namespace
+{
+static bool showException(ExceptionInfo*exception,
+                          const std::string&prefix=std::string())
+{
+  if(!exception) {
+    return true;
   }
+  if (exception->severity == UndefinedException) {
+    return false;
+  }
+
+  bool iswarning=exception->severity < ErrorException;
+
+  std::string message=prefix;
+  message+="[";
+  message+= SetClientName(0);
+  message+="]";
+
+  if(!iswarning) {
+    message+"!";
+  }
+
+  message+=": ";
+
+  if ( exception->reason != 0 ) {
+    message += std::string(exception->reason);
+  }
+  if ( exception->description != 0 ) {
+    message += " (" + std::string(exception->description) + ")";
+  }
+
+  if(iswarning) {
+    verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
+  } else {
+    verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
+  }
+  return (!iswarning);
+}
 }
 
 
@@ -75,19 +91,21 @@ namespace {
 // really open the file ! (OS dependent)
 //
 /////////////////////////////////////////////////////////
-bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properties&props)
+bool imageMAGICK :: load(std::string filename, imageStruct&result,
+                         gem::Properties&props)
 {
   bool success=false;
-  ::verbose(2, "reading '%s' with ImageMagick", filename.c_str());
   ExceptionInfo*exception=AcquireExceptionInfo();
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
   Image*image=ReadImage(image_info,exception);
-  if(showException(exception, "magick reading problem"))
+  if(showException(exception, "reading problem")) {
     goto cleanup;
-  if (image == (Image *) NULL)
+  }
+  if (image == (Image *) NULL) {
     goto cleanup;
+  }
 
   result.xsize=static_cast<GLint>(image->columns);
   result.ysize=static_cast<GLint>(image->rows);
@@ -105,31 +123,33 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result, gem::Properti
                     CharPixel,
                     reinterpret_cast<void*>(result.data),
                     exception);
-  if(showException(exception, "magick decoding problem"))
+  if(showException(exception, "decoding problem")) {
     goto cleanup;
+  }
 
   success=true;
 
- cleanup:
-  if(image)
+cleanup:
+  if(image) {
     DestroyImage(image);
+  }
   image=NULL;
-  if(image_info)
+  if(image_info) {
     image_info=DestroyImageInfo(image_info);
-  if(exception)
+  }
+  if(exception) {
     exception=DestroyExceptionInfo(exception);
+  }
   return success;
 }
-bool imageMAGICK::save(const imageStruct&image, const std::string&filename, const std::string&mimetype, const gem::Properties&props) {
-  error("GEM::imageMAGICK::save (MagickCore) seems to be broken! we are trying to fix it");
-
+bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
+                       const std::string&mimetype, const gem::Properties&props)
+{
+  MagickBooleanType status = MagickFalse;
   imageStruct*img=const_cast<imageStruct*>(&image);
   imageStruct*pImage=img;
-  bool result=false;
-
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   Image*finalImage=NULL;
-  CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
   std::string cs;
   switch(img->format) {
@@ -158,39 +178,52 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename, cons
     break;
   }
 
+  ExceptionInfo*ex = 0;
   ExceptionInfo*exception=AcquireExceptionInfo();
-  Image *mimage = ConstituteImage(pImage->xsize,pImage->ysize,
-                                 cs.c_str(), CharPixel,
-                                 pImage->data,exception);
-  if(showException(exception, "magick conversion problem"))
+  Image *mimage = ConstituteImage(pImage->xsize, pImage->ysize,
+                                  cs.c_str(), CharPixel,
+                                  pImage->data, exception);
+  if(showException(exception, "conversion problem")) {
     goto cleanup;
+  }
 
   finalImage=(pImage->upsidedown)?mimage:FlipImage( mimage, exception );
-  if(showException(exception, "magick flipping problem"))
+  if(showException(exception, "flipping problem")) {
     goto cleanup;
+  }
 
   finalImage->depth=8;
-  //options->depth = 8;
+  image_info->depth = 8;
 
   double quality;
   if(props.get("quality", quality)) {
     finalImage->quality=quality;
-    //options->quality = quality;
+    image_info->quality = quality;
   }
 
-  WriteImage(image_info,finalImage);
-  if(showException(&finalImage->exception, "magick writing problem"))
+  ex = exception;
+  CopyMagickString(image_info->filename, filename.c_str(), MaxTextExtent);
+  CopyMagickString(finalImage->filename, filename.c_str(), MaxTextExtent);
+  SetImageInfo(image_info, 0, ex);
+
+#ifdef HAVE_MAGICK7
+  status = WriteImage(image_info, finalImage, ex);
+#else
+  status = WriteImage(image_info, finalImage);
+  ex = &finalImage->exception;
+#endif
+  if(showException(ex, "writing problem")) {
     goto cleanup;
+  }
 
-  result=true;
-
- cleanup:
-  if(finalImage!=mimage)
+cleanup:
+  if(finalImage!=mimage) {
     finalImage=DestroyImage(finalImage);
+  }
 
   mimage=DestroyImage(mimage);
   exception=DestroyExceptionInfo(exception);
   image_info=DestroyImageInfo(image_info);
 
-  return result;
+  return (status == MagickTrue);
 }

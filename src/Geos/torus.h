@@ -26,7 +26,7 @@ LOG
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
-	torus
+        torus
 
     Creates a torus
 
@@ -38,32 +38,32 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXTERN torus : public GemGluObj
 {
-    CPPEXTERN_HEADER(torus, GemGluObj);
+  CPPEXTERN_HEADER(torus, GemGluObj);
 
-    public:
+public:
 
-	    //////////
-	    // Constructor
-    	torus(int argc, t_atom *argv);
+  //////////
+  // Constructor
+  torus(int argc, t_atom *argv);
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~torus();
+  //////////
+  // Destructor
+  virtual ~torus();
 
-    	//////////
-		// Inner radius of the torus
-		float			m_innerRadius;
+  //////////
+  // Inner radius of the torus
+  float                   m_innerRadius;
 
-    	//////////
-		// Set the inner radius
-		void			innerRadius(float radius);
+  //////////
+  // Set the inner radius
+  void                    innerRadius(float radius);
 
-    	//////////
-    	// Do the rendering
-    	virtual void 	render(GemState *state);
+  //////////
+  // Do the rendering
+  virtual void    render(GemState *state);
 
 };
 
-#endif	// for header file
+#endif  // for header file

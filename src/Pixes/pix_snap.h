@@ -42,7 +42,7 @@ class GEM_EXTERN pix_snap : public GemBase
 {
   CPPEXTERN_HEADER(pix_snap, GemBase);
 
- public:
+public:
 
   //////////
   // Constructor
@@ -54,35 +54,35 @@ class GEM_EXTERN pix_snap : public GemBase
 
   //////////
   // When a snap is received
-  virtual void	snapMess(void);
+  virtual void  snapMess(void);
 
   //////////
   // Do the rendering
-  virtual void 	render(GemState *state);
+  virtual void  render(GemState *state);
 
   //////////
   // Clear the dirty flag on the pixBlock
-  virtual void 	postrender(GemState *state);
+  virtual void  postrender(GemState *state);
 
   //////////
   // When a size message is received
-  virtual void	sizeMess(int width, int height);
+  virtual void  sizeMess(int width, int height);
 
   //////////
   // When a position message is received
-  virtual void	posMess(int x, int y);
+  virtual void  posMess(int x, int y);
 
   //////////
   // Clean up the image
-  void	    	cleanImage(void);
+  void          cleanImage(void);
 
   //////////
   // The original pix_snap
-  imageStruct 	*m_originalImage;
+  imageStruct   *m_originalImage;
 
   //////////
   // The pixBlock with the current image
-  pixBlock    	m_pixBlock;
+  pixBlock      m_pixBlock;
   imageStruct   m_imageStruct;
 
   //////////
@@ -96,4 +96,4 @@ class GEM_EXTERN pix_snap : public GemBase
   GLuint *m_pbo;                   // IDs of PBO
 };
 
-#endif	// for header file
+#endif  // for header file

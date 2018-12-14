@@ -63,7 +63,7 @@
 #X text 505 77 open a supported;
 #X text 506 88 movie-clip;
 #X text 523 114 macOS: quicktime;
-#X text 516 104 windos: *.AVI;
+#X text 516 104 MS Windows: *.AVI;
 #X text 523 124 linux: depends...;
 #X obj 451 232 pix_rtx;
 #X text 50 12 Synopsis: [pix_rtx];
@@ -86,7 +86,7 @@ have to stay in RAM);
 #X text 23 299 Inlet 1: set : sets the whole internal buffer to the
 next incoming frame;
 #X text 23 329 Inlet 1: mode 1|0 : clamp the discontinuity to the edge
-or not. (default: 1);
+or not. (default:1);
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 20 0;

@@ -47,19 +47,24 @@ pix_buf :: ~pix_buf()
 /////////////////////////////////////////////////////////
 void pix_buf :: render(GemState *state)
 {
-  if(!state)return;
+  if(!state) {
+    return;
+  }
   bool doit=m_banged;
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
   orgPixBlock = img;
 
-  if (!img || !img->image.data) return;
+  if (!img || !img->image.data) {
+    return;
+  }
 
   doit|=m_auto;
   doit|=img->newimage;
 
-  if (m_cache&&m_cache->resendImage)
+  if (m_cache&&m_cache->resendImage) {
     doit=true;
+  }
 
   cachedPixBlock.newimage = 0;
   if (doit) {
@@ -102,7 +107,7 @@ void pix_buf :: autoMess(int a)
 void pix_buf :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buf),
-		   gensym("pix_separator"), A_DEFFLOAT, A_NULL);
+                   gensym("pix_separator"), A_DEFFLOAT, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, int);

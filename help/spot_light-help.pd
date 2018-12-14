@@ -60,9 +60,10 @@
 use "debug" to display the light source as a small cone.;
 #X text 33 14 Synopsis: [spot_light];
 #X text 7 64 Description: adds a spot-light to the scene;
-#X text 37 417 Inlet 1: message: debug 1|0;
+#X text 37 417 Inlet 1: message: debug 1|0 : show debugging object
+(default:0), f 64;
 #X text 37 447 Inlet 3: list: linear_attenuation \, cone_cutoff_angle
-\, decay_at_edges;
+\, decay_at_edges, f 69;
 #X obj 484 362 spot_light;
 #N canvas 611 263 574 368 spheres 0;
 #X obj 66 12 gemhead;
@@ -142,10 +143,10 @@ of vertices (or "slices").;
 #X obj 548 337 pack 0 90 3;
 #X obj 492 265 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
 -1 0 1;
-#X text 37 401 Inlet 1: float: turn light on(1)/off(0);
 #X text 480 457 see also:;
 #X obj 527 477 world_light;
 #X obj 485 477 light;
+#X text 37 401 Inlet 1: float: turn light on/off (default:1);
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 43 0;

@@ -29,33 +29,26 @@ CPPEXTERN_NEW_WITH_GIMME(scaleXYZ);
 /////////////////////////////////////////////////////////
 scaleXYZ :: scaleXYZ(int argc, t_atom *argv)
 {
-    if (argc == 3)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[1]);
-        m_vector[2] = atom_getfloat(&argv[2]);
-    }
-    else if (argc == 1)
-    {
-        m_vector[0] = atom_getfloat(&argv[0]);
-        m_vector[1] = atom_getfloat(&argv[0]);
-        m_vector[2] = atom_getfloat(&argv[0]);
-    }
-    else if (argc == 0)
-    {
-        m_vector[0] = 1.f;
-        m_vector[1] = 1.f;
-        m_vector[2] = 1.f;
-    }
-    else
-    {
-      throw(GemException("needs 0, 1, or 3 arguments"));
-    }
+  if (argc == 3) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[1]);
+    m_vector[2] = atom_getfloat(&argv[2]);
+  } else if (argc == 1) {
+    m_vector[0] = atom_getfloat(&argv[0]);
+    m_vector[1] = atom_getfloat(&argv[0]);
+    m_vector[2] = atom_getfloat(&argv[0]);
+  } else if (argc == 0) {
+    m_vector[0] = 1.f;
+    m_vector[1] = 1.f;
+    m_vector[2] = 1.f;
+  } else {
+    throw(GemException("needs 0, 1, or 3 arguments"));
+  }
 
-    // create the new inlets
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yVal"));
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zVal"));
+  // create the new inlets
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zVal"));
 }
 
 /////////////////////////////////////////////////////////
@@ -71,7 +64,7 @@ scaleXYZ :: ~scaleXYZ()
 /////////////////////////////////////////////////////////
 void scaleXYZ :: render(GemState *)
 {
-    glScalef(m_vector[0], m_vector[1], m_vector[2]);
+  glScalef(m_vector[0], m_vector[1], m_vector[2]);
 }
 
 /////////////////////////////////////////////////////////
@@ -80,8 +73,8 @@ void scaleXYZ :: render(GemState *)
 /////////////////////////////////////////////////////////
 void scaleXYZ :: xMess(float val)
 {
-    m_vector[0] = val;
-    setModified();
+  m_vector[0] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -90,8 +83,8 @@ void scaleXYZ :: xMess(float val)
 /////////////////////////////////////////////////////////
 void scaleXYZ :: yMess(float val)
 {
-    m_vector[1] = val;
-    setModified();
+  m_vector[1] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -100,8 +93,8 @@ void scaleXYZ :: yMess(float val)
 /////////////////////////////////////////////////////////
 void scaleXYZ :: zMess(float val)
 {
-    m_vector[2] = val;
-    setModified();
+  m_vector[2] = val;
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -114,4 +107,3 @@ void scaleXYZ :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "yVal", yMess, float);
   CPPEXTERN_MSG1(classPtr, "zVal", zMess, float);
 }
-

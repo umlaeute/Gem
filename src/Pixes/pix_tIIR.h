@@ -43,13 +43,13 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_tIIR, GemPixObj);
 
- public:
+public:
 
   //////////
   // Constructor
   pix_tIIR(t_floatarg,t_floatarg);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -57,12 +57,12 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
 
   //////////
   // Do the processing
-  virtual void 	processImage(imageStruct &image);
+  virtual void  processImage(imageStruct &image);
 
 #ifdef __MMX__
-  virtual void 	processRGBAMMX(imageStruct &image);
-  virtual void 	processYUVMMX (imageStruct &image);
-  virtual void 	processGrayMMX(imageStruct &image);
+  virtual void  processRGBAMMX(imageStruct &image);
+  virtual void  processYUVMMX (imageStruct &image);
+  virtual void  processGrayMMX(imageStruct &image);
 #endif
 
   //////////
@@ -92,4 +92,4 @@ class GEM_EXTERN pix_tIIR : public GemPixObj
   void setMess(t_symbol*,int,t_atom*);
 };
 
-#endif	// for header file
+#endif  // for header file

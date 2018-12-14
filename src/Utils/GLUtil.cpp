@@ -36,10 +36,11 @@ GLenum gem::utils::gl::glReportError (bool verbose)
     post("GL: %s",(char*)gluErrorString(err));
   }
   // ensure we are returning an OSStatus noErr if no error condition
-  if (err == GL_NO_ERROR)
+  if (err == GL_NO_ERROR) {
     return 0;
-  else
+  } else {
     return err;
+  }
 }
 
 #warning TODO: use gem::ContextData
@@ -50,13 +51,16 @@ struct gem::utils::gl::GLuintMap::PIMPL {
   PIMPL(void)
     : nextfloat(-0.5)
   {}
-  float getNewKey() {
+  float getNewKey()
+  {
     nextfloat+=1.0;
-    while(idmap.count(nextfloat>0))
+    while(idmap.count(nextfloat>0)) {
       nextfloat+=1.0;
+    }
     return nextfloat;
   }
-  void del(float id){
+  void del(float id)
+  {
     std::map<float,GLuint>::iterator it = idmap.find(id);
     if(idmap.end() != it) {
       idmap.erase(it);
@@ -64,7 +68,8 @@ struct gem::utils::gl::GLuintMap::PIMPL {
   }
 
   static std::map<std::string, PIMPL*>s_pool;
-  static PIMPL*getFromPool(const std::string&name) {
+  static PIMPL*getFromPool(const std::string&name)
+  {
     if(s_pool.count(name)>0) {
       return s_pool[name];
     }
@@ -81,7 +86,8 @@ GLuintMap::GLuintMap(const std::string&name)
 
 GLuintMap::~GLuintMap()
 {}
-GLuint GLuintMap::get(float f) throw(GemException&){
+GLuint GLuintMap::get(float f)
+{
   if(m_pimpl->idmap.count(f)>0) {
     GLuint i = m_pimpl->idmap[f];
     return i;
@@ -90,13 +96,15 @@ GLuint GLuintMap::get(float f) throw(GemException&){
   }
   return 0;
 }
-float GLuintMap::set(GLuint i, float f){
+float GLuintMap::set(GLuint i, float f)
+{
   if(f==0.f) {
     f=m_pimpl->getNewKey();
   }
   m_pimpl->idmap[f]=i;
   return f;
 }
-void GLuintMap::del(float f){
+void GLuintMap::del(float f)
+{
   m_pimpl->del(f);
 }

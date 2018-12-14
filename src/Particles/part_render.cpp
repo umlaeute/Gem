@@ -58,13 +58,21 @@ void part_render :: renderParticles(GemState *state)
   if (m_tickTime > 0.f)    {
     pMove();
   }
-  //	pDrawGroupp();
+  //    pDrawGroupp();
   int cnt = pGetGroupCount();
-  if(cnt < 1)return;
-  if (cnt>m_number){
-    if(m_colors)delete[]m_colors;
-    if(m_sizes) delete[]m_sizes;
-    if(m_pos)   delete[]m_pos;
+  if(cnt < 1) {
+    return;
+  }
+  if (cnt>m_number) {
+    if(m_colors) {
+      delete[]m_colors;
+    }
+    if(m_sizes) {
+      delete[]m_sizes;
+    }
+    if(m_pos) {
+      delete[]m_pos;
+    }
     m_number = cnt;
 
     m_colors = new GLfloat[m_number * 4];
@@ -75,28 +83,29 @@ void part_render :: renderParticles(GemState *state)
   GLfloat *color = m_colorize ?  m_colors : NULL;
   GLfloat *size = m_sizing ? m_sizes : NULL;
   pGetParticles(0, cnt, position, color, NULL, size);
-  for(int i = 0; i < cnt; i++)	{
+  for(int i = 0; i < cnt; i++)  {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(position[0], position[1], position[2]);
     position+=3;
-    if(color!=NULL){
+    if(color!=NULL) {
       glColor4fv((GLfloat *)&color[i*4]);
       //post("%d color: %f %f %f", i, color[0], color[1], color[2], color[3]);
     }
-    if(size!=NULL){
+    if(size!=NULL) {
       glScalef(size[0], size[1], size[2]);
       //      post("%d size: %f %f %f", i, size[0], size[1], size[2]);
       size+=3;
     }
-    if(i<(cnt-1)){
+    if(i<(cnt-1)) {
       continueRender(state);
       glMatrixMode(GL_MODELVIEW);
       glPopMatrix();
     }
   }
 }
-void part_render :: postrender(GemState*){
+void part_render :: postrender(GemState*)
+{
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
 }

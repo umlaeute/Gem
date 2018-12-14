@@ -77,7 +77,7 @@ ID has changed \, we trigger the linking of the 2 modules;
 #X text 264 441 order of module IDs does not matter...;
 #X text 96 487 after linking \, click "print" to get some info about
 the compiled shader program;
-#X text 330 550 the Toon-shader has a unifom variable "Phong" (see
+#X text 330 550 the Toon-shader has a uniform variable "Phong" (see
 "print") \, which we can change to modify the effect.;
 #X text 213 264 pd's search path is searched for the given filename
 \; just add the examples/data folder to your path options and this
