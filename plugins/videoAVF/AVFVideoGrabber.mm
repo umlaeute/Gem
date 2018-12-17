@@ -330,12 +330,13 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     // Lock the image buffer
     CVPixelBufferLockBaseAddress(imageBuffer,0);
-    printSampleBuffer(sampleBuffer);
 
     CMTime ts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
       lastSeen=ts;
       fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
+    } else {
+      printSampleBuffer(sampleBuffer);
     }
     unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
     size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
