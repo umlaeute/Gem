@@ -327,17 +327,19 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
   fromConnection:(AVCaptureConnection *)connection
 {
   @autoreleasepool {
+    CMTime ts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
+      lastSeen=ts;
+      //fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
+    } else {
+      printSampleBuffer(sampleBuffer);
+      return;
+    }
+
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     // Lock the image buffer
     CVPixelBufferLockBaseAddress(imageBuffer,0);
 
-    CMTime ts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
-      lastSeen=ts;
-      fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
-    } else {
-      printSampleBuffer(sampleBuffer);
-    }
     unsigned char *isrc4 = (unsigned char *)CVPixelBufferGetBaseAddress(imageBuffer);
     size_t widthIn  = CVPixelBufferGetWidth(imageBuffer);
     size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
