@@ -317,7 +317,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
       reinterpret_cast<Ptr>
       (aglChoosePixelFormat)) { // check for existence of OpenGL
     verbose(2,"MAC: BuildGLonWindow: OpenGL not installed");
-    return NULL;
+    return 0;
   }
   // we successfully passed the renderer check
 
@@ -335,7 +335,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
   aglReportError ();
   if (NULL == pcontextInfo->fmt) {
     verbose(2,"MAC: BuildGLonWindow: Could not find valid pixel format");
-    return NULL;
+    return 0;
   }
 
   *paglContext = aglCreateContext (pcontextInfo->fmt,
@@ -349,7 +349,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
   aglReportError ();
   if (NULL == *paglContext) {
     verbose(2,"MAC: BuildGLonWindow: Unable to create AGL context");
-    return NULL;
+    return 0;
   }
 
   if (!aglSetDrawable (*paglContext,
@@ -948,7 +948,7 @@ short FindGDHandleFromWindow (WindowPtr pWindow,
   GDHandle hgdNthDevice;
 
   if (!pWindow || !phgdOnThisDevice) {
-    return NULL;
+    return 0;
   }
 
   *phgdOnThisDevice = NULL;
