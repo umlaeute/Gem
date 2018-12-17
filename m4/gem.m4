@@ -526,10 +526,12 @@ AC_ARG_WITH([pd],
 AS_IF([ test "x${with_pd}" = "x" ],[
  AS_CASE([$host_os],
  [*-darwin*], [
-    AS_IF([ test -d "/Applications/Pd.app/Contents/Resources" ], [ with_pd="/Applications/Pd.app/Contents/Resources" ])
+    # get the latest and greatest Pd installed in /Applications
+    with_pd_=$(ls -S /Applications/Pd*.app/Contents/Resources/bin/pd 2>/dev/null | sort | tail -1 | sed "s/\/bin\/pd$//")
+    AS_IF([ test -d "${with_pd_}" ], [ with_pd="${with_pd_}" ])
     ],
  [*mingw* | *cygwin*], [
-    AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
+    dnl AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
 ],)])
 
 AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
@@ -542,6 +544,7 @@ AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
 ])
 
 AS_IF([ test -d "$with_pd"  ],[
+ with_pd=$(echo $with_pd | sed -e 's/\/*$//' -e 's/\/\/*/\//g')
  AC_MSG_CHECKING([include paths for Pd])
  if test -d "${with_pd}/src" ; then
    AC_MSG_RESULT([${with_pd}/src])
@@ -596,6 +599,13 @@ AC_CHECK_HEADERS([m_imp.h], [], [],
 # include "m_pd.h"
 #endif
 ])
+
+WHICH=$(which which)
+AC_MSG_CHECKING([Pd executable])
+PD_EXE=$(PATH=${with_pd}/bin:${with_pd}/src:${with_pd} ${WHICH} pd.com pd 2>/dev/null | head -1)
+AC_MSG_RESULT([${PD_EXE}])
+AC_SUBST([PD_EXE])
+
 
 ### this should only be set if Pd has been found
 # the extension

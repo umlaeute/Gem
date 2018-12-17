@@ -14,7 +14,20 @@
 //
 /////////////////////////////////////////////////////////
 
-#if defined __APPLE__  && !defined __x86_64
+#if !defined DISABLE_GEMMACWINDOW
+# if !defined __x86_64
+#  define DISABLE_GEMMACWINDOW
+# endif
+#endif
+
+#include <AvailabilityMacros.h>
+#if !defined DISABLE_GEMMACWINDOW
+# if defined (MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#  define DISABLE_GEMMACWINDOW
+# endif
+#endif
+
+#if !defined DISABLE_GEMMACWINDOW
 #include "Gem/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
@@ -317,7 +330,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
       reinterpret_cast<Ptr>
       (aglChoosePixelFormat)) { // check for existence of OpenGL
     verbose(2,"MAC: BuildGLonWindow: OpenGL not installed");
-    return NULL;
+    return 0;
   }
   // we successfully passed the renderer check
 
@@ -335,7 +348,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
   aglReportError ();
   if (NULL == pcontextInfo->fmt) {
     verbose(2,"MAC: BuildGLonWindow: Could not find valid pixel format");
-    return NULL;
+    return 0;
   }
 
   *paglContext = aglCreateContext (pcontextInfo->fmt,
@@ -349,7 +362,7 @@ OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
   aglReportError ();
   if (NULL == *paglContext) {
     verbose(2,"MAC: BuildGLonWindow: Unable to create AGL context");
-    return NULL;
+    return 0;
   }
 
   if (!aglSetDrawable (*paglContext,
@@ -948,7 +961,7 @@ short FindGDHandleFromWindow (WindowPtr pWindow,
   GDHandle hgdNthDevice;
 
   if (!pWindow || !phgdOnThisDevice) {
-    return NULL;
+    return 0;
   }
 
   *phgdOnThisDevice = NULL;
