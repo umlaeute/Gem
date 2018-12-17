@@ -25,6 +25,48 @@
 
 
 #include <AvailabilityMacros.h>
+
+#if defined __i386__
+# define NSEventMaskAny NSAnyEventMask
+
+# define NSEventTypeLeftMouseUp NSLeftMouseUp
+# define NSEventTypeRightMouseUp NSRightMouseUp
+# define NSEventTypeOtherMouseUp NSOtherMouseUp
+# define NSEventTypeLeftMouseDown NSLeftMouseDown
+# define NSEventTypeRightMouseDown NSRightMouseDown
+# define NSEventTypeOtherMouseDown NSOtherMouseDown
+# define NSEventTypeMouseMoved NSMouseMoved
+# define NSEventTypeLeftMouseDragged NSLeftMouseDragged
+# define NSEventTypeRightMouseDragged NSRightMouseDragged
+# define NSEventTypeOtherMouseDragged NSOtherMouseDragged
+# define NSEventTypeMouseEntered NSMouseEntered
+# define NSEventTypeMouseExited NSMouseExited
+# define NSEventTypeScrollWheel NSScrollWheel
+
+# define NSEventTypeKeyDown NSKeyDown
+# define NSEventTypeKeyUp NSKeyUp
+
+# define NSEventTypeTabletPoint NSTabletPoint
+# define NSEventTypeTabletProximity NSTabletProximity
+
+# define NSEventTypeFlagsChanged NSFlagsChanged
+# define NSEventModifierFlagCapsLock NSAlphaShiftKeyMask
+# define NSEventModifierFlagOption NSAlternateKeyMask
+# define NSEventModifierFlagCommand NSCommandKeyMask
+# define NSEventModifierFlagControl NSControlKeyMask
+# define NSEventModifierFlagFunction NSFunctionKeyMask
+# define NSEventModifierFlagNumericPad NSNumericPadKeyMask
+# define NSEventModifierFlagShift NSShiftKeyMask
+# define NSEventModifierFlagHelp NSHelpKeyMask
+
+# define NSWindowStyleMaskTitled NSTitledWindowMask
+# define NSWindowStyleMaskClosable NSClosableWindowMask
+# define NSWindowStyleMaskResizable NSResizableWindowMask
+# define NSWindowStyleMaskUnifiedTitleAndToolbar NSUnifiedTitleAndToolbarWindowMask
+# define NSWindowStyleMaskMiniaturizable NSMiniaturizableWindowMask
+# define NSWindowStyleMaskBorderless NSBorderlessWindowMask
+#endif
+
 #if defined (MAC_OS_X_VERSION_10_10) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 #warning openGL context sharing
 
