@@ -2,8 +2,19 @@
 ## simple script to run Gem from the build
 
 
-## PD binary can be overriden by setting the PD environment
-PD=${PD:-$(which pd)}
+## Pd binary can be overriden by setting the PD environment
+if [ "x${PD}" = "x" ]; then
+  PD=@PD_EXE@
+  if [ "x${PD#@}" != "x${PD}" ]; then
+    PD=""
+  fi
+fi
+if [ "x${PD}" = "x" ]; then
+ PD=pd
+fi
+
+## provide replacement for realpath
+which realpath >/dev/null 2>&1 || realpath() { [ "x${1#/}" != "x$1" ] && echo "$1" || echo "$PWD/${1#.}"; }
 
 ## search abstractions (both static ones and built ones)
 srcdir=$(realpath @abs_top_srcdir@)
