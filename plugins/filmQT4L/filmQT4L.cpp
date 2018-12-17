@@ -182,10 +182,10 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
   if(imgNum>m_numFrames || imgNum<0) {
     return film::FAILURE;
   }
-  if  (imgNum>0) {
+  if  (imgNum>=0) {
     m_curFrame=imgNum;
   }
-  if(trackNum>0) {
+  if(trackNum>=0) {
     m_curTrack=trackNum;
   }
 
