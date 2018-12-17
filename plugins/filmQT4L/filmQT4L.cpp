@@ -102,7 +102,7 @@ bool filmQT4L :: open(const std::string&filename,
     // Get the number of tracks
     m_numTracks = quicktime_video_tracks(m_quickfile);
     // Get the length of the movie (on track current track)
-    m_numFrames = quicktime_video_length(m_quickfile, m_curTrack) - 1;
+    m_numFrames = quicktime_video_length(m_quickfile, m_curTrack);
     // Get the frame-rate
     m_fps = quicktime_frame_rate(m_quickfile, m_curTrack);
     // Get the video dimensions
