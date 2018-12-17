@@ -220,6 +220,7 @@ pixBlock* videoAVF::getFrame(void)
   m_videoGrabber->lock.lock();
   pixBlock*img = &[m_videoGrabber getCurrentFrame];
   if(img) {
+    img->newfilm = (m_width != img->image.xsize) || (m_height != img->image.ysize);
     m_width = img->image.xsize;
     m_height = img->image.ysize;
   }

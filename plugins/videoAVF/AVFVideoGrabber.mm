@@ -345,7 +345,6 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
     size_t heightIn	= CVPixelBufferGetHeight(imageBuffer);
 
     lock.lock();
-    pixes.newfilm = (pixes.image.xsize != widthIn) || (pixes.image.ysize != heightIn);
     pixes.newimage = true;
     pixes.image.xsize = widthIn;
     pixes.image.ysize = heightIn;
