@@ -544,6 +544,7 @@ AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
 ])
 
 AS_IF([ test -d "$with_pd"  ],[
+ with_pd=$(echo $with_pd | sed -e 's/\/*$//' -e 's/\/\/*/\//g')
  AC_MSG_CHECKING([include paths for Pd])
  if test -d "${with_pd}/src" ; then
    AC_MSG_RESULT([${with_pd}/src])
