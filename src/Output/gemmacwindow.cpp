@@ -14,7 +14,20 @@
 //
 /////////////////////////////////////////////////////////
 
-#if defined __APPLE__  && !defined __x86_64
+#if !defined DISABLE_GEMMACWINDOW
+# if !defined __x86_64
+#  define DISABLE_GEMMACWINDOW
+# endif
+#endif
+
+#include <AvailabilityMacros.h>
+#if !defined DISABLE_GEMMACWINDOW
+# if defined (MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#  define DISABLE_GEMMACWINDOW
+# endif
+#endif
+
+#if !defined DISABLE_GEMMACWINDOW
 #include "Gem/GemGL.h"
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
