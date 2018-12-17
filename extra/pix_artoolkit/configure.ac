@@ -2,6 +2,7 @@ AC_PREREQ(2.60)
 AC_INIT([pix_artoolkit],[0.1],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
+AC_CONFIG_MACRO_DIR([../../m4])
 
 
 AC_LANG(C++)
