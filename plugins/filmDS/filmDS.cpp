@@ -558,7 +558,7 @@ public:
     if (FAILED(hr)) {
 MARK_HR(hr);
       verbose(1,
-              "[GEM::filmDS] unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)");
+              "[GEM::filmDS] unable to ConnectFilters(%p, %p, %p)", m_pGraph, m_pSourceFile, m_pGrabberF);
       tearDown();
       return false;
     }
