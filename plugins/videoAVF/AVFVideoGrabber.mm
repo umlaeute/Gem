@@ -332,7 +332,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
     CVPixelBufferLockBaseAddress(imageBuffer,0);
     printSampleBuffer(sampleBuffer);
 
-    CMTime ts = CMSampleBufferGetDecodeTimeStamp(sampleBuffer);
+    CMTime ts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
       lastSeen=ts;
       fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
