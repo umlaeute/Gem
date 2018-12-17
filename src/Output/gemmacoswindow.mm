@@ -26,7 +26,20 @@
 
 #include <AvailabilityMacros.h>
 
-#if defined __i386__
+#ifndef GEM_NSEVENT_LEGACY
+# if defined (MAC_OS_X_VERSION_10_12) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+# else
+#  define GEM_NSEVENT_LEGACY
+# endif
+#endif
+#ifndef GEM_NSEVENT_LEGACY
+# if defined __i386__
+#  define GEM_NSEVENT_LEGACY
+# endif
+#endif
+
+
+#if defined GEM_NSEVENT_LEGACY
 # define NSEventMaskAny NSAnyEventMask
 
 # define NSEventTypeLeftMouseUp NSLeftMouseUp
