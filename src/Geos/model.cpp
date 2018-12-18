@@ -232,7 +232,7 @@ void model :: enumPropertyMess()
 
     data.clear();
     data.push_back(value=std::string("numwrite"));
-    data.push_back(value=writekeys.size());
+    data.push_back(value=(int)writekeys.size());
     m_infoOut.send("proplist", data);
 
     for(i=0; i<writekeys.size(); i++) {
