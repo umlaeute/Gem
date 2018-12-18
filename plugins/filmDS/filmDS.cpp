@@ -897,10 +897,14 @@ MARK();
       verbose(1, "[GEM::filmDS] current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
              (int)m_wantFrame);
 
+      if(m_wantFrame >= m_numFrames) {
+        return false;
+      }
       if (m_wantFrame == m_lastFrame) {
         pb.newimage = false;
-        return &pb;
+        return true;
       }
+      frameSeek = (LONGLONG) m_wantFrame;
 
       hr = m_pSeek->SetPositions(&frameSeek,
                                  AM_SEEKING_AbsolutePositioning,
@@ -939,10 +943,20 @@ MARK_HR(hr);
   }
   bool seekFrame(int frame)
   {
-    if(frame>m_numFrames) {
+    if(frame>=m_numFrames || frame<0) {
       return false;
     }
     m_wantFrame=frame;
+    LONGLONG frameSeek = (LONGLONG)m_wantFrame;
+    if(m_pSeek) {
+      HRESULT hr = m_pSeek->SetPositions(&frameSeek,
+                                         AM_SEEKING_AbsolutePositioning,
+                                         NULL, AM_SEEKING_NoPositioning);
+      if (FAILED(hr))
+        return false;
+      else
+        return true;
+    }
     return true;
   }
   bool isLoaded(void)
