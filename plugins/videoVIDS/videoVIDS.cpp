@@ -210,6 +210,9 @@ bool videoVIDS::enumProperties(gem::Properties&readable,
     ENUM_READWRITE(Camera, "iris", propIris);
     ENUM_READWRITE(Camera, "focus", propFocus);
   }
+
+  writeable.set("verbose",  0);
+
   return true;
 }
 
@@ -236,6 +239,11 @@ void videoVIDS::setProperties(gem::Properties&props)
         if(dval>0) {
           height = dval;
         }
+      }
+    } else if("verbose" == key) {
+      if(props.get(key, dval)) {
+        int i = (int)dval;
+        videoInput::setVerbose(i>0);
       }
     } else if(("fps" == key) || ("framerate" == key) ) {
       if(props.get(key, dval)) {
