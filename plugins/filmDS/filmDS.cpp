@@ -820,13 +820,13 @@ MARK();
     HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
 
     if(FAILED(hr)) {
-      verbose(1, "ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i",
+      verbose(1, "[GEM::filmDS] ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i",
              bufferSize);
       return false;
     }
 
     if (videoSize != bufferSize) {
-      verbose(1, "ERROR: GetPixels() - bufferSizes do not match!");
+      verbose(1, "[GEM::filmDS] ERROR: GetPixels() - bufferSizes do not match!");
       return false;
     }
 
