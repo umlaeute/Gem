@@ -838,6 +838,9 @@ MARK();
     hr=m_pControl->GetState(0, &State);
     if(m_auto > 0.f) {
 MARK();
+      if(m_wantFrame >= m_numFrames) {
+        return false;
+      }
       //if the video is paused then start it running again
       if (State != State_Running) {
         hr = m_pControl->Run();
@@ -952,10 +955,10 @@ MARK_HR(hr);
   }
   bool seekFrame(int frame)
   {
+    m_wantFrame=frame;
     if(frame>=m_numFrames || frame<0) {
       return false;
     }
-    m_wantFrame=frame;
     if(m_pSeek) {
       LONGLONG frameSeek = 0;
       HRESULT hr = 0;
