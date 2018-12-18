@@ -70,11 +70,15 @@ struct fxns {
   struct type {
     static const std::type_info& get_type(void)
     {
+#if 0
       const std::type_info&res=typeid(T);
       // the following is a dummy use of the type_info struct
       // to make the template engine work properly on OSX/10.9
       static std::string _ = res.name();
       return res;
+#else
+      return typeid(T);
+#endif
     }
     static void static_delete(void** x)
     {
@@ -100,8 +104,12 @@ struct fxns<false> {
   struct type {
     static const std::type_info& get_type(void)
     {
+#if 0
       const std::type_info&res=typeid(T);
       return res;
+#else
+      return typeid(T);
+#endif
     }
     static void static_delete(void** x)
     {
