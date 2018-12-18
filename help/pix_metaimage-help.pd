@@ -54,7 +54,7 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
-#X text 63 277 <none>;
+#X text 63 277 <size>;
 #X text 43 412 Outlet 1: gemlist;
 #X text 50 322 Inlet 1: gemlist;
 #X obj 451 253 pix_draw;

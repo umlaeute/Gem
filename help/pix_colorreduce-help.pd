@@ -55,7 +55,7 @@
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
-#X text 63 166 <none>;
+#X text 63 166 <number-of-colors>;
 #X text 57 295 Outlet 1: gemlist;
 #X text 63 212 Inlet 1: gemlist;
 #X obj 451 196 pix_colorreduce;

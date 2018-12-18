@@ -59,11 +59,11 @@ conversion. LATER make pix_posterize eat RGBA too...;
 #X connect 6 0 1 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
-#X text 63 186 <none>;
+#X text 63 186 <factor>;
 #X text 57 293 Outlet 1: gemlist;
 #X text 63 232 Inlet 1: gemlist;
 #X obj 451 255 square 3;
-#X text 50 12 Synopsis: [pix_duotone];
+#X text 50 12 Synopsis: [pix_posterize];
 #X obj 451 196 pix_posterize;
 #X floatatom 473 160 5 0 255 2 factor - -;
 #X obj 527 179 hradio 15 1 0 5 empty empty limit 0 -6 0 8 -262144 -1
@@ -76,6 +76,8 @@ conversion. LATER make pix_posterize eat RGBA too...;
 ;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
+#X text 20 121 currently only YUV images are supported. use [pix_yuv]
+to make sure that you are in the correct colorspace.;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

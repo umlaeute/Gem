@@ -71,7 +71,7 @@
 #X text 29 57 Description: apply motionbluring on a series of images
 ;
 #X obj 544 219 / 100;
-#X text 64 195 <none>;
+#X text 64 195 <blur-factor>;
 #X text 24 254 Inlet 2: float: blur-factor (0..no blurring \, 1..only
 blurring);
 #X text 14 73 [pix_motionblur] applies a very simple and fast motion

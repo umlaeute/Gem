@@ -61,7 +61,7 @@
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
 #X obj 451 233 pix_texture;
-#X text 63 186 <none>;
+#X text 63 186 <stride>;
 #X text 57 323 Outlet 1: gemlist;
 #X text 63 232 Inlet 1: gemlist;
 #X obj 460 158 tgl 15 0 empty empty mode 20 8 0 8 -262144 -1 -1 0 1

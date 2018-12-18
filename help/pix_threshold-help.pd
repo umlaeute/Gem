@@ -54,7 +54,7 @@
 #X connect 4 0 3 0;
 #X connect 5 0 1 0;
 #X restore 451 110 pd image;
-#X text 63 196 <none>;
+#X text 63 196 <threshold (scalar/vector)>;
 #X text 56 328 Outlet 1: gemlist;
 #X text 63 242 Inlet 1: gemlist;
 #X text 516 105 open an image;
