@@ -165,17 +165,20 @@ std::string RTE::findFile(const std::string&f, const std::string&e,
 bool RTE::addSearchPath(const std::string&path, void* ctx)
 {
   static bool didit=false;
-  static t_namelist *rte_searchpath = 0;
   static bool modern = true;
+
   if(ctx) {
+    // WTF?
     return false;
   }
 
+  static void *rte_searchpath = 0;
   if(!didit) {
     unsigned int major = 0, minor = 0;
-    rte_searchpath=(t_namelist*)this->getFunction("sys_searchpath");
+    rte_searchpath=this->getFunction("sys_searchpath");
     this->getVersion(major, minor);
     modern = ((major>0) || (minor>47));
+    didit = true;
   }
   if(modern) {
     t_atom ap[2];
@@ -197,7 +200,9 @@ bool RTE::addSearchPath(const std::string&path, void* ctx)
     if(!rte_searchpath) {
       return false;
     }
-    rte_searchpath = namelist_append(rte_searchpath, path.c_str(), 0);
+#if defined HAVE_S_STUFF_H
+    rte_searchpath = namelist_append((t_namelist*)rte_searchpath, path.c_str(), 0);
+#endif
   }
   return true;
 }
