@@ -145,7 +145,7 @@ bool modelOBJ :: enumProperties(gem::Properties&readable,
   writeable.set("usematerials", 0);
   writeable.set("group", 0);
   writeable.set("reverse", 0);
-  return false;
+  return true;
 }
 
 void modelOBJ :: setProperties(gem::Properties&props)
