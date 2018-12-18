@@ -864,12 +864,17 @@ MARK();
           // If the current position is >= the duration, reset the position to the
           // beginning
           if (CurrentPosition >= m_numFrames)                {
+#if 0
             LONGLONG Current = 0;
             // Set the start position to 0, do not change the end position.
             hr = m_pSeek->SetPositions(&Current,
                                        AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
                                        NULL, AM_SEEKING_NoPositioning);
             pb.newimage = true;
+#else
+            hr = m_pControl->Pause();
+            return false;
+#endif
           }
           // Indicate the the image has changed.
           else if (CurrentPosition > m_lastFrame)               {
