@@ -62,6 +62,11 @@ protected:
   // When an open is received
   virtual void  openMess(const std::string&filename);
 
+  virtual void enumPropertyMess(void);
+  virtual void clearPropertiesMess(void);
+  virtual void getPropertyMess(t_symbol*s, int, t_atom*);
+  virtual void setPropertyMess(t_symbol*s, int, t_atom*);
+  virtual void setPropertiesMess(t_symbol*, int, t_atom*);
   virtual void applyProperties(void);
 
   //////////
@@ -101,7 +106,7 @@ protected:
   gem::plugins::modelloader*m_loader;
   bool m_loaded, m_size_change_flag;
 
-  gem::Properties m_properties;
+  gem::Properties m_readprops, m_writeprops;
 
   gem::VertexBuffer m_position, m_texture, m_color, m_normal;
 
