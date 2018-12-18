@@ -890,17 +890,16 @@ MARK();
       }
     } else { // non-auto mode
 MARK();
-      LONGLONG frameSeek;
       if(m_wantFrame >= m_numFrames) {
         return false;
       }
-
 #if 0
       if (State == State_Running) {
         hr = m_pControl->Pause();
       }
 #endif
 
+      LONGLONG frameSeek;
       //check if the playback is 'Paused' and don't keep asking for the same frame
       frameSeek = 0;
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
