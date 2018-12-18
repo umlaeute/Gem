@@ -28,7 +28,11 @@
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-#define MARK_HR(hr)if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
+#if 1
+# define MARK_HR(hr) if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
+#else
+# define MARK_HR(hr) do{;} while(0)
+#endif
 #define MARK() MARK_HR(0)
 
 #include <dshow.h>
@@ -278,7 +282,7 @@ static int comRefCount = 0;
 static void retainCom()
 {
   if( comRefCount == 0 ) {
-    //printf("com is initialized!\n");
+    printf("COM is initialized!\n");
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
   }
   comRefCount++;
@@ -288,7 +292,7 @@ static void releaseCom()
 {
   comRefCount--;
   if( comRefCount == 0 ) {
-    //printf("com is uninitialized!\n");
+    printf("COM is uninitialized!\n");
     CoUninitialize();
   }
 }
@@ -359,9 +363,13 @@ public:
 
   ~DirectShowVideo()
   {
+MARK();
     tearDown();
+MARK();
     releaseCom();
+MARK();
     DeleteCriticalSection(&critSection);
+MARK();
   }
 
   void tearDown()
@@ -909,7 +917,7 @@ MARK();
       hr = m_pSeek->SetPositions(&frameSeek,
                                  AM_SEEKING_AbsolutePositioning,
                                  NULL, AM_SEEKING_NoPositioning);
-      verbose(2, "[GEM::filmDS] new=%d", (int)frameSeek);
+      //verbose(2, "[GEM::filmDS] new=%d", (int)frameSeek);
 
       if (FAILED(hr)) {
 MARK_HR(hr);
@@ -1066,6 +1074,7 @@ MARK();
   }
 MARK();
   if(player->seekFrame(imgNum)) {
+MARK();
     return film::SUCCESS;
   }
 MARK();
