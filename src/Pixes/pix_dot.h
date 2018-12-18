@@ -38,7 +38,7 @@ public:
 
   //////////
   // Constructor
-  pix_dot();
+  pix_dot(int, t_atom*);
 
 protected:
 
@@ -90,14 +90,6 @@ protected:
   int B2Y[256];
 
   bool m_useScale;
-
-private:
-
-  //////////
-  // static member functions
-  static void bangMessCallback(void *data);
-  static void sizeMessCallback(void *data, t_float width, t_float height);
-  static void scaleMessCallback(void *data, t_float state);
 };
 
 #endif  // for header file

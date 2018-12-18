@@ -45,7 +45,7 @@ public:
 
   //////////
   // Constructor
-  pix_threshold();
+  pix_threshold(int, t_atom*);
 
 protected:
 
@@ -72,7 +72,7 @@ protected:
 #endif
   //////////
   // Set the new threshold vector
-  void            vecThreshMess(int argc, t_atom *argv);
+  void            vecThreshMess(t_symbol*, int argc, t_atom *argv);
 
   //////////
   // Set the new threshold value
@@ -82,14 +82,6 @@ protected:
   // The new color
   unsigned char   m_thresh[4];
   unsigned char   m_Y;
-
-private:
-
-  //////////
-  // Static member functions
-  static void     vecThreshMessCallback(void *data, t_symbol *, int argc,
-                                        t_atom *argv);
-  static void     floatThreshMessCallback(void *data, t_float thresh);
 };
 
 #endif  // for header file

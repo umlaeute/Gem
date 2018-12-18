@@ -43,7 +43,7 @@ public:
 
   //////////
   // Constructor
-  pix_compare();
+  pix_compare(t_floatarg f=0);
 
 protected:
 

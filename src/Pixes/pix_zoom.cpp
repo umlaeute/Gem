@@ -15,8 +15,9 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_zoom.h"
+#include "Gem/Exception.h"
 
-CPPEXTERN_NEW(pix_zoom);
+CPPEXTERN_NEW_WITH_GIMME(pix_zoom);
 
 /////////////////////////////////////////////////////////
 //
@@ -26,9 +27,24 @@ CPPEXTERN_NEW(pix_zoom);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_zoom :: pix_zoom()
+pix_zoom :: pix_zoom(int argc, t_atom*argv)
 {
-  zoomMess(1, 1);
+  t_float x = 1., y=1.;
+  switch(argc) {
+  case 0:
+    break;
+  case 1:
+    x = y = atom_getfloat(argv);
+    break;
+  case 2:
+    x = atom_getfloat(argv+0);
+    y = atom_getfloat(argv+1);
+    break;
+  default:
+    throw(GemException("needs 0, 1 or 2 arguments"));
+  }
+
+  zoomMess(x, y);
 
   // create the new inlet
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
@@ -64,7 +80,7 @@ void pix_zoom :: postrender(GemState *)
 // zoom_magMess
 //
 /////////////////////////////////////////////////////////
-void pix_zoom :: zoomMess(float xZoom, float yZoom)
+void pix_zoom :: zoomMess(t_float xZoom, t_float yZoom)
 {
   m_xZoom = xZoom;
   m_yZoom = yZoom;
@@ -77,11 +93,5 @@ void pix_zoom :: zoomMess(float xZoom, float yZoom)
 /////////////////////////////////////////////////////////
 void pix_zoom :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_zoom::zoomMessCallback),
-                  gensym("zoom"), A_FLOAT, A_FLOAT, A_NULL);
-}
-void pix_zoom :: zoomMessCallback(void *data, t_float xMag, t_float yMag)
-{
-  GetMyClass(data)->zoomMess((float)xMag, (float)yMag);
+  CPPEXTERN_MSG2(classPtr, "zoom", zoomMess, t_float, t_float);
 }

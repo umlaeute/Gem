@@ -35,7 +35,7 @@ public:
 
   //////////
   // Constructor
-  pix_motionblur(void);
+  pix_motionblur(int, t_atom*);
 
 protected:
 

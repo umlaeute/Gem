@@ -42,7 +42,7 @@ public:
 
   //////////
   // Constructor
-  pix_zoom();
+  pix_zoom(int, t_atom*);
 
 protected:
 
@@ -59,22 +59,15 @@ protected:
   virtual void    postrender(GemState *state);
 
   //////////
-  // x zoom
-  float           m_xZoom;
-
-  //////////
-  // y zoom
-  float           m_yZoom;
+  // x & y zoom
+  t_float           m_xZoom;
+  t_float           m_yZoom;
 
   //////////
   // Zoom mag
-  void            zoomMess(float xMag, float yMag);
+  void            zoomMess(t_float xMag, t_float yMag);
 
 private:
-
-  //////////
-  // static member functions
-  static void     zoomMessCallback(void *data, t_float xZoom, t_float yZoom);
 };
 
 #endif  // for header file

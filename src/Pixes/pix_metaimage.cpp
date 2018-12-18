@@ -16,7 +16,7 @@
 #include "pix_metaimage.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW(pix_metaimage);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_metaimage, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -26,11 +26,11 @@ CPPEXTERN_NEW(pix_metaimage);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_metaimage :: pix_metaimage() :
+pix_metaimage :: pix_metaimage(t_floatarg f) :
   init(0),
   nHeight(0), nWidth(0),
   pSource(0), pOutput(0),
-  m_Size(0.2f),
+  m_Size((f>0.f)?f:0.2f),
   m_DoDistanceBased(0.0f),
   m_DoCheapAndNasty(0.0f),
   hSubImage(NULL)

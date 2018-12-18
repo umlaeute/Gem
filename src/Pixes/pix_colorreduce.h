@@ -45,7 +45,7 @@ public:
 
   //////////
   // Constructor
-  pix_colorreduce();
+  pix_colorreduce(t_floatarg);
 
 protected:
 

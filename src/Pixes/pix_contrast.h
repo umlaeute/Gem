@@ -21,7 +21,7 @@ public:
 
   //////////
   // Constructor
-  pix_contrast();
+  pix_contrast(int, t_atom*);
 
 protected:
 
@@ -45,13 +45,5 @@ protected:
   float   m_saturation;
 
   t_inlet*m_inSat, *m_inCon;
-
-private:
-
-  //////////
-  // Static member functions
-  static void     contrastMessCallback(void *data, t_float contrast);
-  static void     saturationMessCallback(void *data, t_float contrast);
-
 };
 #endif

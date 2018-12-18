@@ -15,7 +15,7 @@
 #include "Utils/PixPete.h"
 #include "pix_colorreduce.h"
 
-CPPEXTERN_NEW(pix_colorreduce);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_colorreduce, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -25,11 +25,11 @@ CPPEXTERN_NEW(pix_colorreduce);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_colorreduce :: pix_colorreduce() :
+pix_colorreduce :: pix_colorreduce(t_floatarg fcount) :
   nHeight(0), nWidth(0),
   init(0),
   pSource(0), pOutput(0),
-  m_TargetColorCount(8.0f),
+  m_TargetColorCount((fcount>1.)?fcount:8.0f),
   m_PalettePersistence(0.95f),
   m_BoundarySmoothing(0.10f),
   hRGBHistogram(NULL), hSortedColors(NULL), hInverseColorMap(NULL),

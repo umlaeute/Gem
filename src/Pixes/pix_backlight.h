@@ -38,7 +38,7 @@ public:
 
   //////////
   // Constructor
-  pix_backlight();
+  pix_backlight(int, t_atom*);
 
 protected:
 
@@ -67,13 +67,10 @@ protected:
   //int Pete_BackLight_Init();
   //void Pete_BackLight_DeInit();
 
-private:
-
   //////////
-  // Static member functions
-  static void     scaleCallback(void *data, t_float m_SpikeScale);
-  static void     floorCallback(void *data, t_float m_SpikeFloor);
-  static void     ceilingCallback(void *data, t_float m_SpikeCeiling);
+  void     scaleMess(t_float scale);
+  void     floorMess(t_float floor);
+  void     ceilingMess(t_float ceil);
 };
 
 #endif  // for header file

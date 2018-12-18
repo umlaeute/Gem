@@ -45,7 +45,7 @@ public:
 
   //////////
   // Constructor
-  pix_data();
+  pix_data(t_floatarg x=0, t_floatarg y=0);
 
 protected:
 

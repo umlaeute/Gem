@@ -44,7 +44,7 @@ public:
 
   //////////
   // Constructor
-  pix_flip();
+  pix_flip(t_symbol*s);
 
 protected:
 
@@ -63,6 +63,7 @@ protected:
 
   //////////
   void            flipMess(FlipType type);
+  void            flipMess(t_symbol*s);
 
   //////////
   // The flip type
@@ -76,7 +77,6 @@ private:
   static void     vertMessCallback(void *data);
   static void     bothMessCallback(void *data);
   static void     noneMessCallback(void *data);
-  static void     flipMessCallback(void *data, t_symbol*s);
 };
 
 #endif  // for header file

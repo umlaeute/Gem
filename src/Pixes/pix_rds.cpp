@@ -18,7 +18,7 @@
 #include "pix_rds.h"
 #include <stdlib.h>
 
-CPPEXTERN_NEW(pix_rds);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_rds, t_floatarg, A_DEFFLOAT);
 
 #define inline_fastrand() (fastrand_val=fastrand_val*1103515245+12345)
 
@@ -30,9 +30,9 @@ CPPEXTERN_NEW(pix_rds);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_rds :: pix_rds() :
+pix_rds :: pix_rds(t_floatarg f) :
   doDots(1),
-  stride(40),
+  stride((f>1.)?(int)f:40),
   method(0),
   fastrand_val(0)
 {

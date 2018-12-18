@@ -10,7 +10,7 @@
 #include "pix_compare.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW(pix_compare);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_compare, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -20,8 +20,8 @@ CPPEXTERN_NEW(pix_compare);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_compare :: pix_compare() :
-  m_direction(0)
+pix_compare :: pix_compare(t_floatarg f) :
+  m_direction(!(!(int)f))
 {}
 
 /////////////////////////////////////////////////////////

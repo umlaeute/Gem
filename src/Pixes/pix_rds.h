@@ -44,7 +44,7 @@ public:
 
   //////////
   // Constructor
-  pix_rds();
+  pix_rds(t_floatarg);
 
 protected:
 

@@ -18,7 +18,7 @@
 #include "pix_data.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW(pix_data);
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_data, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -28,7 +28,7 @@ CPPEXTERN_NEW(pix_data);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_data :: pix_data() :
+pix_data :: pix_data(t_floatarg x, t_floatarg y) :
   m_quality(0)
 {
   // create the new inlet for the X position
@@ -41,7 +41,8 @@ pix_data :: pix_data() :
   m_colorOut = outlet_new(this->x_obj, 0);
   m_grayOut = outlet_new(this->x_obj, 0);
 
-  m_position[0] = m_position[1] = 0.f;
+  m_position[0] = x;
+  m_position[1] = y;
 }
 
 /////////////////////////////////////////////////////////

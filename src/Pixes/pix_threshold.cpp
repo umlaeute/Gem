@@ -17,7 +17,7 @@
 #include "pix_threshold.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW(pix_threshold);
+CPPEXTERN_NEW_WITH_GIMME(pix_threshold);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,7 +27,7 @@ CPPEXTERN_NEW(pix_threshold);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_threshold :: pix_threshold() :
+pix_threshold :: pix_threshold(int argc, t_atom*argv) :
   m_Y(0)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -36,6 +36,14 @@ pix_threshold :: pix_threshold() :
             gensym("vec_thresh"));
   m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_thresh[chAlpha]
                                         = 0;
+  switch(argc) {
+  case 0: break;
+  case 1:
+    floatThreshMess(atom_getfloat(argv+0));
+    break;
+  default:
+    vecThreshMess(0, argc, argv);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -170,7 +178,7 @@ void pix_threshold :: processGrayImage(imageStruct &image)
 // vecThreshMess
 //
 /////////////////////////////////////////////////////////
-void pix_threshold :: vecThreshMess(int argc, t_atom *argv)
+void pix_threshold :: vecThreshMess(t_symbol*, int argc, t_atom *argv)
 {
   if (argc >= 4) {
     m_thresh[chAlpha] = CLAMP(atom_getfloat(&argv[3]) * 255);
@@ -207,19 +215,6 @@ void pix_threshold :: floatThreshMess(float thresh)
 /////////////////////////////////////////////////////////
 void pix_threshold :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_threshold::vecThreshMessCallback),
-                  gensym("vec_thresh"), A_GIMME, A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_threshold::floatThreshMessCallback),
-                  gensym("ft1"), A_FLOAT, A_NULL);
-}
-void pix_threshold :: vecThreshMessCallback(void *data, t_symbol *,
-    int argc, t_atom *argv)
-{
-  GetMyClass(data)->vecThreshMess(argc, argv);
-}
-void pix_threshold :: floatThreshMessCallback(void *data, t_float thresh)
-{
-  GetMyClass(data)->floatThreshMess((float)thresh);
+  CPPEXTERN_MSG (classPtr, "vec_thresh", vecThreshMess);
+  CPPEXTERN_MSG1(classPtr, "ft1", floatThreshMess, float);
 }

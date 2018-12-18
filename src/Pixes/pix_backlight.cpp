@@ -15,8 +15,9 @@
 #include "Utils/PixPete.h"
 #include "pix_backlight.h"
 #include "Utils/Functions.h"
+#include "Gem/Exception.h"
 
-CPPEXTERN_NEW(pix_backlight);
+CPPEXTERN_NEW_WITH_GIMME(pix_backlight);
 
 /////////////////////////////////////////////////////////
 //
@@ -26,7 +27,7 @@ CPPEXTERN_NEW(pix_backlight);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_backlight :: pix_backlight() :
+pix_backlight :: pix_backlight(int argc, t_atom*argv) :
   nHeight(0),
   nWidth(0),
   init(0),
@@ -36,6 +37,19 @@ pix_backlight :: pix_backlight() :
   m_SpikeFloor(0.0f),
   m_SpikeCeiling(255.0f)
 {
+  switch(argc) {
+  case 0:
+    break;
+  case 3:
+    ceilingMess(atom_getfloat(argv+2));
+  case 2:
+    floorMess(atom_getfloat(argv+1));
+  case 1:
+    scaleMess(atom_getfloat(argv+0));
+    break;
+  default:
+    throw(GemException("arguments: [<scale> <floor> <ceiling>]"));
+  }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
             gensym("scale"));
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -719,44 +733,38 @@ void pix_backlight :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_backlight :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_backlight::scaleCallback),
-                  gensym("scale"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_backlight::floorCallback),
-                  gensym("floor"), A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_backlight::ceilingCallback),
-                  gensym("ceiling"), A_DEFFLOAT, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "scale", scaleMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "floor", floorMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "ceiling", ceilingMess, t_float);
 }
-void pix_backlight :: scaleCallback(void *data, t_float m_SpikeScale)
+void pix_backlight :: scaleMess(t_float v)
 {
-  m_SpikeScale*=255.0;
-  //  if(m_SpikeScale<0.f)m_SpikeScale=0.f;else if(m_SpikeScale>255.f)m_SpikeScale=255.f;
-  GetMyClass(data)->m_SpikeScale=(m_SpikeScale);
-  GetMyClass(data)->setPixModified();
+  v*=255.0;
+  //  if(v<0.f)v=0.f;else if(v>255.f)v=255.f;
+  m_SpikeScale=v;
+  setPixModified();
 }
 
-void pix_backlight :: floorCallback(void *data, t_float m_SpikeFloor)
+void pix_backlight :: floorMess(t_float v)
 {
-  m_SpikeFloor*=255.0;
-  if(m_SpikeFloor<0.f) {
-    m_SpikeFloor=0.f;
-  } else if(m_SpikeFloor>255.f) {
-    m_SpikeFloor=255.f;
+  v*=255.0;
+  if(v<0.f) {
+    v=0.f;
+  } else if(v>255.f) {
+    v=255.f;
   }
-  GetMyClass(data)->m_SpikeFloor=(m_SpikeFloor);
-  GetMyClass(data)->setPixModified();
+  m_SpikeFloor=v;
+  setPixModified();
 }
 
-void pix_backlight :: ceilingCallback(void *data, t_float m_SpikeCeiling)
+void pix_backlight :: ceilingMess(t_float v)
 {
-  m_SpikeCeiling*=255.0;
-  if(m_SpikeCeiling<0.f) {
-    m_SpikeCeiling=0.f;
-  } else if(m_SpikeCeiling>255.f) {
-    m_SpikeCeiling=255.f;
+  v*=255.0;
+  if(v<0.f) {
+    v=0.f;
+  } else if(v>255.f) {
+    v=255.f;
   }
-  GetMyClass(data)->m_SpikeCeiling=(m_SpikeCeiling);
-  GetMyClass(data)->setPixModified();
+  m_SpikeCeiling=v;
+  setPixModified();
 }

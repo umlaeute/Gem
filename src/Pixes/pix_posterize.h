@@ -35,7 +35,7 @@ public:
 
   //////////
   // Constructor
-  pix_posterize();
+  pix_posterize(t_floatarg);
 
 protected:
 

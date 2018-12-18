@@ -9,17 +9,29 @@
 
 #include "pix_contrast.h"
 #include "Utils/Functions.h"
+#include "Gem/Exception.h"
 
-CPPEXTERN_NEW(pix_contrast);
+CPPEXTERN_NEW_WITH_GIMME(pix_contrast);
 
 
-pix_contrast :: pix_contrast():
+pix_contrast :: pix_contrast(int argc, t_atom*argv):
   m_contrast(1.f), m_saturation(1.f)
 {
   m_inCon=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                     gensym("contrast"));
   m_inSat=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                     gensym("saturation"));
+
+  switch(argc) {
+  case 0: break;
+  case 2:
+    m_saturation=atom_getfloat(argv+1);
+  case 1:
+    m_contrast=atom_getfloat(argv+0);
+    break;
+  default:
+    throw(GemException("arguments: [<contrast> [<saturation>]]"));
+  }
 }
 
 pix_contrast :: ~pix_contrast()
@@ -322,22 +334,6 @@ void pix_contrast :: saturationMess(float saturation)
 
 void pix_contrast :: obj_setupCallback(t_class *classPtr)
 {
-
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_contrast::contrastMessCallback),
-                  gensym("contrast"),A_FLOAT,A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_contrast::saturationMessCallback),
-                  gensym("saturation"),A_FLOAT,A_NULL);
-
-}
-
-void pix_contrast :: contrastMessCallback(void *data, t_float contrast)
-{
-  GetMyClass(data)->contrastMess(contrast);
-}
-
-void pix_contrast :: saturationMessCallback(void *data, t_float saturation)
-{
-  GetMyClass(data)->saturationMess(saturation);
+  CPPEXTERN_MSG1(classPtr, "contrast", contrastMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "saturation", saturationMess, t_float);
 }

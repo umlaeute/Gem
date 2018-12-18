@@ -38,7 +38,7 @@ public:
 
   //////////
   // Constructor
-  pix_metaimage();
+  pix_metaimage(t_floatarg);
 
 protected:
 

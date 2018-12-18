@@ -17,7 +17,7 @@
 
 #include "pix_flip.h"
 
-CPPEXTERN_NEW(pix_flip);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_flip, t_symbol*, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,11 +27,12 @@ CPPEXTERN_NEW(pix_flip);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_flip :: pix_flip()
+pix_flip :: pix_flip(t_symbol*s)
   : m_flip(NONE)
 {
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"),
             gensym("flip"));
+  flipMess(s);
 }
 
 /////////////////////////////////////////////////////////
@@ -299,9 +300,7 @@ void pix_flip :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&pix_flip::noneMessCallback),
                   gensym("none"), A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_flip::flipMessCallback),
-                  gensym("flip"), A_SYMBOL, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "flip", flipMess, t_symbol*);
 }
 void pix_flip :: horMessCallback(void *data)
 {
@@ -319,23 +318,23 @@ void pix_flip :: noneMessCallback(void *data)
 {
   GetMyClass(data)->flipMess(NONE);
 }
-void pix_flip :: flipMessCallback(void *data, t_symbol*s)
+void pix_flip :: flipMess(t_symbol*s)
 {
   char c=*s->s_name;
   switch(c) {
   case 'v':
   case 'V':
-    GetMyClass(data)->flipMess(VERTICAL);
+    flipMess(VERTICAL);
     break;
   case 'h':
   case 'H':
-    GetMyClass(data)->flipMess(HORIZONTAL);
+    flipMess(HORIZONTAL);
     break;
   case 'b':
   case 'B':
-    GetMyClass(data)->flipMess(BOTH);
+    flipMess(BOTH);
     break;
   default:
-    GetMyClass(data)->flipMess(NONE);
+    flipMess(NONE);
   }
 }

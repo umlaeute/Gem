@@ -22,8 +22,9 @@
 #include "pix_dot.h"
 #include <stdlib.h>
 #include "Gem/PixConvert.h"
+#include "Gem/Exception.h"
 
-CPPEXTERN_NEW(pix_dot);
+CPPEXTERN_NEW_WITH_GIMME(pix_dot);
 
 /////////////////////////////////////////////////////////
 //
@@ -33,7 +34,7 @@ CPPEXTERN_NEW(pix_dot);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_dot :: pix_dot() :
+pix_dot :: pix_dot(int argc, t_atom*argv) :
   m_xsize(0), m_ysize(0), m_csize(0),
   sharedbuffer(NULL), sharedbuffer_length(0),
   tail(0),
@@ -49,6 +50,18 @@ pix_dot :: pix_dot() :
   mode(0),
   m_useScale(true)
 {
+  switch(argc) {
+  case 0:
+    break;
+  case 1:
+    scaleMess(atom_getfloat(argv+0));
+    break;
+  case 2:
+    sizeMess((int)atom_getfloat(argv+0), (int)atom_getfloat(argv+1));
+    break;
+  default:
+    throw(GemException("needs 0, 1, 2 arguments"));
+  }
   myImage.xsize=myImage.ysize=0;
   DOTDEPTH = 5;
   DOTMAX = (1<<DOTDEPTH);
@@ -614,22 +627,6 @@ unsigned char* pix_dot :: sharedbuffer_alloc(int size)
 /////////////////////////////////////////////////////////
 void pix_dot :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_dot::sizeMessCallback),
-                  gensym("size"), A_FLOAT, A_FLOAT, A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_dot::scaleMessCallback),
-                  gensym("scale"), A_FLOAT, A_NULL);
-}
-
-
-void pix_dot :: sizeMessCallback(void *data, t_float width, t_float height)
-{
-  GetMyClass(data)->sizeMess(static_cast<int>(width),
-                             static_cast<int>(height));
-}
-
-void pix_dot :: scaleMessCallback(void *data, t_float state)
-{
-  GetMyClass(data)->scaleMess( state );
+  CPPEXTERN_MSG2(classPtr, "size", sizeMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "scale", scaleMess, float);
 }

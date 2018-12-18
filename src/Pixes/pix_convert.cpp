@@ -19,7 +19,7 @@
 
 #include "pix_convert.h"
 
-CPPEXTERN_NEW(pix_convert);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_convert, t_symbol*, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
 //
@@ -29,11 +29,13 @@ CPPEXTERN_NEW(pix_convert);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_convert :: pix_convert()
+pix_convert :: pix_convert(t_symbol*s)
 {
   m_image.xsize=128;
   m_image.ysize=128;
-  m_image.setCsizeByFormat(GL_RGBA_GEM);
+  int fmt = getPixFormat(s->s_name);
+  m_image.setCsizeByFormat(fmt?fmt:GL_RGBA_GEM);
+
   m_image.reallocate();
 }
 
@@ -95,15 +97,13 @@ void pix_convert :: processImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_convert :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_convert::colorMessCallback),
-                  gensym("color"), A_SYMBOL, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "color", colorMess, t_symbol*);
 }
-void pix_convert :: colorMessCallback(void *data, t_symbol*s)
+void pix_convert :: colorMess(t_symbol*s)
 {
   int fo = getPixFormat(s->s_name);
   if(fo) {
-    GetMyClass(data)->m_image.setCsizeByFormat(fo);
+    m_image.setCsizeByFormat(fo);
   }
-  GetMyClass(data)->setPixModified();
+  setPixModified();
 }

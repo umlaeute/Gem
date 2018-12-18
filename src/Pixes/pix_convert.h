@@ -42,7 +42,7 @@ public:
 
   //////////
   // Constructor
-  pix_convert();
+  pix_convert(t_symbol*);
 
 protected:
 
@@ -53,10 +53,9 @@ protected:
   //////////
   // Do the processing
   void        processImage(imageStruct &image);
+  void colorMess(t_symbol*s);
 
   imageStruct m_image;
-private:
-  static void colorMessCallback(void *data, t_symbol*s);
 };
 
 #endif  // for header file

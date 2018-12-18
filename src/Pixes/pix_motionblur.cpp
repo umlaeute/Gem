@@ -13,7 +13,7 @@
 #include "pix_motionblur.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW(pix_motionblur);
+CPPEXTERN_NEW_WITH_GIMME(pix_motionblur);
 
 /////////////////////////////////////////////////////////
 //
@@ -23,7 +23,7 @@ CPPEXTERN_NEW(pix_motionblur);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_motionblur :: pix_motionblur(void) :
+pix_motionblur :: pix_motionblur(int argc, t_atom*argv) :
   m_blur0(256), m_blur1(0),
   inletmotionblur(NULL)
 {
@@ -36,6 +36,8 @@ pix_motionblur :: pix_motionblur(void) :
   m_savedImage.setCsizeByFormat(GL_RGBA_GEM);
   m_savedImage.reallocate();
   m_savedImage.setBlack();
+  if(argc)
+    motionblurMessage(0, argc, argv);
 }
 
 /////////////////////////////////////////////////////////
@@ -504,7 +506,7 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
 }/* end of working altivec function */
 #endif /* ALTIVEC */
 
-void pix_motionblur :: motionblurMessage(t_symbol*s, int argc, t_atom*argv)
+void pix_motionblur :: motionblurMessage(t_symbol*, int argc, t_atom*argv)
 {
   switch(argc) {
   case 1:
