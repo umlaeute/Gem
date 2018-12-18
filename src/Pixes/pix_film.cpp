@@ -529,7 +529,7 @@ void pix_film :: postrender(GemState *state)
 
   if (m_auto!=0 && !m_thread_running) {
     if (gem::plugins::film::FAILURE==m_handle->changeImage(static_cast<int>
-        (m_reqFrame+=m_auto))) {
+        (m_reqFrame))) {
       //      m_reqFrame = m_numFrames;
       outlet_bang(m_outEnd);
     }
