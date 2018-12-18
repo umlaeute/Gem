@@ -67,7 +67,7 @@ public:
   // can be used within a threaded context
   virtual bool isThreadable(void)
   {
-    return true;
+    return false;
   }
 
   // Property handling
