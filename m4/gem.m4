@@ -600,12 +600,7 @@ AC_CHECK_HEADERS([m_imp.h], [], [],
 #endif
 ])
 
-WHICH=$(which which)
-AC_MSG_CHECKING([Pd executable])
-PD_EXE=$(PATH=${with_pd}/bin:${with_pd}/src:${with_pd} ${WHICH} pd.com pd 2>/dev/null | head -1)
-AC_MSG_RESULT([${PD_EXE}])
-AC_SUBST([PD_EXE])
-
+AC_PATH_PROGS([PD_EXE], [pd.com pd], [pd], [${with_pd}/bin:${with_pd}/src:${with_pd}])
 
 ### this should only be set if Pd has been found
 # the extension
