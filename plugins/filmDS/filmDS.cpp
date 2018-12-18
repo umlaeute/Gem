@@ -878,7 +878,7 @@ MARK();
           hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
           if(FAILED(hr)) {
 MARK_HR(hr);
-            verbose(1, "[GEM::filmDS] GetCurrentBuffer(auto) failed: state=%d\n", State);
+            verbose(1, "[GEM::filmDS] GetCurrentBuffer(auto) failed: state=%d", State);
             pb.image.data = NULL; // FIXXME
 MARK();
             return false;
@@ -898,8 +898,8 @@ MARK();
 
       //check if the playback is 'Paused' and don't keep asking for the same frame
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      verbose(2, "[GEM::filmDS] current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
-             (int)m_wantFrame);
+      verbose(2, "[GEM::filmDS] playing current=%d\twant=%d\tlast=%d",
+              (int)frameSeek, (int)m_wantFrame, (int)m_lastFrame);
 
       if(m_wantFrame >= m_numFrames) {
         return false;
@@ -925,7 +925,7 @@ MARK();
       if (FAILED(hr)) {
 MARK_HR(hr);
         pb.image.data = NULL; // FIXXME
-        verbose(1, "[GEM::filmDS] GetCurrentBuffer failed: state=%d\n", State);
+        verbose(1, "[GEM::filmDS] GetCurrentBuffer failed: state=%d", State);
         return false;
       } else {
         //pb.image.data = rawBuffer;
