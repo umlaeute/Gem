@@ -858,9 +858,9 @@ MARK();
 #if 0
             LONGLONG Current = 0;
             // Set the start position to 0, do not change the end position.
-            hr = m_pSeek->SetPositions(&Current,
-                                       AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
-                                       NULL, AM_SEEKING_NoPositioning);
+            hr = m_pSeek->SetPositions(
+              &Current, AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
+              NULL, AM_SEEKING_NoPositioning);
             pb.newimage = true;
 #else
             hr = m_pControl->Pause();
@@ -888,36 +888,43 @@ MARK();
           }
         }
       }
-    } else {
+    } else { // non-auto mode
 MARK();
       LONGLONG frameSeek;
-      frameSeek = (LONGLONG) m_wantFrame;
+      if(m_wantFrame >= m_numFrames) {
+        return false;
+      }
+
+#if 0
       if (State == State_Running) {
         hr = m_pControl->Pause();
       }
+#endif
 
       //check if the playback is 'Paused' and don't keep asking for the same frame
+      frameSeek = 0;
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
       verbose(2, "[GEM::filmDS] playing current=%d\twant=%d\tlast=%d",
               (int)frameSeek, (int)m_wantFrame, (int)m_lastFrame);
 
-      if(m_wantFrame >= m_numFrames) {
-        return false;
-      }
       if (m_wantFrame == m_lastFrame) {
+        //post("skipping same frame: %d == %d", m_wantFrame, frameSeek);
         pb.newimage = false;
         return true;
       }
-      frameSeek = (LONGLONG) m_wantFrame;
 
-      hr = m_pSeek->SetPositions(&frameSeek,
-                                 AM_SEEKING_AbsolutePositioning,
-                                 NULL, AM_SEEKING_NoPositioning);
+      frameSeek = (LONGLONG) m_wantFrame;
+      hr = m_pSeek->SetPositions(
+        &frameSeek, AM_SEEKING_AbsolutePositioning,
+        NULL, AM_SEEKING_NoPositioning);
 
       if (FAILED(hr)) {
 MARK_HR(hr);
         verbose(1, "[GEM::filmDS] SetPositions failed");
       }
+
+      // trigger the actual seek:
+      m_pControl->Pause();
 
 MARK();
       hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
@@ -950,11 +957,18 @@ MARK_HR(hr);
       return false;
     }
     m_wantFrame=frame;
-    LONGLONG frameSeek = (LONGLONG)m_wantFrame;
     if(m_pSeek) {
-      HRESULT hr = m_pSeek->SetPositions(&frameSeek,
-                                         AM_SEEKING_AbsolutePositioning,
-                                         NULL, AM_SEEKING_NoPositioning);
+      LONGLONG frameSeek = 0;
+      HRESULT hr = 0;
+      hr = m_pSeek->GetCurrentPosition(&frameSeek);
+      verbose(2, "[GEM::filmDS] seeking current=%d\twant=%d\tlast=%d",
+              (int)frameSeek, (int)m_wantFrame, (int)m_lastFrame);
+
+      frameSeek = (LONGLONG)m_wantFrame;
+      hr = m_pSeek->SetPositions(
+        &frameSeek, AM_SEEKING_AbsolutePositioning,
+        NULL, AM_SEEKING_NoPositioning);
+      m_pControl->Pause();
       if (FAILED(hr))
         return false;
       else
