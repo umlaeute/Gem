@@ -554,9 +554,12 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 #endif
   if (m_handle) {
     if(!m_thread_running) {
+      //post("ChangeImage(%d, %d)", imgNum, trackNum);
       if (gem::plugins::film::FAILURE==m_handle->changeImage(imgNum, trackNum)) {
         outlet_bang(m_outEnd);
       }
+    } else {
+      //post("deferred ChangeImage(%d, %d)", imgNum, trackNum);
     }
     m_reqFrame=imgNum;
     m_reqTrack=trackNum;
