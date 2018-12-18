@@ -124,11 +124,19 @@ void TextBase :: render(GemState *)
   if (m_theText.empty() || !m_font) {
     return;
   }
+  glPushAttrib(GL_COLOR_BUFFER_BIT);
+  glEnable(GL_BLEND);
+  if(glBlendFuncSeparate)
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
+        GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  else
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   // step through the lines
   for(i=0; i<m_theText.size(); i++) {
     renderLine(m_theText[i].c_str(),
                m_lineDist[i]*m_fontSize*m_dist*m_precision);
   }
+  glPopAttrib();
   fontInfo();
 }
 
