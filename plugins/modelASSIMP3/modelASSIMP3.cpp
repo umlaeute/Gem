@@ -390,9 +390,14 @@ void modelASSIMP3 :: close(void)
 bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
                                     gem::Properties&writeable)
 {
+  gem::any typ;
   readable.clear();
   writeable.clear();
-  return false;
+  writeable.set("texttype", std::string("UV"));
+  writeable.set("rescale", 0);
+  writeable.set("usematerials", 0);
+
+  return true;
 }
 
 void modelASSIMP3 :: setProperties(gem::Properties&props)
