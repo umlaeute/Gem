@@ -475,7 +475,6 @@ MARK();
 
     // Create the Filter Graph Manager and query for interfaces.
 
-    //printf("step 1\n");
     HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IGraphBuilder, (void **)&m_pGraph);
@@ -486,7 +485,6 @@ MARK();
     }
 
     // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
-    //printf("step 4\n");
     hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
     if (FAILED(hr) || !m_pControl) {
       verbose(1, "[GEM::filmDS] could not get MediaControl interface: %d", hr);
@@ -494,7 +492,6 @@ MARK();
       return false;
     }
 
-    //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
     if (FAILED(hr) || !m_pSeek) {
       verbose(1, "[GEM::filmDS] could not get MediaSeeking interface: %d", hr);
@@ -542,7 +539,6 @@ MARK();
     mt.subtype           = MEDIASUBTYPE_RGB32;
     mt.formattype        = GUID_NULL;//FORMAT_VideoInfo;
 
-    //printf("step 5.5\n");
     hr = m_pGrabber->SetMediaType(&mt);
     if (FAILED(hr)) {
       verbose(1, "[GEM::filmDS] could not set MediaType: %d", hr);
@@ -550,7 +546,6 @@ MARK();
       return false;
     }
 
-    //printf("step 6\n");
     std::wstring filePathW = std::wstring(path.begin(), path.end());
 
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
@@ -570,7 +565,7 @@ MARK_HR(hr);
       tearDown();
       return false;
     }
-    //printf("step 7\n");
+
     if(!SUCCEEDED(hr)) { // can this ever happen after we just checked for FAILED(hr)??
       verbose(1, "[GEM::filmDS] Error occured while playing or pausing or opening the file");
       tearDown();
@@ -694,13 +689,9 @@ MARK_HR(hr);
 
     // FIXXME: original code now does some special tricks for DV video
 
-    //printf("step 8\n");
     // Run the graph.
 
-    std::string grfile="test_" __TIME__ "_";
-    //SaveGraphFile(m_pGraph, grfile+"2.grf");
     hr = m_pControl->Run();
-    //SaveGraphFile(m_pGraph, grfile+"3.grf");
     if( FAILED(hr) ) {
       verbose(1, "[GEM::filmDS] unable to start film", hr);
       tearDown();
@@ -922,7 +913,6 @@ MARK();
       hr = m_pSeek->SetPositions(&frameSeek,
                                  AM_SEEKING_AbsolutePositioning,
                                  NULL, AM_SEEKING_NoPositioning);
-      //verbose(2, "[GEM::filmDS] new=%d", (int)frameSeek);
 
       if (FAILED(hr)) {
 MARK_HR(hr);
@@ -1074,6 +1064,7 @@ MARK_HR(res);
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
 MARK();
+  //post("changeImage(%d,%d)", imgNum, trackNum);
   if(!player) {
     return film::FAILURE;
   }
