@@ -132,7 +132,19 @@ bool modelOBJ :: enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable)
 {
   readable.clear();
+  readable.set("texwidth", 1);
+  readable.set("texheight", 1);
+  readable.set("groups", 0);
+
   writeable.clear();
+  writeable.set("textype", std::string("default"));
+  writeable.set("rescale", 1);
+  writeable.set("smooth", 0);
+  writeable.set("texwidth", 1);
+  writeable.set("texheight", 1);
+  writeable.set("usematerials", 0);
+  writeable.set("group", 0);
+  writeable.set("reverse", 0);
   return false;
 }
 
@@ -210,7 +222,21 @@ void modelOBJ :: setProperties(gem::Properties&props)
 }
 void modelOBJ :: getProperties(gem::Properties&props)
 {
+  std::vector<std::string>keys=props.keys();
+  unsigned int i;
   props.clear();
+  for(i=0; i<keys.size(); i++) {
+    if("texwidth" == keys[i]) {
+      props.set(keys[i], m_currentW);
+    }
+    if("texheight" == keys[i]) {
+      props.set(keys[i], m_currentH);
+    }
+    if("groups" == keys[i]) {
+      if(m_model)
+        props.set(keys[i], glmGetNumGroups(m_model));
+    }
+  }
 }
 
 bool modelOBJ :: compile(void)
