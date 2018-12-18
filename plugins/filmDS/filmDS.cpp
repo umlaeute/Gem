@@ -28,7 +28,7 @@
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-#if 1
+#if 0
 # define MARK_HR(hr) if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
 #else
 # define MARK_HR(hr) do{;} while(0)
@@ -907,7 +907,7 @@ MARK();
 
       //check if the playback is 'Paused' and don't keep asking for the same frame
       hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      verbose(1, "[GEM::filmDS] current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
+      verbose(2, "[GEM::filmDS] current=%d\tlast=%d\twant=%d\n", (int)frameSeek, (int)m_lastFrame,
              (int)m_wantFrame);
 
       if(m_wantFrame >= m_numFrames) {
