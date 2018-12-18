@@ -704,7 +704,7 @@ MARK_HR(hr);
 
       // Get the state and ensure it's not in an intermediate state
       hr = m_pControl->GetState(0, &FilterState);
-      if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE)  {
+      if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE) {
         verbose(1, "[GEM::filmDS] Unable to run film %d", hr);
         tearDown();
         return false;
@@ -851,10 +851,10 @@ MARK();
         // Get the current position of the video
         LONGLONG CurrentPosition;
         hr = m_pSeek->GetCurrentPosition(&CurrentPosition);
-        if (S_OK == hr)            {
+        if (S_OK == hr) {
           // If the current position is >= the duration, reset the position to the
           // beginning
-          if (CurrentPosition >= m_numFrames)                {
+          if (CurrentPosition >= m_numFrames) {
 #if 0
             LONGLONG Current = 0;
             // Set the start position to 0, do not change the end position.
@@ -868,7 +868,7 @@ MARK();
 #endif
           }
           // Indicate the the image has changed.
-          else if (CurrentPosition > m_lastFrame)               {
+          else if (CurrentPosition != m_lastFrame) {
             pb.newimage = true;
           }
         }
@@ -922,7 +922,7 @@ MARK_HR(hr);
 MARK();
       hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
 
-      if (FAILED(hr))  {
+      if (FAILED(hr)) {
 MARK_HR(hr);
         pb.image.data = NULL; // FIXXME
         verbose(1, "[GEM::filmDS] GetCurrentBuffer failed: state=%d\n", State);
