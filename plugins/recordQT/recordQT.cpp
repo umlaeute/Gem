@@ -114,7 +114,7 @@ recordQT :: recordQT(void)
   verbose(0, "[GEM:recordQT] %i codecs installed",codecList->count);
   for (i = 0; i < count; i++) {
     codecName = codecList->list[i];
-    std::string typeName = std::string((char*)codecName.typeName);
+    std::string typeName = std::string((char*)codecName.typeName + 1, ((char*)codecName.typeName)[0]);
     codecListStorage cod = {i, codecName.cType, typeName, codecName.codec};
     codecContainer.push_back(cod);
   }
