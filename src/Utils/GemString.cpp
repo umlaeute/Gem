@@ -1,7 +1,7 @@
 #include "Gem/GemConfig.h"
 
 #include "GemString.h"
-
+#include "Utils/wstring.h"
 
 #ifdef _WIN32
 typedef unsigned __int8 uint8_t;
@@ -154,5 +154,12 @@ std::wstring toWstring(const char*str)
 
   return result;
 }
+  std::wstring toWstring(const std::string&str) {
+#ifdef _WIN32
+    return gem::string::utf8string_to_wstring(str);
+#else
+    return toWstring(str.c_str());
+#endif
+  }
 };
 };
