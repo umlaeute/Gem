@@ -11,6 +11,7 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/Exception.h"
 #include "Gem/RTE.h"
+#include "Utils/wstring.h"
 
 using namespace gem::plugins;
 
@@ -33,6 +34,30 @@ using namespace gem::plugins;
 
 /* for post() and error() */
 #include "m_pd.h"
+
+
+static bool touch(const std::string&filename)
+{
+#ifdef __APPLE__
+  int fd;
+  fd = open(filename.c_str(), O_CREAT | O_RDWR, 0600);
+  if (fd < 0) {
+    return false;
+  }
+  write(fd, " ", 1);
+  close(fd);
+
+  return true;
+#elif defined _WIN32
+  FILE*outfile=fopen(filename.c_str(), "");
+  if(NULL==outfile) {
+    return false;
+  }
+  fclose(outfile);
+  return true;
+#endif
+  return false;
+}
 
 REGISTER_RECORDFACTORY("QT", recordQT);
 /////////////////////////////////////////////////////////
@@ -60,8 +85,6 @@ recordQT :: recordQT(void)
   , m_spatialQuality(codecNormalQuality)
   , nFileRefNum(0), nResID(0)
 {
-  m_filename[0] = 0;
-
   static bool firsttime=true;
   if(firsttime) {
 #ifdef _WIN32
@@ -91,7 +114,8 @@ recordQT :: recordQT(void)
   verbose(0, "[GEM:recordQT] %i codecs installed",codecList->count);
   for (i = 0; i < count; i++) {
     codecName = codecList->list[i];
-    codecListStorage cod = {i, codecName.cType, std::string(codecName.typeName), codecName.codec};
+    std::string typeName = std::string((char*)codecName.typeName);
+    codecListStorage cod = {i, codecName.cType, typeName, codecName.codec};
     codecContainer.push_back(cod);
   }
 
@@ -150,34 +174,24 @@ void recordQT :: setupQT(
   //this mess should create and open a file for QT to use
   //probably should be a separate function
 
-  if (!m_filename || !m_filename[0]) {
-    error("[GEM:recordQT]  no filename passed");
+  if (m_filename.empty()) {
+    error("[GEM:recordQT] no filename passed");
     return;
   }
+  std::string filename = gem::string::utf8string_to_nativestring(m_filename);
 
   if (!m_compressImage) {
-    error("[GEM:recordQT]  no image to record");
+    error("[GEM:recordQT] no image to record");
     return;
   }
+  touch (filename);
 #ifdef __APPLE__
-  else {
-    UInt8*filename8=reinterpret_cast<UInt8*>(m_filename);
+  do {
+    UInt8*filename8=reinterpret_cast<UInt8*>(filename.c_str());
     err = ::FSPathMakeRef(filename8, &ref, NULL);
-    if (err == fnfErr) {
-      // if the file does not yet exist, then let's create the file
-      int fd;
-      fd = ::open(m_filename, O_CREAT | O_RDWR, 0600);
-      if (fd < 0) {
-        error("[GEM:recordQT] problem with fd");
-        return ;
-      }
-      ::write(fd, " ", 1);
-      ::close(fd);
-      err = FSPathMakeRef(filename8, &ref, NULL);
-    }
     if (err) {
       error("[GEM:recordQT] Unable to make file ref from filename %s",
-            m_filename);
+            m_filename.c_str());
       return ;
     }
     err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec,
@@ -192,27 +206,25 @@ void recordQT :: setupQT(
       error("[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
       return;
     }
-  }
+  } while(0);
 #elif defined _WIN32
-  else {
-    /* just create this file, in case it isn't there already...weird hack */
-    char filename[QT_MAX_FILENAMELENGTH];
-    UInt8*filename8=reinterpret_cast<UInt8*>(filename);
-    FILE*fil=NULL;
-
-    fil=fopen(m_filename, "a");
-    if(NULL!=fil) {
-      fclose(fil);
-    }
-
-    snprintf(filename, QT_MAX_FILENAMELENGTH, m_filename);
-    c2pstr(filename);
-    FSMakeFSSpec (0, 0L, filename8, &theFSSpec);
+  do {
+    err = ::NativePathNameToFSSpec (const_cast<char*>(filename.c_str()), &theFSSpec, 0);
     if (err != noErr && err != -37) {
-      error("[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
+      error("[GEM:recordQT] error#%d in NativePathNameToFSSpec()", err);
       return;
     }
-  }
+    err = CreateMovieFile(        &theFSSpec,
+                                  FOUR_CHAR_CODE('TVOD'),
+                                  smSystemScript,
+                                  createMovieFileDeleteCurFile |
+                                  createMovieFileDontCreateResFile,
+                                  &nFileRefNum,
+                                  &m_movie);
+    err = CloseMovieFile(nFileRefNum);
+    err = ::NativePathNameToFSSpec (const_cast<char*>(filename.c_str()), &theFSSpec, 0);
+
+  } while(0);
 #endif    /* OS */
 
   //create the movie from the file
@@ -227,7 +239,7 @@ void recordQT :: setupQT(
   case noErr:
     break;
   case -37:
-    error("[GEM:recordQT] invalid filename '%s'", m_filename);
+    error("[GEM:recordQT] invalid filename '%s'", m_filename.c_str());
     return;
   default:
     error("[GEM:recordQT] CreateMovieFile failed with error %d",err);
@@ -396,8 +408,8 @@ void recordQT :: stop(void)
   m_recordSetup = false;
   m_firstRun = 1;
 
-  verbose(0, "[GEM:recordQT] movie written to %s",m_filename);
-  m_filename[0]=0;
+  verbose(0, "[GEM:recordQT] movie written to %s",m_filename.c_str());
+  m_filename.clear();
 }
 
 void recordQT :: compressFrame(void)
@@ -747,10 +759,7 @@ bool recordQT :: start(const std::string&filename, gem::Properties&props)
     error("[GEM:recordQT] cannot set filename while recording is running!");
     return false;
   }
-
-  snprintf(m_filename, QT_MAX_FILENAMELENGTH, "%s\0", filename.c_str());
-  m_filename[QT_MAX_FILENAMELENGTH-1]=0;
-
+  m_filename = filename;
   m_recordStart=true;
   return true;
 }

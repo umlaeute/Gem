@@ -20,6 +20,7 @@
 #include "Gem/RTE.h"
 #include "imageQT.h"
 #include "plugins/PluginFactory.h"
+#include "Utils/wstring.h"
 
 #if defined __APPLE__
 #  include <Carbon/Carbon.h>
@@ -60,13 +61,13 @@ REGISTER_IMAGESAVERFACTORY("QT", imageQT);
 #if defined __APPLE__
 static OSStatus
 FSPathMakeFSSpec(
-  const UInt8 *path,
+  const std::string&filename_,
   FSSpec *spec)
 {
+  const UInt8 *path = reinterpret_cast<const UInt8*>(filename_.c_str());
   OSStatus   result;
   FSRef      ref;
   Boolean *isDirectory=NULL;
-
   /* check parameters */
   require_action(NULL != spec, BadParameter, result = paramErr);
 
@@ -88,18 +89,13 @@ BadParameter:
 #elif defined _WIN32
 static OSStatus
 FSPathMakeFSSpec(
-  const UInt8 *path,
+  const std::string&filename_,
   FSSpec *spec)
 {
-  char filename[QT_MAX_FILENAMELENGTH];
-  UInt8*filename8=reinterpret_cast<UInt8*>(filename);
-  FILE*fil=NULL;
-
-  snprintf(filename, QT_MAX_FILENAMELENGTH, "%s", path);
-  c2pstr(filename);
-  OSErr err=FSMakeFSSpec (0, 0L, filename8, spec);
+  std::string filename = gem::string::utf8string_to_nativestring(filename_);
+  OSStatus err = ::NativePathNameToFSSpec (const_cast<char*>(filename.c_str()), spec, 0);
   if (err != noErr && err != -37) {
-    verbose(0, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
+    verbose(0, "[GEM:imageQT] error#%d in NativePathNameToFSSpec()", err);
   } else {
     err = noErr;
   }
@@ -327,8 +323,7 @@ bool imageQT :: load(std::string filename, imageStruct&result,
   // does the file even exist?
   if (!filename.empty()) {
     FSSpec   spec;
-    err = ::FSPathMakeFSSpec( reinterpret_cast<const UInt8*>
-                              (myfilename.c_str()), &spec);
+    err = ::FSPathMakeFSSpec(myfilename, &spec);
     if (err) {
       verbose(0, "[GEM:imageQT] Unable to find file: %s", filename.c_str());
       verbose(1, "[GEM:imageQT] parID : %d", spec.parID);
@@ -375,18 +370,18 @@ bool imageQT::save(const imageStruct&constimage,
                    const std::string&filename, const std::string&mimetype,
                    const gem::Properties&props)
 {
-  OSErr                 err=noErr;
+  bool                          result=false;
+  OSErr                         err=noErr;
   ComponentResult               cErr    = 0;
 
   GWorldPtr                     img     = NULL;
   GraphicsExportComponent       geComp  = NULL;
-  Rect                  r;
-
+  Rect                          r;
   FSSpec                        spec;
 
   OSType                        osFileType=kQTFileTypeTIFF;
   mime2type(mimetype, osFileType);
-  std::string myfilename=filename.c_str();
+  std::string myfilename=gem::string::utf8string_to_nativestring(filename);
 
   const UInt8*filename8=reinterpret_cast<const UInt8*>(myfilename.c_str());
 #if defined __APPLE__
@@ -415,7 +410,7 @@ bool imageQT::save(const imageStruct&constimage,
 
 #elif defined _WIN32
   touch(myfilename);
-  err = FSMakeFSSpec (0, 0L, filename8, &spec);
+  err = ::NativePathNameToFSSpec (const_cast<char*>(myfilename.c_str()), &spec, 0);
 #endif
   if (err != noErr && err != -37) {
     verbose(1, "[GEM:imageQT] error#%d in FSMakeFSSpec()", err);
@@ -457,10 +452,7 @@ bool imageQT::save(const imageStruct&constimage,
 
   if (err != noErr) {
     verbose(0, "[GEM:imageQT] error#%d in QTNewGWorldFromPtr()", err);
-    if(data) {
-      delete[]data;
-    }
-    return false; // FIXME:
+    goto cleanup;
   }
 
   // Set the input GWorld for the exporter
@@ -468,10 +460,7 @@ bool imageQT::save(const imageStruct&constimage,
   if (cErr != noErr)  {
     verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetInputGWorld()",
             cErr);
-    if(data) {
-      delete[]data;
-    }
-    return false; // FIXME:
+    goto cleanup;
   }
 
   // Set the output file to our FSSpec
@@ -479,62 +468,58 @@ bool imageQT::save(const imageStruct&constimage,
   if (cErr != noErr) {
     verbose(0, "[GEM:imageQT] error#%d in GraphicsExportSetOutputFile()",
             cErr);
-    if(data) {
-      delete[]data;
-    }
-    return false; // FIXME:
+    goto cleanup;
   }
 
   // Set the compression quality (needed for JPEG, not necessarily for other formats)
-  /*
-    codecMinQuality
-    codecLowQuality
-    codecNormalQuality
-    codecHighQuality
-    codecMaxQuality
-    codecLosslessQuality
-  */
+  do {
+    /*
+      codecMinQuality
+      codecLowQuality
+      codecNormalQuality
+      codecHighQuality
+      codecMaxQuality
+      codecLosslessQuality
+    */
 
-  CodecQ quality=codecHighQuality;
+    CodecQ quality=codecHighQuality;
+    double d=0.;
+    if(props.get("quality", d)) {
+      // <0 = minqality
+      // >=100 = lossless
+      if(d<0.) {
+        d=0.;
+      } else if(d>100.) {
+        d=100.;
+      }
 
-  double d=0.;
-  if(props.get("quality", d)) {
-    // <0 = minqality
-    // >=100 = lossless
-    if(d<0.) {
-      d=0.;
-    } else if(d>100.) {
-      d=100.;
+      CodecQ maxQ=codecLosslessQuality;
+      double maxQ_d=(double)maxQ;
+      double quality_d=maxQ_d * d / 100.; // 0..maxQ
+
+      quality=(CodecQ)quality_d;
     }
 
-    CodecQ maxQ=codecLosslessQuality;
-    double maxQ_d=(double)maxQ;
-    double quality_d=maxQ_d * d / 100.; // 0..maxQ
-
-    quality=(CodecQ)quality_d;
-  }
-
-  cErr = GraphicsExportSetCompressionQuality(geComp,  quality);
+    cErr = GraphicsExportSetCompressionQuality(geComp,  quality);
+  } while(0);
 
   // Export it
   cErr = GraphicsExportDoExport(geComp, NULL);
   if (cErr != noErr) {
     verbose(0, "[GEM:imageQT] ERROR: %i in GraphicsExportDoExport()", cErr);
-    if(data) {
-      delete[]data;
-    }
-    return false; // FIXME:
+    goto cleanup;
   }
 
   // finally, close the component
   if (geComp != NULL) {
     CloseComponent(geComp);
   }
-
+  result = true;
+cleanup:
   if(data) {
     delete[]data;
   }
-  return true;
+  return result;
 }
 
 

@@ -22,6 +22,7 @@
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
+#include "Utils/wstring.h"
 
 using namespace gem::plugins;
 
@@ -131,7 +132,7 @@ void filmQT :: close(void)
   //    m_srcGWorld = NULL;
 }
 
-bool filmQT :: open(const std::string&filename,
+bool filmQT :: open(const std::string&filename_,
                     const gem::Properties&wantProps)
 {
   FSSpec        theFSSpec;
@@ -148,28 +149,32 @@ bool filmQT :: open(const std::string&filename,
   OSType pixelformat=0;
   long hints=0;
 
-  if (filename.empty()) {
+  if (filename_.empty()) {
     return false;
   }
   if (!m_bInit) {
     verbose(0, "[GEM:filmQT] QT object not correctly initialized\n");
     return false;
   }
+  std::string filename = gem::string::utf8string_to_nativestring(filename_);
+
   // Clean up any open files:  closeMess();
 
+#ifdef __APPLE__
   Str255        pstrFilename;
   CopyCStringToPascal(filename.c_str(),
                       pstrFilename);           // Convert to Pascal string
 
   err = FSMakeFSSpec (0, 0L, pstrFilename,
                       &theFSSpec);  // Make specification record
-#ifdef __APPLE__
   if (err != noErr) {
     FSRef               ref;
     err = ::FSPathMakeRef((const UInt8*)filename.c_str(), &ref, NULL);
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
                              NULL);
   }
+#else /* windows */
+  err = ::NativePathNameToFSSpec (const_cast<char*>(filename.c_str()), &theFSSpec, 0);
 #endif
 
   if (err != noErr) {

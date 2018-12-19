@@ -109,7 +109,7 @@ private:
 
   //////////
   // current file to write to
-  char          m_filename[QT_MAX_FILENAMELENGTH];
+  std::string   m_filename;
 
   //////////
   // (previous) dimensions to check
