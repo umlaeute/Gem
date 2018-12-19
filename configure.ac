@@ -308,7 +308,9 @@ GEM_CHECK_FRAMEWORK([Carbon],
                         [have_carbon_framework="yes"],
                         [have_carbon_framework="no"])
 
-AC_CHECK_HEADERS([QuickTime/QuickTime.h], [], [with_QuickTime_framework="no"])
+have_quicktime_framework_headers="no"
+AC_CHECK_HEADERS([QuickTime/QuickTime.h QTML.h], [have_quicktime_framework_headers="yes"])
+AS_IF([test "x${have_quicktime_framework_headers}" != "xyes"], [with_QuickTime_framework="no"])
 GEM_CHECK_FRAMEWORK([QuickTime],
                         [have_quicktime_framework="yes"],
                         [have_quicktime_framework="no"])
