@@ -33,15 +33,18 @@ static inline std::wstring utf8string_to_wstring(const std::string&s) {
   MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), &buf[0], n);
   return buf;
 }
-static inline std::string wstring_to_utf8string(const std::wstring&s) {
+static inline std::string wstring_to_mbstring(const std::wstring&s, unsigned int codepage) {
   if (s.empty()){
     return std::string();
   }
-  int n = WideCharToMultiByte(CP_UTF8, 0, s.data(), s.size(), NULL, 0, NULL, NULL);
+  int n = WideCharToMultiByte(codepage, 0, s.data(), s.size(), NULL, 0, NULL, NULL);
   std::string buf;
   buf.resize(n);
-  WideCharToMultiByte(CP_UTF8, 0, s.data(), s.size(), &buf[0], n, NULL, NULL);
+  WideCharToMultiByte(codepage, 0, s.data(), s.size(), &buf[0], n, NULL, NULL);
   return buf;
+}
+static inline std::string wstring_to_utf8string(const std::wstring&s) {
+  return wstring_to_mbstring(s, CP_UTF8);
 }
 #endif /* OS */
 };};
