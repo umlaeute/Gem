@@ -21,6 +21,7 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
+#include "Utils/wstring.h"
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -47,17 +48,6 @@
 
 //for threading
 #include <process.h>
-
-std::wstring utf8wstring(const std::string& s){
-    if (s.empty()){
-        return std::wstring();
-    }
-    int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), NULL, 0);
-    std::wstring buf;
-    buf.resize(n);
-    MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), &buf[0], n);
-    return buf;
-}
 
 // Due to a missing qedit.h in recent Platform SDKs, we've replicated the relevant contents here
 // #include <qedit.h>
@@ -278,7 +268,7 @@ HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
 }
 HRESULT SaveGraphFile(IGraphBuilder *pGraph, std::string path)
 {
-  std::wstring filePathW = utf8wstring(path);
+  std::wstring filePathW = gem::string::utf8string_to_wstring(path);
   const WCHAR*wszPath=filePathW.c_str();
   return SaveGraphFile(pGraph, wszPath);
 }
@@ -557,7 +547,7 @@ MARK();
       return false;
     }
 
-    std::wstring filePathW = utf8wstring(path);
+    std::wstring filePathW = gem::string::utf8string_to_wstring(path);
 
     //this is the more manual way to do it - its a pain though because the audio won't be connected by default
     hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source",
