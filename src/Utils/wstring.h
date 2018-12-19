@@ -23,16 +23,18 @@ LOG
 
 namespace gem { namespace string {
 #ifdef _WIN32
-static inline std::wstring utf8string_to_wstring(const std::string&s) {
+/* convert a multibyte encoded string (as defined by codepage) to a UTF-16 (wchar) encoded string */
+    static inline std::wstring mbstring_to_wstring(const std::string&s, unsigned int codepage) {
   if (s.empty()){
     return std::wstring();
   }
-  int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), NULL, 0);
+  int n = MultiByteToWideChar(codepage, 0, s.data(), s.size(), NULL, 0);
   std::wstring buf;
   buf.resize(n);
-  MultiByteToWideChar(CP_UTF8, 0, s.data(), s.size(), &buf[0], n);
+  MultiByteToWideChar(codepage, 0, s.data(), s.size(), &buf[0], n);
   return buf;
 }
+/* convert a UTF-8 encoded string to a multibyte encoded string (as defined by codepage) */
 static inline std::string wstring_to_mbstring(const std::wstring&s, unsigned int codepage) {
   if (s.empty()){
     return std::string();
@@ -43,8 +45,24 @@ static inline std::string wstring_to_mbstring(const std::wstring&s, unsigned int
   WideCharToMultiByte(codepage, 0, s.data(), s.size(), &buf[0], n, NULL, NULL);
   return buf;
 }
+
+
+/* convert a standard UTF-8 encoded string to a UTF-16 (wchar) encoded string */
+static inline std::wstring utf8string_to_wstring(const std::string&s) {
+  return mbstring_to_wstring(s, CP_UTF8);
+}
+/* convert a UTF-16 (wchar) encoded string to a standard UTF-8 encoded string */
 static inline std::string wstring_to_utf8string(const std::wstring&s) {
   return wstring_to_mbstring(s, CP_UTF8);
+}
+/* convert a UTF-8 encoded string to a native windows multibyte string (using the default Windows 'ANSI' code page) */
+static inline std::string utf8string_to_nativestring(const std::string&s) {
+  return gem::string::wstring_to_mbstring(gem::string::utf8string_to_wstring(s), CP_ACP);
+}
+#else
+/* convert a UTF-8 encoded string to a native string (UTF-8 on all platforms but windows) */
+static inline std::string utf8string_to_nativestring(const std::string&s) {
+  return std::string(s);
 }
 #endif /* OS */
 };};
