@@ -44,22 +44,21 @@ REGISTER_RECORDFACTORY("QT", recordQT);
 //
 /////////////////////////////////////////////////////////
 recordQT :: recordQT(void)
-  : m_recordSetup(false),
-    m_recordStart(false),
-    m_recordStop(false),
-    m_width(-1), m_height(-1),
-    m_prevWidth(0), m_prevHeight(0),
-    m_compressImage(NULL),
-    seconds(0.f),
-    m_ticks(20),
-    m_firstRun(true),
-    m_rowBytes(0),
-    dataSize(0),
-    m_depth(0),
-    m_frameRate(0), m_keyFrameRate(0),
-    m_spatialQuality(codecNormalQuality),
-    nFileRefNum(0), nResID(0),
-    codecContainer(NULL), numCodecContainer(0)
+  : m_recordSetup(false)
+  , m_recordStart(false)
+  , m_recordStop(false)
+  , m_width(-1), m_height(-1)
+  , m_prevWidth(0), m_prevHeight(0)
+  , m_compressImage(NULL)
+  , seconds(0.f)
+  , m_ticks(20)
+  , m_firstRun(true)
+  , m_rowBytes(0)
+  , dataSize(0)
+  , m_depth(0)
+  , m_frameRate(0), m_keyFrameRate(0)
+  , m_spatialQuality(codecNormalQuality)
+  , nFileRefNum(0), nResID(0)
 {
   m_filename[0] = 0;
 
