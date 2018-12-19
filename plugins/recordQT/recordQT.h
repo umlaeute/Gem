@@ -165,7 +165,7 @@ private:
   //this will hold the ctype value of the codecs listed by getCodecList()
   struct codecListStorage {
     int         position;
-    int         ctype;
+    CodecType   ctype;
     std::string name;
     CodecComponent              codec;
   };
