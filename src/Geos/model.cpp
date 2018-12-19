@@ -19,6 +19,16 @@
 #include "plugins/modelloader.h"
 #include <algorithm> // std::min
 
+namespace {
+static char mytolower(char in)
+{
+  if(in<='Z' && in>='A') {
+    return in-('Z'-'z');
+  }
+  return in;
+}
+};
+
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
 
 /////////////////////////////////////////////////////////
@@ -37,8 +47,17 @@ model :: model(t_symbol *filename) :
   m_texture (256,2),
   m_color   (256,4),
   m_normal  (256,3),
-  m_infoOut(gem::RTE::Outlet(this))
+  m_infoOut(gem::RTE::Outlet(this)),
+  m_drawType(GL_TRIANGLES)
 {
+  m_drawTypes.clear();
+  m_drawTypes["default"]=m_drawType;
+  m_drawTypes["point"]=GL_POINTS;
+  m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINES;
+  m_drawTypes["lines"]=GL_LINES;
+  m_drawTypes["fill"]=GL_TRIANGLES;
+
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) {
     openMess(filename->s_name);
@@ -366,7 +385,7 @@ void model :: rescaleMess(bool state)
 }
 
 /////////////////////////////////////////////////////////
-// matrialMess
+// groupMess
 //
 /////////////////////////////////////////////////////////
 void model :: groupMess(int state)
@@ -375,6 +394,38 @@ void model :: groupMess(int state)
   m_writeprops.set("group", value);
   applyProperties();
 }
+
+/////////////////////////////////////////////////////////
+// drawStyle
+//
+/////////////////////////////////////////////////////////
+void model :: drawMess(int type)
+{
+  /* raw */
+  m_drawType = type;
+}
+void model :: drawMess(std::string name)
+{
+  if(0==m_drawTypes.size()) {
+    error("unable to change drawstyle");
+    return;
+  }
+
+  std::transform(name.begin(), name.end(), name.begin(), mytolower);
+
+  std::map<std::string, GLenum>::iterator it=m_drawTypes.find(name);
+  if(m_drawTypes.end() == it) {
+    error ("unknown draw style '%s'... possible values are:", name.c_str());
+    it=m_drawTypes.begin();
+    while(m_drawTypes.end() != it) {
+      error("\t %s", it->first.c_str());
+      ++it;
+    }
+    return;
+  }
+  m_drawType=it->second;
+}
+
 
 /////////////////////////////////////////////////////////
 // backendMess
@@ -513,7 +564,7 @@ void model :: render(GemState *state)
 
   if ( sizeList.size() > 0 ) {
     unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-    glDrawArrays(GL_TRIANGLES, 0, npoints);
+    glDrawArrays(m_drawType, 0, npoints);
   }
 
   if ( m_position.enabled ) {
@@ -551,6 +602,9 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertyMess);
   CPPEXTERN_MSG0(classPtr, "clearProps", clearPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "applyProps", applyProperties);
+
+  CPPEXTERN_MSG1(classPtr, "draw", drawMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "type", drawMess, int);
 }
 
 void model :: createVBO(void)

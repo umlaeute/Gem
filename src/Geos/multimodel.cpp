@@ -21,6 +21,17 @@
 #include <string.h>
 #include <stdio.h>
 
+namespace {
+static char mytolower(char in)
+{
+  if(in<='Z' && in>='A') {
+    return in-('Z'-'z');
+  }
+  return in;
+}
+};
+
+
 CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg,
                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
@@ -40,10 +51,18 @@ multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
      m_texture (256,2),
      m_color   (256,4),
      m_normal  (256,3),
-     m_infoOut(gem::RTE::Outlet(this))
+     m_infoOut(gem::RTE::Outlet(this)),
+     m_drawType(GL_TRIANGLES)
 {
+  m_drawTypes.clear();
+  m_drawTypes["default"]=m_drawType;
+  m_drawTypes["point"]=GL_POINTS;
+  m_drawTypes["points"]=GL_POINTS;
+  m_drawTypes["line"]=GL_LINES;
+  m_drawTypes["lines"]=GL_LINES;
+  m_drawTypes["fill"]=GL_TRIANGLES;
+
   inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("mdl_num"));
-  post("MULTIMODEL");
 
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) {
@@ -106,7 +125,7 @@ void multimodel :: materialMess(int material)
 }
 
 /////////////////////////////////////////////////////////
-// materialMess
+// textureMess
 //
 /////////////////////////////////////////////////////////
 void multimodel :: textureMess(int state)
@@ -145,7 +164,7 @@ void multimodel :: smoothMess(t_float fsmooth)
 }
 
 /////////////////////////////////////////////////////////
-// rescaleMess
+// reverseMess
 //
 /////////////////////////////////////////////////////////
 void multimodel :: reverseMess(bool reverse)
@@ -166,7 +185,7 @@ void multimodel :: rescaleMess(bool state)
 }
 
 /////////////////////////////////////////////////////////
-// matrialMess
+// groupMess
 //
 /////////////////////////////////////////////////////////
 void multimodel :: groupMess(int state)
@@ -175,6 +194,39 @@ void multimodel :: groupMess(int state)
   m_properties.set("group", value);
   applyProperties();
 }
+
+/////////////////////////////////////////////////////////
+// drawStyle
+//
+/////////////////////////////////////////////////////////
+void multimodel :: drawMess(int type)
+{
+  /* raw */
+  m_drawType = type;
+}
+
+void multimodel :: drawMess(std::string name)
+{
+  if(0==m_drawTypes.size()) {
+    error("unable to change drawstyle");
+    return;
+  }
+
+  std::transform(name.begin(), name.end(), name.begin(), mytolower);
+
+  std::map<std::string, GLenum>::iterator it=m_drawTypes.find(name);
+  if(m_drawTypes.end() == it) {
+    error ("unknown draw style '%s'... possible values are:", name.c_str());
+    it=m_drawTypes.begin();
+    while(m_drawTypes.end() != it) {
+      error("\t %s", it->first.c_str());
+      ++it;
+    }
+    return;
+  }
+  m_drawType=it->second;
+}
+
 
 /////////////////////////////////////////////////////////
 // backendMess
@@ -413,7 +465,7 @@ void multimodel :: render(GemState *state)
 
   if ( sizeList.size() > 0 ) {
     unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-    glDrawArrays(GL_TRIANGLES, 0, npoints);
+    glDrawArrays(m_drawType, 0, npoints);
   }
 
   if ( m_position.enabled ) {
@@ -436,9 +488,7 @@ void multimodel :: render(GemState *state)
 /////////////////////////////////////////////////////////
 void multimodel :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&multimodel::openMessCallback),
-                  gensym("open"), A_SYMBOL, A_FLOAT, A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+  CPPEXTERN_MSG4(classPtr, "open", openMess, std::string, float, float, float);
   CPPEXTERN_MSG1(classPtr, "mdl_num", changeModel, int);
 
   CPPEXTERN_MSG1(classPtr, "rescale", rescaleMess, bool);
@@ -448,15 +498,9 @@ void multimodel :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
-}
-void multimodel :: openMessCallback(void *data, t_symbol *filesymbol,
-                                    t_float baseModel,
-                                    t_floatarg topModel, t_floatarg skipRate)
-{
-  GetMyClass(data)->openMess(filesymbol->s_name, baseModel, topModel,
-                             skipRate);
-}
 
+  CPPEXTERN_MSG1(classPtr, "draw", drawMess, std::string);
+}
 
 void multimodel :: createVBO(void)
 {

@@ -20,6 +20,8 @@
 #include "Gem/VertexBuffer.h"
 #include "RTE/Outlet.h"
 
+#include <map>
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -90,6 +92,11 @@ protected:
   virtual void    groupMess(int group);
 
   //////////
+  // draw type
+  virtual void    drawMess(std::string);
+  virtual void    drawMess(int);
+
+  //////////
   // Set backend to use
   virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
 
@@ -112,6 +119,9 @@ protected:
 
   gem::RTE::Outlet m_infoOut;
   std::vector<std::string> m_backends;
+
+  GLenum m_drawType;
+  std::map<std::string, GLenum>m_drawTypes;
 };
 
 #endif  // for header file
