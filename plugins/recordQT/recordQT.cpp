@@ -87,26 +87,12 @@ recordQT :: recordQT(void)
 
   GetCodecNameList(&codecList,1);
   count=codecList->count;
-  codecContainer=new codecListStorage[count];
-  numCodecContainer=count;
+  codecContainer.clear();
   verbose(0, "[GEM:recordQT] %i codecs installed",codecList->count);
   for (i = 0; i < count; i++) {
     codecName = codecList->list[i];
-    codecContainer[i].position = i;
-    codecContainer[i].ctype = codecName.cType;
-    codecContainer[i].codec = codecName.codec;
-    if(codecName.typeName) {
-      int namelength=*(codecName.typeName);
-      char*name=new char[namelength+1];
-      const char*orgname=reinterpret_cast<const char*>(codecName.typeName)+1;
-      strncpy(name, orgname, namelength);
-      name[namelength]=0;
-      t_symbol*s=gensym(name);
-      codecContainer[i].name = s->s_name;
-      delete[]name;
-    } else {
-      codecContainer[i].name = NULL;
-    }
+    codecListStorage cod = {i, codecName.cType, std::string(codecName.typeName), codecName.codec};
+    codecContainer.push_back(cod);
   }
 
   //initialize member variables
@@ -456,9 +442,9 @@ void recordQT :: compressFrame(void)
     seconds = (static_cast<float>(endTime.QuadPart -
                                   startTime.QuadPart)/countFreq * 1.f);
     verbose(1,
-            "[GEM:recordQT] freq %f countFreq %f startTime %d endTime %d fps %f seconds %f ",
-            freq, countFreq, static_cast<int>startTime.QuadPart,
-            static_cast<int>endTime.QuadPart, fps, seconds);
+            "[GEM:recordQT] freq %f countFreq %f startTime %d endTime %d fps %f seconds %f",
+            freq, countFreq, static_cast<int>(startTime.QuadPart),
+            static_cast<int>(endTime.QuadPart), fps, seconds);
 
     m_ticks = static_cast<int>(600 * seconds);
     if (m_ticks < 20) {
@@ -628,21 +614,21 @@ bool recordQT :: dialog(void)
 int recordQT :: getNumCodecs(void)
 {
   //get list of codecs installed  -- useful later
-  return(numCodecContainer);
+  return(codecContainer.size());
 }
 const char*recordQT :: getCodecName(int i)
 {
-  if(i<0 || i>numCodecContainer) {
+  if(i<0 || i>codecContainer.size()) {
     return NULL;
   }
-  return (codecContainer[i].name);
+  return (codecContainer[i].name.c_str());
 }
 
 std::vector<std::string>recordQT::getCodecs(void)
 {
   std::vector<std::string>result;
   int i;
-  for(i=0; i<numCodecContainer; i++) {
+  for(i=0; i<codecContainer.size(); i++) {
     result.push_back(codecContainer[i].name);
   }
   return result;
@@ -664,7 +650,7 @@ bool recordQT::enumProperties(gem::Properties&props)
 /////////////////////////////////////////////////////////
 bool recordQT :: setCodec(int num)
 {
-  if(num<0 || num>numCodecContainer) {
+  if(num<0 || num>codecContainer.size()) {
     return false;
   }
   resetCodecSettings();
@@ -688,7 +674,7 @@ bool recordQT :: setCodec(const std::string&codecName)
     requestedCodec=5;
   }
 
-  for(i=0; i < numCodecContainer; i++)  {
+  for(i=0; i < codecContainer.size(); i++)  {
     switch(requestedCodec) {
     case 1: /* PJPEG */
       if (codecContainer[i].ctype == kJPEGCodecType) {
@@ -737,7 +723,7 @@ bool recordQT :: setCodec(const std::string&codecName)
       break;
     default:
       /* hmmm... */
-      if(gensym(codecName.c_str())==gensym(codecContainer[i].name)) {
+      if(gensym(codecName.c_str())==gensym(codecContainer[i].name.c_str())) {
         verbose(0, "[GEM:recordQT] found '%s'", codecName.c_str());
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;

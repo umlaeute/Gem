@@ -31,6 +31,8 @@
 # include <QuickTime/QuickTime.h>
 #endif // __APPLE__
 
+#include <vector>
+
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -164,12 +166,10 @@ private:
   struct codecListStorage {
     int         position;
     int         ctype;
-    char* name;
+    std::string name;
     CodecComponent              codec;
   };
-
-  codecListStorage *codecContainer;
-  int numCodecContainer;
+  std::vector<codecListStorage>codecContainer;
 
   //std::map<std::string, std::string>m_codecdescriptions;
 };
