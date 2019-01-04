@@ -30,6 +30,8 @@ libControls_la_SOURCES=  \
     gemlist_info.h \
     gemlist_matrix.cpp \
     gemlist_matrix.h \
+    gemmanager.cpp \
+    gemmanager.h \
     gemreceive.cpp \
     gemreceive.h \
     render_trigger.cpp \
