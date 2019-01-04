@@ -1,0 +1,19 @@
+#N canvas 6 61 467 618 10;
+#X text 335 8 GEM object;
+#X obj 8 438 cnv 15 430 150 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 8 76 cnv 15 430 310 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 71 31 Class: control object;
+#X text 50 12 Synopsis: [gemmanager];
+#X text 18 440 Messages:;
+#X text 34 462 dimen <w> <h>: set global window-dimensions;
+#X text 29 77 Description: interact with the global GemState;
+#X text 14 111 this is an internal helper-object to interact with the
+global GemState.;
+#X text 16 148 e.g. it allows to set Gem's knowledge of the current
+window-dimensions (important for a few objects like [ortho] or [pix_snap2tex])
+;
+#X text 15 195 This is object is probably of little use for the end-user
+(e.g.: you);
+#X obj 63 401 gemmanager;
