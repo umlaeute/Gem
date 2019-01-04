@@ -26,8 +26,10 @@
 # include <windows.h>
 #endif
 
-#ifdef GLEW_MX
-# define GEM_MULTICONTEXT
+#include "Gem/GemGLconfig.h"
+
+#ifdef GEM_MULTICONTEXT
+# define GLEW_MX
 #endif
 
 #include "Gem/glew.h"

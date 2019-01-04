@@ -85,6 +85,7 @@ AC_CONFIG_FILES([devgem.sh], [chmod +x devgem.sh])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_HEADERS([src/config.h])
+AC_CONFIG_HEADERS([src/Gem/GemGLconfig.h])
 AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
 AC_CONFIG_SUBDIRS([extra])
@@ -263,14 +264,13 @@ AS_IF([test "x$enable_multicontext" = "xyes"], [
   GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
 
   AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
+  AC_DEFINE([GEM_MULTICONTEXT], [1], [whether Gem is built with multi-context support])
 ])
 AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
 
 AS_IF([test "x${have_glew}" != "xyes"], [
-  GEM_CPPFLAGS+=" -DGLEW_BUILD"
-  AS_IF([test "x${enable_multicontext}" = "xyes"], [
-    GEM_CPPFLAGS+=" -DGLEW_MX"
-  ])])
+AC_DEFINE([GLEW_BUILD], [1], [Define to 1 if using the built-in glew])
+])
 
 GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
 

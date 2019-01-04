@@ -1,0 +1,6 @@
+
+/* Define to 1 if Gem is built with multi-context support */
+#undef GEM_MULTICONTEXT
+
+/* Define to 1 if using the built-in GLEW */
+#undef GLEW_BUILD

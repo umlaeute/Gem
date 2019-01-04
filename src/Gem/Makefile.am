@@ -50,6 +50,7 @@ libGem_la_include_HEADERS = \
 
 libGem_la_include_HEADERS += \
 	GemGL.h \
+	GemGLconfig.h \
 	glew.h \
 	glxew.h \
 	wglew.h \
