@@ -123,6 +123,7 @@ public:
   static void getDimen(int*width, int*height);
   static void getRealDimen(int*width, int*height);
   static void getOffset(int*x, int*y);
+  static void setDimen(int width, int height);
 
   //////////
   // Turn on/off lighting

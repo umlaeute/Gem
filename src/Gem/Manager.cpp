@@ -1320,6 +1320,11 @@ void GemMan :: getDimen(int*width, int*height)
     *height=m_height;
   }
 }
+void GemMan :: setDimen(int width, int height)
+{
+  m_width = width;
+  m_height = height;
+}
 
 /////////////////////////////////////////////////////////
 // get real window dimensions (as reported by the window creator)
