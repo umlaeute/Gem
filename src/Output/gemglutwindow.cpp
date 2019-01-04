@@ -395,6 +395,9 @@ bool gemglutwindow :: create(void)
   } else {
     mode|=GLUT_SINGLE;
   }
+  if(!m_border) {
+    mode|=GLUT_BORDERLESS|GLUT_CAPTIONLESS;
+  }
 
   glutInitDisplayMode(mode);
 
