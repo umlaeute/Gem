@@ -2,7 +2,7 @@
 //
 // GEMi - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //

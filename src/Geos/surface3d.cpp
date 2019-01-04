@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // surface3d : create a plan that can be distored.
 // used cubic interpolation

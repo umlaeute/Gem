@@ -4,7 +4,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file for AltiVec-optimized color-conversion routines
 //

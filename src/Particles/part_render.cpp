@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.

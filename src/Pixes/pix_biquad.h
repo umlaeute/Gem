@@ -16,7 +16,7 @@
   tv_biquad
 
   IOhannes m zmoelnig
-  mailto:zmoelnig@iem.kug.ac.at
+  mailto:zmoelnig@iem.at
 
   this code is published under the Gnu GeneralPublicLicense that should be distributed with gem & pd
 

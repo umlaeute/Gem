@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //
@@ -21,7 +21,7 @@
 //
 //  0409:forum::für::umläute:2000
 //  IOhannes m zmoelnig
-//  mailto:zmoelnig@iem.kug.ac.at
+//  mailto:zmoelnig@iem.at
 //
 /////////////////////////////////////////////////////////
 

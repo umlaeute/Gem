@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Curve3D : create a besier surface
 // made by Cyrille Henry

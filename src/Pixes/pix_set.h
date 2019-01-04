@@ -17,7 +17,7 @@ pix_set
 
   0409:forum::für::umläute:2000
   IOhannes m zmoelnig
-  mailto:zmoelnig@iem.kug.ac.at
+  mailto:zmoelnig@iem.at
 -----------------------------------------------------------------*/
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_SET_H_

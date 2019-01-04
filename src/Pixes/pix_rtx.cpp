@@ -2,7 +2,7 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //
@@ -29,7 +29,7 @@
 //   0409:forum::für::umläute:2000
 //   1801:forum::für::umläute:2001  added the second mode
 //   IOhannes m zmoelnig
-//   mailto:zmoelnig@iem.kug.ac.at
+//   mailto:zmoelnig@iem.at
 //
 //   this code is published under the Gnu GeneralPublicLicense that should be distributed with gem & pd
 //

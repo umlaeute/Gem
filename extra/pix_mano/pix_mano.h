@@ -13,7 +13,7 @@
 // Silent Percussion Project
 //
 // GEM - Graphics Environment for Multimedia
-// zmoelnig@iem.kug.ac.at
+// zmoelnig@iem.at
 //
 // Implementation file
 //    Copyright (c) 1997-1998 Mark Danks.

@@ -16,7 +16,7 @@
   pix_tIIR
 
   IOhannes m zmoelnig
-  mailto:zmoelnig@iem.kug.ac.at
+  mailto:zmoelnig@iem.at
 
   time-domain filtering:
   arguments: number of feedforward-taps, number of feedback-taps
