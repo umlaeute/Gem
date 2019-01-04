@@ -434,7 +434,7 @@ GEM_EXTERN void triggerWheelEvent(int axis, int value)
 {
   addEvent(WHEEL, NULL, 0, 0, 0, axis, value, 0);
 }
-GEM_EXTERN void triggerKeyboardEvent(char *string, int value, int state)
+GEM_EXTERN void triggerKeyboardEvent(const char *string, int value, int state)
 {
   addEvent(KEYBOARD, gensym(string)->s_name, 0, 0, state, 0, value, 0);
 }
