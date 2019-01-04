@@ -68,7 +68,7 @@ public:
 
   //////////
   // is there a context (has its meaning under X)
-  static void         createContext(char* disp);
+  static void         createContext(const char* disp);
   static int        contextExists(void);
 
   //////////
@@ -98,7 +98,7 @@ public:
 
   //////////
   // Create the window with the current parameters
-  static int        createWindow(char* disp = 0);
+  static int        createWindow(const char* disp = 0);
 
   //////////
   // Destroy the window
@@ -219,7 +219,7 @@ private:
   // This window is always available (although not visible)
   static WindowInfo   &getConstWindowInfo(void);
 #endif /* GEM_MULTICONTEXT */
-  static int        createConstWindow(char* disp = 0);
+  static int        createConstWindow(const char* disp = 0);
 
   // gemwin is allowed to modifying "global" window attributes
   friend class gemwin;

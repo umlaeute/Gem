@@ -176,11 +176,11 @@ public:
   int                   fsaa;
 
   ///// if we can use a different display , this has its meaning under X
-  char* display;
+  const char* display;
 
   //////////////
   // display some title....
-  char* title;
+  const char* title;
 
   //////////
   // The GLXcontext to share rendering with

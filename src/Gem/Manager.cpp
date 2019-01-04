@@ -195,7 +195,7 @@ void GemMan :: checkOpenGLExtensions(void)
   }
 }
 
-void GemMan :: createContext(char* disp)
+void GemMan :: createContext(const char* disp)
 {
   // can we only have one context?
 
@@ -992,7 +992,7 @@ int GemMan :: windowExists(void)
 // createWindow
 //
 /////////////////////////////////////////////////////////
-int GemMan :: createWindow(char* disp)
+int GemMan :: createWindow(const char* disp)
 {
 #ifndef GEM_MULTICONTEXT
   if ( m_windowState ) {
@@ -1132,7 +1132,7 @@ int GemMan :: windowNumber(void)
 // createConstWindow
 //
 /////////////////////////////////////////////////////////
-int GemMan::createConstWindow(char* disp)
+int GemMan::createConstWindow(const char* disp)
 {
 #ifndef GEM_MULTICONTEXT
   // can we only have one context?
