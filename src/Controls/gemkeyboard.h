@@ -55,7 +55,7 @@ private:
 
   //////////
   // Static member functions
-  static void     keyboardCallback(char *w, int x, int y, void *data);
+  static void     keyboardCallback(const char *w, int x, int y, void *data);
 };
 
 #endif  // for header file

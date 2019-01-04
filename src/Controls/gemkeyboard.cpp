@@ -67,7 +67,7 @@ void gemkeyboard :: KeyBoardPressed(int val, int state)
 /////////////////////////////////////////////////////////
 void gemkeyboard :: obj_setupCallback(t_class *)
 { }
-void gemkeyboard :: keyboardCallback(char* w, int x, int y, void *data)
+void gemkeyboard :: keyboardCallback(const char* w, int x, int y, void *data)
 {
   (reinterpret_cast<gemkeyboard*>(data))->KeyBoardPressed(x, y);
 }

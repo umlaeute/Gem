@@ -55,7 +55,7 @@ gemkeyname :: ~gemkeyname()
 // mouseMotion
 //
 /////////////////////////////////////////////////////////
-void gemkeyname :: KeyNamePressed(char *string, int val, int state)
+void gemkeyname :: KeyNamePressed(const char *string, int val, int state)
 {
   outlet_symbol(m_outKeyVal, gensym(string));
   outlet_float(m_outKeyState, static_cast<t_float>(state));
@@ -67,7 +67,7 @@ void gemkeyname :: KeyNamePressed(char *string, int val, int state)
 /////////////////////////////////////////////////////////
 void gemkeyname :: obj_setupCallback(t_class *)
 { }
-void gemkeyname :: keynameCallback(char *x, int y, int z, void *data)
+void gemkeyname :: keynameCallback(const char *x, int y, int z, void *data)
 {
-  (reinterpret_cast<gemkeyname*>(data))->KeyNamePressed(x,y, z);
+  (reinterpret_cast<gemkeyname*>(data))->KeyNamePressed(x, y, z);
 }

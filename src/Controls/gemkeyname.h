@@ -45,7 +45,7 @@ protected:
 
   //////////
   // keyname-button
-  void            KeyNamePressed(char* string, int val, int state);
+  void            KeyNamePressed(const char* string, int val, int state);
 
   //////////
   // The key-val outlet
@@ -60,7 +60,7 @@ private:
 
   //////////
   // Static member functions
-  static void     keynameCallback(char* x, int y, int z, void *data);
+  static void     keynameCallback(const char* x, int y, int z, void *data);
 };
 
 #endif  // for header file
