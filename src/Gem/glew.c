@@ -1,3 +1,7 @@
+#include "Gem/GemGLconfig.h"
+#ifdef GEM_MULTICONTEXT
+# define GLEW_MX
+#endif
 /*
 ** The OpenGL Extension Wrangler Library
 ** Copyright (C) 2008-2015, Nigel Stewart <nigels[]users sourceforge net>
