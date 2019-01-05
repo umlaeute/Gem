@@ -289,52 +289,7 @@ bool GemState::get(const GemState::key_t key, any&value)
       value=drawType;
       return true;
 #endif
-
-#if 0
-    //if(key==GemState::_GL_STACKS) { value=stackDepth[4]; return true; }
-
-    if(key=="vertex.dirty") {
-      value=VertexDirty;
-      return true;
     }
-    if(key=="*VertexArray") {
-      value=*VertexArray;
-      return true;
-    }
-    if(key=="VertexArraySize") {
-      value=VertexArraySize;
-      return true;
-    }
-    if(key=="VertexArrayStride") {
-      value=VertexArrayStride;
-      return true;
-    }
-    if(key=="*ColorArray") {
-      value=*ColorArray;
-      return true;
-    }
-    if(key=="HaveColorArray") {
-      value=HaveColorArray;
-      return true;
-    }
-    if(key=="*NormalArray") {
-      value=*NormalArray;
-      return true;
-    }
-    if(key=="HaveNormalArray") {
-      value=HaveNormalArray;
-      return true;
-    }
-    if(key=="*TexCoordArray") {
-      value=*TexCoordArray;
-      return true;
-    }
-    if(key=="HaveTexCoordArray") {
-      value=HaveTexCoordArray;
-      return true;
-    }
-#endif
-
     return false;
   }
 
