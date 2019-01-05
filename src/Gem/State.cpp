@@ -245,59 +245,49 @@ bool GemState::get(const GemState::key_t key, any&value)
 {
   std::map<GemState::key_t,any>::iterator it =
     data->data.find(key);
+
   if(it==data->data.end()) {
-    if(key==_PIX) {
+    /* key not stored in 'data'; fall back to legacy data */
+
+    switch(key) {
+    default:
+      break;
+    case(_PIX):
       value=image;
       return true;
-    }
-    if(key==_GL_TEX_NUMCOORDS) {
+    case(_GL_TEX_NUMCOORDS):
       value=numTexCoords;
       return true;
-    }
-
-    return false; // FIXXME
-
 #if 0
-    if(key==_DIRTY) {
+    case(_DIRTY):
       value=dirty;
       return true;
-    }
-    if(key==_GL_DISPLAYLIST) {
+    case(_GL_DISPLAYLIST):
       value=inDisplayList;
       return true;
-    }
-
-    if(key==_GL_LIGHTING) {
+    case(_GL_LIGHTING):
       value=lighting;
       return true;
-    }
-    if(key==_GL_SMOOTH) {
+    case(_GL_SMOOTH):
       value=smooth;
       return true;
-    }
-    if(key==_GL_TEX_TYPE) {
+    case(_GL_TEX_TYPE):
       value=texture;
       return true;
-    }
-    if(key==_GL_TEX_COORDS) {
-      if(!texCoords) {
+    case(_GL_TEX_COORDS):
+      if(!texCoords)
         return false;
-      }
       value=texCoords;
       return true;
-    }
-    if(key==_GL_TEX_UNITS) {
+    case(_GL_TEX_UNITS):
       value=multiTexUnits;
       return true;
-    }
-    if(key==_TIMING_TICK) {
+    case(_TIMING_TICK):
       value=tickTime;
       return true;
-    }
-    if(key==_GL_DRAWTYPE) {
+    case(_GL_DRAWTYPE):
       value=drawType;
       return true;
-    }
 #endif
 
 #if 0
