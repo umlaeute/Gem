@@ -61,8 +61,8 @@ public:
   typedef enum {
     _ILLEGAL=-1,
     _DIRTY, /* "dirty" */
-    _TIMING_TICK, /* "timing.tick" */
-    _PIX, /* "pix" */
+    _TIMING_TICK, /* "timing.tick" <float> */
+    _PIX, /* "pix", <*pixBuffer> */
     _GL_STACKS, /* "stacks" */
     _GL_DISPLAYLIST, /* */
     _GL_LIGHTING, /* */
