@@ -354,6 +354,34 @@ T const& any_cast(any const& this_)
 {
   return *any_cast<T>(const_cast<any*>(&this_));
 }
+#ifdef GEM_INTERNAL
+// Note: The "unsafe" versions of any_cast are not part of the
+// public interface (and hence protected by GEM_INTERNAL) and may
+// be removed at any time. They are required where we know what type
+// is stored in the any and can't use typeid() comparison, e.g.,
+// when our types may travel across different shared libraries.
+template<typename T>
+T* unsafe_any_cast(any* this_)
+{
+  if (sizeof(T) <= sizeof(void*)) {
+    return reinterpret_cast<T*>(&this_->object);
+  } else {
+    return reinterpret_cast<T*>(this_->object);
+  }
+}
+
+template<typename T>
+T const* unsafe_any_cast(any const* this_)
+{
+  return unsafe_any_cast<T>(const_cast<any*>(this_));
+}
+
+template<typename T>
+T const& unsafe_any_cast(any const& this_)
+{
+  return *unsafe_any_cast<T>(const_cast<any*>(&this_));
+}
+#endif
 }
 
 #ifdef _MSC_VER
