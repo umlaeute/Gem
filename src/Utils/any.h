@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <string>
 
+//#define GEM_ANY_TYPEID_HACK
 
 namespace gem
 {
@@ -70,7 +71,7 @@ struct fxns {
   struct type {
     static const std::type_info& get_type(void)
     {
-#if 0
+#if GEM_ANY_TYPEID_HACK
       const std::type_info&res=typeid(T);
       // the following is a dummy use of the type_info struct
       // to make the template engine work properly on OSX/10.9
@@ -104,7 +105,7 @@ struct fxns<false> {
   struct type {
     static const std::type_info& get_type(void)
     {
-#if 0
+#if GEM_ANY_TYPEID_HACK
       const std::type_info&res=typeid(T);
       return res;
 #else
