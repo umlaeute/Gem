@@ -79,8 +79,8 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
   }
 
   unsigned char *src = reinterpret_cast<unsigned char*>(readData);
-  unsigned char *dst = &(result.data[0]);
   const int yStride = result.xsize * result.csize;
+  unsigned char *dst = &(result.data[0]) + yStride * (result.ysize - 1);
 
   // do RGBA data
   if (csize == 4) {
@@ -95,7 +95,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
         pixels += 4;
         src += 4;
       }
-      dst += yStride;
+      dst -= yStride;
     }
   } else if (csize == 3) {
     // do RGB data
@@ -110,7 +110,7 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
         pixels += 4;
         src += 4;
       }
-      dst += yStride;
+      dst -= yStride;
     }
   } else  {
     // do grayscale
@@ -122,12 +122,11 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
         pixels++;
         src += 4;
       }
-      dst += yStride;
+      dst -= yStride;
     }
   }
 
   free(readData);
-
   return true;
 }
 
