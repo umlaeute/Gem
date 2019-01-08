@@ -313,7 +313,7 @@ bool GemState::set(const GemState::key_t key, any value)
         dirty=gem::any_cast<bool>(value);
         break;
       case(_PIX):
-        image=gem::any_cast<pixBlock*>(value);
+        image=gem::unsafe_any_cast<pixBlock*>(value);
         break;
       case(_GL_TEX_NUMCOORDS):
         numTexCoords=gem::any_cast<int>(value);

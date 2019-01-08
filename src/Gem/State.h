@@ -208,6 +208,11 @@ public:
         // key not found
         return false;
       }
+#ifdef GEM_INTERNAL
+      if(_PIX == key)
+        value=gem::unsafe_any_cast<T>(val);
+      else
+#endif
       value=gem::any_cast<T>(val);
       return true;
     } catch (gem::bad_any_cast&x) {
