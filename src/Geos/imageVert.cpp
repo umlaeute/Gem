@@ -15,11 +15,6 @@
 //
 /////////////////////////////////////////////////////////
 
-#ifdef __GNUC__
-# warning LATER fix upsidedown
-// LATER think about textures without images (or not: use GLSL for that)
-#endif
-
 #include "imageVert.h"
 #include "Gem/State.h"
 
@@ -62,9 +57,9 @@ void imageVert :: processRGBAPix(imageStruct &image, int texture)
   const int yStride = xSize * image.csize;
   const int xStride = image.csize;
 
-  const float yDiff = 1.f / ySize;
+  const float yDiff = (image.upsidedown?-1.f:1.f) / ySize;
   float yDown = -.5f;
-  float yCurrent = yDown + yDiff;
+  float yCurrent = yDown + yDiff + (image.upsidedown?1.f:0.f);
   float yTexDown = 0.f;
   float yTex = yTexDown + yDiff;
 
@@ -158,9 +153,9 @@ void imageVert :: processGrayPix(imageStruct &image, int texture)
   const int yStride = xSize * image.csize;
   const int xStride = image.csize;
 
-  const float yDiff = 1.f / ySize;
+  const float yDiff = (image.upsidedown?-1.f:1.f) / ySize;
   float yDown = -.5f;
-  float yCurrent = yDown + yDiff;
+  float yCurrent = yDown + yDiff + (image.upsidedown?1.f:0.f);
   float yTexDown = 0.f;
   float yTex = yTexDown + yDiff;
 
@@ -240,9 +235,9 @@ void imageVert :: processYUVPix(imageStruct &image, int texture)
     const int yStride = xSize * image.csize;
     const int xStride = image.csize;
 
-    const float yDiff = 1.f / ySize;
+    const float yDiff = (image.upsidedown?-1.f:1.f) / ySize;
     float yDown = -.5f;
-    float yCurrent = yDown + yDiff;
+    float yCurrent = yDown + yDiff + (image.upsidedown?1.f:0.f);
     float yTexDown = 0.f;
     float yTex = yTexDown + yDiff;
 
