@@ -54,29 +54,7 @@ void pix_rgba :: processImage(imageStruct &image)
     return;  // we don't need to convert as we are already there
   }
 
-  m_image.xsize=image.xsize;
-  m_image.ysize=image.ysize;
-
-  switch (image.format) {
-  case GL_RGBA:
-    m_image.fromRGBA(image.data);
-    break;
-  case GL_RGB:
-    m_image.fromRGB(image.data);
-    break;
-  case GL_BGR_EXT:
-    m_image.fromBGR(image.data);
-    break;
-  case GL_BGRA_EXT: /* "RGBA" on apple */
-    m_image.fromBGRA(image.data);
-    break;
-  case GL_LUMINANCE:
-    m_image.fromGray(image.data);
-    break;
-  case GL_YCBCR_422_GEM: // YUV
-    m_image.fromUYVY(image.data);
-    break;
-  default:
+  if(!m_image.convertFrom(&image)) {
     error("no method for this format !!!");
     error("if you know how to convert this format (%X),\n"
           "please contact the authors of this software", image.format);
