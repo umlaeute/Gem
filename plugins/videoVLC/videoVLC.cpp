@@ -393,7 +393,7 @@ unsigned videoVLC::setFormat(char chroma[4], unsigned &width,
   return 1;
 }
 void videoVLC::resize(unsigned int width, unsigned int height,
-                      GLenum format)
+                      unsigned int format)
 {
   bool do_convert = true;
 

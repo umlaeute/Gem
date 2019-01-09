@@ -83,7 +83,7 @@ public:
   // GROUP:     Movie data
   //-----------------------------------
 protected:
-  GLenum  m_wantedFormat; // format requested by the user
+  unsigned int  m_wantedFormat; // format requested by the user
   double m_fps;  // the frame-rate
   int m_numFrames, m_numTracks; // number of frames in video
   int m_curFrame, m_curTrack;

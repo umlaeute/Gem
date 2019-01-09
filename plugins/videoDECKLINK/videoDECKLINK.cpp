@@ -517,7 +517,7 @@ pixBlock*videoDECKLINK::getFrame(void)
   m_mutex.lock();
   return &m_pixBlock;
 }
-void videoDECKLINK::setFrame(unsigned int w, unsigned int h, GLenum format,
+void videoDECKLINK::setFrame(unsigned int w, unsigned int h, unsigned int format,
                              unsigned char*data)
 {
   m_mutex.lock();

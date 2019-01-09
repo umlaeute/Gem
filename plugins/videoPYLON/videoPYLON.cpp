@@ -38,7 +38,7 @@ public:
   Pylon::CImageFormatConverter m_converter;
   Pylon::CLock m_colorlock, m_pixlock;
   pixBlock m_pix;
-  GLenum m_color;
+  unsigned int m_color;
   ImageEventHandler(videoPYLON*parent)
     : CImageEventHandler()
     , m_parent(parent)

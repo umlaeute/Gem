@@ -115,7 +115,7 @@ protected:
   // PIMPL pointer to the Obj-C object behind this class
   AVFVideoGrabber* m_videoGrabber;
 
-  GLenum m_wantedFormat;        //< requested color space
+  unsigned int m_wantedFormat;        //< requested color space
 
   int m_width, m_height;
 

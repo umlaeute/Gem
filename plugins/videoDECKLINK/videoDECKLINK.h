@@ -52,7 +52,7 @@ public:
   virtual void releaseFrame(void);
 
   /* to be called from the capturing thread */
-  void setFrame(unsigned int w, unsigned int h, GLenum format,
+  void setFrame(unsigned int w, unsigned int h, unsigned int format,
                 unsigned char*data);
 
   virtual std::vector<std::string>enumerate(void);

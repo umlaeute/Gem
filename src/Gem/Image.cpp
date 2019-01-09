@@ -431,7 +431,7 @@ GEM_EXTERN void imageStruct::setWhite(void)
   }
 }
 GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
-    GLenum to_format)
+    unsigned int to_format)
 {
   if (!from || !this || !from->data) {
     error("GEM: Someone sent a bogus pointer to convert");
@@ -473,7 +473,7 @@ GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
   }
 }
 
-GEM_EXTERN void imageStruct::convertTo(imageStruct *to, GLenum fmt) const
+GEM_EXTERN void imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
 {
   if (!to || !this || !this->data) {
     error("GEM: Someone sent a bogus pointer to convert");

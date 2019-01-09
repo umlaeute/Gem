@@ -87,7 +87,7 @@ public:
   virtual void getProperties(gem::Properties&props);
 
 protected:
-  GLenum  m_wantedFormat; // format requested by the user
+  unsigned int  m_wantedFormat; // format requested by the user
   bool m_auto;  // automatic progression
   int m_numFrames, m_numTracks; // number of frames in video
   int m_curFrame, m_lastFrame;

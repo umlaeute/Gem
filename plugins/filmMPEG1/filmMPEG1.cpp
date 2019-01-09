@@ -213,7 +213,7 @@ void filmMPEG1::setProperties(gem::Properties&props)
 {
   double d;
   if(props.get("colorspace", d)) {
-    m_wantedFormat=(GLenum)d;
+    m_wantedFormat=(unsigned int)d;
   }
 }
 

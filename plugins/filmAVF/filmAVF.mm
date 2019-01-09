@@ -65,7 +65,7 @@ bool filmAVF::open(const std::string &filename,
   }
   double d;
   if(props.get("colorspace", d)) {
-    m_wantedFormat = (GLenum)d;
+    m_wantedFormat = (unsigned int)d;
   }
 
   // close and reset
@@ -242,7 +242,7 @@ void filmAVF::setProperties(gem::Properties &props)
 {
   double d;
   if(props.get("colorspace", d)) {
-    changeFormat((GLenum)d);
+    changeFormat((unsigned int)d);
   }
 }
 
@@ -280,7 +280,7 @@ void filmAVF::getProperties(gem::Properties &props)
 
 // PROTECTED
 
-bool filmAVF::changeFormat(GLenum format)
+bool filmAVF::changeFormat(unsigned int format)
 {
   bool changed = (m_wantedFormat != format);
   m_wantedFormat = format;

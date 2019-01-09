@@ -86,23 +86,23 @@ struct GEM_EXTERN imageStruct {
 
   //////////
   // dimensions of the image
-  GLint         xsize;
-  GLint             ysize;
+  int xsize;
+  int ysize;
 
   //////////
   // (average) width of 1 pixel (LUMINANCE = 1, RGBA = 4, YUV = 2)
-  GLint             csize;
+  int csize;
 
   //////////
   // data type - always GL_UNSIGNED_BYTE (except for OS X)
-  GLenum          type;
+  unsigned int type;
 
   //////////
   // the format - either GL_RGBA, GL_LUMINANCE
   // or GL_YCBCR_422_GEM (which is on mac-computers GL_YCBCR_422_APPLE)
-  GLenum          format;
+  unsigned int format;
 
-  //////////
+  /////////
   // is this owned by us (? what about underscores ?)
   int notowned;
 
@@ -192,8 +192,8 @@ struct GEM_EXTERN imageStruct {
    *   this is maybe not really clean (the meta-data is stored in the destination,
    *   while the source has no meta-data of its own)
    */
-  virtual void convertTo  (imageStruct*to,   GLenum dest_format=0) const;
-  virtual void convertFrom(const imageStruct*from, GLenum dest_format=0);
+  virtual void convertTo  (imageStruct*to, unsigned int dest_format=0) const;
+  virtual void convertFrom(const imageStruct*from, unsigned int dest_format=0);
 
   virtual void fromRGB    (const unsigned char* orgdata);
   virtual void fromRGBA   (const unsigned char* orgdata);
@@ -249,7 +249,7 @@ public:
   //////////
   // true if the image is flipped horizontally (origin is upper-left)
   // false if the image is openGL-conformant (origin is lower-left)
-  GLboolean       upsidedown;
+  bool upsidedown;
 
   /* make the image orientation openGL-conformant */
   virtual void fixUpDown(void);
