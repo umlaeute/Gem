@@ -17,7 +17,6 @@
 
 #include "gemvertexbuffer.h"
 
-#include "Gem/State.h"
 #include "Gem/Manager.h"
 #include "Utils/Functions.h"
 

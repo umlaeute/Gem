@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////
 
 #include "model.h"
-#include "Gem/State.h"
 #include "plugins/modelloader.h"
 #include <algorithm> // std::min
 

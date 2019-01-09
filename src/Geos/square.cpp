@@ -16,8 +16,6 @@
 
 #include "square.h"
 
-#include "Gem/State.h"
-
 CPPEXTERN_NEW_WITH_ONE_ARG(square, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
