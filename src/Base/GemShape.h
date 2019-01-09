@@ -16,6 +16,7 @@
 #define _INCLUDE__GEM_BASE_GEMSHAPE_H_
 
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 #include <map>
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

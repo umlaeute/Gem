@@ -26,6 +26,7 @@
 
 #include "RTE/Outlet.h"
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 
 #include <vector>
 #include <string>
