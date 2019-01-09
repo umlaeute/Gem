@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "scale.h"
+#include "Gem/GemGL.h"
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(scale);

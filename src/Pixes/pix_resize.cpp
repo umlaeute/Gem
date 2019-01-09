@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_resize.h"
+#include "Gem/GemGL.h"
 #include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_resize, t_float,A_DEFFLOAT,t_float,

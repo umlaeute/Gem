@@ -13,6 +13,7 @@
 ////////////////////////////////////////////////////////
 
 #include "gemlist_matrix.h"
+#include "Gem/GemGL.h"
 
 #include <math.h>
 

@@ -17,6 +17,7 @@
 // 1307:forum::für::umläute:2000
 
 #include "emission.h"
+#include "Gem/GemGL.h"
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(emission);

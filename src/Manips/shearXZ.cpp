@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "shearXZ.h"
+#include "Gem/GemGL.h"
 
 CPPEXTERN_NEW_WITH_GIMME(shearXZ);
 

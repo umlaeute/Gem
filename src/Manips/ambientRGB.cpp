@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "ambientRGB.h"
+#include "Gem/GemGL.h"
 #include "Gem/Exception.h"
 
 CPPEXTERN_NEW_WITH_GIMME(ambientRGB);

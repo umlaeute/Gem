@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "shearYX.h"
+#include "Gem/GemGL.h"
 
 CPPEXTERN_NEW_WITH_GIMME(shearYX);
 

@@ -19,6 +19,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_MANIPS_VERTEX_PROGRAM_H_
 
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 
 #define GEM_PROGRAM_none 0
 #define GEM_PROGRAM_NV  1

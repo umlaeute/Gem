@@ -21,6 +21,7 @@
 #define _INCLUDE__GEM_CONTROLS_GEMCUBEFRAMEBUFFER_H_
 
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 #include <iostream>
 
 /*-----------------------------------------------------------------

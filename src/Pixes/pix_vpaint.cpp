@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_vpaint.h"
+#include "Gem/GemGL.h"
 
 GLfloat edgeKernel[] = {
   -0.50f, 0.25f, -0.50f,

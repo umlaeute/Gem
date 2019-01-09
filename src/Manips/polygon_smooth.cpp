@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "polygon_smooth.h"
+#include "Gem/GemGL.h"
 
 CPPEXTERN_NEW(polygon_smooth);
 
