@@ -1473,8 +1473,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
 {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!U && !V) {
-    #warning FIXXME
-    return fromGray(reinterpret_cast<unsigned char*>(*Y>>7));
+    return fromGray(Y);
   }
   if(!Y || !U || !V) {
     return false;
