@@ -18,9 +18,9 @@ LOG
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
 #include "Gem/Rectangle.h"
-#include "stdlib.h"
-#include "string.h"
-#include "math.h"
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

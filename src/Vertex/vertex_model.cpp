@@ -17,7 +17,7 @@
 #include "vertex_model.h"
 
 #include "Gem/State.h"
-#include "string.h"
+#include <string.h>
 
 #define T(x) (m_model->triangles[(x)])
 

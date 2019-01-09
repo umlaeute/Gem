@@ -17,7 +17,7 @@
 #include "vertex_grid.h"
 
 #include "Gem/State.h"
-#include "string.h"
+#include <string.h>
 CPPEXTERN_NEW_WITH_TWO_ARGS(vertex_grid, t_floatarg, A_DEFFLOAT,
                             t_floatarg, A_DEFFLOAT);
 

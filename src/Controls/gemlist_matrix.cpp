@@ -14,7 +14,7 @@
 
 #include "gemlist_matrix.h"
 
-#include "math.h"
+#include <math.h>
 
 #ifdef __ppc__
 #include "Utils/Functions.h"

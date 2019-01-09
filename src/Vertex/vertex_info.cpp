@@ -17,7 +17,7 @@
 #include "vertex_info.h"
 
 #include "Gem/State.h"
-#include "string.h"
+#include <string.h>
 CPPEXTERN_NEW(vertex_info);
 
 /////////////////////////////////////////////////////////
