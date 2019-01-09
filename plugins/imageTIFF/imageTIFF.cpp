@@ -118,7 +118,6 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   result.xsize=width;
   result.ysize=height;
   result.upsidedown=true;
-  result.type=GL_UNSIGNED_BYTE; //?
 
   bool knownFormat = false;
   // Is it a gray8 image?
