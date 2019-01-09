@@ -44,6 +44,15 @@ dist_gemhelp_DATA = \
 	gemtablet-help.pd \
 	gemvertexbuffer-help.pd \
 	gemwin-help.pd \
+	gemcocoawindow-help.pd \
+	gemglfw2window-help.pd \
+	gemglfw3window-help.pd \
+	gemglutwindow-help.pd \
+	gemglxwindow-help.pd \
+	gemmacoswindow-help.pd \
+	gemmacwindow-help.pd \
+	gemsdlwindow-help.pd \
+	gemw32window-help.pd \
 	GLdefine-help.pd \
 	glsl_fragment-help.pd \
 	glsl_geometry-help.pd \
