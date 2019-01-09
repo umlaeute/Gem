@@ -16,6 +16,7 @@ LOG
 #define _INCLUDE__GEM_PIXES_PIX_IMAGEINPLACE_H_
 
 #include "Pixes/pix_multiimage.h"
+#include "Gem/GemGL.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

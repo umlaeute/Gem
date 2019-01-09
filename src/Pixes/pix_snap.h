@@ -16,6 +16,7 @@
 #define _INCLUDE__GEM_PIXES_PIX_SNAP_H_
 
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 #include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
