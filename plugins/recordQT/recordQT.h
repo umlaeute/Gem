@@ -22,7 +22,7 @@
 #  include <Math64.h>
 #  define TARGET_OS_WIN32 1
 # endif /* MINGW */
-
+# include <windows.h>
 # include <QTML.h>
 # include <Movies.h>
 # include <QuickTimeComponents.h>

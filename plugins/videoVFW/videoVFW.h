@@ -16,7 +16,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__VIDEOVFW_VIDEOVFW_H_
 
 #include "plugins/videoBase.h"
-
+#include <windows.h>
 #include <vfw.h>
 
 /*-----------------------------------------------------------------
