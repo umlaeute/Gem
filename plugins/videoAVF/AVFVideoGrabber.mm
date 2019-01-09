@@ -75,7 +75,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
   switch(fmt) {
-  case GL_RGBA_GEM:
+  case GEM_RGBA:
     glformat=fmt;
     capformat=kCVPixelFormatType_32BGRA;
   default:

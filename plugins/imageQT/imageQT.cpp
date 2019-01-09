@@ -267,14 +267,14 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter,
 #ifdef k8GrayPixelFormat
   /* from the docs on "depth": what depth is this data (1-32) or ( 33-40 grayscale ) */
   if ((*imageDescH)->depth <= 32) {
-    result.setCsizeByFormat(GL_RGBA_GEM);
+    result.setCsizeByFormat(GEM_RGBA);
     pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
   } else {
-    result.setCsizeByFormat(GL_LUMINANCE);
+    result.setCsizeByFormat(GEM_GRAY);
     pixelformat = k8GrayPixelFormat;
   }
 #else
-  result.setCsizeByFormat(GL_RGBA_GEM);
+  result.setCsizeByFormat(GEM_RGBA);
   pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
 #endif
 
@@ -429,7 +429,7 @@ bool imageQT::save(const imageStruct&constimage,
   r.right = constimage.xsize;
 
   imageStruct rgbaimg;
-  rgbaimg.convertFrom(&constimage, GL_RGBA_GEM);
+  rgbaimg.convertFrom(&constimage, GEM_RGBA);
 
   unsigned char *data = NULL;
   if(!rgbaimg.upsidedown) { // the image is openGL-oriented, not quicktime-oriented! flip it!

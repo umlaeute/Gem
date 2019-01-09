@@ -27,7 +27,7 @@ using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("AVF", filmAVF);
 
-#define FILMAVF_DEFAULT_PIXELFORMAT GL_YCBCR_422_APPLE
+#define FILMAVF_DEFAULT_PIXELFORMAT GEM_YUV
 
 /////////////////////////////////////////////////////////
 //
@@ -154,12 +154,12 @@ pixBlock* filmAVF::getFrame(void)
                 CVPixelBufferGetBytesPerRow(imageBuffer);
   if(src) {
     switch(m_wantedFormat) {
-    case GL_YCBCR_422_APPLE:
-    case GL_RGBA_GEM:
+    case GEM_YUV:
+    case GEM_RGBA:
       // format should be correct, so just pass through
       memcpy(dest, src, size);
       break;
-    case GL_LUMINANCE: {
+    case GEM_GRAY: {
       // copy every second byte (Y-channel) for grayscale
       src =  (uint8_t *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);
       uint8_t *srcPos = (uint8_t *)src + 1;
@@ -287,11 +287,11 @@ bool filmAVF::changeFormat(unsigned int format)
   if(m_moviePlayer) {
     switch(m_wantedFormat) {
     default:
-    case GL_YCBCR_422_APPLE:
-    case GL_LUMINANCE:
+    case GEM_YUV:
+    case GEM_GRAY:
       m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_422YpCbCr8;
       break;
-    case GL_RGBA_GEM:
+    case GEM_RGBA:
       m_moviePlayer.desiredPixelFormat = kCVPixelFormatType_32ARGB;
       break;
     }

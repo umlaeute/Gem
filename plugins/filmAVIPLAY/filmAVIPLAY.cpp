@@ -39,7 +39,7 @@ REGISTER_FILMFACTORY("aviplay", filmAVIPLAY);
 /////////////////////////////////////////////////////////
 
 filmAVIPLAY :: filmAVIPLAY(void) :
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GEM_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_curTrack(-1),

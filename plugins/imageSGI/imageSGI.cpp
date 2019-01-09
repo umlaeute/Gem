@@ -60,9 +60,9 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
   result.ysize=ysize;
 
   if (csize == 4 || csize == 3) {
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
   } else if (csize == 1) {
-    result.setCsizeByFormat(GL_LUMINANCE);
+    result.setCsizeByFormat(GEM_GRAY);
   } else {
     fprintf(stderr,
             "[GEM:imageSGI] unknown color components in SGI file: %s\n",
@@ -134,7 +134,7 @@ bool imageSGI::save(const imageStruct&image, const std::string&filename,
                     const std::string&mimetype, const gem::Properties&props)
 {
   imageStruct img;
-  image.convertTo(&img, GL_RGBA);
+  image.convertTo(&img, GEM_RGBA);
   unsigned int32*data=(unsigned int32*)img.data;
 
   std::string name="";

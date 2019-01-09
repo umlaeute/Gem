@@ -1063,7 +1063,7 @@ MARK();
   if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
     m_image.image.xsize=w;
     m_image.image.ysize=h;
-    m_image.image.setCsizeByFormat(GL_RGBA);
+    m_image.image.setCsizeByFormat(GEM_RGBA);
     m_image.image.reallocate();
 
     m_image.newfilm=true;

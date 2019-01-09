@@ -40,14 +40,14 @@ REGISTER_FILMFACTORY("AVI", filmAVI);
 /////////////////////////////////////////////////////////
 
 filmAVI :: filmAVI(void) :
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GEM_RGBA),
   m_fps(-1.0),
   m_numFrames(-1),
   m_curFrame(-1),
 
   m_nRawBuffSize(0),
   m_RawBuffer(NULL),
-  m_format(GL_BGR_EXT),
+  m_format(GEM_RGB), /* it's really GL_BGR_EXT */
   m_reqFrame(0),
   m_frame(NULL),
   m_pbmihRaw(NULL),
@@ -151,7 +151,7 @@ bool filmAVI :: open(const std::string&filename,
     *m_pbmihDst = *m_pbmihRaw;
     m_pbmihDst->biSize = sizeof(BITMAPINFOHEADER);
 
-    m_format = GL_LUMINANCE;
+    m_format = GEM_GRAY;
 
     m_pbmihDst->biBitCount                      = 8;
     m_pbmihDst->biClrUsed                       = 256;
@@ -167,7 +167,7 @@ bool filmAVI :: open(const std::string&filename,
     m_pbmihDst = (BITMAPINFOHEADER*) new char[sizeof(BITMAPINFOHEADER)];
     *m_pbmihDst = *m_pbmihRaw;
 
-    m_format = GL_BGR_EXT;
+    m_format = GEM_RGB;
 
     m_pbmihDst->biBitCount      = 24;
     m_pbmihDst->biClrUsed       = 0;
@@ -193,7 +193,7 @@ bool filmAVI :: open(const std::string&filename,
             filename.c_str());
     goto unsupported;
   }
-  if (m_format==GL_LUMINANCE) {
+  if (m_format==GEM_GRAY) {
     if (ICERR_OK != ICDecompressSetPalette(m_hic, m_pbmihDst)) {
       verbose(0, "[GEM:filmAVI] Could not set palette: %s", filename.c_str());
     }
@@ -257,7 +257,7 @@ pixBlock* filmAVI :: getFrame(void)
   }
 
   switch(m_format) {
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     m_image.image.fromGray(data);
     break;
   default:

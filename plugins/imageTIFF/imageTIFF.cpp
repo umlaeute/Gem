@@ -123,17 +123,17 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   bool knownFormat = false;
   // Is it a gray8 image?
   if (bits == 8 && samps == 1) {
-    result.setCsizeByFormat(GL_LUMINANCE);
+    result.setCsizeByFormat(GEM_GRAY);
     knownFormat = true;
   }
   // Is it an RGB image?
   else if (bits == 8 && samps == 3) {
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
     knownFormat = true;
   }
   // Is it an RGBA image?
   else if (bits == 8 && samps == 4) {
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
     knownFormat = true;
   }
 
@@ -215,7 +215,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     }
 
     TIFFRGBAImageEnd(&img);
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
     result.reallocate();
 
     unsigned char *dstLine = result.data;
@@ -284,7 +284,7 @@ bool imageTIFF::save(const imageStruct&constimage,
 {
   TIFF *tif = NULL;
 
-  if(GL_YUV422_GEM==constimage.format) {
+  if(GEM_YUV==constimage.format) {
     verbose(0, "[GEM:imageTIFF] don't know how to write YUV-images");
     return false;
   }

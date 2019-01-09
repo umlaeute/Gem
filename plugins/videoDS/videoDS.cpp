@@ -65,7 +65,7 @@ videoDS :: videoDS(void)
   : videoBase("directshow", 0),
     m_readIdx (0), m_lastreadIdx (0),
     m_writeIdx(0), m_lastwriteIdx(0),
-    m_format(GL_BGR_EXT),
+    m_format(GEM_RGB) /* really: GL_BGR_EXT */
 #ifdef USE_RECORDING
     m_recording(false),
 #endif
@@ -99,7 +99,7 @@ videoDS :: videoDS(void)
   for (int i = 0; i <= 2; i++) {
     m_pixBlockBuf[i].image.xsize=m_width;
     m_pixBlockBuf[i].image.ysize=m_height;
-    m_pixBlockBuf[i].image.setCsizeByFormat(GL_RGBA);
+    m_pixBlockBuf[i].image.setCsizeByFormat(GEM_RGBA);
     m_pixBlockBuf[i].image.reallocate();
 
     m_pixBlockBuf[i].newimage = 0;
@@ -111,7 +111,7 @@ videoDS :: videoDS(void)
 
   m_image.image.xsize=m_width;
   m_image.image.ysize=m_height;
-  m_image.image.setCsizeByFormat(GL_RGBA);
+  m_image.image.setCsizeByFormat(GEM_RGBA);
   m_image.image.reallocate();
 
 #ifdef USE_RECORDING
@@ -464,7 +464,7 @@ pixBlock* videoDS :: getFrame(void)
     m_image.image.xsize=m_pixBlockBuf[m_readIdx].image.xsize;
     m_image.image.ysize=m_pixBlockBuf[m_readIdx].image.ysize;
     switch (m_pixBlockBuf[m_readIdx].image.format) {
-    case GL_BGR_EXT:
+    case GEM_RGB:
     default:
       m_image.image.fromBGR(m_pixBlockBuf[m_readIdx].image.data);
     }
@@ -511,7 +511,7 @@ void videoDS :: copyBuffer(void)
     GetBitmapInfoHdr(&pmt, &pbmih);
     m_width = pbmih->biWidth;
     m_height = pbmih->biHeight;
-    m_format = GL_BGR_EXT;
+    m_format = GEM_RGB;
     FreeMediaType(pmt);     // is this necessary?!
   }
 
@@ -574,7 +574,7 @@ bool videoDS :: startTransfer(void)
   GetBitmapInfoHdr(&mt, &pbmih);
   m_width = pbmih->biWidth;
   m_height = pbmih->biHeight;
-  m_format = GL_BGR_EXT;
+  m_format = GEM_RGB;
 
   //starts the graph rendering
   if (FAILED(hr = m_pMC->Run())) {

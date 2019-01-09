@@ -56,18 +56,18 @@ recordV4L2 :: recordV4L2(void):
 {
   m_image.xsize=720;
   m_image.ysize=576;
-  m_image.setCsizeByFormat(GL_YUV422_GEM);
-  //m_image.setCsizeByFormat(GL_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
+  m_image.setCsizeByFormat(GEM_YUV);
+  //m_image.setCsizeByFormat(GEM_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
   m_image.reallocate();
 
   switch(m_image.format) {
-  case GL_YUV422_GEM:
+  case GEM_YUV:
     m_palette = V4L2_PIX_FMT_UYVY;
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     m_palette = V4L2_PIX_FMT_GREY;
     break;
-  case GL_RGBA:
+  case GEM_RGBA:
     m_palette = V4L2_PIX_FMT_RGB32;
     break;
   default:

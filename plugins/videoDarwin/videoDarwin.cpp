@@ -55,7 +55,7 @@ videoDarwin :: videoDarwin()
   , m_srcGWorld(NULL)
   , m_rowBytes(0)
   , m_quality(channelPlayNormal)
-  , m_colorspace(GL_YCBCR_422_GEM)
+  , m_colorspace(GEM_YUV)
   , m_inputDevice(0)   //set to the first input device
   , m_inputDeviceChannel(0)
 {
@@ -64,7 +64,7 @@ videoDarwin :: videoDarwin()
 
   m_image.image.xsize = 800;
   m_image.image.ysize = 600;
-  m_image.image.setCsizeByFormat(GL_BGRA_EXT);
+  m_image.image.setCsizeByFormat(GEM_RGBA);
   m_image.image.allocate();
 
   //initSeqGrabber();
@@ -294,13 +294,13 @@ bool videoDarwin :: initSeqGrabber()
   m_image.image.xsize = m_width;
   m_image.image.ysize = m_height;
 
-  if (m_colorspace==GL_BGRA_EXT) {
-    m_image.image.setCsizeByFormat(GL_RGBA_GEM);
-    m_rowBytes = m_width*4;
+  if (m_colorspace==GEM_RGBA) {
+    m_image.image.setCsizeByFormat(m_colorspace);
+    m_rowBytes = m_width*m_csize;
     pixelFormat=k32ARGBPixelFormat;
     verbose(1, "[GEM:videoDarwin] using RGB");
   } else {
-    m_image.image.setCsizeByFormat(GL_YCBCR_422_APPLE);
+    m_image.image.setCsizeByFormat(GEM_YUV);
     m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
     verbose(1, "[GEM:videoDarwin] using YUV");

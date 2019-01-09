@@ -43,7 +43,7 @@ REGISTER_VIDEOFACTORY("vlc", videoVLC);
 namespace
 {
 static const char*  format_string="RV32";
-static const GLenum format_enum  = GL_RGBA_GEM;
+static const unsigned int format_enum  = GEM_RGBA;
 };
 
 videoVLC::videoVLC(void) :

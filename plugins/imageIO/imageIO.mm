@@ -127,7 +127,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   size_t h = CGImageGetHeight(myImage);
   result.xsize = w;
   result.ysize = h;
-  result.setCsizeByFormat(GL_RGBA_GEM);
+  result.setCsizeByFormat(GEM_RGBA);
   result.reallocate();
   CGRect rect = {{0,0},{w,h}};
 

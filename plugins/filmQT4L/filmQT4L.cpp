@@ -40,7 +40,7 @@ REGISTER_FILMFACTORY("quicktime4linux", filmQT4L);
 /////////////////////////////////////////////////////////
 
 filmQT4L :: filmQT4L(void) :
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GEM_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_curTrack(0),
@@ -75,7 +75,7 @@ void filmQT4L :: close(void)
 bool filmQT4L :: open(const std::string&filename,
                       const gem::Properties&wantProps)
 {
-  int wantedFormat=GL_RGBA;
+  int wantedFormat=GEM_RGBA;
   double d;
   unsigned int format=0;
   if(wantProps.get("format", d)) {
@@ -84,9 +84,9 @@ bool filmQT4L :: open(const std::string&filename,
   switch(format) {
   default:
     break;
-  case GL_RGBA:
-  case GL_YCBCR_422_GEM:
-  case GL_LUMINANCE:
+  case GEM_RGBA:
+  case GEM_YUV:
+  case GEM_GRAY:
     m_wantedFormat=format;
     break;
   }
@@ -120,11 +120,7 @@ bool filmQT4L :: open(const std::string&filename,
 
     m_qtimage.xsize=m_image.image.xsize;
     m_qtimage.ysize=m_image.image.ysize;
-#ifdef __APPLE__
-    m_qtimage.setCsizeByFormat(GL_BGR);
-#else
-    m_qtimage.setCsizeByFormat(GL_RGB);
-#endif
+    m_qtimage.setCsizeByFormat(GEM_RGB);
     m_qtimage.reallocate();
 
     m_newfilm = true;

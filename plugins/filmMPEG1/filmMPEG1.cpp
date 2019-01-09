@@ -37,7 +37,7 @@ REGISTER_FILMFACTORY("MPEG1", filmMPEG1);
 /////////////////////////////////////////////////////////
 
 filmMPEG1 :: filmMPEG1(void) :
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GEM_RGBA),
   m_fps(-1.0),
   m_curFrame(-1),
   m_newfilm(false),
@@ -79,15 +79,15 @@ bool filmMPEG1 :: open(const std::string&filename, int format)
   if (!(m_streamfile = fopen (filename.c_str(), "rb"))) {
     return false;
   }
-  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GL_RGBA;
+  int wantedFormat= (m_wantedFormat)?m_wantedFormat:GEM_RGBA;
   switch (wantedFormat) {
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     SetMPEGOption (MPEG_DITHER, GRAY_DITHER);
     break;
   default:
-    wantedFormat=GL_RGBA;
-  case GL_YCBCR_422_GEM:
-  case GL_RGBA:
+    wantedFormat=GEM_RGBA;
+  case GEM_YUV:
+  case GEM_RGBA:
     SetMPEGOption (MPEG_DITHER, FULL_COLOR_DITHER);
   }
   if (OpenMPEG (m_streamfile, &m_streamVid)) { /* let's hope it's MPEG */
@@ -106,7 +106,7 @@ bool filmMPEG1 :: open(const std::string&filename, int format)
     m_image.image.reallocate();
 
     int length=m_image.image.xsize*m_image.image.ysize;
-    length*=((m_image.image.format==GL_LUMINANCE)?1:4)+4;
+    length*=((m_image.image.format==GEM_GRAY)?1:4)+4;
     if(m_length<length) {
       if (m_data) {
         delete[]m_data;
@@ -141,7 +141,7 @@ pixBlock* filmMPEG1 :: getFrame()
 
   m_readNext = false;
   int length=m_image.image.xsize*m_image.image.ysize;
-  length*=((m_image.image.format==GL_LUMINANCE)?1:4)+4;
+  length*=((m_image.image.format==GEM_GRAY)?1:4)+4;
   if(m_length<length) {
     if (m_data) {
       delete[]m_data;
@@ -150,7 +150,7 @@ pixBlock* filmMPEG1 :: getFrame()
     m_data=new unsigned char[m_length];
   }
   if (m_reachedEnd=!GetMPEGFrame ((char*)(m_data))) {
-    if(m_image.image.format==GL_YCBCR_422_GEM) {
+    if(m_image.image.format==GEM_YUV) {
       m_image.image.fromRGBA(m_data);
     }  else {
       m_image.image.data=m_data;
@@ -158,7 +158,7 @@ pixBlock* filmMPEG1 :: getFrame()
     m_curFrame=-1;
     return &m_image;// was 0; but then we have one non-textured frame in auto-mode
   } else {
-    if(m_image.image.format==GL_YCBCR_422_GEM) {
+    if(m_image.image.format==GEM_YUV) {
       m_image.image.fromRGBA(m_data);
     }  else {
       m_image.image.data=m_data;

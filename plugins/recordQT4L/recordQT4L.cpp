@@ -359,13 +359,13 @@ bool recordQT4L :: write(imageStruct*img)
 
   switch(m_colormodel) {
   case BC_RGBA8888:
-    m_image.convertFrom(img, GL_RGBA);
+    m_image.convertFrom(img, GEM_RGBA);
     break;
   case BC_RGB888:
-    m_image.convertFrom(img, GL_RGB);
+    m_image.convertFrom(img, GEM_RGB);
     break;
   case BC_YUV422:
-    m_image.convertFrom(img, GL_YUV422_GEM);
+    m_image.convertFrom(img, GEM_YUV);
     break;
   default:
     error("[GEM:recordQT4L] unsupported colormodel...");

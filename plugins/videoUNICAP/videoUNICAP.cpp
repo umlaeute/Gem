@@ -77,7 +77,7 @@ videoUNICAP :: videoUNICAP(void) :
   m_width(-1), m_height(-1),
   m_handle(NULL),
   m_devicenum(-1),
-  m_reqFormat(GL_RGBA_GEM),
+  m_reqFormat(GEM_RGBA),
   m_running(false)
 {
   enumerate();

@@ -150,16 +150,16 @@ void pix_buffer :: allocateMess(unsigned int x, unsigned int y,
 
   switch (c) {
   case 1:
-    format=GL_LUMINANCE;
+    format=GEM_GRAY;
     break;
   case 2:
-    format=GL_YUV422_GEM;
+    format=GEM_YUV;
     break;
   case 3:
-    format=GL_RGB;
+    format=GEM_RGB;
     break;
   case 4:
-    format=GL_RGBA_GEM;
+    format=GEM_RGBA;
     break;
   default:
     format=0;

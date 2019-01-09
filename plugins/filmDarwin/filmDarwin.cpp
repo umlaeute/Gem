@@ -38,7 +38,7 @@ REGISTER_FILMFACTORY("Darwin", filmDarwin);
 /////////////////////////////////////////////////////////
 
 filmDarwin :: filmDarwin(void) :
-  m_wantedFormat(GL_YUV422_GEM),
+  m_wantedFormat(GEM_YUV),
   m_auto(false),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_lastFrame(-1),
@@ -172,13 +172,13 @@ bool filmDarwin :: open(const std::string&filename,
 
   switch(m_wantedFormat) {
   case 0: // if no other format is requested, use YUV
-  case GL_YCBCR_422_APPLE:
+  case GEM_YUV:
     m_image.image.format = m_wantedFormat;
     hints |= hintsHighQuality | hintsDeinterlaceFields;
     pixelformat=k422YpCbCr8CodecType;
     break;
   default:
-    m_image.image.format = GL_BGRA_EXT;
+    m_image.image.format = GEM_RGBA;
     hints |= hintsHighQuality;
     pixelformat=k32ARGBPixelFormat;
     break;

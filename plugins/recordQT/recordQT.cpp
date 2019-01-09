@@ -252,11 +252,11 @@ void recordQT :: setupQT(
   m_srcRect.bottom = m_height;
   m_srcRect.right = m_width;
 
-  if (m_compressImage->format == GL_YUV422_GEM) {
+  if (m_compressImage->format == GEM_YUV) {
     verbose(0, "[GEM:recordQT] using YUV");
     colorspace = k422YpCbCr8CodecType;
   }
-  if (m_compressImage->format == GL_BGRA) {
+  if (m_compressImage->format == GEM_RGBA) {
     verbose(0, "[GEM:recordQT] using BGRA");
     colorspace = k32ARGBPixelFormat;
   }
@@ -300,7 +300,7 @@ void recordQT :: setupQT(
   //since QT has flipped Y compared to GL it is upside down to GL but not to itself
   //so while the upsidedown flag is set for QT images sent to GL it is not correct for pix_ processing.
   //this is a hack on OSX since the native is YUV for pix_ and the only BGRA will usually be from pix_snap
-  if (m_compressImage->upsidedown && m_compressImage->format == GL_BGRA) {
+  if (m_compressImage->upsidedown && m_compressImage->format == GEM_RGBA) {
     MatrixRecord        aMatrix;
     GetMovieMatrix(m_movie,&aMatrix);
     verbose(1, "[GEM:recordQT] upside down");

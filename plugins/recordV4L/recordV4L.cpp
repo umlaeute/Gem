@@ -54,18 +54,18 @@ recordV4L :: recordV4L(void):
 {
   m_image.xsize=720;
   m_image.ysize=576;
-  m_image.setCsizeByFormat(GL_YUV422_GEM);
-  m_image.setCsizeByFormat(GL_RGBA);
+  m_image.setCsizeByFormat(GEM_YUV);
+  m_image.setCsizeByFormat(GEM_RGBA);
   m_image.reallocate();
 
   switch(m_image.format) {
-  case GL_YUV422_GEM:
+  case GEM_YUV:
     m_palette = VIDEO_PALETTE_YUV422;
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     m_palette = VIDEO_PALETTE_GREY;
     break;
-  case GL_RGBA:
+  case GEM_RGBA:
     m_palette = VIDEO_PALETTE_RGB32;
     break;
   default:

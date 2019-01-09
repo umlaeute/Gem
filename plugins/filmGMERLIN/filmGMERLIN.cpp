@@ -262,9 +262,9 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   m_image.image.xsize=gformat->frame_width;
   m_image.image.ysize=gformat->frame_height;
 #ifdef __APPLE__
-  m_image.image.setCsizeByFormat(GL_YUV422_GEM);
+  m_image.image.setCsizeByFormat(GEM_YUV);
 #else
-  m_image.image.setCsizeByFormat(GL_RGBA);
+  m_image.image.setCsizeByFormat(GEM_RGBA);
 #endif
   m_image.image.notowned=true;
   m_image.image.upsidedown=true;

@@ -45,7 +45,7 @@ REGISTER_FILMFACTORY("MPEG3", filmMPEG3);
 /////////////////////////////////////////////////////////
 
 filmMPEG3 :: filmMPEG3(void) :
-  m_wantedFormat(GL_RGBA),
+  m_wantedFormat(GEM_RGBA),
   m_fps(-1.0),
   m_numFrames(-1), m_numTracks(-1),
   m_curFrame(-1), m_curTrack(-1),
@@ -148,7 +148,7 @@ pixBlock* filmMPEG3 :: getFrame(void)
   int datasize=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
   m_image.image.reallocate(datasize+4);
 
-  if(m_wantedFormat==GL_RGBA) {
+  if(m_wantedFormat==GEM_RGBA) {
     // the mpeg3-YUV2RGB decoder works better than ours
     unsigned char **rows = new unsigned char* [m_image.image.ysize];
     unsigned char **dummy=rows;

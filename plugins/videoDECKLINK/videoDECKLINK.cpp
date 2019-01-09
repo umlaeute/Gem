@@ -212,7 +212,7 @@ public:
         videoFrame->GetBytes(&frameBytes);
         m_priv->setFrame(videoFrame->GetWidth(),
                          videoFrame->GetHeight(),
-                         GL_YUV422_GEM,
+                         GEM_YUV,
                          (unsigned char*)frameBytes);
       }
 
@@ -335,7 +335,7 @@ videoDECKLINK::videoDECKLINK(void)
 
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
 }
 

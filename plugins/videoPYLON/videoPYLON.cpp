@@ -42,7 +42,7 @@ public:
   ImageEventHandler(videoPYLON*parent)
     : CImageEventHandler()
     , m_parent(parent)
-    , m_color(GL_RGBA)
+    , m_color(GEM_RGBA)
   {
     m_converter.OutputBitAlignment = Pylon::OutputBitAlignment_LsbAligned;
     setFormat(m_color);
@@ -67,11 +67,11 @@ public:
   void setFormat(int format) {
     Pylon::AutoLock colorlock(m_colorlock);
     switch(format) {
-    case(GL_RGBA):
+    case(GEM_RGBA):
       m_color = format;
       m_converter.OutputPixelFormat = Pylon::PixelType_BGRA8packed;
       break;
-    case(GL_LUMINANCE):
+    case(GEM_GRAY):
       m_color = format;
       m_converter.OutputPixelFormat = Pylon::PixelType_Mono8;
       break;

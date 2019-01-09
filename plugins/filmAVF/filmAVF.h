@@ -93,7 +93,7 @@ public:
 protected:
 
   //////////
-  // set the pixel format: GL_YCBCR_422_APPLE, GL_RGBA_GEM, or GL_LUMINANCE
+  // set the pixel format: GEM_YUV, GEM_RGBA or GEM_GRAY
   // (re)allocates when necessary, returns true if format was changed
   bool changeFormat(unsigned int format);
 

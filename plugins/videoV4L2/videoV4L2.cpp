@@ -587,18 +587,18 @@ bool videoV4L2 :: startTransfer()
   }
 
   switch(m_reqFormat) {
-  case GL_YCBCR_422_GEM:
+  case GEM_YUV:
     pixelformat = V4L2_PIX_FMT_UYVY;
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     pixelformat = V4L2_PIX_FMT_GREY;
     break;
-  case GL_RGB:
+  case GEM_RGB:
     pixelformat = V4L2_PIX_FMT_RGB24;
     break;
   default:
     pixelformat = V4L2_PIX_FMT_RGB32;
-    m_reqFormat=GL_RGBA;
+    m_reqFormat=GEM_RGBA;
     break;
   }
 
@@ -648,8 +648,8 @@ bool videoV4L2 :: startTransfer()
      * let's try formats that should be always supported by libv4l2
      */
     switch(m_reqFormat) {
-    case GL_YCBCR_422_GEM:
-    case GL_LUMINANCE:
+    case GEM_YUV:
+    case GEM_GRAY:
       pixelformat = V4L2_PIX_FMT_YUV420;
       break;
     default:
@@ -731,16 +731,16 @@ bool videoV4L2 :: startTransfer()
             m_reqFormat);
   switch(m_gotFormat) {
   case V4L2_PIX_FMT_GREY  :
-    m_colorConvert=(m_reqFormat!=GL_LUMINANCE);
+    m_colorConvert=(m_reqFormat!=GEM_GRAY);
     break;
   case V4L2_PIX_FMT_RGB24 :
-    m_colorConvert=(m_reqFormat!=GL_BGR);
+    m_colorConvert=true;
     break;
   case V4L2_PIX_FMT_RGB32 :
     m_colorConvert=true;
     break;
   case V4L2_PIX_FMT_UYVY  :
-    m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM);
+    m_colorConvert=(m_reqFormat!=GEM_YUV);
     break;
   case V4L2_PIX_FMT_YUV420:
     m_colorConvert=1;

@@ -142,13 +142,13 @@ bool imageJPEG :: load(std::string filename, imageStruct&result,
 
   // do we have an RGB image?
   if (cinfo.jpeg_color_space == JCS_RGB) {
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
   } else if (cinfo.jpeg_color_space == JCS_GRAYSCALE) {
     // do we have a gray8 image?
-    result.setCsizeByFormat(GL_LUMINANCE);
+    result.setCsizeByFormat(GEM_GRAY);
   } else {
     // something else, so decompress as RGB
-    result.setCsizeByFormat(GL_RGBA);
+    result.setCsizeByFormat(GEM_RGBA);
     cinfo.out_color_space = JCS_RGB;
   }
 
@@ -244,7 +244,7 @@ bool imageJPEG::save(const imageStruct&constimage,
     quality=fquality;
   }
 
-  if(GL_YUV422_GEM==constimage.format) {
+  if(GEM_YUV==constimage.format) {
     fprintf(stderr, "[GEM:imageJPEG] don't know how to write YUV-images\n");
     return false;
   }
@@ -259,7 +259,7 @@ bool imageJPEG::save(const imageStruct&constimage,
   jpeg_stdio_dest(&cinfo, outfile);
 
   imageStruct image;
-  constimage.convertTo(&image, GL_RGB);
+  constimage.convertTo(&image, GEM_RGB);
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
 
