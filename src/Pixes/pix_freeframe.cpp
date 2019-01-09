@@ -1081,8 +1081,7 @@ void pix_freeframe :: parmMess(std::string key, t_atom *value)
       v=atom_getfloat(value);
       break;
     case (A_SYMBOL):
-#warning gem::any doesnt like "const char*"
-      v=const_cast<char*>(atom_getsymbol(value)->s_name);
+      v=std::string(atom_getsymbol(value)->s_name);
       break;
     default:
       return;
