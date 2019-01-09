@@ -293,6 +293,11 @@ struct GEM_EXTERN any {
   {
     return (get_type() == typeid(T));
   }
+  template<typename T>
+  bool compatible(T&x) const
+  {
+    return compatible<T>();
+  }
 
   // implicit casting is disabled by default
 
