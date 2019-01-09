@@ -446,12 +446,12 @@ GEM_EXTERN void imageStruct::setWhite(void)
     break;
   }
 }
-GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
+GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     unsigned int to_format)
 {
   if (!from || !this || !from->data) {
     error("GEM: Someone sent a bogus pointer to convert");
-    return;
+    return false;
   }
   xsize=from->xsize;
   ysize=from->ysize;
@@ -467,7 +467,7 @@ GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
   switch (from->format) {
   default:
     error("%s: unable to convert from %d", __FUNCTION__, from->format);
-    return;
+    return false;
   case GL_RGBA:
     fromRGBA(from->data);
     break;
@@ -487,16 +487,17 @@ GEM_EXTERN void imageStruct::convertFrom(const imageStruct *from,
     fromUYVY(from->data);
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
+GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
 {
   if (!to || !this || !this->data) {
     error("GEM: Someone sent a bogus pointer to convert");
     if (to) {
       to->data = NULL;
     }
-    return;
+    return false;
   }
   to->xsize=xsize;
   to->ysize=ysize;
@@ -511,7 +512,7 @@ GEM_EXTERN void imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGBA:
     to->fromRGBA(data);
     break;
@@ -531,12 +532,13 @@ GEM_EXTERN void imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
     to->fromUYVY(data);
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata)
+GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
 {
   if(!rgbdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -545,7 +547,7 @@ GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGB:
     memcpy(data, rgbdata, pixelnum*csize);
     break;
@@ -602,14 +604,15 @@ GEM_EXTERN void imageStruct::fromRGB(const unsigned char *rgbdata)
 #endif
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromRGB16(const unsigned char *rgb16data)
+GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
 {
   //   B B B B B G G G   G G G R R R R R
   //   R R R R R G G G   G G G B B B B B
   if(!rgb16data) {
-    return;
+    return false;
   }
   const unsigned short*rgbdata=(const unsigned short*)rgb16data;
   size_t pixelnum=xsize*ysize;
@@ -620,7 +623,7 @@ GEM_EXTERN void imageStruct::fromRGB16(const unsigned char *rgb16data)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGBA:
     while(pixelnum--) {
       rgb=*rgbdata++;
@@ -657,12 +660,13 @@ GEM_EXTERN void imageStruct::fromRGB16(const unsigned char *rgb16data)
     }
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata)
+GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
 {
   if(!rgbadata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -671,7 +675,7 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGB:
     while(pixelnum--) {
       *pixels++=*rgbadata++;
@@ -754,13 +758,14 @@ GEM_EXTERN void imageStruct::fromRGBA(const unsigned char *rgbadata)
     STOP_TIMING("RGBA to UYVY");
     break;
   }
+  return true;
 }
 
 
-GEM_EXTERN void imageStruct::fromBGR(const unsigned char *bgrdata)
+GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
 {
   if(!bgrdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -769,7 +774,7 @@ GEM_EXTERN void imageStruct::fromBGR(const unsigned char *bgrdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_BGR_EXT:
     memcpy(data, bgrdata, pixelnum*csize);
     break;
@@ -822,12 +827,13 @@ GEM_EXTERN void imageStruct::fromBGR(const unsigned char *bgrdata)
     }
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata)
+GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
 {
   if(!bgradata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -836,7 +842,7 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_BGR_EXT:
     while(pixelnum--) {
       *pixels++=*bgradata++;
@@ -923,14 +929,15 @@ GEM_EXTERN void imageStruct::fromBGRA(const unsigned char *bgradata)
     STOP_TIMING("BGRA_to_YCbCr");
     break;
   }
+  return true;
 }
 
 
 
-GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata)
+GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
 {
   if(!abgrdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -939,7 +946,7 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_BGR_EXT:
     while(pixelnum--) {
       abgrdata++;
@@ -1047,12 +1054,13 @@ GEM_EXTERN void imageStruct::fromABGR(const unsigned char *abgrdata)
     STOP_TIMING("ABGR_to_YCbCr");
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata)
+GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
 {
   if(!argbdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1061,7 +1069,7 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_BGR_EXT:
     while(pixelnum--) {
       pixels[0]=argbdata[3]; // B
@@ -1160,12 +1168,13 @@ GEM_EXTERN void imageStruct::fromARGB(const unsigned char *argbdata)
     STOP_TIMING("ARGB_to_YCbCr");
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromGray(const unsigned char *greydata)
+GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
 {
   if(!greydata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1175,7 +1184,7 @@ GEM_EXTERN void imageStruct::fromGray(const unsigned char *greydata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGB:
   case GL_BGR_EXT:
     while(pixelnum--) {
@@ -1210,12 +1219,13 @@ GEM_EXTERN void imageStruct::fromGray(const unsigned char *greydata)
     }
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromGray(short *greydata)
+GEM_EXTERN bool imageStruct::fromGray(short *greydata)
 {
   if(!greydata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1225,7 +1235,7 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_RGB:
   case GL_BGR_EXT:
     while(pixelnum--) {
@@ -1260,33 +1270,34 @@ GEM_EXTERN void imageStruct::fromGray(short *greydata)
     }
     break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromYU12(const unsigned char*yuvdata)
+GEM_EXTERN bool imageStruct::fromYU12(const unsigned char*yuvdata)
 {
   if(!yuvdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
-  fromYV12((yuvdata), yuvdata+(pixelnum), yuvdata+(pixelnum+(pixelnum>>2)));
+  return fromYV12((yuvdata), yuvdata+(pixelnum), yuvdata+(pixelnum+(pixelnum>>2)));
 }
-GEM_EXTERN void imageStruct::fromYV12(const unsigned char*yuvdata)
+GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*yuvdata)
 {
   if(!yuvdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
-  fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
+  return fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
 }
-GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y,
+GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
                                       const unsigned char*U, const unsigned char*V)
 {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!U && !V) {
-    fromGray(Y);
+    return fromGray(Y);
   }
   if(!Y || !U || !V) {
-    return;
+    return false;
   }
 
   size_t pixelnum=xsize*ysize;
@@ -1295,7 +1306,7 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y,
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
@@ -1446,25 +1457,27 @@ GEM_EXTERN void imageStruct::fromYV12(const unsigned char*Y,
   }
   break;
   }
+  return true;
 }
 //  for gem2pdp
-GEM_EXTERN void imageStruct::fromYV12(const short*yuvdata)
+GEM_EXTERN bool imageStruct::fromYV12(const short*yuvdata)
 {
   if(!yuvdata) {
-    return;
+    return false;
   }
   int pixelnum=xsize*ysize;
-  fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
+  return fromYV12((yuvdata), yuvdata+(pixelnum+(pixelnum>>2)), yuvdata+(pixelnum));
 }
-GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U,
+GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
                                       const short*V)
 {
   // planar: 8bit Y-plane + 8bit 2x2-subsampled V- and U-planes
   if(!U && !V) {
-    fromGray(reinterpret_cast<unsigned char*>(*Y>>7));
+    #warning FIXXME
+    return fromGray(reinterpret_cast<unsigned char*>(*Y>>7));
   }
   if(!Y || !U || !V) {
-    return;
+    return false;
   }
 
   size_t pixelnum=xsize*ysize;
@@ -1473,7 +1486,7 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U,
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
@@ -1674,13 +1687,14 @@ GEM_EXTERN void imageStruct::fromYV12(const short*Y, const short*U,
   }
   break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata)
+GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
 {
   // this is the yuv-format with Gem
   if(!yuvdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1689,7 +1703,7 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_YUV422_GEM:
     memcpy(data, yuvdata, pixelnum*csize);
     break;
@@ -1792,13 +1806,14 @@ GEM_EXTERN void imageStruct::fromUYVY(const unsigned char *yuvdata)
   }
   break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromYUY2(const unsigned char
+GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char
                                       *yuvdata)   // YUYV
 {
   if(!yuvdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1807,7 +1822,7 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--) {
@@ -1891,13 +1906,14 @@ GEM_EXTERN void imageStruct::fromYUY2(const unsigned char
   }
   break;
   }
+  return true;
 }
 
-GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata)
+GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
 {
   // this is the yuv-format with Gem
   if(!yuvdata) {
-    return;
+    return false;
   }
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
@@ -1906,7 +1922,7 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata)
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return;
+    return false;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--) {
@@ -1990,6 +2006,7 @@ GEM_EXTERN void imageStruct::fromYVYU(const unsigned char *yuvdata)
   }
   break;
   }
+  return true;
 }
 
 GEM_EXTERN extern int getPixFormat(const char*cformat)
@@ -2068,7 +2085,7 @@ GEM_EXTERN void imageStruct::swapRedBlue(void)
 }
 
 
-GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r,
+GEM_EXTERN bool imageStruct::getRGB(int X, int Y, unsigned char*r,
                                     unsigned char*g, unsigned char*b, unsigned char*a) const
 {
   unsigned char red=0, green=0, blue=0, alpha=255;
@@ -2139,8 +2156,9 @@ GEM_EXTERN void imageStruct::getRGB(int X, int Y, unsigned char*r,
   if(a) {
     *a=alpha;
   }
+  return true;
 }
-GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
+GEM_EXTERN bool imageStruct::getGrey(int X, int Y, unsigned char*g) const
 {
   unsigned char grey=0;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
@@ -2177,8 +2195,9 @@ GEM_EXTERN void imageStruct::getGrey(int X, int Y, unsigned char*g) const
   if(g) {
     *g=grey;
   }
+  return true;
 }
-GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y,
+GEM_EXTERN bool imageStruct::getYUV(int X, int Y, unsigned char*y,
                                     unsigned char*u, unsigned char*v) const
 {
   unsigned char luma=0, chromaU=128, chromaV=128;
@@ -2191,11 +2210,11 @@ GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y,
   case GL_RGB:
   case GL_BGR_EXT:
     error("getYUV not implemented for RGB");
-    break;
+    return false;
   case GL_RGBA:
   case GL_BGRA_EXT:
     error("getYUV not implemented for RGBA");
-    break;
+    return false;
   case GL_YUV422_GEM:
     position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
     pixels=data+position*csize;
@@ -2215,4 +2234,5 @@ GEM_EXTERN void imageStruct::getYUV(int X, int Y, unsigned char*y,
   if(v) {
     *v=chromaV;
   }
+  return true;
 }

@@ -139,10 +139,10 @@ struct GEM_EXTERN imageStruct {
 
   /////////
   // gets the color of a pixel
-  virtual void getRGB(int X, int Y, unsigned char*r, unsigned char*g,
+  virtual bool getRGB(int X, int Y, unsigned char*r, unsigned char*g,
                       unsigned char*b, unsigned char*a=NULL) const;
-  virtual void getGrey(int X, int Y, unsigned char*g) const;
-  virtual void getYUV(int X, int Y, unsigned char*y, unsigned char*u,
+  virtual bool getGrey(int X, int Y, unsigned char*g) const;
+  virtual bool getYUV(int X, int Y, unsigned char*y, unsigned char*u,
                       unsigned char*v) const;
 
   /* following will set the whole image-data to either black or white
@@ -195,45 +195,45 @@ struct GEM_EXTERN imageStruct {
    *   this is maybe not really clean (the meta-data is stored in the destination,
    *   while the source has no meta-data of its own)
    */
-  virtual void convertTo  (imageStruct*to, unsigned int dest_format=0) const;
-  virtual void convertFrom(const imageStruct*from, unsigned int dest_format=0);
+  virtual bool convertTo  (imageStruct*to, unsigned int dest_format=0) const;
+  virtual bool convertFrom(const imageStruct*from, unsigned int dest_format=0);
 
-  virtual void fromRGB    (const unsigned char* orgdata);
-  virtual void fromRGBA   (const unsigned char* orgdata);
-  virtual void fromBGR    (const unsigned char* orgdata);
-  virtual void fromBGRA   (const unsigned char* orgdata);
-  virtual void fromRGB16  (const unsigned char* orgdata);
-  virtual void fromABGR   (const unsigned char* orgdata);
-  virtual void fromARGB   (const unsigned char* orgdata);
-  virtual void fromGray   (const unsigned char* orgdata);
-  virtual void fromGray   (short* orgdata);
-  virtual void fromUYVY   (const unsigned char* orgdata);
-  virtual void fromYUY2   (const unsigned char* orgdata); // YUYV
-  virtual void fromYVYU   (const unsigned char* orgdata);
+  virtual bool fromRGB    (const unsigned char* orgdata);
+  virtual bool fromRGBA   (const unsigned char* orgdata);
+  virtual bool fromBGR    (const unsigned char* orgdata);
+  virtual bool fromBGRA   (const unsigned char* orgdata);
+  virtual bool fromRGB16  (const unsigned char* orgdata);
+  virtual bool fromABGR   (const unsigned char* orgdata);
+  virtual bool fromARGB   (const unsigned char* orgdata);
+  virtual bool fromGray   (const unsigned char* orgdata);
+  virtual bool fromGray   (short* orgdata);
+  virtual bool fromUYVY   (const unsigned char* orgdata);
+  virtual bool fromYUY2   (const unsigned char* orgdata); // YUYV
+  virtual bool fromYVYU   (const unsigned char* orgdata);
   /* planar YUV420: this is rather generic and not really YV12 only */
-  virtual void fromYV12   (const unsigned char* Y, const unsigned char*U,
+  virtual bool fromYV12   (const unsigned char* Y, const unsigned char*U,
                            const unsigned char*V);
   /* assume that the planes are near each other: YVU */
-  virtual void fromYV12   (const unsigned char* orgdata);
+  virtual bool fromYV12   (const unsigned char* orgdata);
   /* assume that the planes are near each other: YVU */
-  virtual void fromYU12   (const unsigned char* orgdata);
+  virtual bool fromYU12   (const unsigned char* orgdata);
   /* overloading the above two in order to accept pdp YV12 packets */
-  virtual void fromYV12   (const short* Y, const short*U, const short*V);
-  virtual void fromYV12   (const short* orgdata);
+  virtual bool fromYV12   (const short* Y, const short*U, const short*V);
+  virtual bool fromYV12   (const short* orgdata);
 
   /* aliases */
-  virtual void fromYUV422 (const unsigned char* orgdata)
+  virtual bool fromYUV422 (const unsigned char* orgdata)
   {
-    fromUYVY(orgdata);
+    return fromUYVY(orgdata);
   }
-  virtual void fromYUV420P(const unsigned char* orgdata)
+  virtual bool fromYUV420P(const unsigned char* orgdata)
   {
-    fromYV12(orgdata);
+    return fromYV12(orgdata);
   }
-  virtual void fromYUV420P(const unsigned char*Y,const unsigned char*U,
+  virtual bool fromYUV420P(const unsigned char*Y,const unsigned char*U,
                            const unsigned char*V)
   {
-    fromYV12(Y,U,V);
+    return fromYV12(Y,U,V);
   }
 
   // "data" points to the image.
