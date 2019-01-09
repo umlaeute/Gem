@@ -28,15 +28,14 @@ LOG
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
 
-/* RGBA */
-
-#if GL_RGBA_GEM == GL_RGBA
+/* RGBA: on Apple this is really BGRA_EXT */
+#ifndef __APPLE__
 # define GEM_RGBA 0x1908
 const int chRed   = 0;
 const int chGreen = 1;
 const int chBlue  = 2;
 const int chAlpha = 3;
-#else
+#else /* APPLE */
 # define GEM_RGBA 0x80E1
 const int chAlpha = 0;
 const int chRed   = 1;
