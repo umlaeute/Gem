@@ -37,6 +37,14 @@
 # pragma warning( disable : 4996 )
 #endif
 
+#ifdef GEM_ANY_TYPEID_HACK
+# if GEM_ANY_TYPEID_HACK
+#  warning GEM_ANY_TYPEID_HACK enabled
+# else
+#  warning GEM_ANY_TYPEID_HACK disabled
+# endif
+#endif
+
 #define CATCH_ANY(y) catch(gem::bad_any_cast&x) { ::verbose(3, "%s:%d [%s] %d:: %s", __FILE__, __LINE__, __FUNCTION__, (y), x.what()); }
 
 using namespace gem;
