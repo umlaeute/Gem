@@ -49,7 +49,7 @@ pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
   m_xstep(1), m_ystep(1),
   m_data(0),
   m_bytemode(false),
-  m_mode(GL_RGBA)
+  m_mode(GEM_RGBA)
 {
   xsize = static_cast<int>(fx);
   ysize = static_cast<int>(fy);
@@ -211,7 +211,7 @@ void pix_dump :: trigger()
         b = static_cast<float>(data[chBlue]) / 255.f;
         SETFLOAT(&m_buffer[i], b);
         i++;
-        if ( m_mode == GL_RGBA ) {
+        if ( m_mode == GEM_RGBA ) {
           float a = static_cast<float>(data[chAlpha]) / 255.f;
           SETFLOAT(&m_buffer[i], a);
           i++;
@@ -227,7 +227,7 @@ void pix_dump :: trigger()
         b = static_cast<unsigned char>(data[chBlue]);
         SETFLOAT(&m_buffer[i], b);
         i++;
-        if ( m_mode == GL_RGBA ) {
+        if ( m_mode == GEM_RGBA ) {
           unsigned char a = static_cast<unsigned char>(data[chAlpha]);
           SETFLOAT(&m_buffer[i], a);
           i++;
@@ -256,7 +256,7 @@ void pix_dump :: trigger()
           v = static_cast<float>(data[2]) / 255.f;
           SETFLOAT(&m_buffer[i], v);
           i++;
-          if ( m_mode == GL_RGBA ) {
+          if ( m_mode == GEM_RGBA ) {
             float y1 = static_cast<float>(data[3]) / 255.f;
             SETFLOAT(&m_buffer[i], y1);
             i++;
@@ -272,7 +272,7 @@ void pix_dump :: trigger()
           v = static_cast<unsigned char>(data[2]);
           SETFLOAT(&m_buffer[i], v);
           i++;
-          if ( m_mode == GL_RGBA ) {
+          if ( m_mode == GEM_RGBA ) {
             unsigned char y1 = static_cast<unsigned char>(data[3]);
             SETFLOAT(&m_buffer[i], y1);
             i++;
@@ -300,7 +300,7 @@ void pix_dump :: trigger()
         v = static_cast<float>(data[2]) / 255.f;
         SETFLOAT(&m_buffer[i+2], v);
         i+=3;
-        if ( m_mode == GL_RGBA ) {
+        if ( m_mode == GEM_RGBA ) {
           v = static_cast<float>(data[3]) / 255.f;
           SETFLOAT(&m_buffer[i], v);
           i++;
@@ -321,7 +321,7 @@ void pix_dump :: trigger()
         v = static_cast<unsigned char>(data[2]);
         SETFLOAT(&m_buffer[i+2], v);
         i+=3;
-        if ( m_mode == GL_RGBA ) {
+        if ( m_mode == GEM_RGBA ) {
           v = static_cast<unsigned char>(data[3]);
           SETFLOAT(&m_buffer[i], v);
           i++;
@@ -359,7 +359,7 @@ void pix_dump :: trigger()
 /////////////////////////////////////////////////////////
 void pix_dump :: RGBAMess(void)
 {
-  m_mode = GL_RGBA;
+  m_mode = GEM_RGBA;
 }
 /////////////////////////////////////////////////////////
 // RGBMess
@@ -367,7 +367,7 @@ void pix_dump :: RGBAMess(void)
 /////////////////////////////////////////////////////////
 void pix_dump :: RGBMess(void)
 {
-  m_mode = GL_RGB;
+  m_mode = GEM_RGB;
 }
 
 void pix_dump :: bytemodeMess(bool v)

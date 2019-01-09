@@ -136,7 +136,7 @@ pix_recordQT :: pix_recordQT(int argc, t_atom *argv)
   m_currentFrame = 0;
 
 #ifdef __APPLE__
-  m_colorspace = GL_YUV422_GEM;
+  m_colorspace = GEM_YUV;
 #else
   m_colorspace = GL_BGRA_EXT;
 #endif
@@ -307,7 +307,7 @@ setupQT() //this only needs to be done when codec info changes
   m_srcRect.right = m_width;
 
 
-  if (m_colorspace == GL_YUV422_GEM)
+  if (m_colorspace == GEM_YUV)
   {
 
     //give QT the length of each pixel row in bytes (2 for 4:2:2 YUV)

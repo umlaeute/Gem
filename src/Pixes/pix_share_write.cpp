@@ -159,7 +159,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   size_t size=0;
   int    xsize=1;
   int    ysize=1;
-  GLenum color=GL_RGBA_GEM;
+  unsigned int color=GEM_RGBA;
 
   if(argc<1) {
     return 7;
@@ -229,13 +229,13 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
       int csize=atom_getint(argv+2);
       switch(csize) {
       case 1:
-        color = GL_LUMINANCE;
+        color = GEM_GRAY;
         break;
       case 2:
-        color = GL_YUV422_GEM;
+        color = GEM_YUV;
         break;
       case 4:
-        color = GL_RGBA_GEM;
+        color = GEM_RGBA;
         break;
       default:
         return 4;
@@ -246,15 +246,15 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
       switch(c) {
       case 'G':
       case 'g':
-        color = GL_LUMINANCE;
+        color = GEM_GRAY;
         break;
       case 'Y':
       case 'y':
-        color = GL_YUV422_GEM;
+        color = GEM_YUV;
         break;
       case 'R':
       case 'r':
-        color = GL_RGBA_GEM;
+        color = GEM_RGBA;
         break;
       default:
         return 4;

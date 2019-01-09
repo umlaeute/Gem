@@ -80,7 +80,7 @@ pix_rtx :: pix_rtx()
   imageStruct image;
 
   image.xsize  = image.ysize = 64;
-  image.setCsizeByFormat(GL_RGBA_GEM);
+  image.setCsizeByFormat(GEM_RGBA);
 
   refresh_buffer(image, buffer);
 

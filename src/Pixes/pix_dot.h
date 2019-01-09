@@ -57,7 +57,7 @@ protected:
                              unsigned char *dest );
   virtual void  sampxy_table_init();
   virtual void  yuv_init();
-  virtual void  makePattern(int format=GL_RGBA);
+  virtual void  makePattern(unsigned int format=GEM_RGBA);
   virtual void  sizeMess(int width, int height);
   virtual void  scaleMess( float state );
   int   sharedbuffer_init();

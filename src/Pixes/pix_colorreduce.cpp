@@ -52,7 +52,7 @@ pix_colorreduce :: pix_colorreduce(t_floatarg fcount) :
 
   tempImage.xsize=0;
   tempImage.ysize=0;
-  tempImage.setCsizeByFormat(GL_RGBA_GEM);
+  tempImage.setCsizeByFormat(GEM_RGBA);
 }
 
 /////////////////////////////////////////////////////////

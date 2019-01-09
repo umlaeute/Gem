@@ -120,7 +120,7 @@ void pix_vpaint :: makepoints(void)
   points = new cPoint[maxPoints];
 
   numPoints = maxPoints;
-  if (m_imageStruct.format == GL_YCBCR_422_GEM) {
+  if (m_imageStruct.format == GEM_YUV) {
     for (i = 0; i < maxPoints; i++) {
       points[i].x = modrand(m_w)>>1;
       points[i].y = modrand(m_h);

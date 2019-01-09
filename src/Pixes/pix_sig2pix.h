@@ -69,7 +69,7 @@ protected:
   //////////
   // setting dimension and colourspace
   virtual void  dimenMess(int w, int h);
-  virtual void  csMess(GLint cs);
+  virtual void  csMess(int cs);
 
   //////////
   // DSP-Message
@@ -89,7 +89,7 @@ protected:
 
   //////////////
   // which colorspace do we want ? currently only GL_RGBA
-  GLint         m_reqFormat;
+  int         m_reqFormat;
 
 private:
 

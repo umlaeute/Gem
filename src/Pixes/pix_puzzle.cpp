@@ -44,7 +44,7 @@ pix_puzzle :: pix_puzzle() :
   m_game(false)
 {
   myImage.xsize=myImage.ysize=512;
-  myImage.setCsizeByFormat(GL_RGBA_GEM);
+  myImage.setCsizeByFormat(GEM_RGBA);
   myImage.allocate();
 }
 

@@ -53,7 +53,7 @@ pix_movieDarwin :: pix_movieDarwin(t_symbol *filename) :
   m_numFrames(0), m_reqFrame(0), m_curFrame(0), m_track(0),
   m_xsize(0), m_ysize(0), m_csize(0),
   m_film(false), m_newFilm(0), newImage(0),
-  m_colorspace(GL_YCBCR_422_GEM), m_format(0), m_rectangle(1),
+  m_colorspace(GEM_YUV), m_format(0), m_rectangle(1),
   m_hiquality(1),
   m_play(0), m_rate(1.f)
 {

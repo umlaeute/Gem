@@ -133,7 +133,7 @@ void pix_snap :: snapMess(void)
     m_originalImage = new imageStruct;
     m_originalImage->xsize = m_width;
     m_originalImage->ysize = m_height;
-    m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
+    m_originalImage->setCsizeByFormat(GEM_RGBA);
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 

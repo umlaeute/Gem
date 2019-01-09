@@ -32,7 +32,7 @@ pix_pix2sig :: pix_pix2sig(void) :
   m_data(NULL),
   m_size(0),
   m_csize(4),
-  m_format(GL_RGBA_GEM)
+  m_format(GEM_RGBA)
 {
   int i=4;
   while(i--) {
@@ -107,7 +107,7 @@ t_int* pix_pix2sig :: perform(t_int* w)
       break;
     }
     switch(x->m_format) {
-    case GL_RGBA:
+    case GEM_RGBA:
     default:
       while(n--) {
         *(out_red  ++) = data[chRed]  *scale0;
@@ -117,7 +117,7 @@ t_int* pix_pix2sig :: perform(t_int* w)
         data+=csize;
       }
       break;
-    case GL_YUV422_GEM:
+    case GEM_YUV:
       n/=2;
       while(n--) {
         *(out_red  ++) = data[chY0]   *scale0;
@@ -131,7 +131,7 @@ t_int* pix_pix2sig :: perform(t_int* w)
         data+=4;
       }
       break;
-    case GL_LUMINANCE:
+    case GEM_GRAY:
       while(n--) {
         *(out_red  ++) = data[chGray]*scale0;
         *(out_green++) = 0;

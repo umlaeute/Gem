@@ -457,23 +457,23 @@ void pix_video :: colorMess(t_atom*a)
   int format=0;
   if (a->a_type==A_SYMBOL) {
     char c =*atom_getsymbol(a)->s_name;
-    // we only have 3 colour-spaces: monochrome (GL_LUMINANCE), yuv (GL_YCBCR_422_GEM), and rgba (GL_RGBA)
+    // we only have 3 colour-spaces: monochrome (GEM_GRAY), yuv (GEM_YUV), and rgba (GL_RGBA)
     // if you don't need colour, i suggest, take monochrome
     // if you don't need alpha,  i suggest, take yuv
     // else take rgba
     switch (c) {
     case 'g':
     case 'G':
-      format=GL_LUMINANCE;
+      format=GEM_GRAY;
       break;
     case 'y':
     case 'Y':
-      format=GL_YCBCR_422_GEM;
+      format=GEM_YUV;
       break;
     case 'r':
     case 'R':
     default:
-      format=GL_RGBA_GEM;
+      format=GEM_RGBA;
     }
   } else {
     format=atom_getint(a);

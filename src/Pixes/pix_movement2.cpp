@@ -33,22 +33,22 @@ pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh):
   while(i--) {
     m_frame[i].xsize=0;
     m_frame[i].ysize=0;
-    m_frame[i].setCsizeByFormat(GL_LUMINANCE);
+    m_frame[i].setCsizeByFormat(GEM_GRAY);
     m_frame[i].reallocate();
   }
   m_output.xsize=0;
   m_output.ysize=0;
-  m_output.setCsizeByFormat(GL_LUMINANCE);
+  m_output.setCsizeByFormat(GEM_GRAY);
   m_output.reallocate();
 
   m_background.xsize=0;
   m_background.ysize=0;
-  m_background.setCsizeByFormat(GL_LUMINANCE);
+  m_background.setCsizeByFormat(GEM_GRAY);
   m_background.reallocate();
 
   m_threshold.xsize=0;
   m_threshold.ysize=0;
-  m_threshold.setCsizeByFormat(GL_LUMINANCE);
+  m_threshold.setCsizeByFormat(GEM_GRAY);
   m_threshold.reallocate();
 
   m_lowthresh=CLAMP(255.f*MIN(lothresh, hithresh));
@@ -131,10 +131,10 @@ void pix_movement2 :: processImage(imageStruct &image)
   case GL_BGRA_EXT:
     m_frame[m_frameIndex].fromBGRA(image.data);
     break;
-  case GL_YCBCR_422_GEM:
+  case GEM_YUV:
     m_frame[m_frameIndex].fromUYVY(image.data);
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     m_frame[m_frameIndex].fromGray(image.data);
     break;
   default:

@@ -425,7 +425,7 @@ void pix_texture :: render(GemState *state)
     // if YUV is not supported on this platform, we have to convert it to RGB
     //(skip Alpha since it isn't used)
     const bool do_yuv = m_yuv && GLEW_APPLE_ycbcr_422;
-    if (!do_yuv && m_imagebuf.format == GL_YUV422_GEM) {
+    if (!do_yuv && m_imagebuf.format == GEM_YUV) {
       m_imagebuf.format=GL_RGB;
       m_imagebuf.csize=3;
       m_imagebuf.reallocate();
@@ -499,7 +499,7 @@ void pix_texture :: render(GemState *state)
         m_dataSize[1] = m_buffer.xsize;
         m_dataSize[2] = m_buffer.ysize;
 
-        if (m_buffer.format == GL_YUV422_GEM && !m_rectangle) {
+        if (m_buffer.format == GEM_YUV && !m_rectangle) {
           m_buffer.setBlack();
         }
 

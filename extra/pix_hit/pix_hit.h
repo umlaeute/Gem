@@ -83,7 +83,7 @@ class GEM_EXPORT pix_hit : public GemPixObj
   void createLine(int n, float x1, float y1, float x2, float y2);
   void move(int n, float x, float y, float w, float h);
   void del(int n);
-  unsigned char getGreyValue(GLenum format, unsigned char *data);
+  unsigned char getGreyValue(unsigned int format, unsigned char *data);
 
 
   t_hitarea hit_areas[NUM_hit_areas];

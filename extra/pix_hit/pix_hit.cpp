@@ -53,21 +53,21 @@ pix_hit :: ~pix_hit()
   outlet_free(m_hits);
 }
 
-unsigned char pix_hit :: getGreyValue(GLenum format, unsigned char *data)
+unsigned char pix_hit :: getGreyValue(unsigned int format, unsigned char *data)
 {
   // is this a gray8 or RGBA?
   switch(format)
     {
       // Gray scale
-    case(GL_LUMINANCE):
+    case(GEM_GRAY):
       return data[chGray];
       break;
       // YUV
-    case(GL_YCBCR_422_GEM):
+    case(GEM_YUV):
       return data[chY0];
       break;
       // RGB, RGBA
-    case(GL_RGB): case (GL_RGBA): case (GL_BGRA_EXT):
+    case(GEM_RGB): case (GEM_RGBA):
       return (data[chRed]*RGB2GRAY_RED+data[chGreen]*RGB2GRAY_GREEN+data[chBlue]*RGB2GRAY_BLUE)>>8;
       break;
     default :

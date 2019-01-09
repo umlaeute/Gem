@@ -373,7 +373,7 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
 {
   //  throw(GemException("Gem has been compiled without Frei0r-support!"));
   int can_rgba=0;
-  m_image.setCsizeByFormat(GL_RGBA_GEM);
+  m_image.setCsizeByFormat(GEM_RGBA);
 
   if(!s || s==&s_) {
     m_canopen=true;

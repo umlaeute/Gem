@@ -131,7 +131,7 @@ void pix_write :: doWrite(void)
 #ifndef __APPLE__
   m_originalImage->setCsizeByFormat(m_color);
 #else
-  m_originalImage->setCsizeByFormat(GL_RGBA_GEM);
+  m_originalImage->setCsizeByFormat(GEM_RGBA);
 #endif /* APPLE */
 
   m_originalImage->reallocate();

@@ -34,7 +34,7 @@ pix_convert :: pix_convert(t_symbol*s)
   m_image.xsize=128;
   m_image.ysize=128;
   int fmt = getPixFormat(s->s_name);
-  m_image.setCsizeByFormat(fmt?fmt:GL_RGBA_GEM);
+  m_image.setCsizeByFormat(fmt?fmt:GEM_RGBA);
 
   m_image.reallocate();
 }
@@ -72,10 +72,10 @@ void pix_convert :: processImage(imageStruct &image)
   case GL_RGBA:
     m_image.fromRGBA     (image.data);
     break;
-  case GL_YUV422_GEM:
+  case GEM_YUV:
     m_image.fromYUV422   (image.data);
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     m_image.fromGray     (image.data);
     break;
   default:

@@ -100,7 +100,7 @@ private:
       }
       return 0;
     }
-    static inline FFUInt32 updown2orientation(GLboolean updown)
+    static inline FFUInt32 updown2orientation(bool updown)
     {
       return (updown?1:2);
     }
@@ -743,9 +743,9 @@ public:
     close();
   }
 
-  GLenum GLformat()
+  unsigned int GLformat()
   {
-    GLenum format = (m_rgba?GL_RGBA_GEM:GL_RGB);
+    unsigned int format = (m_rgba?GEM_RGBA:GEM_RGB);
     return format;
   }
 
@@ -1016,10 +1016,10 @@ void pix_freeframe :: processImage(imageStruct &image)
     case GL_BGRA_EXT: /* "RGBA" on apple */
       m_image.fromBGRA(image.data);
       break;
-    case GL_LUMINANCE: // greyscale
+    case GEM_GRAY: // greyscale
       m_image.fromGray(image.data);
       break;
-    case GL_YUV422_GEM: // YUV
+    case GEM_YUV: // YUV
       m_image.fromYUV422(image.data);
       break;
     }
@@ -1048,10 +1048,10 @@ void pix_freeframe :: processImage(imageStruct &image)
     case GL_BGRA_EXT: /* "RGBA" on apple */
       image.fromBGRA(m_image.data);
       break;
-    case GL_LUMINANCE:
+    case GEM_GRAY:
       image.fromGray(m_image.data);
       break;
-    case GL_YCBCR_422_GEM: // YUV
+    case GEM_YUV: // YUV
       image.fromUYVY(m_image.data);
       break;
     default:

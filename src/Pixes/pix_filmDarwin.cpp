@@ -51,7 +51,7 @@ pix_filmDarwin :: pix_filmDarwin(t_symbol *filename) :
   m_volume(0.f),
   m_movie(NULL)
 {
-  m_colorspace = GL_YUV422_GEM;
+  m_colorspace = GEM_YUV;
 
   // make sure that there are some characters
   if (filename && filename->s_name && filename->s_name[0]) {
@@ -229,7 +229,7 @@ void pix_filmDarwin :: realOpen(char *filename)
   //   (and for rgba/32bits width needs to be a multiple of 32)
   // we pad out to that. The texture coords ensure we do not use the extra bytes.
   int bpp;
-  if (m_colorspace == GL_RGBA_GEM) {
+  if (m_colorspace == GEM_RGBA) {
     bpp = 32;
   } else {
     bpp = 16;
@@ -241,8 +241,8 @@ void pix_filmDarwin :: realOpen(char *filename)
     SetRect( &m_srcRect, 0, 0, m_xsize, m_ysize );
   }
 
-  if (m_colorspace == GL_RGBA_GEM) {
-    m_format = GL_RGBA_GEM;
+  if (m_colorspace == GEM_RGBA) {
+    m_format = GEM_RGBA;
     createBuffer();
     prepareTexture();
     m_rowBytes = m_xsize * 4;
@@ -259,7 +259,7 @@ void pix_filmDarwin :: realOpen(char *filename)
                                 m_rowBytes);
 
   } else {
-    m_format=GL_YUV422_GEM;
+    m_format=GEM_YUV;
     createBuffer();
     // prepareTexture();
     m_rowBytes = m_xsize * 2;

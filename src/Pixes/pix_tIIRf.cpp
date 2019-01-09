@@ -73,7 +73,7 @@ pix_tIIRf :: pix_tIIRf(t_floatarg fb_numf, t_floatarg ff_numf)
 
   m_image.xsize=0;
   m_image.ysize=0;
-  m_image.setCsizeByFormat(GL_RGBA_GEM);
+  m_image.setCsizeByFormat(GEM_RGBA);
 }
 
 /////////////////////////////////////////////////////////

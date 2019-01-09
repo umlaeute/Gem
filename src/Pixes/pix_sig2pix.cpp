@@ -32,7 +32,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float,
 //
 /////////////////////////////////////////////////////////
 pix_sig2pix :: pix_sig2pix(t_floatarg width,
-                           t_floatarg height) : m_reqFormat(GL_RGBA_GEM)
+                           t_floatarg height) : m_reqFormat(GEM_RGBA)
 {
 
   m_pixBlock.image = m_imageStruct;
@@ -153,7 +153,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
       data+=4;
     }
     break;
-  case GL_YUV422_GEM:
+  case GEM_YUV:
     n/=2;
     while(n--) {
       data[chY0] = (unsigned char) (*in_red++  *255.0);
@@ -166,7 +166,7 @@ t_int* pix_sig2pix :: perform(t_int* w)
       data+=4;
     }
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     while(n--) {
       *data++ = (unsigned char) (*in_red++  *255.0);
     }

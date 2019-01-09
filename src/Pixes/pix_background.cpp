@@ -29,7 +29,7 @@ pix_background :: pix_background(int argc, t_atom*argv) :
 
   m_savedImage.xsize=320;
   m_savedImage.ysize=240;
-  m_savedImage.setCsizeByFormat(GL_RGBA_GEM);
+  m_savedImage.setCsizeByFormat(GEM_RGBA);
   m_savedImage.reallocate();
   switch(argc) {
   case 4:

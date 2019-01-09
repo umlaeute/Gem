@@ -121,7 +121,7 @@ pix_multiblob :: pix_multiblob(t_floatarg f) :
   // initialize image
   m_image.xsize=320;
   m_image.ysize=240;
-  m_image.setCsizeByFormat(GL_LUMINANCE);
+  m_image.setCsizeByFormat(GEM_GRAY);
   m_image.allocate();
 
   // outlets
@@ -323,31 +323,7 @@ void pix_multiblob :: processImage(imageStruct &image)
 {
   // store the image in greyscale
   // since the algorithm is destructive we do it in a sandbox...
-
-  m_image.xsize=image.xsize;
-  m_image.ysize=image.ysize;
-
-  switch (image.format) {
-  case GL_RGBA:
-    m_image.fromRGBA(image.data);
-    break;
-  case GL_RGB:
-    m_image.fromRGB(image.data);
-    break;
-  case GL_BGR_EXT:
-    m_image.fromBGR(image.data);
-    break;
-  case GL_BGRA_EXT: /* "RGBA" on apple */
-    m_image.fromBGRA(image.data);
-    break;
-  case GL_LUMINANCE:
-    m_image.fromGray(image.data);
-    break;
-  case GL_YCBCR_422_GEM: // YUV
-    m_image.fromUYVY(image.data);
-    break;
-  }
-
+  m_image.convertFrom(&image);
   doProcessing();
 }
 

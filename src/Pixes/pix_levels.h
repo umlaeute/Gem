@@ -100,8 +100,8 @@ protected:
   int m_nBlueTable[nChannelFunction_Levels];
   int m_nAlphaTable[nChannelFunction_Levels];
 
-  void Pete_Levels_SetupCFSettings(int colour=GL_RGBA);
-  void Pete_Levels_CalculateAutoLevels(int colour=GL_RGBA);
+  void Pete_Levels_SetupCFSettings(int colour=GEM_RGBA);
+  void Pete_Levels_CalculateAutoLevels(int colour=GEM_RGBA);
   void Pete_ChannelFunction_Render();
   void Pete_ChannelFunction_RenderYUV();
 

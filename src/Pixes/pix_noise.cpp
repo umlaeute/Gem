@@ -42,7 +42,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_noise, t_floatarg, A_DEFFLOAT, t_floatarg,
 /////////////////////////////////////////////////////////
 pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   m_banged(false), m_automatic(false),
-  m_mode(GL_RGBA_GEM),
+  m_mode(GEM_RGBA),
   m_rand_p(0), m_rand_k(24)
 {
   if (xsize < 1) {
@@ -57,7 +57,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   //    m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.allocate();
 
   generateNoise();
@@ -174,7 +174,7 @@ void pix_noise :: generateNoise(void)
       buffer+=4;
     }
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     while (counter-->0) {
       buffer[chRed] = buffer[chGreen] = buffer[chBlue] = random();      // rgb
       buffer[chAlpha] = 255;                    // alpha
@@ -226,7 +226,7 @@ void pix_noise :: RGBMess(void)
 }
 void pix_noise :: GREYMess(void)
 {
-  m_mode = GL_LUMINANCE;
+  m_mode = GEM_GRAY;
   bang();
 }
 /////////////////////////////////////////////////////////
@@ -241,7 +241,7 @@ void pix_noise :: SETMess(int xsize, int ysize)
   m_pixBlock.image.clear();
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
 
   generateNoise();

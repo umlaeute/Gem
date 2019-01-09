@@ -191,7 +191,7 @@ void *pix_film :: grabThread(void*you)
 /////////////////////////////////////////////////////////
 pix_film :: pix_film(t_symbol *filename) :
   m_haveMovie(0),
-  m_auto(0), m_format(GL_RGBA_GEM),
+  m_auto(0), m_format(GEM_RGBA),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_reqTrack(0), m_curTrack(0),
   m_handle(NULL),
@@ -575,18 +575,18 @@ void pix_film :: csMess(t_symbol *s, bool immediately)
   switch (c) {
   case 'g':
   case 'G':
-    m_format=GL_LUMINANCE;
+    m_format=GEM_GRAY;
     break;
   case 'y':
   case 'Y':
-    m_format=GL_YCBCR_422_GEM;
+    m_format=GEM_YUV;
     break;
   case 'r':
   case 'R':
     if(gensym("RGB")==s||gensym("rgb")==s) {
       m_format=GL_RGB;
     } else {
-      m_format=GL_RGBA_GEM;
+      m_format=GEM_RGBA;
     }
     break;
   default:

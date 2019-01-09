@@ -100,7 +100,7 @@ void pix_levels :: processYUVImage(imageStruct &image)
   pOutput = reinterpret_cast<U32*>(myImage.data);
 
   if(m_DoAuto) {
-    Pete_Levels_CalculateAutoLevels(GL_YUV422_GEM);
+    Pete_Levels_CalculateAutoLevels(GEM_YUV);
   }
   Pete_Levels_SetupCFSettings();
   Pete_ChannelFunction_RenderYUV();
@@ -126,7 +126,7 @@ void pix_levels :: processRGBAImage(imageStruct &image)
   pOutput = reinterpret_cast<U32*>(myImage.data);
 
   if(m_DoAuto) {
-    Pete_Levels_CalculateAutoLevels(GL_RGBA);
+    Pete_Levels_CalculateAutoLevels(GEM_RGBA);
   }
   Pete_Levels_SetupCFSettings();
   Pete_ChannelFunction_Render();
@@ -365,7 +365,7 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour)
         nBlueHistogram[nSourceBlue]+=1;
         nAlphaHistogram[nSourceAlpha]+=1;
         break;
-      case (GL_LUMINANCE):
+      case (GEM_GRAY):
         nRedHistogram  [nSourceRed] +=1;
         nRedHistogram  [nSourceGreen]+=1;
         nRedHistogram  [nSourceBlue]+=1;
@@ -383,7 +383,7 @@ void pix_levels :: Pete_Levels_CalculateAutoLevels(int colour)
         nAlphaHistogram[nSourceBlue]+=1;
         nAlphaHistogram[nSourceAlpha]+=1;
         break;
-      case (GL_YUV422_GEM):
+      case (GEM_YUV):
         nRedHistogram[nSourceRed]+=1; // U
         nGreenHistogram[nSourceGreen]+=1; // Y0
         nAlphaHistogram[nSourceGreen]+=1; // Y0

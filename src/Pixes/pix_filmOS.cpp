@@ -39,7 +39,7 @@ pix_filmOS :: pix_filmOS(t_symbol *filename) :
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
   m_numTracks(0), m_track(0), m_frame(NULL), m_data(NULL), m_film(true),
   m_newFilm(0),
-  m_colorspace(GL_RGBA_GEM), m_format(GL_RGBA_GEM)
+  m_colorspace(GEM_RGBA), m_format(GEM_RGBA)
 {
   // setting the current frame
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),

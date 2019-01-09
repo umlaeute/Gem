@@ -168,7 +168,7 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       }
     }
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     counter=(picturesize<argc)?picturesize:argc;
     if ( pixels->image.csize == 4 ) {
       while (counter--) {
@@ -201,7 +201,7 @@ void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
       }
     }
     break;
-  case GL_YCBCR_422_GEM:
+  case GEM_YUV:
     // ?
     break;
   default:
@@ -254,7 +254,7 @@ void pix_set :: RGBMess(void)
 /////////////////////////////////////////////////////////
 void pix_set :: GREYMess(void)
 {
-  m_mode = GL_LUMINANCE;
+  m_mode = GEM_GRAY;
 }
 
 /////////////////////////////////////////////////////////
@@ -269,7 +269,7 @@ void pix_set :: SETMess(int xsize, int ysize)
   m_pixBlock.image.clear();
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
 }
@@ -339,7 +339,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
       }
     }
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     if ( argc>0 ) {
       r=g=b=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
       a=0;
@@ -362,7 +362,7 @@ void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
       }
     }
     break;
-  case GL_YCBCR_422_GEM:
+  case GEM_YUV:
     // ?
     break;
   default:

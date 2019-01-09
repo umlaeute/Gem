@@ -86,7 +86,7 @@ pix_dot :: ~pix_dot()
 // draw a basic Dot
 //
 /////////////////////////////////////////////////////////
-void pix_dot :: makePattern(int format)
+void pix_dot :: makePattern(unsigned int format)
 {
   switch(format) {
   default: { // RGBA
@@ -116,7 +116,7 @@ void pix_dot :: makePattern(int format)
     }
   }
   break;
-  case GL_LUMINANCE: {
+  case GEM_GRAY: {
     for (int i=0; i<DOTMAX; i++) {
       /* Generated pattern is a quadrant of a disk. */
       unsigned char *pat = (reinterpret_cast<unsigned char*>(pattern)) +
@@ -144,7 +144,7 @@ void pix_dot :: makePattern(int format)
     }
   }
   break;
-  case GL_YUV422_GEM: {
+  case GEM_YUV: {
     const unsigned char chroma = 128;
 
     for (int i=0; i<DOTMAX; i++) {
@@ -429,7 +429,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
     if (sampx == NULL || sampy == NULL ) {
       return;
     }
-    makePattern(GL_YUV422_GEM);
+    makePattern(GEM_YUV);
     sampxy_table_init();
   }
 
@@ -496,7 +496,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
     if (sampx == NULL || sampy == NULL ) {
       return;
     }
-    makePattern(GL_LUMINANCE);
+    makePattern(GEM_GRAY);
     sampxy_table_init();
   }
 

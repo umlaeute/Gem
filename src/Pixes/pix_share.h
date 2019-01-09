@@ -24,11 +24,11 @@
 
 // this is the header of the shared-memory segment
 typedef struct _pixshare_header {
-  size_t    size;      // total size of the shared-memory segment (without header)
-  GLint     xsize;     // width of the image in the shm-segment
-  GLint     ysize;     // height of the image in the shm-segment
-  GLenum    format;    // format of the image (calculate csize,... from that)
-  GLboolean upsidedown;// is the stored image swapped?
+  size_t     size;    // total size of the shared-memory segment (without header)
+  int      xsize;     // width of the image in the shm-segment
+  int      ysize;     // height of the image in the shm-segment
+  unsigned int format;    // format of the image (calculate csize,... from that)
+  bool upsidedown;    // is the stored image swapped?
 } t_pixshare_header;
 
 #endif

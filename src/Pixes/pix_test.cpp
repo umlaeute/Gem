@@ -202,7 +202,7 @@ void makeSMPTE_Grey(unsigned int rows, unsigned int cols,
 pix_test :: pix_test()
 {
   m_pix.image.xsize=m_pix.image.ysize=128;
-  m_pix.image.setCsizeByFormat(GL_RGBA_GEM);
+  m_pix.image.setCsizeByFormat(GEM_RGBA);
   m_pix.image.reallocate();
 }
 
@@ -225,15 +225,15 @@ void pix_test :: render(GemState*state)
   int datasize;
   unsigned char* data=m_pix.image.data;
   switch (m_pix.image.format) {
-  case GL_RGBA_GEM:
+  case GEM_RGBA:
     makeSMPTE_RGBA(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
                    scale);
     break;
-  case GL_YUV422_GEM:
+  case GEM_YUV:
     makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
                   scale);
     break;
-  case GL_LUMINANCE:
+  case GEM_GRAY:
     makeSMPTE_Grey(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
                    scale);
     break;
@@ -254,20 +254,20 @@ void pix_test :: obj_setupCallback(t_class *classPtr)
 }
 void pix_test :: csMess(std::string cs)
 {
-  GLenum fmt=GL_RGBA_GEM;
+  unsigned int fmt=GEM_RGBA;
   char c=0;
   if(cs.size()>0) {
     c=tolower(cs[0]);
   }
   switch(c) {
   case 'r':
-    fmt=GL_RGBA_GEM;
+    fmt=GEM_RGBA;
     break;
   case 'y':
-    fmt=GL_YUV422_GEM;
+    fmt=GEM_YUV;
     break;
   case 'g':
-    fmt=GL_LUMINANCE;
+    fmt=GEM_GRAY;
     break;
   default:
     error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",

@@ -72,7 +72,7 @@ pix_videoDarwin :: pix_videoDarwin( t_floatarg w, t_floatarg h ) :
   m_pixBlock.image.allocate();
 
   m_quality = 0; //normal quality gives non-interlaced images from DV cams
-  m_colorspace = GL_YCBCR_422_GEM; //default to YUV
+  m_colorspace = GEM_YUV; //default to YUV
 
   //set to the first input device
   m_inputDevice = 0;
@@ -448,7 +448,7 @@ void pix_videoDarwin :: InitSeqGrabber()
   if (m_colorspace==GL_BGRA_EXT) {
     m_pixBlock.image.xsize = m_vidXSize;
     m_pixBlock.image.ysize = m_vidYSize;
-    m_pixBlock.image.setCsizeByFormat(GL_RGBA_GEM);
+    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
     m_pixBlock.image.reallocate();
     m_rowBytes = m_vidXSize*4;
     anErr = QTNewGWorldFromPtr (&m_srcGWorld,
@@ -714,11 +714,11 @@ void pix_videoDarwin :: csMess(int format)
     post("colorspace is GL_RGBA %d",m_colorspace);
   } else if (format == GL_BGRA_EXT) {
     post("colorspace is GL_RGBA %d",m_colorspace);
-  } else if (format == GL_YCBCR_422_GEM) {
+  } else if (format == GEM_YUV) {
     post("colorspace is YUV %d",m_colorspace);
-  } else if (format == GL_LUMINANCE) {
+  } else if (format == GEM_GRAY) {
     post("'Gray' not yet supported...using YUV");
-    format=GL_YCBCR_422_GEM;
+    format=GEM_YUV;
   } else {
     error("colorspace is unknown %d", m_colorspace);
     return;
@@ -735,11 +735,11 @@ void pix_videoDarwin :: csMess(t_symbol*s)
   switch (c) {
   case 'g':
   case 'G':
-    format=GL_LUMINANCE;
+    format=GEM_GRAY;
     break;
   case 'y':
   case 'Y':
-    format=GL_YCBCR_422_GEM;
+    format=GEM_YUV;
     break;
   case 'r':
   case 'R':
