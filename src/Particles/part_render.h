@@ -16,6 +16,7 @@ LOG
 #define _INCLUDE__GEM_PARTICLES_PART_RENDER_H_
 
 #include "Particles/partlib_base.h"
+#include "Gem/GemGL.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
