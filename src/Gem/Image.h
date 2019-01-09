@@ -32,30 +32,30 @@ LOG
 
 #if GL_RGBA_GEM == GL_RGBA
 # define GEM_RGBA 0x1908
-const int chRed         = 0;
-const int chGreen       = 1;
-const int chBlue        = 2;
-const int chAlpha       = 3;
+const int chRed   = 0;
+const int chGreen = 1;
+const int chBlue  = 2;
+const int chAlpha = 3;
 #else
 # define GEM_RGBA 0x80E1
-const int chAlpha       = 0;
-const int chRed         = 1;
-const int chGreen       = 2;
-const int chBlue        = 3;
+const int chAlpha = 0;
+const int chRed   = 1;
+const int chGreen = 2;
+const int chBlue  = 3;
 #endif
 
 #define GEM_RGB 0x1907
 
 /* Gray */
 #define GEM_GRAY 0x1909
-const int chGray        = 0;
+const int chGray  = 0;
 
 /* YUV422 */
 #define GEM_YUV 0x85B9
-const int chU           = 0;
-const int chY0          = 1;
-const int chV           = 2;
-const int chY1          = 3;
+const int chU     = 0;
+const int chY0    = 1;
+const int chV     = 2;
+const int chY1    = 3;
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -242,13 +242,13 @@ struct GEM_EXTERN imageStruct {
   // the memory could(!) be reserved by this class or someone else
   // "notowned" should be set to "1", if "data" points to foreign memory
   // "data" is not freed directly, when the destructor is called
-  unsigned char   *data;    // the pointer to the data
+  unsigned char *data;    // the pointer to the data
 private:
   // "pdata" is the private data, and is the memory reserved by this class
   // this data is freed when the destructor is called
-  unsigned char   *pdata;
+  unsigned char *pdata;
   // "datasize" is the size of data reserved at "pdata"
-  size_t    datasize;
+  size_t datasize;
 
 public:
   //////////
@@ -275,17 +275,17 @@ struct GEM_EXTERN pixBlock {
 
   //////////
   // the block's image
-  imageStruct     image;
+  imageStruct image;
 
   //////////
   // is this a newimage since last time?
   //  ie, has it been refreshed
-  bool            newimage;
+  bool newimage;
 
   //////////
   // keeps track of when new films are loaded
   //  useful for rectangle_textures on OSX
-  bool                    newfilm;
+  bool newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

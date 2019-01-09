@@ -81,27 +81,27 @@ pixBlock :: pixBlock(void)
 
 
 imageStruct :: imageStruct(void)
-  : xsize (0),ysize(0),csize(0),
+  : xsize (0), ysize(0), csize(0)
 #ifdef __APPLE__
     // or should type be GL_UNSIGNED_INT_8_8_8_8_REV ? i don't know: jmz
 # ifdef __BIG_ENDIAN__
-    type(GL_UNSIGNED_SHORT_8_8_REV_APPLE),
+  , type(GL_UNSIGNED_SHORT_8_8_REV_APPLE)
 # else
-    type(GL_UNSIGNED_SHORT_8_8_APPLE),
+  , type(GL_UNSIGNED_SHORT_8_8_APPLE)
 # endif /* __BIG_ENDIAN__ */
-    format(GL_YCBCR_422_GEM),
+  , format(GL_YCBCR_422_GEM)
 #else /* !__APPLE__ */
-    type(GL_UNSIGNED_BYTE), format(GL_RGBA),
+  , type(GL_UNSIGNED_BYTE), format(GL_RGBA)
 #endif /* __APPLE__ */
-    notowned(false),data(NULL),pdata(NULL),datasize(0),
-    upsidedown(true)
+  , notowned(false), data(NULL), pdata(NULL), datasize(0)
+  , upsidedown(true)
 {}
 
 imageStruct :: imageStruct(const imageStruct&org)
-  : xsize (0),ysize(0),csize(0),
-    type(GL_UNSIGNED_BYTE), format(GL_RGBA),
-    notowned(0),data(NULL),pdata(NULL),datasize(0),
-    upsidedown(true)
+  : xsize(0), ysize(0), csize(0)
+  , type(GL_UNSIGNED_BYTE), format(GL_RGBA)
+  , notowned(false), data(NULL), pdata(NULL), datasize(0)
+  , upsidedown(true)
 {
   org.copy2Image(this);
 }
@@ -348,7 +348,7 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
   default:
     format=GL_RGBA;
 #ifdef __BIG_ENDIAN__
-    type  =GL_UNSIGNED_INT_8_8_8_8_REV;
+    type=GL_UNSIGNED_INT_8_8_8_8_REV;
 #else
     type=GL_UNSIGNED_BYTE;
     //type  =GL_UNSIGNED_INT_8_8_8_8;
