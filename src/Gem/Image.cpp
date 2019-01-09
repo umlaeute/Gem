@@ -467,27 +467,21 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
   switch (from->format) {
   default:
     error("%s: unable to convert from %d", __FUNCTION__, from->format);
-    return false;
+    break;
   case GL_RGBA:
-    fromRGBA(from->data);
-    break;
+    return fromRGBA(from->data);
   case GL_RGB:
-    fromRGB(from->data);
-    break;
+    return fromRGB(from->data);
   case GL_BGR_EXT:
-    fromBGR(from->data);
-    break;
+    return fromBGR(from->data);
   case GL_BGRA_EXT: /* "RGBA" on apple */
-    fromBGRA(from->data);
-    break;
+    return fromBGRA(from->data);
   case GL_LUMINANCE:
-    fromGray(from->data);
-    break;
+    return fromGray(from->data);
   case GL_YCBCR_422_GEM: // YUV
-    fromUYVY(from->data);
-    break;
+    return fromUYVY(from->data);
   }
-  return true;
+  return false;
 }
 
 GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
@@ -512,27 +506,27 @@ GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
   switch (format) {
   default:
     error("%s: unable to convert to %d", __FUNCTION__, format);
-    return false;
+    break;
   case GL_RGBA:
-    to->fromRGBA(data);
+    return to->fromRGBA(data);
     break;
   case GL_RGB:
-    to->fromRGB(data);
+    return to->fromRGB(data);
     break;
   case GL_BGR_EXT:
-    to->fromBGR(data);
+    return to->fromBGR(data);
     break;
   case GL_BGRA_EXT: /* "RGBA" on apple */
-    to->fromBGRA(data);
+    return to->fromBGRA(data);
     break;
   case GL_LUMINANCE:
-    to->fromGray(data);
+    return to->fromGray(data);
     break;
   case GL_YCBCR_422_GEM: // YUV
-    to->fromUYVY(data);
+    return to->fromUYVY(data);
     break;
   }
-  return true;
+  return false;
 }
 
 GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
