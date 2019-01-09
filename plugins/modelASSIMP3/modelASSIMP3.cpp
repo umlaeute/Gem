@@ -17,6 +17,7 @@
 #include "Gem/Exception.h"
 #include "Gem/Properties.h"
 #include "Gem/VertexBuffer.h"
+#include "Gem/GemGL.h"
 
 #include "Utils/Functions.h"
 

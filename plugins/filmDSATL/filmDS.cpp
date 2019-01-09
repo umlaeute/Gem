@@ -43,6 +43,7 @@
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
 #include "Gem/Exception.h"
+#include "Gem/GemGL.h"
 
 using namespace gem::plugins;
 

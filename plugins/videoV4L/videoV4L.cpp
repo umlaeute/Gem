@@ -56,6 +56,7 @@ using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 #include "Gem/Files.h"
+#include "Gem/GemGL.h"
 
 #ifndef HAVE_LIBV4L1
 # define v4l1_open ::open

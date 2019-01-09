@@ -18,6 +18,7 @@
 
 #include "imageMAGICK.h"
 #include "Gem/RTE.h"
+#include "Gem/GemGL.h"
 
 #include <Magick++.h>
 

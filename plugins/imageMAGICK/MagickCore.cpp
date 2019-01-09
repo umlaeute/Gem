@@ -21,6 +21,7 @@
 
 #include "imageMAGICK.h"
 #include "Gem/RTE.h"
+#include "Gem/GemGL.h"
 
 #ifdef _MSC_VER
 # if !defined(_W64)

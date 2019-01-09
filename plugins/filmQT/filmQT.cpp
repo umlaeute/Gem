@@ -22,6 +22,7 @@
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
+#include "Gem/GemGL.h"
 #include "Utils/wstring.h"
 
 using namespace gem::plugins;
