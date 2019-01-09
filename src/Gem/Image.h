@@ -17,10 +17,9 @@ LOG
 #ifndef _INCLUDE__GEM_GEM_IMAGE_H_
 #define _INCLUDE__GEM_GEM_IMAGE_H_
 
-#include "Gem/GemGL.h"
-
 #include <string.h>
 #include <stdlib.h>
+#include "Gem/ExportDef.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Color component defines
