@@ -20,6 +20,7 @@
 
 #include "pix_video.h"
 #include "Gem/State.h"
+#include "Gem/Image.h"
 #include "Gem/Exception.h"
 #include "plugins/PluginFactory.h"
 
