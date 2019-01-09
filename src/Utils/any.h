@@ -29,7 +29,7 @@
 
 #include "is_pointer.h"
 
-//#define GEM_ANY_TYPEID_HACK
+//#define GEM_ANY_TYPEID_HACK 1
 
 namespace gem
 {
