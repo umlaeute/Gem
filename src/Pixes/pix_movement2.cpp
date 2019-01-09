@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////
 
 #include "pix_movement2.h"
+
 #include <string.h>
 #include "Utils/Functions.h"
 
@@ -124,20 +125,7 @@ void pix_movement2 :: processImage(imageStruct &image)
   }
 
   // 1. store the current frame as gray-image in the appropriate buffer
-  switch (image.format) {
-  case GL_RGBA:
-    m_frame[m_frameIndex].fromRGBA(image.data);
-    break;
-  case GL_BGRA_EXT:
-    m_frame[m_frameIndex].fromBGRA(image.data);
-    break;
-  case GEM_YUV:
-    m_frame[m_frameIndex].fromUYVY(image.data);
-    break;
-  case GEM_GRAY:
-    m_frame[m_frameIndex].fromGray(image.data);
-    break;
-  default:
+  if(!m_frame[m_frameIndex].convertFrom(&image)) {
     error("no method for this kind of color");
     return;
   }

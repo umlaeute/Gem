@@ -1000,6 +1000,7 @@ void pix_freeframe :: openMess(t_symbol*s)
 /////////////////////////////////////////////////////////
 void pix_freeframe :: processImage(imageStruct &image)
 {
+  unsigned int orgformat = image.format;
   unsigned int format=m_image.format;
   unsigned char*data=image.data;
 
@@ -1008,58 +1009,14 @@ void pix_freeframe :: processImage(imageStruct &image)
   }
 
   // convert the current image into a format that suits the FreeFrame-plugin
-  if(image.format!=format) {
-    switch (image.format) {
-    case GL_RGBA:
-      m_image.fromRGBA(image.data);
-      break;
-    case GL_BGRA_EXT: /* "RGBA" on apple */
-      m_image.fromBGRA(image.data);
-      break;
-    case GEM_GRAY: // greyscale
-      m_image.fromGray(image.data);
-      break;
-    case GEM_YUV: // YUV
-      m_image.fromYUV422(image.data);
-      break;
+  if(orgformat != format) {
+    if(m_image.convertFrom(&image)) {
+      m_plugin->processFrame(m_image);
+      m_image.convertTo(&image);
     }
-    m_plugin->processFrame(m_image);
-    data=m_image.data;
   } else {
     m_plugin->processFrame(image);
-    data=image.data;
   }
-
-  // check whether we have converted our image data
-  if(image.data!=data)
-    // it seems, like we did: convert it back
-
-    // just copied the code from [pix_rgba]
-    switch(format) {
-    case GL_RGBA:
-      image.fromRGBA(m_image.data);
-      break;
-    case GL_RGB:
-      image.fromRGB(m_image.data);
-      break;
-    case GL_BGR_EXT:
-      image.fromBGR(m_image.data);
-      break;
-    case GL_BGRA_EXT: /* "RGBA" on apple */
-      image.fromBGRA(m_image.data);
-      break;
-    case GEM_GRAY:
-      image.fromGray(m_image.data);
-      break;
-    case GEM_YUV: // YUV
-      image.fromUYVY(m_image.data);
-      break;
-    default:
-      error("no method for this format !!!");
-      error("if you know how to convert this format (%X),\n"
-            "please contact the authors of this software", image.format);
-      return;
-    }
 }
 
 
