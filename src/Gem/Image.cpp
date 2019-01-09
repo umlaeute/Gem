@@ -1222,7 +1222,7 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   return true;
 }
 
-GEM_EXTERN bool imageStruct::fromGray(short *greydata)
+GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
 {
   if(!greydata) {
     return false;
