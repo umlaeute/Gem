@@ -27,6 +27,8 @@
 #include <algorithm>
 #include <string>
 
+#include "is_pointer.h"
+
 //#define GEM_ANY_TYPEID_HACK
 
 namespace gem
@@ -334,11 +336,10 @@ struct GEM_EXTERN any {
 };
 
 // boost::any-like casting
-
 template<typename T>
-T* any_cast(any* this_)
+T* any_cast(any* this_, bool force)
 {
-  if (this_->get_type() != typeid(T)) {
+  if (!force && !this_->compatible<T>()) {
     throw bad_any_cast(this_->get_type(), typeid(T));
   }
   if (sizeof(T) <= sizeof(void*)) {
@@ -351,13 +352,13 @@ T* any_cast(any* this_)
 template<typename T>
 T const* any_cast(any const* this_)
 {
-  return any_cast<T>(const_cast<any*>(this_));
+  return any_cast<T>(const_cast<any*>(this_), false);
 }
 
 template<typename T>
-T const& any_cast(any const& this_)
+T const& any_cast(any const& this_, bool force_pointers=false)
 {
-  return *any_cast<T>(const_cast<any*>(&this_));
+  return *any_cast<T>(const_cast<any*>(&this_), force_pointers && is_pointer<T>());
 }
 #ifdef GEM_INTERNAL
 // Note: The "unsafe" versions of any_cast are not part of the
