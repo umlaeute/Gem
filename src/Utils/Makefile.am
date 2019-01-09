@@ -30,6 +30,7 @@ libUtils_la_include_HEADERS = \
 	Functions.h \
 	GLUtil.h \
 	GemMath.h \
+	is_pointer.h \
 	Matrix.h \
 	nop.h \
 	PixPete.h \
@@ -53,6 +54,7 @@ libUtils_la_SOURCES=  \
 	GLUtil_define.cpp \
 	GLUtil_define_generated.h \
 	GemMath.h \
+	is_pointer.h \
 	Matrix.cpp \
 	Matrix.h \
 	PixPete.h \
