@@ -31,22 +31,27 @@ LOG
 /* RGBA */
 
 #if GL_RGBA_GEM == GL_RGBA
+# define GEM_RGBA 0x1908
 const int chRed         = 0;
 const int chGreen       = 1;
 const int chBlue        = 2;
 const int chAlpha       = 3;
 #else
+# define GEM_RGBA 0x80E1
 const int chAlpha       = 0;
 const int chRed         = 1;
 const int chGreen       = 2;
 const int chBlue        = 3;
 #endif
 
+#define GEM_RGB 0x1907
 
 /* Gray */
+#define GEM_GRAY 0x1909
 const int chGray        = 0;
 
 /* YUV422 */
+#define GEM_YUV 0x85B9
 const int chU           = 0;
 const int chY0          = 1;
 const int chV           = 2;
