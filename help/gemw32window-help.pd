@@ -1,4 +1,4 @@
-#N canvas 30 105 957 728 10;
+#N canvas 55 7 957 713 10;
 #X declare -lib Gem;
 #X obj 367 612 gemw32window;
 #X obj 442 642 print unknown.message;
@@ -30,7 +30,7 @@
 0;
 #X obj 407 365 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
 0;
-#X obj 407 405 cnv 15 470 30 empty empty empty 20 12 0 14 -260097 -66577
+#X obj 407 405 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
 0;
 #X obj 367 506 t a;
 #X obj 407 445 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
@@ -62,39 +62,24 @@ render-bang;
 #X text 515 531 some random unknown message;
 #X obj 407 565 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
 0;
-#N canvas 76 289 890 395 specific 0;
+#N canvas 60 208 572 395 specific 0;
 #X obj 88 303 outlet;
 #X msg 88 40 offset \$1 \$1;
 #X floatatom 88 21 5 0 0 0 - - -;
 #X floatatom 128 61 5 0 0 0 - - -;
 #X msg 128 80 dimen \$1 \$1;
 #X text 201 46 change window dimension/position on the fly;
-#X msg 288 97 menu;
-#X obj 289 127 r \$0-info;
-#X obj 289 150 route menu;
-#X floatatom 289 243 5 0 0 0 - - -;
-#X obj 289 264 i;
-#X msg 289 290 addMenu \$1 File 0 \, addMenu \$1 Gem 2 \, addMenu \$1
-Quit 1;
-#X obj 289 176 route new float;
-#X floatatom 416 212 5 0 0 1 menu - -;
-#X text 326 242 ID of the newly created menu;
-#X text 320 271 add entries to the new menu, f 62;
-#X text 625 290 addMenu <menuid> <title> <value>;
-#X text 510 212 <- selected menu;
-#X text 336 96 <- create a new right-click menu;
+#X msg 152 173 topmost \$1;
+#X obj 152 151 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 231 156 make sure the Gem-window is in front of all others
+;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
 #X connect 4 0 0 0;
 #X connect 6 0 0 0;
-#X connect 7 0 8 0;
-#X connect 8 0 12 0;
-#X connect 9 0 10 0;
-#X connect 10 0 11 0;
-#X connect 11 0 0 0;
-#X connect 12 0 9 0;
-#X connect 12 1 13 0;
+#X connect 7 0 6 0;
 #X restore 411 571 pd specific messages;
 #X text 47 51 [gemw32window];
 #X text 18 79 part of Gem;
@@ -115,7 +100,66 @@ to create windows.;
 #X obj 235 348 metro 100;
 #X obj 235 326 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X text 765 411 (NOT IMPLEMENTED);
+#N canvas 348 0 335 657 keyboard 0;
+#X obj 104 235 r \$0-info;
+#X obj 104 256 route keyboard;
+#X obj 104 277 list split 1;
+#X obj 104 298 list trim;
+#X obj 104 319 route keyname key;
+#X obj 104 370 unpack s f;
+#X symbolatom 104 391 10 0 0 0 - - -;
+#X floatatom 166 391 5 0 0 0 - - -;
+#X floatatom 237 391 5 0 0 0 - - -;
+#X obj 204 370 unpack;
+#X floatatom 204 391 5 0 0 0 - - -;
+#X msg 104 481 add2 \$1;
+#X msg 160 482 set;
+#X obj 104 411 list prepend 0;
+#X obj 104 432 route 0;
+#X obj 104 453 symbol;
+#X msg 104 502 W ;
+#X obj 38 107 cnv 15 100 100 empty empty empty 20 12 0 14 -154295 -66577
+0;
+#X obj 148 107 cnv 15 100 100 empty empty empty 20 12 0 14 -155048
+-66577 0;
+#X obj 258 107 cnv 15 40 100 empty empty empty 20 12 0 14 -223782 -66577
+0;
+#X text 58 109 keystroke;
+#X text 166 109 keyname;
+#X text 267 108 key;
+#X text 54 136 <a>;
+#X text 54 152 <LeftShift>;
+#X text 54 168 <A>;
+#X text 54 184 <Ã¤>;
+#X msg 174 136 A;
+#X msg 174 152 ;
+#X msg 174 184 Þ;
+#X msg 174 168 A;
+#X text 264 136 65;
+#X text 264 168 65;
+#X text 264 152 16;
+#X text 264 184 222;
+#X text 37 124 ===========================================;
+#X obj 160 463 loadbang;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 1 9 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 0;
+#X connect 6 0 13 0;
+#X connect 7 0 13 1;
+#X connect 9 0 10 0;
+#X connect 9 1 8 0;
+#X connect 11 0 16 0;
+#X connect 12 0 16 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 15 0 11 0;
+#X connect 36 0 12 0;
+#X restore 58 464 pd keyboard;
 #X connect 0 0 2 0;
 #X connect 0 1 1 0;
 #X connect 2 0 3 0;
