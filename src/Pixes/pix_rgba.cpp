@@ -62,7 +62,7 @@ void pix_rgba :: processImage(imageStruct &image)
   }
 
   image.data   = m_image.data;
-  image.notowned = 0;
+  image.notowned = true;
   image.setCsizeByFormat(m_image.format);
 }
 
