@@ -33,6 +33,11 @@ static unsigned int s_instances=0;
 
 static std::map<GLFWwindow *, gemglfw3window*>s_windowmap;
 
+static void error_callback(int err, const char* description)
+{
+  error("[glfw3window]: %s", description);
+}
+
 CPPEXTERN_NEW(gemglfw3window);
 
 /* starting with GLFW-3.2, we can use glfwGetKeyName() */
@@ -52,6 +57,7 @@ gemglfw3window :: gemglfw3window(void) :
   m_gles(false)
 {
   if(s_instances==0) {
+    glfwSetErrorCallback(error_callback);
     if(!glfwInit()) {
       throw(GemException("could not initialize GLFW infrastructure"));
     }
@@ -241,14 +247,13 @@ bool gemglfw3window :: create(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_profile_minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   }
-
   m_window=glfwCreateWindow(m_width, m_height,
                             m_title.c_str(),
                             monitor,
                             NULL);
 
   if (!m_window) {
-    error("glfw couldn't create window");
+    error("glfw3 couldn't create window");
     return false;
   }
   s_windowmap[m_window]=this;
