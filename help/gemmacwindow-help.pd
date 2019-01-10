@@ -211,6 +211,8 @@ Quit 1;
 #X connect 12 0 9 0;
 #X connect 12 1 13 0;
 #X restore 421 429 pd specific messages;
+#X text 16 171 afaict \, it is non-functional. you probably should
+use [gemmacoswindow] instead.;
 #X connect 2 0 3 0;
 #X connect 2 1 5 0;
 #X connect 7 0 8 0;
