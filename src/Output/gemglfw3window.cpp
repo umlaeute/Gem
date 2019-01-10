@@ -35,6 +35,9 @@ static std::map<GLFWwindow *, gemglfw3window*>s_windowmap;
 
 CPPEXTERN_NEW(gemglfw3window);
 
+/* starting with GLFW-3.2, we can use glfwGetKeyName() */
+#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
+
 /////////////////////////////////////////////////////////
 //
 // gemglfw3window
@@ -268,7 +271,11 @@ bool gemglfw3window :: create(void)
   glfwSetWindowCloseCallback  (m_window, windowcloseCb);
   glfwSetWindowRefreshCallback(m_window, windowrefreshCb);
   glfwSetKeyCallback          (m_window, keyCb);
+#if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,2,0)
+  /* we use glfwGetKeyName() in they KeyCallback */
+#else
   glfwSetCharCallback         (m_window, charCb);
+#endif
   glfwSetMouseButtonCallback  (m_window, mousebuttonCb);
   glfwSetCursorPosCallback    (m_window, mouseposCb);
   glfwSetScrollCallback       (m_window, scrollCb);
@@ -333,6 +340,10 @@ void gemglfw3window::windowrefreshCallback()
 void gemglfw3window::keyCallback(int key, int scancode, int action,
                                  int mods)
 {
+#if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,2,0)
+  const char*sid = glfwGetKeyName(key, scancode);
+  gemglfw3window::key(0, std::string(sid?sid:"<unknown>"), key, action);
+#else
   t_atom ap[4];
   SETFLOAT (ap+0, 0);
   SETSYMBOL(ap+1, gensym("key"));
@@ -340,6 +351,7 @@ void gemglfw3window::keyCallback(int key, int scancode, int action,
   SETFLOAT (ap+3, action);
 
   info(gensym("keyboard"), 4, ap);
+#endif
 }
 void gemglfw3window::charCallback(unsigned int character)
 {
