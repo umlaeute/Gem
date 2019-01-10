@@ -1,68 +1,183 @@
-#N canvas 70 90 957 728 10;
+#N canvas 55 51 885 613 10;
 #X declare -lib Gem;
-#X obj 367 612 gemglfw3window;
-#X obj 442 642 print unknown.message;
-#X obj 367 645 route bang;
-#X obj 367 668 bng 15 250 50 0 empty empty render! 17 7 0 10 -262144
--4034 -1;
-#X obj 674 703 print info;
-#X obj 424 697 s \$0-info;
-#X text 485 697 feedback about the window;
-#X obj 674 657 r \$0-info;
-#X obj 674 680 spigot;
-#X obj 721 682 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 407 45 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 85 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 125 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 165 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 205 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 245 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 285 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 325 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 365 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X obj 407 405 cnv 15 470 30 empty empty empty 20 12 0 14 -260097 -66577
-0;
-#X obj 367 506 t a;
-#X obj 407 445 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
-0;
-#X msg 421 51 create;
-#X msg 421 90 bang;
-#X msg 421 130 destroy;
-#X text 515 91 clear window \, activate openGL-context \, and send
-render-bang;
-#X text 515 132 destroy the window;
-#X text 515 51 create the window;
-#X text 515 171 single-buffered(1) or double-buffered(2) rendering
+#X text 13 145 [gemglfw3window] uses GLFW (version3) to create windows.
 ;
-#X msg 421 170 buffer 2;
-#X msg 421 210 FSAA \$1;
-#X text 515 211 Full Screen Antia Aliasing mode;
-#X msg 421 250 title foo;
-#X text 515 251 title of the window;
-#X msg 421 290 dimen 640 460;
-#X text 515 291 change dimension of the window;
-#X msg 421 330 offset 100 100;
-#X text 515 331 change position of the window;
-#X text 515 411 turn on/off window borders;
-#X text 515 451 (don't) show cursorwhen it's on the window;
-#X obj 407 525 cnv 15 470 30 empty empty empty 20 12 0 14 -258113 -66577
+#X obj 441 515 print unknown.message;
+#X obj 367 515 route bang;
+#X obj 367 558 bng 15 250 50 0 empty empty render! 17 7 0 10 -262144
+-4034 -1;
+#X obj 648 560 print info;
+#X obj 424 537 s \$0-info;
+#X text 485 537 feedback about the window;
+#X obj 648 514 r \$0-info;
+#X obj 648 537 spigot;
+#X obj 695 539 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 407 45 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 75 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 105 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 135 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 165 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 195 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 225 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 255 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 285 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 315 cnv 15 470 25 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X obj 367 386 t a;
+#X obj 407 345 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X msg 411 48 create;
+#X msg 411 78 bang;
+#X msg 411 108 destroy;
+#X text 515 79 clear window \, activate openGL-context \, and send
+render-bang;
+#X text 515 110 destroy the window;
+#X text 515 49 create the window;
+#X text 515 139 single-buffered(1) or double-buffered(2) rendering
+;
+#X msg 411 138 buffer 2;
+#X msg 411 168 FSAA \$1;
+#X text 515 169 Full Screen Antia Aliasing mode;
+#X msg 411 198 title foo;
+#X text 515 199 title of the window;
+#X msg 411 228 dimen 640 460;
+#X text 515 229 change dimension of the window;
+#X msg 411 258 offset 100 100;
+#X text 515 259 change position of the window;
+#X text 515 319 turn on/off window borders;
+#X text 515 349 (don't) show cursorwhen it's on the window;
+#X obj 407 395 cnv 15 470 25 empty empty empty 20 12 0 14 -258113 -66577
 0;
 #X text 465 17 standard messages;
-#X msg 421 530 blurb;
-#X text 515 531 some random unknown message;
-#X obj 407 565 cnv 15 470 30 empty empty empty 20 12 0 14 -4034 -66577
+#X msg 421 399 blurb;
+#X text 515 400 some random unknown message;
+#X obj 407 425 cnv 15 470 25 empty empty empty 20 12 0 14 -257985 -66577
 0;
-#N canvas 413 484 890 395 specific 0;
+#X text 47 51 [gemglfw3window];
+#X text 18 79 part of Gem;
+#X obj 38 553 declare -lib Gem;
+#X text 24 529 last updated for Gem-0.94;
+#X msg 411 348 cursor \$1;
+#X obj 500 350 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 411 318 border \$1;
+#X obj 500 320 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 500 290 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 515 289 switch fullscreen mode on/off;
+#X msg 411 288 fullscreen \$1;
+#X obj 235 348 metro 100;
+#X obj 235 326 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 43 209 cnv 15 100 50 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#N canvas 348 141 312 657 keyboard 0;
+#X obj 54 265 r \$0-info;
+#X obj 54 286 route keyboard;
+#X obj 54 307 list split 1;
+#X obj 54 328 list trim;
+#X obj 54 349 route keyname key;
+#X obj 54 400 unpack s f;
+#X symbolatom 54 421 10 0 0 0 - - -;
+#X floatatom 116 421 5 0 0 0 - - -;
+#X floatatom 187 421 5 0 0 0 - - -;
+#X obj 154 400 unpack;
+#X floatatom 154 421 5 0 0 0 - - -;
+#X msg 54 582;
+#X obj 18 127 cnv 15 100 100 empty empty empty 20 12 0 14 -154295 -66577
+0;
+#X obj 128 127 cnv 15 100 100 empty empty empty 20 12 0 14 -155048
+-66577 0;
+#X obj 238 127 cnv 15 40 100 empty empty empty 20 12 0 14 -223782 -66577
+0;
+#X text 38 129 keystroke;
+#X text 146 129 keyname;
+#X text 247 128 key;
+#X text 34 153 <a>;
+#X text 34 171 <LeftShift>;
+#X text 34 189 <A>;
+#X text 34 207 <Ã¤>;
+#X msg 154 153 A;
+#X msg 154 171 ;
+#X msg 154 207 Þ;
+#X msg 154 189 A;
+#X text 244 153 65;
+#X text 244 189 65;
+#X text 244 171 16;
+#X text 244 207 222;
+#X text 17 139 ===========================================;
+#X text 17 23 While Gem tries to provide a consistent platform-independent
+interface \, the values returned by [gemkeyboard] and [gemkeyname]
+might depend on the actual window toolkit., f 43;
+#X text 125 264 <- from [gem*window];
+#N canvas 5 51 450 300 record 0;
+#X obj 244 15 r \$0-info;
+#X obj 244 66 route keyboard;
+#X obj 244 87 list split 1;
+#X obj 244 108 list trim;
+#X msg 244 221 add2 \$1;
+#X msg 300 221 set;
+#X obj 300 200 loadbang;
+#X text 315 14 <- from [gem*window];
+#X obj 244 129 route keyname;
+#X obj 244 152 unpack s f;
+#X obj 244 200 spigot;
+#X obj 301 179 == 0;
+#X obj 244 244 t a;
+#X obj 244 267 outlet;
+#X obj 100 100 f;
+#X obj 185 117 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 100 118 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 244 40 spigot;
+#X connect 0 0 17 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X connect 3 0 8 0;
+#X connect 4 0 12 0;
+#X connect 5 0 12 0;
+#X connect 6 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 9 1 11 0;
+#X connect 10 0 4 0;
+#X connect 11 0 10 1;
+#X connect 12 0 13 0;
+#X connect 15 0 5 0;
+#X connect 16 0 17 1;
+#X connect 17 0 1 0;
+#X coords 0 -1 1 1 100 33 1 100 100;
+#X restore 54 543 pd record keyup;
+#X text 10 102 values returned by [gemglfw3window];
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 1 9 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 0;
+#X connect 9 0 10 0;
+#X connect 9 1 8 0;
+#X connect 33 0 11 0;
+#X restore 58 224 pd keyboard;
+#X obj 363 459 cnv 15 100 50 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X obj 367 472 gemglfw3window;
+#X text 765 319 (NOT IMPLEMENTED);
+#N canvas 60 208 572 395 specific 0;
 #X obj 88 303 outlet;
 #X msg 88 40 offset \$1 \$1;
 #X floatatom 88 21 5 0 0 0 - - -;
@@ -83,35 +198,13 @@ created windows;
 #X connect 6 0 7 0;
 #X connect 7 0 0 0;
 #X connect 9 0 0 0;
-#X restore 411 571 pd specific messages;
-#X text 47 51 [gemglfw3window];
-#X text 18 79 part of Gem;
-#X obj 38 693 declare -lib Gem;
-#X text 24 669 last updated for Gem-0.94;
-#X msg 421 450 cursor \$1;
-#X obj 490 452 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X msg 421 410 border \$1;
-#X obj 490 412 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 501 372 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 515 371 switch fullscreen mode on/off;
-#X msg 421 370 fullscreen \$1;
-#X obj 235 348 metro 100;
-#X obj 235 326 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 765 411 (NOT IMPLEMENTED);
-#X text 13 145 [gemglfw3window] uses GLFW (version3) to create windows.
-;
-#X connect 0 0 2 0;
-#X connect 0 1 1 0;
+#X restore 421 429 pd specific messages;
 #X connect 2 0 3 0;
 #X connect 2 1 5 0;
 #X connect 7 0 8 0;
 #X connect 8 0 4 0;
 #X connect 9 0 8 1;
-#X connect 20 0 0 0;
+#X connect 20 0 61 0;
 #X connect 22 0 20 0;
 #X connect 23 0 20 0;
 #X connect 24 0 20 0;
@@ -120,13 +213,15 @@ created windows;
 #X connect 32 0 20 0;
 #X connect 34 0 20 0;
 #X connect 36 0 20 0;
-#X connect 42 0 0 0;
-#X connect 45 0 0 0;
-#X connect 50 0 20 0;
-#X connect 51 0 50 0;
-#X connect 52 0 20 0;
-#X connect 53 0 52 0;
-#X connect 54 0 56 0;
+#X connect 42 0 61 0;
+#X connect 49 0 20 0;
+#X connect 50 0 49 0;
+#X connect 51 0 20 0;
+#X connect 52 0 51 0;
+#X connect 53 0 55 0;
+#X connect 55 0 20 0;
 #X connect 56 0 20 0;
-#X connect 57 0 20 0;
-#X connect 58 0 57 0;
+#X connect 57 0 56 0;
+#X connect 61 0 2 0;
+#X connect 61 1 1 0;
+#X connect 63 0 61 0;
