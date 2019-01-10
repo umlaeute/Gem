@@ -12,7 +12,11 @@
 #include "Files.h"
 
 #ifdef HAVE_WORDEXP_H
+#ifdef __EMSCRIPTEN__
+#undef HAVE_WORDEXP_H
+#else
 # include <wordexp.h>
+#endif
 #endif
 
 #include "Gem/RTE.h"
