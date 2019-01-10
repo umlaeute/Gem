@@ -549,7 +549,35 @@ void PBuffer::disable()
   }
 }
 #else
-# error do Pbuffers on your OS !
+
+# warning do Pbuffers on your OS !
+
+struct PBuffer_data {
+  int dummy;
+};
+
+PBuffer::PBuffer(int width,int height,int flags)
+  : width(width)
+  , height(height)
+  , data(nullptr)
+{
+  error("PBuffer::PBuffer(): no PBuffer support");
+}
+
+PBuffer::~PBuffer()
+{
+}
+
+void PBuffer::enable()
+{
+  error("PBuffer::enable(): no PBuffer support");
+}
+
+void PBuffer::disable()
+{
+  error("PBuffer::disable(): no PBuffer support");
+}
+
 #endif /* OS */
 
 /* dummy implementations */
