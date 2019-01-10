@@ -333,18 +333,19 @@ void gemglfw3window::windowrefreshCallback()
 void gemglfw3window::keyCallback(int key, int scancode, int action,
                                  int mods)
 {
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("key"));
-  SETFLOAT (ap+1, key);
-  SETFLOAT (ap+2, action);
+  t_atom ap[4];
+  SETFLOAT (ap+0, 0);
+  SETSYMBOL(ap+1, gensym("key"));
+  SETFLOAT (ap+2, key);
+  SETFLOAT (ap+3, action);
 
-  info(gensym("keyboard"), 3, ap);
+  info(gensym("keyboard"), 4, ap);
 }
 void gemglfw3window::charCallback(unsigned int character)
 {
-  t_atom ap[3];
+  t_atom ap[4];
   std::string sid;
-  int action=-1; // ????
+  int action=1; // ????
   switch(character) {
   case 32:
     sid = "Space";
@@ -352,11 +353,12 @@ void gemglfw3window::charCallback(unsigned int character)
   default:
     sid += character;
   }
-  SETSYMBOL(ap+0, gensym("keyname"));
-  SETSYMBOL(ap+1, gensym(sid.c_str()));
-  SETFLOAT (ap+2, action);
+  SETFLOAT (ap+0, 0);
+  SETSYMBOL(ap+1, gensym("keyname"));
+  SETSYMBOL(ap+2, gensym(sid.c_str()));
+  SETFLOAT (ap+3, action);
 
-  info(gensym("keyboard"), 3, ap);
+  info(gensym("keyboard"), 4, ap);
 }
 void gemglfw3window::mousebuttonCallback(int button, int action, int mods)
 {
