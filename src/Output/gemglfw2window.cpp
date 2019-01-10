@@ -303,16 +303,19 @@ void gemglfw2window::windowrefreshCallback()
 }
 void gemglfw2window::keyCallback(int key, int action)
 {
-  t_atom ap[3];
-  SETSYMBOL(ap+0, gensym("key"));
-  SETFLOAT (ap+1, key);
-  SETFLOAT (ap+2, action);
+  int devID=0;
+  t_atom ap[4];
+  SETFLOAT (ap+0, devID);
+  SETSYMBOL(ap+1, gensym("key"));
+  SETFLOAT (ap+2, key);
+  SETFLOAT (ap+3, action);
 
-  info(gensym("keyboard"), 3, ap);
+  info(gensym("keyboard"), 4, ap);
 }
 void gemglfw2window::charCallback(int character, int action)
 {
-  t_atom ap[3];
+  int devID=0;
+  t_atom ap[4];
   std::string sid;
   switch(character) {
   case 32:
@@ -321,11 +324,12 @@ void gemglfw2window::charCallback(int character, int action)
   default:
     sid += character;
   }
-  SETSYMBOL(ap+0, gensym("keyname"));
-  SETSYMBOL(ap+1, gensym(sid.c_str()));
-  SETFLOAT (ap+2, action);
+  SETFLOAT (ap+0, devID);
+  SETSYMBOL(ap+1, gensym("keyname"));
+  SETSYMBOL(ap+2, gensym(sid.c_str()));
+  SETFLOAT (ap+3, action);
 
-  info(gensym("keyboard"), 3, ap);
+  info(gensym("keyboard"), 4, ap);
 }
 void gemglfw2window::mousebuttonCallback(int button, int action)
 {
