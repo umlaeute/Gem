@@ -202,6 +202,7 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_key2symbol[SDLK_z]="z";
     s_key2symbol[SDLK_DELETE]="Delete";
 
+#ifndef __EMSCRIPTEN__
     s_worldkey2symbol[SDLK_WORLD_0]="World_0";
     s_worldkey2symbol[SDLK_WORLD_1]="World_1";
     s_worldkey2symbol[SDLK_WORLD_2]="World_2";
@@ -298,6 +299,7 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_worldkey2symbol[SDLK_WORLD_93]="World_93";
     s_worldkey2symbol[SDLK_WORLD_94]="World_94";
     s_worldkey2symbol[SDLK_WORLD_95]="World_95";
+#endif
 
     s_key2symbol[SDLK_KP0]="KeyPad_0";
     s_key2symbol[SDLK_KP1]="KeyPad_1";
