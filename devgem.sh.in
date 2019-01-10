@@ -4,7 +4,7 @@
 
 ## Pd binary can be overriden by setting the PD environment
 if [ "x${PD}" = "x" ]; then
-  PD=@PD_EXE@
+  PD="@PD_EXE@"
   if [ "x${PD#@}" != "x${PD}" ]; then
     PD=""
   fi
@@ -39,4 +39,4 @@ if [ "x${gempath}" = "x" ]; then
   gempath=${builddir}
 fi
 
-"${PD}" -stderr -oss -nosound -path "${gempath}" -lib ${builddir}/Gem "$@"
+${PD} -stderr -oss -nosound -path "${gempath}" -lib ${builddir}/Gem "$@"
