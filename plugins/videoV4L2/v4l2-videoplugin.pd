@@ -1,23 +1,23 @@
-#N canvas 8 49 505 589 10;
-#X msg 9 219 device usb-0000:00:04.1-4;
-#X msg 9 239 device usb-0000:00:06.0-2;
-#X msg 9 259 device usb-0000:00:04.0-1;
-#X msg -42 366 get driver;
-#X msg 48 366 get card;
-#X msg 138 366 get bus_info;
-#X text -42 304 contrary to /dev/video* files \, this address is not
+#N canvas 8 61 505 589 10;
+#X msg 109 219 device usb-0000:00:04.1-4;
+#X msg 109 239 device usb-0000:00:06.0-2;
+#X msg 109 259 device usb-0000:00:04.0-1;
+#X msg 58 366 get driver;
+#X msg 148 366 get card;
+#X msg 238 366 get bus_info;
+#X text 58 304 contrary to /dev/video* files \, this address is not
 related to the plug order of the devices;
-#X obj -73 425 cnv 15 150 20 empty \$0-propreadNamev4l2 -- 10 9 0 14
+#X obj 27 425 cnv 15 150 20 empty \$0-propreadNamev4l2 -- 10 9 0 14
 -203904 -66577 0;
-#X obj 86 425 cnv 15 200 20 empty \$0-propreadValuev4l2 -- 10 9 0 14
--261234 -66577 0;
-#X obj -21 282 s \$1-ctl;
-#X text -38 176 You can also choose a device by its physical location
+#X obj 186 425 cnv 15 200 20 empty \$0-propreadValuev4l2 -- 10 9 0
+14 -261234 -66577 0;
+#X obj 79 282 s \$1-ctl;
+#X text 62 176 You can also choose a device by its physical location
 on the bus:;
-#X obj -21 132 s \$1-ctl;
-#X msg 9 69 device /dev/video0;
-#X msg 9 89 device /dev/video4;
-#X text -44 350 these are some related read-only properties :;
+#X obj 79 132 s \$1-ctl;
+#X msg 109 69 device /dev/video0;
+#X msg 109 89 device /dev/video4;
+#X text 56 350 these are some related read-only properties :;
 #N canvas 762 178 450 537 getDeviceInfo 0;
 #X obj 54 38 inlet;
 #X obj 54 66 s \$1-ctl;
@@ -62,8 +62,8 @@ on the bus:;
 #X connect 18 0 19 0;
 #X connect 19 0 7 0;
 #X connect 19 1 12 0;
-#X restore -42 394 pd getDeviceInfo;
-#X text -38 26 With V4L2 backend you can choose a device via its device-name:
+#X restore 58 394 pd getDeviceInfo;
+#X text 62 26 With V4L2 backend you can choose a device via its device-name:
 ;
 #X connect 0 0 9 0;
 #X connect 1 0 9 0;

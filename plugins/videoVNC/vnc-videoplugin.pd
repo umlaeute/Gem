@@ -1,4 +1,4 @@
-#N canvas 344 334 656 389 10;
+#N canvas 106 139 656 389 10;
 #X obj 82 233 s \$1-ctl;
 #X text 19 72 1- select the backend;
 #X text 62 27 With VNC backend you can open a remote desktop using

@@ -1,4 +1,4 @@
-#N canvas 8 51 636 903 10;
+#N canvas 61 128 636 521 10;
 #X text 89 47 DeckLink video backend;
 #X text 89 59 ======================;
 #X text 61 94 this allows you to use capture cards manufactured by
