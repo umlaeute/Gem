@@ -32,10 +32,15 @@
 # define GLEW_MX
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <GL/RegalGLEW.h>
+#else
 #include "Gem/glew.h"
+#endif
 
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
+#elif defined(__EMSCRIPTEN__)
 #elif defined _WIN32
 # include "Gem/wglew.h"
 #elif defined(__linux__) || defined(__FreeBSD_kernel__)
