@@ -25,6 +25,8 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 # ifdef HAVE_LIBXXF86VM
 #  include <X11/extensions/xf86vmode.h>
 # endif
+#elif defined __EMSCRIPTEN__
+#  include <SDL/SDL.h>
 #else
 # error Define OS specific window creation
 #endif
@@ -65,6 +67,8 @@ public:
 #elif defined __linux__ || defined HAVE_GL_GLX_H
     dpy(NULL), win(0), screen(0), cmap(0), context(NULL), delete_atom(0),
     have_border(false),
+#elif defined __EMSCRIPTEN__
+    win(NULL), context(0),
 #else
 #endif
     have_constContext(0)
@@ -112,6 +116,10 @@ public:
   XF86VidModeModeInfo deskMode; // originale ModeLine of the Desktop
 # endif
 
+#elif defined __EMSCRIPTEN__
+
+  SDL_Window *win;
+  SDL_GLContext context;
 
 #else
 # error Define OS specific window data
@@ -190,6 +198,8 @@ public:
   AGLContext  shared;
 #elif defined __linux__ || defined HAVE_GL_GLX_H
   GLXContext  shared;
+#elif defined __EMSCRIPTEN__
+  SDL_GLContext shared;
 #else
 #error Define OS specific OpenGL context
 #endif
