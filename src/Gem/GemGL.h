@@ -96,7 +96,7 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 
 
 // missing from Emscripten's glew implementation
-#ifdef __EMSCRIPTEN__
+#ifndef GL_TEXTURE_RECTANGLE_EXT
 # define GL_TEXTURE_RECTANGLE_EXT 0x84F5
 #endif
 
