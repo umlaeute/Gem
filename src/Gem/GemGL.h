@@ -28,6 +28,10 @@
 
 #include "Gem/GemGLconfig.h"
 
+#ifdef GEM_MULTICONTEXT
+# define GLEW_MX
+#endif
+
 #ifdef __EMSCRIPTEN__
 #include <GL/glew.h>
 #include <SDL/SDL_opengl.h>
