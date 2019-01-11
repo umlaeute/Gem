@@ -33,12 +33,12 @@
 #endif
 
 #ifdef __EMSCRIPTEN__
-#include <GL/glew.h>
-#include <SDL/SDL_opengl.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+# include <GL/glew.h>
+# include <SDL/SDL_opengl.h>
+# include <GL/gl.h>
+# include <GL/glu.h>
 #else
-#include "Gem/glew.h"
+# include "Gem/glew.h"
 #endif
 
 #ifdef __APPLE__
@@ -97,7 +97,7 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 
 // missing from Emscripten's glew implementation
 #ifdef __EMSCRIPTEN__
-#define GL_TEXTURE_RECTANGLE_EXT 0x84F5
+# define GL_TEXTURE_RECTANGLE_EXT 0x84F5
 #endif
 
 #endif /* _INCLUDE__GEM_GEM_GEMGL_H_ */
