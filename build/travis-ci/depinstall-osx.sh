@@ -13,20 +13,8 @@ github_list_releaseartifacts() {
 	| jq -r ".assets[] | select(.name | test(\"${spruce_type}\")) | .browser_download_url"
 }
 
-brewinstall() {
-  brew install "$@" || (brew upgrade "$@" && brew cleanup "$@")
-}
-
 doinstall() {
-  brew update
-  brewinstall pkg-config gettext
-  brew link gettext --force
-  if [ "x${ARCH}" != "xi386" ]; then
-    brewinstall fribidi
-  fi
-  brewinstall imagemagick ftgl
-  brewinstall sdl glfw glfw@2
-  brewinstall coreutils
+  brew bundle --file=.git-ci/macOS.brew
   
   ## and install pd
   PDVERSION="0.49-1"
