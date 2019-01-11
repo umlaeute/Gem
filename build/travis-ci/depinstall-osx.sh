@@ -29,7 +29,7 @@ doinstall() {
   brewinstall coreutils
   
   ## and install pd
-  PDVERSION="0.48-0"
+  PDVERSION="0.49-1"
   if [ "x${ARCH}" = "xi386" ]; then
     wget http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.mac.tar.gz
     tar -xf pd-${PDVERSION}-i386.mac.tar.gz
