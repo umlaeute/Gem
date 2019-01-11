@@ -28,14 +28,18 @@
 
 #include "Gem/GemGLconfig.h"
 
-#ifdef GEM_MULTICONTEXT
-# define GLEW_MX
-#endif
-
+#ifdef __EMSCRIPTEN__
+#include <GL/glew.h>
+#include <SDL/SDL_opengl.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#else
 #include "Gem/glew.h"
+#endif
 
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
+#elif defined(__EMSCRIPTEN__)
 #elif defined _WIN32
 # include "Gem/wglew.h"
 #elif defined(__linux__) || defined(__FreeBSD_kernel__)
@@ -84,6 +88,12 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 # else
 #  define GemCGLint long
 # endif
+#endif
+
+
+// missing from Emscripten's glew implementation
+#ifdef __EMSCRIPTEN__
+#define GL_TEXTURE_RECTANGLE_EXT 0x84F5
 #endif
 
 #endif /* _INCLUDE__GEM_GEM_GEMGL_H_ */

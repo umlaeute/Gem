@@ -33,7 +33,7 @@ GLenum gem::utils::gl::glReportError (bool verbose)
 {
   GLenum err = glGetError();
   if (verbose && GL_NO_ERROR != err) {
-    post("GL: %s",(char*)gluErrorString(err));
+    post("GL: %d %s",err,(char*)gluErrorString(err));
   }
   // ensure we are returning an OSStatus noErr if no error condition
   if (err == GL_NO_ERROR) {

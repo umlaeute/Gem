@@ -12,7 +12,11 @@
 #include "Files.h"
 
 #ifdef HAVE_WORDEXP_H
+#ifdef __EMSCRIPTEN__
+#undef HAVE_WORDEXP_H
+#else
 # include <wordexp.h>
+#endif
 #endif
 
 #include "Gem/RTE.h"
@@ -61,7 +65,11 @@ std::vector<std::string>getFilenameListing(const std::string&pattern)
   /* use glob */
   glob_t glob_buffer;
   int i=0;
+#ifdef GLOB_TILDE
   switch( glob( pattern.c_str(), GLOB_TILDE, NULL, &glob_buffer ) ) {
+#else
+  switch( glob( pattern.c_str(), 0, NULL, &glob_buffer ) ) {
+#endif
   case GLOB_NOSPACE:
     //        error("out of memory for \"%s\"",pattern.c_str());
     return result;

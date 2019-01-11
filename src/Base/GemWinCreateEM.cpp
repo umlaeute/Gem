@@ -1,133 +1,179 @@
-///////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
+// claude@mathr.co.uk
 //
 // Implementation file
 //
 //    Copyright (c) 1997-2000 Mark Danks.
 //    Copyright (c) Günther Geiger.
 //    Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    Copyright (c) 2019 Claude Heiland-Allen
+//
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
+#ifdef __EMSCRIPTEN__
 
-#include "gemsdlwindow.h"
+#include "GemWinCreate.h"
+#include "Gem/Event.h"
 #include "Gem/GemGL.h"
-
-#include "RTE/MessageCallbacks.h"
-#include "Gem/Exception.h"
-
-#define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
+#include "Gem/RTE.h"
 
 #include <map>
-static std::map<int, gemsdlwindow*>s_windowmap;
+#include <string>
 
-CPPEXTERN_NEW(gemsdlwindow);
-
-namespace
+/////////////////////////////////////////////////////////
+// createGemWindow
+//
+/////////////////////////////////////////////////////////
+GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 {
-static unsigned int sdl_count = 0;
-};
-
-
-#ifdef __APPLE__
-#include <dlfcn.h>
-//This must be called before playing with SDL, else it won't work on osx.
-
-namespace
-{
-static void pre_init()
-{
-  void* cocoa_lib;
-
-  cocoa_lib = dlopen( "/System/Library/Frameworks/Cocoa.framework/Cocoa",
-                      RTLD_LAZY );
-  if(!cocoa_lib) {
-    return;
+  static int firstTime = 1;
+  if (firstTime) {
+    SDL_Init(SDL_INIT_VIDEO);
+    firstTime = 0;
   }
-  void (*nsappload)(void);
-  nsappload = (void(*)()) dlsym( cocoa_lib, "NSApplicationLoad");
-  if(!nsappload) {
-    return;
-  }
-  nsappload();
-}
-};
-#else /* __APPLE__ */
-namespace
-{
-void pre_init() {;}
-};
-#endif /* __APPLE__ */
 
-/////////////////////////////////////////////////////////
-//
-// gemsdlwindow
-//
-/////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////
-gemsdlwindow :: gemsdlwindow(void) :
-  m_surface(NULL),
-  m_videoFlags(0),
-  m_bpp(0)
-{
-  if(!sdl_count) {
-    pre_init();
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-      throw(GemException("could not initialize SDL window infrastructure"));
+  if (! hints.actuallyDisplay) {
+    return(1);
+  }
+
+  int w = hints.width;
+  int h = hints.height;
+  int x = hints.x_offset;
+  int y = hints.y_offset;
+  bool fullscreen = (hints.fullscreen != 0);
+  bool border = (hints.border != 0);
+
+  info.win = SDL_CreateWindow(hints.title, x, y, w, h
+    , SDL_WINDOW_OPENGL
+    | SDL_WINDOW_RESIZABLE
+    | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
+    | (border ? 0 : SDL_WINDOW_BORDERLESS)
+    );
+  info.fs = fullscreen;
+
+  if (! info.win)  {
+    error("GEM: Unable to create window");
+    return(0);
+  }
+
+// Emscripten doesn't support shared contexts yet
+#if 0
+  if (hints.shared) {
+    if (SDL_GL_MakeCurrent(info.win, hints.shared)) {
+      error("GEM: Unable to make shared OpenGL context current: %s", SDL_GetError());
+      destroyGemWindow(info);
+      return(0);
     }
-    SDL_EnableUNICODE(1);
+    SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
   }
-  sdl_count++;
+#endif
+  info.context = SDL_GL_CreateContext(info.win);
+#if 0
+  if (! info.context) {
+    error("GEM: Unable to create OpenGL context: %s", SDL_GetError());
+    SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 0);
+    destroyGemWindow(info);
+    return(0);
+  }
+  SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 0);
+#endif
+
+  if (SDL_GL_MakeCurrent(info.win, info.context)) {
+    error("GEM: Unable to make OpenGL context current: %s", SDL_GetError());
+    destroyGemWindow(info);
+    return(0);
+  }
+
+  if (fullscreen) {
+    SDL_RaiseWindow(info.win);
+  }
+
+  return(1);
 }
 
 /////////////////////////////////////////////////////////
-// Destructor
+// destroyGemWindow
 //
 /////////////////////////////////////////////////////////
-gemsdlwindow :: ~gemsdlwindow()
+GEM_EXTERN void destroyGemWindow(WindowInfo &info)
 {
-  destroyMess();
-
-  sdl_count--;
-  if(!sdl_count) {
-    SDL_Quit(); // ????
+  if (info.win) {
+    if (info.context) {
+      SDL_GL_DeleteContext(info.context);
+    }
+    SDL_DestroyWindow(info.win);
   }
+  info.win = NULL;
+  info.context = 0;
 }
 
-
-bool gemsdlwindow :: makeCurrent(void)
+/////////////////////////////////////////////////////////
+// switch cursor on/off
+//
+/////////////////////////////////////////////////////////
+int cursorGemWindow(WindowInfo &info, int state)
 {
-  if(!m_surface) {
-    return false;
+  static int cursor_state = 1;
+  state=!(!state);
+  if (cursor_state != state) {
+    cursor_state=SDL_ShowCursor(state);
+    if (cursor_state != (cursor_state & 1))
+    {
+      fprintf(stderr, "cursor problem: %s\n", SDL_GetError());
+    }
   }
-  // ????
-  return(true);
+  return cursor_state;
 }
 
-void gemsdlwindow :: swapBuffers(void)
+/////////////////////////////////////////////////////////
+// set topmost position on/off
+//
+/////////////////////////////////////////////////////////
+int topmostGemWindow(WindowInfo &info, int state)
 {
-  if(makeCurrent()) { // FIXME: is this needed?
-    SDL_GL_SwapBuffers();
+  static int topmost_state = 0;
+  state=!(!state);
+  if (state)
+  {
+    SDL_RaiseWindow(info.win); // FIXME not permanent
   }
+  topmost_state = state;
+  return topmost_state;
 }
 
-void gemsdlwindow :: doRender()
+void gemWinSwapBuffers(WindowInfo &nfo)
 {
-  // FIXME: ?????
-  bang();
+  SDL_GL_SwapWindow(nfo.win);
 }
 
+void gemWinMakeCurrent(WindowInfo&nfo)
+{
+  if (!nfo.win || !nfo.context) {
+    return;  // do not crash ??
+  }
+  SDL_GL_MakeCurrent(nfo.win, nfo.context);
+}
 
-static std::map<SDLKey, std::string>s_key2symbol;
-static std::map<SDLKey, std::string>s_worldkey2symbol;
-static std::string key2symbol(SDLKey k, Uint16 unicode)
+bool initGemWin(void)
+{
+  return 1;
+}
+
+GEM_EXTERN void initWin_sharedContext(WindowInfo &info, WindowHints &hints)
+{
+  //  myHints.shared = constInfo.context;
+  hints.shared = NULL;
+}
+
+static std::map<SDL_Keycode, std::string>s_key2symbol;
+static std::map<SDL_Keycode, std::string>s_worldkey2symbol;
+static std::string key2symbol(SDL_Keycode k)
 {
   if(0==s_key2symbol.size()) {
     s_key2symbol[SDLK_BACKSPACE]="BackSpace";
@@ -301,16 +347,16 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_worldkey2symbol[SDLK_WORLD_95]="World_95";
 #endif
 
-    s_key2symbol[SDLK_KP0]="KeyPad_0";
-    s_key2symbol[SDLK_KP1]="KeyPad_1";
-    s_key2symbol[SDLK_KP2]="KeyPad_2";
-    s_key2symbol[SDLK_KP3]="KeyPad_3";
-    s_key2symbol[SDLK_KP4]="KeyPad_4";
-    s_key2symbol[SDLK_KP5]="KeyPad_5";
-    s_key2symbol[SDLK_KP6]="KeyPad_6";
-    s_key2symbol[SDLK_KP7]="KeyPad_7";
-    s_key2symbol[SDLK_KP8]="KeyPad_8";
-    s_key2symbol[SDLK_KP9]="KeyPad_9";
+    s_key2symbol[SDLK_KP_0]="KeyPad_0";
+    s_key2symbol[SDLK_KP_1]="KeyPad_1";
+    s_key2symbol[SDLK_KP_2]="KeyPad_2";
+    s_key2symbol[SDLK_KP_3]="KeyPad_3";
+    s_key2symbol[SDLK_KP_4]="KeyPad_4";
+    s_key2symbol[SDLK_KP_5]="KeyPad_5";
+    s_key2symbol[SDLK_KP_6]="KeyPad_6";
+    s_key2symbol[SDLK_KP_7]="KeyPad_7";
+    s_key2symbol[SDLK_KP_8]="KeyPad_8";
+    s_key2symbol[SDLK_KP_9]="KeyPad_9";
     s_key2symbol[SDLK_KP_PERIOD]="KeyPad_.";
     s_key2symbol[SDLK_KP_DIVIDE]="KeyPad_/";
     s_key2symbol[SDLK_KP_MULTIPLY]="KeyPad_*";
@@ -342,38 +388,45 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_key2symbol[SDLK_F13]="F13";
     s_key2symbol[SDLK_F14]="F14";
     s_key2symbol[SDLK_F15]="F15";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_NUMLOCK]="Num_Lock";
+#endif
     s_key2symbol[SDLK_CAPSLOCK]="Caps_Lock";
-    s_key2symbol[SDLK_SCROLLOCK]="Scroll_Lock";
+    s_key2symbol[SDLK_SCROLLLOCK]="Scroll_Lock";
     s_key2symbol[SDLK_RSHIFT]="Shift_R";
     s_key2symbol[SDLK_LSHIFT]="Shift_L";
     s_key2symbol[SDLK_RCTRL]="Control_R";
     s_key2symbol[SDLK_LCTRL]="Control_L";
     s_key2symbol[SDLK_RALT]="AltGr";
     s_key2symbol[SDLK_LALT]="Alt_L";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_RMETA]="Meta_R";
     s_key2symbol[SDLK_LMETA]="Meta_L";
     s_key2symbol[SDLK_LSUPER]="Super_L";
     s_key2symbol[SDLK_RSUPER]="Super_R";
+#endif
     s_key2symbol[SDLK_MODE]="Mode";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_COMPOSE]="Compose";
+#endif
     s_key2symbol[SDLK_HELP]="Help";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_PRINT]="Print";
+#endif
     s_key2symbol[SDLK_SYSREQ]="SysRq";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_BREAK]="Break";
+#endif
     s_key2symbol[SDLK_MENU]="Menu";
     s_key2symbol[SDLK_POWER]="Power";
+#ifndef __EMSCRIPTEN__
     s_key2symbol[SDLK_EURO]="€";
+#endif
     s_key2symbol[SDLK_UNDO]="Undo";
   }
   std::string s = s_key2symbol[k];
   if(s.empty()) {
-    if(unicode) {
-      s_worldkey2symbol[k]=unicode;
-      s=unicode;
-    } else {
-      s=s_worldkey2symbol[k];
-    }
+    s=s_worldkey2symbol[k];
   }
   if(s.empty()) {
     s="<unknown>";
@@ -382,237 +435,57 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
   return s;
 }
 
-void gemsdlwindow :: dispatch()
+GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
 {
-  if(!m_surface) {
-    return;
-  }
-
-  std::vector<t_atom>al;
-  t_atom a;
-  int state;
-  unsigned long devID=0;
   SDL_Event event;
-  while (SDL_PollEvent(&event)) {
-    switch(event.type) {
-    default:
-      post("event: %d", event.type);
-      break;
-    case SDL_ACTIVEEVENT: {
-      state=event.active.gain;
-      if(event.active.state & SDL_APPMOUSEFOCUS) {
-        entry(devID, state);
-      }
-      if(event.active.state & SDL_APPINPUTFOCUS) {
-        info("inputentry", state);
-      }
-      if(event.active.state & SDL_APPACTIVE) {
-        info("visible", state);
-      }
-    }
-    break;
-    case SDL_KEYUP:
-    case SDL_KEYDOWN:
-      key
-        ( 0
-        , key2symbol(event.key.keysym.sym, event.key.keysym.unicode)
-        , event.key.keysym.scancode
-        , event.key.state==SDL_PRESSED
-        );
-      break;
-    case SDL_MOUSEMOTION:
-      motion(event.motion.which, event.motion.x, event.motion.y);
-      break;
-    case SDL_MOUSEBUTTONUP:
-    case SDL_MOUSEBUTTONDOWN:
-      motion(event.button.which, event.button.x, event.button.y);
-      button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
-             event.button.state==SDL_PRESSED);
-      break;
-    case SDL_VIDEORESIZE:
-      dimension(event.resize.w, event.resize.h);
-      break;
-    case SDL_VIDEOEXPOSE:
-      info("window", "exposed");
-      break;
-    case SDL_QUIT:
-      info("window", "destroy");
-      break;
-    }
-  }
-}
-
-
-/////////////////////////////////////////////////////////
-// bufferMess
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: bufferMess(int buf)
-{
-  switch(buf) {
-  case 1:
-  case 2:
-    m_buffer=buf;
-    if(m_surface) {
-      post("changing buffer type will only effect newly created windows");
-    }
-    break;
-  default:
-    error("buffer can only be '1' (single) or '2' (double) buffered");
-    break;
-  }
-}
-
-/////////////////////////////////////////////////////////
-// titleMess
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: titleMess(const std::string&s)
-{
-  m_title = s;
-  if(m_surface) {
-    SDL_WM_SetCaption(m_title.c_str(), m_title.c_str());
-  }
-}
-/////////////////////////////////////////////////////////
-// dimensionsMess
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: dimensionsMess(unsigned int width,
-                                    unsigned int height)
-{
-  if (width < 1) {
-    error("width must be greater than 0");
-    return;
-  }
-
-  if (height < 1) {
-    error ("height must be greater than 0");
-    return;
-  }
-  m_width = width;
-  m_height = height;
-  if(makeCurrent()) {
-    m_surface = SDL_SetVideoMode( m_width,
-                                  m_height,
-                                  m_bpp,
-                                  m_videoFlags );
-  }
-}
-/////////////////////////////////////////////////////////
-// fullscreenMess
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: fullscreenMess(int on)
-{
-  bool toggle=false;
-  m_fullscreen = on;
-  if(m_surface) {
-    if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
-        (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN))) {
-      toggle=true;
+  while (SDL_PollEvent(&event))
+  {
+    switch (event.type)
+    {
+      case SDL_QUIT:
+        // ignore
+        break;
+      case SDL_WINDOWEVENT:
+        switch (event.window.event)
+        {
+          case SDL_WINDOWEVENT_CLOSE:
+            // ignore
+            break;
+          case SDL_WINDOWEVENT_RESIZED:
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+            triggerResizeEvent(event.window.data1, event.window.data2);
+            break;
+        }
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+        triggerKeyboardEvent
+          ( key2symbol(event.key.keysym.sym).c_str()
+          , event.key.keysym.scancode
+          , event.type == SDL_KEYDOWN
+          );
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+        triggerButtonEvent
+          ( event.button.button == SDL_BUTTON_LEFT ? 0
+          : event.button.button == SDL_BUTTON_MIDDLE ? 1
+          : event.button.button == SDL_BUTTON_RIGHT ? 2
+          : event.button.button // FIXME
+          , event.type == SDL_MOUSEBUTTONDOWN
+          , event.button.x
+          , event.button.y
+          );
+        break;
+      case SDL_MOUSEMOTION:
+        triggerMotionEvent(event.motion.x, event.motion.y);
+        break;
+      case SDL_MOUSEWHEEL: // FIXME
+        if (event.wheel.y != 0) triggerWheelEvent(0, event.wheel.y);
+        if (event.wheel.x != 0) triggerWheelEvent(1, event.wheel.x);
+        break;
     }
   }
-  if(toggle && makeCurrent()) {
-    SDL_WM_ToggleFullScreen( m_surface );
-  }
 }
 
-
-/////////////////////////////////////////////////////////
-// createMess
-//
-/////////////////////////////////////////////////////////
-bool gemsdlwindow :: create(void)
-{
-  if(m_surface) {
-    error("window already made!");
-    return false;
-  }
-
-  if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 ) {
-    error("could not (re)initialize SDL window infrastructure");
-    return false;
-  }
-
-  /* Fetch the video info */
-  const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo( );
-
-  m_videoFlags  = SDL_OPENGL;          /* Enable OpenGL in SDL */
-  if(2==m_buffer) {
-    m_videoFlags |= SDL_GL_DOUBLEBUFFER; /* Enable double buffering */
-
-    /* Sets up OpenGL double buffering */
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-  } else {
-    /* Sets up OpenGL double buffering */
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
-  }
-  m_videoFlags |= SDL_HWPALETTE;       /* Store the palette in hardware */
-  m_videoFlags |= SDL_RESIZABLE;       /* Enable window resizing */
-
-
-  if(videoInfo) {
-    /* This checks to see if surfaces can be stored in memory */
-    if ( videoInfo->hw_available ) {
-      m_videoFlags |= SDL_HWSURFACE;
-    } else {
-      m_videoFlags |= SDL_SWSURFACE;
-    }
-
-    /* This checks if hardware blits can be done */
-    if ( videoInfo->blit_hw ) {
-      m_videoFlags |= SDL_HWACCEL;
-    }
-  }
-
-  /* get a SDL surface */
-  m_surface = SDL_SetVideoMode( m_width, m_height,
-                                m_bpp,
-                                m_videoFlags );
-
-  if(!m_surface) {
-    return false;
-  }
-
-
-  if(!createGemWindow()) {
-    destroyMess();
-    return false;
-  }
-  titleMess(m_title);
-  fullscreenMess(m_fullscreen);
-
-  dispatch();
-  return true;
-}
-void gemsdlwindow :: createMess(const std::string&)
-{
-  create();
-}
-
-
-/////////////////////////////////////////////////////////
-// destroy window
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: destroy(void)
-{
-  destroyGemWindow();
-  m_surface=NULL;
-  info("window", "closed");
-}
-void gemsdlwindow :: destroyMess(void)
-{
-  if(makeCurrent()) {
-    SDL_QuitSubSystem( SDL_INIT_VIDEO );
-  }
-  destroy();
-}
-
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void gemsdlwindow :: obj_setupCallback(t_class *classPtr)
-{}
+#endif /* Emscripten */

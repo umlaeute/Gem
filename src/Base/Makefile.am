@@ -82,6 +82,7 @@ if ENABLE_MULTICONTEXT
 else !ENABLE_MULTICONTEXT
 libBase_la_SOURCES+= \
     GemWinCreate.h \
+    GemWinCreateEM.cpp \
     GemWinCreateMac.cpp \
     GemWinCreateNT.cpp \
     GemWinCreateXWin.cpp
