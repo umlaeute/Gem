@@ -15,8 +15,8 @@ set it yourself :;
 #X msg 216 418 dimen 1920 1080;
 #X text 61 473 you can easily over- or undersample your video with
 this (if don't care about the interpolation quality...);
-#X msg 169 160 set screen-fps 50 \, set screen-top 100 \, set-screen
-left 0 \, set screen-width 500 \, set screen-height 500 \, device screen://
+#X msg 169 160 set screen-fps 50 \, set screen-top 100 \, set screen-left
+0 \, set screen-width 500 \, set screen-height 500 \, device screen://
 ;
 #X text 537 174 screen capturing;
 #X text 53 275 The available properties are the VLC cmdline options.
