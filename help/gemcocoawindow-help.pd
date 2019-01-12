@@ -37,26 +37,26 @@
 #X obj 367 386 t a;
 #X obj 407 345 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
 0;
-#X msg 421 48 create;
-#X msg 421 78 bang;
-#X msg 421 108 destroy;
+#X msg 411 48 create;
+#X msg 411 78 bang;
+#X msg 411 108 destroy;
 #X text 515 79 clear window \, activate openGL-context \, and send
 render-bang;
 #X text 515 110 destroy the window;
 #X text 515 49 create the window;
 #X text 515 139 single-buffered(1) or double-buffered(2) rendering
 ;
-#X msg 421 138 buffer 2;
-#X msg 421 168 FSAA \$1;
+#X msg 411 138 buffer 2;
+#X msg 411 168 FSAA \$1;
 #X text 515 169 Full Screen Antia Aliasing mode;
-#X msg 421 198 title foo;
+#X msg 411 198 title foo;
 #X text 515 199 title of the window;
-#X msg 421 228 dimen 640 460;
+#X msg 411 228 dimen 640 460;
 #X text 515 229 change dimension of the window;
-#X msg 421 258 offset 100 100;
+#X msg 411 258 offset 100 100;
 #X text 515 259 change position of the window;
 #X text 515 319 turn on/off window borders;
-#X text 515 349 (don't) show cursorwhen it's on the window;
+#X text 515 349 (don't) show cursor when it's on the window;
 #X obj 407 395 cnv 15 470 25 empty empty empty 20 12 0 14 -258113 -66577
 0;
 #X msg 421 399 blurb;
@@ -65,16 +65,16 @@ render-bang;
 0;
 #X obj 38 553 declare -lib Gem;
 #X text 24 529 last updated for Gem-0.94;
-#X msg 421 348 cursor \$1;
+#X msg 411 348 cursor \$1;
 #X obj 490 350 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X msg 421 318 border \$1;
+#X msg 411 318 border \$1;
 #X obj 490 320 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 501 290 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X text 515 289 switch fullscreen mode on/off;
-#X msg 421 288 fullscreen \$1;
+#X msg 411 288 fullscreen \$1;
 #X obj 235 348 metro 100;
 #X obj 235 326 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;

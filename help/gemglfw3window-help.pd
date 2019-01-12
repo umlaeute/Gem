@@ -55,7 +55,7 @@ render-bang;
 #X msg 411 258 offset 100 100;
 #X text 515 259 change position of the window;
 #X text 515 319 turn on/off window borders;
-#X text 515 349 (don't) show cursorwhen it's on the window;
+#X text 515 349 (don't) show cursor when it's on the window;
 #X obj 407 395 cnv 15 470 25 empty empty empty 20 12 0 14 -258113 -66577
 0;
 #X text 465 17 standard messages;

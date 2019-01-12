@@ -1,6 +1,6 @@
 #N canvas 55 51 885 613 10;
 #X declare -lib Gem;
-#X text 13 145 [gemmacwindow] uses Carbon to create windows.;
+#X text 13 145 [gemmacwindow] uses Carbon to create windows. (only on OSX).;
 #X obj 441 515 print unknown.message;
 #X obj 367 515 route bang;
 #X obj 367 558 bng 15 250 50 0 empty empty render! 17 7 0 10 -262144
@@ -54,7 +54,7 @@ render-bang;
 #X msg 411 258 offset 100 100;
 #X text 515 259 change position of the window;
 #X text 515 319 turn on/off window borders;
-#X text 515 349 (don't) show cursorwhen it's on the window;
+#X text 515 349 (don't) show cursor when it's on the window;
 #X obj 407 395 cnv 15 470 25 empty empty empty 20 12 0 14 -258113 -66577
 0;
 #X text 465 17 standard messages;
@@ -211,8 +211,7 @@ Quit 1;
 #X connect 12 0 9 0;
 #X connect 12 1 13 0;
 #X restore 421 429 pd specific messages;
-#X text 16 171 afaict \, it is non-functional. you probably should
-use [gemmacoswindow] instead.;
+#X text 16 171 this is a legacy window \, that probably only works on OSX<=10.6.  you should use [gemmacoswindow] instead.;
 #X connect 2 0 3 0;
 #X connect 2 1 5 0;
 #X connect 7 0 8 0;
