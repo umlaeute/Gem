@@ -37,6 +37,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+
 class GEM_EXTERN glsl_program : public GemBase
 {
   CPPEXTERN_HEADER(glsl_program, GemBase);
@@ -109,14 +110,17 @@ protected:
   //////////
   // Variables for the, uh, variables
   GLint                 m_uniformCount;
-  t_symbol  **m_symname;
-  GLint                 *m_size;
-  GLenum                *m_type;
-  GLint       *m_loc;
-  GLfloat    **m_param;
-  GLint       *m_paramnum;
-  bool        *m_changed;
-
+  struct t_uniform {
+    t_symbol*name;
+    GLint size;
+    GLenum type;
+    GLint loc;
+    void*param;
+    GLint paramsize; /* how many elements does single parameter hold (e.g. vec2 => 2) */
+    GLint arraysize; /* array size (or 1) */
+    bool changed;
+  };
+  t_uniform*m_uniform;
 
   GLint m_linked;
   bool m_wantLink;
