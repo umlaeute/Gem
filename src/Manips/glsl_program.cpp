@@ -39,7 +39,7 @@ glsl_program :: glsl_program()  :
   m_param(0), m_paramnum(0),
   m_changed(0),
   m_linked(0), m_wantLink(false),
-  m_num(0),
+  m_numShaders(0),
   m_outProgramID(0),
   m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
   m_programmapped(0.),
@@ -431,7 +431,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
       }
     }
     // if we reach this, then no param-name was matching!
-    if(i>m_num) {
+    if(uni>m_numShaders) {
       error("no method for '%s' (it's not uniform variable)", s->s_name);
     }
   }
@@ -450,9 +450,9 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     return;
   }
 
-  m_num=0;
+  m_numShaders=0;
   for (i = 0; i < argc; i++) {
-    if(m_num>=MAX_NUM_SHADERS) {
+    if(m_numShaders>=MAX_NUM_SHADERS) {
       post("only %d shaders supported; skipping the rest", MAX_NUM_SHADERS);
       break;
     }
@@ -463,9 +463,9 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     } catch(GemException&x) {
       post("unable to get shader for %f", f);
     }
-    m_shaderObj[m_num]    = ui;
-    m_shaderObjARB[m_num] = ui;//static_cast<GLhandleARB>(fi.i);
-    m_num++;
+    m_shaderObj[m_numShaders]    = ui;
+    m_shaderObjARB[m_numShaders] = ui;//static_cast<GLhandleARB>(fi.i);
+    m_numShaders++;
   }
 }
 
@@ -486,7 +486,7 @@ bool glsl_program :: LinkGL2()
     m_program = 0;
   }
   m_program = glCreateProgram();
-  for (i = 0; i < m_num; i++) {
+  for (i = 0; i < m_numShaders; i++) {
     glAttachShader( m_program, m_shaderObj[i] );
   }
 
@@ -551,7 +551,7 @@ bool glsl_program :: LinkARB()
     m_programARB = 0;
   }
   m_programARB = glCreateProgramObjectARB();
-  for (i = 0; i < m_num; i++) {
+  for (i = 0; i < m_numShaders; i++) {
     glAttachObjectARB( m_programARB, m_shaderObjARB[i] );
   }
 
@@ -605,7 +605,7 @@ bool glsl_program :: LinkARB()
 void glsl_program :: LinkProgram()
 {
   bool success=false;
-  if (!m_num) {
+  if (!m_numShaders) {
     error("can't link zero shaders");
     return;
   }
@@ -729,13 +729,13 @@ void glsl_program :: printInfo()
 
   if(GLEW_VERSION_2_0) {
     startpost("linked shaders");
-    for (i = 0; i < m_num; i++)  {
+    for (i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObj[i] );
     }
     post("-> %d", m_program);
   } else {
     startpost("linked ARB-shaders");
-    for (i = 0; i < m_num; i++)  {
+    for (i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
     }
     post("-> %d", m_programARB);

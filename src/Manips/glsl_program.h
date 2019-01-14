@@ -117,10 +117,11 @@ protected:
   GLint       *m_paramnum;
   bool        *m_changed;
 
-  int             m_num;
 
   GLint m_linked;
   bool m_wantLink;
+  int m_numShaders;
+
   t_outlet *m_outProgramID;
 
   gem::utils::gl::GLuintMap m_shadermapper, m_programmapper;
