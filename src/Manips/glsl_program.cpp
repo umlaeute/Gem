@@ -35,12 +35,12 @@ glsl_program :: glsl_program()  :
   m_program(0),
   m_programARB(0),
   m_maxLength(0), m_uniformCount(0),
-  m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
-  m_param(NULL), m_paramnum(NULL),
-  m_changed(NULL),
+  m_symname(0), m_size(0), m_type(0), m_loc(0),
+  m_param(0), m_paramnum(0),
+  m_changed(0),
   m_linked(0), m_wantLink(false),
   m_num(0),
-  m_outProgramID(NULL),
+  m_outProgramID(0),
   m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
   m_programmapped(0.),
   m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),
@@ -85,38 +85,38 @@ void glsl_program :: destroyArrays()
       if(m_param[i]) {
         delete[]m_param[i];
       }
-      m_param[i]=NULL;
+      m_param[i]=0;
     }
   }
 
   if (m_size) {
     delete[]m_size;
   }
-  m_size   =NULL;
+  m_size   =0;
   if (m_type) {
     delete[]m_type;
   }
-  m_type   =NULL;
+  m_type   =0;
   if (m_symname) {
     delete[]m_symname;
   }
-  m_symname=NULL;
+  m_symname=0;
   if (m_changed) {
     delete[]m_changed;
   }
-  m_changed   =NULL;
+  m_changed   =0;
   if (m_loc) {
     delete[]m_loc;
   }
-  m_loc    =NULL;
+  m_loc    =0;
   if (m_param) {
     delete[]m_param;
   }
-  m_param  =NULL;
+  m_param  =0;
   if (m_paramnum) {
     delete[]m_paramnum;
   }
-  m_paramnum =NULL;
+  m_paramnum =0;
 }
 void glsl_program :: createArrays()
 {
@@ -519,7 +519,7 @@ bool glsl_program :: LinkGL2()
   if(infoLog) {
     delete[]infoLog;
   }
-  infoLog=NULL;
+  infoLog=0;
 
   //
   // If all went well, make the ProgramObject part of the current state
@@ -586,7 +586,7 @@ bool glsl_program :: LinkARB()
   if(infoLogARB) {
     delete[]infoLogARB;
   }
-  infoLogARB=NULL;
+  infoLogARB=0;
 
   //
   // If all went well, make the ProgramObject part of the current state
