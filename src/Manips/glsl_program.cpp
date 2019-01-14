@@ -36,7 +36,8 @@ glsl_program :: glsl_program()  :
   m_programARB(0),
   m_maxLength(0), m_uniformCount(0),
   m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
-  m_param(NULL), m_flag(NULL), m_linked(0), m_wantLink(false),
+  m_param(NULL), m_changed(NULL),
+  m_linked(0), m_wantLink(false),
   m_num(0),
   m_outProgramID(NULL),
   m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
@@ -99,10 +100,10 @@ void glsl_program :: destroyArrays()
     delete[]m_symname;
   }
   m_symname=NULL;
-  if (m_flag) {
-    delete[]m_flag;
+  if (m_changed) {
+    delete[]m_changed;
   }
-  m_flag   =NULL;
+  m_changed   =NULL;
   if (m_loc) {
     delete[]m_loc;
   }
@@ -120,7 +121,7 @@ void glsl_program :: createArrays()
   m_type   = new GLenum    [m_uniformCount];
   m_symname= new t_symbol* [m_uniformCount];
   m_param  = new float*    [m_uniformCount];
-  m_flag   = new int       [m_uniformCount];
+  m_changed= new bool      [m_uniformCount];
   m_loc    = new GLint     [m_uniformCount];
 
   // allocate maximum size for a param, which is a 4x4 matrix of floats
@@ -133,10 +134,10 @@ void glsl_program :: createArrays()
     m_symname[i] = 0;
     m_loc    [i] = 0;
     m_param  [i] = new float[16];
-    m_flag   [i] = 0;
     for(j=0; j<16; j++) {
       m_param[i][j]=0;
     }
+    m_changed[i] = false;
   }
 }
 
@@ -160,7 +161,7 @@ void glsl_program :: renderGL2()
   if (m_linked) {
     glUseProgram( m_program );
     for(int i=0; i<m_uniformCount; i++) {
-      if(m_flag[i]) {
+      if(m_changed[i]) {
         switch (m_type[i]) {
         /* float vectors */
         case GL_FLOAT:
@@ -250,7 +251,7 @@ void glsl_program :: renderGL2()
           ;
         }
         // remove flag because the value is in GL's state now...
-        m_flag[i]=0;
+        m_changed[i] = false;
 
       }
     }
@@ -266,7 +267,7 @@ void glsl_program :: renderARB()
   if (m_linked) {
     glUseProgramObjectARB( m_programARB );
     for(int i=0; i<m_uniformCount; i++) {
-      if(m_flag[i]) {
+      if(m_changed[i]) {
         switch (m_type[i]) {
         /* float vectors */
         case GL_FLOAT:
@@ -358,7 +359,7 @@ void glsl_program :: renderARB()
           ;
         }
         // remove flag because the value is in GL's state now...
-        m_flag[i]=0;
+        m_changed[i] = false;
       }
     }
     //  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
@@ -416,7 +417,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
           m_param[i][j] = atom_getfloat(&argv[j]);
         }
         // tell the GL state that this variable has changed next render
-        m_flag[i] = 1;
+        m_changed[i] = true;
         setModified();
         // should we return here?  It only allows one m_param[i] to be changed
         return;
