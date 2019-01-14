@@ -785,46 +785,44 @@ void glsl_program :: getVariables()
   GLcharARB *nameARB=new GLcharARB[m_maxLength];
   GLsizei    length=0;
   for (GLuint i = 0; i < m_uniformCount; i++) {
+    t_uniform &uni=m_uniform[i];
     if(GLEW_VERSION_2_0) {
-      glGetActiveUniform(m_program, i, m_maxLength, &length, &m_uniform[i].size,
-                         &m_uniform[i].type, name);
-      m_uniform[i].loc = glGetUniformLocation( m_program, name );
-      m_uniform[i].name=gensym(name);
-
       GLint size;
-      GLint offset;
-      GLint type;
-      glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_OFFSET, &offset);
+      glGetActiveUniform(m_program, i, m_maxLength, &length, &uni.size,
+                         &uni.type, name);
       glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &size);
-      glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_TYPE, &type);
-      m_uniform[i].arraysize = size;
-      m_uniform[i].paramsize = uniform2numelements(m_uniform[i].type);
-      switch(uniform2type(m_uniform[i].type)) {
-      case GL_FLOAT: {
-        GLfloat*params=static_cast<GLfloat*>(m_uniform[i].param);
-        delete params;
-        params = new GLfloat[m_uniform[i].arraysize * m_uniform[i].paramsize];
-        for(GLint n=0; n<m_uniform[i].arraysize * m_uniform[i].paramsize; n++)
-          params[n] = 0.;
-        m_uniform[i].param = params;
-        break;
-      }
-      case GL_INT: {
-        GLint*params=static_cast<GLint*>(m_uniform[i].param);
-        delete params;
-        params = new GLint[m_uniform[i].arraysize * m_uniform[i].paramsize];
-        for(GLint n=0; n<m_uniform[i].arraysize * m_uniform[i].paramsize; n++)
-          params[n] = 0;
-        m_uniform[i].param = params;
-        break;
-      }
-      }
+      uni.loc = glGetUniformLocation( m_program, name );
+      uni.name=gensym(name);
+      uni.arraysize = size;
     } else if (GLEW_ARB_shader_objects) {
-      glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &m_uniform[i].size,
-                            &m_uniform[i].type, nameARB);
-      m_uniform[i].loc = glGetUniformLocationARB( m_programARB, nameARB );
-      m_uniform[i].name=gensym(nameARB);
+      glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &uni.size,
+                            &uni.type, nameARB);
+      uni.loc = glGetUniformLocationARB( m_programARB, nameARB );
+      uni.name=gensym(nameARB);
+      uni.arraysize = 1;
     }
+    uni.paramsize = uniform2numelements(uni.type);
+    switch(uniform2type(uni.type)) {
+    case GL_FLOAT: {
+      GLfloat*params=static_cast<GLfloat*>(uni.param);
+      delete params;
+      params = new GLfloat[uni.arraysize * uni.paramsize];
+      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
+        params[n] = 0.;
+      uni.param = params;
+      break;
+    }
+    case GL_INT: {
+      GLint*params=static_cast<GLint*>(uni.param);
+      delete params;
+      params = new GLint[uni.arraysize * uni.paramsize];
+      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
+        params[n] = 0;
+      uni.param = params;
+      break;
+    }
+    }
+
   }
   delete[]name;
   delete[]nameARB;
