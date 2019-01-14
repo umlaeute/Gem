@@ -114,6 +114,7 @@ protected:
   GLenum                *m_type;
   GLint       *m_loc;
   GLfloat    **m_param;
+  GLint       *m_paramnum;
   bool        *m_changed;
 
   GLint         m_linked;

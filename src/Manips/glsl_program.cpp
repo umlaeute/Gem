@@ -36,7 +36,8 @@ glsl_program :: glsl_program()  :
   m_programARB(0),
   m_maxLength(0), m_uniformCount(0),
   m_symname(NULL), m_size(NULL), m_type(NULL), m_loc(NULL),
-  m_param(NULL), m_changed(NULL),
+  m_param(NULL), m_paramnum(NULL),
+  m_changed(NULL),
   m_linked(0), m_wantLink(false),
   m_num(0),
   m_outProgramID(NULL),
@@ -112,6 +113,10 @@ void glsl_program :: destroyArrays()
     delete[]m_param;
   }
   m_param  =NULL;
+  if (m_paramnum) {
+    delete[]m_paramnum;
+  }
+  m_paramnum =NULL;
 }
 void glsl_program :: createArrays()
 {
@@ -121,6 +126,7 @@ void glsl_program :: createArrays()
   m_type   = new GLenum    [m_uniformCount];
   m_symname= new t_symbol* [m_uniformCount];
   m_param  = new float*    [m_uniformCount];
+  m_paramnum= new GLint    [m_uniformCount];
   m_changed= new bool      [m_uniformCount];
   m_loc    = new GLint     [m_uniformCount];
 
@@ -137,6 +143,7 @@ void glsl_program :: createArrays()
     for(j=0; j<16; j++) {
       m_param[i][j]=0;
     }
+    m_paramnum[i] = 0;
     m_changed[i] = false;
   }
 }
@@ -654,7 +661,6 @@ void glsl_program :: getVariables()
   if(!m_linked) {
     return;
   }
-  int i;
   //
   // Allocate arrays to store the answers in. For simplicity, the return
   // from malloc is not checked for NULL.
@@ -684,12 +690,16 @@ void glsl_program :: getVariables()
   GLchar *name=new GLchar[m_maxLength];
   GLcharARB *nameARB=new GLcharARB[m_maxLength];
   GLsizei    length=0;
-  for (i = 0; i < m_uniformCount; i++) {
+  for (GLuint i = 0; i < m_uniformCount; i++) {
     if(GLEW_VERSION_2_0) {
       glGetActiveUniform(m_program, i, m_maxLength, &length, &m_size[i],
                          &m_type[i], name);
       m_loc[i] = glGetUniformLocation( m_program, name );
       m_symname[i]=gensym(name);
+
+      GLint size;
+      glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &size);
+      m_paramnum[i] = size;
     } else if (GLEW_ARB_shader_objects) {
       glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &m_size[i],
                             &m_type[i], nameARB);
