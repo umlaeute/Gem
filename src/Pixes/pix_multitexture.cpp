@@ -189,7 +189,7 @@ void pix_multitexture :: postrender(GemState *state)
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->set(GemState::_GL_TEX_UNITS, m_oldTexUnits);
   if(GLEW_VERSION_1_3) {
-    for ( int i = m_reqTexUnits; i>0; i--) {
+    for ( int i = m_useTexUnits; i>0; i--) {
       glActiveTexture( GL_TEXTURE0 + i);
       glDisable( m_textureType );
     }
