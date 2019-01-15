@@ -138,7 +138,9 @@ void pix_multitexture :: render(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
 
-  state->get(GemState::_GL_TEX_UNITS, m_reqTexUnits);
+  state->get(GemState::_GL_TEX_UNITS, m_useTexUnits);
+  if(m_useTexUnits>m_reqTexUnits)
+    m_useTexUnits=m_reqTexUnits;
 
   if (m_textureType == GL_TEXTURE_2D) {
     m_xRatio = 1.0;
@@ -157,8 +159,7 @@ void pix_multitexture :: render(GemState *state)
   state->set(GemState::_GL_TEX_NUMCOORDS, 4);
   state->set(GemState::_GL_TEX_TYPE, textype);
 
-
-  for ( int i=0; i< m_reqTexUnits; i++ ) {
+  for ( int i=0; i< m_useTexUnits; i++ ) {
     if(GLEW_VERSION_1_3) {
       glActiveTexture( GL_TEXTURE0 + i );
     } else {
@@ -185,7 +186,6 @@ void pix_multitexture :: postrender(GemState *state)
   state->set(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
-
   if(GLEW_VERSION_1_3) {
     for ( int i = m_reqTexUnits; i>0; i--) {
       glActiveTexture( GL_TEXTURE0 + i);
@@ -193,7 +193,7 @@ void pix_multitexture :: postrender(GemState *state)
     }
     glActiveTexture( GL_TEXTURE0 );
   } else {
-    for ( int i = m_reqTexUnits; i>0; i--) {
+    for ( int i = m_useTexUnits; i>0; i--) {
       glActiveTextureARB( GL_TEXTURE0_ARB + i);
       glDisable( m_textureType );
     }

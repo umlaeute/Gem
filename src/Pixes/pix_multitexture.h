@@ -63,6 +63,7 @@ protected:
   unsigned int m_numInlets;
 
   int m_reqTexUnits; // requested # of texunits (default: m_max)
+  int m_useTexUnits; // actually used texunits
   GLint m_max; // maximum # of texunits supported by the hw
   GLint                   m_texID[MAX_MULTITEX_ID];
   GLint                   m_textureType;
