@@ -24,16 +24,15 @@
 #define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 #include <map>
-static std::map<int, gemsdl2window*>s_windowmap;
 
 CPPEXTERN_NEW(gemsdl2window);
 
 namespace
 {
   static unsigned int sdl_count = 0;
+  static std::map<Uint32, gemsdl2window*>s_windowmap;
   static SDL_GLContext s_context = 0;
 };
-
 
 #ifdef __APPLE__
 #include <dlfcn.h>
