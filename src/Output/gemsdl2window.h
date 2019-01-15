@@ -81,6 +81,7 @@ private:
 
   /* window position/dimension (pre creation) */
   virtual void dimensionsMess(unsigned int width, unsigned int height);
+  virtual void offsetMess(int x, int y);
   virtual void fullscreenMess(int on);
   virtual void borderMess(bool on);
   virtual void cursorMess(bool on);

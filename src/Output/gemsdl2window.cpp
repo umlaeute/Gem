@@ -437,6 +437,14 @@ void gemsdl2window :: dimensionsMess(unsigned int width,
     SDL_SetWindowSize(m_window, m_width, m_height);
   }
 }
+void gemsdl2window :: offsetMess(int x, int y)
+{
+  m_xoffset = x;
+  m_yoffset = y;
+  if(m_window) {
+    SDL_SetWindowPosition(m_window, x, y);
+  }
+}
 /////////////////////////////////////////////////////////
 // fullscreenMess
 //
