@@ -76,7 +76,7 @@ gemsdl2window :: gemsdl2window(void)
   : m_window(0)
   , m_context(0)
   , m_videoFlags(0)
-  , m_mousegrab(false)
+  , m_grabmouse(false)
 {
   if(!sdl_count) {
     pre_init();
@@ -466,11 +466,12 @@ void gemsdl2window :: topmostMess(bool state)
   if(m_window)
     SDL_RaiseWindow(m_window);
 }
-void gemsdl2window :: mousegrabMess(bool state)
+void gemsdl2window :: grabmouseMess(bool state)
 {
-  m_mousegrab = state;
-  if(m_window)
-    SDL_SetWindowGrab(m_window, m_mousegrab?SDL_TRUE:SDL_FALSE);
+  m_grabmouse = state;
+  if(m_window) {
+    SDL_SetWindowGrab(m_window, m_grabmouse?SDL_TRUE:SDL_FALSE);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -543,7 +544,7 @@ bool gemsdl2window :: create(void)
   SDL_DisableScreenSaver();
   SDL_RaiseWindow(m_window);
   SDL_CaptureMouse(SDL_TRUE);
-  mousegrabMess(m_mousegrab);
+  grabmouseMess(m_grabmouse);
   dispatch();
   return true;
 }
@@ -581,5 +582,5 @@ void gemsdl2window :: destroyMess(void)
 void gemsdl2window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "topmost", topmostMess, bool);
-  CPPEXTERN_MSG1(classPtr, "mousegrab", mousegrabMess, bool);
+  CPPEXTERN_MSG1(classPtr, "grabmouse", grabmouseMess, bool);
 }

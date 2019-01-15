@@ -85,7 +85,7 @@ private:
   virtual void borderMess(bool on);
   virtual void cursorMess(bool on);
   virtual void topmostMess(bool on);
-  virtual void mousegrabMess(bool on);
+  virtual void grabmouseMess(bool on);
 
   /* creation/destruction */
   virtual bool create(void);
@@ -115,7 +115,7 @@ private:
   /* hints how to create the window */
   int m_videoFlags;
 
-  bool m_mousegrab;
+  bool m_grabmouse;
 };
 
 #endif    // for header file
