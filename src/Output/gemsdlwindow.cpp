@@ -414,12 +414,7 @@ void gemsdlwindow :: dispatch()
     case SDL_KEYDOWN:
       key
         (
-#if SDL_VERSION_ATLEAST(2,0,0)
-          /* SDL2 dropped event.key.which */
-          0
-#else
           event.key.which
-#endif
         , key2symbol(event.key.keysym.sym, event.key.keysym.unicode)
         , event.key.keysym.scancode
         , event.key.state==SDL_PRESSED
