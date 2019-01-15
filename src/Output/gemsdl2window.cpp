@@ -295,91 +295,94 @@ void gemsdl2window :: dispatch()
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
 #warning CHECK event->window.windowID;
-    switch(event.type) {
-    default:
-      post("event: %d", event.type);
-      break;
-    case SDL_WINDOWEVENT:
-      switch (event.window.event) {
-      case SDL_WINDOWEVENT_SHOWN:
-        info("visible", 1);
-        break;
-      case SDL_WINDOWEVENT_HIDDEN:
-        info("visible", 0);
-        break;
-      case SDL_WINDOWEVENT_EXPOSED:
-        info("window", "exposed");
-        break;
-      case SDL_WINDOWEVENT_MOVED:
-        position(event.window.data1, event.window.data2);
-        break;
-      case SDL_WINDOWEVENT_RESIZED:
-        /* nop: this event always follows the SIZE_CHANGED event */
-        break;
-      case SDL_WINDOWEVENT_SIZE_CHANGED:
-        dimension(event.window.data1, event.window.data2);
-        break;
-      case SDL_WINDOWEVENT_MINIMIZED:
-#warning minimized,maximized,restored events
-        info("visible", 0);
-        break;
-      case SDL_WINDOWEVENT_MAXIMIZED:
-        info("visible", 1);
-        break;
-      case SDL_WINDOWEVENT_RESTORED:
-        info("visible", 1);
-        break;
-      case SDL_WINDOWEVENT_ENTER:
-        entry(devID, 1);
-        break;
-      case SDL_WINDOWEVENT_LEAVE:
-        entry(devID, 0);
-        break;
-      case SDL_WINDOWEVENT_FOCUS_GAINED:
-        info("inputentry", 1);
-        break;
-      case SDL_WINDOWEVENT_FOCUS_LOST:
-        info("inputentry", 0);
-        break;
-      case SDL_WINDOWEVENT_CLOSE:
-        info("window", "closed");
-        break;
-#if SDL_VERSION_ATLEAST(2, 0, 5)
-      case SDL_WINDOWEVENT_TAKE_FOCUS:
-        SDL_Log("Window %d is offered a focus", event.window.windowID);
-        break;
-      case SDL_WINDOWEVENT_HIT_TEST:
-        SDL_Log("Window %d has a special hit test", event.window.windowID);
-        break;
-#endif
-        break;
-      }
+  switch(event.type) {
+  default:
+    post("event: %d", event.type);
     break;
-    case SDL_KEYUP:
-    case SDL_KEYDOWN:
-      /* FIXME: event.key.repeat */
-      key
-        (
+  case SDL_WINDOWEVENT:
+    post("windowevent for %d @%p", event.window.windowID, m_window);
+    switch (event.window.event) {
+    case SDL_WINDOWEVENT_SHOWN:
+      info("visible", 1);
+      break;
+    case SDL_WINDOWEVENT_HIDDEN:
+      info("visible", 0);
+      break;
+    case SDL_WINDOWEVENT_EXPOSED:
+      info("window", "exposed");
+      break;
+    case SDL_WINDOWEVENT_MOVED:
+      position(event.window.data1, event.window.data2);
+      break;
+    case SDL_WINDOWEVENT_RESIZED:
+      /* nop: this event always follows the SIZE_CHANGED event */
+      break;
+    case SDL_WINDOWEVENT_SIZE_CHANGED:
+      dimension(event.window.data1, event.window.data2);
+      break;
+    case SDL_WINDOWEVENT_MINIMIZED:
+#warning minimized,maximized,restored events
+      SDL_Log("minimized %p", event.window.windowID);
+      info("visible", 0);
+      break;
+    case SDL_WINDOWEVENT_MAXIMIZED:
+      SDL_Log("maximized %p", event.window.windowID);
+      info("visible", 1);
+      break;
+    case SDL_WINDOWEVENT_RESTORED:
+      SDL_Log("restored %p", event.window.windowID);
+      info("visible", 1);
+      break;
+    case SDL_WINDOWEVENT_ENTER:
+      entry(devID, 1); // "mouse" <devID> "entry" 1
+      break;
+    case SDL_WINDOWEVENT_LEAVE:
+      entry(devID, 0); // "mouse" <devID> "entry" 0
+      break;
+    case SDL_WINDOWEVENT_FOCUS_GAINED:
+      info("inputentry", 1);
+      break;
+    case SDL_WINDOWEVENT_FOCUS_LOST:
+      info("inputentry", 0);
+      break;
+    case SDL_WINDOWEVENT_CLOSE:
+      info("window", "close");
+      break;
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+    case SDL_WINDOWEVENT_TAKE_FOCUS:
+      //SDL_Log("Window %d is offered a focus", event.window.windowID);
+      break;
+    case SDL_WINDOWEVENT_HIT_TEST:
+      //SDL_Log("Window %d has a special hit test", event.window.windowID);
+      break;
+#endif
+      break;
+    }
+    break;
+  case SDL_KEYUP:
+  case SDL_KEYDOWN:
+    /* FIXME: event.key.repeat */
+    key
+      (
         /* SDL2 dropped event.key.which */
         devID
         , key2symbol(event.key.keysym.sym)
         , event.key.keysym.scancode
         , event.key.state==SDL_PRESSED
         );
-      break;
-    case SDL_MOUSEMOTION:
-      motion(event.motion.which, event.motion.x, event.motion.y);
-      break;
-    case SDL_MOUSEBUTTONUP:
-    case SDL_MOUSEBUTTONDOWN:
-      motion(event.button.which, event.button.x, event.button.y);
-      button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
-             event.button.state==SDL_PRESSED);
-      break;
-    case SDL_QUIT:
-      info("window", "destroy");
-      break;
-    }
+    break;
+  case SDL_MOUSEMOTION:
+    motion(event.motion.which, event.motion.x, event.motion.y);
+    break;
+  case SDL_MOUSEBUTTONUP:
+  case SDL_MOUSEBUTTONDOWN:
+    motion(event.button.which, event.button.x, event.button.y);
+    button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
+           event.button.state==SDL_PRESSED);
+    break;
+  case SDL_QUIT:
+    info("window", "destroy");
+    break;
   }
 }
 
