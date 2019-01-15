@@ -510,6 +510,7 @@ bool gemsdl2window :: create(void)
   if(!m_window) {
     return false;
   }
+  s_windowmap[SDL_GetWindowID(m_window)] = this;
   if(s_context) {
     if (SDL_GL_MakeCurrent(m_window, s_context)) {
       error("unable to make shared openGL context currect: %s", SDL_GetError());
@@ -562,6 +563,8 @@ void gemsdl2window :: createMess(const std::string&)
 void gemsdl2window :: destroy(void)
 {
   destroyGemWindow();
+  s_windowmap.erase(SDL_GetWindowID(m_window));
+
   m_window=NULL;
   info("window", "closed");
 }
