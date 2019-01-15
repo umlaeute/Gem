@@ -31,6 +31,7 @@ CPPEXTERN_NEW(gemsdl2window);
 namespace
 {
 static unsigned int sdl_count = 0;
+  static SDL_GLContext s_context = 0;
 };
 
 
