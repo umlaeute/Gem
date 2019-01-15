@@ -294,10 +294,9 @@ void gemsdl2window :: dispatch()
 #warning CHECK event->window.windowID;
   switch(event.type) {
   default:
-    post("event: %d", event.type);
+    post("unknown event: %d", event.type);
     break;
   case SDL_WINDOWEVENT:
-    post("windowevent for %d @%p", event.window.windowID, m_window);
     switch (event.window.event) {
     case SDL_WINDOWEVENT_SHOWN:
       info("visible", 1);
@@ -455,7 +454,8 @@ void gemsdl2window :: fullscreenMess(int on)
   if(!m_window)
     return;
   if(!SDL_SetWindowFullscreen(m_window, m_fullscreen?SDL_WINDOW_FULLSCREEN:0)) {
-    error("fullscreen failed: %s", SDL_GetError());
+    const char*errstr = SDL_GetError();
+    error("fullscreen failed: %s", (errstr&&*errstr)?errstr:"unknown reason");
   }
 }
 void gemsdl2window :: borderMess(bool on)
