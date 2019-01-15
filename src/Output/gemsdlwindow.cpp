@@ -24,7 +24,6 @@
 #define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
 
 #include <map>
-static std::map<int, gemsdlwindow*>s_windowmap;
 
 CPPEXTERN_NEW(gemsdlwindow);
 
