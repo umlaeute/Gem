@@ -64,7 +64,6 @@ protected:
 
   int m_reqTexUnits; // requested # of texunits (default: m_max)
   int m_useTexUnits; // actually used texunits (=min(requested,available))
-  GLint m_max; // maximum # of texunits supported by the hw
   GLint                   m_texID[MAX_MULTITEX_ID];
   GLint                   m_textureType;
   int                     m_mode; // 1=TEXTURE_RECTANGLE, 0=TEXTURE_2D

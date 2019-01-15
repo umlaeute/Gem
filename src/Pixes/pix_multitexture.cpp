@@ -12,8 +12,6 @@
 //
 /////////////////////////////////////////////////////////
 
-/* LATER: respect the available number of texunits as stored in m_max */
-
 #include "pix_multitexture.h"
 
 #include "Gem/Manager.h"
@@ -39,7 +37,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_multitexture, t_floatarg, A_DEFFLOAT);
 /////////////////////////////////////////////////////////
 pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   : m_inlet(NULL), m_numInlets(0),
-    m_reqTexUnits((GLint)reqTexUnits), m_max(0), m_textureType(GL_TEXTURE_2D),
+    m_reqTexUnits((GLint)reqTexUnits), m_textureType(GL_TEXTURE_2D),
     m_mode(0),
     m_xRatio(1.f), m_yRatio(1.f), upsidedown(false), m_texSizeX(0),
     m_texSizeY(0),
@@ -189,6 +187,7 @@ void pix_multitexture :: postrender(GemState *state)
   state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->set(GemState::_GL_TEX_UNITS, m_oldTexUnits);
+
   if(GLEW_VERSION_1_3) {
     for ( int i = m_useTexUnits; i>0; i--) {
       glActiveTexture( GL_TEXTURE0 + i);
