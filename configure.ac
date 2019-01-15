@@ -273,8 +273,8 @@ AS_IF([test "x${have_glew}" != "xyes"], [
 AC_DEFINE([GLEW_BUILD], [1], [Define to 1 if using the built-in glew])
 ])
 
-GEM_CHECK_LIB([sdl2], [SDL2],[SDL.h], [SDL_Quit],,,,[SDL2 windowing])
 GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
+GEM_CHECK_LIB([sdl2], [SDL2],[SDL_log.h], [SDL_Quit],,,,[SDL2 windowing])
 
 ## use GLFW windowing framework
 GEM_CHECK_LIB([libglfw], [glfw],[GL/glfw.h], [glfwInit],,,,[GLFW2 windowing])
