@@ -83,6 +83,7 @@ protected:
   TexCoord       *m_oldTexCoords;
   int             m_oldNumCoords;
   int             m_oldTexture;
+  int m_oldTexUnits;
 
 
   void texUnitMess(int n, int texID);

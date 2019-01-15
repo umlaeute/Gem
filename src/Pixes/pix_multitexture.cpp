@@ -137,6 +137,7 @@ void pix_multitexture :: render(GemState *state)
   state->get(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
+  state->get(GemState::_GL_TEX_UNITS, m_oldTexUnits);
 
   state->get(GemState::_GL_TEX_UNITS, m_useTexUnits);
   if(m_useTexUnits>m_reqTexUnits)
@@ -186,6 +187,7 @@ void pix_multitexture :: postrender(GemState *state)
   state->set(GemState::_GL_TEX_COORDS, m_oldTexCoords);
   state->set(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->set(GemState::_GL_TEX_TYPE, m_oldTexture);
+  state->set(GemState::_GL_TEX_UNITS, m_oldTexUnits);
   if(GLEW_VERSION_1_3) {
     for ( int i = m_reqTexUnits; i>0; i--) {
       glActiveTexture( GL_TEXTURE0 + i);
