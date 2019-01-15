@@ -372,6 +372,44 @@ void gemsdl2window :: dispatch()
     button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
            event.button.state==SDL_PRESSED);
     break;
+  case SDL_DROPFILE: {
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+  case SDL_DROPTEXT:
+  case SDL_DROPBEGIN:
+  case SDL_DROPCOMPLETE:
+#endif
+    const char*droptype = 0;
+    switch(event.type) {
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+    case SDL_DROPTEXT:
+      droptype = "text";
+      break;
+    case SDL_DROPBEGIN:
+      droptype = "begin";
+      break;
+    case SDL_DROPCOMPLETE:
+      droptype = "end";
+      break;
+#endif
+    default:
+      droptype = "file";
+      break;
+    }
+    char*dropped = event.drop.file;
+    std::vector<t_atom>alist;
+    t_atom a;
+    SETSYMBOL(&a, gensym("drop"));
+    alist.push_back(a);
+    SETSYMBOL(&a, gensym(droptype));
+    alist.push_back(a);
+    if(dropped) {
+      SETSYMBOL(&a, gensym(dropped));
+      alist.push_back(a);
+    }
+    info(alist);
+    SDL_free(dropped);
+  }
+    break;
   case SDL_QUIT:
     info("window", "destroy");
     break;
