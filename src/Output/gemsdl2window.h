@@ -106,6 +106,7 @@ private:
   virtual void swapBuffers(void);
   // dispatch events
   virtual void dispatch(void);
+  virtual void dispatch(SDL_Event&event);
 
 private:
 

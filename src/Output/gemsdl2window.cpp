@@ -288,10 +288,63 @@ void gemsdl2window :: dispatch()
     return;
   }
 
-  unsigned long devID=0;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
-#warning CHECK event->window.windowID;
+    Uint32 winid = 0;
+    switch(event.type) {
+    default: break;
+    case SDL_WINDOWEVENT:
+      winid = event.window.windowID;
+      break;
+    case SDL_KEYUP: case SDL_KEYDOWN:
+      winid = event.key.windowID;
+      break;
+    case SDL_TEXTEDITING:
+      winid = event.edit.windowID;
+      break;
+    case SDL_TEXTINPUT:
+      winid = event.text.windowID;
+      break;
+    case SDL_MOUSEMOTION:
+      winid = event.motion.windowID;
+      break;
+    case SDL_MOUSEBUTTONUP: case SDL_MOUSEBUTTONDOWN:
+      winid = event.button.windowID;
+      break;
+    case SDL_MOUSEWHEEL:
+      winid = event.wheel.windowID;
+      break;
+    case SDL_USEREVENT:
+      winid = event.user.windowID;
+      break;
+    case SDL_DROPFILE:
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+    case SDL_DROPTEXT:
+    case SDL_DROPBEGIN:
+    case SDL_DROPCOMPLETE:
+#endif
+      winid = event.drop.windowID;
+    }
+    if(winid) {
+      auto it = s_windowmap.find(winid);
+      if (it != s_windowmap.end()) {
+        gemsdl2window*that = it->second;
+        if(that)
+          that->dispatch(event);
+      }
+    } else {
+      /* dispatch to all windows(?) */
+      for (auto it = s_windowmap.begin(); it != s_windowmap.end(); ++it) {
+        gemsdl2window*that = it->second;
+        if(that)
+          that->dispatch(event);
+      }
+    }
+  }
+}
+
+void gemsdl2window :: dispatch(SDL_Event&event) {
+  unsigned long devID=0;
   switch(event.type) {
   default:
     post("unknown event: %d", event.type);
