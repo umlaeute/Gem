@@ -317,17 +317,13 @@ void gemsdl2window :: dispatch()
       dimension(event.window.data1, event.window.data2);
       break;
     case SDL_WINDOWEVENT_MINIMIZED:
-#warning minimized,maximized,restored events
-      SDL_Log("minimized %p", event.window.windowID);
-      info("visible", 0);
+      info("window", "minimized");
       break;
     case SDL_WINDOWEVENT_MAXIMIZED:
-      SDL_Log("maximized %p", event.window.windowID);
-      info("visible", 1);
+      info("window", "maximized");
       break;
     case SDL_WINDOWEVENT_RESTORED:
-      SDL_Log("restored %p", event.window.windowID);
-      info("visible", 1);
+      info("window", "restored");
       break;
     case SDL_WINDOWEVENT_ENTER:
       entry(devID, 1); // "mouse" <devID> "entry" 1
