@@ -134,7 +134,7 @@ void pix_share_write :: freeShm()
 #else
   if(shm_addr) {
     if (shmdt(shm_addr) == -1) {
-      error("shmdt failed at %x", shm_addr);
+      error("shmdt failed at %p", shm_addr);
     }
   }
   shm_addr=NULL;
@@ -363,7 +363,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     t_pixshare_header *h=(t_pixshare_header *)shm_addr;
     h->size = (shm_desc.shm_segsz-sizeof(t_pixshare_header));
 
-    verbose(1, "shm:: id(%d) segsz(%d) cpid (%d) mem(0x%X)",
+    verbose(1, "shm:: id(%d) segsz(%d) cpid (%d) mem(%p)",
             shm_id,shm_desc.shm_segsz,shm_desc.shm_cpid, shm_addr);
   } else {
     error("couldn't get shm_id: error %d", errno);

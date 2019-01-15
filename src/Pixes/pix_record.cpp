@@ -191,7 +191,7 @@ bool pix_record :: addHandle( std::vector<std::string>available,
       m_ids.push_back(key);
       m_allhandles.push_back(handle);
       count++;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_allhandles.size()-1,
+      verbose(2, "added backend#%d '%s' @ %p", m_allhandles.size()-1,
               key.c_str(), handle);
     }
   }

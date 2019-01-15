@@ -223,7 +223,7 @@ bool pix_video :: addHandle( std::vector<std::string>available,
       m_videoHandles.push_back(handle);
       count++;
       MARK;
-      verbose(2, "added backend#%d '%s' @ 0x%x", m_videoHandles.size()-1,
+      verbose(2, "added backend#%d '%s' @ %p", m_videoHandles.size()-1,
               key.c_str(), handle);
       MARK;
     }

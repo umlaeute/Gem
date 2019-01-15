@@ -290,13 +290,13 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width),
   data = new PBuffer_data;
   data->old_context = CGLGetCurrentContext();
   err = CGLGetVirtualScreen(data->old_context, &vs);
-  verbose (2, "Target Context (0x%X) Renderer: %s\n",data->old_context,
+  verbose (2, "Target Context (%p) Renderer: %s\n",data->old_context,
            glGetString (GL_RENDERER));
   cglReportError(CGLChoosePixelFormat (attrib, &data->pixfmt, &npf));
 
   cglReportError(CGLCreateContext (data->pixfmt, data->old_context,
                                    &(data->context)));
-  verbose (2, "pBuffer Context (0x%X) Renderer: %s\n",data->context,
+  verbose (2, "pBuffer Context (%p) Renderer: %s\n",data->context,
            glGetString (GL_RENDERER));
 
   /*    if (float_buffer)
@@ -308,7 +308,7 @@ PBuffer::PBuffer(int width, int height, int flag) : width(width),
   cglReportError( CGLSetCurrentContext( data->context ) );
   cglReportError( CGLGetVirtualScreen(data->old_context, &vs) );
   cglReportError( CGLSetPBuffer(data->context, data->pbuffer, 0, 0, vs) );
-  verbose (2, "pbuffer (0x%X) Renderer: %s\n",data->pbuffer,
+  verbose (2, "pbuffer (%p) Renderer: %s\n",data->pbuffer,
            glGetString (GL_RENDERER));
 }
 
@@ -339,9 +339,9 @@ void PBuffer::enable()
   cglReportError (CGLSetCurrentContext (data->context));
   cglReportError (CGLGetVirtualScreen ( data->old_context, &vs ));
   cglReportError( CGLSetPBuffer( data->context, data->pbuffer, 0, 0, vs) );
-  debug ("enable Context (0x%X) Renderer: %s\n",CGLGetCurrentContext(),
+  debug ("enable Context (%p) Renderer: %s\n",CGLGetCurrentContext(),
          glGetString (GL_RENDERER));
-  debug ("pBuffer Context (0x%X) Renderer: %s\n",data->context,
+  debug ("pBuffer Context (%p) Renderer: %s\n",data->context,
          glGetString (GL_RENDERER));
 
   return;
