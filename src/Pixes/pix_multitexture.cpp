@@ -255,6 +255,6 @@ void pix_multitexture :: parmCallback(void*data, t_symbol*s, int argc,
     int i = atoi(s->s_name+1);
     GetMyClass(data)->texUnitMess(i, atom_getint(argv));
   } else {
-    GetMyClass(data)->error("invalid texUnit specified!");
+    GetMyClass(data)->error("invalid texUnit specified! %s[%d]", s->s_name, argc);
   }
 }
