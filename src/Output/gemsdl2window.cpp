@@ -433,7 +433,7 @@ void gemsdl2window :: dimensionsMess(unsigned int width,
   }
   m_width = width;
   m_height = height;
-  if(m_window && makeCurrent()) {
+  if(m_window) {
     SDL_SetWindowSize(m_window, m_width, m_height);
   }
 }
