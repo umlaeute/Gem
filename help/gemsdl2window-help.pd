@@ -1,0 +1,247 @@
+#N canvas 674 73 885 613 10;
+#X declare -lib Gem;
+#X text 13 145 [gemsdl2window] uses the SDL2 toolkit (Simple DirectMedia
+Layer) to create windows.;
+#X obj 441 515 print unknown.message;
+#X obj 367 515 route bang;
+#X obj 367 558 bng 15 250 50 0 empty empty render! 17 7 0 10 -262144
+-4034 -1;
+#X obj 648 560 print info;
+#X obj 424 537 s \$0-info;
+#X text 485 537 feedback about the window;
+#X obj 648 514 r \$0-info;
+#X obj 648 537 spigot;
+#X obj 695 539 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 407 45 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 75 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 105 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 135 cnv 15 470 25 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X obj 407 165 cnv 15 470 25 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X obj 407 195 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 225 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 255 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 285 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 407 315 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X obj 367 386 t a;
+#X obj 407 345 cnv 15 470 25 empty empty empty 20 12 0 14 -4034 -66577
+0;
+#X msg 411 48 create;
+#X msg 411 78 bang;
+#X msg 411 108 destroy;
+#X text 515 79 clear window \, activate openGL-context \, and send
+render-bang;
+#X text 515 110 destroy the window;
+#X text 515 49 create the window;
+#X text 515 139 single-buffered(1) or double-buffered(2) rendering
+;
+#X msg 411 138 buffer 2;
+#X msg 411 168 FSAA \$1;
+#X text 515 169 Full Screen Antia Aliasing mode;
+#X msg 411 198 title foo;
+#X text 515 199 title of the window;
+#X msg 411 228 dimen 640 460;
+#X text 515 229 change dimension of the window;
+#X msg 411 258 offset 100 100;
+#X text 515 259 change position of the window;
+#X text 515 319 turn on/off window borders;
+#X text 515 349 (don't) show cursor when it's on the window;
+#X obj 407 395 cnv 15 470 25 empty empty empty 20 12 0 14 -258113 -66577
+0;
+#X text 465 17 standard messages;
+#X msg 421 399 blurb;
+#X text 515 400 some random unknown message;
+#X obj 407 425 cnv 15 470 25 empty empty empty 20 12 0 14 -257985 -66577
+0;
+#X text 47 51 [gemsdl2window];
+#X text 18 79 part of Gem;
+#X obj 38 553 declare -lib Gem;
+#X text 24 529 last updated for Gem-0.94;
+#X msg 411 348 cursor \$1;
+#X obj 500 350 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 411 318 border \$1;
+#X obj 500 320 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 500 290 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 515 289 switch fullscreen mode on/off;
+#X msg 411 288 fullscreen \$1;
+#X obj 235 348 metro 100;
+#X obj 235 326 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 43 209 cnv 15 100 50 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#N canvas 348 171 312 657 keyboard 0;
+#X obj 54 265 r \$0-info;
+#X obj 54 286 route keyboard;
+#X obj 54 307 list split 1;
+#X obj 54 328 list trim;
+#X obj 54 349 route keyname key;
+#X obj 54 400 unpack s f;
+#X symbolatom 54 421 10 0 0 0 - - -;
+#X floatatom 116 421 5 0 0 0 - - -;
+#X floatatom 187 421 5 0 0 0 - - -;
+#X obj 154 400 unpack;
+#X floatatom 154 421 5 0 0 0 - - -;
+#X msg 54 582;
+#X obj 18 127 cnv 15 100 100 empty empty empty 20 12 0 14 -154295 -66577
+0;
+#X obj 128 127 cnv 15 100 100 empty empty empty 20 12 0 14 -155048
+-66577 0;
+#X obj 238 127 cnv 15 40 100 empty empty empty 20 12 0 14 -223782 -66577
+0;
+#X text 38 129 keystroke;
+#X text 146 129 keyname;
+#X text 247 128 key;
+#X text 34 153 <a>;
+#X text 34 171 <LeftShift>;
+#X text 34 189 <A>;
+#X text 34 207 <ä>;
+#X text 17 139 ===========================================;
+#X text 17 23 While Gem tries to provide a consistent platform-independent
+interface \, the values returned by [gemkeyboard] and [gemkeyname]
+might depend on the actual window toolkit., f 43;
+#X text 125 264 <- from [gem*window];
+#N canvas 5 51 450 300 record 0;
+#X obj 244 15 r \$0-info;
+#X obj 244 66 route keyboard;
+#X obj 244 87 list split 1;
+#X obj 244 108 list trim;
+#X msg 244 221 add2 \$1;
+#X msg 300 221 set;
+#X obj 300 200 loadbang;
+#X text 315 14 <- from [gem*window];
+#X obj 244 129 route keyname;
+#X obj 244 152 unpack s f;
+#X obj 244 200 spigot;
+#X obj 301 179 == 0;
+#X obj 244 244 t a;
+#X obj 244 267 outlet;
+#X obj 100 100 f;
+#X obj 185 117 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 100 118 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 244 40 spigot;
+#X connect 0 0 17 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X connect 3 0 8 0;
+#X connect 4 0 12 0;
+#X connect 5 0 12 0;
+#X connect 6 0 5 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 9 1 11 0;
+#X connect 10 0 4 0;
+#X connect 11 0 10 1;
+#X connect 12 0 13 0;
+#X connect 15 0 5 0;
+#X connect 16 0 17 1;
+#X connect 17 0 1 0;
+#X coords 0 -1 1 1 100 33 1 100 100;
+#X restore 54 543 pd record keyup;
+#X msg 154 153 a;
+#X msg 154 171 Shift_L;
+#X msg 154 189 a;
+#X msg 154 207 ä;
+#X text 10 102 values returned by [gemsdl2window];
+#X text 244 153 4;
+#X text 244 171 255;
+#X text 244 189 4;
+#X text 244 207 52;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 1 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 1 9 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 0;
+#X connect 9 0 10 0;
+#X connect 9 1 8 0;
+#X connect 25 0 11 0;
+#X restore 58 224 pd keyboard;
+#X obj 363 459 cnv 15 100 50 empty empty empty 20 12 0 14 -260097 -66577
+0;
+#X obj 367 472 gemsdl2window;
+#X text 765 169 (NOT IMPLEMENTED);
+#N canvas 61 86 537 808 specific 0;
+#X obj 85 463 outlet;
+#X obj 85 422 t a;
+#X text 92 88 most window settings (dimen \, offset \, title \, fullscreen
+\, border \, ...) can also be applied after creating the window.;
+#X obj 85 156 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 85 179 topmost \$1;
+#X text 161 177 bring window to front;
+#X obj 125 206 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X msg 125 229 grabmouse \$1;
+#X obj 151 341 hsl 128 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X floatatom 148 361 5 0 0 0 - - -;
+#X msg 148 383 opacity \$1;
+#X text 227 387 make window transparent (if your OS supports it);
+#X obj 135 266 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 223 229 confine the mouse to within the window;
+#X msg 135 289 relativemouse \$1;
+#X text 249 292 lock mouse into the window, f 33;
+#X text 61 558 drag-n-drop support:;
+#X text 63 587 you can drop a file (or text) onto the Gem-window \,
+and it will be reported as a "drop" event (eventually surrounded by
+"begin" and "end" messages);
+#X obj 134 650 r \$0-info;
+#X obj 134 673 route drop;
+#X obj 134 696 print \$0:dropped;
+#X connect 1 0 0 0;
+#X connect 3 0 4 0;
+#X connect 4 0 1 0;
+#X connect 6 0 7 0;
+#X connect 7 0 1 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
+#X connect 10 0 1 0;
+#X connect 12 0 14 0;
+#X connect 14 0 1 0;
+#X connect 18 0 19 0;
+#X connect 19 0 20 0;
+#X restore 421 429 pd specific messages;
+#X connect 2 0 3 0;
+#X connect 2 1 5 0;
+#X connect 7 0 8 0;
+#X connect 8 0 4 0;
+#X connect 9 0 8 1;
+#X connect 20 0 61 0;
+#X connect 22 0 20 0;
+#X connect 23 0 20 0;
+#X connect 24 0 20 0;
+#X connect 29 0 20 0;
+#X connect 30 0 20 0;
+#X connect 32 0 20 0;
+#X connect 34 0 20 0;
+#X connect 36 0 20 0;
+#X connect 42 0 61 0;
+#X connect 49 0 20 0;
+#X connect 50 0 49 0;
+#X connect 51 0 20 0;
+#X connect 52 0 51 0;
+#X connect 53 0 55 0;
+#X connect 55 0 20 0;
+#X connect 56 0 20 0;
+#X connect 57 0 56 0;
+#X connect 61 0 2 0;
+#X connect 61 1 1 0;
+#X connect 63 0 61 0;
