@@ -83,6 +83,9 @@ private:
   virtual void dimensionsMess(unsigned int width, unsigned int height);
   virtual void fullscreenMess(int on);
   virtual void borderMess(bool on);
+  virtual void cursorMess(bool on);
+  virtual void topmostMess(bool on);
+  virtual void mousegrabMess(bool on);
 
   /* creation/destruction */
   virtual bool create(void);
@@ -112,8 +115,7 @@ private:
   /* hints how to create the window */
   int m_videoFlags;
 
-  /* bits per pixel */
-  unsigned int m_bpp;
+  bool m_mousegrab;
 };
 
 #endif    // for header file
