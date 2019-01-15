@@ -37,6 +37,10 @@ if HAVE_LIB_SDL
 pkglib_LTLIBRARIES += gemsdlwindow.la
 endif
 
+if HAVE_LIB_SDL2
+pkglib_LTLIBRARIES += gemsdl2window.la
+endif
+
 if HAVE_LIB_LIBGLFW
 pkglib_LTLIBRARIES += gemglfw2window.la
 endif
@@ -238,6 +242,34 @@ gemsdlwindow_la_LDFLAGS  +=
 gemsdlwindow_la_SOURCES = \
   gemsdlwindow.cpp \
   gemsdlwindow.h
+
+
+
+########### gemsdl2window ###########
+# some default flags
+gemsdl2window_la_CXXFLAGS =
+gemsdl2window_la_LDFLAGS  = $(COMMON_LDFLAGS)
+gemsdl2window_la_LIBADD   =
+# RTE flags
+gemsdl2window_la_CXXFLAGS += $(GEM_RTE_CFLAGS)
+gemsdl2window_la_LIBADD   += $(GEM_RTE_LIBS)
+# arch flags
+gemsdl2window_la_CXXFLAGS += $(GEM_ARCH_CXXFLAGS)
+gemsdl2window_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
+# flags for building Gem externals
+gemsdl2window_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+gemsdl2window_la_LIBADD   += -L$(top_builddir) $(GEM_EXTERNAL_LIBS)
+# gemsdl2window_la @MOREFLAGS@
+
+# object specific libraries
+gemsdl2window_la_CXXFLAGS += $(GEM_LIB_SDL2_CFLAGS)
+gemsdl2window_la_LIBADD   += $(GEM_LIB_SDL2_LIBS)
+gemsdl2window_la_LDFLAGS  +=
+
+## SOURCES
+gemsdl2window_la_SOURCES = \
+  gemsdl2window.cpp \
+  gemsdl2window.h
 
 
 
