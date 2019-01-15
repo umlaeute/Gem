@@ -220,3 +220,5 @@ void CPPExtern::beforeDeletion(void)
 {
   //post("CPPExtern to be deleted");
 }
+
+struct register_class_setup *gem_register_class_setup_list = 0;

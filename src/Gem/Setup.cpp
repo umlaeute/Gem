@@ -37,6 +37,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Version.h"
 #include "Gem/Files.h"
+#include "Base/CPPExtern.h"
 
 #include <stdio.h>
 
@@ -239,6 +240,13 @@ void setup()
   verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
   verbose(-1,
           "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
+
+  struct register_class_setup *l = gem_register_class_setup_list;
+  while (l)
+  {
+    l->setup();
+    l = l->next;
+  }
 
   gem::Settings::init();
   addownpath("Gem-meta.pd");
