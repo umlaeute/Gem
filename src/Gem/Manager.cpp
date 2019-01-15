@@ -335,6 +335,7 @@ void GemMan :: resetValues()
 
   // setup the transformation matrices
   float xDivy = (float)m_w / (float)m_h;
+  if (m_h == 0) xDivy = 1;
 
   if(GLEW_ARB_imaging) {
     glMatrixMode(GL_COLOR);
@@ -606,6 +607,7 @@ void GemMan :: render(void *)
   case 1: { // 2-screen stereo
     int xSize = m_w / 2;
     int ySize = m_h;
+    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
     // setup the left viewpoint
@@ -693,6 +695,7 @@ void GemMan :: render(void *)
   case 2: { // color-stereo
     int xSize = m_w;
     int ySize = m_h;
+    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
     color_t left_color=RED;
@@ -767,6 +770,7 @@ void GemMan :: render(void *)
   case 3: { // Crystal Eyes Stereo
     int xSize = m_w;
     int ySize = m_h;
+    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
 
     // setup the left viewpoint
@@ -1212,6 +1216,7 @@ void GemMan :: swapBuffers()
     glFlush();
     // setup the transformation matrices
     float xDivy = static_cast<float>(m_w) / static_cast<float>(m_h);
+    if (m_h == 0) xDivy = 1;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
