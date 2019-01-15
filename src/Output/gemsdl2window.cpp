@@ -541,6 +541,11 @@ bool gemsdl2window :: create(void)
   }
 
   m_videoFlags = flags;
+
+  SDL_DisableScreenSaver();
+  SDL_RaiseWindow(m_window);
+  SDL_CaptureMouse(SDL_TRUE);
+  mousegrabMess(m_mousegrab);
   dispatch();
   return true;
 }
