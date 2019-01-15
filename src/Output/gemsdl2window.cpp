@@ -288,9 +288,6 @@ void gemsdl2window :: dispatch()
     return;
   }
 
-  std::vector<t_atom>al;
-  t_atom a;
-  int state;
   unsigned long devID=0;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
