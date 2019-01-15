@@ -510,13 +510,37 @@ bool gemsdl2window :: create(void)
   if(!m_window) {
     return false;
   }
-  m_videoFlags = flags;
+  if(s_context) {
+    if (SDL_GL_MakeCurrent(m_window, s_context)) {
+      error("unable to make shared openGL context currect: %s", SDL_GetError());
+      destroyMess();
+      return false;
+    }
+    SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
+  }
+
+  m_context = SDL_GL_CreateContext(m_window);
+  SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 0);
+
+
+  if(!m_context) {
+    error("unable to create OpenGL context: %s", SDL_GetError());
+    destroyMess();
+    return false;
+  }
+
+  if (SDL_GL_MakeCurrent(m_window, m_context)) {
+    error("unable to make OpenGL context current: %s", SDL_GetError());
+    destroyMess();
+    return false;
+  }
 
   if(!createGemWindow()) {
     destroyMess();
     return false;
   }
 
+  m_videoFlags = flags;
   dispatch();
   return true;
 }
