@@ -158,6 +158,7 @@ void pix_multitexture :: render(GemState *state)
   state->set(GemState::_GL_TEX_COORDS, tc);
   state->set(GemState::_GL_TEX_NUMCOORDS, 4);
   state->set(GemState::_GL_TEX_TYPE, textype);
+  state->set(GemState::_GL_TEX_UNITS, m_useTexUnits);
 
   for ( int i=0; i< m_useTexUnits; i++ ) {
     if(GLEW_VERSION_1_3) {
