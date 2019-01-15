@@ -54,6 +54,10 @@ pix_multitexture :: pix_multitexture(t_floatarg reqTexUnits)
   m_textureType = GL_TEXTURE_RECTANGLE_EXT;
 #endif
 
+  for(int i=0; i<MAX_MULTITEX_ID; i++) {
+    m_texID[i]=0;
+  }
+
   m_numInlets=m_reqTexUnits;
   m_inlet=new t_inlet*[m_numInlets];
   char tempVt[5];
@@ -162,6 +166,8 @@ void pix_multitexture :: render(GemState *state)
     }
 
     glEnable( m_textureType );
+
+    if(!m_texID[i])continue;
     glBindTexture( m_textureType, m_texID[i] );
     glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
