@@ -59,8 +59,8 @@ void pix_convert :: processImage(imageStruct &image)
   if(!m_image.convertFrom(&image)) {
     post("no method for this format !!!");
     post("if you know how to convert this format (0x%X) to (0x%X),\n"
-         "please contact the authors of this software", image.format,
-         m_image.format);
+         "please contact the authors of this software",
+         image.format, m_image.format);
     return;
   }
   image.data = m_image.data;

@@ -919,7 +919,7 @@ void glsl_program :: printInfo()
         SWITCHPOST(GL_SAMPLER_2D_SHADOW_ARB);
         SWITCHPOST(GL_SAMPLER_2D_RECT_ARB);
       default:
-        post("unknown (0x%X)", m_uniform[i].type);
+        post("unknown uniform type (0x%X)", m_uniform[i].type);
         break;
       }
       break;
