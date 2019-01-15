@@ -360,12 +360,8 @@ void gemsdl2window :: dispatch()
       /* FIXME: event.key.repeat */
       key
         (
-#if SDL_VERSION_ATLEAST(2,0,0)
-          /* SDL2 dropped event.key.which */
-          0
-#else
-          event.key.which
-#endif
+        /* SDL2 dropped event.key.which */
+        devID
         , key2symbol(event.key.keysym.sym)
         , event.key.keysym.scancode
         , event.key.state==SDL_PRESSED
