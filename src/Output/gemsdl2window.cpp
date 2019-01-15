@@ -77,6 +77,7 @@ gemsdl2window :: gemsdl2window(void)
   , m_context(0)
   , m_videoFlags(0)
   , m_grabmouse(false)
+  , m_opacity(1.)
 {
   if(!sdl_count) {
     pre_init();
@@ -568,6 +569,12 @@ void gemsdl2window :: grabmouseMess(bool state)
     SDL_SetWindowGrab(m_window, m_grabmouse?SDL_TRUE:SDL_FALSE);
   }
 }
+void gemsdl2window :: opacityMess(float opacity)
+{
+  m_opacity = opacity;
+  if(m_window)
+    SDL_SetWindowOpacity(m_window, m_opacity);
+}
 
 /////////////////////////////////////////////////////////
 // createMess
@@ -640,6 +647,7 @@ bool gemsdl2window :: create(void)
   SDL_RaiseWindow(m_window);
   SDL_CaptureMouse(SDL_TRUE);
   grabmouseMess(m_grabmouse);
+  opacityMess(m_opacity);
   dispatch();
   return true;
 }
@@ -684,4 +692,5 @@ void gemsdl2window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "topmost", topmostMess, bool);
   CPPEXTERN_MSG1(classPtr, "grabmouse", grabmouseMess, bool);
+  CPPEXTERN_MSG1(classPtr, "opacity", opacityMess, float);
 }

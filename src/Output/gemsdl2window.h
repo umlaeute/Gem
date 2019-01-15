@@ -87,6 +87,7 @@ private:
   virtual void cursorMess(bool on);
   virtual void topmostMess(bool on);
   virtual void grabmouseMess(bool on);
+  virtual void opacityMess(float);
 
   /* creation/destruction */
   virtual bool create(void);
@@ -118,6 +119,7 @@ private:
   int m_videoFlags;
 
   bool m_grabmouse;
+  float m_opacity;
 };
 
 #endif    // for header file
