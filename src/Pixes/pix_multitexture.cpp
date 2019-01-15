@@ -90,9 +90,14 @@ pix_multitexture :: ~pix_multitexture()
 bool pix_multitexture :: isRunnable(void)
 {
   if(GLEW_VERSION_1_3 && GLEW_ARB_multitexture) {
+    GLint numTexUnits=0;
+    glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &numTexUnits );
+    m_useTexUnits = m_reqTexUnits;
+    if(m_useTexUnits>numTexUnits)
+      m_useTexUnits=numTexUnits;
     return true;
   }
-
+  m_useTexUnits=0;
   error("your system lacks multitexture support");
   return false;
 }
@@ -138,10 +143,6 @@ void pix_multitexture :: render(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, m_oldNumCoords);
   state->get(GemState::_GL_TEX_TYPE, m_oldTexture);
   state->get(GemState::_GL_TEX_UNITS, m_oldTexUnits);
-
-  state->get(GemState::_GL_TEX_UNITS, m_useTexUnits);
-  if(m_useTexUnits>m_reqTexUnits)
-    m_useTexUnits=m_reqTexUnits;
 
   if (m_textureType == GL_TEXTURE_2D) {
     m_xRatio = 1.0;
