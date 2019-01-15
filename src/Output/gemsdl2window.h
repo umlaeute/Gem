@@ -80,15 +80,16 @@ private:
   virtual void titleMess(const std::string&s);
 
   /* window position/dimension (pre creation) */
-  virtual void    dimensionsMess(unsigned int width, unsigned int height);
-  virtual void    fullscreenMess(int on);
+  virtual void dimensionsMess(unsigned int width, unsigned int height);
+  virtual void fullscreenMess(int on);
+  virtual void borderMess(bool on);
 
   /* creation/destruction */
-  virtual bool        create(void);
+  virtual bool create(void);
   virtual void destroy(void);
 
-  virtual void        createMess(const std::string&);
-  virtual void       destroyMess(void);
+  virtual void createMess(const std::string&);
+  virtual void destroyMess(void);
 
   /* post creation */
   void menuMess(void);
@@ -105,7 +106,8 @@ private:
 private:
 
   /* the SDL surface */
-  SDL_Surface*m_surface;
+  SDL_Window*m_window;
+  SDL_GLContext m_context;
 
   /* hints how to create the window */
   int m_videoFlags;

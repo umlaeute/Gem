@@ -73,7 +73,7 @@ void pre_init() {;}
 //
 /////////////////////////////////////////////////////////
 gemsdl2window :: gemsdl2window(void) :
-  m_surface(NULL),
+  m_window(NULL),
   m_videoFlags(0),
   m_bpp(0)
 {
@@ -82,7 +82,6 @@ gemsdl2window :: gemsdl2window(void) :
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
       throw(GemException("could not initialize SDL window infrastructure"));
     }
-    SDL_EnableUNICODE(1);
   }
   sdl_count++;
 }
@@ -104,7 +103,7 @@ gemsdl2window :: ~gemsdl2window()
 
 bool gemsdl2window :: makeCurrent(void)
 {
-  if(!m_surface) {
+  if(!m_window) {
     return false;
   }
   // ????
@@ -114,7 +113,7 @@ bool gemsdl2window :: makeCurrent(void)
 void gemsdl2window :: swapBuffers(void)
 {
   if(makeCurrent()) { // FIXME: is this needed?
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(m_window);
   }
 }
 
@@ -125,9 +124,9 @@ void gemsdl2window :: doRender()
 }
 
 
-static std::map<SDLKey, std::string>s_key2symbol;
-static std::map<SDLKey, std::string>s_worldkey2symbol;
-static std::string key2symbol(SDLKey k, Uint16 unicode)
+static std::map<SDL_Keycode, std::string>s_key2symbol;
+static std::map<SDL_Keycode, std::string>s_worldkey2symbol;
+static std::string key2symbol(SDL_Keycode k)
 {
   if(0==s_key2symbol.size()) {
     s_key2symbol[SDLK_BACKSPACE]="BackSpace";
@@ -202,115 +201,17 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_key2symbol[SDLK_z]="z";
     s_key2symbol[SDLK_DELETE]="Delete";
 
-#ifndef __EMSCRIPTEN__
-    s_worldkey2symbol[SDLK_WORLD_0]="World_0";
-    s_worldkey2symbol[SDLK_WORLD_1]="World_1";
-    s_worldkey2symbol[SDLK_WORLD_2]="World_2";
-    s_worldkey2symbol[SDLK_WORLD_3]="World_3";
-    s_worldkey2symbol[SDLK_WORLD_4]="World_4";
-    s_worldkey2symbol[SDLK_WORLD_5]="World_5";
-    s_worldkey2symbol[SDLK_WORLD_6]="World_6";
-    s_worldkey2symbol[SDLK_WORLD_7]="World_7";
-    s_worldkey2symbol[SDLK_WORLD_8]="World_8";
-    s_worldkey2symbol[SDLK_WORLD_9]="World_9";
-    s_worldkey2symbol[SDLK_WORLD_10]="World_10";
-    s_worldkey2symbol[SDLK_WORLD_11]="World_11";
-    s_worldkey2symbol[SDLK_WORLD_12]="World_12";
-    s_worldkey2symbol[SDLK_WORLD_13]="World_13";
-    s_worldkey2symbol[SDLK_WORLD_14]="World_14";
-    s_worldkey2symbol[SDLK_WORLD_15]="World_15";
-    s_worldkey2symbol[SDLK_WORLD_16]="World_16";
-    s_worldkey2symbol[SDLK_WORLD_17]="World_17";
-    s_worldkey2symbol[SDLK_WORLD_18]="World_18";
-    s_worldkey2symbol[SDLK_WORLD_19]="World_19";
-    s_worldkey2symbol[SDLK_WORLD_20]="World_20";
-    s_worldkey2symbol[SDLK_WORLD_21]="World_21";
-    s_worldkey2symbol[SDLK_WORLD_22]="World_22";
-    s_worldkey2symbol[SDLK_WORLD_23]="World_23";
-    s_worldkey2symbol[SDLK_WORLD_24]="World_24";
-    s_worldkey2symbol[SDLK_WORLD_25]="World_25";
-    s_worldkey2symbol[SDLK_WORLD_26]="World_26";
-    s_worldkey2symbol[SDLK_WORLD_27]="World_27";
-    s_worldkey2symbol[SDLK_WORLD_28]="World_28";
-    s_worldkey2symbol[SDLK_WORLD_29]="World_29";
-    s_worldkey2symbol[SDLK_WORLD_30]="World_30";
-    s_worldkey2symbol[SDLK_WORLD_31]="World_31";
-    s_worldkey2symbol[SDLK_WORLD_32]="World_32";
-    s_worldkey2symbol[SDLK_WORLD_33]="World_33";
-    s_worldkey2symbol[SDLK_WORLD_34]="World_34";
-    s_worldkey2symbol[SDLK_WORLD_35]="World_35";
-    s_worldkey2symbol[SDLK_WORLD_36]="World_36";
-    s_worldkey2symbol[SDLK_WORLD_37]="World_37";
-    s_worldkey2symbol[SDLK_WORLD_38]="World_38";
-    s_worldkey2symbol[SDLK_WORLD_39]="World_39";
-    s_worldkey2symbol[SDLK_WORLD_40]="World_40";
-    s_worldkey2symbol[SDLK_WORLD_41]="World_41";
-    s_worldkey2symbol[SDLK_WORLD_42]="World_42";
-    s_worldkey2symbol[SDLK_WORLD_43]="World_43";
-    s_worldkey2symbol[SDLK_WORLD_44]="World_44";
-    s_worldkey2symbol[SDLK_WORLD_45]="World_45";
-    s_worldkey2symbol[SDLK_WORLD_46]="World_46";
-    s_worldkey2symbol[SDLK_WORLD_47]="World_47";
-    s_worldkey2symbol[SDLK_WORLD_48]="World_48";
-    s_worldkey2symbol[SDLK_WORLD_49]="World_49";
-    s_worldkey2symbol[SDLK_WORLD_50]="World_50";
-    s_worldkey2symbol[SDLK_WORLD_51]="World_51";
-    s_worldkey2symbol[SDLK_WORLD_52]="World_52";
-    s_worldkey2symbol[SDLK_WORLD_53]="World_53";
-    s_worldkey2symbol[SDLK_WORLD_54]="World_54";
-    s_worldkey2symbol[SDLK_WORLD_55]="World_55";
-    s_worldkey2symbol[SDLK_WORLD_56]="World_56";
-    s_worldkey2symbol[SDLK_WORLD_57]="World_57";
-    s_worldkey2symbol[SDLK_WORLD_58]="World_58";
-    s_worldkey2symbol[SDLK_WORLD_59]="World_59";
-    s_worldkey2symbol[SDLK_WORLD_60]="World_60";
-    s_worldkey2symbol[SDLK_WORLD_61]="World_61";
-    s_worldkey2symbol[SDLK_WORLD_62]="World_62";
-    s_worldkey2symbol[SDLK_WORLD_63]="World_63";
-    s_worldkey2symbol[SDLK_WORLD_64]="World_64";
-    s_worldkey2symbol[SDLK_WORLD_65]="World_65";
-    s_worldkey2symbol[SDLK_WORLD_66]="World_66";
-    s_worldkey2symbol[SDLK_WORLD_67]="World_67";
-    s_worldkey2symbol[SDLK_WORLD_68]="World_68";
-    s_worldkey2symbol[SDLK_WORLD_69]="World_69";
-    s_worldkey2symbol[SDLK_WORLD_70]="World_70";
-    s_worldkey2symbol[SDLK_WORLD_71]="World_71";
-    s_worldkey2symbol[SDLK_WORLD_72]="World_72";
-    s_worldkey2symbol[SDLK_WORLD_73]="World_73";
-    s_worldkey2symbol[SDLK_WORLD_74]="World_74";
-    s_worldkey2symbol[SDLK_WORLD_75]="World_75";
-    s_worldkey2symbol[SDLK_WORLD_76]="World_76";
-    s_worldkey2symbol[SDLK_WORLD_77]="World_77";
-    s_worldkey2symbol[SDLK_WORLD_78]="World_78";
-    s_worldkey2symbol[SDLK_WORLD_79]="World_79";
-    s_worldkey2symbol[SDLK_WORLD_80]="World_80";
-    s_worldkey2symbol[SDLK_WORLD_81]="World_81";
-    s_worldkey2symbol[SDLK_WORLD_82]="World_82";
-    s_worldkey2symbol[SDLK_WORLD_83]="World_83";
-    s_worldkey2symbol[SDLK_WORLD_84]="World_84";
-    s_worldkey2symbol[SDLK_WORLD_85]="World_85";
-    s_worldkey2symbol[SDLK_WORLD_86]="World_86";
-    s_worldkey2symbol[SDLK_WORLD_87]="World_87";
-    s_worldkey2symbol[SDLK_WORLD_88]="World_88";
-    s_worldkey2symbol[SDLK_WORLD_89]="World_89";
-    s_worldkey2symbol[SDLK_WORLD_90]="World_90";
-    s_worldkey2symbol[SDLK_WORLD_91]="World_91";
-    s_worldkey2symbol[SDLK_WORLD_92]="World_92";
-    s_worldkey2symbol[SDLK_WORLD_93]="World_93";
-    s_worldkey2symbol[SDLK_WORLD_94]="World_94";
-    s_worldkey2symbol[SDLK_WORLD_95]="World_95";
-#endif
 
-    s_key2symbol[SDLK_KP0]="KeyPad_0";
-    s_key2symbol[SDLK_KP1]="KeyPad_1";
-    s_key2symbol[SDLK_KP2]="KeyPad_2";
-    s_key2symbol[SDLK_KP3]="KeyPad_3";
-    s_key2symbol[SDLK_KP4]="KeyPad_4";
-    s_key2symbol[SDLK_KP5]="KeyPad_5";
-    s_key2symbol[SDLK_KP6]="KeyPad_6";
-    s_key2symbol[SDLK_KP7]="KeyPad_7";
-    s_key2symbol[SDLK_KP8]="KeyPad_8";
-    s_key2symbol[SDLK_KP9]="KeyPad_9";
+    s_key2symbol[SDLK_KP_0]="KeyPad_0";
+    s_key2symbol[SDLK_KP_1]="KeyPad_1";
+    s_key2symbol[SDLK_KP_2]="KeyPad_2";
+    s_key2symbol[SDLK_KP_3]="KeyPad_3";
+    s_key2symbol[SDLK_KP_4]="KeyPad_4";
+    s_key2symbol[SDLK_KP_5]="KeyPad_5";
+    s_key2symbol[SDLK_KP_6]="KeyPad_6";
+    s_key2symbol[SDLK_KP_7]="KeyPad_7";
+    s_key2symbol[SDLK_KP_8]="KeyPad_8";
+    s_key2symbol[SDLK_KP_9]="KeyPad_9";
     s_key2symbol[SDLK_KP_PERIOD]="KeyPad_.";
     s_key2symbol[SDLK_KP_DIVIDE]="KeyPad_/";
     s_key2symbol[SDLK_KP_MULTIPLY]="KeyPad_*";
@@ -342,38 +243,36 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
     s_key2symbol[SDLK_F13]="F13";
     s_key2symbol[SDLK_F14]="F14";
     s_key2symbol[SDLK_F15]="F15";
-    s_key2symbol[SDLK_NUMLOCK]="Num_Lock";
+    s_key2symbol[SDLK_NUMLOCKCLEAR]="Num_Lock";
     s_key2symbol[SDLK_CAPSLOCK]="Caps_Lock";
-    s_key2symbol[SDLK_SCROLLOCK]="Scroll_Lock";
+    s_key2symbol[SDLK_SCROLLLOCK]="Scroll_Lock";
     s_key2symbol[SDLK_RSHIFT]="Shift_R";
     s_key2symbol[SDLK_LSHIFT]="Shift_L";
     s_key2symbol[SDLK_RCTRL]="Control_R";
     s_key2symbol[SDLK_LCTRL]="Control_L";
     s_key2symbol[SDLK_RALT]="AltGr";
     s_key2symbol[SDLK_LALT]="Alt_L";
-    s_key2symbol[SDLK_RMETA]="Meta_R";
-    s_key2symbol[SDLK_LMETA]="Meta_L";
-    s_key2symbol[SDLK_LSUPER]="Super_L";
-    s_key2symbol[SDLK_RSUPER]="Super_R";
+    s_key2symbol[SDLK_RGUI]="Meta_R";
+    s_key2symbol[SDLK_LGUI]="Meta_L";
     s_key2symbol[SDLK_MODE]="Mode";
-    s_key2symbol[SDLK_COMPOSE]="Compose";
+    s_key2symbol[SDLK_APPLICATION]="Compose";
     s_key2symbol[SDLK_HELP]="Help";
-    s_key2symbol[SDLK_PRINT]="Print";
+    s_key2symbol[SDLK_PRINTSCREEN]="Print";
     s_key2symbol[SDLK_SYSREQ]="SysRq";
-    s_key2symbol[SDLK_BREAK]="Break";
+    s_key2symbol[SDLK_PAUSE]="Break";
     s_key2symbol[SDLK_MENU]="Menu";
     s_key2symbol[SDLK_POWER]="Power";
+#if 0
+    s_key2symbol[SDLK_LSUPER]="Super_L";
+    s_key2symbol[SDLK_RSUPER]="Super_R";
     s_key2symbol[SDLK_EURO]="€";
+#endif
     s_key2symbol[SDLK_UNDO]="Undo";
   }
   std::string s = s_key2symbol[k];
   if(s.empty()) {
-    if(unicode) {
-      s_worldkey2symbol[k]=unicode;
-      s=unicode;
-    } else {
-      s=s_worldkey2symbol[k];
-    }
+    const char*keyname = SDL_GetKeyName(k);
+    s = keyname?keyname:"";
   }
   if(s.empty()) {
     s="<unknown>";
@@ -384,7 +283,7 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
 
 void gemsdl2window :: dispatch()
 {
-  if(!m_surface) {
+  if(!m_window) {
     return;
   }
 
@@ -394,25 +293,70 @@ void gemsdl2window :: dispatch()
   unsigned long devID=0;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
+#warning CHECK event->window.windowID;
     switch(event.type) {
     default:
       post("event: %d", event.type);
       break;
-    case SDL_ACTIVEEVENT: {
-      state=event.active.gain;
-      if(event.active.state & SDL_APPMOUSEFOCUS) {
-        entry(devID, state);
+    case SDL_WINDOWEVENT:
+      switch (event.window.event) {
+      case SDL_WINDOWEVENT_SHOWN:
+        info("visible", 1);
+        break;
+      case SDL_WINDOWEVENT_HIDDEN:
+        info("visible", 0);
+        break;
+      case SDL_WINDOWEVENT_EXPOSED:
+        info("window", "exposed");
+        break;
+      case SDL_WINDOWEVENT_MOVED:
+        position(event.window.data1, event.window.data2);
+        break;
+      case SDL_WINDOWEVENT_RESIZED:
+        /* nop: this event always follows the SIZE_CHANGED event */
+        break;
+      case SDL_WINDOWEVENT_SIZE_CHANGED:
+        dimension(event.window.data1, event.window.data2);
+        break;
+      case SDL_WINDOWEVENT_MINIMIZED:
+#warning minimized,maximized,restored events
+        info("visible", 0);
+        break;
+      case SDL_WINDOWEVENT_MAXIMIZED:
+        info("visible", 1);
+        break;
+      case SDL_WINDOWEVENT_RESTORED:
+        info("visible", 1);
+        break;
+      case SDL_WINDOWEVENT_ENTER:
+        entry(devID, 1);
+        break;
+      case SDL_WINDOWEVENT_LEAVE:
+        entry(devID, 0);
+        break;
+      case SDL_WINDOWEVENT_FOCUS_GAINED:
+        info("inputentry", 1);
+        break;
+      case SDL_WINDOWEVENT_FOCUS_LOST:
+        info("inputentry", 0);
+        break;
+      case SDL_WINDOWEVENT_CLOSE:
+        info("window", "closed");
+        break;
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+      case SDL_WINDOWEVENT_TAKE_FOCUS:
+        SDL_Log("Window %d is offered a focus", event.window.windowID);
+        break;
+      case SDL_WINDOWEVENT_HIT_TEST:
+        SDL_Log("Window %d has a special hit test", event.window.windowID);
+        break;
+#endif
+        break;
       }
-      if(event.active.state & SDL_APPINPUTFOCUS) {
-        info("inputentry", state);
-      }
-      if(event.active.state & SDL_APPACTIVE) {
-        info("visible", state);
-      }
-    }
     break;
     case SDL_KEYUP:
     case SDL_KEYDOWN:
+      /* FIXME: event.key.repeat */
       key
         (
 #if SDL_VERSION_ATLEAST(2,0,0)
@@ -421,7 +365,7 @@ void gemsdl2window :: dispatch()
 #else
           event.key.which
 #endif
-        , key2symbol(event.key.keysym.sym, event.key.keysym.unicode)
+        , key2symbol(event.key.keysym.sym)
         , event.key.keysym.scancode
         , event.key.state==SDL_PRESSED
         );
@@ -434,12 +378,6 @@ void gemsdl2window :: dispatch()
       motion(event.button.which, event.button.x, event.button.y);
       button(event.button.which, event.button.button-SDL_BUTTON_LEFT,
              event.button.state==SDL_PRESSED);
-      break;
-    case SDL_VIDEORESIZE:
-      dimension(event.resize.w, event.resize.h);
-      break;
-    case SDL_VIDEOEXPOSE:
-      info("window", "exposed");
       break;
     case SDL_QUIT:
       info("window", "destroy");
@@ -459,7 +397,7 @@ void gemsdl2window :: bufferMess(int buf)
   case 1:
   case 2:
     m_buffer=buf;
-    if(m_surface) {
+    if(m_window) {
       post("changing buffer type will only effect newly created windows");
     }
     break;
@@ -476,8 +414,8 @@ void gemsdl2window :: bufferMess(int buf)
 void gemsdl2window :: titleMess(const std::string&s)
 {
   m_title = s;
-  if(m_surface) {
-    SDL_WM_SetCaption(m_title.c_str(), m_title.c_str());
+  if(m_window) {
+    SDL_SetWindowTitle(m_window, m_title.c_str());
   }
 }
 /////////////////////////////////////////////////////////
@@ -498,11 +436,8 @@ void gemsdl2window :: dimensionsMess(unsigned int width,
   }
   m_width = width;
   m_height = height;
-  if(makeCurrent()) {
-    m_surface = SDL_SetVideoMode( m_width,
-                                  m_height,
-                                  m_bpp,
-                                  m_videoFlags );
+  if(m_window && makeCurrent()) {
+    SDL_SetWindowSize(m_window, m_width, m_height);
   }
 }
 /////////////////////////////////////////////////////////
@@ -511,17 +446,18 @@ void gemsdl2window :: dimensionsMess(unsigned int width,
 /////////////////////////////////////////////////////////
 void gemsdl2window :: fullscreenMess(int on)
 {
-  bool toggle=false;
   m_fullscreen = on;
-  if(m_surface) {
-    if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
-        (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN))) {
-      toggle=true;
-    }
+  if(!m_window)
+    return;
+  if(!SDL_SetWindowFullscreen(m_window, m_fullscreen?SDL_WINDOW_FULLSCREEN:0)) {
+    error("fullscreen failed: %s", SDL_GetError());
   }
-  if(toggle && makeCurrent()) {
-    SDL_WM_ToggleFullScreen( m_surface );
-  }
+}
+void gemsdl2window :: borderMess(bool on)
+{
+  m_border = on;
+  if(m_window)
+    SDL_SetWindowBordered(m_window, m_border?SDL_TRUE:SDL_FALSE);
 }
 
 
@@ -531,7 +467,7 @@ void gemsdl2window :: fullscreenMess(int on)
 /////////////////////////////////////////////////////////
 bool gemsdl2window :: create(void)
 {
-  if(m_surface) {
+  if(m_window) {
     error("window already made!");
     return false;
   }
@@ -541,53 +477,30 @@ bool gemsdl2window :: create(void)
     return false;
   }
 
-  /* Fetch the video info */
-  const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo( );
-
-  m_videoFlags  = SDL_OPENGL;          /* Enable OpenGL in SDL */
-  if(2==m_buffer) {
-    m_videoFlags |= SDL_GL_DOUBLEBUFFER; /* Enable double buffering */
-
-    /* Sets up OpenGL double buffering */
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-  } else {
-    /* Sets up OpenGL double buffering */
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 0 );
-  }
-  m_videoFlags |= SDL_HWPALETTE;       /* Store the palette in hardware */
-  m_videoFlags |= SDL_RESIZABLE;       /* Enable window resizing */
-
-
-  if(videoInfo) {
-    /* This checks to see if surfaces can be stored in memory */
-    if ( videoInfo->hw_available ) {
-      m_videoFlags |= SDL_HWSURFACE;
-    } else {
-      m_videoFlags |= SDL_SWSURFACE;
-    }
-
-    /* This checks if hardware blits can be done */
-    if ( videoInfo->blit_hw ) {
-      m_videoFlags |= SDL_HWACCEL;
-    }
-  }
+  Uint32 flags = SDL_WINDOW_OPENGL;
+  flags |= SDL_WINDOW_RESIZABLE; /* Enable window resizing */
+  flags |= SDL_WINDOW_INPUT_GRABBED;
+  if(m_fullscreen)
+    flags |= SDL_WINDOW_FULLSCREEN;
+  if(!m_border)
+    flags |= SDL_WINDOW_BORDERLESS;
 
   /* get a SDL surface */
-  m_surface = SDL_SetVideoMode( m_width, m_height,
-                                m_bpp,
-                                m_videoFlags );
+  m_window = SDL_CreateWindow(
+    m_title.c_str(),
+    m_xoffset, m_yoffset,
+    m_width, m_height,
+    flags );
 
-  if(!m_surface) {
+  if(!m_window) {
     return false;
   }
-
+  m_videoFlags = flags;
 
   if(!createGemWindow()) {
     destroyMess();
     return false;
   }
-  titleMess(m_title);
-  fullscreenMess(m_fullscreen);
 
   dispatch();
   return true;
@@ -605,7 +518,7 @@ void gemsdl2window :: createMess(const std::string&)
 void gemsdl2window :: destroy(void)
 {
   destroyGemWindow();
-  m_surface=NULL;
+  m_window=NULL;
   info("window", "closed");
 }
 void gemsdl2window :: destroyMess(void)
@@ -615,6 +528,7 @@ void gemsdl2window :: destroyMess(void)
   }
   destroy();
 }
+
 
 /////////////////////////////////////////////////////////
 // static member function
