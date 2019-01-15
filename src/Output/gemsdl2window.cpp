@@ -570,16 +570,22 @@ void gemsdl2window :: destroy(void)
 {
   destroyGemWindow();
   s_windowmap.erase(SDL_GetWindowID(m_window));
-
+  if(m_window)
+    SDL_DestroyWindow(m_window);
   m_window=NULL;
   info("window", "closed");
 }
 void gemsdl2window :: destroyMess(void)
 {
   if(makeCurrent()) {
-    SDL_QuitSubSystem( SDL_INIT_VIDEO );
+    if(m_context)
+      SDL_GL_DeleteContext(m_context);
+    if(s_context == m_context)
+      s_context = 0;
+    m_context = 0;
   }
   destroy();
+  SDL_QuitSubSystem( SDL_INIT_VIDEO );
 }
 
 
