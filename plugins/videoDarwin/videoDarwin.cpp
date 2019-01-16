@@ -296,7 +296,7 @@ bool videoDarwin :: initSeqGrabber()
 
   if (m_colorspace==GEM_RGBA) {
     m_image.image.setCsizeByFormat(m_colorspace);
-    m_rowBytes = m_width*m_csize;
+    m_rowBytes = m_width*m_image.image.csize;
     pixelFormat=k32ARGBPixelFormat;
     verbose(1, "[GEM:videoDarwin] using RGB");
   } else {
