@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUFFIXES = .pd
+.SUFFIXES = .pd
 
 gemabsdir=$(pkglibdir)
 

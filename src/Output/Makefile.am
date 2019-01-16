@@ -115,7 +115,7 @@ gemmacoswindow_la_SOURCES = \
 ######################################
 # ObjC++ nastiness {
 
-SUFFIXES=.mm
+.SUFFIXES=.mm
 
 am_gemcocoawindow_la_OBJECTS = gemcocoawindow_la-gemcocoawindow.lo
 gemcocoawindow_la-gemcocoawindow.lo: gemcocoawindow.mm
