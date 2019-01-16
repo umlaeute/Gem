@@ -194,7 +194,11 @@ void pix_snap2tex :: snapMess(void)
       setTexCoords((float)width / (float)x_2, (float)height / (float)y_2);
 
       glCopyTexImage2D( m_textureType, 0,
+#ifdef __EMSCRIPTEN__
+                        GL_RGB,
+#else
                         GL_RGBA16,
+#endif
                         m_x, m_y,
                         m_texWidth, m_texHeight,
                         0);
@@ -203,7 +207,11 @@ void pix_snap2tex :: snapMess(void)
       m_texWidth  = width;
       m_texHeight = height;
       glCopyTexImage2D( m_textureType, 0,
+#ifdef __EMSCRIPTEN__
+                        GL_RGB,
+#else
                         GL_RGBA16,
+#endif
                         m_x, m_y,
                         m_texWidth, m_texHeight,
                         0);
