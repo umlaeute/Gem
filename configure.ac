@@ -101,18 +101,18 @@ AC_LANG(C++)
 ARCH=$(uname -m)
 KERN=$(uname -s)
 
-ifeq=ifeq
-ifneq=ifneq
-ifdef=ifdef
-ifndef=ifndef
-else=else
-endif=endif
-AC_SUBST([ifeq])
-AC_SUBST([ifneq])
-AC_SUBST([ifdef])
-AC_SUBST([ifndef])
-AC_SUBST([else])
-AC_SUBST([endif])
+IFEQ=ifeq
+IFNEQ=ifneq
+IFDEF=ifdef
+IFNDEF=ifndef
+ELSE=else
+ENDIF=endif
+AC_SUBST([IFEQ])
+AC_SUBST([IFNEQ])
+AC_SUBST([IFDEF])
+AC_SUBST([IFNDEF])
+AC_SUBST([ELSE])
+AC_SUBST([ENDIF])
 
 AC_SUBST(CXXCPP)
 AC_SUBST(CXX)

@@ -10,6 +10,6 @@ _check_sources_all=$(notdir $(wildcard $(addprefix $(srcdir)/*, $(SUFFIXES) $(.S
 _check_sources_unused=$(filter-out $(DIST_SOURCES) $(CHECKUNUSED_IGNORE), $(_check_sources_all))
 
 check-sources:
-@ifneq@ ($(strip $(_check_sources_unused)),)
+@IFNEQ@ ($(strip $(_check_sources_unused)),)
 	@echo "UNUSED SOURCES in $(srcdir:$(top_srcdir)/%=%): $(_check_sources_unused)"
-@endif@
+@ENDIF@
