@@ -17,9 +17,12 @@ libopenGL_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libopenGL_la_LIBADD   += $(GEM_RTE_LIBS)
 libopenGL_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
+
 libopenGL_la_SOURCES=  \
     GEMglAccum.cpp \
     GEMglAccum.h \
+    GEMglActiveTexture.h \
+    GEMglActiveTexture.cpp \
     GEMglActiveTextureARB.cpp \
     GEMglActiveTextureARB.h \
     GEMglAlphaFunc.cpp \
@@ -312,6 +315,8 @@ libopenGL_la_SOURCES=  \
     GEMglMateriali.h \
     GEMglMatrixMode.cpp \
     GEMglMatrixMode.h \
+    GEMglMultiTexCoord2f.h \
+    GEMglMultiTexCoord2f.cpp \
     GEMglMultiTexCoord2fARB.cpp \
     GEMglMultiTexCoord2fARB.h \
     GEMglMultMatrixd.cpp \
@@ -562,6 +567,8 @@ libopenGL_la_SOURCES=  \
     GEMglTranslatef.h \
     GEMgluLookAt.cpp \
     GEMgluLookAt.h \
+    GEMglUniform1f.h \
+    GEMglUniform1f.cpp \
     GEMglUniform1fARB.cpp \
     GEMglUniform1fARB.h \
     GEMgluPerspective.cpp \
