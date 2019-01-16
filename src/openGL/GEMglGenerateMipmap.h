@@ -42,8 +42,7 @@ protected:
 
   // variables
   GLenum        target;            // VAR
-  virtual void  targetMess(t_atom);        // FUN
-
+  virtual void  targetMess(t_atom&);        // FUN
 
 private:
 

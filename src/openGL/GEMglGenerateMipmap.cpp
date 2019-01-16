@@ -68,7 +68,7 @@ void GEMglGenerateMipmap :: render(GemState *state)
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglGenerateMipmap :: targetMess (t_atom arg)        // FUN
+void GEMglGenerateMipmap :: targetMess (t_atom&arg)        // FUN
 {
   target = static_cast<GLenum>(getGLdefine(&arg));
   setModified();
