@@ -60,16 +60,18 @@ void circle :: renderShape(GemState *state)
   glLineWidth(m_linewidth);
   glBegin(m_drawType);
   if (GemShape::m_texType) {
+    GLfloat xsize0 = 0.f;
     GLfloat xsize  = 1.f;
     GLfloat ysize0 = 0.f;
     GLfloat ysize  = 1.f;
     if(GemShape::m_texNum>=3) {
+      xsize0 = GemShape::m_texCoords[0].s;
       xsize  = GemShape::m_texCoords[1].s;
       ysize0 = GemShape::m_texCoords[2].t;
       ysize  = GemShape::m_texCoords[1].t;
     }
     for (int n = 0; n < NUM_PNTS; n++) {
-      glTexCoord2f(xsize*(m_cos[n] + 1) / 2.f,
+      glTexCoord2f((xsize-xsize0)*(m_cos[n] + 1) / 2.f+xsize0,
                    (ysize0-ysize)*(m_sin[n] + 1) / 2.f+ysize);
       glVertex3f(m_cos[n] * m_size,
                  m_sin[n] * m_size,
