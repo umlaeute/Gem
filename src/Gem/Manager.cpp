@@ -147,11 +147,9 @@ void GemMan::dispatchWinmessCallback()
 void GemMan::resizeCallback(int xSize, int ySize, void *)
 {
 #ifndef GEM_MULTICONTEXT
-  if (ySize==0) {
-    ySize=1;
-  }
 
   float xDivy = (float)xSize / (float)ySize;
+  if (ySize == 0) xDivy = 1;
   GemMan::m_h = ySize;
   GemMan::m_w = xSize;
   GemMan::m_height = ySize;
@@ -335,6 +333,7 @@ void GemMan :: resetValues()
 
   // setup the transformation matrices
   float xDivy = (float)m_w / (float)m_h;
+  if (m_w == 0) xDivy = 1;
   if (m_h == 0) xDivy = 1;
 
   if(GLEW_ARB_imaging) {
@@ -607,8 +606,8 @@ void GemMan :: render(void *)
   case 1: { // 2-screen stereo
     int xSize = m_w / 2;
     int ySize = m_h;
-    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
+    if (ySize == 0) xDivy = 1;
 
     // setup the left viewpoint
     glViewport(0, 0, xSize, ySize);
@@ -695,8 +694,8 @@ void GemMan :: render(void *)
   case 2: { // color-stereo
     int xSize = m_w;
     int ySize = m_h;
-    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
+    if (ySize == 0) xDivy = 1;
 
     color_t left_color=RED;
     color_t right_color=GREEN;
@@ -770,8 +769,8 @@ void GemMan :: render(void *)
   case 3: { // Crystal Eyes Stereo
     int xSize = m_w;
     int ySize = m_h;
-    if (ySize == 0) ySize = 1;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
+    if (ySize == 0) xDivy = 1;
 
     // setup the left viewpoint
 
