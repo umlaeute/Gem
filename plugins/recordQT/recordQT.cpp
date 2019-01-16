@@ -187,7 +187,7 @@ void recordQT :: setupQT(
   touch (filename);
 #ifdef __APPLE__
   do {
-    UInt8*filename8=reinterpret_cast<UInt8*>(filename.c_str());
+    const UInt8*filename8=reinterpret_cast<const UInt8*>(filename.c_str());
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     if (err) {
       error("[GEM:recordQT] Unable to make file ref from filename %s",
