@@ -37,10 +37,10 @@ matrix:
    - env: ARCH=i386
 
 before_install:
-- "./build/travis-ci/depinstall.sh"
+- ".git-ci/travis-ci/depinstall.sh"
 
 before_script:
-  - "./build/travis-ci/configure.sh"
+  - ".git-ci/travis-ci/configure.sh"
   - cat src/config.h || true
   # implement Coverity Scan with before_script instead of addons.coverity_scan
   # to work around too-early quota check by the coverity_scan addon
@@ -51,12 +51,12 @@ script:
 
 ## deploy all build artefacts to a private git-repository
 after_success:
-- "./build/travis-ci/deploy-git.sh"
+- ".git-ci/travis-ci/deploy-git.sh"
 
 
 ## deploy tagged artefacts to github
 before_deploy:
-- "./build/travis-ci/prepare-upload.sh"
+- ".git-ci/travis-ci/prepare-upload.sh"
 
 deploy:
   provider: releases
