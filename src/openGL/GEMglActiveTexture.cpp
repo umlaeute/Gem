@@ -12,8 +12,7 @@
 
 #include "GEMglActiveTexture.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglActiveTexture, t_floatarg,
-                             A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_GIMME ( GEMglActiveTexture );
 
 /////////////////////////////////////////////////////////
 //
@@ -22,11 +21,20 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglActiveTexture, t_floatarg,
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglActiveTexture :: GEMglActiveTexture  (t_floatarg arg0) :
-  texUnit(static_cast<GLenum>(arg0))
+GEMglActiveTexture :: GEMglActiveTexture  (int argc, t_atom*argv)
+  : texUnit(0)
+  , maxTexUnits(0)
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
-                         gensym("texUnit"));
+  switch(argc) {
+  case 0: break;
+  case 1:
+    texUnitMess(argv[0]);
+    break;
+  default:
+    throw(GemException("invalid number of arguments"));
+  }
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd,
+                         gensym("list"), gensym("texUnit"));
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -50,15 +58,21 @@ bool GEMglActiveTexture :: isRunnable(void)
 //
 void GEMglActiveTexture :: render(GemState *state)
 {
+  if (texUnit < GL_TEXTURE0) {
+    /* the normal usage is 'glActiveTexture (GL_TEXTURE0 + n)'
+     * but the user might be inclined to just use 'glActiveTexture(n)'
+     */
+    texUnit += GL_TEXTURE0;
+  }
   glActiveTexture (texUnit);
 }
 
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GEMglActiveTexture :: texUnitMess (t_float arg1)        // FUN
+void GEMglActiveTexture :: texUnitMess (t_atom&arg)        // FUN
 {
-  texUnit = static_cast<GLenum>(arg1);
+  texUnit = static_cast<GLenum>(gem::utils::gl::getGLdefine(&arg));
   setModified();
 }
 
@@ -70,11 +84,13 @@ void GEMglActiveTexture :: obj_setupCallback(t_class *classPtr)
 {
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&GEMglActiveTexture::texUnitMessCallback),
-                  gensym("texUnit"), A_DEFFLOAT, A_NULL);
+                  gensym("texUnit"), A_GIMME, A_NULL);
 }
 
 void GEMglActiveTexture :: texUnitMessCallback (void* data,
-    t_float arg0)
+                                                t_symbol*, int argc, t_atom*argv)
 {
-  GetMyClass(data)->texUnitMess ( static_cast<t_float>(arg0));
+  if(argc==1) {
+    GetMyClass(data)->texUnitMess(argv[0]);
+  }
 }

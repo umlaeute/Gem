@@ -28,7 +28,7 @@ class GEM_EXTERN GEMglActiveTexture : public GemGLBase
 
 public:
   // Constructor
-  GEMglActiveTexture (t_float);      // CON
+  GEMglActiveTexture (int,t_atom*);      // CON
 
 protected:
   // Destructor
@@ -41,7 +41,8 @@ protected:
 
   // variables
   GLenum        texUnit;                // VAR
-  virtual void  texUnitMess(t_float);   // FUN
+  GLenum        maxTexUnits;            // maxvar
+  virtual void  texUnitMess(t_atom&);        // FUN
 
 private:
 
@@ -49,6 +50,6 @@ private:
   t_inlet *m_inlet[1];
 
   // static member functions
-  static void    texUnitMessCallback (void*, t_float);
+  static void    texUnitMessCallback (void*, t_symbol*,int,t_atom*);
 };
 #endif // for header file
