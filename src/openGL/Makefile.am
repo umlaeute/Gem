@@ -212,6 +212,8 @@ libopenGL_la_SOURCES=  \
     GEMglGenProgramsARB.h \
     GEMglGenTextures.cpp \
     GEMglGenTextures.h \
+    GEMglGenerateMipmap.cpp \
+    GEMglGenerateMipmap.h \
     GEMglGetError.cpp \
     GEMglGetError.h \
     GEMglGetFloatv.cpp \
