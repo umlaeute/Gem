@@ -36,6 +36,18 @@ std::vector<std::string>getFilenameListing(const std::string&pattern)
   HANDLE hFind;
   LPVOID lpErrorMessage;
 
+  std::string::size_type filePos = pattern.rfind('\\');
+  if (filePos != std::string::npos)
+    ++filePos;
+  else {
+    filePos = pattern.rfind('/');
+    if (filePos != std::string::npos)
+      ++filePos;
+    else
+      filePos = pattern.length();
+  }
+  std::string dirname = pattern.substr(0, filePos);
+
   hFind = FindFirstFile(pattern.c_str(), &findData);
   if (hFind == INVALID_HANDLE_VALUE) {
     errorNumber = GetLastError();
@@ -57,7 +69,9 @@ std::vector<std::string>getFilenameListing(const std::string&pattern)
     return result;
   }
   do {
-    result.push_back(findData.cFileName);
+    std::string pathfile = dirname;
+    pathfile += findData.cFileName;
+    result.push_back(pathfile);
   } while (FindNextFile(hFind, &findData) != 0);
 
   FindClose(hFind);
