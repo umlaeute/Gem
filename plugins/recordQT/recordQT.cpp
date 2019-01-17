@@ -128,8 +128,8 @@ recordQT :: recordQT(void)
   for(i = 0; i < count; i++) {
     if (codecContainer[i].ctype == kJPEGCodecType) {
       m_codec = codecContainer[i].codec;
-      verbose(1, "[GEM:recordQT] found pjpeg codec %i %i %i ctype", i,
-              m_codecType, m_codec);
+      verbose(1, "[GEM:recordQT] found pjpeg codec %i %lu %p ctype",
+              i, m_codecType, m_codec);
       break;
     }
   }
@@ -151,7 +151,7 @@ recordQT :: ~recordQT(void)
   if (stdComponent != NULL) {
     compErr = CloseComponent(stdComponent);
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] CloseComponent failed with error %d",compErr);
+      verbose(0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
     }
   }
 }
@@ -274,7 +274,8 @@ void recordQT :: setupQT(
     m_rowBytes = m_width * 2;
     break;
   default:
-    error("[GEM:recordQT] unknown colorspace 0x%x", colorspace);
+#define FourCC2Str(code) (char[5]){(code >> 24) & 0xFF, (code >> 16) & 0xFF, (code >> 8) & 0xFF, code & 0xFF, 0}
+    error("[GEM:recordQT] unknown colorspace '%s'", FourCC2Str(colorspace));
     m_rowBytes = m_width;
     break;
   }
@@ -335,13 +336,13 @@ void recordQT :: setupQT(
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCSetInfo failed with error#%d",compErr);
+    error("[GEM:recordQT] SCSetInfo failed with error#%ld", compErr);
   }
 
   compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),
                                     &m_srcRect,&hImageDesc);
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceBegin failed with error#%d",
+    error("[GEM:recordQT] SCCompressSequenceBegin failed with error#%ld",
           compErr);
     return;
   }
@@ -400,7 +401,7 @@ void recordQT :: stop(void)
   compErr = SCCompressSequenceEnd(stdComponent);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceEnd failed with error %d",
+    error("[GEM:recordQT] SCCompressSequenceEnd failed with error %ld",
           compErr);
   }
 
@@ -473,7 +474,7 @@ void recordQT :: compressFrame(void)
                                     &syncFlag);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceFrame failed with error %d",
+    error("[GEM:recordQT] SCCompressSequenceFrame failed with error %ld",
           compErr);
   }
 
@@ -566,7 +567,7 @@ bool recordQT :: dialog(void)
       compErr = CloseComponent(stdComponent);
     }
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] CloseComponent failed with error %d", compErr);
+      verbose(0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
     }
 
     //open a new component from scratch
@@ -581,7 +582,7 @@ bool recordQT :: dialog(void)
     compErr = SCRequestSequenceSettings(stdComponent);
 
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] SCRequestSequenceSettings failed with error %d",
+      verbose(0, "[GEM:recordQT] SCRequestSequenceSettings failed with error %ld",
               compErr);
     }
 
@@ -590,7 +591,7 @@ bool recordQT :: dialog(void)
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] SCGetInfo failed with error %d", compErr);
+      verbose(0, "[GEM:recordQT] SCGetInfo failed with error %ld", compErr);
     }
 
     m_codecType = SpatialSettings.codecType;
@@ -601,16 +602,16 @@ bool recordQT :: dialog(void)
     m_keyFrameRate = TemporalSettings.keyFrameRate;
 
     verbose(1, "[GEM:recordQT] Dialog returned SpatialSettings\n"
-            "\tcodecType %d\n"
-            "\tcodec %d\n"
+            "\tcodecType %lX\n"
+            "\tcodec %p\n"
             "\tdepth %d\n"
-            "\tspatialQuality %d",
+            "\tspatialQuality %ld",
             SpatialSettings.codecType, SpatialSettings.codec, SpatialSettings.depth,
             SpatialSettings.spatialQuality);
     verbose(1, "[GEM:recordQT] Dialog returned TemporalSettings\n"
-            "\ttemporalQualitye %d\n"
-            "\tframeRate %d\n"
-            "\tkeyFrameRate %d",
+            "\ttemporalQualitye %ld\n"
+            "\tframeRate %ld\n"
+            "\tkeyFrameRate %ld",
             TemporalSettings.temporalQuality, TemporalSettings.frameRate,
             TemporalSettings.keyFrameRate);
     return(true);
