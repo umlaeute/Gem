@@ -23,8 +23,30 @@
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
+#include "Gem/Exception.h"
 
 using namespace gem::plugins;
+
+static bool filmQT_initQT(void)
+{
+  // Initialize QuickTime Media Layer
+  OSErr         err = noErr;
+  // Initialize QuickTime
+  if (err = EnterMovies()) {
+    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+            err);
+    return false;
+  }
+  return true;
+}
+static bool filmQT_deinitQT(void)
+{
+  // Deinitialize QuickTime Media Layer
+  ExitMovies();
+
+  return true;
+}
+
 
 REGISTER_FILMFACTORY("Darwin", filmDarwin);
 
@@ -50,7 +72,11 @@ filmDarwin :: filmDarwin(void) :
   m_timeScale(0),
   m_durationf(0.),
   m_fps(1.)
-{}
+{
+  if(!filmQT_initQT()) {
+    throw(GemException("unable to initialize QuickTime"));
+  }
+}
 
 ////////////////////////////////////////////////////////
 // Destructor
@@ -59,6 +85,7 @@ filmDarwin :: filmDarwin(void) :
 filmDarwin :: ~filmDarwin(void)
 {
   close();
+  filmQT_deinitQT();
 }
 
 void filmDarwin :: close(void)
