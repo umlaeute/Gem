@@ -35,6 +35,15 @@ using namespace gem::plugins;
 /* for post() and error() */
 #include "m_pd.h"
 
+static char* FourCC2Str(int code, char*char5) {
+  char5[0] = (code >> 24) & 0xFF;
+  char5[1] = (code >> 16) & 0xFF;
+  char5[2] = (code >>  8) & 0xFF;
+  char5[3] = (code >>  0) & 0xFF;
+  char5[4] = 0;
+  return char5;
+}
+
 
 static bool touch(const std::string&filename)
 {
@@ -264,6 +273,7 @@ void recordQT :: setupQT(
   colorspace = k32RGBAPixelFormat;
 #endif
 
+  char char5[5];
   switch(colorspace) {
   case k32ARGBPixelFormat:
   case k32BGRAPixelFormat:
@@ -274,8 +284,7 @@ void recordQT :: setupQT(
     m_rowBytes = m_width * 2;
     break;
   default:
-#define FourCC2Str(code) (char[5]){(code >> 24) & 0xFF, (code >> 16) & 0xFF, (code >> 8) & 0xFF, code & 0xFF, 0}
-    error("[GEM:recordQT] unknown colorspace '%s'", FourCC2Str(colorspace));
+    error("[GEM:recordQT] unknown colorspace '%s'", FourCC2Str(colorspace, char5));
     m_rowBytes = m_width;
     break;
   }
