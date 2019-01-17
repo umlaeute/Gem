@@ -25,6 +25,7 @@ list_deps() {
 }
 
 install_deps () {
+error "DEP: ${INSTALLDEPS_INDENT}$1"
 outdir=$2
 if [ "x${outdir}" = "x" ]; then
   outdir=$(dirname "$1")
@@ -36,12 +37,14 @@ fi
 list_deps "$1" | while read dep; do
   depfile=$(basename "${dep}")
   if [ -e "${outdir}/${depfile}" ]; then
-    error "${INSTALLDEPS_INDENT}${dep} SKIPPED"
+    error "DEP:   ${INSTALLDEPS_INDENT}${dep} SKIPPED"
   else
-    error "${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
+    error "DEP:   ${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
     cp "${dep}" "${outdir}"
+    chmod a-x "${outdir}/${depfile}"
+
     # recursively call ourselves, to resolve higher-order dependencies
-    INSTALLDEPS_INDENT="${INSTALLDEPS_INDENT}   " $0 "${outdir}/${depfile}"
+    INSTALLDEPS_INDENT="${INSTALLDEPS_INDENT}    " $0 "${outdir}/${depfile}"
   fi
 done
 
