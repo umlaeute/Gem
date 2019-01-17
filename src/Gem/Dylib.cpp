@@ -120,7 +120,7 @@ public:
     sys_bashfilename(filename.c_str(), buf);
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
     SetLastError(0);
-    handle->w32handle=LoadLibrary(buf);
+    handle->w32handle=LoadLibraryEx(buf, NULL, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
     DWORD errorNumber = GetLastError();
     errorboxflags=SetErrorMode(errorboxflags);
     if(handle->w32handle) {
