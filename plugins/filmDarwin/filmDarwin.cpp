@@ -109,7 +109,7 @@ bool filmDarwin :: open(const std::string&filename,
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
     verbose(0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)",
-            theFSSpec.name, err);
+            filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
     }
@@ -127,7 +127,7 @@ bool filmDarwin :: open(const std::string&filename,
   }
   m_lastFrame=-1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
-  verbose(1, "[GEM:filmDarwin]  m_numTracks = %d",(int)m_numTracks);
+  verbose(1, "[GEM:filmDarwin] %d tracks", (int)m_numTracks);
 
   // Get the length of the movie
   long  movieDur, movieScale;
@@ -135,7 +135,7 @@ bool filmDarwin :: open(const std::string&filename,
   movieScale = (long)GetMovieTimeScale(m_movie);
 
   verbose(1,
-          "[GEM:filmDarwin] Movie duration = %d timescale = %d timebase = %d",
+          "[GEM:filmDarwin] duration = %d timescale = %d timebase = %d",
           movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
 
   movieTrack = GetMovieIndTrackType(m_movie,
@@ -154,7 +154,7 @@ bool filmDarwin :: open(const std::string&filename,
     m_fps=30.f;
     m_durationf=static_cast<double>(movieScale)/m_fps;
   }
-  verbose(1, "[GEM:filmDarwin] numFrames= %d...%f", (int)m_numFrames,
+  verbose(1, "[GEM:filmDarwin] %d frames @ %f", (int)m_numFrames,
           (float)m_durationf);
 
   // Get the bounds for the movie
