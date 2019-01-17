@@ -59,9 +59,9 @@ list_deps "$1" | while read dep; do
   install_name_tool -change "${dep}" "@loader_path/${depfile}" "$1"
 
   if [ -e "${outdir}/${depfile}" ]; then
-    error "DEP:   ${INSTALLDEPS_INDENT}${dep} SKIPPED"
+    error "DEP: ${INSTALLDEPS_INDENT}  ${dep} SKIPPED"
   else
-    error "DEP:   ${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
+    error "DEP: ${INSTALLDEPS_INDENT}  ${dep} -> ${outdir}"
     cp "${dep}" "${outdir}"
     chmod u+w "${outdir}/${depfile}"
     install_name_tool -id "@loader_path/${depfile}" "${outdir}/${depfile}"

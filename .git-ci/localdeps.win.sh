@@ -37,9 +37,9 @@ fi
 list_deps "$1" | while read dep; do
   depfile=$(basename "${dep}")
   if [ -e "${outdir}/${depfile}" ]; then
-    error "DEP:   ${INSTALLDEPS_INDENT}${dep} SKIPPED"
+    error "DEP: ${INSTALLDEPS_INDENT}  ${dep} SKIPPED"
   else
-    error "DEP:   ${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
+    error "DEP: ${INSTALLDEPS_INDENT}  ${dep} -> ${outdir}"
     cp "${dep}" "${outdir}"
     chmod a-x "${outdir}/${depfile}"
 
