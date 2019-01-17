@@ -58,14 +58,15 @@ list_deps "$1" | while read dep; do
   install_name_tool -change "${dep}" "@loader_path/${depfile}" "$1"
 
   if [ -e "${outdir}/${depfile}" ]; then
-    error "skipping already localized dependency ${dep}"
+    error "${INSTALLDEPS_INDENT}${dep} SKIPPED"
   else
-    cp -v "${dep}" "${outdir}"
+    error "${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
+    cp "${dep}" "${outdir}"
     chmod u+w "${outdir}/${depfile}"
     install_name_tool -id "@loader_path/${depfile}" "${outdir}/${depfile}"
 
     # recursively call ourselves, to resolve higher-order dependencies
-    $0 "${outdir}/${depfile}"
+    INSTALLDEPS_INDENT="${INSTALLDEPS_INDENT}   " $0 "${outdir}/${depfile}"
   fi
 done
 

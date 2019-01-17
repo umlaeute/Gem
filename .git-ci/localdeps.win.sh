@@ -36,11 +36,12 @@ fi
 list_deps "$1" | while read dep; do
   depfile=$(basename "${dep}")
   if [ -e "${outdir}/${depfile}" ]; then
-    error "skipping already localized dependency ${dep}"
+    error "${INSTALLDEPS_INDENT}${dep} SKIPPED"
   else
-    cp -v "${dep}" "${outdir}"
+    error "${INSTALLDEPS_INDENT}${dep} -> ${outdir}"
+    cp "${dep}" "${outdir}"
     # recursively call ourselves, to resolve higher-order dependencies
-    $0 "${outdir}/${depfile}"
+    INSTALLDEPS_INDENT="${INSTALLDEPS_INDENT}   " $0 "${outdir}/${depfile}"
   fi
 done
 
