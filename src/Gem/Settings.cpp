@@ -26,6 +26,13 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#ifdef  _WIN32
+# include <windows.h>
+#else
+# include <limits.h>
+# include <stdlib.h>
+#endif
+
 #define GEM_SETTINGS_FILE "gem.conf"
 static const char*s_configdir[] = {
 #ifdef __linux__
@@ -214,9 +221,21 @@ struct PIMPL {
 
 
     t_gemclass *c = (t_gemclass*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
-    set("gem.path", c->c_externdir->s_name);
-
-    //    print();
+    char fullpath[PATH_MAX];
+    const char*fp = fullpath;
+#ifdef _WIN32
+    char** lppPart={NULL};
+    GetFullPathName(c->c_externdir->s_name,
+                                 PATH_MAX,
+                                 fullpath,
+                                 lppPart);
+#else
+    fp = realpath(c->c_externdir->s_name, fullpath);
+#endif
+    sys_unbashfilename(fullpath, fullpath);
+    if(!fp)
+      fp = c->c_externdir->s_name;
+    set("gem.path", fp);
   }
 
   ~PIMPL(void)
