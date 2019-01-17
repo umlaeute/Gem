@@ -96,6 +96,17 @@ public:
       }
     }
 #endif
+
+    static bool firsttime=true;
+    if(firsttime && m_ids.size()>0) {
+      startpost("GEM: video record plugins:");
+      unsigned int i;
+      for(i=0; i<m_ids.size(); i++) {
+        startpost(" %s", m_ids[i].c_str());
+      }
+      endpost();
+    }
+    firsttime=false;
   }
   bool addPlugin( std::vector<std::string>available,
                   std::string ID=std::string(""))

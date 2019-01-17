@@ -113,6 +113,17 @@ public:
         break;
       }
     }
+
+    static bool firsttime=true;
+    if(firsttime && ids.size()>0) {
+      startpost("GEM: model loading plugins:");
+      unsigned int i;
+      for(i=0; i<ids.size(); i++) {
+        startpost(" %s", ids[i].c_str());
+      }
+      endpost();
+    }
+    firsttime=false;
   }
 
   virtual ~modelloaderMeta(void)

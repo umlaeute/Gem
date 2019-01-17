@@ -182,7 +182,7 @@ public:
 
     static bool firsttime=true;
     if(firsttime && m_ids.size()>0) {
-      startpost("GEM: image saving support:");
+      startpost("GEM: image saving plugins:");
       unsigned int i;
       for(i=0; i<m_ids.size(); i++) {
         startpost(" %s", m_ids[i].c_str());
