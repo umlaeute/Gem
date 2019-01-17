@@ -1089,6 +1089,10 @@ static pascal OSStatus evtHandler (EventHandlerCallRef myHandler,
 
 bool gemmacwindow::init(void)
 {
+#if 0
+  /* JMZ20180117: skip QT check, it's done by the plugins that need QT
+   */
+
   // Check QuickTime installed
   long  QDfeature;
   if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
@@ -1100,6 +1104,7 @@ bool gemmacwindow::init(void)
       return false;
     }
   }
+#endif
   // check existence of OpenGL libraries
   if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) ==
       reinterpret_cast<Ptr>(aglChoosePixelFormat)) {
