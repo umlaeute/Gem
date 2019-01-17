@@ -87,18 +87,18 @@ recordQT :: recordQT(void)
 {
   static bool firsttime=true;
   if(firsttime) {
+    OSErr               err = noErr;
 #ifdef _WIN32
     // Initialize QuickTime Media Layer
-    OSErr               err = noErr;
     if ((err = InitializeQTML(0))) {
       throw(GemException("unable to initialize QuickTime"));
     }
+#endif // WINDOWS
     // start QuickTime
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
     }
     verbose(1, "[GEM:recordQT] QT init done");
-#endif // WINDOWS
     firsttime=false;
   }
 
