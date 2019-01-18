@@ -74,10 +74,8 @@ TextBase :: TextBase(int argc, t_atom *argv)
 
 void TextBase :: startRendering(void)
 {
-  if(NULL==m_font) {
-    if(m_fontname) {
-      fontNameMess(m_fontname->s_name);
-    }
+  if(m_fontname) {
+    fontNameMess(m_fontname->s_name);
   }
 }
 
