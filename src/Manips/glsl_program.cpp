@@ -227,12 +227,15 @@ void glsl_program :: destroyArrays()
     case GL_FLOAT: {
       GLfloat*params=static_cast<GLfloat*>(uni.param);
       delete[]params;
+      break;
     }
     case GL_INT: {
       GLint*params=static_cast<GLint*>(uni.param);
       delete[]params;
+      break;
     }
     }
+    uni.param = 0;
   }
   delete[]m_uniform;
   m_uniform = 0;
