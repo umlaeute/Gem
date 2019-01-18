@@ -1,4 +1,4 @@
-#N canvas 26 86 704 623 10;
+#N canvas 163 146 704 623 10;
 #X text 452 8 GEM object;
 #X obj 9 272 cnv 15 430 340 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -148,9 +148,6 @@ for OS-X only;
 #X obj 473 305 unpack 0 0 0 0;
 #X floatatom 581 306 5 0 0 3 fps - -;
 #X obj 451 281 pix_film;
-#X msg 486 212 driver foo;
-#X text 17 391 Inlet 1: message : driver <name>: open the film using
-only the specified backend(s), f 70;
 #X msg 489 237 bang;
 #X text 17 418 Inlet 1: message : bang: (re)send the l/w/h/fps info
 to the 2nd outlet, f 69;
@@ -162,6 +159,9 @@ auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached., f 69;
 #X text 16 445 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering (starting with 0), f 69;
+#X msg 486 212 loader foo;
+#X text 17 391 Inlet 1: message : loader <name>: open the film using
+only the specified backend(s), f 70;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 46 0;
@@ -181,4 +181,4 @@ on rendering (starting with 0), f 69;
 #X connect 46 1 44 0;
 #X connect 46 2 24 0;
 #X connect 47 0 46 0;
-#X connect 49 0 46 0;
+#X connect 51 0 46 0;
