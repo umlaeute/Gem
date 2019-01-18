@@ -136,6 +136,7 @@ void TextBase :: render(GemState *)
     renderLine(m_theText[i].c_str(),
                m_lineDist[i]*m_fontSize*m_dist*m_precision);
   }
+  glDisable(GL_BLEND);
   glPopAttrib();
   fontInfo();
 }
