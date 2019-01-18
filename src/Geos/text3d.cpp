@@ -118,7 +118,7 @@ void text3d :: setFontSize()
   }
   m_font=selectFont();
 
-  setModified();
+  //setModified();
 }
 
 

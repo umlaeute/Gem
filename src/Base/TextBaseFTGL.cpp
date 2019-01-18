@@ -198,7 +198,7 @@ void TextBase :: fontNameMess(const std::string&filename)
   m_font->Depth(m_fontDepth);
   m_font->CharMap(ft_encoding_unicode);
 
-  setModified();
+  //setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -231,8 +231,7 @@ void TextBase :: setFontSize()
   if(!m_font->FaceSize(fs)) {
     error("unable to set fontsize !");
   }
-
-  setModified();
+  //setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -430,7 +429,7 @@ void TextBase :: breakLine(wstring line)
     m_theText.push_back(gem::string::getVisualLine(line));
   }
   makeLineDist();
-  setModified();
+  //setModified();
 }
 
 void TextBase :: textMess(int argc, t_atom *argv)

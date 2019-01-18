@@ -114,7 +114,7 @@ void text2d :: setFontSize()
     }
   }
   m_font=selectFont();
-  setModified();
+  //setModified();
 }
 
 /////////////////////////////////////////////////////////

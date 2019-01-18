@@ -70,7 +70,7 @@ void textextruded :: setDepth(float prec)
   }
   m_font->Depth(m_fontDepth);
   setFontSize();
-  setModified();
+  //setModified();
 }
 #else
 
