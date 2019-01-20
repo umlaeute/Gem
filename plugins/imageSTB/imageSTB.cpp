@@ -22,7 +22,8 @@
 #include "Gem/RTE.h"
 #include "plugins/PluginFactory.h"
 
-#ifdef HAVE_LIBSTB
+#ifndef HAVE_LIBSTB
+# define STB_IMAGE_IMPLEMENTATION
 # define STB_IMAGE_WRITE_IMPLEMENTATION
 #endif
 #ifdef HAVE_STB_STB_IMAGE_H
