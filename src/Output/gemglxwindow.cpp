@@ -915,7 +915,7 @@ bool gemglxwindow :: create(void)
    * when disabled, we don't get textures on two screens
    */
   //~#warning context-sharing disabled
-  bool context_sharing=true;
+  bool context_sharing=false;
   if(!m_context
       && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
