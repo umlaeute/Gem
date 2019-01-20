@@ -623,7 +623,6 @@ struct gemglxwindow::PIMPL {
       }
     }
     fs = fullscreen;
-
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen),
                         x, y, w, h,
                         0, vi->depth, InputOutput,
@@ -714,7 +713,8 @@ struct gemglxwindow::PIMPL {
       Window winDummy;
       unsigned int depthDummy;
       unsigned int borderDummy;
-      int x, y;
+      //int x, y;
+
       XGetGeometry(dpy, win,
                    &winDummy,
                    &x, &y,
