@@ -225,17 +225,16 @@ void glsl_program :: destroyArrays()
     t_uniform&uni = m_uniform[i];
     switch(uniform2type(uni.type)) {
     case GL_FLOAT: {
-      GLfloat*params=static_cast<GLfloat*>(uni.param);
-      delete[]params;
+      delete[]uni.param.f;
+      uni.param.f = 0;
       break;
     }
     case GL_INT: {
-      GLint*params=static_cast<GLint*>(uni.param);
-      delete[]params;
+      delete[]uni.param.i;
+      uni.param.i = 0;
       break;
     }
     }
-    uni.param = 0;
   }
   delete[]m_uniform;
   m_uniform = 0;
@@ -254,7 +253,7 @@ void glsl_program :: createArrays()
     uni.type      = 0;
     uni.name      = 0;
     uni.loc       = 0;
-    uni.param     = 0;
+    uni.param.f   = 0;
     uni.arraysize  = 0;
     uni.paramsize = 1;
     uni.changed   = false;
@@ -282,62 +281,60 @@ void glsl_program :: renderGL2()
     glUseProgram( m_program );
     for(int i=0; i<m_uniformCount; i++) {
       t_uniform&uni = m_uniform[i];
-      GLfloat*fparams=static_cast<GLfloat*>(uni.param);
-      GLint*iparams=static_cast<GLint*>(uni.param);
       if(uni.changed) {
         switch (uni.type) {
         /* float vectors */
         case GL_FLOAT:
-          glUniform1fv( uni.loc, uni.arraysize, fparams );
+          glUniform1fv( uni.loc, uni.arraysize, uni.param.f );
           break;
         case GL_FLOAT_VEC2:
-          glUniform2fv( uni.loc, uni.arraysize, fparams );
+          glUniform2fv( uni.loc, uni.arraysize, uni.param.f );
           break;
         case GL_FLOAT_VEC3:
-          glUniform3fv( uni.loc, uni.arraysize, fparams );
+          glUniform3fv( uni.loc, uni.arraysize, uni.param.f );
           break;
         case GL_FLOAT_VEC4:
-          glUniform4fv( uni.loc, uni.arraysize, fparams );
+          glUniform4fv( uni.loc, uni.arraysize, uni.param.f );
           break;
 
           /* int vectors */
         case GL_INT:
-          glUniform1iv( uni.loc, uni.arraysize, iparams );
+          glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_INT_VEC2:
-          glUniform2iv( uni.loc, uni.arraysize, iparams );
+          glUniform2iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_INT_VEC3:
-          glUniform3iv( uni.loc, uni.arraysize, iparams );
+          glUniform3iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_INT_VEC4:
-          glUniform4iv( uni.loc, uni.arraysize, iparams );
+          glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
           break;
 
           /* bool vectors */
         case GL_BOOL:
-          glUniform1iv( uni.loc, uni.arraysize, iparams );
+          glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_BOOL_VEC2:
-          glUniform2iv( uni.loc, uni.arraysize, iparams );
+          glUniform2iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_BOOL_VEC3:
-          glUniform3iv( uni.loc, uni.arraysize, iparams );
+          glUniform3iv( uni.loc, uni.arraysize, uni.param.i );
           break;
         case GL_BOOL_VEC4:
-          glUniform4iv( uni.loc, uni.arraysize, iparams );
+          glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
           break;
 
           /* float matrices */
         case GL_FLOAT_MAT2:
           // GL_TRUE = row major order, GL_FALSE = column major
-          glUniformMatrix2fv( uni.loc, uni.arraysize, GL_FALSE, fparams );
+          glUniformMatrix2fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
           break;
         case GL_FLOAT_MAT3:
-          glUniformMatrix3fv( uni.loc, uni.arraysize, GL_FALSE, fparams );
+          glUniformMatrix3fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
           break;
         case GL_FLOAT_MAT4:
-          glUniformMatrix4fv( uni.loc, uni.arraysize, GL_FALSE, fparams );
+          glUniformMatrix4fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
           break;
 
         /* textures */
@@ -348,7 +345,7 @@ void glsl_program :: renderGL2()
         case GL_SAMPLER_1D_SHADOW:
         case GL_SAMPLER_2D_SHADOW:
         case GL_SAMPLER_2D_RECT_ARB:
-          glUniform1iv(uni.loc, uni.arraysize, iparams);
+          glUniform1iv(uni.loc, uni.arraysize, uni.param.i);
           break;
 
         default:
@@ -372,66 +369,64 @@ void glsl_program :: renderARB()
     glUseProgramObjectARB( m_programARB );
     for(int i=0; i<m_uniformCount; i++) {
       t_uniform&uni = m_uniform[i];
-      GLfloat*fparams=static_cast<GLfloat*>(uni.param);
-      GLint*iparams=static_cast<GLint*>(uni.param);
       if(uni.changed) {
         switch (uni.type) {
         /* float vectors */
         case GL_FLOAT:
-          glUniform1fARB( uni.loc, fparams[0] );
+          glUniform1fARB( uni.loc, uni.param.f[0] );
           break;
         case GL_FLOAT_VEC2_ARB:
           glUniform2fARB( uni.loc,
-                          fparams[0], fparams[1] );
+                          uni.param.f[0], uni.param.f[1] );
           break;
         case GL_FLOAT_VEC3_ARB:
           glUniform3fARB( uni.loc,
-                          fparams[0], fparams[1], fparams[2] );
+                          uni.param.f[0], uni.param.f[1], uni.param.f[2] );
           break;
         case GL_FLOAT_VEC4_ARB:
           glUniform4fARB( uni.loc,
-                          fparams[0], fparams[1], fparams[2], fparams[3] );
+                          uni.param.f[0], uni.param.f[1], uni.param.f[2], uni.param.f[3] );
           break;
 
         /* int vectors */
         case GL_INT:
-          glUniform1iARB( uni.loc, iparams[0] );
+          glUniform1iARB( uni.loc, uni.param.i[0] );
           break;
         case GL_INT_VEC2_ARB:
-          glUniform2iARB( uni.loc, iparams[0], iparams[1] );
+          glUniform2iARB( uni.loc, uni.param.i[0], uni.param.i[1] );
           break;
         case GL_INT_VEC3_ARB:
           glUniform3iARB( uni.loc,
-                          iparams[0], iparams[1], iparams[2] );
+                          uni.param.i[0], uni.param.i[1], uni.param.i[2] );
           break;
         case GL_INT_VEC4_ARB:
-          glUniform4iARB( uni.loc, iparams[0], iparams[1], iparams[2], iparams[3] );
+          glUniform4iARB( uni.loc, uni.param.i[0], uni.param.i[1], uni.param.i[2], uni.param.i[3] );
           break;
 
         /* bool vectors */
         case GL_BOOL_ARB:
-          glUniform1fARB( uni.loc, fparams[0] );
+          glUniform1fARB( uni.loc, uni.param.f[0] );
           break;
         case GL_BOOL_VEC2_ARB:
-          glUniform2fARB( uni.loc, fparams[0], fparams[1] );
+          glUniform2fARB( uni.loc, uni.param.f[0], uni.param.f[1] );
           break;
         case GL_BOOL_VEC3_ARB:
-          glUniform3fARB( uni.loc, fparams[0], fparams[1], fparams[2] );
+          glUniform3fARB( uni.loc, uni.param.f[0], uni.param.f[1], uni.param.f[2] );
           break;
         case GL_BOOL_VEC4_ARB:
-          glUniform4fARB( uni.loc, fparams[0], fparams[1], fparams[2], fparams[3] );
+          glUniform4fARB( uni.loc, uni.param.f[0], uni.param.f[1], uni.param.f[2], uni.param.f[3] );
           break;
 
         /* float matrices */
         case GL_FLOAT_MAT2_ARB:
           // GL_TRUE = row major order, GL_FALSE = column major
-          glUniformMatrix2fvARB( uni.loc, 1, GL_FALSE, fparams );
+          glUniformMatrix2fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
           break;
         case GL_FLOAT_MAT3_ARB:
-          glUniformMatrix3fvARB( uni.loc, 1, GL_FALSE, fparams );
+          glUniformMatrix3fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
           break;
         case GL_FLOAT_MAT4_ARB:
-          glUniformMatrix4fvARB( uni.loc, 1, GL_FALSE, fparams );
+          glUniformMatrix4fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
           break;
 
         /* textures */
@@ -442,7 +437,7 @@ void glsl_program :: renderARB()
         case GL_SAMPLER_1D_SHADOW_ARB:
         case GL_SAMPLER_2D_SHADOW_ARB:
         case GL_SAMPLER_2D_RECT_ARB:
-          glUniform1iARB(uni.loc, fparams[0]);
+          glUniform1iARB(uni.loc, uni.param.f[0]);
           break;
         default:
           break;
@@ -510,16 +505,14 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
     if(argc > maxargc) argc=maxargc;
     switch(uniform2type(uni.type)) {
     case GL_FLOAT: {
-      GLfloat*params=static_cast<GLfloat*>(uni.param);
       for (int j=0; j < argc; j++) {
-        params[j] = atom_getfloat(&argv[j]);
+        uni.param.f[j] = atom_getfloat(&argv[j]);
       }
       break;
     }
     case GL_INT: {
-      GLint*params=static_cast<GLint*>(uni.param);
       for (int j=0; j < argc; j++) {
-        params[j] = (GLint)atom_getfloat(&argv[j]);
+        uni.param.i[j] = (GLint)atom_getfloat(&argv[j]);
       }
     }
     }
@@ -807,21 +800,17 @@ void glsl_program :: getVariables()
     uni.paramsize = uniform2numelements(uni.type);
     switch(uniform2type(uni.type)) {
     case GL_FLOAT: {
-      GLfloat*params=static_cast<GLfloat*>(uni.param);
-      delete params;
-      params = new GLfloat[uni.arraysize * uni.paramsize];
+      delete uni.param.f;
+      uni.param.f = new GLfloat[uni.arraysize * uni.paramsize];
       for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
-        params[n] = 0.;
-      uni.param = params;
+        uni.param.f[n] = 0.;
       break;
     }
     case GL_INT: {
-      GLint*params=static_cast<GLint*>(uni.param);
-      delete params;
-      params = new GLint[uni.arraysize * uni.paramsize];
+      delete uni.param.i;
+      uni.param.i = new GLint[uni.arraysize * uni.paramsize];
       for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
-        params[n] = 0;
-      uni.param = params;
+        uni.param.i[n] = 0;
       break;
     }
     }

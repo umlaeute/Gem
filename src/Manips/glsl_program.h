@@ -115,7 +115,10 @@ protected:
     GLint size;
     GLenum type;
     GLint loc;
-    void*param;
+    union {
+      GLfloat*f;
+      GLint*i;
+    } param;
     GLint paramsize; /* how many elements does single parameter hold (e.g. vec2 => 2) */
     GLint arraysize; /* array size (or 1) */
     bool changed;
