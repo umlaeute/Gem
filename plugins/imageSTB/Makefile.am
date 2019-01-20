@@ -17,7 +17,7 @@ gem_imageSTB_la_LIBADD   =
 
 if HAVE_LIB_STB
 else
-AM_CPPFLAGS += -ISTB
+AM_CPPFLAGS += -I$(srcdir)/STB
 endif
 
 # RTE
