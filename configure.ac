@@ -28,6 +28,7 @@ AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/imageTIFF/Makefile])
 AC_CONFIG_FILES([plugins/imageJPEG/Makefile])
 AC_CONFIG_FILES([plugins/imageSGI/Makefile])
+AC_CONFIG_FILES([plugins/imageSTB/Makefile])
 AC_CONFIG_FILES([plugins/imageIO/Makefile])
 
 AC_CONFIG_FILES([plugins/filmAVF/Makefile])
@@ -360,6 +361,7 @@ AS_IF([test "x$magickpackage" != "x"], [
 
 GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
+GEM_CHECK_LIB([stb], [stb],[stb/stb_image.h], [stbi_load],,,,[image loader])
 
 IEM_CHECK_FTGL()
 GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
