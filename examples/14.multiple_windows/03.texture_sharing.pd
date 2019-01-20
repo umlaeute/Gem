@@ -1,7 +1,6 @@
 #N canvas 224 736 1147 233 10;
 #X obj 33 169 gemwin 20 a;
 #X obj 396 181 square;
-#X msg 33 87 title a \, create \, 1;
 #X obj 168 46 b;
 #X obj 168 26 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
@@ -13,26 +12,30 @@
 #X obj 396 72 pix_image ../data/fractal.JPG;
 #X obj 596 59 translateXYZ 2 0 0;
 #X obj 596 37 gemhead b;
-#X msg 168 87 title b \, create \, 1;
 #X obj 168 169 gemwin 20 b;
 #X msg 596 4 context a;
 #X msg 669 4 context b;
 #X msg 90 118 destroy;
-#X text 729 90 on Linux \, this is only supported by [gemglxwindow]
-and [gemglutwindow].;
-#X connect 2 0 0 0;
+#X text 731 150 on Linux \, this is only supported by [gemglutwindow].
+;
+#X text 730 98 support for texture sharing is limited by Operating
+System \, ggraphics hardware \, openGL implementation and the windowing
+backend.;
+#X msg 33 87 title a \, create \, 1;
+#X msg 168 117 title b \, create \, 1;
+#X connect 2 0 18 0;
+#X connect 2 0 19 0;
 #X connect 3 0 2 0;
-#X connect 3 0 13 0;
-#X connect 4 0 3 0;
-#X connect 5 0 10 0;
-#X connect 7 0 1 0;
-#X connect 7 1 9 1;
-#X connect 9 0 8 0;
-#X connect 10 0 7 0;
-#X connect 11 0 9 0;
-#X connect 12 0 11 0;
-#X connect 13 0 14 0;
+#X connect 4 0 9 0;
+#X connect 6 0 1 0;
+#X connect 6 1 8 1;
+#X connect 8 0 7 0;
+#X connect 9 0 6 0;
+#X connect 10 0 8 0;
+#X connect 11 0 10 0;
+#X connect 13 0 11 0;
+#X connect 14 0 11 0;
 #X connect 15 0 12 0;
-#X connect 16 0 12 0;
-#X connect 17 0 14 0;
-#X connect 17 0 0 0;
+#X connect 15 0 0 0;
+#X connect 18 0 0 0;
+#X connect 19 0 12 0;
