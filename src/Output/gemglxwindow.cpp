@@ -926,16 +926,16 @@ bool gemglxwindow :: create(void)
         unsigned int w=1, h=1;
         success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h,
                                     m_transparent);
-      } catch (GemException&x) {
-        error("creation of shared glxcontext failed: %s", x.what());
+      } catch (GemException&ex) {
+        error("creation of shared glxcontext failed: %s", ex.what());
         verbose(0, "continuing at your own risk!");
       }
       if(!sharedPimpl->gemcontext) {
         try {
           sharedPimpl->gemcontext = createContext();
-        } catch (GemException&x) {
+        } catch (GemException&ex) {
           sharedPimpl->gemcontext = NULL;
-          error("creation of shared gem::context failed: %s", x.what());
+          error("creation of shared gem::context failed: %s", ex.what());
         }
       }
     }
