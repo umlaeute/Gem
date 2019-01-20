@@ -94,7 +94,7 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
     err = stbi_write_png(filename.c_str(), img.xsize, img.ysize, img.csize, img.data, img.xsize * img.csize);
   } else if ("image/bmp" == mimetype) {
     err = stbi_write_bmp(filename.c_str(), img.xsize, img.ysize, img.csize, img.data);
-  } else if ("image/tga" == mimetype) {
+  } else if ("image/targa" == mimetype) {
     err = stbi_write_tga(filename.c_str(), img.xsize, img.ysize, img.csize, img.data);
   } else if ("image/jpeg" == mimetype) {
     err = stbi_write_jpg(filename.c_str(), img.xsize, img.ysize, img.csize, img.data, quality);
@@ -111,7 +111,7 @@ float imageSTB::estimateSave(const imageStruct&img,
     result+=80;
   } else if ("image/bmp" == mimetype) {
     result+=80;
-  } else if ("image/tga" == mimetype) {
+  } else if ("image/targa" == mimetype) {
     result+=80;
   } else if ("image/jpeg" == mimetype) {
     result+=80;
@@ -129,7 +129,7 @@ void imageSTB::getWriteCapabilities(std::vector<std::string>&mimetypes,
   props.clear();
   mimetypes.push_back("image/png");
   mimetypes.push_back("image/bmp");
-  mimetypes.push_back("image/tga");
+  mimetypes.push_back("image/targa");
   mimetypes.push_back("image/jpeg");
   //mimetypes.push_back("image/hdr"); // ??; expects float
   gem::any value;
