@@ -242,7 +242,7 @@ AC_DEFUN([_AX_CHECK_GLU_MANUAL_LIBS_DARWIN],
                 [ax_check_glu_lib_opengl="yes"],
                 [ax_check_glu_lib_opengl="no"])
  _AX_CHECK_GLU_RESTORE_FLAGS()
- AC_LANG_PUSH([C])
+ AC_LANG_POP([C])
 ])
 
 # dnl try to found library (generic case)
