@@ -84,8 +84,6 @@ protected:
   void destroySeqGrabber(void);
   virtual void    setupCapture(void);
 
-
-
   int          m_newFrame;
   SeqGrabComponent     m_sg;           // Sequence Grabber Component
   SGChannel                    m_vc;                   // Video Channel
@@ -104,6 +102,8 @@ protected:
 
   bool setIIDCProperty(OSType specifier, double value);
   bool applyProperties(gem::Properties&props);
+
+  imageStruct m_img;
 };
 };
 };

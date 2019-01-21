@@ -62,10 +62,10 @@ videoDarwin :: videoDarwin()
   m_width= DEFAULT_WIDTH;
   m_height=DEFAULT_HEIGHT;
 
-  m_image.image.xsize = 800;
-  m_image.image.ysize = 600;
-  m_image.image.setCsizeByFormat(GEM_RGBA);
-  m_image.image.allocate();
+  m_img.xsize = 800;
+  m_img.ysize = 600;
+  m_img.setCsizeByFormat(GEM_RGBA);
+  m_img.allocate();
 
   //initSeqGrabber();
   provide("dv");
@@ -145,6 +145,7 @@ bool videoDarwin :: grabFrame()
     verbose(0, "[GEM:videoDarwin] no video yet");
     return true;
   }
+  m_img.copy2Image(&m_image.image);
   m_image.newimage = m_newFrame;
   m_newFrame = false;
 
@@ -291,28 +292,28 @@ bool videoDarwin :: initSeqGrabber()
   }
   SGSetChannelPlayFlags(m_vc, m_quality);
   OSType pixelFormat=0;
-  m_image.image.xsize = m_width;
-  m_image.image.ysize = m_height;
+  m_img.xsize = m_width;
+  m_img.ysize = m_height;
 
   if (m_colorspace==GEM_RGBA) {
-    m_image.image.setCsizeByFormat(m_colorspace);
-    m_rowBytes = m_width*m_image.image.csize;
+    m_img.setCsizeByFormat(m_colorspace);
+    m_rowBytes = m_width*m_img.csize;
     pixelFormat=k32ARGBPixelFormat;
     verbose(1, "[GEM:videoDarwin] using RGB");
   } else {
-    m_image.image.setCsizeByFormat(GEM_YUV);
+    m_img.setCsizeByFormat(GEM_YUV);
     m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
     verbose(1, "[GEM:videoDarwin] using YUV");
   }
-  m_image.image.reallocate();
+  m_img.reallocate();
   anErr = QTNewGWorldFromPtr (&m_srcGWorld,
                               pixelFormat,
                               &srcRect,
                               NULL,
                               NULL,
                               0,
-                              m_image.image.data,
+                              m_img.data,
                               m_rowBytes);
 
   if (anErr!= noErr) {
