@@ -184,7 +184,7 @@ and cetera...;
 #X obj 201 151 * 0.5;
 #X obj 136 153 * 0.5;
 #X obj 201 209 clip -90 90;
-#N canvas 1020 394 450 300 space 0;
+#N canvas 20 394 450 300 space 0;
 #X obj 42 13 inlet;
 #X obj 42 35 symbol;
 #X obj 42 87 select space;

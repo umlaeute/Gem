@@ -1,4 +1,4 @@
-#N canvas 652 79 668 661 10;
+#N canvas 52 79 668 661 10;
 #X obj 78 339 glsl_vertex;
 #X msg 32 338 print;
 #X obj 78 626 glsl_program;

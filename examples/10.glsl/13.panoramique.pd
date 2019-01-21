@@ -4,7 +4,7 @@
 #X obj 160 405 pix_texture;
 #X obj 169 165 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 1338 29 792 790 glsl 0;
+#N canvas 38 29 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
 #X msg 32 338 print;
 #X obj 78 626 glsl_program;
@@ -81,7 +81,7 @@
 #X obj 353 406 pix_texture;
 #X obj 362 166 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 1338 29 792 790 glsl 0;
+#N canvas 38 29 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
 #X msg 32 338 print;
 #X obj 78 626 glsl_program;
@@ -158,7 +158,7 @@
 #X obj 552 407 pix_texture;
 #X obj 561 167 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 1338 29 792 790 glsl 0;
+#N canvas 38 29 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
 #X msg 32 338 print;
 #X obj 78 626 glsl_program;
@@ -238,7 +238,7 @@
 #X obj 747 408 pix_texture;
 #X obj 756 168 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 1338 29 792 790 glsl 0;
+#N canvas 38 29 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
 #X msg 32 338 print;
 #X obj 78 626 glsl_program;

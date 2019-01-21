@@ -1,4 +1,4 @@
-#N canvas 656 222 901 508 10;
+#N canvas 56 222 901 508 10;
 #X obj 191 413 pix_texture;
 #X obj 463 158 gemwin;
 #X msg 506 135 0 \, destroy;

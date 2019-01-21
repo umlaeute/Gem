@@ -47,7 +47,7 @@
 #X msg 344 358 quality 1 \, rectangle 0;
 #X obj 344 337 loadbang;
 #X obj 327 309 gemhead 99;
-#N canvas 1070 136 503 739 14_pass_blur 0;
+#N canvas 70 136 503 739 14_pass_blur 0;
 #X obj 87 102 inlet;
 #X obj 87 527 outlet;
 #X obj 87 173 single_blur 76 0 64;

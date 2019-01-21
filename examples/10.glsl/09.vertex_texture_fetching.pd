@@ -23,7 +23,7 @@
 #X obj 49 231 loadbang;
 #X obj 44 419 loadbang;
 #X msg 520 456 quality 0;
-#N canvas 703 231 450 300 load_glsl 0;
+#N canvas 70 231 450 300 load_glsl 0;
 #X obj 51 22 gemhead;
 #X obj 51 98 outlet;
 #X obj 51 50 route gem_state;

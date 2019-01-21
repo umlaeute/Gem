@@ -19,7 +19,7 @@
 #X msg 182 68 set create;
 #X msg 132 112 create \, 1;
 #X msg 238 112 destroy;
-#N canvas 689 152 247 179 Gem.init 0;
+#N canvas 89 152 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X msg 118 81 reset;
 #X obj 118 113 outlet;

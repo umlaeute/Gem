@@ -1,4 +1,4 @@
-#N canvas 631 50 600 504 10;
+#N canvas 31 50 600 504 10;
 #X obj 426 54 gemhead;
 #X floatatom 464 134 0 0 0 0 - - -;
 #X obj 464 307 gemhead 1;

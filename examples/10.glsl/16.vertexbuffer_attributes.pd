@@ -96,7 +96,7 @@
 #X obj 358 431 print linking;
 #X obj 184 372 t a a;
 #N canvas 359 182 450 300 tables 0;
-#N canvas 816 49 460 613 load_tables 0;
+#N canvas 81 49 460 613 load_tables 0;
 #X obj 39 17 loadbang;
 #X msg 39 106 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0.5 0.5 1 0.5 0.5 1 0.5 0.5
 1 0.5 0.5 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 0 0.5 0.6 1 1 1 1 1 1 1 1 1

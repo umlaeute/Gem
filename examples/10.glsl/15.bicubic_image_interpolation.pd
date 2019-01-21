@@ -1,4 +1,4 @@
-#N canvas 722 145 681 529 10;
+#N canvas 22 145 681 529 10;
 #X obj 232 189 gemhead;
 #X obj 232 356 pix_noise 5 5;
 #X obj 232 446 pix_texture;

@@ -1,4 +1,4 @@
-#N canvas 602 711 828 296 10;
+#N canvas 60 711 828 296 10;
 #X obj 88 241 gemwin 20 a;
 #X obj 295 79 square;
 #X obj 295 49 color 1 0 0 1;

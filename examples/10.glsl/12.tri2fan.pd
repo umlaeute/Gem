@@ -1,4 +1,4 @@
-#N canvas 1775 56 785 745 10;
+#N canvas 17 56 785 745 10;
 #X floatatom 286 440 9 0 0 0 ID - -;
 #X floatatom 249 264 9 0 0 0 ID - -;
 #X obj 296 500 print linking;

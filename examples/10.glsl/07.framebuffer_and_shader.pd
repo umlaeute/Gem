@@ -152,7 +152,7 @@
 -1 -1;
 #X obj 454 308 loadbang;
 #X obj 786 442 loadbang;
-#N canvas 693 153 804 667 _glsl 0;
+#N canvas 93 153 804 667 _glsl 0;
 #X obj 80 426 glsl_program;
 #X obj 261 238 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;

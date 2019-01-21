@@ -1,5 +1,5 @@
 #N struct 1002-xy-pad-knob-1 float x0 float y0 float id;
-#N canvas 875 218 764 482 10;
+#N canvas 75 218 764 482 10;
 #X obj 27 380 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -90,7 +90,7 @@
 #X obj 506 610 square 4;
 #X obj 261 477 translateXYZ 0 0 -4;
 #X obj 290 368 loadbang;
-#N canvas 1062 27 528 709 shader 0;
+#N canvas 62 27 528 709 shader 0;
 #X obj 32 384 glsl_program;
 #X obj 32 36 inlet;
 #X obj 32 453 outlet;
@@ -633,7 +633,7 @@
 -1;
 #X obj 146 134 t b;
 #X msg 146 155 texture_mass 1;
-#N canvas 668 405 301 465 shader 0;
+#N canvas 68 405 301 465 shader 0;
 #X obj 110 298 pack 0 0;
 #X obj 131 278 t b f;
 #X msg 110 321 link \$1 \$2;
@@ -647,7 +647,7 @@
 #X obj 110 135 change;
 #X obj 131 233 change;
 #X obj 38 371 glsl_program;
-#N canvas 703 231 450 300 load_glsl 0;
+#N canvas 70 231 450 300 load_glsl 0;
 #X obj 51 22 gemhead;
 #X obj 51 98 outlet;
 #X obj 51 50 route gem_state;
@@ -779,7 +779,7 @@
 #X text 12 6 "Potential Flag" \, by Samuel Bianchini;
 #X floatatom 606 304 5 0 0 0 - - -;
 #X obj 606 324 * 10;
-#N canvas 830 53 450 300 Gem.init 0;
+#N canvas 30 53 450 300 Gem.init 0;
 #X obj 26 3 loadbang;
 #X msg 26 26 perspec -1 1 -1 1 10 100;
 #X obj 26 124 t a;
@@ -951,7 +951,7 @@
 #X restore 27 342 pd shader_normal ______________;
 #X obj 6 304 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#N canvas 1468 153 767 700 \$0-pad 0;
+#N canvas 68 153 767 700 \$0-pad 0;
 #X msg 158 309 clear;
 #N canvas 6 50 590 367 clear-all 0;
 #X obj 89 46 inlet;
@@ -1060,7 +1060,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X msg 72 233 900;
 #X obj 162 646 outlet;
 #X text 486 42 based on: xy-pad;
-#N canvas 1444 366 450 300 xy2rphi 0;
+#N canvas 44 366 450 300 xy2rphi 0;
 #X obj 46 35 inlet x y;
 #X obj 46 272 outlet r;
 #X obj 136 266 outlet phi;

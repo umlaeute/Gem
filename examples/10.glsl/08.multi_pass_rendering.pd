@@ -29,7 +29,7 @@
 #X connect 3 0 2 0;
 #X restore 669 120 pd init;
 #X obj 353 199 translateXYZ 0 0 -4;
-#N canvas 700 0 407 295 init 0;
+#N canvas 70 0 407 295 init 0;
 #X obj 106 175 outlet;
 #X obj 106 68 loadbang;
 #X msg 106 118 type FLOAT \, dimen 1024 1024 \, rectangle 0;
@@ -150,7 +150,7 @@
 #X connect 22 0 16 0;
 #X connect 23 0 18 0;
 #X restore 353 78 pd shader2;
-#N canvas 660 91 589 635 shader3 0;
+#N canvas 60 91 589 635 shader3 0;
 #X obj 94 500 glsl_program;
 #X obj 94 340 glsl_fragment;
 #X obj 94 160 glsl_vertex;
