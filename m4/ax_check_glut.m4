@@ -139,7 +139,7 @@ AC_DEFUN([_AX_CHECK_GLUT_MANUAL_LIBS_DARWIN],
 		      ],
                       [ax_check_glut_lib_opengl="no"])
   _AX_CHECK_GLUT_RESTORE_FLAGS()
-  AC_LANG_PUSH([C])
+  AC_LANG_POP([C])
 ])
 
 
@@ -163,7 +163,7 @@ AC_DEFUN([_AX_CHECK_GLUT_MANUAL_LIBS_GENERIC],
  	 [no],[],
  	 [GLUT_LIBS="${ac_cv_search_glutMainLoop} ${GLU_LIBS}"])
   _AX_CHECK_GLUT_RESTORE_FLAGS()
-  AC_LANG_PUSH([C])
+  AC_LANG_POP([C])
 ])
 
 
