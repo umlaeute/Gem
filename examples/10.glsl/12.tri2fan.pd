@@ -12,7 +12,7 @@
 #X floatatom 289 579 5 0 0 0 - - -;
 #X obj 161 526 glsl_program;
 #X obj 42 117 t b b b b;
-#X msg 42 147 -1;
+#X msg 286 157 -1;
 #X obj 42 98 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 249 242 change;
@@ -39,7 +39,7 @@
 #X msg 460 180 perspec -0.1 0.1 -0.1 0.1 1 110;
 #X obj 422 229 gemwin;
 #X obj 460 159 loadbang;
-#N canvas 0 0 877 520 light 0;
+#N canvas 5 51 877 520 light 0;
 #X obj 225 45 gemhead 10;
 #X floatatom 258 78 5 0 0 0 - - -;
 #X floatatom 299 77 5 0 0 0 - - -;
@@ -82,8 +82,8 @@
 #X restore 421 253 pd light;
 #X obj 161 595 rotateXYZ -55 20 0;
 #X floatatom 298 537 5 0 0 0 - - -;
-#X text 235 13 replace triangle with 3 triangles the orientations of which
-depend on the normal of the original primitive;
+#X text 235 13 replace triangle with 3 triangles the orientations of
+which depend on the normal of the original primitive;
 #X obj 161 554 scaleXYZ 0.2 0.2 0.2;
 #X msg 172 129 auto 1;
 #X obj 172 108 loadbang;
@@ -108,10 +108,10 @@ depend on the normal of the original primitive;
 #X connect 9 0 38 2;
 #X connect 10 0 38 3;
 #X connect 11 0 41 0;
-#X connect 12 0 13 0;
-#X connect 12 1 46 0;
-#X connect 12 2 45 0;
-#X connect 12 3 44 0;
+#X connect 12 0 46 0;
+#X connect 12 1 45 0;
+#X connect 12 2 44 0;
+#X connect 12 3 13 0;
 #X connect 13 0 17 0;
 #X connect 14 0 12 0;
 #X connect 15 0 1 0;

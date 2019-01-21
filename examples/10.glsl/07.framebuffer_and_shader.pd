@@ -255,7 +255,7 @@
 #X connect 11 0 0 0;
 #X restore 402 542 pd gouttes;
 #X msg 244 284 quality 0;
-#X obj 774 541 rectangle -4 -4;
+#X obj 774 541 rectangle 4 4;
 #X obj 9 155 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
 #X obj 220 180 delay 1000;

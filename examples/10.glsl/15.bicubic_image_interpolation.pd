@@ -21,7 +21,7 @@
 #X obj 358 389 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 33 246 vradio 15 1 1 3 empty empty empty 0 -8 0 10 -262144 -1
--1 0;
+-1 1;
 #X text 53 246 bicubic interpolation;
 #X text 53 264 bilinear interpolation;
 #X text 55 276 no interpolation;
