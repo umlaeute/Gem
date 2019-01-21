@@ -120,6 +120,7 @@ protected:
   int m_width, m_height;
 
   bool m_isInit;
+  pixBlock    m_img;
 };
 };
 };

@@ -224,7 +224,11 @@ pixBlock* videoAVF::getFrame(void)
     m_width = img->image.xsize;
     m_height = img->image.ysize;
   }
-  return img;
+  img->image.copy2Image(&m_img.image);
+  m_img.newfilm = img->newfilm;
+  m_img.newimage = img->newimage;
+
+  return &m_img;
 }
 void videoAVF::releaseFrame(void)
 {
