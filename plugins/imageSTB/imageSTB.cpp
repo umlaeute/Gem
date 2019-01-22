@@ -72,7 +72,13 @@ bool imageSTB :: load(std::string filename, imageStruct&result,
   result.setCsizeByFormat(GEM_RGBA);
   result.reallocate();
 
+#ifdef __APPLE__
+  result.fromARGB(data);
+  result.swapRedBlue();
+#else
   result.fromRGBA(data);
+#endif
+
   stbi_image_free(data);
   return true;
 }
@@ -90,6 +96,10 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
   }
 
   image.convertTo(&img, GEM_RGBA);
+#ifdef __APPLE__
+   /* OSX postprocessing to get really RGBA */
+   img.fromABGR(img.data);
+#endif /* !APPLE */
 
   if("image/png" == mimetype) {
     err = stbi_write_png(filename.c_str(), img.xsize, img.ysize, img.csize, img.data, img.xsize * img.csize);
