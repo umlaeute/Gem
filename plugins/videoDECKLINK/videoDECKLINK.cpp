@@ -21,6 +21,8 @@
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
+#include <pthread.h>
+
 #include <stdio.h>
 #define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
 
