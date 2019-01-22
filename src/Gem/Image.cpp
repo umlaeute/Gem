@@ -204,7 +204,7 @@ GEM_EXTERN void imageStruct::clear(void)
 
 GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
 {
-  if (!to || !this || !this->data) {
+  if (!to || !data) {
     error("GEM: Someone sent a bogus pointer to copy2ImageStruct");
     if (to) {
       to->data = NULL;
@@ -449,7 +449,7 @@ GEM_EXTERN void imageStruct::setWhite(void)
 GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     unsigned int to_format)
 {
-  if (!from || !this || !from->data) {
+  if (!from || !from->data) {
     error("GEM: Someone sent a bogus pointer to convert");
     return false;
   }
@@ -486,7 +486,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
 
 GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
 {
-  if (!to || !this || !this->data) {
+  if (!to || !data) {
     error("GEM: Someone sent a bogus pointer to convert");
     if (to) {
       to->data = NULL;
