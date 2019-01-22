@@ -101,6 +101,8 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
   img.fromABGR(img.data);
 #endif /* !APPLE */
 
+  if(!img.upsidedown)
+    stbi_flip_vertically_on_write(1);
   if("image/png" == mimetype) {
     err = stbi_write_png(filename.c_str(), img.xsize, img.ysize, img.csize, img.data, img.xsize * img.csize);
   } else if ("image/bmp" == mimetype) {
