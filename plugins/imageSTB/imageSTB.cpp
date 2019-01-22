@@ -97,8 +97,8 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
 
   image.convertTo(&img, GEM_RGBA);
 #ifdef __APPLE__
-   /* OSX postprocessing to get really RGBA */
-   img.fromABGR(img.data);
+  /* OSX postprocessing to get really RGBA */
+  img.fromABGR(img.data);
 #endif /* !APPLE */
 
   if("image/png" == mimetype) {
