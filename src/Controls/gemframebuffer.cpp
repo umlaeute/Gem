@@ -282,6 +282,12 @@ void gemframebuffer :: printInfo()
 
   std::string type;
   switch(m_type) {
+  case GL_UNSIGNED_INT:
+    type="UINT";
+    break;
+  case GL_INT:
+    type="INT";
+    break;
   case GL_UNSIGNED_BYTE:
     type="BYTE";
     break;
@@ -570,10 +576,15 @@ void gemframebuffer :: typeMess(std::string type)
 {
   if("FLOAT"==type) {
     m_type = GL_FLOAT;
+  } else if("INT"==type) {
+    m_type = GL_INT;
+  } else if("UINT"==type) {
+    m_type = GL_UNSIGNED_INT;
   } else {
     type="BYTE";
     m_type=GL_UNSIGNED_BYTE;
   }
+
   // changed type, so we need to rebuild the FBO
   setModified();
 }
