@@ -47,14 +47,14 @@ CPPEXTERN_NEW_WITH_GIMME(newWave);
 /////////////////////////////////////////////////////////
 newWave :: newWave( int argc,
                     t_atom*argv)//t_floatarg widthX, t_floatarg widthY )
-  : GemShape(MEDIUM),
-    gridX(0), gridY(0),
-    m_height(1.0),
-    m_inletH(0), m_inletM(0),
-    xsize(0), xsize0(0), ysize(0), ysize0(0),
-    K1(0.05), D1(0.1), K2(0), D2(0), K3(0), D3(0),
-    alreadyInit(0),
-    m_textureMode(0)
+  : GemShape(MEDIUM)
+  , gridX(0), gridY(0)
+  , m_height(1.0)
+  , m_inletH(0), m_inletM(0)
+  , xsize(0), xsize0(0), ysize(0), ysize0(0)
+  , K1(0.05), D1(0.1), K2(0), D2(0), K3(0), D3(0)
+  , alreadyInit(0)
+  , m_textureMode(0)
 {
   int widthX=10;
   int widthY=10;
