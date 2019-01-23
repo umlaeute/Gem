@@ -16,6 +16,7 @@ LOG
 #define _INCLUDE__GEM_VERTEX_VERTEX_DRAW_H_
 
 #include "Base/GemVertex.h"
+#include "Gem/GemGL.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------

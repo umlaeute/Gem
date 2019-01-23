@@ -78,7 +78,7 @@ static t_float* checkarray(t_symbol *s, int &length)
   }
   if(!fp)
     return 0;
-  return fp->w_float;
+  return &fp->w_float;
 }
 
 void vertex_tabread :: render(GemState *state)

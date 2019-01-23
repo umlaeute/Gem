@@ -30,8 +30,8 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(vertex_grid, t_floatarg, A_DEFFLOAT,
 //
 /////////////////////////////////////////////////////////
 vertex_grid :: vertex_grid(t_floatarg f1, t_floatarg f2)
-  : m_x(f1>=1.0?static_cast<int>(f1):4), m_y(f2>=1.0?static_cast<int>(f2):4),
-  , m_oldx(0), m_oldy(0),
+  : m_x(f1>=1.0?static_cast<int>(f1):4), m_y(f2>=1.0?static_cast<int>(f2):4)
+  , m_oldx(0), m_oldy(0)
   , m_spacex(1), m_spacey(1)
   , maxX(0), maxY(0)
   , ratioX(1.f), ratioY(1.f)
