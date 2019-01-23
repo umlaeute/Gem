@@ -39,7 +39,7 @@ public:
 
   //////////
   // Constructor
-  gemframebuffer(t_symbol *format, t_symbol *type);
+  gemframebuffer(int, t_atom*);
 
 protected:
 

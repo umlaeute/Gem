@@ -20,8 +20,7 @@
 #include "Gem/State.h"
 #include "Gem/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL,
-                            t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_GIMME(gemframebuffer);
 
 /////////////////////////////////////////////////////////
 //
@@ -31,7 +30,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemframebuffer, t_symbol *, A_DEFSYMBOL,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
+/* args:
+ *      : width(256), height(256), format(RGB), type(uchar)
+ * s    <s:format>: width(), height(), format(format), type()
+ * f    <f:dimen>: width()dimen, height(dimen), format(), type()
+ * ss   <s:format> <s:type>: width(), height(), format(format), type(type)
+ * ff   <f:width> <f:height>: width(width), height(height), format(), type()
+ * ffs  <f:width> <f:height> <s:format>: width(width), height(height), format(format), type()
+ * ffss <f:width> <f:height> <s:format> <s:type>: width(width), height(height), format(format), type(type)
+
+ */
+gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
     m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
@@ -50,6 +59,59 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
     m_outTexInfo = outlet_new(this->x_obj, 0);
   }
 
+  unsigned int typesignature = 0;
+  for(int i=0; i<4; i++) {
+    if(i>=argc)
+      break;
+    switch(argv[i].a_type) {
+    default:
+      break;
+    case A_SYMBOL:
+      typesignature |= 2<<(2*i);
+      break;
+    case A_FLOAT:
+      typesignature |= 1<<(2*i);
+      break;
+    }
+  }
+
+  int index_width=-1;
+  int index_height=-1;
+  int index_format=-1;
+  int index_type=-1;
+  switch(typesignature) {
+  case 0:
+    break;
+  case 1: /* f */
+    index_width = index_height = 0;
+    break;
+  case 2: /* s */
+    index_format = 0;
+    break;
+  case 5: /* ff */
+    index_width = 0;
+    index_height = 1;
+    break;
+  case 10: /* ss */
+    index_format = 0;
+    index_type = 1;
+    break;
+  case 37: /* ffs */
+    index_width = 0;
+    index_height = 1;
+    index_format = 2;
+    break;
+  case 165: /* ffss */
+    index_width = 0;
+    index_height = 1;
+    index_format = 2;
+    index_type = 3;
+    break;
+  default:
+    /* unknown type signature */
+    break;
+  }
+
   m_FBOcolor[0] = 0.f;
   m_FBOcolor[1] = 0.f;
   m_FBOcolor[2] = 0.f;
@@ -62,12 +124,19 @@ gemframebuffer :: gemframebuffer(t_symbol *format, t_symbol *type)
   m_perspect[4] = 1.f;
   m_perspect[5] = 20.f;
 
-
-  if(format && format->s_name && format!=gensym("")) {
-    formatMess(format->s_name);
+  int w = m_width, h = m_height;
+  if(index_width >= 0) {
+    w = atom_getfloat(argv+index_width);
   }
-  if(type   && type->s_name   && type  !=gensym("")) {
-    typeMess(type->s_name);
+  if(index_height >= 0) {
+    h = atom_getfloat(argv+index_height);
+  }
+  dimMess(w, h);
+  if(index_format >= 0) {
+    formatMess(atom_getsymbol(argv+index_format)->s_name);
+  }
+  if(index_type >= 0) {
+    typeMess(atom_getsymbol(argv+index_type)->s_name);
   }
 }
 
