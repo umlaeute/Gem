@@ -32,8 +32,6 @@ libVertex_la_SOURCES=  \
     vertex_grid.h \
     vertex_info.cpp \
     vertex_info.h \
-    vertex_model.cpp \
-    vertex_model.h \
     vertex_mul.cpp \
     vertex_mul.h \
     vertex_offset.cpp \
@@ -47,3 +45,9 @@ libVertex_la_SOURCES=  \
     vertex_tabread.cpp \
     vertex_tabread.h
 
+if DISABLED
+libVertex_la_SOURCES+=  \
+    vertex_model.cpp \
+    vertex_model.h \
+    $(empty)
+endif
