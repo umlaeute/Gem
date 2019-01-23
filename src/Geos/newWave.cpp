@@ -23,8 +23,6 @@ enum {SMALL, MEDIUM, LARGE, XLARGE};
 enum {CURRENT, FLAT, SPIKE, DIAGONALWALL, SIDEWALL, HOLE,
       MIDDLEBLOCK, DIAGONALBLOCK, CORNERBLOCK, HILL, HILLFOUR
      };
-int displayMode = WIREFRAME;
-int resetMode = HILLFOUR;
 
 #define SQRTOFTWOINV 1.0 / 1.414213562
 
@@ -55,6 +53,7 @@ newWave :: newWave( int argc,
   , K1(0.05), D1(0.1), K2(0), D2(0), K3(0), D3(0)
   , alreadyInit(0)
   , m_textureMode(0)
+  , m_resetMode(HILLFOUR)
 {
   int widthX=10;
   int widthY=10;
@@ -175,7 +174,7 @@ void newWave :: renderShape(GemState *state)
 
       setSize( gridX, gridY );
       setOther(m_textureMode);
-      reset( resetMode );
+      reset( m_resetMode );
       alreadyInit = 1;
     }
 
@@ -200,7 +199,7 @@ void newWave :: renderShape(GemState *state)
       xsize0= 0;
       setSize( gridX, gridY);
       setOther(m_textureMode );
-      reset( resetMode );
+      reset( m_resetMode );
       alreadyInit = 1;
     }
 
@@ -449,7 +448,7 @@ void newWave :: setSize( int valueX, int valueY )
   gridX = valueX>MAXGRID?MAXGRID:valueX;
   gridY = valueY>MAXGRID?MAXGRID:valueY;
 
-  reset(resetMode);
+  reset(m_resetMode);
 
   getTexCoords();
 }
@@ -654,14 +653,14 @@ void newWave :: getFaceNormSegs(void)
 void newWave :: reset(int value)
 {
   if (value != CURRENT) {
-    resetMode = value;
+    m_resetMode = value;
   }
   for( int i=0; i<gridX; i++)
     for( int j=0; j<gridY; j++) {
       force[i][j]=0.0;
       veloc[i][j]=0.0;
 
-      switch(resetMode) {
+      switch(m_resetMode) {
       case FLAT:
         posit[i][j] = 0.0;
         break;

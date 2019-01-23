@@ -115,6 +115,7 @@ protected:
   int alreadyInit;
   int m_textureMode; // how to texture...
 
+  int m_resetMode;
 
   float force[MAXGRID][MAXGRID],
         veloc[MAXGRID][MAXGRID],
