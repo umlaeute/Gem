@@ -20,11 +20,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Manips/glsl_vertex.h"
 
-#define GEM_shader_none  0
-#define GEM_shader_GLSL  1
-#define GEM_shader_CG    2
-
-
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
