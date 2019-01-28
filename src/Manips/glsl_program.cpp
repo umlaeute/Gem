@@ -517,7 +517,6 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
     }
     // tell the GL state that this variable has changed next render
     uni.changed = true;
-    setModified();
     // should we return here?  It only allows one uni.param to be changed
     return;
   }
