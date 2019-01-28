@@ -594,8 +594,10 @@ bool glsl_program :: LinkGL2()
   }
 
 
+  GLint linkstatus = 0;
   glLinkProgram( m_program );
-  glGetProgramiv( m_program, GL_LINK_STATUS, &m_linked );
+  glGetProgramiv( m_program, GL_LINK_STATUS, &linkstatus );
+  m_linked = linkstatus;
 
   glGetProgramiv( m_program, GL_INFO_LOG_LENGTH, &infoLength );
   GLchar *infoLog = new GLchar[infoLength];
@@ -659,8 +661,10 @@ bool glsl_program :: LinkARB()
   }
 
   glLinkProgramARB( m_programARB );
+  GLint linkstatus = 0;
   glGetObjectParameterivARB( m_programARB, GL_OBJECT_LINK_STATUS_ARB,
-                             &m_linked );
+                             &linkstatus );
+  m_linked = linkstatus;
 
   glGetObjectParameterivARB( m_programARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
                              &infoLength );
@@ -760,19 +764,23 @@ void glsl_program :: getVariables()
   //
   // Get the number of uniforms, and the length of the longest name.
   //
+  GLint maxlength = 0;
+  GLint uniformcount = 0;
   if(GLEW_VERSION_2_0) {
     glGetProgramiv( m_program,
                     GL_ACTIVE_UNIFORM_MAX_LENGTH,
-                    &m_maxLength);
+                    &maxlength);
     glGetProgramiv( m_program, GL_ACTIVE_UNIFORMS,
-                    &m_uniformCount);
+                    &uniformcount);
   } else if (GLEW_ARB_shader_objects) {
     glGetObjectParameterivARB( m_programARB,
                                GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB,
-                               &m_maxLength);
+                               &maxlength);
     glGetObjectParameterivARB( m_programARB, GL_OBJECT_ACTIVE_UNIFORMS_ARB,
-                               &m_uniformCount);
+                               &uniformcount);
   }
+  m_maxLength = maxlength;
+  m_uniformCount = uniformcount;
   createArrays();
 
   //
