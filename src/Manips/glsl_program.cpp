@@ -551,7 +551,8 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     try {
       ui=m_shadermapper.get(f);
     } catch(GemException&x) {
-      post("unable to get shader for %f", f);
+      error("unable to get shader for %f...skipping!", f);
+      continue;
     }
     m_shaderObj[m_numShaders]    = ui;
     m_shaderObjARB[m_numShaders] = ui;//static_cast<GLhandleARB>(fi.i);
