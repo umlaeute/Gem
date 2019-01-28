@@ -551,7 +551,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     try {
       ui=m_shadermapper.get(f);
     } catch(GemException&x) {
-      error("unable to get shader for %f...skipping!", f);
+      error("unable to get shaderID for %f...skipping!", f);
       continue;
     }
     m_shaderObj[m_numShaders]    = ui;
@@ -838,17 +838,19 @@ void glsl_program :: printInfo()
   post("=================");
 
   if(GLEW_VERSION_2_0) {
+    GLuint program = m_program;
     startpost("linked shaders");
     for (i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObj[i] );
     }
-    post("-> %d", m_program);
+    post("-> %d", program);
   } else {
+    GLhandleARB program = m_programARB;
     startpost("linked ARB-shaders");
     for (i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
     }
-    post("-> %d", m_programARB);
+    post("-> %d", program);
   }
 
   post("");
@@ -1011,6 +1013,6 @@ void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc,
     GetMyClass(data)->outtypeMess(static_cast<GLenum>(getGLdefine(argv+1)));
   } else {
     GetMyClass(
-      data)->error("type must have exactly two parameters (input-type & output-type)");
+      data)->error("geometry_type must have exactly two parameters (input-type & output-type)");
   }
 }
