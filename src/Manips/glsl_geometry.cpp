@@ -101,7 +101,8 @@ void glsl_geometry :: printInfo()
       glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
       if(m_shader) {
-        post("compiled last shader to ID: %d", m_shader);
+        GLint shader = m_shader;
+        post("compiled last shader to ID: %d", shader);
       }
     } else {
       glGetIntegerv( GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_ARB, &bitnum );
@@ -117,7 +118,8 @@ void glsl_geometry :: printInfo()
       glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
       post("MAX_TEXTURE_COORDS: %d", bitnum);
       if(m_shaderARB) {
-        post("compiled last shaderARB to ID: %d", m_shaderARB);
+        GLhandleARB shader = m_shaderARB;
+        post("compiled last shaderARB to ID: %d", shader);
       }
     }
   } else {

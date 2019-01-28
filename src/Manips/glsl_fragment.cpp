@@ -90,7 +90,8 @@ void glsl_fragment :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 
       if(m_shader) {
-        post("compiled last shader to ID: %d", m_shader);
+        GLint shader = m_shader;
+        post("compiled last shader to ID: %d", shader);
       }
     } else {
       glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB, &bitnum );
@@ -101,7 +102,9 @@ void glsl_fragment :: printInfo()
       post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
 
       if(m_shaderARB) {
-        post("compiled last shaderARB to ID: %d", m_shaderARB);
+        GLhandleARB shader = m_shaderARB;
+
+        post("compiled last shaderARB to ID: %d", shader);
       }
     }
   } else {
