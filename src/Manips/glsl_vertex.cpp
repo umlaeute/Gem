@@ -279,9 +279,8 @@ void glsl_vertex :: startRendering()
   }
 }
 void glsl_vertex :: stopRendering() {
-  GLuint shader = m_shader;
-  if(shader) {
-    glDeleteShader( shader );
+  if(m_shader) {
+    glDeleteShader( m_shader );
   }
   GLhandleARB shaderARB = m_shaderARB;
   if(shaderARB) {
