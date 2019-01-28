@@ -83,11 +83,11 @@ protected:
   //////////
   //
   std::string m_shaderString;
-  GLuint m_shaderTarget;
+  gem::ContextData<GLuint>m_shaderTarget;
   enum shaderType { NONE=0, ARB=1, GL2=2 };
   gem::ContextData<shaderType>m_shaderType;
-  GLuint m_shader;
-  GLhandleARB   m_shaderARB;
+  gem::ContextData<GLuint>m_shader;
+  gem::ContextData<GLhandleARB>m_shaderARB;
 
   t_outlet              *m_outShaderID;
   gem::utils::gl::GLuintMap m_idmapper;
