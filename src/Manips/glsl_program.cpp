@@ -612,6 +612,27 @@ bool glsl_program :: LinkGL2()
     glProgramParameteriEXT(m_program,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
   }
 
+  if(numTessEvalShaders>0 && glPatchParameterfv) {
+    float kInnerTessellationLevel = 1.0f;
+    float kOuterTessellationLevel = 1.0f;
+    const GLfloat innerTessLevels[2] = {
+      kInnerTessellationLevel, // inner horizontal
+      kInnerTessellationLevel  // inner vertical
+    };
+
+    const GLfloat outerTessLevels[4] = {
+      kOuterTessellationLevel, // outer left (vertical)
+      kOuterTessellationLevel, // outer bottom (horizontal)
+      kOuterTessellationLevel, // outer right (vertical)
+      kOuterTessellationLevel  // outer top (horizontal)
+    };
+
+    // We can define the tessellation levels using glPatchParameter if we don't
+    // have a Tessellation Control Shader stage.
+    glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, innerTessLevels);
+    glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, outerTessLevels);
+  }
+
 
   GLint linkstatus = 0;
   glLinkProgram( m_program );
