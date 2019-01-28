@@ -86,7 +86,6 @@ protected:
   GLuint m_shaderTarget;
   GLuint m_shader;
   GLhandleARB   m_shaderARB;
-  GLint m_compiled;
 
   t_outlet              *m_outShaderID;
   gem::utils::gl::GLuintMap m_idmapper;

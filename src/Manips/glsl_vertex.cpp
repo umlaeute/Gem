@@ -43,7 +43,6 @@ glsl_vertex :: glsl_vertex() :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0),
   m_outShaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
@@ -55,7 +54,6 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
 {
@@ -93,8 +91,6 @@ void glsl_vertex :: closeMess(void)
 
   m_shader=0;
   m_shaderARB = 0;
-
-  m_compiled=0;
 }
 
 ////////////////////////////////////////////////////////
@@ -117,8 +113,9 @@ bool glsl_vertex :: openMessGL2(void)
   const char * vs = m_shaderString.c_str();
   glShaderSource( m_shader, 1, &vs, NULL );
   glCompileShader( m_shader );
-  glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
-  if (!m_compiled) {
+  GLint compiled = 0;
+  glGetShaderiv( m_shader, GL_COMPILE_STATUS, &compiled );
+  if (!compiled) {
     GLint       length;
     GLchar* log;
     glGetShaderiv( m_shader, GL_INFO_LOG_LENGTH, &length );
@@ -155,9 +152,10 @@ bool glsl_vertex :: openMessARB(void)
   const char * vs = m_shaderString.c_str();
   glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
   glCompileShaderARB( m_shaderARB );
+  GLint compiled = 0;
   glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
-                             &m_compiled );
-  if (!m_compiled) {
+                             &compiled );
+  if (!compiled) {
     GLint       length;
     GLcharARB* log;
     glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
