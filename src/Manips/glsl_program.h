@@ -58,6 +58,7 @@ protected:
   //////////
   // check openGL-extensions
   virtual bool  isRunnable(void);
+  virtual void  startRendering(void);
 
   //////////
   // Do the rendering
@@ -126,7 +127,6 @@ protected:
   t_uniform*m_uniform;
 
   GLint m_linked;
-  bool m_wantLink;
   int m_numShaders;
 
   t_outlet *m_outProgramID;

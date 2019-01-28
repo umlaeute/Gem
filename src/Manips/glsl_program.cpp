@@ -180,7 +180,7 @@ glsl_program :: glsl_program()  :
   m_programARB(0),
   m_maxLength(0), m_uniformCount(0),
   m_uniform(0),
-  m_linked(0), m_wantLink(false),
+  m_linked(0),
   m_numShaders(0),
   m_outProgramID(0),
   m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
@@ -453,14 +453,13 @@ void glsl_program :: renderARB()
   }
 }
 
+void glsl_program :: startRendering() {
+  LinkProgram();
+}
+
 
 void glsl_program :: render(GemState *state)
 {
-  if(m_wantLink) {
-    m_wantLink=0;
-    LinkProgram();
-  }
-
   if(GLEW_VERSION_2_0) {
     renderGL2();
   } else {
@@ -558,6 +557,7 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     m_shaderObjARB[m_numShaders] = ui;//static_cast<GLhandleARB>(fi.i);
     m_numShaders++;
   }
+  setModified();
 }
 
 /////////////////////////////////////////////////////////
@@ -986,7 +986,6 @@ void glsl_program :: linkMess(t_symbol*, int argc, t_atom*argv)
   if(argc) {
     shaderMess(argc, argv);
   }
-  m_wantLink=1;
 }
 void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc,
                                        t_atom *argv)
