@@ -278,6 +278,22 @@ void glsl_vertex :: startRendering()
     return;
   }
 }
+void glsl_vertex :: stopRendering() {
+  GLuint shader = m_shader;
+  if(shader) {
+    glDeleteShader( shader );
+  }
+  GLhandleARB shaderARB = m_shaderARB;
+  if(shaderARB) {
+    glDeleteObjectARB( shaderARB );
+  }
+
+  m_idmapper.del(m_idmapped);
+  m_idmapped=0.;
+
+  m_shader=0;
+  m_shaderARB = 0;
+}
 
 ////////////////////////////////////////////////////////
 // render

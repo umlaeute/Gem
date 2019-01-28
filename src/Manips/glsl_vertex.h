@@ -75,6 +75,7 @@ protected:
 
   //////////
   virtual void startRendering();
+  virtual void stopRendering();
 
   //////////
   // Print Info about Hardware limits
