@@ -18,6 +18,7 @@
 #include "GLUtil.h"
 #include <map>
 #include "Gem/RTE.h"
+#include "Gem/ContextData.h"
 
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32
@@ -46,7 +47,7 @@ GLenum gem::utils::gl::glReportError (bool verbose)
 #warning TODO: use gem::ContextData
 using namespace gem::utils::gl;
 struct gem::utils::gl::GLuintMap::PIMPL {
-  std::map<float, GLuint>idmap;
+  std::map<float, gem::ContextData<GLuint> >idmap;
   float nextfloat;
   PIMPL(void)
     : nextfloat(-0.5)
@@ -61,7 +62,7 @@ struct gem::utils::gl::GLuintMap::PIMPL {
   }
   void del(float id)
   {
-    std::map<float,GLuint>::iterator it = idmap.find(id);
+    std::map<float,gem::ContextData<GLuint> >::iterator it = idmap.find(id);
     if(idmap.end() != it) {
       idmap.erase(it);
     }
