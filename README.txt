@@ -8,8 +8,7 @@ https://github.com/umlaeute/Gem
 if you want to compile the newest (bleeding edge, and possibly unstable) source
 code yourself, you can get a copy from the public git repository:
 
- read-only  access: https://git.iem.at/pd/Gem.git
- read-write access: ssh://git@git.iem.at:pd/Gem.git
+  https://git.iem.at/pd/Gem.git
 
 There is also a mirror on github:
   https://github.com/umlaeute/Gem
