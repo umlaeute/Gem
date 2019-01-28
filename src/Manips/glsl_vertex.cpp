@@ -232,10 +232,16 @@ void glsl_vertex :: loadShader()
     return;
   }
 
-  if(GLEW_VERSION_2_0) {
+  GLuint type = m_shaderType;
+  switch(type) {
+  case GL2:
     openMessGL2();
-  } else if (GLEW_ARB_vertex_shader) {
+    break;
+  case ARB:
     openMessARB();
+    break;
+  default:
+    break;
   }
 }
 
@@ -247,9 +253,11 @@ bool glsl_vertex :: isRunnable()
 {
   if(GLEW_VERSION_2_0) {
     m_shaderTarget = GL_VERTEX_SHADER;
+    m_shaderType = GL2;
     return true;
   } else if (GLEW_ARB_vertex_shader) {
     m_shaderTarget = GL_VERTEX_SHADER_ARB;
+    m_shaderType = ARB;
     return true;
   }
 

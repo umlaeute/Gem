@@ -53,23 +53,6 @@ glsl_geometry :: ~glsl_geometry()
   closeMess();
 }
 
-void glsl_geometry :: loadShader()
-{
-  if(!isRunnable()) {
-    return;
-  }
-  if(m_shaderString.empty()) {
-    closeMess();
-    return;
-  }
-
-  if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1
-    openMessGL2();
-  } else if (GLEW_ARB_geometry_shader4) {
-    openMessARB();
-  }
-}
-
 ////////////////////////////////////////////////////////
 // extension check
 //
@@ -78,9 +61,11 @@ bool glsl_geometry :: isRunnable()
 {
   if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1 ??
     m_shaderTarget = GL_GEOMETRY_SHADER_EXT;
+    m_shaderType = GL2;
     return true;
   } else if (GLEW_ARB_geometry_shader4) {
     m_shaderTarget = GL_GEOMETRY_SHADER_ARB;
+    m_shaderType = ARB;
     return true;
   }
 

@@ -54,9 +54,11 @@ bool glsl_fragment :: isRunnable()
 {
   if(GLEW_VERSION_2_0) {
     m_shaderTarget = GL_FRAGMENT_SHADER;
+    m_shaderType = GL2;
     return true;
   } else if (GLEW_ARB_fragment_shader) {
     m_shaderTarget = GL_FRAGMENT_SHADER_ARB;
+    m_shaderType = ARB;
     return true;
   }
 

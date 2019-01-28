@@ -84,6 +84,8 @@ protected:
   //
   std::string m_shaderString;
   GLuint m_shaderTarget;
+  enum shaderType { NONE=0, ARB=1, GL2=2 };
+  gem::ContextData<shaderType>m_shaderType;
   GLuint m_shader;
   GLhandleARB   m_shaderARB;
 

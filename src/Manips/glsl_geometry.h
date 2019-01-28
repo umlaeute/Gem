@@ -52,7 +52,6 @@ protected:
   ////////
   // extension check
   virtual bool isRunnable(void);
-  virtual void loadShader(void);
 
   //////////
   // Print Info about Hardware limits
