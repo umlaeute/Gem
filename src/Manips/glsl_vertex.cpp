@@ -39,12 +39,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_vertex, t_symbol *, A_DEFSYM);
 //
 /////////////////////////////////////////////////////////
 glsl_vertex :: glsl_vertex() :
+  m_shaderString(""),
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
   m_compiled(0),
-  m_shaderString(NULL),
-  m_shaderFilename(NULL),
   m_outShaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
@@ -57,8 +56,6 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shader(0),
   m_shaderARB(0),
   m_compiled(0),
-  m_shaderString(NULL),
-  m_shaderFilename(NULL),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
 {
@@ -83,10 +80,7 @@ glsl_vertex :: ~glsl_vertex()
 /////////////////////////////////////////////////////////
 void glsl_vertex :: closeMess(void)
 {
-  if(m_shaderString) {
-    delete [] m_shaderString;
-  }
-  m_shaderString=NULL;
+  m_shaderString="";
   if(m_shader) {
     glDeleteShader( m_shader );
   }
@@ -120,7 +114,7 @@ bool glsl_vertex :: openMessGL2(void)
     error("could not create GLSL shader object");
     return false;
   }
-  const char * vs = m_shaderString;
+  const char * vs = m_shaderString.c_str();
   glShaderSource( m_shader, 1, &vs, NULL );
   glCompileShader( m_shader );
   glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
@@ -158,7 +152,7 @@ bool glsl_vertex :: openMessARB(void)
     error("could not create ARB shader object");
     return false;
   }
-  const char * vs = m_shaderString;
+  const char * vs = m_shaderString.c_str();
   glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
   glCompileShaderARB( m_shaderARB );
   glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
@@ -196,31 +190,10 @@ void glsl_vertex :: openMess(t_symbol *filename)
     return;
   }
 
-  m_shaderFilename=filename;
+  std::string fn = findFile(filename->s_name);
+  const char*fname=fn.c_str();
 
-  if (getState()==RENDERING) {
-    loadShader();
-  }
-  return;
-}
-
-void glsl_vertex :: loadShader()
-{
-  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name) {
-    return;
-  }
-
-  if(!isRunnable()) {
-    return;
-  }
-
-  // Clean up any open files
-  closeMess();
-
-  std::string fn = findFile(m_shaderFilename->s_name);
-  const char*buf=fn.c_str();
-
-  FILE *file = fopen(buf,"rb");
+  FILE *file = fopen(fname,"rb");
   if(file) {
     fseek(file,0,SEEK_END);
     long size = ftell(file);
@@ -229,25 +202,36 @@ void glsl_vertex :: loadShader()
       error("error reading filesize");
       return;
     }
-    m_shaderString = new char[size + 1];
-    memset(m_shaderString,0,size + 1);
+    char*shaderString = new char[size + 1];
+    memset(shaderString, 0, size + 1);
     fseek(file,0,SEEK_SET);
-    size_t count=fread(m_shaderString,1,size,file);
-    m_shaderString[size]='\0';
+    size_t count=fread(shaderString,1,size,file);
+    shaderString[size]='\0';
+
     int err=ferror(file);
     fclose(file);
     if(err) {
       error("error %d reading file (%d<%d)", err, count, size);
+      delete[]shaderString;
       return;
     }
+    m_shaderString = shaderString;
   } else {
-    error("could not find shader-file: '%s'", buf);
+    error("could not find shader-file: '%s'", fname);
     return;
-    /*
-      // assuming that the "filename" is actually a shader-program per se
-      m_shaderString = new char[strlen(buf) + 1];
-      strcpy(m_shaderString,buf);
-    */
+  }
+  verbose(1, "loaded shader file '%s'", fname);
+  setModified();
+}
+
+void glsl_vertex :: loadShader()
+{
+  if(!isRunnable()) {
+    return;
+  }
+  if(m_shaderString.empty()) {
+    closeMess();
+    return;
   }
 
   if(GLEW_VERSION_2_0) {
@@ -255,9 +239,6 @@ void glsl_vertex :: loadShader()
   } else if (GLEW_ARB_vertex_shader) {
     openMessARB();
   }
-
-  verbose(1, "Loaded file: %s", buf);
-  //m_shaderFilename=NULL;
 }
 
 ////////////////////////////////////////////////////////
@@ -286,7 +267,7 @@ void glsl_vertex :: startRendering()
 {
   loadShader();
 
-  if (m_shaderString == NULL) {
+  if (m_shaderString.empty()) {
     error("need to load a shader");
     return;
   }

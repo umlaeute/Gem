@@ -86,12 +86,11 @@ protected:
 
   //////////
   //
-  GLuint                m_shaderTarget;
-  GLuint                m_shader;
+  std::string m_shaderString;
+  GLuint m_shaderTarget;
+  GLuint m_shader;
   GLhandleARB   m_shaderARB;
-  GLint                 m_compiled;
-  char*                 m_shaderString;
-  t_symbol* m_shaderFilename;
+  GLint m_compiled;
 
   t_outlet              *m_outShaderID;
   gem::utils::gl::GLuintMap m_idmapper;
