@@ -860,7 +860,7 @@ void glsl_program :: printInfo()
 
   post("");
   for (int i=0; i<m_uniformCount; i++) {
-    startpost("uvar#%d: \"%s\": ",
+    startpost("uniform#%d: \"%s\": ",
               i, m_uniform[i].name->s_name);
 #define SWITCHPOST(label) case label: post("%s", #label); break
     switch (m_uniform[i].type) {
