@@ -601,7 +601,7 @@ bool glsl_program :: LinkGL2()
   }
 
   /* setup geometry shader */
-  if(glProgramParameteriEXT) {
+  if(numGeometryShaders>0 && glProgramParameteriEXT) {
     glProgramParameteriEXT(m_program,GL_GEOMETRY_INPUT_TYPE_EXT,m_geoInType);
     glProgramParameteriEXT(m_program,GL_GEOMETRY_OUTPUT_TYPE_EXT,m_geoOutType);
 
