@@ -18,7 +18,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #ifndef _INCLUDE__GEM_MANIPS_GLSL_GEOMETRY_H_
 #define _INCLUDE__GEM_MANIPS_GLSL_GEOMETRY_H_
 
-#include "Manips/glsl_program.h"
+#include "Manips/glsl_vertex.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -32,9 +32,9 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN glsl_geometry : public GemBase
+class GEM_EXTERN glsl_geometry : public glsl_vertex
 {
-  CPPEXTERN_HEADER(glsl_geometry, GemBase);
+  CPPEXTERN_HEADER(glsl_geometry, glsl_vertex);
 
 public:
 
@@ -49,48 +49,14 @@ protected:
   // Destructor
   virtual ~glsl_geometry();
 
-  //////////
-  // close the shader file
-  virtual void closeMess(void);
-  //////////
-  // open a shader up
-  virtual bool openMessGL2(void);
-  virtual bool openMessARB(void);
-  virtual void openMess(t_symbol *filename);
-  virtual void loadShader(void);
-
-
   ////////
   // extension check
   virtual bool isRunnable(void);
-
-  //////////
-  // Do the rendering
-  virtual void render(GemState *state);
-
-  //////////
-  // Clear the dirty flag on the pixBlock
-  virtual void postrender(GemState *state);
-
-  //////////
-  virtual void startRendering();
+  virtual void loadShader(void);
 
   //////////
   // Print Info about Hardware limits
   virtual void printInfo();
-
-  //////////
-  //
-  GLuint                m_shaderTarget;
-  GLuint                m_shader;
-  GLhandleARB   m_shaderARB;
-  GLint                 m_compiled;
-  char*                 m_shaderString;
-  t_symbol* m_shaderFilename;
-
-  t_outlet              *m_outShaderID;
-  gem::utils::gl::GLuintMap m_idmapper;
-  float                 m_idmapped;
 };
 
 #endif  // for header file

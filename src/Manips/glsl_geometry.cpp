@@ -38,35 +38,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_geometry, t_symbol *, A_DEFSYM);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-glsl_geometry :: glsl_geometry() :
-  m_shaderTarget(0),
-  m_shader(0),
-  m_shaderARB(0),
-  m_compiled(0),
-  m_shaderString(NULL),
-  m_shaderFilename(NULL),
-  m_outShaderID(0),
-  m_idmapper("glsl.shader"),
-  m_idmapped(0.)
-{
-  // create an outlet to send shader object ID
-  m_outShaderID = outlet_new(this->x_obj, &s_float);
-}
-glsl_geometry :: glsl_geometry(t_symbol *filename) :
-  m_shaderTarget(0),
-  m_shader(0),
-  m_shaderARB(0),
-  m_compiled(0),
-  m_shaderString(NULL),
-  m_shaderFilename(NULL),
-  m_outShaderID(0),
-  m_idmapper("glsl.shader"),
-  m_idmapped(0.)
+glsl_geometry :: glsl_geometry(t_symbol *filename)
+  : glsl_vertex()
 {
   openMess(filename);
-
-  // create an outlet to send shader object ID
-  m_outShaderID = outlet_new(this->x_obj, &s_float);
 }
 
 ////////////////////////////////////////////////////////
@@ -78,177 +53,14 @@ glsl_geometry :: ~glsl_geometry()
   closeMess();
 }
 
-////////////////////////////////////////////////////////
-// closeMess
-//
-/////////////////////////////////////////////////////////
-void glsl_geometry :: closeMess(void)
-{
-  if(m_shaderString) {
-    delete [] m_shaderString;
-  }
-  m_shaderString=NULL;
-  if(m_shader) {
-    glDeleteShader( m_shader );
-  }
-  if(m_shaderARB) {
-    glDeleteObjectARB( m_shaderARB );
-  }
-
-  m_idmapper.del(m_idmapped);
-  m_idmapped=0.;
-
-  m_shader=0;
-  m_shaderARB = 0;
-
-  m_compiled=0;
-}
-
-////////////////////////////////////////////////////////
-// openMess
-//
-/////////////////////////////////////////////////////////
-bool glsl_geometry :: openMessGL2(void)
-{
-  if (m_shader) {
-    glDeleteShader( m_shader );
-    m_idmapper.del(m_idmapped);
-    m_idmapped=0.;
-  }
-  m_shader = glCreateShader(m_shaderTarget);
-
-  if (!m_shader) {
-    error("could not create GLSL shader object");
-    return false;
-  }
-  const char * vs = m_shaderString;
-  glShaderSource( m_shader, 1, &vs, NULL );
-  glCompileShader( m_shader );
-  glGetShaderiv( m_shader, GL_COMPILE_STATUS, &m_compiled );
-  if (!m_compiled) {
-    GLint       length;
-    GLchar* log;
-    glGetShaderiv( m_shader, GL_INFO_LOG_LENGTH, &length );
-    log = (GLchar*)malloc( length * sizeof(GLchar) );
-    glGetShaderInfoLog( m_shader, length, NULL, log );
-    post("compile Info_log:");
-    post("%s", log );
-    error("shader not loaded");
-    free(log);
-    return false;
-  }
-  if(m_shader) {
-    t_atom a;
-    m_idmapped=m_idmapper.set(m_shader, m_idmapped);
-    SETFLOAT(&a, m_idmapped);
-    outlet_list(m_outShaderID, gensym("list"), 1, &a);
-  }
-  return true;
-}
-
-bool glsl_geometry :: openMessARB(void)
-{
-  if(m_shaderARB) {
-    glDeleteObjectARB( m_shaderARB );
-    m_idmapper.del(m_idmapped);
-    m_idmapped=0.;
-  }
-  m_shaderARB = glCreateShaderObjectARB(m_shaderTarget);
-
-  if (!m_shaderARB) {
-    error("could not create ARB shader object");
-    return false;
-  }
-  const char * vs = m_shaderString;
-  glShaderSourceARB( m_shaderARB, 1, &vs, NULL );
-  glCompileShaderARB( m_shaderARB );
-  glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_COMPILE_STATUS_ARB,
-                             &m_compiled );
-  if (!m_compiled) {
-    GLint       length;
-    GLcharARB* log;
-    glGetObjectParameterivARB( m_shaderARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
-                               &length );
-    log = (GLcharARB*)malloc( length * sizeof(GLcharARB) );
-    glGetInfoLogARB( m_shaderARB, length, NULL, log );
-    post("compile Info_log:");
-    post("%s", log );
-    error("shader not loaded");
-    free(log);
-    return false;
-  }
-  if(m_shaderARB) {
-    t_atom a;
-    m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
-    SETFLOAT(&a, m_idmapped);
-    outlet_list(m_outShaderID, gensym("list"), 1, &a);
-  }
-  return true;
-}
-
-
-
-
-void glsl_geometry :: openMess(t_symbol *filename)
-{
-  if(NULL==filename || NULL==filename->s_name) {
-    return;
-  }
-  if(&s_==filename) {
-    return;
-  }
-
-  m_shaderFilename=filename;
-
-  if (getState()==RENDERING) {
-    loadShader();
-  }
-  return;
-}
-
 void glsl_geometry :: loadShader()
 {
-  if(NULL==m_shaderFilename || NULL==m_shaderFilename->s_name) {
-    return;
-  }
   if(!isRunnable()) {
     return;
   }
-
-  // Clean up any open files
-  closeMess();
-
-  std::string fn = findFile(m_shaderFilename->s_name);
-  const char*buf=fn.c_str();
-
-  FILE *file = fopen(buf,"rb");
-  if(file) {
-    fseek(file,0,SEEK_END);
-    long size = ftell(file);
-    if(size<0) {
-      fclose(file);
-      error("error reading filesize");
-      return;
-    }
-    m_shaderString = new char[size + 1];
-    memset(m_shaderString,0,size + 1);
-    fseek(file,0,SEEK_SET);
-    size_t count=fread(m_shaderString,1,size,file);
-    m_shaderString[size]='\0';
-    int err=ferror(file);
-    fclose(file);
-    if(err) {
-      error("error %d reading file (%d<%d)", err, count, size);
-      return;
-    }
-  } else {
-    error("could not find shader-file: '%s'", buf);
+  if(m_shaderString.empty()) {
+    closeMess();
     return;
-    /*
-      // assuming that the "filename" is actually a shader-program per se
-      m_shaderString = new char[strlen(buf) + 1];
-      strcpy(m_shaderString,buf);
-    */
   }
 
   if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1
@@ -256,9 +68,6 @@ void glsl_geometry :: loadShader()
   } else if (GLEW_ARB_geometry_shader4) {
     openMessARB();
   }
-
-  verbose(1, "Loaded file: %s", buf);
-  m_shaderFilename=NULL;
 }
 
 ////////////////////////////////////////////////////////
@@ -277,36 +86,6 @@ bool glsl_geometry :: isRunnable()
 
   error("need OpenGL-2.1 (or at least the geometry-shader ARB-extension) to run GLSL");
   return false;
-}
-
-////////////////////////////////////////////////////////
-// startRendering
-//
-/////////////////////////////////////////////////////////
-void glsl_geometry :: startRendering()
-{
-  loadShader();
-
-  if (m_shaderString == NULL) {
-    error("need to load a shader");
-    return;
-  }
-}
-
-////////////////////////////////////////////////////////
-// render
-//
-/////////////////////////////////////////////////////////
-void glsl_geometry :: render(GemState *state)
-{
-}
-
-////////////////////////////////////////////////////////
-// postrender
-//
-/////////////////////////////////////////////////////////
-void glsl_geometry :: postrender(GemState *state)
-{
 }
 
 ////////////////////////////////////////////////////////
