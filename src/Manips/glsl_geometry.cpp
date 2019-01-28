@@ -42,10 +42,9 @@ glsl_geometry :: glsl_geometry() :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0),
+  m_compiled(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0),
   m_outShaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
@@ -57,10 +56,9 @@ glsl_geometry :: glsl_geometry(t_symbol *filename) :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0),
+  m_compiled(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0),
   m_outShaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
@@ -90,7 +88,6 @@ void glsl_geometry :: closeMess(void)
     delete [] m_shaderString;
   }
   m_shaderString=NULL;
-  m_size=0;
   if(m_shader) {
     glDeleteShader( m_shader );
   }
@@ -253,7 +250,6 @@ void glsl_geometry :: loadShader()
       strcpy(m_shaderString,buf);
     */
   }
-  m_size=strlen(m_shaderString);
 
   if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1
     openMessGL2();

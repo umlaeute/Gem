@@ -42,10 +42,9 @@ glsl_vertex :: glsl_vertex() :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0),
+  m_compiled(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0),
   m_outShaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
@@ -57,10 +56,9 @@ glsl_vertex :: glsl_vertex(t_symbol *filename) :
   m_shaderTarget(0),
   m_shader(0),
   m_shaderARB(0),
-  m_compiled(0), m_size(0),
+  m_compiled(0),
   m_shaderString(NULL),
   m_shaderFilename(NULL),
-  m_shaderID(0),
   m_idmapper("glsl.shader"),
   m_idmapped(0.)
 {
@@ -89,7 +87,6 @@ void glsl_vertex :: closeMess(void)
     delete [] m_shaderString;
   }
   m_shaderString=NULL;
-  m_size=0;
   if(m_shader) {
     glDeleteShader( m_shader );
   }
@@ -252,7 +249,6 @@ void glsl_vertex :: loadShader()
       strcpy(m_shaderString,buf);
     */
   }
-  m_size=strlen(m_shaderString);
 
   if(GLEW_VERSION_2_0) {
     openMessGL2();
