@@ -827,8 +827,6 @@ void glsl_program :: getVariables()
 /////////////////////////////////////////////////////////
 void glsl_program :: printInfo()
 {
-  int i;
-
   if(!m_linked) {
     error("no GLSL-program linked");
     return;
@@ -840,21 +838,21 @@ void glsl_program :: printInfo()
   if(GLEW_VERSION_2_0) {
     GLuint program = m_program;
     startpost("linked shaders");
-    for (i = 0; i < m_numShaders; i++)  {
+    for (int i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObj[i] );
     }
     post("-> %d", program);
   } else {
     GLhandleARB program = m_programARB;
     startpost("linked ARB-shaders");
-    for (i = 0; i < m_numShaders; i++)  {
+    for (int i = 0; i < m_numShaders; i++)  {
       startpost( " %d", m_shaderObjARB[i] );
     }
     post("-> %d", program);
   }
 
   post("");
-  for (i=0; i<m_uniformCount; i++) {
+  for (int i=0; i<m_uniformCount; i++) {
     startpost("uvar#%d: \"%s\": ",
               i, m_uniform[i].name->s_name);
 #define SWITCHPOST(label) case label: post("%s", #label); break
