@@ -52,6 +52,8 @@ libManips_la_SOURCES=  \
     glsl_program.h \
     glsl_vertex.cpp \
     glsl_vertex.h \
+    glsl_tesseval.cpp \
+    glsl_tesseval.h \
     linear_path.cpp \
     linear_path.h \
     ortho.cpp \
