@@ -13,12 +13,7 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_program.h"
-#include "Utils/GLUtil.h"
 
-#include <string.h>
-#include <stdlib.h>
-
-#include <map>
 using namespace gem::utils::gl;
 
 CPPEXTERN_NEW(glsl_program);

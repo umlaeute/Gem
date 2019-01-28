@@ -16,17 +16,6 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_geometry.h"
-#include "Gem/Manager.h"
-
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#ifdef _WIN32
-# include <io.h>
-# define close _close
-#else
-# include <unistd.h>
-#endif
 
 CPPEXTERN_NEW_WITH_ONE_ARG(glsl_geometry, t_symbol *, A_DEFSYM);
 
