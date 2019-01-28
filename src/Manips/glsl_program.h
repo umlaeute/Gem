@@ -100,17 +100,17 @@ protected:
   // Print Info about Hardware limits
   virtual void printInfo(void);
 
-  GLuint                m_program;
+  gem::ContextData<GLuint>m_program;
   GLuint                m_shaderObj[MAX_NUM_SHADERS];
 
-  GLhandleARB           m_programARB;
+  gem::ContextData<GLhandleARB>m_programARB;
   GLhandleARB           m_shaderObjARB[MAX_NUM_SHADERS];
 
-  GLint                 m_maxLength;
+  gem::ContextData<GLint>m_maxLength;
 
   //////////
   // Variables for the, uh, variables
-  GLint                 m_uniformCount;
+  GLint m_uniformCount;
   struct t_uniform {
     t_symbol*name;
     GLint size;
@@ -126,7 +126,7 @@ protected:
   };
   t_uniform*m_uniform;
 
-  GLint m_linked;
+  gem::ContextData<GLint>m_linked;
   int m_numShaders;
 
   t_outlet *m_outProgramID;
