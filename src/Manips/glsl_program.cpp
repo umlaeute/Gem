@@ -564,6 +564,12 @@ bool glsl_program :: LinkGL2()
   GLsizei length=0;
   int i;
 
+  int numVertexShaders = 0;
+  int numTessEvalShaders = 0;
+  int numTessControlShaders = 0;
+  int numGeometryShaders = 0;
+  int numFragmentShaders = 0;
+
   if(m_program) {
     glDeleteProgram( m_program );
     m_programmapper.del(m_programmapped);
@@ -572,7 +578,26 @@ bool glsl_program :: LinkGL2()
   }
   m_program = glCreateProgram();
   for (i = 0; i < m_numShaders; i++) {
+    GLint type;
     glAttachShader( m_program, m_shaderObj[i] );
+    glGetShaderiv ( m_shaderObj[i], GL_SHADER_TYPE, &type);
+    switch(type) {
+    case GL_VERTEX_SHADER:
+      numVertexShaders++;
+      break;
+    case  GL_GEOMETRY_SHADER:
+      numGeometryShaders++;
+      break;
+    case  GL_FRAGMENT_SHADER:
+      numFragmentShaders++;
+      break;
+    case  GL_TESS_EVALUATION_SHADER:
+      numTessEvalShaders++;
+      break;
+    case GL_TESS_CONTROL_SHADER:
+      numTessControlShaders++;
+      break;
+    }
   }
 
   /* setup geometry shader */
