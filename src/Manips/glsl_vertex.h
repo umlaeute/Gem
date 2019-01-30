@@ -33,6 +33,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   DESCRIPTION
 
   -----------------------------------------------------------------*/
+
+#define GLSL_GETPOSTINT(pname) do { \
+      GLint data = 0; \
+      glGetIntegerv(GL_##pname, &data); \
+      post(#pname ": %d", data); \
+    } while(0)
+
 class GEM_EXTERN glsl_vertex : public GemBase
 {
   CPPEXTERN_HEADER(glsl_vertex, GemBase);
