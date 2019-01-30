@@ -462,13 +462,10 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     char*dropped = event.drop.file;
     std::vector<t_atom>alist;
     t_atom a;
-    SETSYMBOL(&a, gensym("drop"));
-    alist.push_back(a);
-    SETSYMBOL(&a, gensym(droptype));
-    alist.push_back(a);
+    PUSHATOM_S(alist, a, "drop");
+    PUSHATOM_S(alist, a, droptype);
     if(dropped) {
-      SETSYMBOL(&a, gensym(dropped));
-      alist.push_back(a);
+      PUSHATOM_S(alist, a, dropped);
     }
     info(alist);
     SDL_free(dropped);
