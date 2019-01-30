@@ -346,6 +346,15 @@ void gemsdl2window :: dispatch()
 }
 
 void gemsdl2window :: dispatch(SDL_Event&event) {
+#define PUSHATOM_F(atomlist, tmpatom, value) {     \
+    SETFLOAT(&tmpatom, value);                        \
+    atomlist.push_back(tmpatom);                      \
+  }
+#define PUSHATOM_S(atomlist, tmpatom, value) {     \
+    SETSYMBOL(&tmpatom, gensym(value));               \
+    atomlist.push_back(tmpatom);                      \
+  }
+
   unsigned long devID=0;
   switch(event.type) {
   default:
