@@ -73,7 +73,8 @@ namespace
     unsigned int operator[] (T x) {
       unsigned int result = m_map[x];
       if(!result) {
-        result = m_map.size();
+        /* wrap it so that single precision float can represent the value */
+        result = m_map.size() % 16777216;
         m_map[x] = result;
       }
       return result;
