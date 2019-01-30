@@ -69,23 +69,20 @@ void glsl_tesseval :: printInfo()
     return;
   }
   if(GLEW_VERSION_4_0) {
-    GLint bitnum = 0;
-    post("glsl_tesselation_evaluation Hardware Info");
-    post("=========================================");
-#if 0
-    glGetIntegerv( GL_MAX_TESSEVAL_UNIFORM_COMPONENTS_EXT, &bitnum );
-    post("MAX_TESSEVAL_UNIFORM_COMPONENTS_EXT: %d", bitnum);
-    glGetIntegerv( GL_MAX_VARYING_FLOATS, &bitnum );
-    post("MAX_VARYING_FLOATS: %d", bitnum);
-    glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &bitnum );
-    post("MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d", bitnum);
-    glGetIntegerv( GL_MAX_TESSEVAL_TEXTURE_IMAGE_UNITS_EXT, &bitnum );
-    post("MAX_TESSEVAL_TEXTURE_IMAGE_UNITS_EXT: %d", bitnum);
-    glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &bitnum );
-    post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-    glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
-    post("MAX_TEXTURE_COORDS: %d", bitnum);
-#endif
+    post("tesselation evaluation shader - Hardware Info");
+    post("=============================================");
+
+    GLSL_GETPOSTINT( MAX_TESS_GEN_LEVEL );
+    GLSL_GETPOSTINT( MAX_PATCH_VERTICES );
+    GLSL_GETPOSTINT( MAX_TESS_PATCH_COMPONENTS );
+
+    GLSL_GETPOSTINT( MAX_TESS_EVALUATION_UNIFORM_COMPONENTS );
+    GLSL_GETPOSTINT( MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS );
+    GLSL_GETPOSTINT( MAX_TESS_EVALUATION_OUTPUT_COMPONENTS );
+    GLSL_GETPOSTINT( MAX_TESS_EVALUATION_UNIFORM_BLOCKS );
+    GLSL_GETPOSTINT( MAX_TESS_EVALUATION_INPUT_COMPONENTS );
+    GLSL_GETPOSTINT( MAX_COMBINED_TESS_EVALUATION_UNIFORM_COMPONENTS );
+
     if(m_shader) {
       GLint shader = m_shader;
       post("compiled last shader to ID: %d", shader);
