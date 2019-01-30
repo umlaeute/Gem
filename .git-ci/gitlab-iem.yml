@@ -38,7 +38,7 @@ variables:
     - date
   script:
     - ./autogen.sh
-    - ./configure --with-DeckLink=local
+    - ./configure --disable-multicontext --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
@@ -61,7 +61,7 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local
+    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --disable-multicontext --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -86,7 +86,7 @@ variables:
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
+    - ./configure --with-pd="$(pwd)/_pd" --disable-multicontext --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -111,7 +111,7 @@ variables:
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
+    - ./configure --with-pd="$(pwd)/_pd" --disable-multicontext --with-DeckLink=local
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
