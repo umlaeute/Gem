@@ -64,6 +64,26 @@ void pre_init() {;}
 };
 #endif /* __APPLE__ */
 
+
+namespace
+{
+  template <class T>
+  struct autoidmap {
+    std::map<T, unsigned int> m_map;
+    unsigned int operator[] (T x) {
+      unsigned int result = m_map[x];
+      if(!result) {
+        result = m_map.size();
+        m_map[x] = result;
+      }
+      return result;
+    }
+  };
+
+  static autoidmap<SDL_TouchID> s_touchId;
+  static autoidmap<SDL_FingerID> s_fingerId;
+};
+
 /////////////////////////////////////////////////////////
 //
 // gemsdl2window
