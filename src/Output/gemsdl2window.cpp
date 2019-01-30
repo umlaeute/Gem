@@ -357,8 +357,14 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
 
   unsigned long devID=0;
   switch(event.type) {
-  default:
-    post("unknown event: %d", event.type);
+  default: {
+    std::vector<t_atom>alist;
+    t_atom a;
+    PUSHATOM_S(alist, a, "unknown");
+    PUSHATOM_S(alist, a, "event");
+    PUSHATOM_F(alist, a, event.type);
+    info(alist);
+  }
     break;
   case SDL_WINDOWEVENT:
     switch (event.window.event) {
