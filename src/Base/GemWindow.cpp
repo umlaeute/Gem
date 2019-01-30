@@ -22,6 +22,7 @@
 #include "GemBase.h"
 
 #include <set>
+#include <sstream>
 
 namespace
 {
@@ -474,7 +475,24 @@ void GemWindow::       transparentMess(bool on)
 
 void GemWindow::       printMess(void)
 {
-  // nada
+  if (!makeCurrent()) {
+    error("OpenGL has not been initialized yet");
+    post("create a window first!");
+    return;
+  }
+
+  post("OpenGL info");
+  post("\tVendor: %s", glGetString(GL_VENDOR));
+  post("\tRenderer: %s", glGetString(GL_RENDERER));
+  post("\tVersion: %s", glGetString(GL_VERSION));
+
+  std::string extensions = (char*)glGetString(GL_EXTENSIONS);
+  std::string ext;
+  std::istringstream extStream(extensions);
+
+  while (std::getline(extStream, ext, ' ')) {
+    post("\tExtension: %s", ext.c_str());    // Print extension string
+  }
 }
 
 void GemWindow:: anyMess(t_symbol*s, int argc, t_atom*argv)
@@ -499,7 +517,8 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "transparent", transparentMess, bool);
-  //  CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+  CPPEXTERN_MSG0(classPtr, "print", printMess);
 
   struct _CB_any {
     static void callback(void*data, t_symbol*s, int argc, t_atom*argv)
