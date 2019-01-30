@@ -83,6 +83,7 @@ namespace
 
   static autoidmap<SDL_TouchID> s_touchId;
   static autoidmap<SDL_FingerID> s_fingerId;
+  static autoidmap<SDL_GestureID> s_gestureId;
 };
 
 /////////////////////////////////////////////////////////
@@ -534,7 +535,41 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
       SETFLOAT (&alist[5], event.tfinger.dy);
       info(alist);
     }
-
+  }
+    break;
+  case SDL_MULTIGESTURE: {
+    std::vector<t_atom>alist;
+    t_atom a;
+    PUSHATOM_S(alist, a, "gesture");
+    PUSHATOM_F(alist, a, s_touchId[event.mgesture.touchId]);
+    PUSHATOM_F(alist, a, event.mgesture.x);
+    PUSHATOM_F(alist, a, event.mgesture.y);
+    PUSHATOM_F(alist, a, event.mgesture.numFingers);
+    PUSHATOM_F(alist, a, event.mgesture.dTheta);
+    PUSHATOM_F(alist, a, event.mgesture.dDist);
+    info(alist);
+  }
+    break;
+  case SDL_DOLLARGESTURE: {
+    std::vector<t_atom>alist;
+    t_atom a;
+    PUSHATOM_S(alist, a, "usergesture");
+    PUSHATOM_F(alist, a, s_touchId[event.dgesture.touchId]);
+    PUSHATOM_F(alist, a, s_gestureId[event.dgesture.gestureId]);
+    PUSHATOM_F(alist, a, event.dgesture.x);
+    PUSHATOM_F(alist, a, event.dgesture.y);
+    PUSHATOM_F(alist, a, event.dgesture.numFingers);
+    PUSHATOM_F(alist, a, event.dgesture.error);
+    info(alist);
+  }
+    break;
+  case SDL_DOLLARRECORD: {
+    std::vector<t_atom>alist;
+    t_atom a;
+    PUSHATOM_S(alist, a, "usergesture");
+    PUSHATOM_F(alist, a, event.dgesture.touchId);
+    PUSHATOM_F(alist, a, event.dgesture.gestureId);
+    info(alist);
   }
     break;
   }
