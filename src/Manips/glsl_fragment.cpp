@@ -75,28 +75,21 @@ void glsl_fragment :: printInfo()
     return;
   }
   if(GLEW_VERSION_2_0 || GLEW_ARB_shader_objects) {
-    GLint bitnum = 0;
-    post("glsl_fragment Hardware Info");
-    post("============================");
+    post("fragment shader - Hardware Info");
+    post("===============================");
     if(GLEW_VERSION_2_0) {
-      glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &bitnum );
-      post("MAX_FRAGMENT_UNIFORM_COMPONENTS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
-      post("MAX_TEXTURE_COORDS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &bitnum );
-      post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+      GLSL_GETPOSTINT( MAX_FRAGMENT_UNIFORM_COMPONENTS );
+      GLSL_GETPOSTINT( MAX_TEXTURE_COORDS );
+      GLSL_GETPOSTINT( MAX_TEXTURE_IMAGE_UNITS );
 
       if(m_shader) {
         GLint shader = m_shader;
         post("compiled last shader to ID: %d", shader);
       }
     } else {
-      glGetIntegerv( GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB, &bitnum );
-      post("MAX_FRAGMENT_UNIFORM_COMPONENTS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
-      post("MAX_TEXTURE_COORDS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
-      post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
+      GLSL_GETPOSTINT( MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB );
+      GLSL_GETPOSTINT( MAX_TEXTURE_COORDS_ARB );
+      GLSL_GETPOSTINT( MAX_TEXTURE_IMAGE_UNITS_ARB );
 
       if(m_shaderARB) {
         GLhandleARB shader = m_shaderARB;

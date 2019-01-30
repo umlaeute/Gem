@@ -322,44 +322,29 @@ void glsl_vertex :: printInfo()
   }
 
   if(GLEW_VERSION_2_0 || GLEW_ARB_vertex_shader) {
-    GLint bitnum = 0;
-    post("glsl_vertex Hardware Info");
-    post("=========================");
+    post("vertex shader - Hardware Info");
+    post("=============================");
     if(GLEW_VERSION_2_0) {
-      glGetIntegerv( GL_MAX_VERTEX_ATTRIBS, &bitnum );
-      post("MAX_VERTEX_ATTRIBS: %d", bitnum);
-      glGetIntegerv( GL_MAX_VERTEX_UNIFORM_COMPONENTS, &bitnum );
-      post("MAX_VERTEX_UNIFORM_COMPONENTS_ARB: %d", bitnum);
-      glGetIntegerv( GL_MAX_VARYING_FLOATS, &bitnum );
-      post("MAX_VARYING_FLOATS: %d", bitnum);
-      glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &bitnum );
-      post("MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &bitnum );
-      post("MAX_VERTEX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &bitnum );
-      post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_COORDS, &bitnum );
-      post("MAX_TEXTURE_COORDS: %d", bitnum);
+      GLSL_GETPOSTINT( MAX_VERTEX_ATTRIBS );
+      GLSL_GETPOSTINT( MAX_VERTEX_UNIFORM_COMPONENTS );
+      GLSL_GETPOSTINT( MAX_VARYING_FLOATS );
+      GLSL_GETPOSTINT( MAX_COMBINED_TEXTURE_IMAGE_UNITS );
+      GLSL_GETPOSTINT( MAX_VERTEX_TEXTURE_IMAGE_UNITS );
+      GLSL_GETPOSTINT( MAX_TEXTURE_IMAGE_UNITS );
+      GLSL_GETPOSTINT( MAX_TEXTURE_COORDS );
 
       if(m_shader) {
         GLint shader = m_shader;
         post("compiled last shader to ID: %d", shader);
       }
     } else {
-      glGetIntegerv( GL_MAX_VERTEX_ATTRIBS_ARB, &bitnum );
-      post("MAX_VERTEX_ATTRIBS: %d", bitnum);
-      glGetIntegerv( GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &bitnum );
-      post("MAX_VERTEX_UNIFORM_COMPONENTS_ARB: %d", bitnum);
-      glGetIntegerv( GL_MAX_VARYING_FLOATS_ARB, &bitnum );
-      post("MAX_VARYING_FLOATS: %d", bitnum);
-      glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
-      post("MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
-      post("MAX_VERTEX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &bitnum );
-      post("MAX_TEXTURE_IMAGE_UNITS: %d", bitnum);
-      glGetIntegerv( GL_MAX_TEXTURE_COORDS_ARB, &bitnum );
-      post("MAX_TEXTURE_COORDS: %d", bitnum);
+      GLSL_GETPOSTINT( MAX_VERTEX_ATTRIBS_ARB );
+      GLSL_GETPOSTINT( MAX_VERTEX_UNIFORM_COMPONENTS_ARB );
+      GLSL_GETPOSTINT( MAX_VARYING_FLOATS_ARB );
+      GLSL_GETPOSTINT( MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB );
+      GLSL_GETPOSTINT( MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB );
+      GLSL_GETPOSTINT( MAX_TEXTURE_IMAGE_UNITS_ARB );
+      GLSL_GETPOSTINT( MAX_TEXTURE_COORDS_ARB );
       if(m_shaderARB) {
         GLhandleARB shader = m_shaderARB;
         post("compiled last shaderARB to ID: %d", shader);
