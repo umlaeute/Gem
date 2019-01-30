@@ -89,6 +89,7 @@ private:
   virtual void grabmouseMess(bool on);
   virtual void relativemouseMess(bool on);
   virtual void opacityMess(float);
+  virtual void userGestureMess(t_symbol*s, int, t_atom*);
 
   /* creation/destruction */
   virtual bool create(void);

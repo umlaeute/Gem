@@ -685,6 +685,10 @@ void gemsdl2window :: opacityMess(float opacity)
   if(m_window)
     SDL_SetWindowOpacity(m_window, m_opacity);
 }
+void gemsdl2window :: userGestureMess(t_symbol*, int argc, t_atom*argv)
+{
+  error("user gesture recording/saving/restoring not implemented");
+}
 
 /////////////////////////////////////////////////////////
 // createMess
@@ -805,4 +809,6 @@ void gemsdl2window :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "grabmouse", grabmouseMess, bool);
   CPPEXTERN_MSG1(classPtr, "relativemouse", relativemouseMess, bool);
   CPPEXTERN_MSG1(classPtr, "opacity", opacityMess, float);
+
+  CPPEXTERN_MSG(classPtr, "usergesture", userGestureMess);
 }
