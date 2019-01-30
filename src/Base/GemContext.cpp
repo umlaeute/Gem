@@ -165,10 +165,6 @@ Context::Context(void)
     }
 
     m_pimpl->maxStackDepth[GemMan::STACKCOLOR]=colorstack;
-
-    post("OpenGL version %s (GLEW: %s)",
-        glGetString(GL_VERSION),
-        glewGetString(GLEW_VERSION));
   }
 
   pop();

@@ -485,6 +485,7 @@ void GemWindow::       printMess(void)
   post("\tVendor: %s", glGetString(GL_VENDOR));
   post("\tRenderer: %s", glGetString(GL_RENDERER));
   post("\tVersion: %s", glGetString(GL_VERSION));
+  post("\tGLEW: %s", glewGetString(GLEW_VERSION));
 
   std::string extensions = (char*)glGetString(GL_EXTENSIONS);
   std::string ext;
