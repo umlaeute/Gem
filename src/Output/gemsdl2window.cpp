@@ -474,6 +474,36 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
   case SDL_QUIT:
     info("window", "destroy");
     break;
+  case SDL_FINGERDOWN: case SDL_FINGERUP: case SDL_FINGERMOTION: {
+    std::vector<t_atom>alist;
+    t_atom a;
+    PUSHATOM_S(alist, a, "finger");
+    PUSHATOM_F(alist, a, event.tfinger.touchId);
+    PUSHATOM_F(alist, a, event.tfinger.fingerId);
+    const char*direction = "unknown";
+    switch(event.type) {
+    case SDL_FINGERDOWN:
+      direction = "down";
+      break;
+    case SDL_FINGERUP:
+      direction = "up";
+      break;
+    case SDL_FINGERMOTION:
+      direction = "motion";
+      break;
+    default:
+      break;
+    }
+    PUSHATOM_S(alist, a, direction);
+
+    PUSHATOM_F(alist, a, event.tfinger.x);
+    PUSHATOM_F(alist, a, event.tfinger.y);
+    PUSHATOM_F(alist, a, event.tfinger.dx);
+    PUSHATOM_F(alist, a, event.tfinger.dy);
+    PUSHATOM_F(alist, a, event.tfinger.pressure);
+    info(alist);
+  }
+    break;
   }
 }
 
