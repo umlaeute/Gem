@@ -475,6 +475,7 @@ void GemWindow::       transparentMess(bool on)
 
 void GemWindow::       printMess(void)
 {
+  verbose(1, "@%p", this);
   if (!makeCurrent()) {
     error("OpenGL has not been initialized yet");
     post("create a window first!");
@@ -492,7 +493,7 @@ void GemWindow::       printMess(void)
   std::istringstream extStream(extensions);
 
   while (std::getline(extStream, ext, ' ')) {
-    post("\tExtension: %s", ext.c_str());    // Print extension string
+    verbose(0, "\tExtension: %s", ext.c_str());    // Print extension string
   }
 }
 
