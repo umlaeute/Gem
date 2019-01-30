@@ -101,6 +101,4 @@ void glsl_tesseval :: printInfo()
 /////////////////////////////////////////////////////////
 void glsl_tesseval :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
-  CPPEXTERN_MSG0(classPtr, "print", printInfo);
 }

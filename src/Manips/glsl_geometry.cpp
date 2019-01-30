@@ -122,6 +122,4 @@ void glsl_geometry :: printInfo()
 /////////////////////////////////////////////////////////
 void glsl_geometry :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
-  CPPEXTERN_MSG0(classPtr, "print", printInfo);
 }
