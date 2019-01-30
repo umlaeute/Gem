@@ -832,13 +832,14 @@ void glsl_program :: getVariables()
   for (GLuint i = 0; i < m_uniformCount; i++) {
     t_uniform &uni=m_uniform[i];
     if(GLEW_VERSION_2_0) {
-      GLint size;
       glGetActiveUniform(m_program, i, m_maxLength, &length, &uni.size,
                          &uni.type, name);
-      glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &size);
       uni.loc = glGetUniformLocation( m_program, name );
       uni.name=gensym(name);
-      uni.arraysize = size;
+      if (glGetActiveUniformsiv)
+        glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &uni.arraysize);
+      else
+        uni.arraysize = 1;
     } else if (GLEW_ARB_shader_objects) {
       glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &uni.size,
                             &uni.type, nameARB);
