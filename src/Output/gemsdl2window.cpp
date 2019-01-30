@@ -517,10 +517,9 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     default:
       break;
     }
-
     PUSHATOM_S(alist, a, "finger");
-    PUSHATOM_F(alist, a, event.tfinger.touchId);
-    PUSHATOM_F(alist, a, event.tfinger.fingerId);
+    PUSHATOM_F(alist, a, s_touchId[event.tfinger.touchId]);
+    PUSHATOM_F(alist, a, s_fingerId[event.tfinger.fingerId]);
     PUSHATOM_S(alist, a, direction);
 
     PUSHATOM_F(alist, a, event.tfinger.x);
