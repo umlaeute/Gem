@@ -499,10 +499,16 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
 
     PUSHATOM_F(alist, a, event.tfinger.x);
     PUSHATOM_F(alist, a, event.tfinger.y);
-    PUSHATOM_F(alist, a, event.tfinger.dx);
-    PUSHATOM_F(alist, a, event.tfinger.dy);
     PUSHATOM_F(alist, a, event.tfinger.pressure);
     info(alist);
+
+    if(SDL_FINGERMOTION == event.type) {
+      SETSYMBOL(&alist[3], gensym("relative_motion"));
+      SETFLOAT (&alist[4], event.tfinger.dx);
+      SETFLOAT (&alist[5], event.tfinger.dy);
+      info(alist);
+    }
+
   }
     break;
   }
