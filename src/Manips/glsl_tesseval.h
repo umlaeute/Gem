@@ -2,14 +2,9 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an GLSL tesseval shader
+Load an GLSL tesselation evaluation shader
 
- *  Created by tigital on 10/04/2005.
- *  Copyright 2005 James Tittle.
-
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ *  Copyright 2019 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
 WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
