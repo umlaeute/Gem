@@ -34,6 +34,8 @@ libControls_la_SOURCES=  \
     gemmanager.h \
     gemreceive.cpp \
     gemreceive.h \
+    modelfiler.cpp \
+    modelfiler.h \
     render_trigger.cpp \
     render_trigger.h
 
