@@ -136,49 +136,49 @@ glmTexture(GLMmodel* model, glmtexture_t type=GLM_TEX_DEFAULT, float h=1.0,
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumVertices(GLMmodel *model);
+glmGetNumVertices(const GLMmodel *model);
 /*
  * glmGetNumNormals: get number of normals in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumNormals(GLMmodel *model);
+glmGetNumNormals(const GLMmodel *model);
 /*
  * glmGetNumTexCoords: get number of texcoords in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumTexCoords(GLMmodel *model);
+glmGetNumTexCoords(const GLMmodel *model);
 /*
  * glmGetNumFacetNorms: get number of facetnorms in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumFacetNorms(GLMmodel *model);
+glmGetNumFacetNorms(const GLMmodel *model);
 /*
  * glmGetNumTriangles: get number of triangles in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumTriangles(GLMmodel *model);
+glmGetNumTriangles(const GLMmodel *model);
 /*
  * glmGetNumMaterials: get number of materials in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumMaterials(GLMmodel *model);
+glmGetNumMaterials(const GLMmodel *model);
 /*
  * glmGetNumGroups: get number of groups in the model
  *
  * model - pointer to initialized GLMmodel structure
  */
 GLuint
-glmGetNumGroups(GLMmodel *model);
+glmGetNumGroups(const GLMmodel *model);
 
 
 /* glmDelete: Deletes a GLMmodel structure.

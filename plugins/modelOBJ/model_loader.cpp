@@ -1688,7 +1688,7 @@ GLvoid glmTexture(GLMmodel* model, glmtexture_t typ, float h, float w)
  * glmGetNumVertices: get number of vertices in the model
  */
 GLuint
-glmGetNumVertices(GLMmodel *model)
+glmGetNumVertices(const GLMmodel *model)
 {
   return (model && model->vertices)?model->numvertices:0;
 }
@@ -1696,7 +1696,7 @@ glmGetNumVertices(GLMmodel *model)
  * glmGetNumNormals: get number of normals in the model
  */
 GLuint
-glmGetNumNormals(GLMmodel *model)
+glmGetNumNormals(const GLMmodel *model)
 {
   return (model && model->normals)?model->numnormals:0;
 }
@@ -1704,7 +1704,7 @@ glmGetNumNormals(GLMmodel *model)
  * glmGetNumTexCoords: get number of texcoords in the model
  */
 GLuint
-glmGetNumTexCoords(GLMmodel *model)
+glmGetNumTexCoords(const GLMmodel *model)
 {
   return (model && model->texcoords)?model->numtexcoords:0;
 }
@@ -1712,7 +1712,7 @@ glmGetNumTexCoords(GLMmodel *model)
  * glmGetNumFacetNorms: get number of facetnorms in the model
  */
 GLuint
-glmGetNumFacetNorms(GLMmodel *model)
+glmGetNumFacetNorms(const GLMmodel *model)
 {
   return (model && model->facetnorms)?model->numfacetnorms:0;
 }
@@ -1720,7 +1720,7 @@ glmGetNumFacetNorms(GLMmodel *model)
  * glmGetNumTriangles: get number of triangles in the model
  */
 GLuint
-glmGetNumTriangles(GLMmodel *model)
+glmGetNumTriangles(const GLMmodel *model)
 {
   return (model && model->triangles)?model->numtriangles:0;
 }
@@ -1728,7 +1728,7 @@ glmGetNumTriangles(GLMmodel *model)
  * glmGetNumMaterials: get number of materials in the model
  */
 GLuint
-glmGetNumMaterials(GLMmodel *model)
+glmGetNumMaterials(const GLMmodel *model)
 {
   return (model && model->materials)?model->nummaterials:0;
 }
@@ -1736,7 +1736,7 @@ glmGetNumMaterials(GLMmodel *model)
  * glmGetNumGroups: get number of groups in the model
  */
 GLuint
-glmGetNumGroups(GLMmodel *model)
+glmGetNumGroups(const GLMmodel *model)
 {
   return (model && model->groups)?model->numgroups:0;
 }
