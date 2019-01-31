@@ -432,7 +432,10 @@ void gemw32window:: destroy(void)
 /////////////////////////////////////////////////////////
 void gemw32window::cursorMess(bool state)
 {
-  ShowCursor(state);
+  /* ShowCursor() increments/decrements a counter
+   * only if the counter falls below 0, the cursor is hidden...
+   */
+  while ((ShowCursor(state) < 0) == state) {;}
 }
 
 void gemw32window::fullscreenMess(int state)
