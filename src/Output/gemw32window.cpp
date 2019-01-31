@@ -462,6 +462,8 @@ void gemw32window::fullscreenMess(int state)
                       w, h);
   } catch (GemException&x) {
     error("unable to toggle fullscreen mode: %s", x.what());
+    post("fullscreen will effect newly created windows.");
+    return;
   }
   if(tmpwin) {
     delete m_win;
