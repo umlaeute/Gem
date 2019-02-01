@@ -67,6 +67,7 @@ gemvertexbuffer :: ~gemvertexbuffer(void)
 /////////////////////////////////////////////////////////
 void gemvertexbuffer :: renderShape(GemState *state)
 {
+  int vb_size = 0;
   if ( m_drawType == GL_DEFAULT_GEM ) {
     m_drawType = GL_POINTS;
   }
@@ -93,6 +94,7 @@ void gemvertexbuffer :: renderShape(GemState *state)
   if(m_position.render()) {
     glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
+    if(!vb_size)vb_size=m_position.size;
   }
   if(m_texture.render()) {
     glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);
@@ -109,6 +111,10 @@ void gemvertexbuffer :: renderShape(GemState *state)
 
   unsigned int start = std::min(m_range[0], m_range[1]);
   unsigned int end   = std::max(m_range[0], m_range[1]);
+
+  if(!end) {
+    end = vb_size;
+  }
 
   if(start>=vbo_size) {
     start=vbo_size;
