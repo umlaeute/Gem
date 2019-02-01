@@ -185,6 +185,9 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
+AC_ARG_ENABLE([experimental], AC_HELP_STRING([--enable-experimental], [enable experimental objects]))
+AM_CONDITIONAL(EXPERIMENTAL, [test "x$target_experimental" == "xyes"])
+
 # checks for default headers
 IEM_CHECK_INCLUDES_DEFAULT([windows.h])
 
