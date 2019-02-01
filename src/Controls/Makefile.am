@@ -34,8 +34,6 @@ libControls_la_SOURCES=  \
     gemmanager.h \
     gemreceive.cpp \
     gemreceive.h \
-    modelfiler.cpp \
-    modelfiler.h \
     render_trigger.cpp \
     render_trigger.h \
     $(empty)
@@ -53,3 +51,11 @@ libControls_la_SOURCES+=  \
     gemwin.h \
     $(empty)
 endif !ENABLE_MULTICONTEXT
+
+
+if EXPERIMENTAL
+libControls_la_SOURCES+=  \
+    modelfiler.cpp \
+    modelfiler.h \
+    $(empty)
+endif EXPERIMENTAL
