@@ -37,7 +37,8 @@ libControls_la_SOURCES=  \
     modelfiler.cpp \
     modelfiler.h \
     render_trigger.cpp \
-    render_trigger.h
+    render_trigger.h \
+    $(empty)
 
 if ENABLE_MULTICONTEXT
 else !ENABLE_MULTICONTEXT
@@ -49,5 +50,6 @@ libControls_la_SOURCES+=  \
     gemmouse.cpp \
     gemmouse.h \
     gemwin.cpp \
-    gemwin.h
+    gemwin.h \
+    $(empty)
 endif !ENABLE_MULTICONTEXT
