@@ -61,6 +61,12 @@ protected:
   // When an open is received
   virtual void openMess(const std::string&filename);
 
+
+  /////////
+  // output tables
+  virtual void tableMess(t_symbol*s, int, t_atom*);
+
+
   virtual void enumPropertyMess(void);
   virtual void clearPropertiesMess(void);
   virtual void getPropertyMess(t_symbol*s, int, t_atom*);
@@ -83,6 +89,9 @@ protected:
 
   gem::RTE::Outlet m_infoOut;
   std::vector<std::string> m_backends;
+
+  size_t copyArrays(const std::string&, const std::string*, size_t);
+
 };
 
 #endif  // for header file

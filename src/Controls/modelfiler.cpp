@@ -31,26 +31,6 @@ std::string checkArrays(const std::string*tablenames, size_t count) {
   }
   return std::string();
 }
-
-
-size_t copyArrays(
-    const std::vector<std::vector<float> >&data,
-    const std::string*tablenames, size_t count) {
-  std::vector<gem::RTE::Array> tabs;
-  size_t size = data.size();
-  for(size_t i=0; i<count; i++) {
-    gem::RTE::Array a(tablenames[i]);
-    a.resize(size);
-    tabs.push_back(a);
-  }
-  for(size_t i=0; i<size; i++) {
-    for(size_t j=0; j<count; j++) {
-      tabs[j][i] = data[i][j];
-    }
-  }
-
-  return size;
-}
 };
 
 /////////////////////////////////////////////////////////
@@ -380,50 +360,105 @@ void modelfiler :: openMess(const std::string&filename)
     return;
   }
 
-  copyArrays(m_loader->getVector("vertices"), m_position, 3);
-  copyArrays(m_loader->getVector("texcoords"), m_texture, 2);
-  copyArrays(m_loader->getVector("normals"), m_normal, 3);
-  copyArrays(m_loader->getVector("colors"), m_color, 4);
+#define COPYARRAY(name, tables, count) int name = copyArrays(#name, tables, count)
+#define PRINTSUCCESS(name) if(name) do {        \
+    alist.clear();                              \
+    gem::any v = name;                   \
+    alist.push_back(v);                         \
+    m_infoOut.send(std::string(#name), alist); \
+  } while(0)
+
+  COPYARRAY(vertices, m_position, 3);
+  COPYARRAY(colors, m_color, 4);
+  COPYARRAY(texcoords, m_texture, 2);
+  COPYARRAY(normals, m_normal, 3);
 
   m_loader->close();
+  std::vector<gem::any> alist;
+  PRINTSUCCESS(vertices);
+  PRINTSUCCESS(colors);
+  PRINTSUCCESS(texcoords);
+  PRINTSUCCESS(normals);
 }
 
-#if 0
-void modelfiler :: copyArray(const std::vector<std::vector<float> >&tab,
-    std::string*tables)
-{
-  unsigned int size(0), i(0), npts(0);
-
-  //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
-  if ( tab.empty() ) {
-    return;
+size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablenames, size_t count) {
+  if((count > 0) && tablenames[0].empty())
+    return 0;
+  std::string failed = checkArrays(tablenames, count);
+  if(!failed.empty()) {
+    error("no such array '%s' for %s", failed.c_str(), name.c_str());
+    return 0;
   }
-  size=tab.size();
+  const std::vector<std::vector<float> >&data = m_loader->getVector(name);
+  std::vector<gem::RTE::Array> tabs;
 
-  if(size!=vb.size) {
-    vb.resize(size);
-    m_size_change_flag=true;
+  size_t size = data.size();
+  for(size_t i=0; i<count; i++) {
+    gem::RTE::Array a(tablenames[i]);
+    a.resize(size);
+    tabs.push_back(a);
   }
-
-  for ( i = 0 ; i < size ; i++ ) {
-    for ( int j=0 ; j< std::min(vb.dimen,(unsigned int)tab[i].size()) ; j++) {
-      vb.array[i*vb.dimen + j] = tab[i][j];
+  for(size_t i=0; i<size; i++) {
+    for(size_t j=0; j<count; j++) {
+      tabs[j][i] = data[i][j];
     }
   }
-  vb.dirty=true;
-  vb.enabled=true;
+
+  return size;
 }
-void modelfiler :: copyAllArrays()
-{
-  if (m_loader && m_loader->needRefresh()) {
-    copyArray(m_loader->getVector("vertices"), m_position);
-    copyArray(m_loader->getVector("texcoords"), m_texture);
-    copyArray(m_loader->getVector("normals"), m_normal);
-    copyArray(m_loader->getVector("colors"), m_color);
-    m_loader->unsetRefresh();
+
+
+void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv) {
+  const std::string tabletype = s->s_name;
+  std::vector<std::string>extensions;
+  std::string*names;
+
+  if(tabletype == "position" || tabletype == "normal") {
+    extensions.push_back("X");
+    extensions.push_back("Y");
+    extensions.push_back("Z");
+    if("position" == tabletype)
+      names = m_position;
+    else
+      names = m_normal;
+  } else if (tabletype == "texture") {
+    extensions.push_back("U");
+    extensions.push_back("V");
+    names = m_texture;
+  } else if (tabletype == "color") {
+    extensions.push_back("R");
+    extensions.push_back("G");
+    extensions.push_back("B");
+    extensions.push_back("A");
+    names = m_color;
+  }
+
+  if((argc != 1) && (argc != extensions.size()) && (argc != extensions.size() + 1)) {
+    error("'%s' requires %d array names", s->s_name, extensions.size());
+    return;
+  }
+  if(argc == extensions.size()) {
+    for(int i = 0; i < argc; i++) {
+      names[i] = atom_getsymbol(argv+i)->s_name;
+    }
+    return;
+  }
+  if(argc == extensions.size() + 1) {
+    extensions.clear();
+    for(int i = 1; i < argc; i++) {
+      extensions.push_back(atom_getsymbol(argv+i)->s_name);
+    }
+    argc = 1;
+  }
+  if(argc == 1) {
+    std::string basename = atom_getsymbol(argv+0)->s_name;
+    for (size_t i=0; i < extensions.size(); i++) {
+      names[i] = basename + extensions[i];
+    }
+    return;
   }
 }
-#endif
+
 
 
 /////////////////////////////////////////////////////////
@@ -440,4 +475,9 @@ void modelfiler :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "setProps", setPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertyMess);
   CPPEXTERN_MSG0(classPtr, "clearProps", clearPropertiesMess);
+
+  CPPEXTERN_MSG(classPtr, "position", tableMess);
+  CPPEXTERN_MSG(classPtr, "color", tableMess);
+  CPPEXTERN_MSG(classPtr, "texture", tableMess);
+  CPPEXTERN_MSG(classPtr, "normal", tableMess);
 }
