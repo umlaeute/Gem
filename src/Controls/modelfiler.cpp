@@ -393,6 +393,9 @@ size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablen
   std::vector<gem::RTE::Array> tabs;
 
   size_t size = data.size();
+  if(!size)
+    return size;
+
   for(size_t i=0; i<count; i++) {
     gem::RTE::Array a(tablenames[i]);
     a.resize(size);
