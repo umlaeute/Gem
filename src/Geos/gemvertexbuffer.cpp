@@ -50,7 +50,7 @@ gemvertexbuffer :: gemvertexbuffer(t_floatarg size) :
   m_idmapper("glsl.program")
 {
   m_range[0]=0;
-  m_range[1]=-1;
+  m_range[1]=0;
 }
 
 /////////////////////////////////////////////////////////
