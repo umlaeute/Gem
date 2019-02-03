@@ -201,12 +201,12 @@ GEMMARK();
     }
 
     if(fullname.empty()) {
-      std::string error="couldn't find '";
-      error+=filename;
-      error+="'.'";
-      error+=ext;
-      error+="'";
-      throw(GemException(error));
+      std::string error_string="couldn't find '";
+      error_string+=filename;
+      error_string+="'.'";
+      error_string+=ext;
+      error_string+="'";
+      throw(GemException(error_string));
     }
 
     return open(fullname);
