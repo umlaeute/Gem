@@ -22,28 +22,23 @@
 #include <stdlib.h>
 
 GemException::GemException(const char *error)
-  : ErrorString(strdup(error))
+  : runtime_error(error)
 {}
 
 GemException::GemException(const std::string&error)
-  : ErrorString(strdup(error.c_str()))
+  : runtime_error(error)
 {}
 
 GemException::GemException()
-  : ErrorString(0)
+  : runtime_error("")
 {}
 GemException::~GemException()
 {
-  if(ErrorString)
-    free(const_cast<char*>(ErrorString));
-}
-const char *GemException::what() const
-{
-  return ErrorString?ErrorString:"";
 }
 
 void GemException::report(const char*origin) const
 {
+  const char*ErrorString = what();
   if(ErrorString && *ErrorString) {
     if (NULL==origin) {
       error("GemException: %s", ErrorString);
@@ -63,7 +58,7 @@ void gem::catchGemException(const char*name, const t_object*obj)
       ex.report(name);
     } else {
       t_object*o=(t_object*)obj;
-      char*str=(char*)ex.what();
+      const char*str=ex.what();
       if(NULL!=str) {
         if (NULL==name) {
           pd_error(o, "GemException: %s", str);
