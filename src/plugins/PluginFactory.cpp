@@ -64,16 +64,18 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
   }
   std::cerr << "load plugins '" << basename << "' in '" << path << "'" <<
             std::endl;
-
+GEMMARK();
   std::string pattern = path+std::string("gem_") + basename+std::string("*")
                         +GemDylib::getDefaultExtension();
   std::cerr << "pattern : " << pattern << std::endl;
+GEMMARK();
 
   unsigned int count=0;
 
   std::vector<std::string>files=gem::files::getFilenameListing(pattern);
   unsigned int i=0;
 
+GEMMARK();
   for(i=0; i<files.size(); i++) {
     GemDylib*dll=NULL;
     const std::string f=files[i];
@@ -81,7 +83,9 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
     // LATER make checks more sophisticated (like checking file-handles)
     bool alreadyloaded=false;
     unsigned int j;
+GEMMARK();
     for(j=0; j<m_pimpl->p_loaded.size(); j++)
+      verbose(2, "%s:%d[%s]: loaded[%d]?", j);
       if(f == m_pimpl->p_loaded[j]) {
         alreadyloaded=true;
         std::cerr << "not reloading '"<<f<<"'"<<std::endl;
@@ -91,19 +95,26 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
       continue;
     }
 
+GEMMARK();
     std::cerr << "dylib loading file '" << f << "'!" << std::endl;
     dll=NULL;
     try {
+GEMMARK();
       dll=new GemDylib(f, "");
+GEMMARK();
     } catch (GemException&x) {
+GEMMARK();
       // oops, on w32 this might simply be because getFilenameListing() stripped the path
       // so let's try again, with Path added...
       if(f.find(path) == f.npos) {
         try {
           std::string f1=path;
           f1+=f;
+GEMMARK();
           dll=new GemDylib(f1, "");
+GEMMARK();
         } catch (GemException&x1) {
+GEMMARK();
           // giving up
           std::cerr << "library loading returned: " << x1.what() << std::endl;
           dll=NULL;
@@ -115,15 +126,19 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
     }
     if(dll) { // loading succeeded
       try {
+GEMMARK();
         m_pimpl->p_loaded.push_back(f);
         count++;
       } catch (GemException&x) {
+GEMMARK();
         std::cerr << "plugin loading returned: " << x.what() << std::endl;
       }
+GEMMARK();
     }
 
   }
 
+GEMMARK();
   return count;
 }
 

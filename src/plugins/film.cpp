@@ -175,13 +175,16 @@ public:
     m_handle(NULL),
     m_canThread(true)
   {
+GEMMARK();
     gem::PluginFactory<gem::plugins::film>::loadPlugins("film");
+GEMMARK();
     std::vector<std::string>ids=
       gem::PluginFactory<gem::plugins::film>::getIDs();
 
     if(!addPlugin(ids, "DirectShow")) {
       addPlugin(ids, "AVI");
     }
+GEMMARK();
 
     addPlugin(ids, "gmerlin");
     addPlugin(ids, "QuickTime");
@@ -189,7 +192,9 @@ public:
     addPlugin(ids, "MPEG3");
     addPlugin(ids, "aviplay");
     addPlugin(ids, "MPEG1");
+GEMMARK();
     addPlugin(ids);
+GEMMARK();
 
     unsigned int i;
     for(i=0; i<m_handles.size(); i++) {

@@ -120,15 +120,19 @@ public:
     sys_bashfilename(filename.c_str(), buf);
     UINT errorboxflags=SetErrorMode(SEM_FAILCRITICALERRORS);
     SetLastError(0);
+GEMMARK();
     handle->w32handle=LoadLibraryEx(buf, NULL, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
     DWORD errorNumber = GetLastError();
+GEMMARK();
     errorboxflags=SetErrorMode(errorboxflags);
     if(handle->w32handle) {
       handle->fullname=filename;
+GEMMARK();
       return handle;
     }
 #endif
 
+GEMMARK();
     delete handle;
     handle=NULL;
 
@@ -143,6 +147,7 @@ public:
 #endif
 #ifdef _WIN32
     LPVOID lpErrorMessage=NULL;
+GEMMARK();
     if(errorNumber) {
       FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -166,13 +171,18 @@ public:
     errbuf[10-1]=0;
     error+=errbuf;
     error+=")";
+GEMMARK();
     if(lpErrorMessage) {
+GEMMARK();
       error+=(const char*)lpErrorMessage;
     }
     std::cerr << "GemDylib throwing: "<< error << std::endl;
+GEMMARK();
     throw(GemException(std::string(error)));
+GEMMARK();
 #endif
 
+GEMMARK();
     return NULL;
   }
 
