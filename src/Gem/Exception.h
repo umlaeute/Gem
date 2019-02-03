@@ -32,22 +32,19 @@ DESCRIPTION
 #define _INCLUDE__GEM_GEM_EXCEPTION_H_
 
 #include "Gem/ExportDef.h"
-#include <string>
+#include <stdexcept>
+
 
 typedef struct _text t_object;
 
-class GEM_EXTERN GemException
+class GEM_EXTERN GemException : public std::runtime_error
 {
 public:
   GemException(void);
   explicit GemException(const char*error);
   explicit GemException(const std::string&error);
   virtual ~GemException(void);
-
-  virtual const char *what(void) const;
   virtual void report(const char*origin=0) const;
-private:
-  const char*ErrorString;
 };
 
 namespace gem
