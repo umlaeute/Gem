@@ -25,5 +25,7 @@
 # pragma warning( pop )
 #endif
 
+#define GEMMARK() verbose(2, "%s:%d[%s]", __FILE__, __LINE__, __FUNCTION__)
+
 
 #endif /* _INCLUDE__GEM_GEM_RTE_H_ */
