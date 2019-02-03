@@ -201,6 +201,9 @@ static void addownpath(const char*filename)
 
   checkVersion(mypath, filename, flags);
 }
+  static void throwtest(const char*msg) {
+    throw(GemException(msg));
+  }
 }; // namespace
 
 namespace gem
@@ -242,6 +245,14 @@ void setup()
 
   gem::Settings::init();
   addownpath("Gem-meta.pd");
+
+#define CATCHTEST(type) do {try {throwtest(#type); } catch (type e) { verbose(2, "exception.test: %s", e.what()); } catch (...) {error("exception.test failed: " #type); } } while(0)
+  CATCHTEST(std::exception&);
+  CATCHTEST(const std::exception&);
+  CATCHTEST(std::exception);
+  CATCHTEST(GemException&);
+  CATCHTEST(const GemException&);
+
   GemMan::initGem();
 
 
