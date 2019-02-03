@@ -85,13 +85,17 @@ GEMMARK();
     unsigned int j;
 GEMMARK();
     for(j=0; j<m_pimpl->p_loaded.size(); j++)
+GEMMARK();
       verbose(2, "%s:%d[%s]: loaded[%d]?", j);
       if(f == m_pimpl->p_loaded[j]) {
+GEMMARK();
         alreadyloaded=true;
         std::cerr << "not reloading '"<<f<<"'"<<std::endl;
         break;
       }
+GEMMARK();
     if(alreadyloaded) {
+GEMMARK();
       continue;
     }
 
