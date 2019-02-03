@@ -134,16 +134,16 @@ W64:
   <<: *release
 
 
-Linux_snapshot:
+.Linux_snapshot:
   <<: *build_linux
   <<: *snapshot
-Darwin_snapshot:
+.Darwin_snapshot:
   <<: *build_macos
   <<: *snapshot
 W32_snapshot:
   <<: *build_w32
   <<: *snapshot
-W64_snapshot:
+.W64_snapshot:
   <<: *build_w64
   <<: *snapshot
 
