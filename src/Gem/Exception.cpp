@@ -32,9 +32,6 @@ GemException::GemException(const std::string&error)
 GemException::GemException()
   : runtime_error("")
 {}
-GemException::~GemException()
-{
-}
 
 void GemException::report(const char*origin) const
 {

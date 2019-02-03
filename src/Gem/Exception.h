@@ -43,7 +43,6 @@ public:
   GemException(void);
   explicit GemException(const char*error);
   explicit GemException(const std::string&error);
-  virtual ~GemException(void);
   virtual void report(const char*origin=0) const;
 };
 
