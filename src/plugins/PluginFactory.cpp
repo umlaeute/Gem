@@ -84,8 +84,7 @@ GEMMARK();
 GEMMARK();
     post("loaded: %d", m_pimpl->p_loaded.size());
     for(unsigned int j=0; j<m_pimpl->p_loaded.size(); j++) {
-GEMMARK();
-      verbose(2, "%s:%d[%s]: loaded[%d]?", j);
+GEMMARK();verbose(2, "loaded[%d]?", j);
       if(f == m_pimpl->p_loaded[j]) {
 GEMMARK();
         alreadyloaded=true;
