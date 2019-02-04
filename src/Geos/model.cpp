@@ -42,10 +42,10 @@ model :: model(t_symbol *filename) :
   m_loader(gem::plugins::modelloader::getInstance()),
   m_loaded(false),
   m_size_change_flag(false),
-  m_position(256,3),
-  m_texture (256,2),
-  m_color   (256,4),
-  m_normal  (256,3),
+  m_position(0,3),
+  m_texture (0,2),
+  m_color   (0,4),
+  m_normal  (0,3),
   m_infoOut(gem::RTE::Outlet(this)),
   m_drawType(GL_TRIANGLES)
 {
@@ -527,6 +527,39 @@ void model :: startRendering()
 void model :: render(GemState *state)
 {
   if(!m_loaded) {
+    return;
+  }
+
+  if(!GLEW_VERSION_1_5) {
+    float*positions = m_position.size?m_position.array:0;
+    float*textures = m_texture.size?m_texture.array:0;
+    float*colors = m_color.size?m_color.array:0;
+    float*normals = m_normal.size?m_normal.array:0;
+    unsigned int size = m_position.size;
+    if(textures && m_texture.size < size) size = m_texture.size;
+    if(colors && m_color.size < size) size = m_color.size;
+    if(normals && m_normal.size < size) size = m_normal.size;
+
+    glBegin(m_drawType);
+    for (unsigned int i=0; i<size; i++) {
+      if(normals) {
+        glNormal3fv(normals);
+        normals += m_normal.dimen;
+      }
+      if(textures) {
+        glTexCoord2fv(textures);
+        textures += m_texture.dimen;
+      }
+      if(colors) {
+        glColor4fv(colors);
+        colors += m_color.dimen;
+      }
+      if(positions) {
+        glVertex3fv(positions);
+        positions += m_position.dimen;
+      }
+    }
+    glEnd();
     return;
   }
 
