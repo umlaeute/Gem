@@ -102,6 +102,7 @@ void gem::VertexBuffer:: resize (unsigned int size_)
 
 bool gem::VertexBuffer:: create (void)
 {
+  if(!(glGenBuffers && glBufferData && glBindBuffer)) return false;
   if(!vbo) {
     glGenBuffers(1, &vbo);
   }
@@ -114,6 +115,7 @@ bool gem::VertexBuffer:: create (void)
 }
 bool gem::VertexBuffer:: render (void)
 {
+  if(!(glBufferData && glBindBuffer)) return false;
   // render from the VBO
   //::post("VertexBuffer::render: %d?", enabled);
   if ( enabled ) {
