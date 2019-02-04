@@ -22,6 +22,9 @@ libUtils_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 libUtils_la_CXXFLAGS += $(GEM_LIB_FRIBIDI_CFLAGS)
 libUtils_la_LIBADD   += $(GEM_LIB_FRIBIDI_LIBS)
 
+if WINDOWS
+libUtils_la_LIBADD   += -lws2_32
+endif
 
 
 libUtils_la_includedir = $(includedir)/Gem/Utils

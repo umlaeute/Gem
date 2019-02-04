@@ -296,6 +296,9 @@ gemw32window_la_LDFLAGS  += @GL_LDFLAGS@
 ## QuickTime support
 #gemw32window_la_CXXFLAGS += $(GEM_FRAMEWORK_QUICKTIME_CFLAGS)
 #gemw32window_la_LIBADD   += $(GEM_FRAMEWORK_QUICKTIME_LIBS)
+if WINDOWS
+gemw32window_la_LIBADD   += -lgdi32
+endif
 
 ## SOURCES
 gemw32window_la_SOURCES = \

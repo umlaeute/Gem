@@ -32,6 +32,9 @@ libBase_la_LIBADD   += $(GEM_LIB_GLEWMX_LIBS)
 else !ENABLE_MULTICONTEXT
 libBase_la_CXXFLAGS += $(GEM_LIB_GLEW_CFLAGS)
 libBase_la_LIBADD   += $(GEM_LIB_GLEW_LIBS)
+if WINDOWS
+libBase_la_LIBADD   += -lgdi32
+endif
 endif !ENABLE_MULTICONTEXT
 
 # FTGL
