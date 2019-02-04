@@ -72,21 +72,20 @@ int gem::BasePluginFactory::doLoadPlugins(const std::string&basename,
   unsigned int count=0;
 
   std::vector<std::string>files=gem::files::getFilenameListing(pattern);
-  unsigned int i=0;
 
-  for(i=0; i<files.size(); i++) {
+  for(unsigned int i=0; i<files.size(); i++) {
     GemDylib*dll=NULL;
     const std::string f=files[i];
     // check whether this file has already been loaded
     // LATER make checks more sophisticated (like checking file-handles)
     bool alreadyloaded=false;
-    unsigned int j;
-    for(j=0; j<m_pimpl->p_loaded.size(); j++)
+    for(unsigned int j=0; j<m_pimpl->p_loaded.size(); j++) {
       if(f == m_pimpl->p_loaded[j]) {
         alreadyloaded=true;
         std::cerr << "not reloading '"<<f<<"'"<<std::endl;
         break;
       }
+    }
     if(alreadyloaded) {
       continue;
     }
@@ -131,8 +130,7 @@ std::vector<std::string>gem::BasePluginFactory::get()
 {
   std::vector<std::string>result;
   if(m_pimpl) {
-    std::map<std::string, void*>::iterator iter = m_pimpl->p_ctors.begin();
-    for(; iter != m_pimpl->p_ctors.end(); ++iter) {
+    for(std::map<std::string, void*>::iterator iter = m_pimpl->p_ctors.begin(); iter != m_pimpl->p_ctors.end(); ++iter) {
       if(NULL!=iter->second) {
         result.push_back(iter->first);
       }
