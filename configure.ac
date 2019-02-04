@@ -231,7 +231,7 @@ AC_CHECK_LIB([dl],[dlopen])
 ## Standard C++ Libray:
 #AC_CHECK_LIB([libcpmt], [main])
 ## C runtime library:
-AC_CHECK_LIB([msvcrt], [fclose])
+#AC_CHECK_LIB([msvcrt], [fclose])
 ## Standard C++ Libray:
 #AC_CHECK_LIB([msvcprt], [main])
 
