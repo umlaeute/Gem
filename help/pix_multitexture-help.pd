@@ -1,4 +1,5 @@
-#N canvas 656 205 721 650 10;
+#N canvas 656 205 633 650 10;
+#X declare -lib Gem;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X msg 118 81 reset;
@@ -27,7 +28,7 @@ working with shaders.;
 #X text 514 536 Create window:;
 #X obj 455 442 cnv 15 160 50 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X text 452 4 GEM object;
+#X text 452 9 GEM object;
 #X text 453 56 Example:;
 #X obj 463 88 gemhead;
 #X obj 489 208 gemhead 11;
@@ -138,6 +139,7 @@ working with shaders.;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 522 576 pd gemwin;
+#X obj 518 8 declare -lib Gem;
 #X connect 0 0 39 0;
 #X connect 15 0 19 0;
 #X connect 16 0 30 0;

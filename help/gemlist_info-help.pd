@@ -1,4 +1,5 @@
 #N canvas 594 117 688 676 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 206 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -40,7 +41,8 @@
 #X text 10 414 Create window:;
 #X text 50 12 Synopsis: [gemlist_info];
 #X text 71 31 Class: information object;
-#X text 29 77 Description: get current transformation of a gemlist;
+#X text 29 77 Description: get current transformation of a gemlist
+;
 #X text 42 94 [gemlist_info] accepts a gemList decompost the transformation
 matrix in basic transformation (translation \, scale \, shear \, rotation)
 ;
@@ -260,6 +262,7 @@ transformation matrix decomposed with gemlist_info;
 #X text 76 349 <- more about gemlist_info;
 #X text 18 375 see also :;
 #X obj 100 375 gemlist_matrix;
+#X obj 548 8 declare -lib Gem;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
 #X connect 27 0 56 0;

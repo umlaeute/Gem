@@ -1,4 +1,5 @@
 #N canvas 539 315 813 403 10;
+#X declare -lib Gem;
 #X msg 631 212 draw point;
 #X text 536 159 This is the drawing mode: line/point;
 #X text 98 109 [part_draw] finally draws a particle system that was
@@ -41,6 +42,7 @@ set up with [part_head] and other [part_]-objects.;
 #X text 38 41 inlet 1: gemlist (with part_head) \, draw [line|point|<nr>]
 ;
 #X text 31 14 Synopsis: [part_draw];
+#X obj 688 8 declare -lib Gem;
 #X connect 0 0 11 0;
 #X connect 7 0 8 0;
 #X connect 8 0 10 0;

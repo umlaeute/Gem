@@ -1,5 +1,6 @@
-#N canvas 0 0 654 372 10;
-#X text 452 8 GEM object;
+#N canvas 6 61 635 372 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 8 245 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 248 Inlets:;
@@ -78,6 +79,7 @@ images of any format into YUV-space. If your image already is in YUV-space
 ;
 #X obj 451 233 pix_texture;
 #X obj 451 256 square;
+#X obj 514 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

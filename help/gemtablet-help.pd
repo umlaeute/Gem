@@ -1,5 +1,6 @@
 #N canvas 293 148 600 385 10;
-#X text 135 37 part of GEM;
+#X declare -lib Gem;
+#X text 365 7 part of GEM;
 #X text 152 70 [gemtablet];
 #X text 69 93 respond to events of a graph-tablet;
 #X obj 110 118 gemtablet ........;
@@ -14,6 +15,7 @@ have a graph-tablet to make any use of [gemtablet];
 #X floatatom 200 178 1 0 0 1 Left_Button - -;
 #X floatatom 215 160 1 0 0 1 Middle_Button - -;
 #X floatatom 231 140 1 0 0 1 Right_Button - -;
+#X obj 438 8 declare -lib Gem;
 #X connect 3 0 5 0;
 #X connect 3 1 6 0;
 #X connect 3 2 7 0;

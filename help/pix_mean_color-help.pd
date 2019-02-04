@@ -1,4 +1,5 @@
-#N canvas 473 0 654 372 10;
+#N canvas 473 61 654 372 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 185 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -35,7 +36,7 @@
 #X restore 459 333 pd gemwin;
 #X msg 459 314 create;
 #X text 455 293 Create window:;
-#X obj 450 135 cnv 15 160 90 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 141 cnv 15 160 65 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
@@ -85,6 +86,7 @@ outputs it as RGBA values.;
 #X obj 451 208 translateXYZ 0 2 0;
 #X text 36 239 Outlet 2: <f:Red> <f:Green> <f:Blue> <f:Alpha>: the
 mean color of the image;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

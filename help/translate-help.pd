@@ -1,4 +1,5 @@
 #N canvas 22 88 639 383 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 206 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -57,6 +58,7 @@ matrix by the specified translation;
 #X obj 455 175 translate 0.1 1 1 0;
 #X text 35 332 see also:;
 #X obj 99 333 translateXYZ;
+#X obj 518 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 30 0;

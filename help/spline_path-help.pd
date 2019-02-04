@@ -1,4 +1,5 @@
-#N canvas 37 45 711 482 10;
+#N canvas 37 61 681 460 10;
+#X declare -lib Gem;
 #X text 458 11 GEM object;
 #X text 41 430 see also:;
 #X obj 115 429 linear_path;
@@ -59,6 +60,7 @@ its values in n-tuples like: "<r1> <g1> <b1> <r2> <g2> <b2>..." Therefore
 #X text 50 240 name of the table;
 #X obj 516 168 spline_path 3 array;
 #X msg 543 140 open array;
+#X obj 578 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 12 1 14 0;
 #X connect 12 2 15 0;

@@ -1,15 +1,16 @@
-#N canvas 0 0 634 679 10;
+#N canvas 6 61 489 679 10;
+#X declare -lib Gem;
 #X msg 142 104 gemList;
 #X msg 142 307 gemList;
 #X text 169 16 part of GEM;
-#X floatatom 186 256 3 0 0;
-#X floatatom 164 281 3 0 0;
+#X floatatom 186 256 3 0 0 0 - - -;
+#X floatatom 164 281 3 0 0 0 - - -;
 #X obj 142 207 pix_blob;
 #X text 176 43 [pix_blob];
 #X text 93 73 get the "center of gravity" of an image;
 #X msg 175 133 <mode>;
 #X msg 209 173 <color-weights>;
-#X floatatom 209 232 3 0 0;
+#X floatatom 209 232 3 0 0 0 - - -;
 #X text 250 231 size;
 #X text 232 261 Y;
 #X text 210 282 X;
@@ -29,6 +30,7 @@ than to the red-channel \, green- and alpha-values will be ignored.
 ;
 #X text 56 617 Specifying only one single color-weight <w> \, is the
 same as "<w> <w> <w> 0";
+#X obj 378 8 declare -lib Gem;
 #X connect 0 0 5 0;
 #X connect 5 0 1 0;
 #X connect 5 1 4 0;

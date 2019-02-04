@@ -1,4 +1,5 @@
 #N canvas 230 118 660 604 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 405 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -9,7 +10,7 @@
 #X text 17 335 Arguments:;
 #X obj 7 76 cnv 15 430 250 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 77 cnv 15 200 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -35,7 +36,7 @@
 #X restore 519 293 pd gemwin;
 #X msg 519 274 create;
 #X text 515 253 Create window:;
-#X obj 450 132 cnv 15 160 90 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 450 143 cnv 15 180 90 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
@@ -57,7 +58,7 @@
 #X text 56 518 Outlet 1: gemlist;
 #X text 63 422 Inlet 1: gemlist;
 #X text 50 12 Synopsis: [pix_color];
-#X obj 451 233 pix_draw;
+#X obj 451 253 pix_draw;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
 #X text 20 101 [pix_histo] will get the histogram (density function)
@@ -76,14 +77,14 @@ sum up to 1.0f;
 #X obj 158 543 table tab-1;
 #X obj 242 544 table tab-2;
 #X obj 325 545 table tab-3;
-#X msg 461 156 set tab-1 tab-2 tab-3;
-#N canvas 0 0 450 300 graph6 0;
+#X msg 461 167 set tab-1 tab-2 tab-3;
+#N canvas 0 0 450 300 (subpatch) 0;
 #X array tab-0 100 float 0;
 #X coords 0 1 99 -1 200 140 1;
-#X restore 445 333 graph;
-#X obj 451 196 pix_histo tab-0;
-#X msg 459 135 set tab-0;
-#X msg 457 177 set tab-1 tab-2 tab-3 tab-0;
+#X restore 448 363 graph;
+#X obj 451 207 pix_histo tab-0;
+#X msg 459 146 set tab-0;
+#X msg 457 188 set tab-1 tab-2 tab-3 tab-0;
 #X text 63 346 1 arg:: <tablename> to store grey-histogram;
 #X text 62 363 3 args: <tablename>s to store RGB-histograms;
 #X text 62 378 4 args: <tablename>s to store RGBA-histograms;
@@ -93,6 +94,7 @@ sum up to 1.0f;
 RGB-histograms;
 #X text 63 474 Inlet 1: set <table1><table2><table3><table4> : tables
 to store RGBA-histograms;
+#X obj 528 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

@@ -1,5 +1,6 @@
-#N canvas 497 199 683 381 10;
-#X text 452 8 GEM object;
+#N canvas 497 199 638 381 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 8 226 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 248 Inlets:;
@@ -37,8 +38,8 @@
 #X text 515 289 Create window:;
 #X obj 451 168 cnv 15 160 80 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 119 gemhead;
-#X obj 502 102 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X obj 451 126 gemhead;
+#X obj 496 109 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
 -1 -1;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
@@ -52,14 +53,14 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 451 138 pd image;
+#X restore 451 145 pd image;
 #X obj 451 263 pix_texture;
 #X text 63 196 <none>;
 #X text 47 318 Outlet 1: gemlist;
 #X text 53 262 Inlet 1: gemlist;
 #X obj 451 285 square 3;
 #X text 503 88 (JPEG \, TIFF \, ..);
-#X obj 541 122 gemhead;
+#X obj 541 129 gemhead;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -72,8 +73,8 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 541 141 pd image;
-#X obj 592 103 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X restore 541 148 pd image;
+#X obj 586 110 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
 -1 -1;
 #X text 53 291 Inlet 2: gemlist;
 #X text 449 77 open two different images;
@@ -85,6 +86,7 @@
 #X text 29 91 [pix_multiply] simply multiplies two pixes together.
 E.g: where either of the pixels is black \, the resulting image will
 be black too. Thus it is simple to get black images.;
+#X obj 508 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

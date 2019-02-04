@@ -1,4 +1,5 @@
 #N canvas 309 237 664 366 10;
+#X declare -lib Gem;
 #X msg 199 131 gemList;
 #X text 176 62 GEM object;
 #X obj 199 182 part_killold;
@@ -8,6 +9,7 @@
 #X text 91 291 kill all particles which are older than the kill time.
 The default time is 10 Make the number longer for particles to live
 longer and shorter to remove them quicker.;
+#X obj 548 8 declare -lib Gem;
 #X connect 0 0 2 0;
 #X connect 2 0 5 0;
 #X connect 3 0 2 1;

@@ -1,4 +1,5 @@
 #N canvas 69 65 686 503 10;
+#X declare -lib Gem;
 #X msg 122 72 gemList;
 #X msg 122 213 gemList;
 #X text 83 44 get a video signal;
@@ -17,5 +18,6 @@ the camera (especially to create an image with dimensions a power of
 ;
 #X text 41 264 [pix_indycam] obviously only works with SGI video workstations.
 The name indicates that it likes SGI-indy's the most.;
+#X obj 578 8 declare -lib Gem;
 #X connect 0 0 10 0;
 #X connect 10 0 1 0;

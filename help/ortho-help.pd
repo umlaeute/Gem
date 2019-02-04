@@ -1,4 +1,5 @@
-#N canvas 397 92 629 343 10;
+#N canvas 397 92 628 342 10;
+#X declare -lib Gem;
 #X obj 462 275 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
@@ -22,7 +23,7 @@
 #X restore 467 314 pd gemwin;
 #X msg 467 295 create;
 #X text 463 274 Create window:;
-#X text 485 29 Example:;
+#X text 465 49 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 216 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
@@ -31,7 +32,7 @@
 #X obj 8 176 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 175 Arguments:;
-#X text 452 8 GEM object;
+#X text 432 8 GEM object;
 #X text 27 233 Inlet 1: gemlist;
 #X text 9 304 Outlets:;
 #X text 21 316 Outlet 1: gemlist;
@@ -51,20 +52,21 @@ subsequent shapes.;
 0;
 #X obj 466 157 cnv 15 150 80 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 490 68 gemhead;
+#X obj 490 72 gemhead;
 #X obj 490 246 cylinder;
-#X obj 490 89 t a b;
-#X obj 520 108 i;
+#X obj 490 93 t a b;
+#X obj 520 112 i;
 #X obj 490 200 ortho;
 #X obj 470 183 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
-#X obj 565 87 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 565 91 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
-#X obj 549 108 + 0;
-#X obj 490 129 rotateXYZ 45 45 0;
+#X obj 549 112 + 0;
+#X obj 490 133 rotateXYZ 45 45 0;
 #X msg 521 180 compat \$1;
 #X obj 521 160 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
+#X obj 508 8 declare -lib Gem;
 #X connect 1 0 2 0;
 #X connect 2 0 1 0;
 #X connect 23 0 25 0;

@@ -1,5 +1,6 @@
-#N canvas 57 47 633 363 10;
-#X text 452 8 GEM object;
+#N canvas 57 61 633 363 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 8 206 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 218 Inlets:;
@@ -59,6 +60,7 @@ matrix by the specified rotation;
 #X text 38 332 see also:;
 #X obj 101 332 rotateXYZ;
 #X obj 169 332 accumrotate;
+#X obj 508 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 22 0;

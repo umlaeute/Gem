@@ -1,4 +1,5 @@
 #N canvas 362 96 968 580 10;
+#X declare -lib Gem;
 #X text 145 42 Class: geometric object;
 #X obj 13 64 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -1611,8 +1612,9 @@ point. (Mx \, My : position of the point in the matrix. X \, Y \, Z
 #X text 21 447 examples :;
 #X text 29 87 The curve3d object renders a curve at the current position
 with current color or texture. The shape of the curve is controlled
-from a matrix. Note that control points are not necessarily part of the
-curve.;
+from a matrix. Note that control points are not necessarily part of
+the curve.;
+#X obj 848 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 18 0 45 0;

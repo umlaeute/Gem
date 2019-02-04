@@ -1,4 +1,5 @@
-#N canvas 1413 30 695 382 10;
+#N canvas 141 109 695 382 10;
+#X declare -lib Gem;
 #X text 92 6 [pix_data];
 #X text 93 25 get pixel-data of an image;
 #X obj 14 57 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
@@ -72,6 +73,7 @@ as RGB-triplet.;
 #X restore 345 332 pd gemwin;
 #X msg 345 313 create;
 #X text 341 292 Create window:;
+#X obj 568 8 declare -lib Gem;
 #X connect 12 1 15 0;
 #X connect 12 2 14 0;
 #X connect 13 0 12 0;

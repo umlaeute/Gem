@@ -1,5 +1,6 @@
-#N canvas 0 321 774 553 10;
-#X text 452 8 GEM object;
+#N canvas 6 321 733 553 10;
+#X declare -lib Gem;
+#X text 542 8 GEM object;
 #X obj 8 386 cnv 15 430 150 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 388 Inlets:;
@@ -9,7 +10,7 @@
 #X text 47 305 Arguments:;
 #X obj 7 76 cnv 15 430 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 77 cnv 15 210 250 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 77 cnv 15 270 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
 #X obj 514 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -35,7 +36,7 @@
 #X restore 519 293 pd gemwin;
 #X msg 519 274 create;
 #X text 515 253 Create window:;
-#X obj 450 138 cnv 15 200 100 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 451 138 cnv 15 260 100 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
@@ -145,6 +146,7 @@ alpha);
 for all channels;
 #X text 23 461 Inlet 1: set <table1><table2><table3><table4>: separate
 tables for all channels (incl. Alpha);
+#X obj 618 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

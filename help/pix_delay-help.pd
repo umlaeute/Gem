@@ -1,4 +1,5 @@
-#N canvas 230 0 683 377 10;
+#N canvas 230 61 629 377 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 9 225 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -77,6 +78,7 @@ in the delay-line have to have the same dimensions and colour-space.
 You can specify the length of the entire delay-line (==maximum delay)
 as an argument to the [pix_delay] object. The delay in frames defaults
 to 0 (route through) and can be changed via the second inlet.;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 23 0;

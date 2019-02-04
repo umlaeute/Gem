@@ -1,4 +1,5 @@
-#N canvas 537 22 651 547 10;
+#N canvas 537 61 630 547 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 216 cnv 15 430 300 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -78,7 +79,7 @@
 #X msg 520 158 inv \$1;
 #X msg 461 225 0 1 0.5 0.6;
 #X obj 451 265 pix_levels;
-#X msg 546 216 0.5 0.6 0 1;
+#X msg 536 216 0.5 0.6 0 1;
 #X msg 460 195 uni \$1;
 #X text 29 77 Description: level adjustment;
 #X text 33 274 Inlet 1: message: uni [1|0] (choose between uniform
@@ -102,9 +103,10 @@ specify the lowest/highest values of both input and output. There is
 also an auto-mode available;
 #X text 33 247 Inlet 1: message: auto [1|0] (turns automatic level-correction
 on/off)(default:0);
-#X msg 546 193 0 0.1 1 0.5;
+#X msg 536 193 0 0.1 1 0.5;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
+#X obj 523 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

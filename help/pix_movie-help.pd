@@ -1,18 +1,19 @@
-#N canvas 469 90 707 633 10;
-#X text 452 -2 GEM object;
-#X obj 8 305 cnv 15 430 320 empty empty empty 20 12 0 14 -233017 -66577
+#N canvas 469 90 719 552 10;
+#X declare -lib Gem;
+#X text 502 8 GEM object;
+#X obj 8 315 cnv 15 430 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X text 9 307 Inlets:;
-#X text 9 377 Outlets:;
-#X obj 8 272 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+#X text 9 327 Inlets:;
+#X text 9 397 Outlets:;
+#X obj 8 282 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
-#X text 17 271 Arguments:;
-#X obj 8 46 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
+#X text 17 281 Arguments:;
+#X obj 8 56 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 47 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 57 cnv 15 250 450 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 30 Example:;
-#X obj 594 430 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 453 40 Example:;
+#X obj 594 440 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -32,47 +33,47 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 599 469 pd gemwin;
-#X msg 599 450 create;
-#X text 595 429 Create window:;
-#X obj 451 78 cnv 15 155 200 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 599 479 pd gemwin;
+#X msg 599 460 create;
+#X text 595 439 Create window:;
+#X obj 451 88 cnv 15 155 200 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 53 gemhead;
-#X text 17 391 Outlet 1: gemlist;
-#X text 23 321 Inlet 1: gemlist;
-#X obj 462 83 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 451 63 gemhead;
+#X text 17 411 Outlet 1: gemlist;
+#X text 23 341 Inlet 1: gemlist;
+#X obj 462 93 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X text 505 47 open a supported;
-#X text 506 58 movie-clip;
-#X obj 471 367 unpack 0 0 0 0;
-#X floatatom 466 390 5 0 0 3 length - -;
-#X floatatom 515 390 5 0 0 3 width - -;
-#X floatatom 565 390 5 0 0 3 height - -;
-#X obj 530 348 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
+#X text 505 57 open a supported;
+#X text 506 68 movie-clip;
+#X obj 471 377 unpack 0 0 0 0;
+#X floatatom 466 400 5 0 0 3 length - -;
+#X floatatom 515 400 5 0 0 3 width - -;
+#X floatatom 565 400 5 0 0 3 height - -;
+#X obj 530 358 bng 15 250 50 0 empty empty end_reached 20 7 0 10 -262144
 -1 -1;
-#X text 71 21 Class: pix object (pix source);
-#X text 29 47 Description: load in a movie-file;
-#X obj 462 112 openpanel;
-#X msg 462 132 open \$1;
-#X obj 451 472 rectangle 4 3;
-#X text 15 68 [pix_movie] loads in a preproduced digital-video to be
+#X text 71 31 Class: pix object (pix source);
+#X text 29 57 Description: load in a movie-file;
+#X obj 462 122 openpanel;
+#X msg 462 142 open \$1;
+#X obj 451 482 rectangle 4 3;
+#X text 15 78 [pix_movie] loads in a preproduced digital-video to be
 used as a texture \, bitblit or something else.;
-#X text 63 282 symbol: file to load initially;
-#X msg 490 189 auto \$1;
-#X obj 490 171 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X text 63 292 symbol: file to load initially;
+#X msg 490 199 auto \$1;
+#X obj 490 181 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 501 213 colorspace Grey;
-#X obj 8 229 cnv 15 430 40 empty empty empty 20 12 0 14 -260818 -66577
+#X msg 501 223 colorspace Grey;
+#X obj 8 239 cnv 15 430 40 empty empty empty 20 12 0 14 -260818 -66577
 0;
-#X obj 451 331 pix_movie;
-#X text 439 575 see also:;
-#X obj 516 575 pix_film;
-#X text 50 2 Synopsis: [pix_movie];
-#X obj 513 237 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 451 341 pix_movie;
+#X text 459 515 see also:;
+#X obj 536 515 pix_film;
+#X text 50 12 Synopsis: [pix_movie];
+#X obj 513 247 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 505 290 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
+#X obj 505 300 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
 -1 -1 0 1;
-#X floatatom 502 310 5 0 0 1 frame_number - -;
+#X floatatom 502 320 5 0 0 1 frame_number - -;
 #N canvas 830 50 450 300 demo 0;
 #X obj 23 26 inlet;
 #X text 126 127 win32:;
@@ -91,24 +92,25 @@ used as a texture \, bitblit or something else.;
 #X connect 7 0 3 0;
 #X connect 8 0 3 0;
 #X coords 0 -1 1 1 100 17 1 20 50;
-#X restore 474 152 pd demo movie;
-#X text 22 353 Inlet 2: float: <frame number> sets the frame to output
+#X restore 474 162 pd demo movie;
+#X text 22 373 Inlet 2: float: <frame number> sets the frame to output
 ;
-#X obj 596 575 pix_texture;
-#X text 14 231 You don't need [pix_texture] to texture the image. [pix_movie]
+#X obj 616 515 pix_texture;
+#X text 14 241 You don't need [pix_texture] to texture the image. [pix_movie]
 is a combination of [pix_film] and [pix_texture];
-#X text 17 450 Outlet 4: list: the texture id \, same as Outlet 2 of
+#X text 17 470 Outlet 4: list: the texture id \, same as Outlet 2 of
 [pix_texture];
-#X msg 513 256 rectangle \$1;
-#X floatatom 615 390 5 0 0 3 fps - -;
-#X text 17 107 This object accepts the same set of messages as [pix_film].
+#X msg 513 266 rectangle \$1;
+#X floatatom 615 400 5 0 0 3 fps - -;
+#X text 17 117 This object accepts the same set of messages as [pix_film].
 In addition \, it will immediately download the frames to the gfx-card
 and make them available as a texture.;
-#X text 23 336 Inlet 1: see [pix_film];
-#X text 17 407 Outlet 2: see [pix_film];
-#X text 17 430 Outlet 3: see [pix_film];
-#X text 21 151 Think of this object as a hybrid between [pix_film]
+#X text 23 356 Inlet 1: see [pix_film];
+#X text 17 427 Outlet 2: see [pix_film];
+#X text 17 450 Outlet 3: see [pix_film];
+#X text 21 161 Think of this object as a hybrid between [pix_film]
 and [pix_texture]...;
+#X obj 578 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 36 0;

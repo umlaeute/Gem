@@ -1,4 +1,5 @@
 #N canvas 26 90 653 587 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X obj 466 66 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -33,7 +34,7 @@
 #X obj 8 295 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 294 Arguments:;
-#X text 351 8 GEM object;
+#X text 461 8 GEM object;
 #X text 27 352 Inlet 1: gemlist;
 #X text 9 465 Outlets:;
 #X text 21 478 Outlet 1: gemlist;
@@ -85,6 +86,7 @@ the current color \, and all 3D-transformation;
 #X obj 489 441 text2d;
 #X obj 488 463 text3d;
 #X text 27 446 Inlet 2: float: size (in points). (default:20);
+#X obj 528 8 declare -lib Gem;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;

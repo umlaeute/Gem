@@ -1,4 +1,5 @@
 #N canvas 41 102 968 681 10;
+#X declare -lib Gem;
 #X text 58 45 Class: geometric object;
 #X obj 13 64 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -41,7 +42,7 @@
 #X connect 10 0 0 0;
 #X connect 11 0 10 0;
 #X restore 821 583 pd gemwin;
-#X msg 821 564 destroy;
+#X msg 821 564 create;
 #X text 817 543 Create window:;
 #X obj 796 74 cnv 15 150 150 empty empty empty 20 12 0 14 -24198 -66577
 0;
@@ -1606,6 +1607,7 @@ from a matrix. The curve go throw all control points (between point
 #X text 33 146 This object is related to curve3d;
 #X text 271 4 Create a 3d bicubic curve \, using a matrix of control
 points;
+#X obj 848 8 declare -lib Gem;
 #X connect 11 0 12 0;
 #X connect 12 0 11 0;
 #X connect 17 0 89 0;

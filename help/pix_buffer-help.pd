@@ -1,6 +1,7 @@
-#N canvas 350 148 784 564 10;
+#N canvas 350 148 668 535 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 9 263 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 9 263 cnv 15 430 250 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 40 265 Inlets:;
 #X obj 9 227 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
@@ -65,6 +66,7 @@ and preallocate memory for them (pixes will be set to black);
 slot <src> to slot <target>;
 #X text 23 444 Inlet 1: message: save <filename> <index>: save image
 in given slot to harddisk.;
+#X obj 548 8 declare -lib Gem;
 #X connect 16 0 23 0;
 #X connect 18 0 23 0;
 #X connect 23 0 17 0;

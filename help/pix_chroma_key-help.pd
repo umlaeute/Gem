@@ -1,5 +1,6 @@
-#N canvas 280 22 628 495 10;
-#X text 452 8 GEM object;
+#N canvas 280 61 632 502 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 8 277 cnv 15 430 210 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 277 Inlets:;
@@ -124,6 +125,7 @@ time.;
 #X restore 546 139 pd image;
 #X text 37 215 RGB values are 0-1 \, YUV values are 16/255-239/255
 ;
+#X obj 508 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 41 0;

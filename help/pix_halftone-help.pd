@@ -1,4 +1,5 @@
-#N canvas 318 0 654 480 10;
+#N canvas 318 61 628 469 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 245 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -84,6 +85,7 @@ of the patterns and how blurry they are on-screen.;
 #X text 111 405 2...diamond dots;
 #X text 111 418 3...'euclidean' dots;
 #X text 111 431 4...postscript diamond dots;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

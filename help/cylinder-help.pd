@@ -1,6 +1,7 @@
-#N canvas 291 154 710 345 10;
+#N canvas 291 154 674 345 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
-#X obj 479 47 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 479 47 cnv 15 180 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 544 224 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -59,6 +60,7 @@ with the draw message \, its size can be changed via the second inlet.
 #X text 63 167 size of the cylinder \, segments;
 #X text 63 182 defaults: 1 \, 10;
 #X text 27 247 Inlet 1: message: draw [line|fill|point|default];
+#X obj 558 8 declare -lib Gem;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 18 0 27 0;

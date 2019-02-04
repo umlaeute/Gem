@@ -1,5 +1,6 @@
-#N canvas 230 0 683 377 10;
-#X text 452 8 GEM object;
+#N canvas 230 61 638 376 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 9 225 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 40 227 Inlets:;
@@ -81,6 +82,7 @@ the blending is the same as pix_mix output = (stream * gain) + (history
 * 1 - gain) applying a higher blur factor will mix in more of the history
 image and thus more of the history will be saved resulting in heavier
 blurring.;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 20 0;

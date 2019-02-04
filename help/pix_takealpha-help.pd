@@ -1,4 +1,5 @@
-#N canvas 0 273 640 398 10;
+#N canvas 6 273 640 398 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -37,8 +38,8 @@
 #X text 515 278 Create window:;
 #X obj 451 187 cnv 15 160 40 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 108 gemhead;
-#X obj 502 91 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X obj 451 118 gemhead;
+#X obj 496 101 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
 -1 -1;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
@@ -52,14 +53,14 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 451 127 pd image;
+#X restore 451 137 pd image;
 #X obj 451 252 pix_texture;
 #X text 63 196 <none>;
 #X text 38 303 Outlet 1: gemlist;
 #X text 44 247 Inlet 1: gemlist;
 #X obj 451 274 square 3;
 #X text 503 77 (JPEG \, TIFF \, ..);
-#X obj 519 111 gemhead;
+#X obj 519 121 gemhead;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -72,15 +73,15 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 519 130 pd image;
-#X obj 570 92 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
+#X restore 519 140 pd image;
+#X obj 564 102 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
 -1 -1;
 #X text 44 276 Inlet 2: gemlist;
 #X text 449 66 open two different images;
 #X text 71 31 Class: pix mix object;
 #X text 29 158 The 2 images have to be of the same size.;
 #X obj 451 197 pix_takealpha;
-#X obj 519 158 pix_coloralpha;
+#X obj 519 161 pix_coloralpha;
 #X obj 451 232 alpha;
 #X text 29 67 Description: transfer the alpha-channel;
 #X text 29 84 [pix_takealpha] takes the alpha-channel of the 2nd image
@@ -91,6 +92,7 @@ value is taken instead of the Alpha-value.;
 #X text 50 12 Synopsis: [pix_takealpha];
 #X text 31 356 see also:;
 #X obj 96 358 pix_mask;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

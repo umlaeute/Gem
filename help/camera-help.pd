@@ -1,4 +1,5 @@
-#N canvas 0 22 630 494 10;
+#N canvas 6 61 630 494 10;
+#X declare -lib Gem;
 #X obj 179 157 camera;
 #X obj 179 45 gemhead;
 #X obj 162 82 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
@@ -53,6 +54,7 @@
 #X restore 175 344 pd gemwin;
 #X msg 175 325 create;
 #X text 171 304 Create window:;
+#X obj 488 18 declare -lib Gem;
 #X connect 1 0 0 0;
 #X connect 2 0 14 0;
 #X connect 3 0 13 0;

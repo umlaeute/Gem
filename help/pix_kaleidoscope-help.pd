@@ -1,4 +1,5 @@
-#N canvas 102 92 665 538 10;
+#N canvas 102 92 647 538 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 7 206 cnv 15 430 280 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -110,6 +111,7 @@ segment \; altering this value will squash or expand (0.1..10 \, default:
 #X floatatom 547 187 4 0 100 0 - - -;
 #X obj 495 206 * 0.01;
 #X obj 547 206 * 0.01;
+#X obj 538 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 22 0 24 0;

@@ -1,4 +1,5 @@
-#N canvas 0 22 658 376 10;
+#N canvas 6 61 633 352 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 196 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -40,7 +41,7 @@
 #X obj 451 84 gemhead;
 #X text 50 12 Synopsis: [pix_dot];
 #X text 71 31 Class: pix object;
-#X obj 451 196 pix_dot;
+#X obj 451 180 pix_dot;
 #X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
 -1 -1;
 #N canvas 0 22 587 366 image 0;
@@ -56,7 +57,7 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
-#X floatatom 524 184 5 0 100 2 size - -;
+#X floatatom 524 181 5 0 100 2 size - -;
 #X obj 451 233 pix_texture;
 #X text 57 295 Outlet 1: gemlist;
 #X text 63 212 Inlet 1: gemlist;
@@ -69,6 +70,7 @@ be segmented and each segment will be represented by a white dot \,
 whose size is relative to the luminance of the original segment.;
 #X obj 451 255 square 3;
 #X text 63 166 <size>;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 19 0;

@@ -1,5 +1,6 @@
-#N canvas 3 44 880 555 10;
-#X text 452 8 GEM object;
+#N canvas 6 61 880 555 10;
+#X declare -lib Gem;
+#X text 692 8 GEM object;
 #X text 71 31 Class: manipulation object;
 #X text 50 12 Synopsis: [separator];
 #X obj 8 337 cnv 15 430 60 empty empty empty 20 12 0 14 -233017 -66577
@@ -102,6 +103,7 @@ subchain is rendered first).;
 #X text 464 364 With the [separator] \, both objects will by translated
 \, but the rotation in one branch will not effect the other branch.
 ;
+#X obj 768 8 declare -lib Gem;
 #X connect 25 0 26 0;
 #X connect 26 0 25 0;
 #X connect 30 0 56 0;

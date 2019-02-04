@@ -1,4 +1,5 @@
-#N canvas 75 13 690 372 10;
+#N canvas 75 61 633 341 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 245 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -12,7 +13,7 @@
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 453 60 Example:;
-#X obj 520 218 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 520 218 cnv 15 90 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -34,7 +35,7 @@
 #X connect 7 0 0 0;
 #X restore 525 257 pd gemwin;
 #X msg 525 238 create;
-#X text 521 217 Create window:;
+#X text 521 218 Create window:;
 #X obj 450 138 cnv 15 160 50 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 84 gemhead;
@@ -76,6 +77,7 @@ mean-value of the RGB-triple for each pixel.;
 #X text 63 275 Inlet 1: 1|0 : turn on/off (default:1);
 #X obj 467 142 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 1
 1;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

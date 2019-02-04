@@ -1,4 +1,5 @@
-#N canvas 0 0 651 393 10;
+#N canvas 6 61 634 347 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 216 cnv 15 430 85 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -71,6 +72,7 @@ any dimensions \, the image will be automatically resized to the next
 power of 2 (eg. 320x240 will be resized to 512x256). You can change
 the re-size with the "dimen"-message \; a value of "0" defaults to
 the next power-of-2 of the original image;
+#X obj 519 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

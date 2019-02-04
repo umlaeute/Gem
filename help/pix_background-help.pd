@@ -1,4 +1,5 @@
-#N canvas 436 51 655 473 10;
+#N canvas 436 61 655 437 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 256 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -94,6 +95,7 @@ in Gray-mode only the first value is important <+-gray>;
 #X restore 451 113 pd film;
 #X text 516 105 open an movie;
 #X text 509 118 (AVI \, MPEG \, MOV);
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 35 0;

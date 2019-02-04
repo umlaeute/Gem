@@ -1,5 +1,6 @@
-#N canvas 509 51 641 529 10;
-#X text 462 20 GEM object;
+#N canvas 509 61 641 529 10;
+#X declare -lib Gem;
+#X text 442 10 GEM object;
 #X obj 18 324 cnv 15 430 190 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 18 291 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
@@ -85,6 +86,7 @@ frame.;
 function, f 62;
 #X text 42 425 set <width> <height> : change size of the image (default
 : 64*64), f 66;
+#X obj 518 8 declare -lib Gem;
 #X connect 8 0 9 0;
 #X connect 9 0 8 0;
 #X connect 12 0 40 0;

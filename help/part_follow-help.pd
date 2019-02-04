@@ -1,4 +1,5 @@
 #N canvas 22 325 802 373 10;
+#X declare -lib Gem;
 #X text 583 138 particle acceleration;
 #X text 97 112 [part_follow] lets the particles follow each other.
 ;
@@ -38,6 +39,7 @@
 #X obj 521 75 part_source 5;
 #X obj 521 51 part_head;
 #X obj 521 243 part_draw;
+#X obj 678 8 declare -lib Gem;
 #X connect 6 0 16 0;
 #X connect 7 0 6 0;
 #X connect 8 0 9 0;

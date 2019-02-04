@@ -1,4 +1,5 @@
 #N canvas 443 181 661 405 10;
+#X declare -lib Gem;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 216 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
@@ -58,6 +59,7 @@ by sending it a "bang" message.;
 #X obj 498 107 route gem_state;
 #X obj 498 127 route float;
 #X obj 498 86 t a a;
+#X obj 538 8 declare -lib Gem;
 #X connect 20 0 21 0;
 #X connect 21 0 20 0;
 #X connect 23 0 33 0;

@@ -1,4 +1,5 @@
 #N canvas 291 154 710 345 10;
+#X declare -lib Gem;
 #X text 33 14 Synopsis: [circle];
 #X text 54 30 Class: geometric object;
 #X text 525 29 Example:;
@@ -56,6 +57,7 @@ with the draw message \, its size can be changed via the second inlet.
 #X floatatom 626 130 5 0 0 2 size - -;
 #X text 64 191 default:1;
 #X text 27 247 Inlet 1: message: draw [line|fill|point|default];
+#X obj 588 8 declare -lib Gem;
 #X connect 18 0 19 0;
 #X connect 19 0 18 0;
 #X connect 23 0 22 0;

@@ -1,4 +1,5 @@
 #N canvas 34 73 724 516 10;
+#X declare -lib Gem;
 #X text 471 28 Example:;
 #X obj 7 64 cnv 15 450 265 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -147,6 +148,7 @@ of vertices (or "slices").;
 #X obj 527 477 world_light;
 #X obj 485 477 light;
 #X text 37 401 Inlet 1: float: turn light on/off (default:1);
+#X obj 578 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 43 0;

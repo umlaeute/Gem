@@ -1,8 +1,9 @@
-#N canvas 130 41 696 468 10;
+#N canvas 130 61 696 468 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X obj 479 107 cnv 15 200 250 empty empty empty 20 12 0 14 -228992
 -66577 0;
-#X obj 494 284 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X obj 494 294 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -22,9 +23,9 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 499 323 pd gemwin;
-#X msg 499 304 create;
-#X text 495 283 Create window:;
+#X restore 499 333 pd gemwin;
+#X msg 499 314 create;
+#X text 495 293 Create window:;
 #X obj 7 65 cnv 15 450 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 8 196 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
@@ -34,7 +35,7 @@
 0;
 #X text 17 155 Arguments:;
 #X text 27 227 Inlet 1: message: draw [line|fill|point];
-#X text 452 8 GEM object;
+#X text 512 8 GEM object;
 #X text 27 213 Inlet 1: gemlist;
 #X text 9 380 Outlets:;
 #X text 21 393 Outlet 1: gemlist;
@@ -78,6 +79,7 @@ of 2nd corner);
 #X text 27 352 Inlet 7: list: 3(RGB) or 4(RGBA) float values (color
 of 3rd corner);
 #X obj 543 259 primTri;
+#X obj 578 8 declare -lib Gem;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 19 0 45 0;

@@ -1,4 +1,5 @@
-#N canvas 346 44 665 538 10;
+#N canvas 346 61 665 552 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 340 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
@@ -116,6 +117,7 @@ settable parameter;
 from 1);
 #X text 22 441 Inlet 1: <name> <value>: set parameter given by <name>
 ;
+#X obj 538 8 declare -lib Gem;
 #X connect 16 0 17 0;
 #X connect 17 0 16 0;
 #X connect 19 0 22 0;

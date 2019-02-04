@@ -1,4 +1,5 @@
 #N canvas 159 184 656 313 10;
+#X declare -lib Gem;
 #X msg 164 109 gemList;
 #X msg 164 227 gemList;
 #X text 155 10 part of GEM;
@@ -7,5 +8,6 @@
 #X text 60 78 clear an image without destroying the texture;
 #X text 58 255 all texture information/setup will be stored \, whereas
 the image itself will be deleted;
+#X obj 538 8 declare -lib Gem;
 #X connect 0 0 3 0;
 #X connect 3 0 1 0;

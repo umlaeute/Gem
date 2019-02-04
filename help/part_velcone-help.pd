@@ -1,4 +1,5 @@
 #N canvas 109 126 635 466 10;
+#X declare -lib Gem;
 #X msg 110 93 gemList;
 #X text 121 50 GEM object;
 #X msg 170 151 x y z;
@@ -14,6 +15,7 @@ midpoint to be the velocity-domain of newly emitted particles within
 the system.;
 #X msg 465 326 x y z height;
 #X obj 239 360 part_velocity cone <x> <z> <z> <height>;
+#X obj 518 8 declare -lib Gem;
 #X connect 0 0 8 0;
 #X connect 2 0 8 1;
 #X connect 8 0 3 0;

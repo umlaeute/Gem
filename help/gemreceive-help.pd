@@ -1,4 +1,5 @@
-#N canvas 4 52 570 713 10;
+#N canvas 6 61 570 713 10;
+#X declare -lib Gem;
 #X obj 96 51 gemreceive;
 #X text 169 51 ordered receive;
 #X obj 72 227 gemreceive foo -1;
@@ -38,6 +39,7 @@ Pd's [receive]) that specifies the priority.;
 #X msg 72 173 bang;
 #X obj 235 359 s fou;
 #X msg 107 331 symbol fou;
+#X obj 448 18 declare -lib Gem;
 #X connect 2 0 3 0;
 #X connect 4 0 5 0;
 #X connect 6 0 7 0;

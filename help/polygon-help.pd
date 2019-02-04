@@ -1,4 +1,5 @@
-#N canvas 27 382 762 461 10;
+#N canvas 27 382 680 461 10;
+#X declare -lib Gem;
 #X text 475 39 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -8,7 +9,7 @@
 #X obj 8 176 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 175 Arguments:;
-#X text 452 8 GEM object;
+#X text 492 8 GEM object;
 #X text 27 233 Inlet 1: gemlist;
 #X text 9 358 Outlets:;
 #X text 21 371 Outlet 1: gemlist;
@@ -75,6 +76,7 @@ is unlimited.;
 #X obj 537 299 polygon 5;
 #X msg 603 246 width \$1;
 #X floatatom 619 226 5 0 10 0 - - -;
+#X obj 568 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 44 0;

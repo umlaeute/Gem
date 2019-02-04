@@ -1,5 +1,6 @@
-#N canvas 61 22 630 385 10;
-#X text 452 8 GEM object;
+#N canvas 61 61 630 385 10;
+#X declare -lib Gem;
+#X text 432 8 GEM object;
 #X obj 8 196 cnv 15 430 180 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 34 198 Inlets:;
@@ -58,6 +59,7 @@ see any effects.;
 #X obj 451 156 diffuse 0 1 0;
 #X obj 451 355 diffuseRGB;
 #X text 448 332 see also:;
+#X obj 508 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 30 0;

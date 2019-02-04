@@ -1,4 +1,5 @@
-#N canvas 0 0 654 372 10;
+#N canvas 6 61 626 372 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 275 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -78,6 +79,7 @@ where ever the pixel alpha is less than the -alphaVal.;
 #X msg 523 171 0.5;
 #X msg 479 170 -0.5;
 #X obj 451 137 pix_coloralpha;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

@@ -1,4 +1,5 @@
-#N canvas 0 0 654 337 10;
+#N canvas 6 61 626 337 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 245 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -68,6 +69,7 @@
 #X text 16 126 [pix_invert] will invert your image. Thus all black
 pixels will become white and vice-versa.;
 #X text 50 12 Synopsis: [pix_invert];
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

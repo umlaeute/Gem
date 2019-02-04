@@ -1,5 +1,6 @@
 #N canvas 293 148 600 556 10;
-#X text 135 37 part of GEM;
+#X declare -lib Gem;
+#X text 375 7 part of GEM;
 #X obj 157 187 gemorb 1;
 #X text 69 93 respond to events of a SpaceOrb on a specified comport.
 ;
@@ -24,6 +25,7 @@ on the device or with the "reset"-message.;
 ;
 #X text 67 503 You can set the pause between the polls of the SpaceOrb
 with the "timer" message.;
+#X obj 458 8 declare -lib Gem;
 #X connect 1 0 3 0;
 #X connect 1 1 4 0;
 #X connect 1 2 5 0;

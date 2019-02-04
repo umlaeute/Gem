@@ -1,4 +1,5 @@
 #N canvas 162 181 644 454 10;
+#X declare -lib Gem;
 #X msg 139 99 gemList;
 #X text 176 62 GEM object;
 #X obj 139 207 part_render;
@@ -13,6 +14,7 @@ normal gemLists (for instance a [sphere]);
 ;
 #X text 39 381 you can turn on/off sizing of paticles (via [part_size])
 ;
+#X obj 538 8 declare -lib Gem;
 #X connect 0 0 2 0;
 #X connect 2 0 3 0;
 #X connect 5 0 2 0;

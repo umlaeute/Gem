@@ -1,4 +1,5 @@
 #N canvas 288 248 639 408 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -60,6 +61,7 @@ don't have hw-acceleration.;
 #X obj 224 362 gemwin;
 #X obj 451 111 alpha 1;
 #X obj 451 240 circle 1 30;
+#X obj 518 8 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 17 0 31 0;

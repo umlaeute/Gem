@@ -1,4 +1,5 @@
 #N canvas 309 237 664 366 10;
+#X declare -lib Gem;
 #X msg 180 86 gemList;
 #X text 176 62 GEM object;
 #X msg 180 195 gemList;
@@ -11,6 +12,7 @@
 #X text 52 254 change the size of the particles of a particle-system.
 You can also give an initial value.;
 #X text 52 295 the particle-size defaults to 1.0f;
+#X obj 548 8 declare -lib Gem;
 #X connect 0 0 4 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 1;

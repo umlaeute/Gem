@@ -1,4 +1,5 @@
 #N canvas 392 297 654 372 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 245 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -7,7 +8,7 @@
 #X obj 8 204 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 17 203 Arguments:;
-#X obj 7 76 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 7 76 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 449 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -82,6 +83,7 @@ difference between adjacent pixels). In mode "1" de-interlacing is
 always enforced.;
 #X text 63 282 Inlet 1: mode <int>: enforce(1) or not(0) (default:1)
 ;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

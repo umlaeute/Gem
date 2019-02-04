@@ -1,4 +1,5 @@
-#N canvas -48 0 754 404 10;
+#N canvas 6 61 754 404 10;
+#X declare -lib Gem;
 #X text 540 156 This is the damping vector;
 #X text 541 176 To slow particles down;
 #X text 99 206 keep all of the values less than one;
@@ -37,10 +38,11 @@ vector greater than 1 \, 1 \, 1 will speed up the particles.;
 #X text 519 316 Create window:;
 #X floatatom 663 192 5 0 0 0 - - -;
 #X msg 663 211 \$1 1 1;
-#X obj 521 10 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1 1
+#X obj 521 10 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
 #X obj 521 80 part_source 5;
 #X obj 521 237 part_damp 0.1 0.1 0.1;
+#X obj 628 8 declare -lib Gem;
 #X connect 9 0 10 0;
 #X connect 10 0 19 0;
 #X connect 11 0 20 0;

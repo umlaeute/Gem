@@ -1,4 +1,5 @@
 #N canvas 124 217 710 507 10;
+#X declare -lib Gem;
 #X text 475 49 Example:;
 #X obj 7 64 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -66,10 +67,10 @@ of the values of the light get set first.;
 #X obj 483 96 rotateXYZ 0 -120 0;
 #X obj 472 274 gemhead 40;
 #X floatatom 523 121 5 1 4 0 - - -;
-#X obj 549 261 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 549 266 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X msg 551 288 lighting \$1;
-#X obj 551 266 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 551 293 lighting \$1;
+#X obj 551 271 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X text 17 155 You can place the light with [rotate] and [translate].
 If you are lost use "debug" to display the light source as a small
@@ -81,6 +82,7 @@ sphere.;
 #X obj 492 175 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
 -1 0 1;
 #X text 27 362 Inlet 1: float: turn light on/off (default:1);
+#X obj 538 9 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 16 0 31 0;

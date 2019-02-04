@@ -1,4 +1,5 @@
 #N canvas 315 171 666 422 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 9 270 cnv 15 430 135 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -91,6 +92,7 @@ that are smaller then <lo_threshold> are ignored;
 #X text 15 78 [pix_movement2] detects movement in a frame with respect
 to the 2 previous frames and a "background"-image and stores it as
 a b/w-image (greyscale).;
+#X obj 548 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 20 0;

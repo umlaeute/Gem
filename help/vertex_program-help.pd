@@ -1,4 +1,5 @@
-#N canvas 35 199 694 458 10;
+#N canvas 35 199 631 458 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 335 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -165,6 +166,7 @@ to load;
 #X obj 453 422 fragment_program;
 #X text 451 405 see also:;
 #X obj 451 206 vertex_program toon.vp;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 16 0;

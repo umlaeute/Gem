@@ -1,11 +1,12 @@
 #N canvas 235 64 871 639 10;
-#X text 451 6 GEM object;
+#X declare -lib Gem;
+#X text 671 9 GEM object;
 #X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 559 47 cnv 15 280 500 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X text 71 21 Class: pix object (pix source);
-#X text 453 27 Example:;
+#X text 561 33 Example:;
 #X text 50 2 Synopsis: [pix_video];
 #X text 29 47 Description: open a camera and get input;
 #X obj 9 182 cnv 15 540 365 empty empty empty 20 12 0 14 -233017 -66577
@@ -60,7 +61,7 @@ for the image (does not work on all capture devices);
 #X text 13 66 [pix_video] opens a wide array of cameras \, USB to FireWire
 to capture cards \, as long as the camera is supported by your operating
 system.;
-#X obj 567 53 gemhead;
+#X obj 567 58 gemhead;
 #X msg 596 124 dimen 64 64;
 #X msg 586 99 dimen 256 128;
 #X msg 635 261 enumerate;
@@ -567,6 +568,7 @@ about a specific driver:;
 #X connect 15 0 4 0;
 #X coords 0 -1 1 1 170 40 1 100 100;
 #X restore 156 103 pd backend specific information;
+#X obj 738 8 declare -lib Gem;
 #X connect 17 0 18 0;
 #X connect 18 0 17 0;
 #X connect 22 0 21 0;

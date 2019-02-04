@@ -1,4 +1,5 @@
-#N canvas 57 47 659 349 10;
+#N canvas 57 61 625 325 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 226 cnv 15 430 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -52,6 +53,7 @@ matrix by the specified shear;
 #X obj 458 136 shearXZ 1;
 #X text 36 122 the X translation depend on Z position and the shear
 factor (float).;
+#X obj 518 8 declare -lib Gem;
 #X connect 18 0 19 0;
 #X connect 19 0 18 0;
 #X connect 22 0 25 0;

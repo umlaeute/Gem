@@ -1,4 +1,5 @@
-#N canvas 26 90 733 630 10;
+#N canvas 26 90 645 630 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X obj 466 65 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -91,6 +92,7 @@ this to work;
 #X obj 545 418 text2d;
 #X obj 592 418 text3d;
 #X text 27 457 Inlet 2: float: size (in points). (default:20);
+#X obj 531 8 declare -lib Gem;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 37 0;

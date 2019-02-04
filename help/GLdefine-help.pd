@@ -1,4 +1,5 @@
-#N canvas 78 37 701 310 10;
+#N canvas 78 61 701 310 10;
+#X declare -lib Gem;
 #X obj 519 47 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
 0;
 #X obj 584 234 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
@@ -56,6 +57,7 @@ in the OpenGL C++ code.;
 #X msg 542 98 GL_LINES;
 #X obj 534 142 GLdefine GL_ADD;
 #X msg 553 119 symbol GL_ACCUM;
+#X obj 588 8 declare -lib Gem;
 #X connect 2 0 3 0;
 #X connect 3 0 2 0;
 #X connect 14 0 27 0;

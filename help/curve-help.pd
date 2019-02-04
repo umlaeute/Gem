@@ -1,4 +1,5 @@
-#N canvas 65 18 762 461 10;
+#N canvas 65 61 682 456 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X text 475 39 Example:;
 #X obj 7 65 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
@@ -84,6 +85,7 @@ of control-points.;
 #X floatatom 600 274 5 0 100 0 - - -;
 #X msg 600 291 res \$1;
 #X msg 605 213 \$1 \$1 \$1;
+#X obj 569 8 declare -lib Gem;
 #X connect 13 0 14 0;
 #X connect 14 0 13 0;
 #X connect 30 0 47 0;

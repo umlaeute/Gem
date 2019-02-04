@@ -1,14 +1,15 @@
-#N canvas 435 49 682 509 10;
-#X text 363 9 GEM object;
+#N canvas 435 61 682 509 10;
+#X declare -lib Gem;
+#X text 433 9 GEM object;
 #X obj 9 375 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #X text 18 374 Arguments:;
 #X obj 8 56 cnv 15 430 310 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 449 43 cnv 15 170 410 empty empty empty 20 12 0 14 -228992 -66577
+#X obj 449 53 cnv 15 170 410 empty empty empty 20 12 0 14 -228992 -66577
 0;
-#X text 453 26 Example:;
-#X obj 479 419 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+#X text 453 36 Example:;
+#X obj 479 429 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
@@ -28,15 +29,15 @@
 #X connect 7 0 4 0;
 #X connect 7 1 6 0;
 #X connect 7 1 5 0;
-#X restore 484 458 pd gemwin;
-#X msg 484 439 create;
-#X text 480 418 Create window:;
-#X obj 451 184 cnv 15 167 230 empty empty empty 20 12 0 14 -24198 -66577
+#X restore 484 468 pd gemwin;
+#X msg 484 449 create;
+#X text 480 428 Create window:;
+#X obj 451 194 cnv 15 167 230 empty empty empty 20 12 0 14 -24198 -66577
 0;
-#X obj 451 49 gemhead;
-#X obj 451 118 pix_film;
-#X obj 515 118 t f;
-#X obj 464 71 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 451 59 gemhead;
+#X obj 451 128 pix_film;
+#X obj 515 128 t f;
+#X obj 464 81 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
 #N canvas 0 0 450 300 open 0;
 #X obj 85 49 inlet;
@@ -50,36 +51,36 @@
 #X connect 3 0 1 0;
 #X connect 4 0 1 0;
 #X connect 5 0 4 0;
-#X restore 464 90 pd open;
-#X text 485 64 open a supported;
-#X text 486 75 movie-clip;
+#X restore 464 100 pd open;
+#X text 485 74 open a supported;
+#X text 486 85 movie-clip;
 #X text 64 385 <none>;
 #X text 50 12 Synopsis: [pix_record];
 #X text 71 31 Class: pix object (output);
 #X text 29 57 Description: write a sequence of pixes to a movie file
 ;
-#X obj 451 393 pix_record;
-#X obj 451 157 pix_draw;
-#X obj 451 138 pix_invert;
+#X obj 451 403 pix_record;
+#X obj 451 167 pix_draw;
+#X obj 451 148 pix_invert;
 #X text 18 104 You can choose the codec you want to use either via
 a graphical dialog or by directly sending a "codec" with either the
 name or the enumeration number of the codec. Use "codeclist" to query
 the available codecs \, their names and their number.;
-#X obj 470 333 cnv 15 145 25 empty empty empty 20 12 0 14 -225271 -66577
+#X obj 470 343 cnv 15 145 25 empty empty empty 20 12 0 14 -225271 -66577
 0;
-#X msg 480 337 bang;
-#X msg 552 337 auto \$1;
-#X obj 533 338 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X msg 480 347 bang;
+#X msg 552 347 auto \$1;
+#X obj 533 348 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 470 189 cnv 15 145 65 empty empty empty 20 12 0 14 -225271 -66577
+#X obj 470 199 cnv 15 145 65 empty empty empty 20 12 0 14 -225271 -66577
 0;
-#X msg 476 214 codeclist;
-#X msg 472 193 dialog;
-#X obj 472 234 t a;
-#X obj 460 261 cnv 15 155 65 empty empty empty 20 12 0 14 -225271 -66577
+#X msg 476 224 codeclist;
+#X msg 472 203 dialog;
+#X obj 472 244 t a;
+#X obj 460 271 cnv 15 155 65 empty empty empty 20 12 0 14 -225271 -66577
 0;
-#X msg 463 282 file /tmp/mymovie.mov;
-#X obj 464 263 bng 15 250 50 0 empty empty empty 0 -6 0 8 -258699 -1
+#X msg 463 292 file /tmp/mymovie.mov;
+#X obj 464 273 bng 15 250 50 0 empty empty empty 0 -6 0 8 -258699 -1
 -1;
 #N canvas 0 0 450 300 savepanel 0;
 #X obj 114 62 inlet;
@@ -92,11 +93,11 @@ the available codecs \, their names and their number.;
 #X connect 2 1 1 0;
 #X connect 3 0 4 0;
 #X connect 4 0 2 0;
-#X restore 484 262 pd savepanel;
-#X msg 520 305 record \$1;
-#X obj 500 307 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X restore 484 272 pd savepanel;
+#X msg 520 315 record \$1;
+#X obj 500 317 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 463 305 t a;
+#X obj 463 315 t a;
 #X text 14 73 [pix_write] writes a series of pixes into a movie file.
 You can set the file to write to via the "file" message.;
 #X text 18 174 When file and codec are specified \, you can open the
@@ -108,8 +109,8 @@ on which frames are to be recorded.;
 #X text 17 269 The recording is finished and the file flushed to disk
 \, after a "record 0" message is received. You might not be able to
 access the file for reading before recording has finished.;
-#X text 526 140 (do something);
-#X text 515 158 (monitoring);
+#X text 526 150 (do something);
+#X text 515 168 (monitoring);
 #X text 22 339 NOTE: currently only quicktime MOVies can be recorded.
 This might change in the future (watch the console!);
 #X obj 8 414 cnv 15 430 30 empty empty empty 20 12 0 14 -233017 -66577
@@ -142,9 +143,9 @@ properties unknown to the currently selected coded are ignored.;
 #X text 18 123 Inlet 1: dialog: popup a dialog to select the codec
 (if available);
 #X restore 83 420 pd MESSAGES;
-#X floatatom 527 395 3 0 0 0 - - -;
-#X msg 532 234 codec mjpa;
-#X msg 552 215 codec 3;
+#X floatatom 527 405 3 0 0 0 - - -;
+#X msg 532 244 codec mjpa;
+#X msg 552 225 codec 3;
 #N canvas 129 512 599 344 PROPERTIES 0;
 #N canvas 607 622 561 319 PropertyLogic 0;
 #X obj 54 6 inlet;
@@ -436,9 +437,9 @@ properties unknown to the currently selected coded are ignored.;
 #X connect 12 0 11 0;
 #X connect 13 0 11 0;
 #X restore 243 420 pd PROPERTIES;
-#X obj 553 376 r \$0-ctl;
-#X obj 621 251 s \$0-ctl;
-#X obj 620 322 s \$0-ctl;
+#X obj 553 386 r \$0-ctl;
+#X obj 621 261 s \$0-ctl;
+#X obj 620 332 s \$0-ctl;
 #N canvas 6 49 515 369 print 0;
 #X obj 102 176 inlet;
 #X obj 102 198 s \$0-nfo;
@@ -450,7 +451,8 @@ properties unknown to the currently selected coded are ignored.;
 out the messages generated from the [pd PROPERTIES] window.;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;
-#X restore 553 393 pd print;
+#X restore 553 403 pd print;
+#X obj 518 8 declare -lib Gem;
 #X connect 7 0 8 0;
 #X connect 8 0 7 0;
 #X connect 11 0 12 0;

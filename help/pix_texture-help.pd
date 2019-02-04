@@ -1,4 +1,5 @@
-#N canvas 43 51 647 715 10;
+#N canvas 43 61 647 715 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 8 392 cnv 15 430 360 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -85,15 +86,15 @@ computationally expensive). However \, on many machines (especially
 SGIs) \, there is no speed difference.;
 #X text 14 233 [pix_texture] is able to texture images of ANY size
 (even non-power of 2);
-#X obj 542 472 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 532 472 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X msg 542 491 rectangle \$1;
+#X msg 532 491 rectangle \$1;
 #X obj 469 497 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 542 432 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 532 432 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X msg 469 516 client_storage \$1;
-#X msg 542 451 repeat \$1;
+#X msg 532 451 repeat \$1;
 #X text 29 453 Inlet 1: repeat 0|1 : CLAMP_TO_EDGE or REPEAT(default)
 ;
 #X text 28 470 Inlet 1: rectangle 0|1 : use rectangle-texturing if
@@ -144,6 +145,7 @@ color.;
 #X msg 537 351 pbo \$1;
 #X text 28 626 Inlet 1: message: yuv : use native YUV-mode if available
 (default:1), f 69;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

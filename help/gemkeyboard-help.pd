@@ -1,4 +1,5 @@
-#N canvas 64 27 679 445 10;
+#N canvas 64 61 679 445 10;
+#X declare -lib Gem;
 #X obj 27 85 cnv 15 450 170 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 28 303 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
@@ -9,7 +10,7 @@
 #X text 37 264 Arguments:;
 #X text 472 28 GEM object;
 #X text 29 337 Outlets:;
-#X text 495 49 Example:;
+#X text 485 69 Example:;
 #X text 74 50 Class: control object;
 #X obj 486 84 cnv 15 170 180 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -57,6 +58,7 @@ will give the same KeyCode for the same key pressed !!!;
 #X floatatom 508 153 5 0 0 1 keyCode - -;
 #X text 488 274 see also:;
 #X obj 489 299 gemkeyname;
+#X obj 556 30 declare -lib Gem;
 #X connect 12 0 13 0;
 #X connect 13 0 12 0;
 #X connect 24 0 25 0;

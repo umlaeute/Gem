@@ -1,5 +1,6 @@
-#N canvas 404 365 654 372 10;
-#X text 452 8 GEM object;
+#N canvas 404 365 632 342 10;
+#X declare -lib Gem;
+#X text 442 8 GEM object;
 #X obj 8 245 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 252 Inlets:;
@@ -69,6 +70,7 @@ a YUV-image will be set to 127 (no chroma);
 #X text 17 97 Assuming that you have an image in the gemList (for instance
 \, loaded in with pix_image) \, [pix_2grey] will convert the image
 into a greyscale \, without changing the actual colorspace.;
+#X obj 518 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;

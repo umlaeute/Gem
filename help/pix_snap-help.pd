@@ -1,5 +1,6 @@
-#N canvas 17 223 935 395 10;
-#X text 452 8 GEM object;
+#N canvas 17 223 835 395 10;
+#X declare -lib Gem;
+#X text 522 8 GEM object;
 #X obj 8 216 cnv 15 430 160 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X text 39 218 Inlets:;
@@ -96,6 +97,7 @@ is captured from the current frame buffer.;
 #X msg 518 227 0;
 #X obj 451 256 pix_snap 0 0 500 500;
 #X msg 570 209 100 100;
+#X obj 598 8 declare -lib Gem;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 19 0 33 0;

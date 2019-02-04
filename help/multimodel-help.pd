@@ -1,4 +1,5 @@
-#N canvas 368 22 710 565 10;
+#N canvas 368 61 710 490 10;
+#X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X obj 464 77 cnv 15 200 180 empty empty empty 20 12 0 14 -228992 -66577
 0;
@@ -62,6 +63,7 @@ the * in the file name and replaces it with a number.;
 #X text 7 69 Description: load multiple an Alias/Wavefront-Model and
 renders one of them;
 #X text 18 386 for other messages to [multimodel] see [model];
+#X obj 558 8 declare -lib Gem;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 18 0 19 0;

@@ -1,4 +1,5 @@
-#N canvas 203 0 664 575 10;
+#N canvas 203 61 664 575 10;
+#X declare -lib Gem;
 #X msg 180 86 gemList;
 #X text 176 62 GEM object;
 #X msg 180 195 gemList;
@@ -21,6 +22,7 @@ number of particles that are emitted at each rendering-frame;
 domain (like "x y z" for "point" \, "x1 y1 z1 x2 y2 z2" for "line"
 \, "x y z r" for "sphere" \, ...). The meaning of the arguments depends
 -of course- on the domain.;
+#X obj 548 8 declare -lib Gem;
 #X connect 0 0 5 0;
 #X connect 5 0 2 0;
 #X connect 9 0 5 1;
