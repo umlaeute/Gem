@@ -14,6 +14,7 @@ LOG
 #define _INCLUDE__GEM_GEM_DYLIB_H_
 
 #include "Gem/Exception.h"
+#include <string>
 
 
 /* an opaque handle to the platform specific library handle */
