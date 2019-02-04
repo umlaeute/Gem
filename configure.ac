@@ -225,15 +225,15 @@ AC_CHECK_LIB([m],[sin])
 AC_CHECK_LIB([z],[zlibVersion])
 AC_CHECK_LIB([dl],[dlopen])
 
-# w32 compatibility library
-AC_CHECK_LIB([OLDNAMES], [close])
-AC_CHECK_LIB([coldname], [close])
-# Standard C++ Libray:
-AC_CHECK_LIB([libcpmt], [main])
-# C runtime library:
+## w32 compatibility library
+#AC_CHECK_LIB([OLDNAMES], [close])
+#AC_CHECK_LIB([coldname], [close])
+## Standard C++ Libray:
+#AC_CHECK_LIB([libcpmt], [main])
+## C runtime library:
 AC_CHECK_LIB([msvcrt], [fclose])
-# Standard C++ Libray:
-AC_CHECK_LIB([msvcprt], [main])
+## Standard C++ Libray:
+#AC_CHECK_LIB([msvcprt], [main])
 # Winsock Library
 AC_CHECK_LIB([ws2_32], [main])
 AC_CHECK_LIB([wsock32], [select])
