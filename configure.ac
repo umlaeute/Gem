@@ -243,8 +243,6 @@ AC_PATH_X
 AC_PATH_XTRA
 
 AS_IF([test "x$with_x" != "xno"], [
-dnl AC_CHECK_LIB([X11],[main])
-dnl AC_CHECK_LIB([Xext],[main])
  AC_CHECK_LIB([Xxf86vm],[XF86VidModeGetAllModeLines])
  AC_CHECK_HEADERS([X11/extensions/XInput2.h])
  AC_CHECK_LIB([Xrender],[XRenderFindVisualFormat])
