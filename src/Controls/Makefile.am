@@ -53,9 +53,7 @@ libControls_la_SOURCES+=  \
 endif !ENABLE_MULTICONTEXT
 
 
-if EXPERIMENTAL
 libControls_la_SOURCES+=  \
     modelfiler.cpp \
     modelfiler.h \
     $(empty)
-endif EXPERIMENTAL
