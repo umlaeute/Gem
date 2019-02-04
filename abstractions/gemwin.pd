@@ -202,7 +202,7 @@ args) into the object);
 #X obj 31 186 outlet;
 #X obj 195 216 outlet gemwin;
 #X obj 195 154 t b;
-#X msg 195 177 dimen 500 500 \, offset 0 0 \, fullscreen 0 \, title
+#X msg 195 177 dimen 500 500 \, offset 50 50 \, fullscreen 0 \, title
 GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #X connect 0 0 1 0;
 #X connect 1 0 4 0;
