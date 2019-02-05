@@ -6,9 +6,8 @@
 //
 // Implementation file
 //
-//    Copyright (c) 2014 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    based on ofDirectShowPlayer
-//        Copyright (c) 2014 Theodore Watson
+//    Copyright © 2014-2019 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+//    based on ofDirectShowPlayer, Copyright © 2014 Theodore Watson
 //    For information on usage and redistribution, and for a DISCLAIMER OF ALL
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
@@ -22,12 +21,9 @@
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
 #include "Utils/wstring.h"
-
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-// DirectShow includes and helper methods
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+/* C++11 */
+#include <memory>
+#include <functional>
 
 #if 0
 # define MARK_HR(hr) if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
@@ -36,13 +32,18 @@
 #endif
 #define MARK() MARK_HR(0)
 
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+// DirectShow includes and helper methods
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
 #include <dshow.h>
 #pragma include_alias( "dxtrans.h", "qedit.h" )
 #define __IDxtCompositor_INTERFACE_DEFINED__
 #define __IDxtAlphaSetter_INTERFACE_DEFINED__
 #define __IDxtJpeg_INTERFACE_DEFINED__
 #define __IDxtKey_INTERFACE_DEFINED__
-#include <uuids.h>
 #include <aviriff.h>
 #include <windows.h>
 
@@ -182,6 +183,7 @@ HRESULT ConnectFilters(
 }
 
 
+
 // ConnectFilters
 //    Connects two filters
 HRESULT ConnectFilters(
@@ -232,10 +234,11 @@ void LocalDeleteMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
+HRESULT SaveGraphFile(IGraphBuilder *pGraph, WCHAR *wszPath)
 {
   const WCHAR wszStreamName[] = L"ActiveMovieGraph";
-  HRESULT hr=0;
+  HRESULT hr;
+
   IStorage *pStorage = NULL;
   hr = StgCreateDocfile(
          wszPath,
@@ -266,96 +269,47 @@ HRESULT SaveGraphFile(IGraphBuilder *pGraph, const WCHAR*wszPath)
   pStorage->Release();
   return hr;
 }
-HRESULT SaveGraphFile(IGraphBuilder *pGraph, std::string path)
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+// DirectShowVideo - a simple directshow video player implementation
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+namespace
 {
-  std::wstring filePathW = gem::string::utf8string_to_wstring(path);
-  const WCHAR*wszPath=filePathW.c_str();
-  return SaveGraphFile(pGraph, wszPath);
-}
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-// DirectShowVideo - contains a simple directshow video player implementation
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+int comRefCount = 0;
 
-static int comRefCount = 0;
-
-static void retainCom()
+void retainCom()
 {
   if( comRefCount == 0 ) {
-    printf("COM is initialized!\n");
+    //printf("com is initialized!\n");
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
   }
   comRefCount++;
 }
 
-static void releaseCom()
+void releaseCom()
 {
   comRefCount--;
   if( comRefCount == 0 ) {
-    printf("COM is uninitialized!\n");
+    //printf("com is uninitialized!\n");
     CoUninitialize();
   }
 }
 
+void releaseSample(IMediaSample * sample)
+{
+  sample->Release();
+}
+}
+
+
 class gem::plugins::filmDS::DirectShowVideo : public ISampleGrabberCB
 {
 public:
-  IGraphBuilder *m_pGraph;          // Graph Builder interface
-  IMediaControl *m_pControl;        // Media Control interface
-  IMediaSeeking *m_pSeek;           // Media Seeking interface
-  IMediaPosition*m_pPosition;
-  ISampleGrabber*m_pGrabber;
-  IBaseFilter   *m_pSourceFile;
-  IBaseFilter   *m_pGrabberF;
-  IBasicVideo   *m_pBasicVideo;
-  IBaseFilter   *m_pNullRenderer;
-
-  REFERENCE_TIME rtNew;                    // Reference time of movie
-
-  long width, height;
-  long videoSize;
-
-  double averageTimePerFrame;
-
-  bool bVideoOpened;
-#if 0
-  bool bNewPixels;
-#endif
-  LONGLONG m_Duration;
-  long m_numFrames;
-
-  LONGLONG m_lastFrame;
-  LONGLONG m_wantFrame;
-
-  CRITICAL_SECTION critSection;
-  unsigned char * rawBuffer;
-
-  double m_auto;
 
   DirectShowVideo()
-    : m_pGraph(NULL)
-    , m_pControl(NULL)
-    , m_pSeek(NULL)
-    , m_pPosition(NULL)
-    , m_pGrabber(NULL)
-    , m_pSourceFile(NULL)
-    , m_pGrabberF(NULL)
-    , m_pBasicVideo(NULL)
-    , m_pNullRenderer(NULL)
-    , rtNew(0)
-    , width(0)
-    , height(0)
-    , videoSize(0)
-    , averageTimePerFrame(1.0/30.0)
-#if 0
-    , bNewPixels(false)
-    , bVideoOpened(false)
-#endif
-    , m_lastFrame(-1)
-    , m_wantFrame(0)
-    , rawBuffer(NULL)
-    , m_auto(0.)
   {
     retainCom();
     clearValues();
@@ -364,13 +318,11 @@ public:
 
   ~DirectShowVideo()
   {
-MARK();
     tearDown();
-MARK();
+    middleSample.reset();
+    backSample.reset();
     releaseCom();
-MARK();
     DeleteCriticalSection(&critSection);
-MARK();
   }
 
   void tearDown()
@@ -380,8 +332,14 @@ MARK();
     if(m_pControl) {
       m_pControl->Release();
     }
+    if(m_pEvent) {
+      m_pEvent->Release();
+    }
     if(m_pSeek) {
       m_pSeek->Release();
+    }
+    if(m_pAudio) {
+      m_pAudio->Release();
     }
     if(m_pBasicVideo) {
       m_pBasicVideo->Release();
@@ -404,39 +362,46 @@ MARK();
     if( m_pPosition ) {
       m_pPosition->Release();
     }
-
-    if(rawBuffer) {
-      delete rawBuffer;
-    }
     clearValues();
   }
 
   void clearValues()
   {
+    hr = 0;
+
     m_pGraph = NULL;
     m_pControl = NULL;
+    m_pEvent = NULL;
     m_pSeek = NULL;
+    m_pAudio = NULL;
     m_pGrabber = NULL;
     m_pGrabberF = NULL;
     m_pBasicVideo = NULL;
     m_pNullRenderer = NULL;
     m_pSourceFile = NULL;
     m_pPosition = NULL;
-    m_lastFrame=-1;
-    m_wantFrame=0;
 
-    rawBuffer = NULL;
-
+    timeNow = 0;
+    lPositionInSecs = 0;
+    lDurationInNanoSecs = 0;
+    lTotalDuration = 0;
     rtNew = 0;
+    lPosition = 0;
+    lvolume = -1000;
+    evCode = 0;
     width = height = 0;
-    videoSize = 0;
-
     bVideoOpened = false;
-    //    bNewPixels = false;
+    bLoop = true;
+    bPaused = false;
+    bPlaying = false;
+    bEndReached = false;
+    bNewPixels = false;
+    bFrameNew = false;
+    curMovieFrame = -1;
+    frameCount = -1;
 
+    movieRate = 1.0;
     averageTimePerFrame = 1.0/30.0;
-    m_auto = 0.;
-
   }
 
   //------------------------------------------------
@@ -461,7 +426,32 @@ MARK();
   //------------------------------------------------
   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
   {
-    return E_NOTIMPL;
+
+    BYTE * ptrBuffer = NULL;
+    HRESULT hr = pSample->GetPointer(&ptrBuffer);
+
+    if(hr == S_OK) {
+      long latestBufferLength = pSample->GetActualDataLength();
+      int currentBufferLength = pixels.xsize * pixels.ysize * pixels.csize;
+      if(latestBufferLength == currentBufferLength ) {
+        EnterCriticalSection(&critSection);
+        pSample->AddRef();
+        backSample =
+          std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>(pSample,
+              releaseSample);
+        bNewPixels = true;
+
+        //this is just so we know if there is a new frame
+        frameCount++;
+
+        LeaveCriticalSection(&critSection);
+      } else {
+        error("[GEM:videoDS] SampleCB() - buffer sizes do not match %d != %d",
+              latestBufferLength, currentBufferLength);
+      }
+    }
+
+    return S_OK;
   }
 
   //This method is meant to have more overhead
@@ -470,39 +460,52 @@ MARK();
     return E_NOTIMPL;
   }
 
-  bool loadMovie(std::string path)
+  bool loadMovie(std::string path, int format)
   {
     tearDown();
+    pixelFormat = format;
 
     // Create the Filter Graph Manager and query for interfaces.
 
-    HRESULT hr = CoCreateInstance(CLSID_FilterGraph, NULL,
-                                  CLSCTX_INPROC_SERVER,
-                                  IID_IGraphBuilder, (void **)&m_pGraph);
-    if (FAILED(hr) || !m_pGraph) {
-      verbose(1, "[GEM::filmDS] unable to create Filter Graph Manager: %d", hr);
+    //printf("step 1\n");
+    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+                          IID_IGraphBuilder, (void **)&m_pGraph);
+    if (FAILED(hr)) {
       tearDown();
       return false;
     }
 
-    // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
-    hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
-    if (FAILED(hr) || !m_pControl) {
-      verbose(1, "[GEM::filmDS] could not get MediaControl interface: %d", hr);
-      tearDown();
-      return false;
-    }
-
+    //printf("step 2\n");
     hr = m_pGraph->QueryInterface(IID_IMediaSeeking, (void**)&m_pSeek);
-    if (FAILED(hr) || !m_pSeek) {
-      verbose(1, "[GEM::filmDS] could not get MediaSeeking interface: %d", hr);
+    if (FAILED(hr)) {
       tearDown();
       return false;
     }
 
     hr = m_pGraph->QueryInterface(IID_IMediaPosition, (LPVOID *)&m_pPosition);
-    if (FAILED(hr) || !m_pPosition) {
-      verbose(1, "[GEM::filmDS] could not get MediaPosition interface: %d", hr);
+    if (FAILED(hr)) {
+      tearDown();
+      return false;
+    }
+
+    hr = m_pGraph->QueryInterface(IID_IBasicAudio,(void**)&m_pAudio);
+    if (FAILED(hr)) {
+      tearDown();
+      return false;
+    }
+
+    // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
+    //printf("step 4\n");
+    hr = m_pGraph->QueryInterface(IID_IMediaControl, (void **)&m_pControl);
+    if (FAILED(hr)) {
+      tearDown();
+      return false;
+    }
+
+    // And get the Media Event interface, too.
+    //printf("step 5\n");
+    hr = m_pGraph->QueryInterface(IID_IMediaEvent, (void **)&m_pEvent);
+    if (FAILED(hr)) {
       tearDown();
       return false;
     }
@@ -512,480 +515,657 @@ MARK();
     hr = CoCreateInstance(CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER,
                           IID_IBaseFilter, (void**)&m_pGrabberF);
     if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] could not create SampleGrabber: %d", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGraph->AddFilter(m_pGrabberF, L"Sample Grabber");
     if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] could not add SampleGrabber filter: %d", hr);
       tearDown();
       return false;
     }
 
     hr = m_pGrabberF->QueryInterface(IID_ISampleGrabber, (void**)&m_pGrabber);
     if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] could not get SampleGrabber interface: %d", hr);
+      tearDown();
+      return false;
+    }
+
+    hr = m_pGrabber->SetCallback(this, 0);
+    if (FAILED(hr)) {
       tearDown();
       return false;
     }
 
     //MEDIA CONVERSION
-    //Get video properties from the stream's mediatype and apply to the grabber (otherwise we don't get an RGBA image)
+    //Get video properties from the stream's mediatype and apply to the grabber (otherwise we don't get an RGB image)
     AM_MEDIA_TYPE mt;
     ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
-    mt.majortype         = MEDIATYPE_Video;
-    mt.subtype           = MEDIASUBTYPE_RGB32;
-    mt.formattype        = GUID_NULL;//FORMAT_VideoInfo;
+    mt.majortype    = MEDIATYPE_Video;
+    switch (format) {
+    case GEM_RGB:
+      mt.subtype = MEDIASUBTYPE_RGB24;
+      break;
+    case GEM_RGBA:
+      mt.subtype = MEDIASUBTYPE_RGB32;
+      break;
+    default:
+      verbose(1,
+              "[GEM:videoDS] Trying to set unsupported format this is an internal bug, using default RGBA");
+      mt.subtype = MEDIASUBTYPE_RGB32;
+    }
 
+    mt.formattype   = FORMAT_VideoInfo;
+    //printf("step 5.5\n");
     hr = m_pGrabber->SetMediaType(&mt);
     if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] could not set MediaType: %d", hr);
       tearDown();
       return false;
     }
 
-    std::wstring filePathW = gem::string::utf8string_to_wstring(path);
+    //printf("step 6\n");
+    std::wstring filePathW = std::wstring(path.begin(), path.end());
 
-    //this is the more manual way to do it - its a pain though because the audio won't be connected by default
-    hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source",
-                                   &m_pSourceFile);
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] could not add Source Filter: %d", hr);
-      tearDown();
-      return false;
-    }
+    //this is the easier way to connect the graph, but we have to remove the video window manually
+    hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
 
-    hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
-    if (FAILED(hr)) {
-MARK_HR(hr);
-      verbose(1,
-              "[GEM::filmDS] unable to ConnectFilters(%p, %p, %p)", m_pGraph, m_pSourceFile, m_pGrabberF);
-      tearDown();
-      return false;
-    }
+    //printf("step 7\n");
+    if (SUCCEEDED(hr)) {
 
-    if(!SUCCEEDED(hr)) { // can this ever happen after we just checked for FAILED(hr)??
-      verbose(1, "[GEM::filmDS] Error occured while playing or pausing or opening the file");
-      tearDown();
-      return false;
-    }
-
-    //Set Params - One Shot should be false unless you want to capture just one buffer
-    hr = m_pGrabber->SetOneShot(FALSE);
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] unable to set one shot");
-      tearDown();
-      return false;
-    }
-
-    hr = m_pGrabber->SetBufferSamples(TRUE);
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] unable to set buffer samples");
-      tearDown();
-      return false;
-    }
-
-    //NULL RENDERER//
-    //used to give the video stream somewhere to go to.
-    hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
-                          IID_IBaseFilter, (void**)(&m_pNullRenderer));
-    if (FAILED(hr) || !m_pNullRenderer) {
-      verbose(1, "[GEM::filmDS] null renderer error");
-      tearDown();
-      return false;
-    }
-
-    hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] unable to add null renderer");
-      tearDown();
-      return false;
-    }
-
-    hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
-    if (FAILED(hr)) {
-MARK_HR(hr);
-      verbose(1, "[GEM::filmDS] unable to ConnectFilters(%s, %s, %s)", m_pGraph, m_pGrabberF, m_pNullRenderer);
-      tearDown();
-      return false;
-    }
-
-    // Set the time format to frames
-    GUID Guid = TIME_FORMAT_FRAME;
-    bool bFrameTime = true;
-    hr = m_pSeek->SetTimeFormat(&Guid);
-
-    if (FAILED(hr)) {
-      // If frame time format not available, default to 100 nanosecond increments.
-      bFrameTime = false;
-      Guid = TIME_FORMAT_MEDIA_TIME;
-
-      hr = m_pSeek->SetTimeFormat(&Guid);
-
+      //Set Params - One Shot should be false unless you want to capture just one buffer
+      hr = m_pGrabber->SetOneShot(FALSE);
       if (FAILED(hr)) {
-        verbose(1, "[GEM::filmDS] Unable to set video time format %d", hr);
+        verbose(1, "[GEM:videoDS] unable to set one shot");
         tearDown();
         return false;
       }
-    }
 
-    // Get the duration of the video. Format will be in previously set time format. This is
-    // compatible with the value returned from GetCurrentPosition
-    hr = m_pSeek->GetDuration(&m_Duration);
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] Unable to get video duration %d", hr);
-      tearDown();
-      return false;
-    }
-    // Set the number of frames based on the time format used.
-    if (bFrameTime) {
-      m_numFrames = m_Duration;
+      //apparently setting to TRUE causes a small memory leak
+      hr = m_pGrabber->SetBufferSamples(FALSE);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] unable to set buffer samples");
+        tearDown();
+        return false;
+      }
+
+      //NULL RENDERER//
+      //used to give the video stream somewhere to go to.
+      hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
+                            IID_IBaseFilter, (void**)(&m_pNullRenderer));
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] null renderer error");
+        tearDown();
+        return false;
+      }
+
+      hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] unable to add null renderer");
+        tearDown();
+        return false;
+      }
+
+      AM_MEDIA_TYPE mt;
+      ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
+
+      hr = m_pGrabber->GetConnectedMediaType(&mt);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] unable to call GetConnectedMediaType");
+        tearDown();
+        return false;
+      }
+
+      VIDEOINFOHEADER * infoheader = (VIDEOINFOHEADER*)mt.pbFormat;
+      width = infoheader->bmiHeader.biWidth;
+      height = infoheader->bmiHeader.biHeight;
+      averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
+      pixels.xsize = width;
+      pixels.ysize = height;
+      pixels.setCsizeByFormat(pixelFormat);
+      pixels.reallocate();
+
+      //we need to manually change the output from the renderer window to the null renderer
+      IBaseFilter * m_pVideoRenderer;
+      IPin* pinIn = 0;
+      IPin* pinOut = 0;
+
+      hr = m_pGraph->FindFilterByName(L"Video Renderer", &m_pVideoRenderer);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] failed to find the video renderer");
+        tearDown();
+        return false;
+      }
+
+      //we disconnect the video renderer window by finding the output pin of the sample grabber
+      hr = m_pGrabberF->FindPin(L"Out", &pinOut);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] failed to find the sample grabber output pin");
+        tearDown();
+        return false;
+      }
+
+      hr = pinOut->Disconnect();
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] failed to disconnect grabber output pin");
+        tearDown();
+        return false;
+      }
+
+      //we have to remove it as well otherwise the graph builder will reconnect it
+      hr = m_pGraph->RemoveFilter(m_pVideoRenderer);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] failed to remove the default renderer");
+        tearDown();
+        return false;
+      } else {
+        m_pVideoRenderer->Release();
+      }
+
+      //now connect the null renderer to the grabber output, if we don't do this not frames will be captured
+      hr = m_pNullRenderer->FindPin(L"In", &pinIn);
+      if (FAILED(hr)) {
+        verbose(1,
+                "[GEM:videoDS] failed to find the input pin of the null renderer");
+        tearDown();
+        return false;
+      }
+
+      hr = pinOut->Connect(pinIn, NULL);
+      if (FAILED(hr)) {
+        verbose(1, "[GEM:videoDS] failed to connect the null renderer");
+        tearDown();
+        return false;
+      }
+
+      //printf("step 8\n");
+
+
+      // Run the graph.
+
+      //SaveGraphFile(m_pGraph, L"test2.grf");
+      hr = m_pControl->Run();
+      //SaveGraphFile(m_pGraph, L"test3.grf");
+
+      // Now pause the graph.
+      hr = m_pControl->Stop();
+      updatePlayState();
+
+      if( FAILED(hr) || width == 0 || height == 0 ) {
+        tearDown();
+        verbose(1,
+                "[GEM:videoDS] Error occured while playing or pausing or opening the file");
+        return false;
+      }
     } else {
-      LONGLONG OutFormat;
-      GUID     OutGuid = TIME_FORMAT_FRAME;
-      Guid = TIME_FORMAT_MEDIA_TIME;
-      //converts from 100 nanosecond format to number of frames
-      m_pSeek->ConvertTimeFormat(&OutFormat, &OutGuid, m_Duration, &Guid);
-
-      m_numFrames = OutFormat;
-    }
-
-    ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
-    m_pGrabber->GetConnectedMediaType(&mt);
-    if (FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] unable to call GetConnectedMediaType %d", hr);
       tearDown();
+      verbose(1,
+              "[GEM:videoDS] Error occured while playing or pausing or opening the file");
       return false;
     }
-
-    if(FORMAT_VideoInfo != mt.formattype || !mt.pbFormat) {
-      verbose(1, "[GEM::filmDS] invalid media type");
-      tearDown();
-      return false;
-    }
-
-    VIDEOINFOHEADER * infoheader = (VIDEOINFOHEADER*)mt.pbFormat;
-    width = infoheader->bmiHeader.biWidth;
-    height = infoheader->bmiHeader.biHeight;
-    averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
-
-    //verbose(1, "[GEM::filmDS] video dimensions are %dx%d", width, height);
-    if( width == 0 || height == 0 ) {
-      verbose(1, "[GEM::filmDS] illegal frame size %dx%d", width, height);
-      tearDown();
-      return false;
-    }
-
-    videoSize = width * height * 4;
-    rawBuffer = new unsigned char[videoSize];
-    if(!rawBuffer) {
-      verbose(1, "[GEM::filmDS] unable to allocate memory for video buffer");
-      tearDown();
-      return false;
-    }
-    //FreeMediaType(mt); // FIXXME
-
-    // FIXXME: original code now does some special tricks for DV video
-
-    // Run the graph.
-
-    hr = m_pControl->Run();
-    if( FAILED(hr) ) {
-      verbose(1, "[GEM::filmDS] unable to start film", hr);
-      tearDown();
-      return false;
-    }
-
-    // Wait for the video to begin playing.
-    while(true) {
-      OAFilterState FilterState;
-
-      // Get the state and ensure it's not in an intermediate state
-      hr = m_pControl->GetState(0, &FilterState);
-      if (FAILED(hr) && hr != VFW_S_STATE_INTERMEDIATE) {
-        verbose(1, "[GEM::filmDS] Unable to run film %d", hr);
-        tearDown();
-        return false;
-      }
-
-      // Ensure the video is running
-      if (SUCCEEDED(hr) && State_Running == FilterState) {
-        break;
-      }
-    }
-
-    // FIXXME: shall we register the filtergraph?
 
     bVideoOpened = true;
-    m_lastFrame=-1;
-    m_wantFrame=0;
     return true;
   }
 
-  void processPixels(unsigned char * src, unsigned char * dst, int width,
-                     int height, bool bRGB, bool bFlip)
+  void update()
   {
-MARK();
-    int widthInBytes = width * 4;
-    int numBytes = widthInBytes * height;
+    if( bVideoOpened ) {
 
-    if(!bRGB) {
-
-      int x = 0;
-      int y = 0;
-
-      if(bFlip) {
-        for(int y = 0; y < height; y++) {
-          memcpy(dst + (y * widthInBytes), src + ( (height -y -1) * widthInBytes),
-                 widthInBytes);
-        }
-
-      } else {
-        memcpy(dst, src, numBytes);
-      }
-    } else {
-      if(bFlip) {
-
-        int x = 0;
-        int y = (height - 1) * widthInBytes;
-        src += y;
-
-        for(int i = 0; i < numBytes; i+=4) {
-          if(x >= width) {
-            x = 0;
-            src -= widthInBytes*2;
-          }
-
-          *dst = *(src+2);
-          dst++;
-
-          *dst = *(src+1);
-          dst++;
-
-          *dst = *src;
-          dst++;
-
-          *dst = *(src+3);
-          dst++;
-
-          src+=4;
-          x++;
-        }
-      } else {
-        for(int i = 0; i < numBytes; i+=4) {
-          *dst = *(src+2);
-          dst++;
-
-          *dst = *(src+1);
-          dst++;
-
-          *dst = *src;
-          dst++;
-
-          *dst = *(src+3);
-          dst++;
-
-          src+=4;
-        }
-      }
-    }
-  }
-
-  double getFramesPerSecond(void)
-  {
-MARK();
-    return 1. / averageTimePerFrame;
-  }
-
-  //this is the non-callback approach
-  bool getPixels(unsigned char * dstBuffer)
-  {
-MARK();
-    if(!bVideoOpened) {
-      return false;
-    }
-
-    long bufferSize = videoSize;
-    HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
-
-    if(FAILED(hr)) {
-      verbose(1, "[GEM::filmDS] ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i",
-             bufferSize);
-      return false;
-    }
-
-    if (videoSize != bufferSize) {
-      verbose(1, "[GEM::filmDS] ERROR: GetPixels() - bufferSizes do not match!");
-      return false;
-    }
-
-    processPixels(rawBuffer, dstBuffer, width, height, true, true);
-    return true;
-  }
-  bool getFrame(pixBlock&pb)
-  {
-MARK();
-    if(!bVideoOpened) {
-      return false;
-    }
-
-    long frameSize = width*height*4;
-    HRESULT hr;
-    OAFilterState State;
-MARK();
-    hr=m_pControl->GetState(0, &State);
-    if(m_auto > 0.f) {
-MARK();
-      if(m_wantFrame >= m_numFrames) {
-        return false;
-      }
-      //if the video is paused then start it running again
-      if (State != State_Running) {
-        hr = m_pControl->Run();
-        hr = m_pControl->GetState(0, &State);
-      }
-
-      //set the rate of the clip
-      hr = m_pSeek->SetRate(m_auto);
-
-      if (State == State_Running) {
-        // Get the current position of the video
-        LONGLONG CurrentPosition;
-        hr = m_pSeek->GetCurrentPosition(&CurrentPosition);
-        if (S_OK == hr) {
-          // If the current position is >= the duration, reset the position to the
-          // beginning
-          if (CurrentPosition >= m_numFrames) {
-#if 0
-            LONGLONG Current = 0;
-            // Set the start position to 0, do not change the end position.
-            hr = m_pSeek->SetPositions(
-              &Current, AM_SEEKING_AbsolutePositioning | AM_SEEKING_NoFlush,
-              NULL, AM_SEEKING_NoPositioning);
-            pb.newimage = true;
+      long eventCode = 0;
+#ifdef _WIN64
+      long long ptrParam1 = 0;
+      long long ptrParam2 = 0;
 #else
-            hr = m_pControl->Pause();
-            return false;
+      long ptrParam1 = 0;
+      long ptrParam2 = 0;
 #endif
-          }
-          // Indicate the the image has changed.
-          else if (CurrentPosition != m_lastFrame) {
-            pb.newimage = true;
-          }
-        }
+      long timeoutMs = 2000;
 
-        // If the video image has changed, copy it to the pixBlock buffer.
-        if (pb.newimage) {
-          hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
-          if(FAILED(hr)) {
-MARK_HR(hr);
-            verbose(1, "[GEM::filmDS] GetCurrentBuffer(auto) failed: state=%d", State);
-            pb.image.data = NULL; // FIXXME
-MARK();
-            return false;
-          } else {
-            //pb.image.data = rawBuffer;
-            processPixels(rawBuffer, pb.image.data, width, height, true, true);
-          }
-        }
-      }
-    } else { // non-auto mode
-MARK();
-      if(m_wantFrame >= m_numFrames) {
-        return false;
-      }
-#if 0
-      if (State == State_Running) {
-        hr = m_pControl->Pause();
-      }
-#endif
-
-      LONGLONG frameSeek;
-      //check if the playback is 'Paused' and don't keep asking for the same frame
-      frameSeek = 0;
-      hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      verbose(2, "[GEM::filmDS] playing current=%d\twant=%d\tlast=%d",
-              (int)frameSeek, (int)m_wantFrame, (int)m_lastFrame);
-
-      if (m_wantFrame == m_lastFrame) {
-        //post("skipping same frame: %d == %d", m_wantFrame, frameSeek);
-        pb.newimage = false;
-        return true;
-      }
-
-      frameSeek = (LONGLONG) m_wantFrame;
-      hr = m_pSeek->SetPositions(
-        &frameSeek, AM_SEEKING_AbsolutePositioning,
-        NULL, AM_SEEKING_NoPositioning);
-
-      if (FAILED(hr)) {
-MARK_HR(hr);
-        verbose(1, "[GEM::filmDS] SetPositions failed");
-      }
-
-      // trigger the actual seek:
-      m_pControl->Pause();
-
-MARK();
-      hr = m_pGrabber->GetCurrentBuffer(&frameSize, (long *)rawBuffer);
-
-      if (FAILED(hr)) {
-MARK_HR(hr);
-        pb.image.data = NULL; // FIXXME
-        verbose(1, "[GEM::filmDS] GetCurrentBuffer failed: state=%d", State);
-        return false;
+      if( curMovieFrame != frameCount ) {
+        bFrameNew = true;
       } else {
-        //pb.image.data = rawBuffer;
-        processPixels(rawBuffer, pb.image.data, width, height, true, true);
+        bFrameNew = false;
+      }
+      curMovieFrame = frameCount;
 
-        pb.newimage = true;
-        //pb.image.fromBGR(m_frame);
-        //m_lastFrame = m_wantFrame;
-        m_lastFrame = frameSeek;
+      while (S_OK == m_pEvent->GetEvent(&eventCode, &ptrParam1, &ptrParam2, 0)) {
+        if (eventCode == EC_COMPLETE ) {
+          if(bLoop) {
+            //printf("Restarting!\n");
+            setPosition(0.0);
+          } else {
+            bEndReached = true;
+            //printf("movie end reached!\n");
+            stop();
+            updatePlayState();
+          }
+        }
+        //printf("Event code: %#04x\n Params: %d, %d\n", eventCode, ptrParam1, ptrParam2);
+        m_pEvent->FreeEventParams(eventCode, ptrParam1, ptrParam2);
       }
     }
-    return true;
   }
 
-  void setSpeed(double speed)
-  {
-    m_auto=speed;
-  }
-  bool seekFrame(int frame)
-  {
-    m_wantFrame=frame;
-    if(frame>=m_numFrames || frame<0) {
-      return false;
-    }
-    if(m_pSeek) {
-      LONGLONG frameSeek = 0;
-      HRESULT hr = 0;
-      hr = m_pSeek->GetCurrentPosition(&frameSeek);
-      verbose(2, "[GEM::filmDS] seeking current=%d\twant=%d\tlast=%d",
-              (int)frameSeek, (int)m_wantFrame, (int)m_lastFrame);
-
-      frameSeek = (LONGLONG)m_wantFrame;
-      hr = m_pSeek->SetPositions(
-        &frameSeek, AM_SEEKING_AbsolutePositioning,
-        NULL, AM_SEEKING_NoPositioning);
-      m_pControl->Pause();
-      if (FAILED(hr))
-        return false;
-      else
-        return true;
-    }
-    return true;
-  }
-  bool isLoaded(void)
+  bool isLoaded()
   {
     return bVideoOpened;
   }
+#if 0
+  //volume has to be log corrected/converted
+  void setVolume(float volPct)
+  {
+    if( isLoaded() ) {
+      if( volPct < 0 ) {
+        volPct = 0.0;
+      }
+      if( volPct > 1 ) {
+        volPct = 1.0;
+      }
+
+      long vol = log10(volPct) * 4000.0;
+      if(vol < -8000) {
+        vol = -10000;
+      }
+      m_pAudio->put_Volume(vol);
+    }
+  }
+
+  float getVolume()
+  {
+    float volPct = 0.0;
+    if( isLoaded() ) {
+      long vol = 0;
+      m_pAudio->get_Volume(&vol);
+      volPct = powf(10, (float)vol/4000.0);
+    }
+    return volPct;
+  }
+#endif
+  double getDurationInSeconds()
+  {
+    if( isLoaded() ) {
+      long long lDurationInNanoSecs = 0;
+      m_pSeek->GetDuration(&lDurationInNanoSecs);
+      double timeInSeconds = (double)lDurationInNanoSecs/10000000.0;
+
+      return timeInSeconds;
+    }
+    return 0.0;
+  }
+
+  double getCurrentTimeInSeconds()
+  {
+    if( isLoaded() ) {
+      long long lCurrentTimeInNanoSecs = 0;
+      m_pSeek->GetCurrentPosition(&lCurrentTimeInNanoSecs);
+      double timeInSeconds = (double)lCurrentTimeInNanoSecs/10000000.0;
+
+      return timeInSeconds;
+    }
+    return 0.0;
+  }
+
+  void setPosition(float pct)
+  {
+    if( bVideoOpened ) {
+      if( pct < 0.0 ) {
+        pct = 0.0;
+      }
+      if( pct > 1.0 ) {
+        pct = 1.0;
+      }
+
+      long long lDurationInNanoSecs = 0;
+      m_pSeek->GetDuration(&lDurationInNanoSecs);
+
+      rtNew = ((float)lDurationInNanoSecs * pct);
+      hr = m_pSeek->SetPositions(&rtNew, AM_SEEKING_AbsolutePositioning,NULL,
+                                 AM_SEEKING_NoPositioning);
+    }
+  }
+
+  float getPosition()
+  {
+    if( bVideoOpened ) {
+      float timeDur = getDurationInSeconds();
+      if( timeDur > 0.0 ) {
+        return getCurrentTimeInSeconds() / timeDur;
+      }
+    }
+    return 0.0;
+  }
+
+  void setSpeed(float speed)
+  {
+    if( bVideoOpened ) {
+      m_pPosition->put_Rate(speed);
+      m_pPosition->get_Rate(&movieRate);
+    }
+  }
+
+  double getSpeed()
+  {
+    return movieRate;
+  }
+
+  void play()
+  {
+    if( bVideoOpened ) {
+      m_pControl->Run();
+      bEndReached = false;
+      updatePlayState();
+    }
+  }
+
+  void stop()
+  {
+    if( bVideoOpened ) {
+      if( isPlaying() ) {
+        setPosition(0.0);
+      }
+      m_pControl->Stop();
+      updatePlayState();
+    }
+  }
+
+  void setPaused(bool bPaused)
+  {
+    if( bVideoOpened ) {
+      if( bPaused ) {
+        m_pControl->Pause();
+      } else {
+        m_pControl->Run();
+      }
+      updatePlayState();
+    }
+
+  }
+
+  void updatePlayState()
+  {
+    if( bVideoOpened ) {
+      FILTER_STATE fs;
+      hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
+      if(hr==S_OK) {
+        if( fs == State_Running ) {
+          bPlaying = true;
+          bPaused = false;
+        } else if( fs == State_Paused ) {
+          bPlaying = false;
+          bPaused = true;
+        } else if( fs == State_Stopped ) {
+          bPlaying = false;
+          bPaused = false;
+        }
+      }
+    }
+  }
+
+  bool isPlaying()
+  {
+    return bPlaying;
+  }
+
+  bool isPaused()
+  {
+    return bPaused;
+  }
+
+  bool isLooping()
+  {
+    return bLoop;
+  }
+
+  void setLoop(bool loop)
+  {
+    bLoop = loop;
+  }
+
+  bool isMovieDone()
+  {
+    return bEndReached;
+  }
+
+  int getWidth()
+  {
+    return width;
+  }
+
+  int getHeight()
+  {
+    return height;
+  }
+
+  bool isFrameNew()
+  {
+    return bFrameNew;
+  }
+
+  void nextFrame()
+  {
+    //we have to do it like this as the frame based approach is not very accurate
+    if( bVideoOpened && ( isPlaying() || isPaused() ) ) {
+      int curFrame = getCurrentFrameNo();
+      float curFrameF = curFrame;
+      for(int i = 1; i < 20; i++) {
+        setAproximateFrameF( curFrameF + 0.3 * (float)i );
+        if( getCurrentFrameNo() >= curFrame + 1 ) {
+          break;
+        }
+      }
+    }
+  }
+
+  void preFrame()
+  {
+    //we have to do it like this as the frame based approach is not very accurate
+    if( bVideoOpened && ( isPlaying() || isPaused() ) ) {
+      int curFrame = getCurrentFrameNo();
+      float curFrameF = curFrame;
+      for(int i = 1; i < 20; i++) {
+        setAproximateFrameF( curFrameF - 0.3 * (float)i );
+        if( getCurrentFrameNo() <= curFrame + 1 ) {
+          break;
+        }
+      }
+    }
+  }
+
+  void setAproximateFrameF(float frameF)
+  {
+    if( bVideoOpened ) {
+      float pct = frameF / (float)getAproximateNoFrames();
+      if( pct > 1.0 ) {
+        pct = 1.0;
+      }
+      if( pct < 0.0 ) {
+        pct = 0.0;
+      }
+      setPosition(pct);
+    }
+  }
+
+  void setAproximateFrame(int frame)
+  {
+    if( bVideoOpened ) {
+      float pct = (float)frame / (float)getAproximateNoFrames();
+      if( pct > 1.0 ) {
+        pct = 1.0;
+      }
+      if( pct < 0.0 ) {
+        pct = 0.0;
+      }
+      setPosition(pct);
+    }
+  }
+
+  int getCurrentFrameNo()
+  {
+    if( bVideoOpened ) {
+      return getPosition() * (float) getAproximateNoFrames();
+    }
+    return 0;
+  }
+
+  int getAproximateNoFrames()
+  {
+    if( bVideoOpened && averageTimePerFrame > 0.0 ) {
+      return getDurationInSeconds() / averageTimePerFrame;
+    }
+    return 0;
+  }
+
+  double getAverageTimePerFrame()
+  {
+    return averageTimePerFrame;
+  }
+
+
+#if 0
+  bool needsRBSwap(of_PixelFormat srcFormat, of_PixelFormat dstFormat)
+  {
+    return false;
+    (srcFormat == OF_PIXELS_BGR
+     || srcFormat == OF_PIXELS_BGRA) && (dstFormat == OF_PIXELS_RGB
+                                         || dstFormat == OF_PIXELS_RGBA) ||
+    (srcFormat == OF_PIXELS_RGB
+     || srcFormat == OF_PIXELS_RGBA) && (dstFormat == OF_PIXELS_BGR
+                                         || dstFormat == OF_PIXELS_BGRA);
+  }
+  void processPixels(of_Pixels & src, of_Pixels & dst)
+  {
+    auto format = src.getPixelFormat();
+
+    if(needsRBSwap(src.getPixelFormat(), dst.getPixelFormat())) {
+      if (src.getPixelFormat() == OF_PIXELS_BGR) {
+        dst.allocate(src.getWidth(), src.getHeight(), OF_PIXELS_RGB);
+        auto dstLine = dst.getLines().begin();
+        auto srcLine = --src.getLines().end();
+        auto endLine = dst.getLines().end();
+        for (; dstLine != endLine; dstLine++, srcLine--) {
+          auto dstPixel = dstLine.getPixels().begin();
+          auto srcPixel = srcLine.getPixels().begin();
+          auto endPixel = dstLine.getPixels().end();
+          for (; dstPixel != endPixel; dstPixel++, srcPixel++) {
+            dstPixel[0] = srcPixel[2];
+            dstPixel[1] = srcPixel[1];
+            dstPixel[2] = srcPixel[0];
+          }
+        }
+      } else if (src.getPixelFormat() == OF_PIXELS_BGRA) {
+        dst.allocate(src.getWidth(), src.getHeight(), OF_PIXELS_RGBA);
+        auto dstLine = dst.getLines().begin();
+        auto srcLine = --src.getLines().end();
+        auto endLine = dst.getLines().end();
+        for (; dstLine != endLine; dstLine++, srcLine--) {
+          auto dstPixel = dstLine.getPixels().begin();
+          auto srcPixel = srcLine.getPixels().begin();
+          auto endPixel = dstLine.getPixels().end();
+          for (; dstPixel != endPixel; dstPixel++, srcPixel++) {
+            dstPixel[0] = srcPixel[2];
+            dstPixel[1] = srcPixel[1];
+            dstPixel[2] = srcPixel[0];
+          }
+        }
+      }
+    } else {
+      src.mirrorTo(dst, true, false);
+    }
+  }
+#endif
+
+
+  bool getPixels(imageStruct&img)
+  {
+    if(bVideoOpened && bNewPixels) {
+      EnterCriticalSection(&critSection);
+      std::swap(backSample, middleSample);
+      bNewPixels = false;
+      LeaveCriticalSection(&critSection);
+      BYTE * ptrBuffer = NULL;
+      HRESULT hr = middleSample->GetPointer(&ptrBuffer);
+      switch (pixelFormat) {
+      case GEM_RGB:
+        pixels.fromRGB(ptrBuffer);
+        break;
+      case GEM_RGBA:
+        pixels.fromRGBA(ptrBuffer);
+        break;
+      }
+      img.convertFrom(&pixels);
+      //processPixels(srcBuffer, pixels);
+    }
+    return true;
+  }
+
+  //this is the non-callback approach
+  //void getPixels(unsigned char * dstBuffer){
+  //
+  //  if(bVideoOpened && isFrameNew()){
+  //      long bufferSize = videoSize;
+  //      HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
+  //
+  //      if(hr==S_OK){
+  //          if (videoSize == bufferSize){
+  //              processPixels(rawBuffer, dstBuffer, width, height, true, true);
+  //          }else{
+  //              printf("ERROR: GetPixels() - bufferSizes do not match!\n");
+  //          }
+  //      }else{
+  //          printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
+  //      }
+  //  }
+  //}
+
+protected:
+
+  HRESULT hr;                         // COM return value
+  IGraphBuilder *m_pGraph;        // Graph Builder interface
+  IMediaControl *m_pControl;  // Media Control interface
+  IMediaEvent   *m_pEvent;        // Media Event interface
+  IMediaSeeking *m_pSeek;     // Media Seeking interface
+  IMediaPosition * m_pPosition;
+  IBasicAudio   *m_pAudio;        // Audio Settings interface
+  ISampleGrabber * m_pGrabber;
+  IBaseFilter * m_pSourceFile;
+  IBaseFilter * m_pGrabberF;
+  IBasicVideo * m_pBasicVideo;
+  IBaseFilter * m_pNullRenderer;
+
+  REFERENCE_TIME
+  timeNow;             // Used for FF & REW of movie, current time
+  LONGLONG lPositionInSecs;       // Time in  seconds
+  LONGLONG lDurationInNanoSecs;       // Duration in nanoseconds
+  LONGLONG lTotalDuration;        // Total duration
+  REFERENCE_TIME rtNew;               // Reference time of movie
+  long lPosition;                 // Desired position of movie used in FF & REW
+  long lvolume;                   // The volume level in 1/100ths dB Valid values range from -10,000 (silence) to 0 (full volume), 0 = 0 dB -10000 = -100 dB
+  long evCode;                    // event variable, used to in file to complete wait.
+
+  long width, height;
+
+  double averageTimePerFrame;
+
+  bool bFrameNew;
+  bool bNewPixels;
+  bool bVideoOpened;
+  bool bPlaying;
+  bool bPaused;
+  bool bLoop;
+  bool bEndReached;
+  double movieRate;
+  int curMovieFrame;
+  int frameCount;
+
+  CRITICAL_SECTION critSection;
+  std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>
+      backSample;
+  std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>
+      middleSample;
+  imageStruct pixels;
+  int pixelFormat;
 };
-
-
 
 
 //-------------------------------------------------------------------------
@@ -1008,15 +1188,15 @@ filmDS::~filmDS()
 
 bool filmDS::open(const std::string&path, const gem::Properties&props)
 {
-MARK();
+  MARK();
   close();
-MARK();
+  MARK();
   player = new DirectShowVideo();
-MARK();
-  bool res=player->loadMovie(path);
-MARK_HR(res);
+  MARK();
+  bool res=player->loadMovie(path, GEM_RGBA);
+  MARK_HR(res);
   if(res) {
-    player->seekFrame(0);
+    player->setPosition(0);
     double d=0.;
     if(props.get("auto", d)) {
       player->setSpeed(d);
@@ -1030,9 +1210,9 @@ MARK_HR(res);
 
 void filmDS::close()
 {
-MARK();
+  MARK();
   if( player ) {
-MARK();
+    MARK();
     delete player;
     player = NULL;
   }
@@ -1040,11 +1220,11 @@ MARK();
 
 pixBlock*filmDS::getFrame(void)
 {
-MARK();
+  MARK();
   if(!player) {
     return 0;
   }
-MARK();
+  MARK();
 #if 0
   //printf("getting frame...%p\n", player);
   if(!player || !player->isLoaded()) {
@@ -1055,11 +1235,12 @@ MARK();
     return NULL;
   }
 #endif
+
   m_image.newfilm=false;
   m_image.newimage=false;
 
-  int w=player->width;
-  int h=player->height;
+  int w=player->getWidth();
+  int h=player->getHeight();
   if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
     m_image.image.xsize=w;
     m_image.image.ysize=h;
@@ -1069,9 +1250,9 @@ MARK();
     m_image.newfilm=true;
     //printf("getting new film\n");
   }
-MARK();
-  bool res=player->getFrame(m_image);
-MARK_HR(res);
+  MARK();
+  bool res=player->getPixels(m_image.image);
+  MARK_HR(res);
   if(res) {
     return &m_image;
   }
@@ -1080,18 +1261,23 @@ MARK_HR(res);
 
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
-MARK();
+  MARK();
   //post("changeImage(%d,%d)", imgNum, trackNum);
   if(!player) {
     return film::FAILURE;
   }
-MARK();
-  if(player->seekFrame(imgNum)) {
-MARK();
+  MARK();
+#if 1
+  player->setAproximateFrame(imgNum);
+  return film::DONTKNOW;
+#else
+  if(player->setAproximateFrame(imgNum)) {
+    MARK();
     return film::SUCCESS;
   }
-MARK();
+  MARK();
   return film::FAILURE;
+#endif
 }
 // Property handling
 bool filmDS::enumProperties(gem::Properties&readable,
@@ -1130,22 +1316,22 @@ void filmDS::getProperties(gem::Properties&props)
       std::string key=keys[i];
       props.erase(key);
       if("fps"==key) {
-        d=player->getFramesPerSecond();
+        d=player->getAverageTimePerFrame();
         value=d;
         props.set(key, value);
       }
       if("frames"==key) {
-        d=player->m_numFrames;
+        d=player->getAproximateNoFrames();
         value=(int)(d+0.5);
         props.set(key, value);
       }
       if("width"==key) {
-        d=player->width;
+        d=player->getWidth();
         value=d;
         props.set(key, value);
       }
       if("height"==key) {
-        d=player->height;
+        d=player->getHeight();
         value=d;
         props.set(key, value);
       }
