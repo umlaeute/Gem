@@ -237,8 +237,7 @@ void init(void);
 # define BUILD_DATE " on " __DATE__
 #endif
 
-
-namespace Gem
+namespace gem
 {
 void setup()
 {
@@ -282,7 +281,7 @@ void caseinsensitive_error(const char*gem)
 {
   /* traditionally Gem can be loaded with wrong spelling on a case-insenstive platform
    * starting with 0.94 we issue a fat warning.
-   * however, much of Gem's loading is done via CTORs and the Gem::setup() only finishes
+   * however, much of Gem's loading is done via CTORs and the gem::setup() only finishes
    * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.
    */
   error("GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!",
@@ -290,10 +289,11 @@ void caseinsensitive_error(const char*gem)
 }
 };
 
+
 extern "C" {
   GEM_EXTERN void Gem_setup()
   {
-    Gem::setup();
+    gem::setup();
   }
 
   GEM_EXTERN void gem_setup()
