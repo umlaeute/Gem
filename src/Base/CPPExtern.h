@@ -332,11 +332,8 @@ static void obj_setupCallback(t_class *classPtr);
 // (registering the class with pd)
 // a static copy of this class is created at runtime, to actually do the setup-call
 ///////////////////////////////////////////////////////////////////////////////
-struct register_class_setup {
-  struct register_class_setup *next;
-  void (*setup)(void);
-};
-extern struct register_class_setup *gem_register_class_setup_list;
+typedef void (*t_class_setup)(void);
+extern "C" { GEM_EXTERN void gem_register_class_setup(const char*name, t_class_setup); }
 
 #ifdef NO_AUTO_REGISTER_CLASS
 // if NO_AUTO_REGISTER_CLASS is defined, we will not register the class
@@ -344,16 +341,10 @@ extern struct register_class_setup *gem_register_class_setup_list;
   static int NEW_CLASS ## _dummyinstance
 #else
 // for debugging we can show the which classes are auto-registering
-# if 0
-#  define POST_AUTOREGISTER(NEW_CLASS) post("auto-registering: "#NEW_CLASS)
-# else
-#  define POST_AUTOREGISTER(NEW_CLASS)
-# endif
-# define AUTO_REGISTER_CLASS(NEW_CLASS)                 \
-static struct register_class_setup NEW_CLASS ## _register = { 0, NEW_CLASS ## _setup }; \
+# define AUTO_REGISTER_CLASS(NEW_CLASS)                                 \
   class NEW_CLASS ## _cppclass {                                        \
   public:                                                               \
-  NEW_CLASS ## _cppclass(void) {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _register.next = gem_register_class_setup_list; gem_register_class_setup_list = & NEW_CLASS ## _register; } \
+  NEW_CLASS ## _cppclass(void) {gem_register_class_setup(#NEW_CLASS, & NEW_CLASS ## _setup); } \
 };                                                                      \
   static NEW_CLASS ## _cppclass NEW_CLASS ## _instance
 #endif

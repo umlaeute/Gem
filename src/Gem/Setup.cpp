@@ -78,6 +78,23 @@ extern "C" {
 #endif /* HAVE_M_IMP_H */
 
 
+typedef struct class_setup_list_ {
+  struct class_setup_list_ *next;
+  const char*name;
+  t_class_setup setup;;
+} class_setup_list_t;
+
+static class_setup_list_t *register_class_setup_list = 0;
+
+void gem_register_class_setup(const char*name, t_class_setup setup) {
+  class_setup_list_t*x = new class_setup_list_t;
+  x->next = register_class_setup_list;
+  x->setup = setup;
+  x->name = name;
+  register_class_setup_list = x;
+}
+
+
 
 namespace
 {
@@ -241,11 +258,12 @@ void setup()
   verbose(-1,
           "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
 
-  struct register_class_setup *l = gem_register_class_setup_list;
-  while (l)
-  {
+  for(class_setup_list_t *l = register_class_setup_list; l;) {
+    class_setup_list_t*next = l->next;
+    verbose(4, "registering Gem object: %s", l->name);
     l->setup();
-    l = l->next;
+    delete l;
+    l = next;
   }
 
   gem::Settings::init();
