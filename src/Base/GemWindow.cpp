@@ -177,7 +177,8 @@ std::set<GemWindow*>GemWindow::PIMPL::s_contexts;
 GemWindow :: GemWindow()
   : m_pimpl(new PIMPL(this)),
     m_width(500), m_height(500),
-    m_xoffset(0), m_yoffset(0),
+    /* in order to not hide the window-title, offset is >0 */
+    m_xoffset(50), m_yoffset(50),
     m_border(true), m_fullscreen(false),
     m_buffer(2),
     m_title("Gem"),
