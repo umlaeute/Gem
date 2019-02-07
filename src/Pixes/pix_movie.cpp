@@ -17,7 +17,6 @@
 /////////////////////////////////////////////////////////
 
 #include "Gem/GemConfig.h"
-#ifndef GEM_FILMBACKEND
 
 #include "pix_movie.h"
 #include "Gem/State.h"
@@ -196,5 +195,3 @@ void pix_movie :: rectangleCallback(void *data, t_float quality)
 {
   GetMyClass(data)->modeMess(static_cast<int>(quality));
 }
-
-#endif /* no OS-specific GEM_FILMBACKEND */

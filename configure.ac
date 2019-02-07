@@ -479,43 +479,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
 
-# using pix_videoOS rather than pix_video
-AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
-
-AS_IF(
- [test "x$with_video" = "x"], [with_video="plugins"],
- [test "x$with_video" = "xyes"], [with_video="plugins"],
- [test "x$with_video" = "xno"],
-  [
-    # hmm, what to do here?
-    AC_MSG_RESULT([ignoring request for no video...using plugins])
-    with_video="plugins"
-  ],
- [test "x$with_video" = "xplugins"], [:],
- [
-  AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video], [backend for deprecated video-capture objects])
-  AC_MSG_RESULT([using deprecated video-loader $with_video])
-])
-
-# using pix_filmOS rather than pix_film
-AC_ARG_WITH([film], AS_HELP_STRING([--with-film=plugins|Darwin],[use plugins for video decoding or OS-specific "pix_film"]))
-
-AS_IF(
- [test "x$with_film" = "x"], [with_film="plugins"],
- [test "x$with_film" = "xyes"], [with_film="plugins"],
- [test "x$with_film" = "xno"],
-  [
-    # hmm, what to do here?
-    AC_MSG_RESULT([ignoring request for no film...using plugins])
-    with_film="plugins"
-  ],
- [test "x$with_film" = "xplugins"], [:],
- [
-  AC_DEFINE_UNQUOTED([GEM_FILMBACKEND],
-                     [GEM_FILMBACKEND_$with_film], [backend for deprecated film-decoding objects])
-  AC_MSG_RESULT([using deprecated film-loader $with_film])
-])
-
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
 AS_IF([test "x$enable_registerstruct" != "xno" ], [

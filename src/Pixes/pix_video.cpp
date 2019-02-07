@@ -16,8 +16,6 @@
 
 #include "Gem/GemConfig.h"
 
-#ifndef GEM_VIDEOBACKEND
-
 #include "pix_video.h"
 #include "Gem/State.h"
 #include "Gem/Image.h"
@@ -1037,4 +1035,3 @@ void pix_video :: openMessCallback(void *data, t_symbol*s, int argc,
     GetMyClass(data)->startRendering();
   }
 }
-#endif /* no OS-specific GEM_VIDEOBACKEND */
