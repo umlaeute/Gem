@@ -184,7 +184,6 @@ dist_gemhelp_DATA = \
 	pix_threshold_bernsen-help.pd \
 	pix_threshold-help.pd \
 	pix_tIIR-help.pd \
-	pix_videoDS-help.pd \
 	pix_video-help.pd \
 	pix_write-help.pd \
 	pix_writer-help.pd \
