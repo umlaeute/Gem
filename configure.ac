@@ -252,7 +252,7 @@ AS_IF([test "x$with_x" != "xno"], [
 
 IEM_CHECK_GL
 no_glu=yes
-IEM_CHECK_GLU
+AS_IF([test "x$with_GLU" != "xno"], IEM_CHECK_GLU)
 AM_CONDITIONAL(HAVE_GLU, [test "x${no_glu}" != "xyes"])
 IEM_CHECK_GLUT
 IEM_CHECK_GLX
@@ -740,7 +740,7 @@ AS_IF([test "x$no_gl" = "xyes"], [
 ])
 
 AS_IF([test "x$no_glu" = "xyes" && test "x$no_agl" = "xyes"], [
- AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])
+ AS_IF([test "x$with_GLU" != "xno"],[AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])])
 ])
 
 AC_MSG_RESULT([Now run make ...])
