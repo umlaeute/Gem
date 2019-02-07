@@ -267,6 +267,7 @@ void setup()
     delete l;
     l = next;
   }
+  register_class_setup_list = 0;
 
   gem::Settings::init();
   addownpath("Gem-meta.pd");
