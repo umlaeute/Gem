@@ -21,10 +21,6 @@
 
 
 CPPEXTERN_NEW_WITH_GIMME(pix_share_write);
-#if 0
-;
-#endif
-
 
 int hash_str2us(std::string s)
 {
