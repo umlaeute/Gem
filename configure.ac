@@ -199,7 +199,7 @@ GEM_CHECK_THREADS
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
 AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h sys/ipc.h sys/shm.h])
 
 AC_CHECK_HEADERS([wordexp.h])
 
