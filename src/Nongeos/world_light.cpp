@@ -29,7 +29,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(world_light, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 world_light :: world_light(t_floatarg lightNum)
-  : m_debug(0), m_thing(NULL)
+  : m_debug(0)
+#ifdef GEM_HAVE_GLU
+  , m_thing(NULL)
+#endif
 {
   m_color[0] = m_color[1] = m_color[2] = m_color[3] = 1.0;
 
@@ -87,6 +90,9 @@ void world_light :: lightOnOffMess(int state)
 ////////////////////////////////////////////////////////
 void world_light :: debugMess(int state)
 {
+#ifndef GEM_HAVE_GLU
+  error("Gem has been compiled without GLU - disabled light debugging");
+#endif
   m_debug = state;
   m_change = 1;
   setModified();
@@ -133,12 +139,14 @@ void world_light :: lightColorMess(t_symbol*s, int argc, t_atom*argv)
 ////////////////////////////////////////////////////////
 void world_light :: startRendering()
 {
+#ifdef GEM_HAVE_GLU
   if (m_thing) {
     stopRendering();
   }
   m_thing = gluNewQuadric();
   gluQuadricTexture(m_thing, GL_FALSE);
   gluQuadricDrawStyle(m_thing, static_cast<GLenum>(GLU_FILL));
+#endif
   m_change = 1;
 }
 
@@ -148,10 +156,12 @@ void world_light :: startRendering()
 ////////////////////////////////////////////////////////
 void world_light :: stopRendering()
 {
+#ifdef GEM_HAVE_GLU
   if (m_thing) {
     gluDeleteQuadric(m_thing);
   }
   m_thing = NULL;
+#endif
 
   if (m_light) {
     glDisable(m_light);
@@ -167,6 +177,7 @@ void world_light :: renderDebug()
 {
   const GLfloat size=0.2f;
   if (m_debug) {
+#ifdef GEM_HAVE_GLU
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glColor3fv(m_color);
@@ -174,6 +185,7 @@ void world_light :: renderDebug()
     gluCylinder(m_thing, size, size, size * 2.f, 10, 10);
     glEnable(GL_LIGHTING);
     glPopMatrix();
+#endif
   }
 }
 

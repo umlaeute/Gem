@@ -9,6 +9,7 @@
 //  OF ALL WARRANTIES, see the file "GEM.LICENSE.TERMS"
 //
 
+#include "Gem/GemConfig.h"
 #include "GEMgluLookAt.h"
 #include "Gem/Exception.h"
 
@@ -105,6 +106,9 @@ GEMgluLookAt :: ~GEMgluLookAt ()
 //
 void GEMgluLookAt :: render(GemState *state)
 {
+#ifndef GEM_HAVE_GLU
+  gem::utils::gl::
+#endif
   gluLookAt (m_eyeX, m_eyeY, m_eyeZ, m_centerX, m_centerY, m_centerZ, m_upX,
              m_upY, m_upZ);
 }

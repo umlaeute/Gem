@@ -15,6 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Gem/GemConfig.h"
 #include "pix_resize.h"
 #include "Gem/GemGL.h"
 #include "Utils/Functions.h"
@@ -55,19 +56,29 @@ void pix_resize :: processImage(imageStruct &image)
   int hN = (m_height>0)?m_height:powerOfTwo(image.ysize);
 
   if (wN != image.xsize || hN != image.ysize) {
-    GLint gluError;
     m_image.xsize=wN;
     m_image.ysize=hN;
     m_image.setCsizeByFormat(image.format);
     m_image.reallocate();
-    m_image.reallocate(
-      wN*hN*4); // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
 
+    // just for safety: it seems like gluScaleImage needs more memory then just the x*y*c
+    m_image.reallocate(wN*hN*4);
+
+    GLint gluError = 0;
+#ifdef GEM_HAVE_GLU
     gluError = gluScaleImage(image.format,
                              image.xsize, image.ysize,
                              image.type, image.data,
                              wN, hN,
                              image.type, m_image.data);
+#else
+    static bool firsttime = true;
+    if(firsttime) {
+      firsttime = false;
+      error("Gem has been compiled without GLU - disabled pix resizing");
+      return;
+    }
+#endif
     if ( gluError ) {
       post("gluError %d: unable to resize image", gluError);
       return;

@@ -98,12 +98,14 @@ void spot_light :: lightParamMess(float linAtt, float cutoff,
 void spot_light :: renderDebug()
 {
   if (m_debug) { // display source
+#ifdef GEM_HAVE_GLU
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glColor3fv(m_color);
     gluCylinder(m_thing, 0.2f, 0, 0.4f, 10, 10);
     glEnable(GL_LIGHTING);
     glPopMatrix();
+#endif
   }
 }
 void spot_light :: render(GemState *state)

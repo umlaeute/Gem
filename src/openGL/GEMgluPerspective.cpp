@@ -54,6 +54,9 @@ GEMgluPerspective :: ~GEMgluPerspective ()
 //
 void GEMgluPerspective :: render(GemState *state)
 {
+#ifndef GEM_HAVE_GLU
+  gem::utils::gl::
+#endif
   gluPerspective (fovy, aspect, m_near, m_far);
 }
 

@@ -15,6 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Gem/GemConfig.h"
 #include "GLUtil.h"
 #include <map>
 #include "Gem/RTE.h"
@@ -36,7 +37,12 @@ GLenum gem::utils::gl::glReportError (bool verbose)
 {
   GLenum err = glGetError();
   if (verbose && GL_NO_ERROR != err) {
-    post("GL: %d %s",err,(char*)gluErrorString(err));
+#ifdef GEM_HAVE_GLU
+    post("GL[%d]: %s", err, (char*)gluErrorString(err));
+#else
+    post("GL: %d", err);
+#endif
+
   }
   // ensure we are returning an OSStatus noErr if no error condition
   if (err == GL_NO_ERROR) {

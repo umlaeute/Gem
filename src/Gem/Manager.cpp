@@ -356,7 +356,7 @@ void GemMan :: resetValues()
   // TODO:
   //   shouldn't this be called here?
   //  glLoadIdentity();
-  gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+  gem::utils::gl::gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
             m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
 
   if (m_fogMode == FOG_OFF) {
@@ -622,7 +622,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -633,7 +633,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
     // setup the right viewpoint
@@ -650,7 +650,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -662,7 +662,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
 
@@ -678,7 +678,7 @@ void GemMan :: render(void *)
       glFrustum(-1, 1, -1, 1, 1, 20);
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
-      gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
+      gem::utils::gl::gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
 
       glLineWidth(2.f);
       glColor3f(1.f, 1.f, 1.f);
@@ -718,7 +718,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -727,7 +727,7 @@ void GemMan :: render(void *)
     renderChain(chain1, &currentState);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
     // setup the right viewpoint
@@ -746,7 +746,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -758,7 +758,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
     glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
@@ -784,7 +784,7 @@ void GemMan :: render(void *)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -793,7 +793,7 @@ void GemMan :: render(void *)
     renderChain(chain1, &currentState);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 - m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
     // setup the right viewpoint
@@ -812,7 +812,7 @@ void GemMan :: render(void *)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
+    gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
               m_lookat[3], m_lookat[4],
               m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
@@ -824,7 +824,7 @@ void GemMan :: render(void *)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0 + m_stereoSep / 100.f, 0, 4, 0, 0, 0 + m_stereoFocal, 0, 1, 0);
     renderChain(chain2, &currentState);
 
     glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
@@ -837,7 +837,7 @@ void GemMan :: render(void *)
     // setup the matrices
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
+    gem::utils::gl::gluLookAt(0, 0, 4, 0, 0, 0, 0, 1, 0);
     renderChain(chain2, &currentState);
   }
   }
@@ -1223,7 +1223,7 @@ void GemMan :: swapBuffers()
     // TODO:
     // shouldn't this be called here?
     //          glLoadIdentity();
-    gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
+    gem::utils::gl::gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
               m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
   }
 #endif /* GEM_MULTICONTEXT */

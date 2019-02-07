@@ -48,6 +48,7 @@ void light :: renderDebug()
 {
   const GLfloat size=0.2f;
   if (m_debug) {
+#ifdef GEM_HAVE_GLU
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glColor3fv(m_color);
@@ -55,6 +56,7 @@ void light :: renderDebug()
     gluSphere(m_thing, size, 10, 10);
     glEnable(GL_LIGHTING);
     glPopMatrix();
+#endif
   }
 }
 
