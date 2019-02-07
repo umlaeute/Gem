@@ -25,7 +25,7 @@ case "$TRAVIS_OS_NAME" in
 	#CONFIGUREFLAGS="--without-ftgl"
 	;;
     osx)
-	CONFIGUREFLAGS=""
+	CONFIGUREFLAGS="--without-ftgl"
 	if [ "x${ARCH}" != "x" ]; then
 	    CONFIGUREFLAGS+=" --enable-fat-binary=${ARCH}"
 	fi
