@@ -241,6 +241,9 @@ namespace gem
 {
 void setup()
 {
+  static bool firsttime = true;
+  if(!firsttime) return;
+  firsttime = false;
   // startup GEM
   post("GEM: Graphics Environment for Multimedia");
   verbose(-1, "GEM: ver: %s", GemVersion::versionString());
