@@ -1,4 +1,5 @@
-#N canvas 3 2 600 605 10;
+#N canvas 6 61 600 605 10;
+#X declare -lib Gem;
 #X obj 14 66 gemwin;
 #X obj 14 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
@@ -43,6 +44,7 @@ Trying to use it with an external counter leads to re-entrancy bugs
 \, because the [repeat] is retriggered before the counter has finished
 \, which messes up the counter's internal state. [nrepeat] is a "repeat
 with a built in counter" \, which is re-entrancy safe.;
+#X obj 440 9 declare -lib Gem;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;

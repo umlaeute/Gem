@@ -1,113 +1,115 @@
-#N canvas 431 30 849 872 10;
-#X obj 39 330 GEMglEnable;
-#X floatatom 125 332 5 0 0 0 - - -;
-#X obj 111 282 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#N canvas 431 61 849 900 10;
+#X declare -lib Gem;
+#X obj 39 337 GEMglEnable;
+#X floatatom 125 339 5 0 0 0 - - -;
+#X obj 111 289 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 111 305 GLdefine GL_STENCIL_TEST;
-#X obj 129 280 loadbang;
-#X obj 104 382 GLdefine GL_STENCIL_BUFFER_BIT;
-#X obj 166 361 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 111 312 GLdefine GL_STENCIL_TEST;
+#X obj 129 287 loadbang;
+#X obj 104 389 GLdefine GL_STENCIL_BUFFER_BIT;
+#X obj 166 368 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X floatatom 119 407 5 0 0 0 - - -;
-#X obj 104 359 loadbang;
-#X obj 39 249 GEMglClearStencil 0;
-#X obj 39 407 GEMglClear;
-#X obj 39 33 gemhead 45;
-#X obj 39 506 GEMglStencilFunc;
-#X msg 146 480 1;
-#X obj 75 436 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X floatatom 119 414 5 0 0 0 - - -;
+#X obj 104 366 loadbang;
+#X obj 39 256 GEMglClearStencil 0;
+#X obj 39 414 GEMglClear;
+#X obj 39 40 gemhead 45;
+#X obj 39 513 GEMglStencilFunc;
+#X msg 146 487 1;
+#X obj 75 443 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 74 459 GLdefine GL_ALWAYS;
-#X obj 96 436 loadbang;
-#X floatatom 100 480 5 0 0 0 - - -;
-#X obj 39 586 GEMglStencilOp;
-#X floatatom 156 581 5 0 0 0 - - -;
-#X obj 70 486 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 74 466 GLdefine GL_ALWAYS;
+#X obj 96 443 loadbang;
+#X floatatom 100 487 5 0 0 0 - - -;
+#X obj 39 593 GEMglStencilOp;
+#X floatatom 156 588 5 0 0 0 - - -;
+#X obj 70 493 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 70 552 GLdefine GL_REPLACE;
-#X obj 95 530 loadbang;
-#X obj 239 743 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 70 559 GLdefine GL_REPLACE;
+#X obj 95 537 loadbang;
+#X obj 239 750 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 170 742 loadbang;
-#X obj 39 810 GEMglClear;
-#X floatatom 156 812 5 0 0 0 - - -;
-#X obj 145 788 GLdefine GL_DEPTH_BUFFER_BIT;
-#X obj 126 743 t b b;
-#X obj 490 287 GEMglStencilFunc;
-#X msg 597 263 1;
-#X obj 525 220 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 170 749 loadbang;
+#X obj 39 817 GEMglClear;
+#X floatatom 156 819 5 0 0 0 - - -;
+#X obj 145 795 GLdefine GL_DEPTH_BUFFER_BIT;
+#X obj 126 750 t b b;
+#X obj 490 294 GEMglStencilFunc;
+#X msg 597 270 1;
+#X obj 525 227 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 546 218 loadbang;
-#X floatatom 535 264 5 0 0 0 - - -;
-#X obj 525 241 GLdefine GL_NOTEQUAL;
-#X obj 490 396 color 1 0 0;
-#X obj 490 659 GEMglStencilFunc;
-#X msg 597 634 1;
-#X obj 525 594 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 546 225 loadbang;
+#X floatatom 535 271 5 0 0 0 - - -;
+#X obj 525 248 GLdefine GL_NOTEQUAL;
+#X obj 490 403 color 1 0 0;
+#X obj 490 666 GEMglStencilFunc;
+#X msg 597 641 1;
+#X obj 525 601 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 547 592 loadbang;
-#X floatatom 536 638 5 0 0 0 - - -;
-#X obj 490 709 rotateXYZ 0 0 45;
-#X obj 525 615 GLdefine GL_EQUAL;
-#X obj 490 685 color 1 1 0;
-#X obj 126 766 GLdefine GL_COLOR_BUFFER_BIT;
-#X obj 490 365 GEMglStencilOp;
-#X floatatom 601 364 5 0 0 0 - - -;
-#X obj 521 310 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 547 599 loadbang;
+#X floatatom 536 645 5 0 0 0 - - -;
+#X obj 490 716 rotateXYZ 0 0 45;
+#X obj 525 622 GLdefine GL_EQUAL;
+#X obj 490 692 color 1 1 0;
+#X obj 126 773 GLdefine GL_COLOR_BUFFER_BIT;
+#X obj 490 372 GEMglStencilOp;
+#X floatatom 601 371 5 0 0 0 - - -;
+#X obj 521 317 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 544 307 loadbang;
-#X obj 521 331 GLdefine GL_KEEP;
-#X floatatom 58 144 5 0 0 0 - - -;
-#X floatatom 97 144 5 0 0 0 - - -;
-#X obj 39 187 colorRGB 0 0 1;
-#X obj 126 810 |;
-#X floatatom 587 830 5 0 0 0 - - -;
-#X obj 569 782 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+#X obj 544 314 loadbang;
+#X obj 521 338 GLdefine GL_KEEP;
+#X floatatom 58 151 5 0 0 0 - - -;
+#X floatatom 97 151 5 0 0 0 - - -;
+#X obj 39 194 colorRGB 0 0 1;
+#X obj 126 817 |;
+#X floatatom 587 837 5 0 0 0 - - -;
+#X obj 569 789 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
 -1;
-#X obj 569 805 GLdefine GL_STENCIL_TEST;
-#X obj 587 780 loadbang;
-#X obj 490 830 GEMglDisable;
-#X text 67 212 allow \, clear and configure stencil buffer;
-#X obj 39 695 circle 1.5;
-#X text 131 685 draw in all buffer;
-#X text 104 840 clear color and depth buffer;
-#X text 488 189 draw where the stencil buffer is not 1;
-#X obj 490 423 square 3;
-#X text 522 565 draw where the stencil buffer is 1;
-#X obj 529 21 gemhead 10;
-#X floatatom 562 41 5 0 0 0 - - -;
-#X floatatom 602 41 5 0 0 0 - - -;
-#X floatatom 642 41 5 0 0 0 - - -;
-#X obj 529 87 world_light;
-#X obj 529 62 rotateXYZ 0 0 0;
-#X obj 39 167 rotateXYZ;
-#X text 151 144 <- play with this.;
-#X text 238 858 (c) Cyrille Henry 2006;
-#X obj 39 56 t a b;
-#X obj 74 78 i;
-#X obj 122 56 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X obj 569 812 GLdefine GL_STENCIL_TEST;
+#X obj 587 787 loadbang;
+#X obj 490 837 GEMglDisable;
+#X text 67 219 allow \, clear and configure stencil buffer;
+#X obj 39 702 circle 1.5;
+#X text 131 692 draw in all buffer;
+#X text 104 847 clear color and depth buffer;
+#X text 488 196 draw where the stencil buffer is not 1;
+#X obj 490 430 square 3;
+#X text 522 572 draw where the stencil buffer is 1;
+#X obj 529 28 gemhead 10;
+#X floatatom 562 48 5 0 0 0 - - -;
+#X floatatom 602 48 5 0 0 0 - - -;
+#X floatatom 642 48 5 0 0 0 - - -;
+#X obj 529 94 world_light;
+#X obj 529 69 rotateXYZ 0 0 0;
+#X obj 39 174 rotateXYZ;
+#X text 151 151 <- play with this.;
+#X text 238 865 (c) Cyrille Henry 2006;
+#X obj 39 63 t a b;
+#X obj 74 85 i;
+#X obj 122 63 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
-#X obj 103 78 + 0;
-#X obj 74 123 t f f;
-#X obj 74 100 spigot;
-#X obj 104 673 teapot 1.5;
-#X obj 39 657 spigot;
-#X obj 104 654 spigot;
-#X obj 79 610 loadbang;
-#X obj 147 632 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X obj 103 85 + 0;
+#X obj 74 130 t f f;
+#X obj 74 107 spigot;
+#X obj 104 680 teapot 1.5;
+#X obj 39 664 spigot;
+#X obj 104 661 spigot;
+#X obj 79 617 loadbang;
+#X obj 147 639 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X obj 82 634 == 0;
-#X msg 147 611 0;
-#X obj 131 77 % 360;
-#X obj 490 754 sphere 1.2 25;
-#X obj 36 6 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1;
+#X obj 82 641 == 0;
+#X msg 147 618 0;
+#X obj 131 84 % 360;
+#X obj 490 761 sphere 1.2 25;
+#X obj 39 13 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X obj 118 113 outlet;
 #X msg 118 81 reset \, lighting 1;
 #X connect 0 0 2 0;
 #X connect 2 0 1 0;
-#X restore 372 38 pd Gem.init;
+#X restore 372 45 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
 -1 -1 0 1;
@@ -147,7 +149,8 @@
 #X connect 15 0 16 0;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 342 55 pd gemwin;
+#X restore 342 62 pd gemwin;
+#X obj 716 16 declare -lib Gem;
 #X connect 0 0 10 0;
 #X connect 2 0 3 0;
 #X connect 3 0 1 0;

@@ -1,4 +1,5 @@
 #N canvas 365 180 996 500 10;
+#X declare -lib Gem;
 #X obj 39 307 r render;
 #X obj 39 437 pix_texture;
 #X obj 110 353 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
@@ -20,6 +21,7 @@ to the computer.;
 create a single image.;
 #X text 305 159 geometry screen and geometry computer can be different
 \, but should define the same number of screen.;
+#X obj 878 16 declare -lib Gem;
 #X connect 0 0 10 0;
 #X connect 1 0 5 0;
 #X connect 2 0 3 0;

@@ -1,4 +1,5 @@
 #N canvas 396 160 600 500 10;
+#X declare -lib Gem;
 #X obj 350 159 gemhead;
 #X obj 350 337 rotate;
 #X floatatom 409 275 0 0 0 0 - - -;
@@ -51,6 +52,7 @@
 #X text 495 146 white;
 #X obj 350 219 color 0 0 1;
 #X text 422 221 (blue);
+#X obj 493 6 declare -lib Gem;
 #X connect 0 0 21 0;
 #X connect 1 0 8 0;
 #X connect 2 0 1 1;

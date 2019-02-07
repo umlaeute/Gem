@@ -1,4 +1,5 @@
-#N canvas 119 33 764 634 10;
+#N canvas 119 61 764 634 10;
+#X declare -lib Gem;
 #N canvas 285 0 681 629 tables 0;
 #N canvas 0 0 450 300 (subpatch) 0;
 #X array red 256 float 0;
@@ -26,8 +27,8 @@
 #X obj 30 272 gemhead;
 #X obj 30 468 pix_texture;
 #N canvas 0 0 450 300 (subpatch) 0;
-#X array rgba 67 float 0;
-#X coords 0 256 66 0 256 140 1;
+#X array rgba 256 float 0;
+#X coords 0 256 255 0 256 140 1;
 #X restore 217 70 graph;
 #X text 78 8 pix_curve: adjust the colour of an image;
 #X text 291 227 separate tables for r \, g \, b and a;
@@ -161,6 +162,7 @@ to be called....;
 #X restore 16 195 pd gemwin;
 #X msg 16 171 create;
 #X text 12 151 Create window and render;
+#X obj 652 5 declare -lib Gem;
 #X connect 1 0 29 0;
 #X connect 2 0 21 0;
 #X connect 13 0 28 0;

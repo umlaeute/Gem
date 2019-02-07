@@ -1,4 +1,5 @@
 #N canvas 208 184 980 477 10;
+#X declare -lib Gem;
 #X obj 42 315 square 4;
 #X obj 42 199 translateXYZ 0 0 -4;
 #X obj 671 399 pix_texture;
@@ -246,7 +247,7 @@
 #X restore 99 394 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -292,6 +293,7 @@
 #X obj 353 291 pix_texture;
 #X msg 666 209 rectangle 0;
 #X msg 691 378 rectangle 0;
+#X obj 99 376 declare -lib Gem;
 #X connect 1 0 13 0;
 #X connect 2 0 3 0;
 #X connect 4 0 52 0;

@@ -1,4 +1,5 @@
 #N canvas 542 198 681 468 10;
+#X declare -lib Gem;
 #X obj 270 175 pix_image ../data/dancer.JPG;
 #X obj 270 342 pix_texture;
 #X obj 270 383 square;
@@ -40,6 +41,7 @@
 #X msg 25 106 create;
 #X text 21 79 Create window and render;
 #X text 135 60 blending \, using pixel addition;
+#X obj 572 5 declare -lib Gem;
 #X connect 0 0 8 0;
 #X connect 1 0 2 0;
 #X connect 3 0 2 1;

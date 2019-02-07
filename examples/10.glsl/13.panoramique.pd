@@ -1,8 +1,9 @@
-#N canvas 189 90 1107 660 10;
-#X msg 17 91 create \, 1;
-#X msg 30 114 0 \, destroy;
-#X obj 160 405 pix_texture;
-#X obj 169 165 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#N canvas 189 90 1107 668 10;
+#X declare -lib Gem;
+#X msg 17 131 create \, 1;
+#X msg 30 154 0 \, destroy;
+#X obj 160 445 pix_texture;
+#X obj 169 205 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #N canvas 38 51 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
@@ -70,16 +71,16 @@
 #X connect 27 2 26 0;
 #X connect 28 0 0 0;
 #X connect 29 0 9 0;
-#X restore 160 182 pd glsl;
-#X obj 175 245 loadbang;
-#X obj 160 288 pix_image;
-#X msg 174 379 rectangle 1;
-#X obj 174 358 loadbang;
-#X obj 160 317 pix_info 0 0 0;
-#X msg 238 148 sizeX \$1;
-#X msg 253 169 sizeY \$1;
-#X obj 353 406 pix_texture;
-#X obj 362 166 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X restore 160 222 pd glsl;
+#X obj 175 285 loadbang;
+#X obj 160 328 pix_image;
+#X msg 174 419 rectangle 1;
+#X obj 174 398 loadbang;
+#X obj 160 357 pix_info 0 0 0;
+#X msg 238 188 sizeX \$1;
+#X msg 253 209 sizeY \$1;
+#X obj 353 446 pix_texture;
+#X obj 362 206 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #N canvas 38 51 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
@@ -147,16 +148,16 @@
 #X connect 27 2 26 0;
 #X connect 28 0 0 0;
 #X connect 29 0 9 0;
-#X restore 353 183 pd glsl;
-#X obj 368 246 loadbang;
-#X obj 353 289 pix_image;
-#X msg 367 378 rectangle 1;
-#X obj 367 359 loadbang;
-#X obj 353 318 pix_info 0 0 0;
-#X msg 431 144 sizeX \$1;
-#X msg 446 170 sizeY \$1;
-#X obj 552 407 pix_texture;
-#X obj 561 167 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X restore 353 223 pd glsl;
+#X obj 368 286 loadbang;
+#X obj 353 329 pix_image;
+#X msg 367 418 rectangle 1;
+#X obj 367 399 loadbang;
+#X obj 353 358 pix_info 0 0 0;
+#X msg 431 184 sizeX \$1;
+#X msg 446 210 sizeY \$1;
+#X obj 552 447 pix_texture;
+#X obj 561 207 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #N canvas 38 51 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
@@ -224,19 +225,19 @@
 #X connect 27 2 26 0;
 #X connect 28 0 0 0;
 #X connect 29 0 9 0;
-#X restore 552 184 pd glsl;
-#X obj 567 247 loadbang;
-#X obj 552 290 pix_image;
-#X msg 566 379 rectangle 1;
-#X obj 566 360 loadbang;
-#X obj 552 319 pix_info 0 0 0;
-#X msg 614 148 sizeX \$1;
-#X msg 633 166 sizeY \$1;
-#X obj 160 427 translateXYZ -3 0 0;
-#X obj 352 426 translateXYZ -1 0 0;
-#X obj 551 427 translateXYZ 1 0 0;
-#X obj 747 408 pix_texture;
-#X obj 756 168 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X restore 552 224 pd glsl;
+#X obj 567 287 loadbang;
+#X obj 552 330 pix_image;
+#X msg 566 419 rectangle 1;
+#X obj 566 400 loadbang;
+#X obj 552 359 pix_info 0 0 0;
+#X msg 614 188 sizeX \$1;
+#X msg 633 206 sizeY \$1;
+#X obj 160 467 translateXYZ -3 0 0;
+#X obj 352 466 translateXYZ -1 0 0;
+#X obj 551 467 translateXYZ 1 0 0;
+#X obj 747 448 pix_texture;
+#X obj 756 208 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #N canvas 38 51 792 790 glsl 0;
 #X obj 78 339 glsl_vertex;
@@ -304,106 +305,107 @@
 #X connect 27 2 26 0;
 #X connect 28 0 0 0;
 #X connect 29 0 9 0;
-#X restore 747 185 pd glsl;
-#X obj 762 248 loadbang;
-#X obj 747 291 pix_image;
-#X msg 761 380 rectangle 1;
-#X obj 761 361 loadbang;
-#X obj 747 320 pix_info 0 0 0;
-#X msg 825 146 sizeX \$1;
-#X msg 840 172 sizeY \$1;
-#X obj 746 428 translateXYZ 3 0 0;
-#X floatatom 199 68 5 0 0 0 - - -;
-#X msg 199 87 dZ \$1;
-#X obj 17 430 s shaders;
-#X obj 206 205 s init_shader;
-#X obj 399 204 s init_shader;
-#X obj 600 204 s init_shader;
-#X obj 794 206 s init_shader;
-#X obj 399 124 r shaders;
-#X obj 598 126 r shaders;
-#X obj 793 127 r shaders;
-#X obj 160 506 rectangle 1 0.75;
-#X obj 352 507 rectangle 1 0.75;
-#X obj 551 508 rectangle 1 0.75;
-#X obj 746 509 rectangle 1 0.75;
-#X obj 160 463 translateXYZ 0 0 0;
-#X obj 201 446 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X restore 747 225 pd glsl;
+#X obj 762 288 loadbang;
+#X obj 747 331 pix_image;
+#X msg 761 420 rectangle 1;
+#X obj 761 401 loadbang;
+#X obj 747 360 pix_info 0 0 0;
+#X msg 825 186 sizeX \$1;
+#X msg 840 212 sizeY \$1;
+#X obj 746 468 translateXYZ 3 0 0;
+#X floatatom 199 108 5 0 0 0 - - -;
+#X msg 199 127 dZ \$1;
+#X obj 17 470 s shaders;
+#X obj 206 245 s init_shader;
+#X obj 399 244 s init_shader;
+#X obj 600 244 s init_shader;
+#X obj 794 246 s init_shader;
+#X obj 399 164 r shaders;
+#X obj 598 166 r shaders;
+#X obj 793 167 r shaders;
+#X obj 160 546 rectangle 1 0.75;
+#X obj 352 547 rectangle 1 0.75;
+#X obj 551 548 rectangle 1 0.75;
+#X obj 746 549 rectangle 1 0.75;
+#X obj 160 503 translateXYZ 0 0 0;
+#X obj 201 486 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 0.12 256;
-#X obj 259 446 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 259 486 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 -0.06 256;
-#X obj 352 465 translateXYZ 0 0 0;
-#X obj 393 448 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 352 505 translateXYZ 0 0 0;
+#X obj 393 488 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 0 256;
-#X obj 451 448 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 451 488 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 0 256;
-#X obj 551 466 translateXYZ 0 0 0;
-#X obj 592 449 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 551 506 translateXYZ 0 0 0;
+#X obj 592 489 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 -0.11 256;
-#X obj 650 449 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 650 489 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 -0.03 256;
-#X obj 746 465 translateXYZ 0 0 0;
-#X obj 787 448 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 746 505 translateXYZ 0 0 0;
+#X obj 787 488 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 -0.18 256;
-#X obj 845 448 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 845 488 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 -0.05 256;
-#X obj 160 -30 gemhead 10;
-#X obj 353 -29 gemhead 20;
-#X obj 552 -28 gemhead 30;
-#X obj 747 -27 gemhead 40;
-#X obj 160 104 alpha;
-#X obj 353 103 alpha;
-#X obj 552 99 alpha;
-#X obj 747 102 alpha;
-#X msg 256 113 ShadeL \$1;
-#X obj 199 25 r init_shader;
-#X obj 256 92 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X obj 160 10 gemhead 10;
+#X obj 353 11 gemhead 20;
+#X obj 552 12 gemhead 30;
+#X obj 747 13 gemhead 40;
+#X obj 160 144 alpha;
+#X obj 353 143 alpha;
+#X obj 552 139 alpha;
+#X obj 747 142 alpha;
+#X msg 256 153 ShadeL \$1;
+#X obj 199 65 r init_shader;
+#X obj 256 132 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 0 256;
-#X msg 447 93 ShadeL \$1;
-#X obj 447 72 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X msg 447 133 ShadeL \$1;
+#X obj 447 112 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 39 256;
-#X msg 634 95 ShadeL \$1;
-#X obj 634 74 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X msg 634 135 ShadeL \$1;
+#X obj 634 114 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 35 256;
-#X msg 831 93 ShadeL \$1;
-#X obj 831 72 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
+#X msg 831 133 ShadeL \$1;
+#X obj 831 112 nbx 5 14 -1e+37 1e+37 0 1 empty empty empty 0 -8 0 10
 -262144 -1 -1 23 256;
-#X msg 212 486 -1;
-#X msg 269 485 -0.75;
-#X text 163 486 invert;
-#X msg 406 485 -1;
-#X msg 463 484 -0.75;
-#X text 357 485 invert;
-#X msg 605 488 -1;
-#X msg 662 487 -0.75;
-#X text 556 488 invert;
-#X msg 800 489 -1;
-#X msg 857 488 -0.75;
-#X text 751 489 invert;
-#X obj 17 218 gemwin;
-#X obj 37 168 loadbang;
-#X obj 160 -8 scaleXYZ 4 4 1;
-#X obj 353 -8 scaleXYZ 4 4 1;
-#X obj 552 -4 scaleXYZ 4 4 1;
-#X obj 747 -5 scaleXYZ 4 4 1;
-#X text 21 548 This patch allow multiples images to be assembled in
+#X msg 212 526 -1;
+#X msg 269 525 -0.75;
+#X text 163 526 invert;
+#X msg 406 525 -1;
+#X msg 463 524 -0.75;
+#X text 357 525 invert;
+#X msg 605 528 -1;
+#X msg 662 527 -0.75;
+#X text 556 528 invert;
+#X msg 800 529 -1;
+#X msg 857 528 -0.75;
+#X text 751 529 invert;
+#X obj 17 258 gemwin;
+#X obj 37 208 loadbang;
+#X obj 160 32 scaleXYZ 4 4 1;
+#X obj 353 32 scaleXYZ 4 4 1;
+#X obj 552 36 scaleXYZ 4 4 1;
+#X obj 747 35 scaleXYZ 4 4 1;
+#X text 21 588 This patch allow multiples images to be assembled in
 order to create a panoramic image.;
-#X text 20 575 A shader distord the image to correct distance distortion
+#X text 20 615 A shader distord the image to correct distance distortion
 \, and allow a fade between 2 images;
-#X text 17 602 "dz" depend on the angles between images.;
-#X text 462 579 copyright cyrille Henry and iem.;
-#X text 463 596 This development was supported by the COMEDIA project
+#X text 17 642 "dz" depend on the angles between images.;
+#X text 462 619 copyright cyrille Henry and iem.;
+#X text 463 636 This development was supported by the COMEDIA project
 ;
-#X floatatom 18 354 5 0 0 0 - - -;
-#X msg 18 373 dZ \$1;
-#X obj 18 311 r init_shader;
-#X msg 18 333 1.62;
-#X msg 199 47 1.38;
-#X msg 37 192 dimen 1024 256;
-#X msg 177 264 thread 0 \, open cam1.jpg;
-#X msg 370 265 thread 0 \, open cam2.jpg;
-#X msg 569 266 thread 0 \, open cam3.jpg;
-#X msg 764 267 thread 0 \, open cam4.jpg;
+#X floatatom 18 394 5 0 0 0 - - -;
+#X msg 18 413 dZ \$1;
+#X obj 18 351 r init_shader;
+#X msg 18 373 1.62;
+#X msg 199 87 1.38;
+#X msg 37 232 dimen 1024 256;
+#X msg 177 304 thread 0 \, open cam1.jpg;
+#X msg 370 305 thread 0 \, open cam2.jpg;
+#X msg 569 306 thread 0 \, open cam3.jpg;
+#X msg 764 307 thread 0 \, open cam4.jpg;
+#X obj 964 623 declare -lib Gem;
 #X connect 0 0 101 0;
 #X connect 1 0 101 0;
 #X connect 2 0 32 0;

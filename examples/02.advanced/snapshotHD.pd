@@ -1,4 +1,5 @@
-#N canvas 143 49 609 575 10;
+#N canvas 143 61 609 575 10;
+#X declare -lib Gem;
 #X obj 152 105 gemframebuffer;
 #X obj 179 148 translateXYZ 0 0 -4;
 #X obj 152 126 t a a;
@@ -49,6 +50,7 @@
 #X obj 152 343 t b a b b b;
 #X obj 167 374 t a b a;
 #X text 453 523 (c) Jack/RYBN 2011;
+#X obj 478 8 declare -lib Gem;
 #X connect 0 0 2 0;
 #X connect 0 1 12 1;
 #X connect 1 0 5 0;

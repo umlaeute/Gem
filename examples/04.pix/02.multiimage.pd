@@ -1,4 +1,5 @@
 #N canvas 411 137 739 504 12;
+#X declare -lib Gem;
 #X msg 345 170 1;
 #X msg 345 202 0;
 #X obj 278 200 gemhead;
@@ -39,6 +40,7 @@
 #X text 21 209 Create window and render;
 #X obj 278 313 pix_texture;
 #X obj 278 335 square 3;
+#X obj 612 5 declare -lib Gem;
 #X connect 0 0 6 1;
 #X connect 1 0 6 1;
 #X connect 2 0 6 0;

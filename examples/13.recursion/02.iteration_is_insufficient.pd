@@ -1,4 +1,5 @@
-#N canvas 0 0 602 259 10;
+#N canvas 6 61 602 259 10;
+#X declare -lib Gem;
 #X obj 14 66 gemwin;
 #X obj 14 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
@@ -22,6 +23,7 @@ structure \, without branches. Iteration has solved one problem \,
 only to present us with another: what if we want a branching structure?
 ;
 #X text 170 187 Recursion is an elegant solution to this problem.;
+#X obj 470 9 declare -lib Gem;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;

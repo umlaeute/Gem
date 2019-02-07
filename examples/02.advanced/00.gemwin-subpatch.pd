@@ -1,4 +1,5 @@
-#N canvas 0 0 725 412 10;
+#N canvas 6 61 725 412 10;
+#X declare -lib Gem;
 #N canvas 95 194 290 179 Gem.init 0;
 #X obj 83 30 loadbang;
 #X msg 83 67 reset;
@@ -58,4 +59,5 @@ understands.;
 anymore...;
 #X text 249 113 for the sake of simplicity \, from now on the examples
 will use the subpatch on the left side to control the Gem-window.;
+#X obj 618 8 declare -lib Gem;
 #X connect 0 0 1 0;

@@ -1,4 +1,5 @@
 #N canvas 396 160 600 366 10;
+#X declare -lib Gem;
 #X obj 41 324 gemwin;
 #X msg 70 111 create;
 #X obj 223 109 gemhead;
@@ -60,6 +61,7 @@
 #X connect 10 0 1 2;
 #X connect 12 0 0 0;
 #X restore 338 89 pd process;
+#X obj 491 4 declare -lib Gem;
 #X connect 1 0 0 0;
 #X connect 2 0 12 0;
 #X connect 3 0 0 0;

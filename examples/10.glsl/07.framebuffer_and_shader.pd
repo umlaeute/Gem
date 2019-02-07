@@ -1,4 +1,5 @@
-#N canvas 1 25 1126 659 10;
+#N canvas 30 77 1126 659 10;
+#X declare -lib Gem;
 #X obj 9 470 translateXYZ 0 0 -4;
 #X obj 9 234 ortho;
 #X floatatom 83 538 5 0 0 0 - - -;
@@ -298,7 +299,7 @@ and multitextures;
 #X restore 760 47 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -343,6 +344,7 @@ and multitextures;
 #X msg 867 255 K \$1 \, texture1 2 \, texture2 3;
 #X text 880 276 texture1==base;
 #X text 882 294 texture2==deformation;
+#X obj 1004 13 declare -lib Gem;
 #X connect 0 0 5 0;
 #X connect 1 0 18 0;
 #X connect 3 0 2 0;

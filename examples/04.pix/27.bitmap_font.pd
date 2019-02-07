@@ -1,4 +1,5 @@
 #N canvas 56 222 901 508 10;
+#X declare -lib Gem;
 #X obj 191 413 pix_texture;
 #X obj 463 158 gemwin;
 #X msg 506 135 0 \, destroy;
@@ -103,6 +104,7 @@
 #X obj 191 483 rectangle 32 -2;
 #X text 501 84 2 click on this patch (to focuses it) and type something
 with your keyboard;
+#X obj 782 5 declare -lib Gem;
 #X connect 0 0 44 0;
 #X connect 2 0 1 0;
 #X connect 3 0 0 0;

@@ -1,4 +1,4 @@
-#N canvas 511 83 666 689 12;
+#N canvas 511 83 713 781 12;
 #X obj 18 14 inlet;
 #X obj 18 35 t a a;
 #X obj 50 98 spigot 0;

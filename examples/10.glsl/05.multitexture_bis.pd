@@ -1,4 +1,5 @@
 #N canvas 207 200 1100 637 10;
+#X declare -lib Gem;
 #X obj 76 5 gemhead;
 #X obj 75 429 glsl_program;
 #X obj 149 268 pack 0 0;
@@ -76,7 +77,7 @@ mixes 2 textures;
 #X restore 395 47 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -133,6 +134,7 @@ mixes 2 textures;
 #X msg 471 402 rectangle 0;
 #X msg 462 313 open img1.jpg;
 #X obj 443 342 pix_image img1.jpg;
+#X obj 983 7 declare -lib Gem;
 #X connect 0 0 11 0;
 #X connect 1 0 48 0;
 #X connect 1 1 30 0;

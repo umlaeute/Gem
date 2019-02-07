@@ -1,4 +1,5 @@
 #N canvas 284 93 594 539 10;
+#X declare -lib Gem;
 #X obj 46 186 gemwin;
 #X obj 319 173 gemhead;
 #X obj 258 329 pix_data;
@@ -50,6 +51,7 @@
 #X obj 419 253 random 1000;
 #X obj 419 270 / 1000;
 #X obj 419 288 t f f;
+#X obj 482 5 declare -lib Gem;
 #X connect 1 0 27 0;
 #X connect 2 1 13 1;
 #X connect 3 0 0 0;

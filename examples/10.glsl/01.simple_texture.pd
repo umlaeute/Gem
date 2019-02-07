@@ -1,4 +1,5 @@
 #N canvas 486 82 722 633 10;
+#X declare -lib Gem;
 #X obj 76 22 gemhead;
 #X obj 76 367 glsl_program;
 #X obj 169 329 print linking;
@@ -13,7 +14,7 @@
 #X msg 106 154 open texture.frag;
 #X obj 76 197 glsl_fragment;
 #X text 215 459 <- load texture;
-#X obj 106 535 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 106 535 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 76 489 pix_image img1.jpg;
 #X msg 103 460 open img2.jpg;
@@ -41,7 +42,7 @@
 #X restore 566 142 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -88,6 +89,7 @@
 #X floatatom 192 372 0 0 0 0 - - -;
 #X msg 151 308 link \$1;
 #X obj 151 259 change;
+#X obj 604 13 declare -lib Gem;
 #X connect 0 0 11 0;
 #X connect 1 0 3 0;
 #X connect 1 1 38 0;

@@ -1,4 +1,5 @@
-#N canvas 375 67 983 713 10;
+#N canvas 375 67 860 713 10;
+#X declare -lib Gem;
 #N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
 #X obj 46 -21 realtime;
@@ -17,7 +18,7 @@
 #X connect 6 0 7 0;
 #X connect 7 0 5 0;
 #X restore 806 149 pd fps;
-#X floatatom 806 172 5 0 0 1 fps - -, f 5;
+#X floatatom 806 172 5 0 0 1 fps - -;
 #N canvas 5 76 450 300 gemwin 0;
 #X obj 132 246 gemwin;
 #X obj 67 89 outlet;
@@ -54,7 +55,7 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 577 115 pd gemwin;
-#X msg 577 96 destroy;
+#X msg 577 96 create;
 #X text 573 75 Create window:;
 #X msg 184 350 link \$1 \$2;
 #X obj 154 264 glsl_vertex;
@@ -190,6 +191,7 @@ and frag files;
 #X connect 6 0 4 0;
 #X restore 184 330 pd modulelist;
 #X msg 272 416 bang;
+#X obj 753 7 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;
 #X connect 3 0 2 0;

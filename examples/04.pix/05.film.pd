@@ -1,4 +1,5 @@
-#N canvas 61 44 827 553 12;
+#N canvas 61 61 827 553 12;
+#X declare -lib Gem;
 #X obj 90 186 gemhead;
 #X floatatom 220 155 5 0 0 0 - - -;
 #X msg 150 156 auto \$1;
@@ -26,8 +27,8 @@ using "pix_rgba". this will be a no-cost operation if the pix_buf already
 is in RGBA.;
 #X text 36 334 you might notice a significant performance-enhancement
 by just turning the [pix_rgba] off (via the toggle). however \, not
-[pix_rgba] is expensive but actually the [pix_convolve] (which appears to do
-nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
+[pix_rgba] is expensive but actually the [pix_convolve] (which appears
+to do nothing when initialized with "0 0 0 0 1 0 0 0 0". When [pix_rgba]
 is "off" \, the [pix_convolve] will be bypassed \, and therefore be
 very fast.;
 #X restore 635 187 pd README;
@@ -93,6 +94,7 @@ very fast.;
 not RGBA \, [pix_convolve] might not be able to process the image and
 therefore will do nothing \, which will dramatically "increase" performance)
 ;
+#X obj 682 5 declare -lib Gem;
 #X connect 0 0 12 0;
 #X connect 1 0 12 1;
 #X connect 2 0 12 0;

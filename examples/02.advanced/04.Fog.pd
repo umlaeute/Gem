@@ -1,4 +1,5 @@
 #N canvas 275 99 721 506 10;
+#X declare -lib Gem;
 #X floatatom 414 85 0 0 0 0 - - -;
 #X obj 385 44 gemhead;
 #X floatatom 403 165 0 0 0 0 - - -;
@@ -82,6 +83,7 @@
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 40 258 pd gemwin;
+#X obj 608 8 declare -lib Gem;
 #X connect 0 0 6 3;
 #X connect 1 0 6 0;
 #X connect 2 0 7 1;

@@ -1,4 +1,5 @@
-#N canvas 0 0 784 537 10;
+#N canvas 6 61 650 591 10;
+#X declare -lib Gem;
 #X obj 64 47 gemhead;
 #X obj 96 94 gemlist_info;
 #X floatatom 177 138 5 0 0 0 - - -;
@@ -42,6 +43,7 @@ of the "load identity" object that resets the transformation;
 #X text 211 457 <- move the object regarding the camera position (this
 is normally done automatically by the gemwin \, but since we have reset
 the transformation matrix we have to do it ourselves...);
+#X obj 506 9 declare -lib Gem;
 #X connect 0 0 7 0;
 #X connect 1 4 5 0;
 #X connect 5 0 2 0;

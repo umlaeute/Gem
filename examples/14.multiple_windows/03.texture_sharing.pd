@@ -1,11 +1,11 @@
 #N canvas 224 736 1147 233 10;
+#X declare -lib Gem;
 #X obj 33 169 gemwin 20 a;
 #X obj 396 181 square;
-#X obj 168 46 b;
-#X obj 168 26 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X obj 141 26 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 396 37 gemhead a;
-#X text 185 24 1 create windows;
+#X text 158 24 1 create windows;
 #X obj 396 104 pix_texture;
 #X obj 596 181 square;
 #X obj 596 155 pix_texture;
@@ -15,7 +15,7 @@
 #X obj 168 169 gemwin 20 b;
 #X msg 596 4 context a;
 #X msg 669 4 context b;
-#X msg 90 118 destroy;
+#X msg 80 118 destroy;
 #X text 731 150 on Linux \, this is only supported by [gemglutwindow].
 ;
 #X text 730 98 support for texture sharing is limited by Operating
@@ -23,19 +23,23 @@ System \, ggraphics hardware \, openGL implementation and the windowing
 backend.;
 #X msg 33 87 title a \, create \, 1;
 #X msg 168 117 title b \, create \, 1;
-#X connect 2 0 18 0;
-#X connect 2 0 19 0;
-#X connect 3 0 2 0;
-#X connect 4 0 9 0;
-#X connect 6 0 1 0;
-#X connect 6 1 8 1;
-#X connect 8 0 7 0;
-#X connect 9 0 6 0;
-#X connect 10 0 8 0;
-#X connect 11 0 10 0;
-#X connect 13 0 11 0;
-#X connect 14 0 11 0;
-#X connect 15 0 12 0;
-#X connect 15 0 0 0;
-#X connect 18 0 0 0;
-#X connect 19 0 12 0;
+#X obj 1030 16 declare -lib Gem;
+#X obj 141 46 t b b;
+#X obj 80 141 t a a;
+#X connect 2 0 20 0;
+#X connect 3 0 8 0;
+#X connect 5 0 1 0;
+#X connect 5 1 7 1;
+#X connect 7 0 6 0;
+#X connect 8 0 5 0;
+#X connect 9 0 7 0;
+#X connect 10 0 9 0;
+#X connect 12 0 10 0;
+#X connect 13 0 10 0;
+#X connect 14 0 21 0;
+#X connect 17 0 0 0;
+#X connect 18 0 11 0;
+#X connect 20 0 17 0;
+#X connect 20 1 18 0;
+#X connect 21 0 0 0;
+#X connect 21 1 11 0;

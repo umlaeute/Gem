@@ -1,4 +1,5 @@
-#N canvas 239 0 785 526 10;
+#N canvas 239 61 690 677 10;
+#X declare -lib Gem;
 #X obj 504 69 gemhead;
 #X obj 576 346 pack 0 0;
 #X obj 597 326 t b f;
@@ -102,6 +103,7 @@ able to run this patch.;
 1024;
 #X msg 44 439 rectangle 0 \, quality 0;
 #X obj 520 437 loadbang;
+#X obj 563 7 declare -lib Gem;
 #X connect 0 0 15 0;
 #X connect 1 0 3 0;
 #X connect 2 0 1 0;

@@ -1,4 +1,5 @@
 #N canvas 372 134 624 496 10;
+#X declare -lib Gem;
 #X floatatom 481 249 0 0 0 0 - - -;
 #X msg 422 21 1;
 #X msg 455 21 0;
@@ -8,7 +9,7 @@
 #X obj 350 364 square;
 #N canvas 21 297 600 400 arrays 0;
 #N canvas 0 0 450 300 (subpatch) 0;
-#X array array2 15 float 0;
+#X array array2 18 float 0;
 #X array array3 24 float 0;
 #X coords 0 1 15 -1 400 300 1;
 #X restore 63 4 graph;
@@ -70,6 +71,7 @@
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 54 151 pd gemwin;
+#X obj 518 8 declare -lib Gem;
 #X connect 0 0 14 0;
 #X connect 1 0 12 0;
 #X connect 2 0 12 0;

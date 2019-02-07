@@ -1,4 +1,5 @@
-#N canvas 1494 239 690 594 10;
+#N canvas 95 168 690 594 10;
+#X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 9 173 cnv 15 430 345 empty empty empty 20 12 0 14 -233017 -66577
 0;
@@ -110,6 +111,7 @@ can be a circle \, a rectangle or a line.;
 #X msg 510 236 circle 1 0.2 0.2 0.15;
 #X obj 535 280 route 0 1 2;
 #X msg 510 254 line 2 0.7 0.1 0.8 0.9;
+#X obj 548 8 declare -lib Gem;
 #X connect 13 0 14 0;
 #X connect 14 0 13 0;
 #X connect 17 0 19 0;

@@ -1,4 +1,5 @@
 #N canvas 50 151 946 464 10;
+#X declare -lib Gem;
 #N canvas 50 173 290 229 Gem.init 0;
 #X obj 71 191 outlet;
 #X obj 71 81 loadbang;
@@ -292,6 +293,7 @@ and cetera...;
 #X obj 604 88 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 2
 2;
 #X text 632 87 <- should the view affect light position or not;
+#X obj 828 8 declare -lib Gem;
 #X connect 0 0 32 0;
 #X connect 2 0 11 0;
 #X connect 3 0 2 0;

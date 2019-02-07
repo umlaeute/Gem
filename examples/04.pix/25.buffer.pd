@@ -1,4 +1,5 @@
-#N canvas 0 0 832 589 10;
+#N canvas 6 61 832 589 10;
+#X declare -lib Gem;
 #X obj 62 327 gemhead;
 #X obj 62 369 pix_texture;
 #X obj 62 392 square 4;
@@ -89,6 +90,7 @@ pixels;
 #X text 287 20 [pix_buffer];
 #X msg 353 181 open ../data/fractal.JPG 5;
 #X text 524 182 load an image into a certain storage-buffer;
+#X obj 722 5 declare -lib Gem;
 #X connect 0 0 36 0;
 #X connect 1 0 2 0;
 #X connect 3 0 4 0;

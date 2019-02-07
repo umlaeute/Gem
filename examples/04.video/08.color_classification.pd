@@ -1,4 +1,5 @@
 #N canvas 55 233 930 428 10;
+#X declare -lib Gem;
 #X obj 297 283 separator;
 #X obj 297 304 pix_texture;
 #X obj 96 130 gemhead 10;
@@ -92,6 +93,7 @@ at the expense of a smaller number of classified pixels.;
 #X obj 65 240 pix_colorclassify;
 #X text 7 385 Author: Ricardo Fabbri labmacambira.sf.net rfabbri at
 gmail;
+#X obj 822 5 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 1 0 10 0;
 #X connect 2 0 3 0;

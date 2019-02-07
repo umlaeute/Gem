@@ -1,4 +1,5 @@
 #N canvas 67 70 636 509 10;
+#X declare -lib Gem;
 #X obj 43 89 gemhead;
 #X obj 190 380 pix_texture;
 #X obj 43 380 pix_texture;
@@ -80,6 +81,7 @@ properties (width \, height \, colorspace) \;;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 424 422 pd gemwin;
+#X obj 532 45 declare -lib Gem;
 #X connect 0 0 20 0;
 #X connect 1 0 21 0;
 #X connect 2 0 24 0;

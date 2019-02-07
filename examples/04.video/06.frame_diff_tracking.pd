@@ -1,4 +1,5 @@
-#N canvas 42 41 639 499 10;
+#N canvas 42 61 639 499 10;
+#X declare -lib Gem;
 #X obj 140 80 gemhead;
 #X obj 140 271 pix_diff;
 #X obj 23 397 pix_texture;
@@ -165,6 +166,7 @@ using blob detection.;
 #X text 356 384 <-- render a cursor using the (x \, y) and size;
 #X text 6 460 render the video of the;
 #X text 6 472 frame difference;
+#X obj 526 62 declare -lib Gem;
 #X connect 0 0 8 0;
 #X connect 1 0 12 0;
 #X connect 2 0 11 0;

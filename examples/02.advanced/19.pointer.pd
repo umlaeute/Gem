@@ -1,4 +1,5 @@
-#N canvas 102 54 864 638 10;
+#N canvas 102 61 864 638 10;
+#X declare -lib Gem;
 #X obj 209 223 gemhead;
 #X obj 241 277 t a a a;
 #X obj 264 320 cube 1;
@@ -182,6 +183,7 @@ means that the examples below are equivalent:;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
 #X restore 44 36 pd Gem.init;
+#X obj 748 8 declare -lib Gem;
 #X connect 0 0 13 0;
 #X connect 1 0 22 0;
 #X connect 1 1 2 0;

@@ -1,4 +1,5 @@
 #N canvas 54 216 940 412 10;
+#X declare -lib Gem;
 #N canvas 338 262 290 225 Gem.init 0;
 #X obj 83 30 loadbang;
 #X msg 161 76 reset;
@@ -60,7 +61,7 @@ ensure that all that you want is already rendered onto the screen.
 1;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -103,6 +104,7 @@ ensure that all that you want is already rendered onto the screen.
 #X obj 60 362 color 0 1 0;
 #X obj 60 382 sphere 0.5;
 #X obj 652 326 pix_write;
+#X obj 828 8 declare -lib Gem;
 #X connect 0 0 34 0;
 #X connect 1 0 2 0;
 #X connect 2 0 5 0;

@@ -1,4 +1,5 @@
 #N canvas 314 61 654 599 12;
+#X declare -lib Gem;
 #X msg 489 227 1;
 #X msg 489 259 0;
 #X obj 375 254 gemhead;
@@ -52,6 +53,7 @@ between the various images.;
 #X restore 25 113 pd gemwin;
 #X msg 25 89 create;
 #X text 21 69 Create window and render;
+#X obj 532 5 declare -lib Gem;
 #X connect 0 0 5 1;
 #X connect 1 0 5 1;
 #X connect 2 0 5 0;

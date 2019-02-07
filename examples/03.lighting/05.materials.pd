@@ -1,4 +1,5 @@
 #N canvas 253 63 743 597 10;
+#X declare -lib Gem;
 #X obj 349 34 gemhead;
 #X obj 349 307 rotate;
 #X floatatom 367 272 0 0 0 0 - - -;
@@ -70,6 +71,7 @@ the sphere is;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 34 155 pd gemwin;
+#X obj 624 8 declare -lib Gem;
 #X connect 0 0 12 0;
 #X connect 1 0 13 0;
 #X connect 2 0 1 1;

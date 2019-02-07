@@ -1,4 +1,5 @@
-#N canvas 54 22 842 789 10;
+#N canvas 54 61 842 789 10;
+#X declare -lib Gem;
 #X obj 225 24 gemhead 1;
 #X obj 225 47 world_light;
 #X obj 77 112 gemhead;
@@ -89,7 +90,7 @@ example should work;
 #X obj 335 114 symbol ../data/Toon;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -130,6 +131,7 @@ example should work;
 #X msg 39 29 lighting \$1;
 #X obj 39 10 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
+#X obj 738 8 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;
 #X connect 3 0 37 0;
