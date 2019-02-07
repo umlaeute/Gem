@@ -10,12 +10,17 @@
 #ifndef _INCLUDE__GEM_PIXES_PIX_SHARE_H_
 #define _INCLUDE__GEM_PIXES_PIX_SHARE_H_
 
+#include <Gem/GemConfig.h>
+#if (defined HAVE_SYS_IPC_H) && (defined HAVE_SYS_SHM_H)
+# define USE_SHM 1
+#endif
+
 #include "Base/GemBase.h"
 #include <sys/types.h>
-#ifndef _WIN32
+#if USE_SHM
 # include <sys/ipc.h>
 # include <sys/shm.h>
-#else
+#elif defined _WIN32
 # include <windows.h>
 # include <stdio.h>
 # include <conio.h>
