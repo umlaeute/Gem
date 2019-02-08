@@ -1,5 +1,6 @@
-#N struct 1002-xy-pad-knob-1 float x0 float y0 float id;
+#N struct 1071-xy-pad-knob-1 float x0 float y0 float id;
 #N canvas 75 218 764 482 10;
+#X declare -lib Gem;
 #X obj 27 380 hradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144 -1
 -1 0;
 #X floatatom 185 212 5 0 0 0 - - -;
@@ -796,7 +797,7 @@
 #X restore 66 188 pd Gem.init;
 #N canvas 341 104 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -1113,7 +1114,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X obj 304 74 cnv 10 12 12 empty empty empty 20 12 0 14 -99865 -66577
 0;
 #N canvas 493 264 450 300 \$0-work 0;
-#X scalar 1002-xy-pad-knob-1 71.2205 45 900 \;;
+#X scalar 1071-xy-pad-knob-1 45 45 900 \;;
 #X coords 0 100 100 0 100 100 1;
 #X restore 260 30 pd \$0-work;
 #X obj 451 532 wrap;
@@ -1184,7 +1185,7 @@ y0(0:90)(0:90) x0(0:90)(10:100) y0(0:90)(10:100) x0(0:90)(0:90) y0(0:90)(10:100)
 #X coords 0 -1 1 1 100 100 2 260 30;
 #X restore 445 290 pd \$0-pad;
 #X obj 445 151 vsl 15 128 0 1 0 0 empty \$0-force force 0 -9 0 10 -262144
--1 -1 7400 1;
+-1 -1 0 1;
 #X obj 538 152 vsl 15 128 0 1 0 0 empty \$0-direction direction 0 -9
 0 10 -262144 -1 -1 0 1;
 #N canvas 424 571 337 368 wind-control. 0;
@@ -1232,6 +1233,7 @@ of 64x92 masses \, and 64x92x12 links at 50x20 Hz. (about 7e+07 links/sec
 on a CPU) (My GPU is old \, this patch performs 10 to 50 times faster
 on a good GPU);
 #X obj 606 346 s qqt_noise;
+#X obj 654 13 declare -lib Gem;
 #X connect 0 0 5 0;
 #X connect 2 0 1 0;
 #X connect 9 0 10 0;

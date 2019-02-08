@@ -234,26 +234,5 @@ libPixes_la_SOURCES=  \
     pix_zoom.cpp \
     pix_zoom.h
 
-
-
-# deprecated stuff
-EXTRA_DIST = \
-    pix_filmOS.cpp \
-    pix_filmOS.h \
-    pix_filmDarwin.cpp \
-    pix_filmDarwin.h \
-    pix_movieOS.cpp \
-    pix_movieOS.h \
-    pix_movieDarwin.cpp \
-    pix_movieDarwin.h \
-    pix_movieDS.cpp \
-    pix_movieDS.h \
-    pix_videoDarwin.cpp \
-    pix_videoDarwin.h \
-    pix_videoOS.cpp \
-    pix_videoOS.h \
-    pix_recordQT.cpp \
-    pix_recordQT.h
-
 CHECKUNUSED_IGNORE=$(EXTRA_DIST)
 

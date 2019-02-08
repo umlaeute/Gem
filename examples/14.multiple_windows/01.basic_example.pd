@@ -1,4 +1,5 @@
 #N canvas 60 711 828 296 10;
+#X declare -lib Gem;
 #X obj 88 241 gemwin 20 a;
 #X obj 295 79 square;
 #X obj 295 49 color 1 0 0 1;
@@ -7,23 +8,24 @@
 #X obj 94 25 gemhead a;
 #X msg 88 199 title a \, create \, 1;
 #X msg 268 199 title b \, create \, 1;
-#X obj 223 158 b;
 #X obj 223 138 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X text 240 136 create window;
-#X text 405 85 You can have multiple window and display different
-things on each.;
+#X text 405 85 You can have multiple window and display different things
+on each.;
 #X obj 268 241 gemwin 20 b;
 #X text 405 119 Basically \, use [gemwin fps context_name] to create
 a named context then use [gemhead context_name] to render to this context
 only.;
 #X obj 295 27 gemhead b;
+#X obj 710 6 declare -lib Gem;
+#X obj 223 158 t b b;
 #X connect 2 0 1 0;
 #X connect 4 0 3 0;
 #X connect 5 0 4 0;
 #X connect 6 0 0 0;
-#X connect 7 0 12 0;
-#X connect 8 0 6 0;
-#X connect 8 0 7 0;
-#X connect 9 0 8 0;
-#X connect 14 0 2 0;
+#X connect 7 0 11 0;
+#X connect 8 0 15 0;
+#X connect 13 0 2 0;
+#X connect 15 0 6 0;
+#X connect 15 1 7 0;

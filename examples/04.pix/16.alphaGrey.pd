@@ -1,4 +1,5 @@
-#N canvas 28 0 713 500 10;
+#N canvas 28 61 713 500 10;
+#X declare -lib Gem;
 #X obj 135 336 pix_texture;
 #X obj 135 393 square 2;
 #X obj 135 171 pix_image ../data/fractalAlpha.TIF;
@@ -14,7 +15,7 @@
 #X text 261 55 grey's out all pixels \, of which the alpha-channel
 is above a certain threshold;
 #X obj 240 269 hsl 128 15 -1 1 0 0 empty empty empty 20 8 0 8 -262144
--1 -1 3100 1;
+-1 -1 0 1;
 #X msg 237 246 0;
 #X msg 266 246 0.5;
 #X obj 20 39 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
@@ -23,7 +24,7 @@ is above a certain threshold;
 #X obj 135 139 gemhead;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -62,6 +63,7 @@ is above a certain threshold;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 28 61 pd gemwin;
 #X floatatom 237 288 5 -1 1 0 - - -;
+#X obj 602 5 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 2 0 4 0;
 #X connect 3 0 0 0;

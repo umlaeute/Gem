@@ -1,33 +1,34 @@
-#N canvas 326 0 854 742 10;
-#X obj 556 -8 bng 15 250 50 0 refresh_var empty load-presets 17 7 0
+#N canvas 265 116 854 813 10;
+#X declare -lib Gem;
+#X obj 556 62 bng 15 250 50 0 refresh_var empty load-presets 17 7 0
 10 -257985 -1 -1;
-#X obj 161 116 pix_grey;
-#X floatatom 117 -50 5 0 0 1 bottom bottom -;
-#X floatatom 152 -33 5 0 0 1 top top -;
-#X obj 161 156 pix_texture;
-#X obj 152 19 t b f;
-#X floatatom 194 -14 5 0 0 1 right right -;
-#X obj 194 19 t b f;
-#X floatatom 235 1 5 0 0 1 left left -;
-#X obj 235 19 t b f;
-#X obj 35 16 t b f;
-#X obj 15 43 pack f f f;
-#X obj 73 16 t b f;
-#X floatatom 35 -17 5 0 0 1 thresh thresh -;
-#X obj 304 19 t b f;
-#X obj 345 19 t b f;
-#X floatatom 15 -33 5 0 0 1 mode mode -;
-#X floatatom 73 -2 5 0 0 1 tip_scalar tip_scalar -;
-#X floatatom 273 -58 5 0 0 1 pix_avg pix_avg -;
-#X floatatom 304 -42 5 0 0 1 pix_tip pix_tip -;
-#X floatatom 345 -27 5 0 0 1 min_entry_size min_entry_size -;
-#X obj 384 20 t b f;
-#X floatatom 384 -12 5 0 0 1 min_perim min_perim -;
-#X floatatom 424 3 5 0 0 1 pix_samp pix_samp -;
-#X obj 424 20 t b f;
-#X obj 273 47 pack f f f f f;
-#X obj 161 76 gemhead 1;
-#X obj 161 96 pix_video;
+#X obj 161 186 pix_grey;
+#X floatatom 117 20 5 0 0 1 bottom bottom -;
+#X floatatom 152 37 5 0 0 1 top top -;
+#X obj 161 226 pix_texture;
+#X obj 152 89 t b f;
+#X floatatom 194 56 5 0 0 1 right right -;
+#X obj 194 89 t b f;
+#X floatatom 235 71 5 0 0 1 left left -;
+#X obj 235 89 t b f;
+#X obj 35 86 t b f;
+#X obj 15 113 pack f f f;
+#X obj 73 86 t b f;
+#X floatatom 35 53 5 0 0 1 thresh thresh -;
+#X obj 304 89 t b f;
+#X obj 345 89 t b f;
+#X floatatom 15 37 5 0 0 1 mode mode -;
+#X floatatom 73 68 5 0 0 1 tip_scalar tip_scalar -;
+#X floatatom 273 12 5 0 0 1 pix_avg pix_avg -;
+#X floatatom 304 28 5 0 0 1 pix_tip pix_tip -;
+#X floatatom 345 43 5 0 0 1 min_entry_size min_entry_size -;
+#X obj 384 90 t b f;
+#X floatatom 384 58 5 0 0 1 min_perim min_perim -;
+#X floatatom 424 73 5 0 0 1 pix_samp pix_samp -;
+#X obj 424 90 t b f;
+#X obj 273 117 pack f f f f f;
+#X obj 161 146 gemhead 1;
+#X obj 161 166 pix_video;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -43,7 +44,7 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 32 204 pd print;
+#X restore 32 274 pd print;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -59,7 +60,7 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 100 204 pd print;
+#X restore 100 274 pd print;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -75,7 +76,7 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 167 204 pd print;
+#X restore 167 274 pd print;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -91,7 +92,7 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 235 204 pd print;
+#X restore 235 274 pd print;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -107,7 +108,7 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 301 204 pd print;
+#X restore 301 274 pd print;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -123,21 +124,48 @@
 #X connect 4 0 5 0;
 #X connect 5 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 369 204 pd print;
-#N canvas 716 528 225 177 gemwin 0;
-#X obj 61 138 gemwin;
-#X msg 46 83 create \, 1;
-#X msg 142 99 0 \, destroy;
-#X obj 24 12 loadbang;
-#X obj 24 38 t b b b;
-#X msg 126 65 dimen 320 240;
+#X restore 369 274 pd print;
+#N canvas 716 528 356 251 gemwin 0;
+#X obj 181 178 gemwin;
+#X msg 166 123 create \, 1;
+#X msg 262 139 0 \, destroy;
+#X obj 234 22 loadbang;
+#X msg 246 105 dimen 320 240;
+#X obj 100 101 tgl 18 0 \$0-win \$0-win empty 17 7 0 10 -262144 -1
+-1 0 1;
+#X obj 11 23 inlet;
+#X obj 11 46 t a a;
+#X obj 11 69 route create destroy;
+#X obj 11 92 t b;
+#X obj 11 115 f 1;
+#X obj 11 138 t f;
+#X msg 11 161 set \$1;
+#X obj 41 92 t b;
+#X obj 41 115 f 0;
+#X obj 156 23 r \$0-win;
+#X obj 156 46 route float;
+#X obj 156 69 select 1 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 4 0;
-#X connect 4 1 1 0;
-#X connect 4 2 5 0;
-#X connect 5 0 0 0;
-#X restore 556 -49 pd gemwin;
+#X connect 4 0 0 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 7 1 0 0;
+#X connect 8 0 9 0;
+#X connect 8 1 13 0;
+#X connect 9 0 10 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 12 0 5 0;
+#X connect 13 0 14 0;
+#X connect 14 0 11 0;
+#X connect 15 0 16 0;
+#X connect 16 0 17 0;
+#X connect 17 0 1 0;
+#X connect 17 1 2 0;
+#X coords 0 -1 1 1 85 20 1 100 100;
+#X restore 556 21 pd gemwin;
 #N canvas 621 151 306 719 graphs-outlet2 0;
 #N canvas 0 22 450 300 (subpatch) 0;
 #X array x 150 float 1;
@@ -222,7 +250,7 @@
 #X connect 19 0 8 1;
 #X connect 20 0 9 1;
 #X connect 21 0 10 0;
-#X restore 100 265 pd graphs-outlet2;
+#X restore 100 335 pd graphs-outlet2;
 #N canvas 0 0 450 300 print 0;
 #X obj 131 36 inlet;
 #X obj 131 57 spigot;
@@ -238,7 +266,7 @@
 #X connect 3 0 4 0;
 #X connect 4 0 1 1;
 #X coords 0 -1 1 1 60 23 2 100 100;
-#X restore 100 238 pd print;
+#X restore 100 308 pd print;
 #N canvas 178 290 743 248 presets 0;
 #X text 280 16 head;
 #X text 229 16 bottom;
@@ -306,77 +334,78 @@ at 320x240.;
 #X connect 31 0 13 0;
 #X connect 31 0 12 0;
 #X connect 34 0 27 0;
-#X restore 556 -30 pd presets;
-#X text 456 52 inlet 1;
-#X text 458 71 mode 0: regular function (others used for debugging)
+#X restore 556 40 pd presets;
+#X text 456 122 inlet 1;
+#X text 458 141 mode 0: regular function (others used for debugging)
 ;
-#X text 457 83 thresh: threshold for contrast step;
-#X text 459 200 pix_avg: number of pixels to average the contour;
-#X text 458 234 min_entry_size: minimum entry size to be considered
+#X text 457 153 thresh: threshold for contrast step;
+#X text 459 270 pix_avg: number of pixels to average the contour;
+#X text 458 304 min_entry_size: minimum entry size to be considered
 as a hand;
-#X text 458 256 min_perim: minimum perimeter to be considered a hand
+#X text 458 326 min_perim: minimum perimeter to be considered a hand
 ;
-#X text 459 308 OUTLETS;
-#X text 459 374 outlet 2: elements in the smoothed contour;
-#X text 460 408 outlet 3: peaks found in the contour;
-#X text 460 449 outlet 4: valleys found in the contour;
-#X text 460 491 outlet 5: contours found;
-#X text 461 542 outlet 6: end of algorithm report;
-#X text 457 148 inlet 2: defines the bounds of the area of analysis
+#X text 459 378 OUTLETS;
+#X text 459 444 outlet 2: elements in the smoothed contour;
+#X text 460 478 outlet 3: peaks found in the contour;
+#X text 460 519 outlet 4: valleys found in the contour;
+#X text 460 561 outlet 5: contours found;
+#X text 461 612 outlet 6: end of algorithm report;
+#X text 457 218 inlet 2: defines the bounds of the area of analysis
 ;
-#X text 484 160 bottom \, top \, right \, left;
-#X text 457 181 inlet 3: parameters of contour analysis;
-#X text 458 212 pix_tip: number of contiguous pixels higher than tip_scalar
+#X text 484 230 bottom \, top \, right \, left;
+#X text 457 251 inlet 3: parameters of contour analysis;
+#X text 458 282 pix_tip: number of contiguous pixels higher than tip_scalar
 to consider something a peak or valley;
-#X text 482 118 mode \, thresh \, tip_scalar;
-#X text 457 94 tip scalar: scalar of maximum angle to consider something
+#X text 482 188 mode \, thresh \, tip_scalar;
+#X text 457 164 tip scalar: scalar of maximum angle to consider something
 a peak or valley;
-#X text 458 267 pix_samp: period of sampling of the averaged contour
+#X text 458 337 pix_samp: period of sampling of the averaged contour
 ;
-#X text 483 281 pix_avg \, pix_tip \, min_entry_size \, min_perim \,
+#X text 483 351 pix_avg \, pix_tip \, min_entry_size \, min_perim \,
 pix_samp;
-#X text 460 592 order of outlets: 1 2 5 3 4 6;
-#X text 460 340 outlet 1: elements in the raw contour (only in mode
+#X text 460 662 order of outlets: 1 2 5 3 4 6;
+#X text 460 410 outlet 1: elements in the raw contour (only in mode
 2);
-#X text 60 301 pix_mano is an object that tracks light reflecting objects
+#X text 60 371 pix_mano is an object that tracks light reflecting objects
 (eg. hands) over a light absorbing background (eg. black cloth). Light
 reflecting objects need to enter the video frame from one of the sides
 to be recognized. For example \, a white circle in the center will
 not be recognized as there is no entry point in the borders of the
 frame.;
-#X text 58 426 Roughly \, the object works by setting a threshold to
+#X text 58 496 Roughly \, the object works by setting a threshold to
 discriminate between black and white pixels. shapes formed of white
 pixels are analyzed in the order of largest entry section.;
-#X text 581 628 support information in www.jaimeoliver.pe;
-#X text 59 483 For each object an analysis of its contour is achieved.
+#X text 581 698 support information in www.jaimeoliver.pe;
+#X text 59 553 For each object an analysis of its contour is achieved.
 (see graph option in outlet two while entering your hand into the frame).
 The contours formed by a hand are averaged for smoothing and sampled
 \, and then are plotted as x \, y coordinates and variation in angle
 with respect to the previous sampled point. An analysis of this contour
 provides tips (positive peaks) and valleys (negative peaks);
-#X text 76 576 This object was programmed as part of the Silent Percussion
+#X text 76 646 This object was programmed as part of the Silent Percussion
 Project \, for use in the MANO Controller. For more information: http://www.jaimeoliver.pe
 ;
-#X obj 117 47 pack f f f f;
-#X text 695 642 jaime.oliver@gmail.com;
-#X text 715 657 joliverl-2010 v0.01;
-#X obj 161 136 pix_mano;
-#X text 460 326 outlet 0: the analyzed video image;
-#X obj 161 176 rectangle 5.33 4;
-#X text 60 383 Although this version is fully functional \, there are
+#X obj 117 117 pack f f f f;
+#X text 695 712 jaime.oliver@gmail.com;
+#X text 715 727 joliverl-2010 v0.01;
+#X obj 161 206 pix_mano;
+#X text 460 396 outlet 0: the analyzed video image;
+#X obj 161 246 rectangle 5.33 4;
+#X text 60 453 Although this version is fully functional \, there are
 still a few bugs to work on and optimizations to be achieved. It is
 still in an experimental level;
-#X text 476 353 [index \, x coordinate \, y coordinate \, angle];
-#X text 475 387 [index \, x coordinate \, y coordinate \, angle];
-#X text 476 421 [index of contour \, index of tip \, position (x \,
+#X text 476 423 [index \, x coordinate \, y coordinate \, angle];
+#X text 475 457 [index \, x coordinate \, y coordinate \, angle];
+#X text 476 491 [index of contour \, index of tip \, position (x \,
 y) \, magnitude \, angle \, position in contour];
-#X text 476 462 [index of contour \, index of tip \, position (x \,
+#X text 476 532 [index of contour \, index of tip \, position (x \,
 y) \, magnitude \, angle \, position in contour];
-#X text 476 504 [index of contour \, entry_point (x \, y) \, area \,
+#X text 476 574 [index of contour \, entry_point (x \, y) \, area \,
 direction \, center (x \, y) \, perimeter \, entr_size \, bounds: right
 (x \, y) \, left (x \, y) \, top (x \, y) \, bottom (x \, y).];
-#X text 477 555 if there were any contours = 1;
-#X text 477 565 if there were no contours = 0;
+#X text 477 625 if there were any contours = 1;
+#X text 477 635 if there were no contours = 0;
+#X obj 538 768 declare -lib Gem;
 #X connect 1 0 68 0;
 #X connect 2 0 65 0;
 #X connect 3 0 5 0;

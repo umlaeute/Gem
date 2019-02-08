@@ -15,6 +15,7 @@
 #ifndef _INCLUDE__GEM_NONGEOS_WORLD_LIGHT_H_
 #define _INCLUDE__GEM_NONGEOS_WORLD_LIGHT_H_
 
+#include "Gem/GemConfig.h"
 #include "Base/GemBase.h"
 #include "Gem/GemGL.h"
 
@@ -107,8 +108,10 @@ protected:
   // The light number with reference to OpenGL
   GLenum          m_light;
 
+#ifdef GEM_HAVE_GLU
   //////////
   GLUquadricObj   *m_thing;
+#endif
 };
 
 #endif  // for header file

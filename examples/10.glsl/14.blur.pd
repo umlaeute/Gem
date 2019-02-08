@@ -1,4 +1,5 @@
 #N canvas 481 142 778 497 10;
+#X declare -lib Gem;
 #X obj 16 74 gemhead;
 #X obj 16 130 gemframebuffer;
 #X obj 129 13 loadbang;
@@ -135,6 +136,7 @@ frame 20 \,;
 #X text 556 67 motion blur;
 #X obj 557 226 * 1;
 #X text 640 129 angle (radian);
+#X obj 663 7 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 1 0 3 0;
 #X connect 1 1 28 0;

@@ -1,4 +1,5 @@
 #N canvas 452 108 681 502 12;
+#X declare -lib Gem;
 #X text 172 376 click on the pix_image object to display the loaded
 image with imgview;
 #X obj 179 199 gemhead;
@@ -47,6 +48,7 @@ However \, pix_draw is easier to use in an example patch.;
 #X obj 264 284 / 100;
 #X floatatom 213 261 0 0 0 0 - - -;
 #X obj 213 284 / 100;
+#X obj 552 5 declare -lib Gem;
 #X connect 1 0 4 0;
 #X connect 4 0 5 0;
 #X connect 5 0 2 0;

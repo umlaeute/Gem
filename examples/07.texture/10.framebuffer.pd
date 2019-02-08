@@ -1,90 +1,91 @@
-#N canvas 446 42 834 667 10;
-#X obj 202 83 gemhead 20;
-#X obj 491 166 gemhead;
-#X floatatom 532 391 5 0 0 0 - - -;
-#X floatatom 481 392 5 0 0 0 - - -;
-#X obj 581 389 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
+#N canvas 226 61 834 813 10;
+#X declare -lib Gem;
+#X obj 272 83 gemhead 20;
+#X obj 561 166 gemhead;
+#X floatatom 602 391 5 0 0 0 - - -;
+#X floatatom 551 392 5 0 0 0 - - -;
+#X obj 651 389 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -6 0 10
 -262144 -1 -1 0 256;
-#X msg 286 97 dim 320 240;
-#X msg 286 117 dim 256 256;
-#X obj 278 634 rotateXYZ;
-#X floatatom 334 617 5 0 0 0 - - -;
-#X floatatom 346 636 5 0 0 0 - - -;
-#X floatatom 295 617 5 0 0 0 - - -;
-#X floatatom 299 443 5 0 0 0 - - -;
-#X floatatom 348 443 5 0 0 0 - - -;
-#X floatatom 250 443 5 0 0 0 - - -;
-#X obj 278 333 separator;
-#X obj -56 319 gemhead 1;
-#X obj -56 339 world_light;
-#X msg 286 137 dim 512 512;
-#X floatatom 507 322 5 0 0 0 - - -;
-#X floatatom 582 333 5 0 0 0 - - -;
-#X msg 289 45 color 0 0 1 0;
-#X msg 286 157 dim 1024 1024;
-#X msg 289 69 color 0 0 0 0;
-#X obj 203 507 rotateXYZ;
-#X floatatom 226 490 5 0 0 0 - - -;
-#X floatatom 269 490 5 0 0 0 - - -;
-#X floatatom 318 496 5 0 0 0 - - -;
-#X msg -21 72 color 0 0 0 0;
-#X obj 278 554 t a b;
-#X msg -33 51 color 0 1 1 0;
-#X msg -12 121 lighting \$1;
-#X obj -12 100 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
-#X floatatom 554 433 5 0 0 0 - - -;
-#X obj 202 302 t a a;
-#X obj 202 355 color 1 1 1;
-#X obj 203 413 pix_texture;
-#X msg 406 94 mode \$1;
-#X obj 406 67 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+#X msg 356 97 dim 320 240;
+#X msg 356 117 dim 256 256;
+#X obj 348 634 rotateXYZ;
+#X floatatom 404 617 5 0 0 0 - - -;
+#X floatatom 416 636 5 0 0 0 - - -;
+#X floatatom 365 617 5 0 0 0 - - -;
+#X floatatom 369 443 5 0 0 0 - - -;
+#X floatatom 418 443 5 0 0 0 - - -;
+#X floatatom 320 443 5 0 0 0 - - -;
+#X obj 348 333 separator;
+#X obj 14 319 gemhead 1;
+#X obj 14 339 world_light;
+#X msg 356 137 dim 512 512;
+#X floatatom 577 322 5 0 0 0 - - -;
+#X floatatom 652 333 5 0 0 0 - - -;
+#X msg 359 45 color 0 0 1 0;
+#X msg 356 157 dim 1024 1024;
+#X msg 359 69 color 0 0 0 0;
+#X obj 273 507 rotateXYZ;
+#X floatatom 296 490 5 0 0 0 - - -;
+#X floatatom 339 490 5 0 0 0 - - -;
+#X floatatom 388 496 5 0 0 0 - - -;
+#X msg 49 72 color 0 0 0 0;
+#X obj 348 554 t a b;
+#X msg 37 51 color 0 1 1 0;
+#X msg 58 121 lighting \$1;
+#X obj 58 100 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
-#X obj 203 467 translateXYZ -0.5 -0.8 -1;
-#X msg 229 374 open data/fractal.JPG;
-#X floatatom 376 507 5 0 0 0 - - -;
-#X msg 289 10 type FLOAT;
-#X obj 460 131 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+#X floatatom 624 433 5 0 0 0 - - -;
+#X obj 272 302 t a a;
+#X obj 272 355 color 1 1 1;
+#X obj 273 413 pix_texture;
+#X msg 476 94 mode \$1;
+#X obj 476 67 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
+;
+#X obj 273 467 translateXYZ -0.5 -0.8 -1;
+#X msg 299 374 open data/fractal.JPG;
+#X floatatom 446 507 5 0 0 0 - - -;
+#X msg 359 10 type FLOAT;
+#X obj 530 131 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
-#X floatatom 342 281 5 0 0 0 - - -;
-#X obj 203 527 sphere 0.4;
-#X obj 491 357 rotateXYZ 28 0 200;
-#X obj 491 431 square 2;
-#X obj 491 410 translateXYZ 0 0 1.53;
-#X obj 202 281 translateXYZ 0 0 -4;
-#X obj 278 681 cube 0.57;
-#X obj 278 527 translateXYZ 2 0 -1;
-#X obj 202 135 color 0 1 0;
-#X obj 179 195 cnv 15 400 60 empty empty empty 20 12 0 14 -233017 -66577
+#X floatatom 412 281 5 0 0 0 - - -;
+#X obj 273 527 sphere 0.4;
+#X obj 561 357 rotateXYZ 28 0 200;
+#X obj 561 431 square 2;
+#X obj 561 410 translateXYZ 0 0 1.53;
+#X obj 272 281 translateXYZ 0 0 -4;
+#X obj 348 681 cube 0.57;
+#X obj 348 527 translateXYZ 2 0 -1;
+#X obj 272 135 color 0 1 0;
+#X obj 249 195 cnv 15 400 60 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 202 200 gemframebuffer;
-#X obj 491 233 pix_texture;
-#X obj -56 410 gemhead;
-#X obj -56 459 teapot 0.3;
-#X obj -56 435 translateXYZ -3 3 0;
-#X text -52 726 this example renders a scene (cube and sphere) into
+#X obj 272 200 gemframebuffer;
+#X obj 561 233 pix_texture;
+#X obj 14 410 gemhead;
+#X obj 14 459 teapot 0.3;
+#X obj 14 435 translateXYZ -3 3 0;
+#X text 18 726 this example renders a scene (cube and sphere) into
 a framebuffer \, which is then used as a texture onto a square. teapot
 and square live in a "meta"-world in relation to cube and sphere.;
-#X obj 362 575 % 360;
-#X obj 308 575 i;
-#X obj 491 265 t a b;
-#X obj 567 286 + 1;
-#X obj 334 575 + 5;
-#X obj 521 286 i 200;
-#X obj 595 286 % 3600;
-#X obj 582 313 / 10;
-#X text 435 65 <-- click me to change between normalized(0) and rectangle(1)
+#X obj 432 575 % 360;
+#X obj 378 575 i;
+#X obj 561 265 t a b;
+#X obj 637 286 + 1;
+#X obj 404 575 + 5;
+#X obj 591 286 i 200;
+#X obj 665 286 % 3600;
+#X obj 652 313 / 10;
+#X text 505 65 <-- click me to change between normalized(0) and rectangle(1)
 textures.;
-#X text 399 717 you need framebuffer support on your gfx-card;
-#X text 395 738 (and its driver!);
-#X obj 202 394 pix_image ../data/fractal.JPG;
+#X text 469 717 you need framebuffer support on your gfx-card;
+#X text 465 738 (and its driver!);
+#X obj 272 394 pix_image ../data/fractal.JPG;
 #N canvas 87 154 247 179 Gem.init 0;
 #X obj 118 46 loadbang;
 #X msg 118 81 reset;
 #X obj 118 113 outlet;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
-#X restore -3 160 pd Gem.init;
+#X restore 67 160 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
 -1 -1 0 1;
@@ -124,7 +125,8 @@ textures.;
 #X connect 15 0 16 0;
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
-#X restore -33 177 pd gemwin;
+#X restore 37 177 pd gemwin;
+#X obj 704 11 declare -lib Gem;
 #X connect 0 0 51 0;
 #X connect 1 0 54 0;
 #X connect 2 0 47 2;

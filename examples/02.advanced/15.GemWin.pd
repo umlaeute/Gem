@@ -1,4 +1,5 @@
-#N canvas 51 56 650 553 10;
+#N canvas 51 61 650 553 10;
+#X declare -lib Gem;
 #X obj 53 224 gemwin;
 #X obj 38 397 gemmouse;
 #X obj 109 206 r gemwin_mess;
@@ -22,7 +23,7 @@
 -66577 0;
 #X msg 253 49 title Graphic's_Environment_for_Multimedia;
 #X msg 286 94 title \$1;
-#X symbolatom 286 72 10 0 0;
+#X symbolatom 286 72 10 0 0 0 - - -;
 #X text 359 94 type your own title;
 #X obj 253 125 s gemwin_mess;
 #X obj 247 259 cnv 15 380 120 empty empty dimensions+positioning 20
@@ -45,7 +46,7 @@
 #X text 548 330 borders !;
 #X obj 247 391 cnv 15 380 80 empty empty full-screen 20 0 0 14 -233017
 -66577 0;
-#X obj 257 409 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 1
+#X obj 257 409 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X msg 257 428 \; gemwin_mess fullscreen \$1;
 #X text 276 407 fullscreen/windowed;
@@ -55,6 +56,7 @@
 #X text 458 415 dimensions & offsets;
 #X text 468 432 mean nothing in;
 #X text 463 448 fullscreen mode !;
+#X obj 528 518 declare -lib Gem;
 #X connect 1 2 4 0;
 #X connect 2 0 0 0;
 #X connect 4 0 5 0;

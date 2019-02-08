@@ -1,4 +1,5 @@
 #N canvas 204 170 691 547 10;
+#X declare -lib Gem;
 #X obj 308 140 gemhead;
 #X obj 308 374 pix_texture;
 #X obj 308 402 square 2;
@@ -37,6 +38,7 @@
 #X text 21 159 Create window and render;
 #X text 64 81 greys out all pixels (but pixel-values are still in RGBA)
 ;
+#X obj 582 5 declare -lib Gem;
 #X connect 0 0 3 0;
 #X connect 1 0 2 0;
 #X connect 3 0 4 0;

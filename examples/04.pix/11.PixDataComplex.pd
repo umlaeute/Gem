@@ -1,4 +1,5 @@
 #N canvas 331 86 929 574 10;
+#X declare -lib Gem;
 #X obj 30 159 gemwin;
 #X obj 372 135 gemhead;
 #X obj 372 164 pix_image ../data/fractal.JPG;
@@ -60,6 +61,7 @@
 #X floatatom 537 423 5 0 0 0 - - -;
 #X obj 537 473 * 0.2;
 #X obj 537 369 f;
+#X obj 822 5 declare -lib Gem;
 #X connect 1 0 2 0;
 #X connect 2 0 3 1;
 #X connect 3 1 14 1;

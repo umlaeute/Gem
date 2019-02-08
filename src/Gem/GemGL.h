@@ -32,11 +32,19 @@
 # define GLEW_MX
 #endif
 
+#ifndef GEM_HAVE_GLU
+# define GLEW_NO_GLU
+#else
+#endif
+
+
 #ifdef __EMSCRIPTEN__
 # include <GL/glew.h>
 # include <SDL/SDL_opengl.h>
 # include <GL/gl.h>
-# include <GL/glu.h>
+# ifdef GEM_HAVE_GLU
+#  include <GL/glu.h>
+# endif
 #else
 # include "Gem/glew.h"
 #endif

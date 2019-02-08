@@ -1,4 +1,5 @@
-#N canvas 0 0 986 385 10;
+#N canvas 6 61 986 385 10;
+#X declare -lib Gem;
 #X text 276 35 Blue Sphere;
 #N canvas 95 194 290 179 Gem.init 0;
 #X obj 118 18 loadbang;
@@ -120,6 +121,7 @@ becomes "behind" \, the rendering order has to be changed. do this
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 72 168 pd gemwin;
+#X obj 878 8 declare -lib Gem;
 #X connect 1 0 34 0;
 #X connect 2 0 4 0;
 #X connect 3 0 5 0;

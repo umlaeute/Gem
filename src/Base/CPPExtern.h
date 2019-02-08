@@ -332,21 +332,19 @@ static void obj_setupCallback(t_class *classPtr);
 // (registering the class with pd)
 // a static copy of this class is created at runtime, to actually do the setup-call
 ///////////////////////////////////////////////////////////////////////////////
+typedef void (*t_class_setup)(void);
+extern "C" { GEM_EXTERN void gem_register_class_setup(const char*name, t_class_setup); }
+
 #ifdef NO_AUTO_REGISTER_CLASS
 // if NO_AUTO_REGISTER_CLASS is defined, we will not register the class
 # define AUTO_REGISTER_CLASS(NEW_CLASS) \
   static int NEW_CLASS ## _dummyinstance
 #else
 // for debugging we can show the which classes are auto-registering
-# if 0
-#  define POST_AUTOREGISTER(NEW_CLASS) post("auto-registering: "#NEW_CLASS)
-# else
-#  define POST_AUTOREGISTER(NEW_CLASS)
-# endif
-# define AUTO_REGISTER_CLASS(NEW_CLASS)                 \
+# define AUTO_REGISTER_CLASS(NEW_CLASS)                                 \
   class NEW_CLASS ## _cppclass {                                        \
   public:                                                               \
-  NEW_CLASS ## _cppclass(void) {POST_AUTOREGISTER(NEW_CLASS); NEW_CLASS ## _setup(); } \
+  NEW_CLASS ## _cppclass(void) {gem_register_class_setup(#NEW_CLASS, & NEW_CLASS ## _setup); } \
 };                                                                      \
   static NEW_CLASS ## _cppclass NEW_CLASS ## _instance
 #endif

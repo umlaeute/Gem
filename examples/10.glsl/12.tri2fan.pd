@@ -1,4 +1,5 @@
-#N canvas 17 56 785 745 10;
+#N canvas 17 61 785 745 10;
+#X declare -lib Gem;
 #X floatatom 286 440 9 0 0 0 ID - -;
 #X floatatom 249 264 9 0 0 0 ID - -;
 #X obj 296 500 print linking;
@@ -96,6 +97,7 @@ which depend on the normal of the original primitive;
 #X obj 552 635 pack f f;
 #X obj 520 611 t f f;
 #X msg 552 655 force \$1 \$2 0.3;
+#X obj 674 13 declare -lib Gem;
 #X connect 0 0 3 0;
 #X connect 1 0 3 2;
 #X connect 3 0 6 0;

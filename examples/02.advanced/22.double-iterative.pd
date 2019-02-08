@@ -1,4 +1,5 @@
-#N canvas 0 0 473 588 10;
+#N canvas 6 61 473 588 10;
+#X declare -lib Gem;
 #X obj 32 103 gemhead;
 #X obj 106 235 gemlist;
 #X msg 106 192 20;
@@ -87,6 +88,7 @@
 #X text 386 416 <- fun 2;
 #X text 389 457 <- fun 3;
 #X text 136 30 double iterative process;
+#X obj 368 8 declare -lib Gem;
 #X connect 0 0 6 0;
 #X connect 1 0 7 0;
 #X connect 2 0 3 0;

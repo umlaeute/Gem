@@ -1,4 +1,5 @@
-#N canvas 10 20 769 486 10;
+#N canvas 10 61 769 486 10;
+#X declare -lib Gem;
 #X obj 252 258 gemhead;
 #X obj 252 313 pix_image ../data/fractal.JPG;
 #X obj 252 343 pix_colormatrix;
@@ -48,6 +49,7 @@
 #X restore 46 186 pd gemwin;
 #X msg 46 162 create;
 #X text 42 142 Create window and render;
+#X obj 662 5 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 2 0 6 0;

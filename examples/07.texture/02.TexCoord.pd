@@ -1,4 +1,5 @@
-#N canvas 127 46 642 483 10;
+#N canvas 127 61 642 483 10;
+#X declare -lib Gem;
 #X obj 251 46 gemhead;
 #X obj 251 424 square;
 #X obj 251 369 pix_coordinate;
@@ -58,6 +59,7 @@
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 34 255 pd gemwin;
+#X obj 534 11 declare -lib Gem;
 #X connect 0 0 4 0;
 #X connect 2 0 1 0;
 #X connect 3 0 2 0;

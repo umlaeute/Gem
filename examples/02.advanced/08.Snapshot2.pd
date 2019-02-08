@@ -1,4 +1,5 @@
-#N canvas 389 0 635 537 10;
+#N canvas 389 61 635 537 10;
+#X declare -lib Gem;
 #X obj 64 405 gemhead;
 #X obj 64 509 model ../data/venus.obj;
 #X text 115 2 snap a portion of the graphics window into a texture
@@ -110,6 +111,7 @@
 #X connect 16 0 0 0;
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 18 206 pd gemwin;
+#X obj 528 8 declare -lib Gem;
 #X connect 0 0 25 0;
 #X connect 3 0 4 0;
 #X connect 4 0 11 0;

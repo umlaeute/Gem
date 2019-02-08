@@ -1,4 +1,5 @@
 #N canvas 246 168 681 468 10;
+#X declare -lib Gem;
 #X obj 270 175 pix_image ../data/dancer.JPG;
 #X obj 270 338 pix_texture;
 #X obj 270 379 square;
@@ -41,6 +42,7 @@
 #X restore 25 123 pd gemwin;
 #X msg 25 105 create;
 #X text 21 79 Create window and render;
+#X obj 572 5 declare -lib Gem;
 #X connect 0 0 7 0;
 #X connect 1 0 2 0;
 #X connect 3 0 2 1;

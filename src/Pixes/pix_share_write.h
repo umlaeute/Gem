@@ -27,10 +27,10 @@ protected:
 
   virtual void render(GemState *state);
   unsigned char *shm_addr;
-#ifndef _WIN32
+#if USE_SHM
   int   shm_id;
   struct shmid_ds shm_desc;
-#else
+#elif defined _WIN32
   HANDLE m_MapFile;
   char m_fileMappingName[MAXPDSTRING];
 #endif

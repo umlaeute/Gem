@@ -1,4 +1,5 @@
 #N canvas 58 175 600 500 10;
+#X declare -lib Gem;
 #X obj 288 247 pix_image ../data/dancer.JPG;
 #X obj 270 153 gemhead;
 #X obj 270 188 pix_image ../data/fractal.JPG;
@@ -45,6 +46,7 @@
 #X msg 25 89 create;
 #X text 21 69 Create window and render;
 #X obj 270 379 square 3;
+#X obj 492 5 declare -lib Gem;
 #X connect 0 0 4 1;
 #X connect 1 0 2 0;
 #X connect 2 0 4 0;

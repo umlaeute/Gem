@@ -164,6 +164,7 @@ GEM_CHECK_WERROR
 GEM_CPPFLAGS=""
 GEM_CHECK_EXTERNAL
 
+AC_ARG_WITH([GLU], AC_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
 dnl unlike MMX or SSE
@@ -185,7 +186,7 @@ GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 
-AC_ARG_ENABLE([experimental], AC_HELP_STRING([--enable-experimental], [enable experimental objects]))
+AC_ARG_ENABLE([experimental], AC_HELP_STRING([--enable-experimental], [enable experimental objects (if any)]))
 AM_CONDITIONAL(EXPERIMENTAL, [test "x$enable_experimental" = "xyes"])
 
 # checks for default headers
@@ -198,7 +199,7 @@ GEM_CHECK_THREADS
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
 AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h])
+AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h sys/ipc.h sys/shm.h])
 
 AC_CHECK_HEADERS([wordexp.h])
 
@@ -250,10 +251,17 @@ AS_IF([test "x$with_x" != "xno"], [
 ])
 
 IEM_CHECK_GL
-IEM_CHECK_GLU
+no_glu=yes
+AS_IF([test "x$with_GLU" != "xno"], IEM_CHECK_GLU)
+AM_CONDITIONAL(HAVE_GLU, [test "x${no_glu}" != "xyes"])
 IEM_CHECK_GLUT
 IEM_CHECK_GLX
 IEM_CHECK_AGL
+
+
+AS_IF([test "x$no_glu" != "xyes"],
+ AC_DEFINE([GEM_HAVE_GLU], [1], [whether we can use libGLU (normally: yes)])
+)
 
 ## use system's libGLEW
 GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
@@ -470,43 +478,6 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
-
-# using pix_videoOS rather than pix_video
-AC_ARG_WITH([video], AS_HELP_STRING([--with-video=plugins|Darwin|DS|NT],[use plugins for video capture or OS-specific "pix_video"]))
-
-AS_IF(
- [test "x$with_video" = "x"], [with_video="plugins"],
- [test "x$with_video" = "xyes"], [with_video="plugins"],
- [test "x$with_video" = "xno"],
-  [
-    # hmm, what to do here?
-    AC_MSG_RESULT([ignoring request for no video...using plugins])
-    with_video="plugins"
-  ],
- [test "x$with_video" = "xplugins"], [:],
- [
-  AC_DEFINE_UNQUOTED([GEM_VIDEOBACKEND], [GEM_VIDEOBACKEND_$with_video], [backend for deprecated video-capture objects])
-  AC_MSG_RESULT([using deprecated video-loader $with_video])
-])
-
-# using pix_filmOS rather than pix_film
-AC_ARG_WITH([film], AS_HELP_STRING([--with-film=plugins|Darwin],[use plugins for video decoding or OS-specific "pix_film"]))
-
-AS_IF(
- [test "x$with_film" = "x"], [with_film="plugins"],
- [test "x$with_film" = "xyes"], [with_film="plugins"],
- [test "x$with_film" = "xno"],
-  [
-    # hmm, what to do here?
-    AC_MSG_RESULT([ignoring request for no film...using plugins])
-    with_film="plugins"
-  ],
- [test "x$with_film" = "xplugins"], [:],
- [
-  AC_DEFINE_UNQUOTED([GEM_FILMBACKEND],
-                     [GEM_FILMBACKEND_$with_film], [backend for deprecated film-decoding objects])
-  AC_MSG_RESULT([using deprecated film-loader $with_film])
-])
 
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
@@ -732,7 +703,7 @@ AS_IF([test "x$no_gl" = "xyes"], [
 ])
 
 AS_IF([test "x$no_glu" = "xyes" && test "x$no_agl" = "xyes"], [
- AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])
+ AS_IF([test "x$with_GLU" != "xno"],[AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])])
 ])
 
 AC_MSG_RESULT([Now run make ...])

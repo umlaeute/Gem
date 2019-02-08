@@ -46,6 +46,8 @@ GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
 GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
 GEM_EXTERN extern int           getGLbitfield(int argc,
     struct _atom *argv);
+GEM_EXTERN extern void          gluLookAt(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
+GEM_EXTERN extern void          gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
 
 
 

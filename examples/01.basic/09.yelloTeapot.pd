@@ -1,4 +1,5 @@
 #N canvas 56 98 635 502 12;
+#X declare -lib Gem;
 #X obj 350 226 gemhead;
 #X floatatom 458 298 0 0 0 0 - - -;
 #X obj 350 286 color;
@@ -51,6 +52,7 @@
 #X text 32 73 Create window and render;
 #X text 32 261 this is the famous;
 #X text 52 294 utah teapot;
+#X obj 515 5 declare -lib Gem;
 #X connect 0 0 2 0;
 #X connect 1 0 6 1;
 #X connect 1 0 6 2;

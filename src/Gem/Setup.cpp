@@ -37,6 +37,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Version.h"
 #include "Gem/Files.h"
+#include "Base/CPPExtern.h"
 
 #include <stdio.h>
 
@@ -75,6 +76,23 @@ extern "C" {
 # include "m_imp.h"
 } // for extern "C"
 #endif /* HAVE_M_IMP_H */
+
+
+typedef struct class_setup_list_ {
+  struct class_setup_list_ *next;
+  const char*name;
+  t_class_setup setup;;
+} class_setup_list_t;
+
+static class_setup_list_t *register_class_setup_list = 0;
+
+void gem_register_class_setup(const char*name, t_class_setup setup) {
+  class_setup_list_t*x = new class_setup_list_t;
+  x->next = register_class_setup_list;
+  x->setup = setup;
+  x->name = name;
+  register_class_setup_list = x;
+}
 
 
 
@@ -219,11 +237,13 @@ void init(void);
 # define BUILD_DATE " on " __DATE__
 #endif
 
-
-namespace Gem
+namespace gem
 {
 void setup()
 {
+  static bool firsttime = true;
+  if(!firsttime) return;
+  firsttime = false;
   // startup GEM
   post("GEM: Graphics Environment for Multimedia");
   verbose(-1, "GEM: ver: %s", GemVersion::versionString());
@@ -239,6 +259,15 @@ void setup()
   verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
   verbose(-1,
           "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
+
+  for(class_setup_list_t *l = register_class_setup_list; l;) {
+    class_setup_list_t*next = l->next;
+    verbose(4, "registering Gem object: %s", l->name);
+    l->setup();
+    delete l;
+    l = next;
+  }
+  register_class_setup_list = 0;
 
   gem::Settings::init();
   addownpath("Gem-meta.pd");
@@ -256,7 +285,7 @@ void caseinsensitive_error(const char*gem)
 {
   /* traditionally Gem can be loaded with wrong spelling on a case-insenstive platform
    * starting with 0.94 we issue a fat warning.
-   * however, much of Gem's loading is done via CTORs and the Gem::setup() only finishes
+   * however, much of Gem's loading is done via CTORs and the gem::setup() only finishes
    * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.
    */
   error("GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!",
@@ -264,10 +293,11 @@ void caseinsensitive_error(const char*gem)
 }
 };
 
+
 extern "C" {
   GEM_EXTERN void Gem_setup()
   {
-    Gem::setup();
+    gem::setup();
   }
 
   GEM_EXTERN void gem_setup()

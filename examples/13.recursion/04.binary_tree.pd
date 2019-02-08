@@ -1,4 +1,5 @@
-#N canvas 3 2 602 516 10;
+#N canvas 6 61 602 516 10;
+#X declare -lib Gem;
 #X obj 14 66 gemwin;
 #X obj 14 9 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
 ;
@@ -53,6 +54,7 @@ to a maximums depth of recursion.;
 #X text 170 137 Be careful not to increase the max-depth too much:
 the splitting at each recursion leads to an exponential increase in
 the number of circles to be drawn.;
+#X obj 497 15 declare -lib Gem;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 0 0;

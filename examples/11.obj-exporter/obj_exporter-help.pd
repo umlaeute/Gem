@@ -1,4 +1,5 @@
 #N canvas 58 106 645 381 12;
+#X declare -lib Gem;
 #X obj 35 90 gemhead;
 #X obj 35 175 translateXYZ 0 0 0.1;
 #X obj 35 153 rotateXYZ 1 5 9;
@@ -55,8 +56,9 @@
 #X obj 241 303 rotateXYZ 30 30 30;
 #X obj 241 282 translateXYZ 2 1 2;
 #X obj 35 59 gemwin;
-#X text 236 16 Here is a way to create obj file in Gem.;
+#X text 216 16 Here is a way to create obj file in Gem.;
 #X obj 307 64 model;
+#X obj 516 15 declare -lib Gem;
 #X connect 0 0 7 0;
 #X connect 1 0 3 0;
 #X connect 2 0 1 0;

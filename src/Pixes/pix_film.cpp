@@ -15,7 +15,6 @@
 //
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
-#ifndef GEM_FILMBACKEND
 
 #include "pix_film.h"
 #include "Gem/Image.h"
@@ -786,4 +785,3 @@ void pix_film :: changeImageCallback(void *data, t_symbol *, int argc,
   GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),
                                 (argc<2)?0:atom_getint(argv+1));
 }
-#endif /*OS-specific GEM_FILMBACKEND */

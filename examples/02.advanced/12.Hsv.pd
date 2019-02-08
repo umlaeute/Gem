@@ -1,4 +1,5 @@
 #N canvas 433 87 762 506 12;
+#X declare -lib Gem;
 #X obj 248 352 gemhead;
 #X obj 248 412 color;
 #X msg 559 202 1 1 1;
@@ -35,7 +36,7 @@
 #X restore 26 133 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
 #X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;
@@ -79,6 +80,7 @@
 -8 0 10 -262144 -1 -1 0 1;
 #X obj 532 112 hsl 128 15 0 1 0 0 \$0-value empty value -2 -8 0 10
 -262144 -1 -1 0 1;
+#X obj 638 8 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 1 0 4 0;
 #X connect 2 0 7 0;

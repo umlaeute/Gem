@@ -1,4 +1,5 @@
 #N canvas 62 735 655 237 10;
+#X declare -lib Gem;
 #X obj 33 129 gemwin 20 a;
 #X obj 396 181 square;
 #X obj 396 159 color 0 0 1 1;
@@ -13,8 +14,9 @@
 #X text 185 24 1 create windows;
 #X text 411 24 2 switch between rendering context;
 #X msg 475 106 set \$1;
-#X floatatom 475 88 5 0 0 0 - - -, f 5;
+#X floatatom 475 88 5 0 0 0 - - -;
 #X msg 168 87 title b \, create \, 1 \, view 1 1 6;
+#X obj 40 206 declare -lib Gem;
 #X connect 2 0 1 0;
 #X connect 3 0 0 0;
 #X connect 4 0 3 0;

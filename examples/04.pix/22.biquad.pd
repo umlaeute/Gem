@@ -1,4 +1,5 @@
-#N canvas 269 10 753 499 10;
+#N canvas 269 61 753 499 10;
+#X declare -lib Gem;
 #X msg 360 312 set;
 #X floatatom 401 209 4 0 0 0 - - -;
 #X floatatom 442 209 4 0 0 0 - - -;
@@ -75,6 +76,7 @@
 #X msg 25 89 create;
 #X text 21 69 Create window and render;
 #X obj 35 247 pix_multiimage ../data/temp*.JPG 2;
+#X obj 642 5 declare -lib Gem;
 #X connect 0 0 38 0;
 #X connect 1 0 14 0;
 #X connect 2 0 3 0;

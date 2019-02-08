@@ -21,10 +21,6 @@
 
 
 CPPEXTERN_NEW_WITH_GIMME(pix_share_write);
-#if 0
-;
-#endif
-
 
 int hash_str2us(std::string s)
 {
@@ -63,15 +59,17 @@ int hash_str2us(std::string s)
 //
 /////////////////////////////////////////////////////////
 pix_share_write :: pix_share_write(int argc, t_atom*argv) :
-#ifdef _WIN32
-#else
+#if USE_SHM
   shm_id(0), shm_addr(NULL),
 #endif
   m_size(0),
   m_outlet(0)
 {
-#ifndef _WIN32
+#if USE_SHM
   memset(&shm_desc, 0, sizeof(shm_desc));
+#elif defined _WIN32
+#else
+  error("Gem has been compiled without shared memory support!")
 #endif
   if(argc<1) {
     //~ throw(GemException("no ID given"));
@@ -126,19 +124,16 @@ void pix_share_write :: freeShm()
   if ( shm_addr ) {
     UnmapViewOfFile( shm_addr );
   }
-  shm_addr = NULL;
   if ( m_MapFile ) {
     CloseHandle( m_MapFile );
   }
   m_MapFile = NULL;
-#else
+#elif USE_SHM
   if(shm_addr) {
     if (shmdt(shm_addr) == -1) {
       error("shmdt failed at %p", shm_addr);
     }
   }
-  shm_addr=NULL;
-
   if(shm_id>0) {
     if (shmctl(shm_id,IPC_STAT, &shm_desc) != -1) {
       if(shm_desc.shm_nattch<=0) {
@@ -149,7 +144,8 @@ void pix_share_write :: freeShm()
     }
   }
   shm_id=0;
-#endif /* _WIN32 */
+#endif /* _WIN32, USE_SHM */
+  shm_addr = NULL;
 }
 
 int pix_share_write :: getShm(int argc,t_atom*argv)
@@ -179,7 +175,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
              "gem_pix_share-FileMappingObject_%s", atom_getsymbol(argv)->s_name);
   }
 
-#else
+#elif USE_SHM
   if(shm_id>0) {
     freeShm();
   }
@@ -194,7 +190,9 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   if(fake<=0) {
     return 8;
   }
-#endif /* _WIN32 */
+#else
+  return -1;
+#endif /* _WIN32, USE_SHM */
 
   argc--;
   argv++;
@@ -313,7 +311,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
             m_fileMappingName);
   }
 
-#else
+#elif USE_SHM
 
   /* get a new segment with the size specified by the user
    * OR an old segment with the size specified in its header
@@ -369,7 +367,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
     error("couldn't get shm_id: error %d", errno);
     return -1; // AV : added because i'm usure of what value is returned when we get this error...
   }
-#endif /* _WIN32 */
+#endif /* _WIN32, SHM */
   return 0;
 }
 
@@ -387,8 +385,10 @@ void pix_share_write :: render(GemState *state)
 
 #ifndef _WIN32
   if(shm_id>0) {
-#else
+#elif USE_SHM
   if(m_MapFile) {
+#else
+  if(0) {
 #endif /* _WIN32 */
     imageStruct *pix = &img->image;
     size_t size=pix->xsize*pix->ysize*pix->csize;

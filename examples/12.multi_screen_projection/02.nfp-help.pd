@@ -1,4 +1,5 @@
 #N canvas 321 188 996 584 10;
+#X declare -lib Gem;
 #X obj 27 231 gemhead;
 #X obj 27 298 gemframebuffer;
 #X obj 27 348 translateXYZ 0 0 -4;
@@ -27,6 +28,7 @@
 #X obj 703 44 nfp_curved_wall 3;
 #X text 52 43 load;
 #X text 104 42 save;
+#X obj 842 6 declare -lib Gem;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X connect 1 1 16 0;

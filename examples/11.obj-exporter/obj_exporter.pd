@@ -1,4 +1,4 @@
-#N canvas 166 167 375 605 12;
+#N canvas 166 167 419 624 12;
 #X obj 90 9 inlet;
 #X obj 51 108 gemhead;
 #X obj 51 150 delay 0;

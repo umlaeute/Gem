@@ -311,8 +311,6 @@ gemw32window::gemw32window(void) :
   m_topmost(false),
   m_win(NULL)
 {
-  /* in order to not hide the window-title, we use a slightly different default offset */
-  m_xoffset = m_yoffset = 100;
   if(!initGemWin()) {
     throw(GemException("could not initialize window infrastructure"));
   }

@@ -1,4 +1,5 @@
-#N canvas 109 48 758 483 10;
+#N canvas 109 61 758 483 10;
+#X declare -lib Gem;
 #X obj 29 30 gemhead;
 #X obj 29 163 pix_video;
 #X obj 29 100 gemframebuffer;
@@ -79,6 +80,7 @@
 #X msg 43 76 dimen 256 256;
 #X obj 69 305 t b a;
 #X obj 559 212 t a b;
+#X obj 652 5 declare -lib Gem;
 #X connect 0 0 2 0;
 #X connect 1 0 7 0;
 #X connect 2 0 3 0;

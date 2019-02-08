@@ -1,4 +1,5 @@
-#N canvas 515 27 647 743 10;
+#N canvas 515 61 647 743 10;
+#X declare -lib Gem;
 #X obj 15 16 gemhead;
 #X obj 76 483 GEMglPushMatrix;
 #X obj 96 462 GEMglPopMatrix;
@@ -35,8 +36,8 @@ it to the corresponding primitives;
 #X text 397 502 <- size of the system;
 #X msg 15 164 F \, [ \, - \, F \, ] \, F \, [ \, + \, F \, ] \, F;
 #X text 12 640 This is a basic implementation of Lindenmayer System
-(LSystem) in GEM. Wikipedia is a good place for information about
-Lsystems;
+(LSystem) in GEM. Wikipedia is a good place for information about Lsystems
+;
 #X obj 15 351 gemlist;
 #X obj 47 110 s \$0-gemlist;
 #X obj 35 372 gemlist;
@@ -94,6 +95,7 @@ F;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X restore 377 40 pd Gem.init;
+#X obj 528 8 declare -lib Gem;
 #X connect 0 0 21 0;
 #X connect 3 0 24 0;
 #X connect 4 0 18 0;

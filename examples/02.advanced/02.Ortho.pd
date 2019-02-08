@@ -1,4 +1,5 @@
 #N canvas 396 100 600 500 10;
+#X declare -lib Gem;
 #X obj 358 140 gemhead;
 #X floatatom 377 222 0 0 0 0 - - -;
 #X obj 358 256 rotateXYZ;
@@ -71,6 +72,7 @@
 #X restore 18 95 pd gemwin;
 #X text 142 32 one model is in "perspective" mode;
 #X text 159 54 the other is in "orthographic" mode;
+#X obj 488 8 declare -lib Gem;
 #X connect 0 0 12 0;
 #X connect 1 0 2 1;
 #X connect 2 0 14 0;
