@@ -1064,6 +1064,8 @@ MARK();
         pix.image.fromBGRA(ptrBuffer);
         break;
       }
+      pix.image.upsidedown = false;
+      pix.image.fixUpDown();
     }
     return &pix;
   }
