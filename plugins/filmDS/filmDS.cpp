@@ -1024,58 +1024,6 @@ MARK();
   }
 
 
-#if 0
-  bool needsRBSwap(of_PixelFormat srcFormat, of_PixelFormat dstFormat)
-  {
-    return false;
-    (srcFormat == OF_PIXELS_BGR
-     || srcFormat == OF_PIXELS_BGRA) && (dstFormat == OF_PIXELS_RGB
-                                         || dstFormat == OF_PIXELS_RGBA) ||
-    (srcFormat == OF_PIXELS_RGB
-     || srcFormat == OF_PIXELS_RGBA) && (dstFormat == OF_PIXELS_BGR
-                                         || dstFormat == OF_PIXELS_BGRA);
-  }
-  void processPixels(of_Pixels & src, of_Pixels & dst)
-  {
-    auto format = src.getPixelFormat();
-
-    if(needsRBSwap(src.getPixelFormat(), dst.getPixelFormat())) {
-      if (src.getPixelFormat() == OF_PIXELS_BGR) {
-        dst.allocate(src.getWidth(), src.getHeight(), OF_PIXELS_RGB);
-        auto dstLine = dst.getLines().begin();
-        auto srcLine = --src.getLines().end();
-        auto endLine = dst.getLines().end();
-        for (; dstLine != endLine; dstLine++, srcLine--) {
-          auto dstPixel = dstLine.getPixels().begin();
-          auto srcPixel = srcLine.getPixels().begin();
-          auto endPixel = dstLine.getPixels().end();
-          for (; dstPixel != endPixel; dstPixel++, srcPixel++) {
-            dstPixel[0] = srcPixel[2];
-            dstPixel[1] = srcPixel[1];
-            dstPixel[2] = srcPixel[0];
-          }
-        }
-      } else if (src.getPixelFormat() == OF_PIXELS_BGRA) {
-        dst.allocate(src.getWidth(), src.getHeight(), OF_PIXELS_RGBA);
-        auto dstLine = dst.getLines().begin();
-        auto srcLine = --src.getLines().end();
-        auto endLine = dst.getLines().end();
-        for (; dstLine != endLine; dstLine++, srcLine--) {
-          auto dstPixel = dstLine.getPixels().begin();
-          auto srcPixel = srcLine.getPixels().begin();
-          auto endPixel = dstLine.getPixels().end();
-          for (; dstPixel != endPixel; dstPixel++, srcPixel++) {
-            dstPixel[0] = srcPixel[2];
-            dstPixel[1] = srcPixel[1];
-            dstPixel[2] = srcPixel[0];
-          }
-        }
-      }
-    } else {
-      src.mirrorTo(dst, true, false);
-    }
-  }
-#endif
 
 #ifdef USE_CALLBACKS
   bool getPixels(imageStruct&img)
@@ -1108,19 +1056,7 @@ MARK();
       long bufferSize = img.xsize * img.ysize * img.csize;
       post("fetching %d bytes into %p", bufferSize, img.data);
       HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)img.data);
-#if 1
       return (S_OK==hr);
-#else
-      if(hr==S_OK){
-        if (videoSize == bufferSize){
-          //processPixels(rawBuffer, dstBuffer, width, height, true, true);
-        }else{
-          printf("ERROR: GetPixels() - bufferSizes do not match!\n");
-        }
-      }else{
-        printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
-      }
-#endif
     }
     return false;
   }
