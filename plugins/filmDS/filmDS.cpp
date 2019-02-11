@@ -431,7 +431,6 @@ public:
   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
   {
 MARK();
-
     BYTE * ptrBuffer = NULL;
     HRESULT hr = pSample->GetPointer(&ptrBuffer);
 
@@ -1258,17 +1257,9 @@ film::errCode filmDS::changeImage(int imgNum, int trackNum)
   if(!(player && player->isLoaded())) {
     return film::FAILURE;
   }
-#if 1
+
   player->setApproximateFrame(imgNum);
   return film::DONTKNOW;
-#else
-  if(player->setApproximateFrame(imgNum)) {
-    MARK();
-    return film::SUCCESS;
-  }
-  MARK();
-  return film::FAILURE;
-#endif
 }
 // Property handling
 bool filmDS::enumProperties(gem::Properties&readable,
