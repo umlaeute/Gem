@@ -36,6 +36,7 @@ variables:
     - apt-get build-dep -y --no-install-recommends gem || true
     - apt-get install -y --no-install-recommends libassimp-dev
     - date
+    - g++ -v
   script:
     - ./autogen.sh
     - ./configure --with-DeckLink=local
@@ -58,6 +59,7 @@ variables:
     - echo "PDDIR=${PDDIR}"
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - date
+    - g++ -v
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
@@ -84,6 +86,7 @@ variables:
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
     - date
+    - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions"
@@ -109,6 +112,7 @@ variables:
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
     - date
+    - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
