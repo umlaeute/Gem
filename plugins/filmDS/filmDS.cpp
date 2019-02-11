@@ -1223,14 +1223,10 @@ void filmDS::close()
 
 pixBlock*filmDS::getFrame(void)
 {
-  if(!player) {
+  if(!(player && player->isLoaded())) {
     return 0;
   }
 #if 0
-  if(!player || !player->isLoaded()) {
-    return NULL;
-  }
-
   if(player->isMovieDone()) {
     return NULL;
   }
