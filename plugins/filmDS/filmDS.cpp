@@ -497,12 +497,13 @@ MARK();
       tearDown();
       return false;
     }
-
+#if 0
     hr = m_pGraph->QueryInterface(IID_IBasicAudio,(void**)&m_pAudio);
     if (FAILED(hr)) {
       tearDown();
       return false;
     }
+#endif
 
     // Use IGraphBuilder::QueryInterface (inherited from IUnknown) to get the IMediaControl interface.
     //printf("step 4\n");
