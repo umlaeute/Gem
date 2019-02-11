@@ -1094,10 +1094,10 @@ MARK();
 MARK_HR(hr);
       switch (pixelFormat) {
       case GEM_RGB:
-        pixels.fromRGB(ptrBuffer);
+        pixels.fromBGR(ptrBuffer);
         break;
       case GEM_RGBA:
-        pixels.fromRGBA(ptrBuffer);
+        pixels.fromBGRA(ptrBuffer);
         break;
       }
       img.convertFrom(&pixels);
