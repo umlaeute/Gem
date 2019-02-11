@@ -404,6 +404,7 @@ public:
     curMovieFrame = -1;
     curMovieTime = -1.;
     frameCount = -1;
+    bNewlyOpened = false;
 
     movieRate = 1.0;
     averageTimePerFrame = 1.0/30.0;
@@ -436,8 +437,9 @@ MARK();
     HRESULT hr = pSample->GetPointer(&ptrBuffer);
 
     if(hr == S_OK) {
+      printf("SampleCB @ %f\n", Time);
       long latestBufferLength = pSample->GetActualDataLength();
-      int currentBufferLength = pixels.xsize * pixels.ysize * pixels.csize;
+      int currentBufferLength = pix.image.xsize * pix.image.ysize * pix.image.csize;
       if(latestBufferLength == currentBufferLength ) {
         EnterCriticalSection(&critSection);
         pSample->AddRef();
@@ -458,6 +460,7 @@ MARK();
       }
     }
 
+MARK();
     return S_OK;
   }
 
@@ -628,10 +631,10 @@ MARK();
       width = infoheader->bmiHeader.biWidth;
       height = infoheader->bmiHeader.biHeight;
       averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
-      pixels.xsize = width;
-      pixels.ysize = height;
-      pixels.setCsizeByFormat(pixelFormat);
-      pixels.reallocate();
+      pix.image.xsize = width;
+      pix.image.ysize = height;
+      pix.image.setCsizeByFormat(pixelFormat);
+      pix.image.reallocate();
 
       //we need to manually change the output from the renderer window to the null renderer
       IBaseFilter * m_pVideoRenderer;
@@ -713,6 +716,7 @@ MARK();
     }
 
     bVideoOpened = true;
+    bNewlyOpened = true;
     return true;
   }
 
@@ -1030,11 +1034,21 @@ MARK();
 
 
 #ifdef USE_CALLBACKS
-  bool getPixels(imageStruct&img)
+  pixBlock*getPixels(void)
   {
     if(!bVideoOpened)
-      return false;
+      return 0;
+    pix.newfilm = bNewlyOpened;
+    bNewlyOpened = false;
+    if(pix.image.xsize != getWidth()  || pix.image.ysize != getHeight()) {
+      pix.image.xsize = getWidth();
+      pix.image.ysize = getHeight();
+      pix.image.setCsizeByFormat(GEM_RGBA);
+      pix.image.reallocate();
+      pix.newfilm = true;
+    }
     if(bFrameNew) {
+      pix.newimage = true;
       EnterCriticalSection(&critSection);
       std::swap(backSample, middleSample);
       bNewPixels = false;
@@ -1044,16 +1058,14 @@ MARK();
       HRESULT hr = middleSample->GetPointer(&ptrBuffer);
       switch (pixelFormat) {
       case GEM_RGB:
-        pixels.fromBGR(ptrBuffer);
+        pix.image.fromBGR(ptrBuffer);
         break;
       case GEM_RGBA:
-        pixels.fromBGRA(ptrBuffer);
+        pix.image.fromBGRA(ptrBuffer);
         break;
       }
-      img.convertFrom(&pixels);
-      //processPixels(srcBuffer, pixels);
     }
-    return true;
+    return &pix;
   }
 
 #else
@@ -1111,13 +1123,14 @@ protected:
   double curMovieTime;
   int curMovieFrame;
   int frameCount;
+  bool bNewlyOpened;
 
   CRITICAL_SECTION critSection;
   std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>
       backSample;
   std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>
       middleSample;
-  imageStruct pixels;
+  pixBlock pix;
   int pixelFormat;
 };
 
@@ -1179,25 +1192,7 @@ pixBlock*filmDS::getFrame(void)
   if(player->isMovieDone()) {
     return 0;
   }
-
-  m_image.newfilm=false;
-  m_image.newimage=player->isFrameNew();
-  int w=player->getWidth();
-  int h=player->getHeight();
-  if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
-    m_image.image.xsize=w;
-    m_image.image.ysize=h;
-    m_image.image.setCsizeByFormat(GEM_RGBA);
-    m_image.image.reallocate();
-
-    m_image.newfilm=true;
-    //printf("getting new film\n");
-  }
-  bool res=player->getPixels(m_image.image);
-  if(res) {
-    return &m_image;
-  }
-  return 0;
+  return player->getPixels();
 }
 
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
