@@ -1247,6 +1247,7 @@ pixBlock*filmDS::getFrame(void)
   }
   bool res=player->getPixels(m_image.image);
   if(res) {
+    m_image.newimage=true;
     return &m_image;
   }
   return 0;
