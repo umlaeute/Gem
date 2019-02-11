@@ -725,7 +725,6 @@ MARK();
       long ptrParam1 = 0;
       long ptrParam2 = 0;
 #endif
-      long timeoutMs = 2000;
 
       if( curMovieFrame != frameCount ) {
         bFrameNew = true;
