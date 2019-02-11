@@ -1184,6 +1184,7 @@ pixBlock*filmDS::getFrame(void)
   if(!(player && player->isLoaded())) {
     return 0;
   }
+  player->update();
   if(player->isMovieDone()) {
     return 0;
   }
