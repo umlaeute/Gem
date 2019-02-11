@@ -1203,7 +1203,12 @@ bool filmDS::open(const std::string&path, const gem::Properties&props)
     player->setPosition(0);
     double d=0.;
     if(props.get("auto", d)) {
-      player->setSpeed(d);
+      if(d>-1e8 && d<1e8)
+        player->setPaused(true);
+      else {
+        player->setSpeed(d);
+        player->play();
+      }
     }
   } else {
     close();
@@ -1284,7 +1289,12 @@ void filmDS::setProperties(gem::Properties&props)
   double d;
   if(props.get("auto", d)) {
     if(player) {
-      player->setSpeed(d);
+      if(d>-1e8 && d<1e8)
+        player->setPaused(true);
+      else {
+        player->setSpeed(d);
+        player->play();
+      }
     }
   }
 }
