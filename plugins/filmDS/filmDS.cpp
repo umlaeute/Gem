@@ -442,8 +442,7 @@ MARK();
         EnterCriticalSection(&critSection);
         pSample->AddRef();
         backSample =
-          std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>(pSample,
-              releaseSample);
+          std::unique_ptr<IMediaSample, std::function<void(IMediaSample*)>>(pSample, releaseSample);
         bNewPixels = true;
 
         //this is just so we know if there is a new frame
@@ -717,7 +716,6 @@ MARK();
   void update()
   {
     if( bVideoOpened ) {
-
       long eventCode = 0;
 #ifdef _WIN64
       long long ptrParam1 = 0;
