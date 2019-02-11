@@ -950,7 +950,7 @@ MARK();
       int curFrame = getCurrentFrameNo();
       float curFrameF = curFrame;
       for(int i = 1; i < 20; i++) {
-        setAproximateFrameF( curFrameF + 0.3 * (float)i );
+        setApproximateFrameF( curFrameF + 0.3 * (float)i );
         if( getCurrentFrameNo() >= curFrame + 1 ) {
           break;
         }
@@ -965,7 +965,7 @@ MARK();
       int curFrame = getCurrentFrameNo();
       float curFrameF = curFrame;
       for(int i = 1; i < 20; i++) {
-        setAproximateFrameF( curFrameF - 0.3 * (float)i );
+        setApproximateFrameF( curFrameF - 0.3 * (float)i );
         if( getCurrentFrameNo() <= curFrame + 1 ) {
           break;
         }
@@ -973,10 +973,10 @@ MARK();
     }
   }
 
-  void setAproximateFrameF(float frameF)
+  void setApproximateFrameF(float frameF)
   {
     if( bVideoOpened ) {
-      float pct = frameF / (float)getAproximateNoFrames();
+      float pct = frameF / (float)getApproximateNoFrames();
       if( pct > 1.0 ) {
         pct = 1.0;
       }
@@ -987,10 +987,10 @@ MARK();
     }
   }
 
-  void setAproximateFrame(int frame)
+  void setApproximateFrame(int frame)
   {
     if( bVideoOpened ) {
-      float pct = (float)frame / (float)getAproximateNoFrames();
+      float pct = (float)frame / (float)getApproximateNoFrames();
       if( pct > 1.0 ) {
         pct = 1.0;
       }
@@ -1004,12 +1004,12 @@ MARK();
   int getCurrentFrameNo()
   {
     if( bVideoOpened ) {
-      return getPosition() * (float) getAproximateNoFrames();
+      return getPosition() * (float) getApproximateNoFrames();
     }
     return 0;
   }
 
-  int getAproximateNoFrames()
+  int getApproximateNoFrames()
   {
     if( bVideoOpened && averageTimePerFrame > 0.0 ) {
       return getDurationInSeconds() / averageTimePerFrame;
@@ -1273,10 +1273,10 @@ film::errCode filmDS::changeImage(int imgNum, int trackNum)
   }
   MARK();
 #if 1
-  player->setAproximateFrame(imgNum);
+  player->setApproximateFrame(imgNum);
   return film::DONTKNOW;
 #else
-  if(player->setAproximateFrame(imgNum)) {
+  if(player->setApproximateFrame(imgNum)) {
     MARK();
     return film::SUCCESS;
   }
@@ -1326,7 +1326,7 @@ void filmDS::getProperties(gem::Properties&props)
         props.set(key, value);
       }
       if("frames"==key) {
-        d=player->getAproximateNoFrames();
+        d=player->getApproximateNoFrames();
         value=(int)(d+0.5);
         props.set(key, value);
       }
