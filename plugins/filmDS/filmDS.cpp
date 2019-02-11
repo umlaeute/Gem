@@ -32,6 +32,9 @@
 #endif
 #define MARK() MARK_HR(0)
 
+
+#define USE_CALLBACKS 1
+
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 // DirectShow includes and helper methods
@@ -532,12 +535,13 @@ MARK();
       return false;
     }
 
+#if USE_CALLBACKS
     hr = m_pGrabber->SetCallback(this, 0);
     if (FAILED(hr)) {
       tearDown();
       return false;
     }
-
+#endif
     //MEDIA CONVERSION
     //Get video properties from the stream's mediatype and apply to the grabber (otherwise we don't get an RGB image)
     AM_MEDIA_TYPE mt;
@@ -1076,7 +1080,7 @@ MARK();
   }
 #endif
 
-
+#ifdef USE_CALLBACKS
   bool getPixels(imageStruct&img)
   {
 MARK();
@@ -1104,24 +1108,30 @@ MARK_HR(hr);
     return true;
   }
 
+#else
   //this is the non-callback approach
-  //void getPixels(unsigned char * dstBuffer){
-  //
-  //  if(bVideoOpened && isFrameNew()){
-  //      long bufferSize = videoSize;
-  //      HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)rawBuffer);
-  //
-  //      if(hr==S_OK){
-  //          if (videoSize == bufferSize){
-  //              processPixels(rawBuffer, dstBuffer, width, height, true, true);
-  //          }else{
-  //              printf("ERROR: GetPixels() - bufferSizes do not match!\n");
-  //          }
-  //      }else{
-  //          printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
-  //      }
-  //  }
-  //}
+  bool getPixels(imageStruct&img){
+    if(bVideoOpened && isFrameNew()){
+      long bufferSize = img.xsize * img.ysize * img.csize;
+      post("fetching %d bytes into %p", bufferSize, img.data);
+      HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)img.data);
+#if 1
+      return (S_OK==hr);
+#else
+      if(hr==S_OK){
+        if (videoSize == bufferSize){
+          //processPixels(rawBuffer, dstBuffer, width, height, true, true);
+        }else{
+          printf("ERROR: GetPixels() - bufferSizes do not match!\n");
+        }
+      }else{
+        printf("ERROR: GetPixels() - Unable to get pixels for device  bufferSize = %i \n", bufferSize);
+      }
+#endif
+    }
+    return false;
+  }
+#endif
 
 protected:
 
