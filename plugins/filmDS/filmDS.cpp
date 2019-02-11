@@ -1081,17 +1081,13 @@ MARK();
 #ifdef USE_CALLBACKS
   bool getPixels(imageStruct&img)
   {
-MARK();
     if(bVideoOpened && bNewPixels) {
-MARK();
       EnterCriticalSection(&critSection);
-MARK();
       std::swap(backSample, middleSample);
       bNewPixels = false;
       LeaveCriticalSection(&critSection);
       BYTE * ptrBuffer = NULL;
       HRESULT hr = middleSample->GetPointer(&ptrBuffer);
-MARK_HR(hr);
       switch (pixelFormat) {
       case GEM_RGB:
         pixels.fromBGR(ptrBuffer);
@@ -1201,13 +1197,9 @@ filmDS::~filmDS()
 
 bool filmDS::open(const std::string&path, const gem::Properties&props)
 {
-  MARK();
   close();
-  MARK();
   player = new DirectShowVideo();
-  MARK();
   bool res=player->loadMovie(path, GEM_RGBA);
-  MARK_HR(res);
   if(res) {
     player->setPosition(0);
     double d=0.;
@@ -1223,9 +1215,7 @@ bool filmDS::open(const std::string&path, const gem::Properties&props)
 
 void filmDS::close()
 {
-  MARK();
   if( player ) {
-    MARK();
     delete player;
     player = NULL;
   }
@@ -1233,13 +1223,10 @@ void filmDS::close()
 
 pixBlock*filmDS::getFrame(void)
 {
-  MARK();
   if(!player) {
     return 0;
   }
-  MARK();
 #if 0
-  //printf("getting frame...%p\n", player);
   if(!player || !player->isLoaded()) {
     return NULL;
   }
@@ -1263,9 +1250,7 @@ pixBlock*filmDS::getFrame(void)
     m_image.newfilm=true;
     //printf("getting new film\n");
   }
-  MARK();
   bool res=player->getPixels(m_image.image);
-  MARK_HR(res);
   if(res) {
     return &m_image;
   }
@@ -1274,12 +1259,9 @@ pixBlock*filmDS::getFrame(void)
 
 film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
-  MARK();
-  //post("changeImage(%d,%d)", imgNum, trackNum);
   if(!(player && player->isLoaded())) {
     return film::FAILURE;
   }
-  MARK();
 #if 1
   player->setApproximateFrame(imgNum);
   return film::DONTKNOW;
