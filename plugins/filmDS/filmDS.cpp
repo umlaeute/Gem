@@ -25,7 +25,7 @@
 #include <memory>
 #include <functional>
 
-#if 0
+#if 1
 # define MARK_HR(hr) if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
 #else
 # define MARK_HR(hr) do{;} while(0)
