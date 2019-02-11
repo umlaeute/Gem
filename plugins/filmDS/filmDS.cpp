@@ -321,6 +321,7 @@ public:
 
   ~DirectShowVideo()
   {
+    stop();
     tearDown();
     middleSample.reset();
     backSample.reset();
