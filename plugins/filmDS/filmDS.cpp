@@ -34,6 +34,7 @@
 
 
 #define USE_CALLBACKS 1
+#define USE_AUTO 0
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -1150,15 +1151,19 @@ bool filmDS::open(const std::string&path, const gem::Properties&props)
   bool res=player->loadMovie(path, GEM_RGBA);
   if(res) {
     player->setPosition(0);
+#if USE_AUTO
     double d=0.;
     if(props.get("auto", d)) {
     }
-    if(d>-1e8 && d<1e8)
+    if(d>-1e-8 && d<1e-8)
       player->setPaused(true);
     else {
       player->setSpeed(d);
       player->play();
     }
+#else
+    player->setPaused(true);
+#endif
   } else {
     close();
   }
@@ -1209,15 +1214,18 @@ bool filmDS::enumProperties(gem::Properties&readable,
   readable.set("width", value);
   readable.set("height", value);
 
+#if USE_AUTO
   writeable.set("auto", value);
+#endif
   return true;
 }
 void filmDS::setProperties(gem::Properties&props)
 {
+#if USE_AUTO
   double d;
   if(props.get("auto", d)) {
     if(player) {
-      if(d>-1e8 && d<1e8)
+      if(d>-1e-8 && d<1e-8)
         player->setPaused(true);
       else {
         player->setSpeed(d);
@@ -1225,6 +1233,7 @@ void filmDS::setProperties(gem::Properties&props)
       }
     }
   }
+#endif
 }
 void filmDS::getProperties(gem::Properties&props)
 {
