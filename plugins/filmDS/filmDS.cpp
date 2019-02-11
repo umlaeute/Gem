@@ -402,6 +402,7 @@ public:
     bNewPixels = false;
     bFrameNew = false;
     curMovieFrame = -1;
+    curMovieTime = -1.;
     frameCount = -1;
 
     movieRate = 1.0;
@@ -445,6 +446,9 @@ MARK();
         bNewPixels = true;
 
         //this is just so we know if there is a new frame
+        if(Time != curMovieTime)
+          bFrameNew = true;
+        curMovieTime = Time;
         frameCount++;
 
         LeaveCriticalSection(&critSection);
@@ -1028,10 +1032,13 @@ MARK();
 #ifdef USE_CALLBACKS
   bool getPixels(imageStruct&img)
   {
-    if(bVideoOpened && bNewPixels) {
+    if(!bVideoOpened)
+      return false;
+    if(bFrameNew) {
       EnterCriticalSection(&critSection);
       std::swap(backSample, middleSample);
       bNewPixels = false;
+      bFrameNew = false;
       LeaveCriticalSection(&critSection);
       BYTE * ptrBuffer = NULL;
       HRESULT hr = middleSample->GetPointer(&ptrBuffer);
@@ -1052,13 +1059,15 @@ MARK();
 #else
   //this is the non-callback approach
   bool getPixels(imageStruct&img){
-    if(bVideoOpened && isFrameNew()){
+    if(!bVideoOpened)
+      return false;
+    if(isFrameNew()){
       long bufferSize = img.xsize * img.ysize * img.csize;
       post("fetching %d bytes into %p", bufferSize, img.data);
       HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)img.data);
       return (S_OK==hr);
     }
-    return false;
+    return true;
   }
 #endif
 
@@ -1099,6 +1108,7 @@ protected:
   bool bLoop;
   bool bEndReached;
   double movieRate;
+  double curMovieTime;
   int curMovieFrame;
   int frameCount;
 
