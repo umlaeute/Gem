@@ -396,7 +396,7 @@ public:
     evCode = 0;
     width = height = 0;
     bVideoOpened = false;
-    bLoop = true;
+    bLoop = false;
     bPaused = false;
     bPlaying = false;
     bEndReached = false;
