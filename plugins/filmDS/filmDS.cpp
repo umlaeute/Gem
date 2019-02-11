@@ -401,9 +401,7 @@ public:
     bEndReached = false;
     bNewPixels = false;
     bFrameNew = false;
-    curMovieFrame = -1;
     curMovieTime = -1.;
-    frameCount = -1;
     bNewlyOpened = false;
 
     movieRate = 1.0;
@@ -451,7 +449,6 @@ MARK();
         if(Time != curMovieTime)
           bFrameNew = true;
         curMovieTime = Time;
-        frameCount++;
 
         LeaveCriticalSection(&critSection);
       } else {
@@ -732,13 +729,6 @@ MARK();
       long ptrParam1 = 0;
       long ptrParam2 = 0;
 #endif
-
-      if( curMovieFrame != frameCount ) {
-        bFrameNew = true;
-      } else {
-        bFrameNew = false;
-      }
-      curMovieFrame = frameCount;
 
       while (S_OK == m_pEvent->GetEvent(&eventCode, &ptrParam1, &ptrParam2, 0)) {
         if (eventCode == EC_COMPLETE ) {
@@ -1124,8 +1114,6 @@ protected:
   bool bEndReached;
   double movieRate;
   double curMovieTime;
-  int curMovieFrame;
-  int frameCount;
   bool bNewlyOpened;
 
   CRITICAL_SECTION critSection;
