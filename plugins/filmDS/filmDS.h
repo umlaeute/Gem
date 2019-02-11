@@ -80,9 +80,6 @@ public:
 protected:
   class DirectShowVideo;
   DirectShowVideo * player;
-  pixBlock m_image; // output image
-
-  int 	    m_reqFrame;
 };
 };
 };
