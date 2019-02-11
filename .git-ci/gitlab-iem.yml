@@ -86,7 +86,7 @@ variables:
     - date
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
+    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions"
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
