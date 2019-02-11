@@ -1265,6 +1265,7 @@ film::errCode filmDS::changeImage(int imgNum, int trackNum)
   }
 
   player->setApproximateFrame(imgNum);
+  player->update();
   return film::DONTKNOW;
 }
 // Property handling
