@@ -426,6 +426,7 @@ public:
   //------------------------------------------------
   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
   {
+MARK();
 
     BYTE * ptrBuffer = NULL;
     HRESULT hr = pSample->GetPointer(&ptrBuffer);
@@ -1078,13 +1079,17 @@ public:
 
   bool getPixels(imageStruct&img)
   {
+MARK();
     if(bVideoOpened && bNewPixels) {
+MARK();
       EnterCriticalSection(&critSection);
+MARK();
       std::swap(backSample, middleSample);
       bNewPixels = false;
       LeaveCriticalSection(&critSection);
       BYTE * ptrBuffer = NULL;
       HRESULT hr = middleSample->GetPointer(&ptrBuffer);
+MARK_HR(hr);
       switch (pixelFormat) {
       case GEM_RGB:
         pixels.fromRGB(ptrBuffer);
