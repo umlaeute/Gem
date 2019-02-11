@@ -1181,8 +1181,7 @@ pixBlock*filmDS::getFrame(void)
   }
 
   m_image.newfilm=false;
-  m_image.newimage=false;
-
+  m_image.newimage=player->isFrameNew();
   int w=player->getWidth();
   int h=player->getHeight();
   if(w!=m_image.image.xsize || h!=m_image.image.ysize) {
@@ -1196,7 +1195,6 @@ pixBlock*filmDS::getFrame(void)
   }
   bool res=player->getPixels(m_image.image);
   if(res) {
-    m_image.newimage=true;
     return &m_image;
   }
   return 0;
