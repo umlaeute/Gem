@@ -25,7 +25,7 @@
 #include <memory>
 #include <functional>
 
-#if 1
+#if 0
 # define MARK_HR(hr) if(hr)printf("%s:%d (%s)\t: 0x%X\n", __FILE__, __LINE__, __FUNCTION__, hr);else printf("%s:%d (%s)\n", __FILE__, __LINE__, __FUNCTION__)
 #else
 # define MARK_HR(hr) do{;} while(0)
@@ -435,7 +435,6 @@ MARK();
     HRESULT hr = pSample->GetPointer(&ptrBuffer);
 
     if(hr == S_OK) {
-      printf("SampleCB @ %f\n", Time);
       long latestBufferLength = pSample->GetActualDataLength();
       int currentBufferLength = pix.image.xsize * pix.image.ysize * pix.image.csize;
       if(latestBufferLength == currentBufferLength ) {
