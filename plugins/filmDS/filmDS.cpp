@@ -1316,7 +1316,7 @@ void filmDS::getProperties(gem::Properties&props)
       std::string key=keys[i];
       props.erase(key);
       if("fps"==key) {
-        d=player->getAverageTimePerFrame();
+        d=1./player->getAverageTimePerFrame();
         value=d;
         props.set(key, value);
       }
