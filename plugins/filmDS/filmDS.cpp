@@ -1276,7 +1276,7 @@ film::errCode filmDS::changeImage(int imgNum, int trackNum)
 {
   MARK();
   //post("changeImage(%d,%d)", imgNum, trackNum);
-  if(!player) {
+  if(!(player && player->isLoaded())) {
     return film::FAILURE;
   }
   MARK();
