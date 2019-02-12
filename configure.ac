@@ -633,7 +633,7 @@ AS_IF([test "x${have_libdv}" != "xno"], [
 ])
 AS_IF([test "x${have_unicap}" = "x"], [have_unicap="no"])
 AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
-AS_IF([test "x${have_stb}" = "xyes"], [have_stb="yes (library)"], [have_stb="yes (local)"])
+AS_IF([test "x${have_stb}" = "xyes"], [have_stb="YES (library)"], [have_stb="YES (local)"])
 # TODO: have_ds
 
 AC_MSG_RESULT([
@@ -670,7 +670,7 @@ Configuration:
     use JPEG             : ${have_jpeg}
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_libquicktime}
-    use SGI              : yes (local)
+    use SGI              : YES (local)
     use STB              : ${have_stb}
     use TIFF             : ${have_tiff}
   film-support
@@ -685,7 +685,7 @@ Configuration:
   capture-support
     use AVfoundation     : ${have_avfoundation_framework}
     use ieee1394         : ${have_ieee1394}
-    use DirectShow       : no (?)
+    use DirectShow       : NO
     use DV               : ${have_libdv}
     use Unicap           : ${have_unicap}
     use v4l              : ${have_v4l}
@@ -699,7 +699,7 @@ Configuration:
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
   model-support
-    use OBJ              : yes (local)
+    use OBJ              : YES (local)
     use ASSIMP2          : ${have_assimp2}
     use ASSIMP3          : ${have_assimp3}
 ])
