@@ -492,6 +492,7 @@ AS_IF([test "x$enable_registerstruct" = "xyes" ], [
 ])])
 
 AS_IF([test "x$WINDOWS" = "xyes"], [GEM_CHECK_CXXFLAGS([-mms-bitfields])])
+AS_IF([test "x$WINDOWS" = "xyes"], [GEM_CHECK_CXXFLAGS([-fexceptions])])
 AS_IF([test "x$KERN" = "xDarwin"], [
  GEM_CHECK_CXXFLAGS([-Os],,GEM_CHECK_CXXFLAGS([-O3]))
 ], [
