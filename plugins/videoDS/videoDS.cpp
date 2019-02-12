@@ -26,7 +26,7 @@ using namespace gem::plugins;
 REGISTER_VIDEOFACTORY("DS", videoDS);
 
 # include <memory>
-# include <Dvdmedia.h>
+# include <dvdmedia.h>
 # include <streams.h>
 # include <atlbase.h>
 # include "DSgrabber.h"
