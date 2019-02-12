@@ -633,12 +633,8 @@ AS_IF([test "x${have_libdv}" != "xno"], [
 ])
 AS_IF([test "x${have_unicap}" = "x"], [have_unicap="no"])
 AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
+AS_IF([test "x${have_stb}" = "xyes"], [have_stb="yes (library)"], [have_stb="yes (local)"])
 # TODO: have_ds
-
-AS_IF([test "x$with_film" = "xplugins"], [use_film_plugins="yes"],
-            [use_film_plugins="no (using $with_film backend)"])
-AS_IF([test "x$with_video" = "xplugins"], [use_video_plugins="yes"],
-            [use_video_plugins="no (using $with_video backend)"])
 
 AC_MSG_RESULT([
 Result:
@@ -670,29 +666,42 @@ Configuration:
      default font        : ${GEM_DEFAULT_FONT}
 
   image-support
+    use ImageIO          : ${have_imageio_framework}
+    use JPEG             : ${have_jpeg}
     use ImageMagick      : ${have_ImageMagick}
     use QuickTime        : ${have_libquicktime}
-    use ImageIO          : ${have_libimageio}
+    use SGI              : yes (local)
+    use STB              : ${have_stb}
     use TIFF             : ${have_tiff}
-    use JPEG             : ${have_jpeg}
-  moviefile-support
-    use PLUGINS          : ${use_film_plugins}
+  film-support
+    use AVFoundation     : ${have_avfoundation_framework}
+    use AVI              : ${WINDOWS}
+    use aviplay          : ${have_avifile}
+    use DirectShow       : ${WINDOWS}
+    use gmerlin          : ${have_gmerlin_avdec}
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
     use QuickTime        : ${have_libquicktime}
-    use AVFoundation     : ${have_libavfoundation}
-    use aviplay          : ${have_avifile}
-    use gmerlin          : ${have_gmerlin_avdec}
   capture-support
-    use PLUGINS          : ${use_video_plugins}
-    use v4l              : ${have_v4l}
-    use v4l2             : ${have_v4l2}
+    use AVfoundation     : ${have_avfoundation_framework}
     use ieee1394         : ${have_ieee1394}
+    use DirectShow       : no (?)
     use DV               : ${have_libdv}
     use Unicap           : ${have_unicap}
+    use v4l              : ${have_v4l}
+    use v4l2             : ${have_v4l2}
     use Video-for-WinDOS : ${have_vfw32}
+    use VideoInput       : ${WINDOWS}
+    use VLC              : ${have_libvlc}
+    use VNC              : ${have_libvncclient}
+  record-support
     use QuickTime        : ${have_libquicktime}
-    use AVFoundation     : ${have_libavfoundation}
+    use v4l              : ${have_v4l}
+    use v4l2             : ${have_v4l2}
+  model-support
+    use OBJ              : yes (local)
+    use ASSIMP2          : ${have_assimp2}
+    use ASSIMP3          : ${have_assimp3}
 ])
 
 AS_IF([test "x$have_pd" = "xno"], [
