@@ -75,6 +75,7 @@ libUtils_la_SOURCES=  \
 	ThreadSemaphore.h \
 	WorkerThread.cpp \
 	WorkerThread.h \
+	wstring.h \
 	SynchedWorkerThread.cpp \
 	SynchedWorkerThread.h \
 	GemString.cpp \
