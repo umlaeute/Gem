@@ -3,8 +3,6 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
 EXTRA_DIST =
-EXTRA_DIST += win-vs2003/imageSTB.sln win-vs2003/imageSTB.vcproj
-EXTRA_DIST += win-vs2008/imageSTB.sln win-vs2008/imageSTB.vcproj
 
 pkglib_LTLIBRARIES= gem_imageSTB.la
 
