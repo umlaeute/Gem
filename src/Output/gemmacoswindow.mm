@@ -99,14 +99,14 @@ static NSDate *distantFuture, *distantPast;
 @end
 #endif
 
-@interface GemCocoaView : NSOpenGLView
+@interface GemMacOSView : NSOpenGLView
 {
 @public gemmacoswindow*parent;
 }
 @end
 
 typedef GLint oglc_setvalue_t;
-@implementation GemCocoaView
+@implementation GemMacOSView
 - (void) prepareOpenGL
 {
 #if 0
@@ -148,7 +148,7 @@ typedef GLint oglc_setvalue_t;
 @end
 
 struct gemmacoswindow :: PIMPL {
-  GemCocoaView*view;
+  GemMacOSView*view;
   NSWindow*window;
   //  WindowResponder*delegate;
   float titleBarHeight, menuBarHeight;
@@ -440,7 +440,7 @@ bool gemmacoswindow :: create(void)
   }
 
   NSOpenGLPixelFormat *nsglFormat = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attr] autorelease];
-  m_pimpl->view = [[GemCocoaView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
+  m_pimpl->view = [[GemMacOSView alloc] initWithFrame:[contentView bounds] pixelFormat:nsglFormat];
   m_pimpl->view->parent=this;
   m_pimpl->window=window;
   [contentView addSubview:m_pimpl->view];
