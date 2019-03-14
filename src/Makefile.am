@@ -94,10 +94,6 @@ Gem_la_LIBADD   += $(GEM_LIB_GLEW_LIBS)
 endif !ENABLE_MULTICONTEXT
 Gem_la_LDFLAGS  +=
 
-if MINGW
-Gem_la_LDFLAGS += -static-libgcc -static-libstdc++ --static
-endif
-
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
