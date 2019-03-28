@@ -83,7 +83,7 @@ static void imageTIFF_warnhandler(const char*module, const char*fmt,
 
 imageTIFF :: imageTIFF(void)
 {
-  bool firsttime=true;
+  static bool firsttime=true;
   if(firsttime) {
     TIFFSetErrorHandler(imageTIFF_errorhandler);
     TIFFSetWarningHandler(imageTIFF_warnhandler);
