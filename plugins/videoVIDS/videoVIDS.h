@@ -51,12 +51,13 @@ public:
                         std::vector<std::string>());
 
   virtual bool          setColor(int);
+  virtual bool trySetProperties(gem::Properties&props, bool);
 
 private:
   std::string m_name;
   pixBlock m_pixBlock;
   gem::Properties m_props;
-  videoInput m_vi;
+  videoInput*m_vi;
   int m_ID, m_wantID;
   int m_width, m_height;
 };
