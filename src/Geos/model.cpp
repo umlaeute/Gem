@@ -649,20 +649,18 @@ void model :: createVBO(void)
 void model :: copyArray(const std::vector<std::vector<float> >&tab,
                         gem::VertexBuffer&vb)
 {
-  unsigned int size(0), i(0), npts(0);
-
   //~std::vector<std::vector<float> > tab = m_loader->getVector(vectorName);
   if ( tab.empty() ) {
     return;
   }
-  size=tab.size();
+  unsigned int size=tab.size();
 
   if(size!=vb.size) {
     vb.resize(size);
     m_size_change_flag=true;
   }
 
-  for ( i = 0 ; i < size ; i++ ) {
+  for ( unsigned int i = 0 ; i < size ; i++ ) {
     for ( int j=0 ; j< std::min(vb.dimen,(unsigned int)tab[i].size()) ; j++) {
       vb.array[i*vb.dimen + j] = tab[i][j];
     }

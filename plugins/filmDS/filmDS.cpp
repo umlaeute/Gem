@@ -1239,31 +1239,28 @@ void filmDS::setProperties(gem::Properties&props)
 void filmDS::getProperties(gem::Properties&props)
 {
   std::vector<std::string> keys=props.keys();
-  gem::any value;
-  double d;
-  unsigned int i=0;
   if(player && player->isLoaded()) {
-    for(i=0; i<keys.size(); i++) {
+    for(size_t i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       props.erase(key);
       if("fps"==key) {
-        d=1./player->getAverageTimePerFrame();
-        value=d;
+        double d=1./player->getAverageTimePerFrame();
+        gem::any value=d;
         props.set(key, value);
       }
       if("frames"==key) {
-        d=player->getApproximateNoFrames();
-        value=(int)(d+0.5);
+        double d=player->getApproximateNoFrames();
+        gem::any value=(int)(d+0.5);
         props.set(key, value);
       }
       if("width"==key) {
-        d=player->getWidth();
-        value=d;
+        double d=player->getWidth();
+        gem::any value=d;
         props.set(key, value);
       }
       if("height"==key) {
-        d=player->getHeight();
-        value=d;
+        double d=player->getHeight();
+        gem::any value=d;
         props.set(key, value);
       }
     }

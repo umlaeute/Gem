@@ -306,16 +306,13 @@ void rubber :: rubber_dynamics(void)
 
 int rubber :: rubber_grab(void)
 {
-  float dx[2];
-  float d;
   float min_d=0;
   int min_i=0;
-  int i;
 
-  for (i = 0; i < m_grid_sizeX*m_grid_sizeY; i++) {
-    dx[0] = m_mass[i].x[0] - ctrX;
-    dx[1] = m_mass[i].x[1] - ctrY;
-    d = sqrt(dx[0]*dx[0] + dx[1]*dx[1]);
+  for (int i = 0; i < m_grid_sizeX*m_grid_sizeY; i++) {
+    float dx0 = m_mass[i].x[0] - ctrX;
+    float dx1 = m_mass[i].x[1] - ctrY;
+    float d = sqrt(dx0*dx0 + dx1*dx1);
     if (i == 0 || d < min_d) {
       min_i = i;
       min_d = d;

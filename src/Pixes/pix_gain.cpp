@@ -69,15 +69,14 @@ void pix_gain :: processRGBAImage(imageStruct &image)
 {
   int datasize =  image.xsize * image.ysize;
   unsigned char *pixels = image.data;
-  short R,G,B,A;
-  int red,green,blue;
-  R = static_cast<int>(256 * m_gain[chRed]);
-  G = static_cast<int>(256 * m_gain[chGreen]);
-  B = static_cast<int>(256 * m_gain[chBlue]);
-  A = static_cast<int>(256 * m_gain[chAlpha]);
+  short R = static_cast<int>(256 * m_gain[chRed]);
+  short G = static_cast<int>(256 * m_gain[chGreen]);
+  short B = static_cast<int>(256 * m_gain[chBlue]);
+  short A = static_cast<int>(256 * m_gain[chAlpha]);
 
   if(m_saturate) {
     while(datasize--) {
+      int red,green,blue;
       red =   (pixels[chRed  ] * R)>>8;
       pixels[chRed  ] = CLAMP(red);
       green = (pixels[chGreen] * G)>>8;

@@ -321,10 +321,6 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
   calculate3x3YUVAltivec(image,tempImg);
   return;
 #else
-
-  int i;
-  int j;
-  int k;
   int xsize =  tempImg.xsize -1;
   int ysize =  tempImg.ysize -1;
   int size = xsize*ysize - xsize-1;
@@ -348,7 +344,7 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
   range =m_irange;
 
   if (m_chroma) {
-    i = xsize;
+    int i = xsize;
 
 #ifdef i386
     register unsigned char val1 = 0;
@@ -376,8 +372,8 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
     //messed up looking on x86
     i=xsize+2;
 
-    for (k=1; k<ysize; k++) {
-      for (j=1; j<xsize; j++) {
+    for (int k=1; k<ysize; k++) {
+      for (int j=1; j<xsize; j++) {
         //load furthest value first...the rest should be in cache
 
         val7 = val8;
@@ -416,8 +412,7 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
       i=k*tempImg.xsize;
     }
   } else {
-
-    i = xsize;
+    int i = xsize;
     //make these temp register vars rather than pointers?
 
     short* val1 = 0;
@@ -441,8 +436,8 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
     register short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];*/
     //int res;
 // for (i=xsize+1;i<size;i++) {
-    for (k=1; k<ysize; k++) {
-      for (j=1; j<xsize; j++) {
+    for (int k=1; k<ysize; k++) {
+      for (int j=1; j<xsize; j++) {
         val1 = val2;
         val2 = val3;
         val3 = src+i-xsize+1;

@@ -563,9 +563,8 @@ void pix_dot :: sampxy_table_init()
 void pix_dot :: yuv_init()
 {
   static int initialized = 0;
-  int i;
   if(!initialized) {
-    for(i=20; i<256; i++) {
+    for(size_t i=20; i<256; i++) {
 #if 0
       R2Y[i] =  static_cast<int>(0.257f*i);
       G2Y[i] =  static_cast<int>(0.504f*i);
