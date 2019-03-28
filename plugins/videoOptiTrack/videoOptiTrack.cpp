@@ -415,9 +415,9 @@ void videoOptiTrack::getProperties(gem::Properties&props)
       continue;
     }
 
-#define GETCAMERAPROP_BOOL(name) if(#name == key) {d=m_camera->##name(); props.set(key, d); continue; } else d=0
-#define GETCAMERAPROP_INT(name)  if(#name == key) {d=m_camera->##name(); props.set(key, d); continue; } else d=0
-#define GETCAMERAPROP_STR(name)  if(#name == key) {s=m_camera->##name(); props.set(key, s); continue; } else d=0
+#define GETCAMERAPROP_BOOL(name) if(#name == key) {d=m_camera->name(); props.set(key, d); continue; } else d=0
+#define GETCAMERAPROP_INT(name)  if(#name == key) {d=m_camera->name(); props.set(key, d); continue; } else d=0
+#define GETCAMERAPROP_STR(name)  if(#name == key) {s=m_camera->name(); props.set(key, s); continue; } else d=0
     GETCAMERAPROP_BOOL(AEC);
     GETCAMERAPROP_BOOL(AGC);
     GETCAMERAPROP_BOOL(ContinuousIR);
