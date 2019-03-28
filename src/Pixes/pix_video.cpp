@@ -503,7 +503,7 @@ void pix_video :: enumerateMess()
       }
     }
   }
-  if(data.size()<=0) {
+  if(data.size()<1) {
     error("no devices found");
   }
 
