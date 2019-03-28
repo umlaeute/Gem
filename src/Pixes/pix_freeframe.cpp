@@ -1000,16 +1000,12 @@ void pix_freeframe :: openMess(t_symbol*s)
 /////////////////////////////////////////////////////////
 void pix_freeframe :: processImage(imageStruct &image)
 {
-  unsigned int orgformat = image.format;
-  unsigned int format=m_image.format;
-  unsigned char*data=image.data;
-
   if(m_plugin==NULL) {
     return;
   }
 
   // convert the current image into a format that suits the FreeFrame-plugin
-  if(orgformat != format) {
+  if(image.format != m_image.format) {
     if(m_image.convertFrom(&image)) {
       m_plugin->processFrame(m_image);
       m_image.convertTo(&image);

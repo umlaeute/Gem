@@ -213,12 +213,10 @@ void pix_record :: startRecording()
   }
 
   // find a handle for the current settings (filename, codec, props)
-  const std::string codec=m_codec;
+  /* const std::string codec=m_codec; */
   stopRecording();
 
-
   m_currentFrame = 0;
-  unsigned int i=0;
   // do not re-set the codec, if there is no need...
   /* m_handle->setCodec(codec); */
   if(m_handle->start(m_filename, m_props)) {

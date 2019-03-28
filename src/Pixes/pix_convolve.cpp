@@ -323,8 +323,6 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
 #else
   int xsize =  tempImg.xsize -1;
   int ysize =  tempImg.ysize -1;
-  int size = xsize*ysize - xsize-1;
-  int length;
 
   short* src = (short*) tempImg.data;
   short* dest = (short*)image.data;

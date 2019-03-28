@@ -255,8 +255,6 @@ void multimodel :: backendMess(t_symbol*s, int argc, t_atom*argv)
     if(m_loader) {
       std::vector<gem::any>atoms;
       gem::any value;
-      t_atom at;
-      t_atom*ap=&at;
       gem::Properties props;
       std::vector<std::string> backends;
       props.set("backends", value);

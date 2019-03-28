@@ -331,7 +331,7 @@ void pix_film :: openMess(std::string filename, int format,
   if (format==0) {
     format=m_format;
   }
-  double d=(double)format;
+
   wantProps.set("colorspace", format);
 
   if(m_auto!=0.f) {

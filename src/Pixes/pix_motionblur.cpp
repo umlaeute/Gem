@@ -113,12 +113,7 @@ void pix_motionblur :: processRGBAImage(imageStruct &image)
 }
 void pix_motionblur :: processGrayImage(imageStruct &image)
 {
-  int Gray;
-
-  Gray=chGray;
-
   unsigned char *saved = m_savedImage.data;
-
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
   m_savedImage.setCsizeByFormat(image.format);

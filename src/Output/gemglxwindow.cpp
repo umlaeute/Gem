@@ -949,8 +949,6 @@ bool gemglxwindow :: create(void)
 #ifdef HAVE_LIBXXF86VM
   XF86VidModeModeInfo **modes;
 #endif
-  int fullscreen=m_fullscreen;
-
   char svalue[3];
   snprintf(svalue, 3, "%d", m_fsaa);
   svalue[2]=0;

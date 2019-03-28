@@ -234,11 +234,10 @@ void pix_compare :: processYUV_MMX(imageStruct &image, imageStruct &right)
 void pix_compare :: processYUV_Altivec(imageStruct &image,
                                        imageStruct &right)
 {
-  register int h,w,i,j,width;
+  register int h,w,i,j;
 
   h = image.ysize;
   w = image.xsize/8;
-  width = image.xsize/8;
 
   //check to see if the buffer isn't 16byte aligned (highly unlikely)
   if (image.ysize*image.xsize % 16 != 0) {
