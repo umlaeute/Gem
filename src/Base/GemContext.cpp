@@ -38,12 +38,12 @@ public:
   PIMPL(void) :
 #ifdef GEM_MULTICONTEXT
     context(new GLEWContext),
-# ifdef GemGlewXContext
-    xcontext(new GemGlewXContext),
-# endif /* GemGlewXContext */
 #else
     context(NULL),
 #endif
+#ifdef GemGlewXContext
+    xcontext(new GemGlewXContext),
+#endif /* GemGlewXContext */
     contextid(makeID())
   {
     /* check the stack-sizes */
@@ -60,12 +60,12 @@ public:
   PIMPL(const PIMPL&p) :
 #ifdef GEM_MULTICONTEXT
     context(new GLEWContext(*p.context)),
-# ifdef GemGlewXContext
-    xcontext(new GemGlewXContext(*p.xcontext)),
-# endif /* GemGlewXContext */
 #else
     context(NULL),
 #endif
+#ifdef GemGlewXContext
+    xcontext(new GemGlewXContext(*p.xcontext)),
+#endif /* GemGlewXContext */
     contextid(makeID())
   {
     /* check the stack-sizes */
