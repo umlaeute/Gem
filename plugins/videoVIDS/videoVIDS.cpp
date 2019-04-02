@@ -244,10 +244,16 @@ bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
     return false;
   std::vector<std::string>keys=props.keys();
   bool needrestart = false;
-  if(canrestart && props.type("width") != gem::Properties::UNSET)
-    needrestart = true;
-  if(props.type("height") != gem::Properties::UNSET)
-    needrestart = true;
+  if(canrestart && props.type("width") != gem::Properties::UNSET) {
+    if((m_props.get("width", dval)) && (int)dval!=m_width) {
+      needrestart = true;
+    }
+  }
+  if(props.type("height") != gem::Properties::UNSET) {
+    if((m_props.get("height", dval)) && (int)dval!=m_height) {
+      needrestart = true;
+    }
+  }
   if(canrestart && needrestart)
     return true;
   for(unsigned i=0; i<keys.size(); i++) {
