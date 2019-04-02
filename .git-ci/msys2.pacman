@@ -1,3 +1,10 @@
+# basic building infrastructure
+@MINGW@gcc
+@MINGW@libtool
+autotools
+automake
+make
+
 # model loading
 @MINGW@assimp
 
