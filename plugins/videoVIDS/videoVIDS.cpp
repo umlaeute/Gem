@@ -34,10 +34,16 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("VIDS", videoVIDS);
 
-videoVIDS::videoVIDS(void) :
-  m_name(std::string("videoInput")),
-  m_ID(-1), m_wantID(-1),
-  m_width(64), m_height(64)
+namespace {
+  /* static instance for enumerating,... */
+  videoInput s_videoInput;
+};
+
+videoVIDS::videoVIDS(void)
+  : m_name(std::string("videoInput"))
+  , m_vi(0)
+  , m_ID(-1), m_wantID(-1)
+  , m_width(64), m_height(64)
 {
   videoInput::setVerbose(false);
   MARK();
@@ -64,8 +70,9 @@ std::vector<std::string>videoVIDS::provides(void)
 
 std::vector<std::string>videoVIDS::enumerate(void)
 {
-  m_vi.listDevices();
-  std::vector<std::string>result=m_vi.getDeviceList();
+  videoInput*vi=(m_vi!=0)?m_vi:&s_videoInput;
+  vi->listDevices();
+  std::vector<std::string>result=vi->getDeviceList();
   return result;
 }
 
@@ -76,8 +83,10 @@ bool videoVIDS::setDevice(int ID)
 }
 bool videoVIDS::setDevice(const std::string&device)
 {
-  if(m_vi.listDevices(true)) {
-    std::vector<std::string>devs=m_vi.getDeviceList();
+  m_wantID=-2;
+  videoInput*vi=(m_vi!=0)?m_vi:&s_videoInput;
+  if(vi->listDevices(true)) {
+    std::vector<std::string>devs=vi->getDeviceList();
     for(unsigned int i=0; i<devs.size(); i++) {
       if(devs[i]==device) {
         m_wantID=i;
@@ -129,7 +138,7 @@ static inline void getVideoFilter(videoInput&vi, int device,
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotV '%s' to %f (%d in %d..%d)",
+  verbose(1, "[GEM::videoVIDS] gotFilterSetting '%s' to %f (%d in %d..%d)",
           propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
@@ -154,19 +163,19 @@ static inline void getVideoCamera(videoInput&vi, int device,
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotC '%s' to %f (%d in %d..%d)\n",
+  verbose(1, "[GEM::videoVIDS] gotCameraSetting '%s' to %f (%d in %d..%d)\n",
           propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
 };
 #define VIDS_SET_FILTER(propName, propValue) \
-  if(propName==key && m_ID>=0)setVideoFilter(m_vi, m_ID, propName, propValue, props)
+  if(propName==key && m_vi)setVideoFilter(*m_vi, m_ID, propName, propValue, props)
 #define VIDS_SET_CAMERA(propName, propValue) \
-  if(propName==key && m_ID>=0)setVideoCamera(m_vi, m_ID, propName, propValue, props)
+  if(propName==key && m_vi)setVideoCamera(*m_vi, m_ID, propName, propValue, props)
 #define VIDS_GET_FILTER(propName, propValue) \
-  if(propName==key && m_ID>=0)getVideoFilter(m_vi, m_ID, propName, propValue, props)
+  if(propName==key && m_vi)getVideoFilter(*m_vi, m_ID, propName, propValue, props)
 #define VIDS_GET_CAMERA(propName, propValue) \
-  if(propName==key && m_ID>=0)getVideoCamera(m_vi, m_ID, propName, propValue, props)
+  if(propName==key && m_vi)getVideoCamera(*m_vi, m_ID, propName, propValue, props)
 
 bool videoVIDS::enumProperties(gem::Properties&readable,
                                gem::Properties&writeable)
@@ -181,14 +190,11 @@ bool videoVIDS::enumProperties(gem::Properties&readable,
 
   writeable.set("fps",  30);
 
-  int id=m_ID;
-  if(id<0) {
-    id=m_wantID;
-  }
-
-#define ENUM_READWRITE(type, key, value)                        \
-    getVideo##type(m_vi, id, key, m_vi.value, readable);        \
-    getVideo##type(m_vi, id, key, m_vi.value, writeable);       \
+  int id=(m_ID<0)?m_wantID:m_ID;
+  videoInput*vi=(m_vi!=0)?m_vi:&s_videoInput;
+#define ENUM_READWRITE(type, key, value)                         \
+    getVideo##type(*vi, id, key, vi->value, readable);        \
+    getVideo##type(*vi, id, key, vi->value, writeable);       \
 
   if(id>=0) {
     ENUM_READWRITE(Filter, "brightness", propBrightness);
@@ -218,40 +224,50 @@ bool videoVIDS::enumProperties(gem::Properties&readable,
 
 void videoVIDS::setProperties(gem::Properties&props)
 {
+  if(trySetProperties(props, true)) {
+    verbose(1, "[GEM::videoVIDS] needs restart");
+    if(m_vi) {
+      stop();
+      start();
+    }
+  }
+}
+/* returns 'true' if we need to restart */
+bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
+{
   m_props=props;
-
-  int width=-1;
-  int height=-1;
+  double dval;
+  if(props.get("verbose", dval)) {
+	  int i = (int)dval;
+      videoInput::setVerbose(i>0);
+  }
+  if(!m_vi)
+    return false;
   std::vector<std::string>keys=props.keys();
+  bool needrestart = false;
+  if(canrestart && props.type("width") != gem::Properties::UNSET) {
+    if((m_props.get("width", dval)) && (int)dval!=m_width) {
+      needrestart = true;
+    }
+  }
+  if(props.type("height") != gem::Properties::UNSET) {
+    if((m_props.get("height", dval)) && (int)dval!=m_height) {
+      needrestart = true;
+    }
+  }
+  if(canrestart && needrestart)
+    return true;
   for(unsigned i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    double dval;
     std::string sval;
-
-    if("width" == key) {
-      if(props.get(key, dval)) {
-        if(dval>0) {
-          width = dval;
-        }
-      }
-    } else if("height" == key) {
-      if(props.get(key, dval)) {
-        if(dval>0) {
-          height = dval;
-        }
-      }
-    } else if("verbose" == key) {
-      if(props.get(key, dval)) {
-        int i = (int)dval;
-        videoInput::setVerbose(i>0);
-      }
+    if("verbose" == key) {
     } else if(("fps" == key) || ("framerate" == key) ) {
       if(props.get(key, dval)) {
-        if(m_ID>=0) {
-          m_vi.setIdealFramerate(m_ID, dval);
+        if(m_vi) {
+          m_vi->setIdealFramerate(m_ID, dval);
         }
       }
-    } else if(("norm" == key) && m_ID>=0) {
+    } else if(("norm" == key) && m_vi) {
       if(props.get(key, sval)) {
         int format=-1;
         if (0) {
@@ -300,79 +316,65 @@ void videoVIDS::setProperties(gem::Properties&props)
           format=VI_NTSC_433;
         }
         if(format>=0) {
-          m_vi.setFormat(m_ID, format);
+          m_vi->setFormat(m_ID, format);
         }
       }
     }
-    else VIDS_SET_FILTER("brightness", m_vi.propBrightness);
-    else VIDS_SET_FILTER("contrast", m_vi.propContrast);
-    else VIDS_SET_FILTER("hue", m_vi.propHue);
-    else VIDS_SET_FILTER("saturation", m_vi.propSaturation);
-    else VIDS_SET_FILTER("sharpness", m_vi.propSharpness);
-    else VIDS_SET_FILTER("gamma", m_vi.propGamma);
-    else VIDS_SET_FILTER("colorenable", m_vi.propColorEnable);
-    else VIDS_SET_FILTER("whitebalance", m_vi.propWhiteBalance);
-    else VIDS_SET_FILTER("backlightcompensation", m_vi.propBacklightCompensation);
-    else VIDS_SET_FILTER("gain", m_vi.propGain);
+    else VIDS_SET_FILTER("brightness", m_vi->propBrightness);
+    else VIDS_SET_FILTER("contrast", m_vi->propContrast);
+    else VIDS_SET_FILTER("hue", m_vi->propHue);
+    else VIDS_SET_FILTER("saturation", m_vi->propSaturation);
+    else VIDS_SET_FILTER("sharpness", m_vi->propSharpness);
+    else VIDS_SET_FILTER("gamma", m_vi->propGamma);
+    else VIDS_SET_FILTER("colorenable", m_vi->propColorEnable);
+    else VIDS_SET_FILTER("whitebalance", m_vi->propWhiteBalance);
+    else VIDS_SET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
+    else VIDS_SET_FILTER("gain", m_vi->propGain);
 
-    else VIDS_SET_CAMERA("pan", m_vi.propPan);
-    else VIDS_SET_CAMERA("tilt", m_vi.propTilt);
-    else VIDS_SET_CAMERA("roll", m_vi.propRoll);
-    else VIDS_SET_CAMERA("zoom", m_vi.propZoom);
-    else VIDS_SET_CAMERA("exposure", m_vi.propExposure);
-    else VIDS_SET_CAMERA("iris", m_vi.propIris);
-    else VIDS_SET_CAMERA("focus", m_vi.propFocus);
+    else VIDS_SET_CAMERA("pan", m_vi->propPan);
+    else VIDS_SET_CAMERA("tilt", m_vi->propTilt);
+    else VIDS_SET_CAMERA("roll", m_vi->propRoll);
+    else VIDS_SET_CAMERA("zoom", m_vi->propZoom);
+    else VIDS_SET_CAMERA("exposure", m_vi->propExposure);
+    else VIDS_SET_CAMERA("iris", m_vi->propIris);
+    else VIDS_SET_CAMERA("focus", m_vi->propFocus);
   }
-  if(width>0 || height>0) {
-    MARK();
-    if(m_ID) {
-      MARK();
-      m_width=m_vi.getWidth(m_ID);
-      MARK();
-      m_height=m_vi.getHeight(m_ID);
-      MARK();
-    }
-    MARK();
-    if(width>0) {
-      m_width=width;
-    }
-    if(height>0) {
-      m_height=width;
-    }
-  }
+  return needrestart;
 }
 
 void videoVIDS::getProperties(gem::Properties&props)
 {
-  std::vector<std::string>keys=props.keys();
-  double d;
-  int i;
+  if(!m_vi)
+    return;
 
-  for(i=0; i<keys.size(); i++) {
+  std::vector<std::string>keys=props.keys();
+
+  for(int i=0; i<keys.size(); i++) {
+    double d;
     std::string key=keys[i];
     if("width"==key) {
       props.set(key, m_pixBlock.image.xsize);
     } else if("height"==key) {
       props.set(key, m_pixBlock.image.ysize);
     }
-    else VIDS_GET_FILTER("brightness", m_vi.propBrightness);
-    else VIDS_GET_FILTER("contrast", m_vi.propContrast);
-    else VIDS_GET_FILTER("hue", m_vi.propHue);
-    else VIDS_GET_FILTER("saturation", m_vi.propSaturation);
-    else VIDS_GET_FILTER("sharpness", m_vi.propSharpness);
-    else VIDS_GET_FILTER("gamma", m_vi.propGamma);
-    else VIDS_GET_FILTER("colorenable", m_vi.propColorEnable);
-    else VIDS_GET_FILTER("whitebalance", m_vi.propWhiteBalance);
-    else VIDS_GET_FILTER("backlightcompensation", m_vi.propBacklightCompensation);
-    else VIDS_GET_FILTER("gain", m_vi.propGain);
+    else VIDS_GET_FILTER("brightness", m_vi->propBrightness);
+    else VIDS_GET_FILTER("contrast", m_vi->propContrast);
+    else VIDS_GET_FILTER("hue", m_vi->propHue);
+    else VIDS_GET_FILTER("saturation", m_vi->propSaturation);
+    else VIDS_GET_FILTER("sharpness", m_vi->propSharpness);
+    else VIDS_GET_FILTER("gamma", m_vi->propGamma);
+    else VIDS_GET_FILTER("colorenable", m_vi->propColorEnable);
+    else VIDS_GET_FILTER("whitebalance", m_vi->propWhiteBalance);
+    else VIDS_GET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
+    else VIDS_GET_FILTER("gain", m_vi->propGain);
 
-    else VIDS_GET_CAMERA("pan", m_vi.propPan);
-    else VIDS_GET_CAMERA("tilt", m_vi.propTilt);
-    else VIDS_GET_CAMERA("roll", m_vi.propRoll);
-    else VIDS_GET_CAMERA("zoom", m_vi.propZoom);
-    else VIDS_GET_CAMERA("exposure", m_vi.propExposure);
-    else VIDS_GET_CAMERA("iris", m_vi.propIris);
-    else VIDS_GET_CAMERA("focus", m_vi.propFocus);
+    else VIDS_GET_CAMERA("pan", m_vi->propPan);
+    else VIDS_GET_CAMERA("tilt", m_vi->propTilt);
+    else VIDS_GET_CAMERA("roll", m_vi->propRoll);
+    else VIDS_GET_CAMERA("zoom", m_vi->propZoom);
+    else VIDS_GET_CAMERA("exposure", m_vi->propExposure);
+    else VIDS_GET_CAMERA("iris", m_vi->propIris);
+    else VIDS_GET_CAMERA("focus", m_vi->propFocus);
   }
 }
 
@@ -380,7 +382,11 @@ bool videoVIDS::open(gem::Properties&props)
 {
   MARK();
   m_props=props;
-  if(m_wantID>=0 && m_wantID<m_vi.listDevices(true)) {
+  const int numdevs = s_videoInput.listDevices(true);
+  if(-1 == m_wantID && 0 < numdevs) {
+	m_wantID = 0;
+  }
+  if(m_wantID>=0 && m_wantID<numdevs) {
     return true;
   }
 
@@ -392,17 +398,18 @@ void videoVIDS::close(void)
   MARK();
   stop();
   MARK();
-  m_wantID=-1;
 }
 
 bool videoVIDS::start(void)
 {
   MARK();
   if(m_wantID>=0) {
+    if(m_vi)delete m_vi;
+    m_vi=new videoInput();
     MARK();
-    m_width=m_vi.getWidth(m_wantID);
+    m_width=m_vi->getWidth(m_wantID);
     MARK();
-    m_height=m_vi.getHeight(m_wantID);
+    m_height=m_vi->getHeight(m_wantID);
     MARK();
 
     double d;
@@ -415,45 +422,53 @@ bool videoVIDS::start(void)
       m_height=d;
     }
     MARK();
-    if(m_vi.setupDevice(m_wantID, m_width, m_height)) {
+    if(m_vi->setupDevice(m_wantID, m_width, m_height)) {
+      MARK();
+      m_width=m_vi->getWidth(m_wantID);
+      m_height=m_vi->getHeight(m_wantID);
       MARK();
       m_ID=m_wantID;
+      trySetProperties(m_props, false);
       return true;
     }
     MARK();
   }
   MARK();
+  if(m_vi)
+    delete m_vi;
+  m_vi=0;
   return false;
 }
 bool videoVIDS::stop (void)
 {
+  bool success = false;
   MARK();
-  if(m_ID>=0) {
-    MARK();
-    m_vi.stopDevice(m_ID);
-    MARK();
-    m_ID=-1;
-    return true;
+  if(m_vi) {
+    m_vi->stopDevice(m_ID);
+    delete m_vi;
+    m_vi = 0;
+    success = true;
   }
   MARK();
-  return false;
+  m_ID=-1;
+  return success;
 }
 bool videoVIDS::reset()
 {
-  if(m_ID>=0) {
-    return m_vi.restartDevice(m_ID);
+  if(m_vi) {
+    return m_vi->restartDevice(m_ID);
   }
   return false;
 }
 
 pixBlock*videoVIDS::getFrame(void)
 {
-  if(m_ID<0) {
+  if(!m_vi) {
     return 0;
   }
-  if(m_vi.isFrameNew(m_ID)) {
-    m_width=m_vi.getWidth(m_ID);
-    m_height=m_vi.getHeight(m_ID);
+  if(m_vi->isFrameNew(m_ID)) {
+    m_width=m_vi->getWidth(m_ID);
+    m_height=m_vi->getHeight(m_ID);
     unsigned char*data=m_pixBlock.image.data;
     m_pixBlock.image.xsize=m_width;
     m_pixBlock.image.ysize=m_height;
@@ -461,7 +476,7 @@ pixBlock*videoVIDS::getFrame(void)
     m_pixBlock.image.reallocate();
     m_pixBlock.newimage=(data==m_pixBlock.image.data);
 
-    m_pixBlock.image.fromRGB(m_vi.getPixels(m_ID, true, true));
+    m_pixBlock.image.fromRGB(m_vi->getPixels(m_ID, true, true));
     m_pixBlock.newimage=true;
   } else {
     m_pixBlock.newimage=false;
@@ -481,21 +496,23 @@ std::vector<std::string>videoVIDS::dialogs(void)
 }
 bool videoVIDS::dialog(std::vector<std::string>dlgs)
 {
-  bool doit=false;
-  if(m_ID>=0) {
-    if(dlgs.empty()) {
-      doit=true;
-    }
+  if(!m_vi)
+    return false;
 
-    if(!doit) {
-      for(unsigned int i=0; i<dlgs.size(); i++)
-        if(dlgs[i]=="format") {
-          doit=true;
-        }
-    }
-    if(doit) {
-      m_vi.showSettingsWindow(m_ID);
-    }
+  bool doit=false;
+
+  if(dlgs.empty()) {
+    doit=true;
+  }
+
+  if(!doit) {
+    for(unsigned int i=0; i<dlgs.size(); i++)
+      if(dlgs[i]=="format") {
+        doit=true;
+      }
+  }
+  if(doit) {
+    m_vi->showSettingsWindow(m_ID);
   }
   return doit;
 }
