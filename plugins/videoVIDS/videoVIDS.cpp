@@ -83,6 +83,7 @@ bool videoVIDS::setDevice(int ID)
 }
 bool videoVIDS::setDevice(const std::string&device)
 {
+  m_wantID=-2;
   videoInput*vi=(m_vi!=0)?m_vi:&s_videoInput;
   if(vi->listDevices(true)) {
     std::vector<std::string>devs=vi->getDeviceList();
@@ -381,7 +382,11 @@ bool videoVIDS::open(gem::Properties&props)
 {
   MARK();
   m_props=props;
-  if(m_wantID>=0 && m_wantID<s_videoInput.listDevices(true)) {
+  const int numdevs = s_videoInput.listDevices(true);
+  if(-1 == m_wantID && 0 < numdevs) {
+	m_wantID = 0;
+  }
+  if(m_wantID>=0 && m_wantID<numdevs) {
     return true;
   }
 
@@ -393,7 +398,6 @@ void videoVIDS::close(void)
   MARK();
   stop();
   MARK();
-  m_wantID=-1;
 }
 
 bool videoVIDS::start(void)
