@@ -84,7 +84,7 @@ variables:
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
+    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
     - date
     - g++ -v
   script:
@@ -110,7 +110,7 @@ variables:
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
     - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
+    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
     - date
     - g++ -v
   script:
