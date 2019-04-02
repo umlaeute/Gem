@@ -235,6 +235,11 @@ void videoVIDS::setProperties(gem::Properties&props)
 bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
 {
   m_props=props;
+  double dval;
+  if(props.get("verbose", dval)) {
+	  int i = (int)dval;
+      videoInput::setVerbose(i>0);
+  }
   if(!m_vi)
     return false;
   std::vector<std::string>keys=props.keys();
@@ -247,13 +252,8 @@ bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
     return true;
   for(unsigned i=0; i<keys.size(); i++) {
     std::string key=keys[i];
-    double dval;
     std::string sval;
     if("verbose" == key) {
-      if(props.get(key, dval)) {
-        int i = (int)dval;
-        videoInput::setVerbose(i>0);
-      }
     } else if(("fps" == key) || ("framerate" == key) ) {
       if(props.get(key, dval)) {
         if(m_vi) {
