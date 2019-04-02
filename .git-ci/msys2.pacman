@@ -4,6 +4,7 @@
 autotools
 automake
 make
+@MINGW@pkg-config
 
 # model loading
 @MINGW@assimp
