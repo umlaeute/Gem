@@ -5,6 +5,7 @@ autoconf
 automake
 make
 @MINGW@pkg-config
+@MINGW@ntldd
 
 # model loading
 @MINGW@assimp
