@@ -85,16 +85,16 @@ bool filmAVIPLAY :: open(const std::string&filename,
   if (!(m_avifile = CreateIAviReadFile(filename.c_str()))) {
     goto unsupported;
   }
-  while(!(*m_avifile).IsOpened()) {
+  while(!m_avifile->IsOpened()) {
     struct timeval sleep;
     sleep.tv_sec=0;
     sleep.tv_usec=500;/*500us*/
     select(0,0,0,0,&sleep);
   }
-  if (!(*m_avifile).IsValid()) {
+  if (!m_avifile->IsValid()) {
     goto unsupported;
   }
-  m_numTracks = (*m_avifile).VideoStreamCount();
+  m_numTracks = m_avifile->VideoStreamCount();
   if (m_numTracks<1) {
     return false;
   }
@@ -102,7 +102,7 @@ bool filmAVIPLAY :: open(const std::string&filename,
     m_curTrack = 0;
   }
   try {
-    m_avistream=(*m_avifile).GetStream(m_curTrack,
+    m_avistream=m_avifile->GetStream(m_curTrack,
                                        avm::IStream::StreamType(1));
   } catch (const char* string) {
     m_avistream = 0;
@@ -110,16 +110,16 @@ bool filmAVIPLAY :: open(const std::string&filename,
   if (!m_avistream) {
     goto unsupported;
   }
-  if ((*m_avistream).StartStreaming()==-1) {
+  if (m_avistream->StartStreaming()==-1) {
     goto unsupported;
   }
-  m_numFrames = (*m_avistream).GetLength();
+  m_numFrames = m_avistream->GetLength();
   m_curFrame = -1;
   if (1) {
-    avm::StreamInfo *l_info = (*m_avistream).GetStreamInfo();
-    m_image.image.xsize = (*l_info).GetVideoWidth();
-    m_image.image.ysize = (*l_info).GetVideoHeight();
-    m_fps= (*l_info).GetFps();
+    avm::StreamInfo *l_info = m_avistream->GetStreamInfo();
+    m_image.image.xsize = l_info->GetVideoWidth();
+    m_image.image.ysize = l_info->GetVideoHeight();
+    m_fps= l_info->GetFps();
   }
   m_image.image.setCsizeByFormat(m_wantedFormat);
   if (!(m_image.image.xsize*m_image.image.ysize*m_image.image.csize)) {
@@ -147,16 +147,16 @@ pixBlock* filmAVIPLAY :: getFrame()
     return &m_image;
   }
   if(m_aviimage) {
-    (*m_aviimage).Release();
+    m_aviimage->Release();
   }
   /* for MPEGs ReadFrame() will return 0 only when errors occur
    * other formats return 0 all the time (and -1 on file end)
    */
-  m_aviimage = (*m_avistream).GetFrame(
+  m_aviimage = m_avistream->GetFrame(
                  true); // this might crash sometimes...
   if (m_aviimage) {
-    int format = (*m_aviimage).Format();
-    m_rawdata=(*m_aviimage).Data();
+    int format = m_aviimage->Format();
+    m_rawdata=m_aviimage->Data();
     m_image.image.setCsizeByFormat(m_wantedFormat);
     switch(format) {
     case IMG_FMT_RGB24:
