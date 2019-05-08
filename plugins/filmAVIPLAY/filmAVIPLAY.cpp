@@ -102,8 +102,9 @@ bool filmAVIPLAY :: open(const std::string&filename,
     m_curTrack = 0;
   }
   try {
-    m_avistream=m_avifile->GetStream(m_curTrack,
-                                       avm::IStream::StreamType(1));
+    int curtrack = m_curTrack;
+    if(curtrack<0)curtrack = 0;
+    m_avistream=m_avifile->GetStream(curtrack,avm::IStream::StreamType(1));
   } catch (const char* string) {
     m_avistream = 0;
   }
