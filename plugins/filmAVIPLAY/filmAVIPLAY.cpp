@@ -65,9 +65,17 @@ filmAVIPLAY :: ~filmAVIPLAY(void)
 }
 void filmAVIPLAY :: close(void)
 {
-  if (m_avistream) {
-    (*m_avistream).StopStreaming();
-  }
+  if(m_aviimage)
+    m_aviimage->Release();
+  m_aviimage = 0;
+
+  if (m_avistream)
+    m_avistream->StopStreaming();
+  m_avistream = 0;
+
+  if (m_avifile)
+    delete m_avifile;
+  m_avifile = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -149,6 +157,7 @@ pixBlock* filmAVIPLAY :: getFrame()
   }
   if(m_aviimage) {
     m_aviimage->Release();
+    m_aviimage = 0;
   }
   /* for MPEGs ReadFrame() will return 0 only when errors occur
    * other formats return 0 all the time (and -1 on file end)
