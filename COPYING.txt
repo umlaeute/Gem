@@ -45,4 +45,4 @@ particle:
             davemc[AT]cs.unc.edu
             http://www.cs.unc.edu/~davemc/Particle/
     Copyright (c) 1998 David K. McAllister
-
+    License: GNU Lesser General Public License, version 2.1 or later
