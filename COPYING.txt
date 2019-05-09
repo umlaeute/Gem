@@ -1,7 +1,7 @@
 GEM - Graphics Environment for Multimedia
 Copyright © 1997-2000 Mark Danks
 Copyright © Günter Geiger
-Copyright © 2001-2011 IOhannes m zmölnig, 
+Copyright © 2001-2019 IOhannes m zmölnig,
 Copyright © 2003-2007 James Tittle II, 
 Copyright © 2003-2008 Chris Clepper
 
