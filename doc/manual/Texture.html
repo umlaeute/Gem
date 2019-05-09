@@ -17,7 +17,7 @@ pixel data to a geometric object.  In GEM, this is achieved with the
 object.  It is important to understand that the
 <i>[pix_texture]</i>
 object merely sets the pix as the current texture.  It does not do
-any rendering!  You need to use a geo object which does texture mapping. 
+any rendering!  You need to use a geo object which does texture mapping.
 All of the basic geo objects can texture map, such as <i>[square]</i> or
 <i>[sphere]</i>.
 <p><img SRC="tribar.gif" height=13 width=561>
@@ -41,15 +41,15 @@ manual section, you saw how to load in pix data with a variety of objects,
 including <i>[pix_multiimage]</i> and <i>[pix_video]</i>.  All of these
 objects can be used with the <i>[pix_texture]</i> object.
 <p>Because the pix data is applied to geometry, you can move, rotate, and
-scale the image.  This is extremely useful on the <i>[square]</i> object. 
+scale the image.  This is extremely useful on the <i>[square]</i> object.
 Instead of doing a one-to-one pixel mapping as occurs with the <i>[pix_draw]</i>
 object, you can resize and reshape the image.
 <p>OpenGL originally required that images must have dimensions that are power-of-2, such as 64, 128, or 256. This restriction has been released with recent gfx-cards
 (like some radeon/nvidia products).
 However, if the width or height of an image is not a power of two,
-then the <i>[pix_texture]</i> object will take care of this, 
+then the <i>[pix_texture]</i> object will take care of this,
 and still render it (depending on you hardware with some tricks).
-You can thus texture images of any size, but since this is based on tricking 
+You can thus texture images of any size, but since this is based on tricking
 the texture-coordinates, <i>[pix_coordinate]</i> might not give the wanted result any more.
 <p><img SRC="tribar.gif" height=13 width=561>
 <p>The example patch 07.texture/02.moveImages.pd is a much more complex
@@ -77,7 +77,7 @@ fast DMA bus)</tt><tt></tt>
 to send the texture to the card, which uses some of the left over space
 in the VRAM.  If you had a 640x480 window on a Voodoo2, you have ~8mb
 of texture space left over.  On a GeForce2, ~60mb.  The problem
-is what happens if you want more textures than can fit into TRAM. 
+is what happens if you want more textures than can fit into TRAM.
 OpenGL requires that the video drivers deal with the problem, so GEM doesn't
 care too much (more about this later).</tt><tt></tt>
 <p><tt>  In most cases, the drivers cache the textures in main memory
@@ -97,7 +97,7 @@ object is reached.</tt><tt></tt>
 acts much the same as pix_multiimage, but it downloads _every_ image in
 the sequence to the card when a download message is recieved.  It
 also immediately turns on texturing, instead of making a copy (ie, you
-don't need a pix_texture object).  Much faster, but not as flexible. 
+don't need a pix_texture object).  Much faster, but not as flexible.
 pix_movie does much the same thing.  It sends the pixel data without
 copying it if there is a new frame to display.</tt><tt></tt>
 <p><tt>  The entire pix system uses a caching system so that the copying
@@ -121,6 +121,6 @@ data is that you can modify the pixel data with other pix objects...[pix_image]
 doesn't actually send the texture data to the gfx card, [pix_texture] does.</tt>
 <p><img SRC="tribar.gif" height=13 width=561><a href="index.html"></a>
 <p><a href="index.html">[return]</a>
-<br> 
+<br>
 </body>
 </html>

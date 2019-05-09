@@ -16,9 +16,9 @@ RGB colors, and to control hue, saturation and contrast.  The most important
 advantage of using matrices is that any number of color transformations
 can be composed using standard matrix multiplication.
 <p>
-Please note that for these operations to be correct, we really must operate 
-on linear brightness values.  If the input image is in a non-linear brightness 
-space RGB colors must be transformed into a linear space before these 
+Please note that for these operations to be correct, we really must operate
+on linear brightness values.  If the input image is in a non-linear brightness
+space RGB colors must be transformed into a linear space before these
 matrix operations are used.
 
 <h3>Color Transformation</h3>
@@ -133,8 +133,8 @@ the "convert to luminance" matrix described above.  When <code>s</code>
 is set to 1.0 the matrix becomes the identity.  All saturation matrices
 can be derived by interpolating between or extrapolating beyond these
 two matrices.
-<p> 
-This is discussed in more detail in the note on 
+<p>
+This is discussed in more detail in the note on
 <a href="../interp/index.html">Image Processing By Interpolation and Extrapolation</a>.
 <h3>Applying Offsets to Color Components</h3>
 To offset the r, g, and b components of colors in an image this matrix is used:
@@ -155,7 +155,7 @@ vector [1.0 1.0 1.0].  The transformation matrix is derived as shown here:
 <p>
   If we have functions:<br><br>
 <dl>
-<dt><code>identmat(mat)</code> 
+<dt><code>identmat(mat)</code>
 <dd>that creates an identity matrix.
 </dl>
 <dl>
@@ -212,7 +212,7 @@ We make an identity matrix
 <pre>
    identmat(mmat);
 </pre>
-Rotate the grey vector into positive Z 
+Rotate the grey vector into positive Z
 <pre>
     mag = sqrt(2.0);
     xrs = 1.0/mag;
@@ -247,17 +247,17 @@ Rotate the grey vector back into place
     xrotatemat(mat,-xrs,xrc);
 </pre>
 <h3>Conclusion</h3>
-I've presented several matrix transformations that may be applied 
-to RGB colors. Each color transformation is represented by 
-a 4 by 4 matrix, similar to matrices commonly used to transform 3D geometry. 
+I've presented several matrix transformations that may be applied
+to RGB colors. Each color transformation is represented by
+a 4 by 4 matrix, similar to matrices commonly used to transform 3D geometry.
 <p>
 <a href="matrix.c">Example C code</a>
 that demonstrates these concepts is provided for your enjoyment.
 <p>
-These transformations allow us to adjust image contrast, brightness, hue and 
-saturation individually.  In addition, color matrix transformations concatenate 
-in a way similar to geometric transformations.  Any sequence of 
-operations can be combined into a single matrix using 
+These transformations allow us to adjust image contrast, brightness, hue and
+saturation individually.  In addition, color matrix transformations concatenate
+in a way similar to geometric transformations.  Any sequence of
+operations can be combined into a single matrix using
 matrix multiplication.
 <!--no_print--><p>
 <!--no_print--><center>

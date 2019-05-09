@@ -12,7 +12,7 @@
 <h2>
 <u>Basic Objects</u></h2></center>
 
-<p><br>There are a number of objects which are the foundation for GEM. 
+<p><br>There are a number of objects which are the foundation for GEM.
 These objects are used in every patch and control the graphics and rendering.
 <p><a href="#gemwin">[gemwin]</a> - The window manager
 <br><a href="#gemhead">[gemhead]</a> - The start of a rendering chain
@@ -21,19 +21,19 @@ These objects are used in every patch and control the graphics and rendering.
 <p><img SRC="tribar.gif" height=13 width=561>
 <h3>
 <a NAME="gemwin"></a>[gemwin]</h3>
-The graphics window is created and destroyed with the <i>[gemwin]</i> object. 
+The graphics window is created and destroyed with the <i>[gemwin]</i> object.
 With the <i>[gemwin]</i> object, you can set the default size of the graphics
 window, create and destroy the graphics window, turn on and off rendering,
 etc.  All basic GEM patches will have the following <i>[gemwin]</i>
 object with these messages:
 <center>
 <p><img SRC="gemwin.jpg" BORDER=1 height=128 width=78></center>
-The create and destroy messages will display and remove the graphics window. 
+The create and destroy messages will display and remove the graphics window.
 The 1 and 0 messages start and stop rendering.
 <p><img SRC="tribar.gif" height=13 width=561>
 <h3>
 <a NAME="gemhead"></a>[gemhead]</h3>
-The <i>[gemhead]</i> object is the start of every rendering chain. 
+The <i>[gemhead]</i> object is the start of every rendering chain.
 A simple patch, which is located in examples/gem_basic/gem1.redSquare.pd
 looks like:
 <center>
@@ -90,10 +90,10 @@ primary geos are:
 <p>The <i>[square]</i>, <i>[circle]</i>, <i>[cube]</i>, and <i>[triangle]</i> objects
 have a right-hand inlet to set the size of the shape.  The default
 size is 1.
-<p>The <i>[cone]</i> and <i>[sphere]</i> objects are not perfectly smooth. 
+<p>The <i>[cone]</i> and <i>[sphere]</i> objects are not perfectly smooth.
 They are actually composed of a number of polygons.  In order to control
 the rendering better, the middle inlet is the size of the object, while
-the right-hand inlet is the number of slices to define the shape. 
+the right-hand inlet is the number of slices to define the shape.
 Take a look at the patch gem_basic/gem3.sphere.pd to see how the number
 of slices can change the look of a sphere.  Don't worry about the
 <i><a href="Lighting.html#world_light">[world_light]</a></i>
@@ -104,7 +104,7 @@ black until you quit and restart pd/GEM).
 <p>Your graphics window should look like this for 5 and 15 slices:
 <center>
 <p><img SRC="sphere5.jpg" BORDER=0 height=150 width=150><img SRC="sphere15.jpg" height=150 width=150></center>
-Obviously, the more slices that you use, the better the sphere looks. 
+Obviously, the more slices that you use, the better the sphere looks.
 However, each slice adds more polygons, which can slow down your frame
 rate.  In computer graphics, there is always a trade off between resolution
 and speed.
