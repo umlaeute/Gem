@@ -102,7 +102,7 @@ bool filmQT4L :: open(const std::string&filename,
     // Get the number of tracks
     m_numTracks = quicktime_video_tracks(m_quickfile);
     // Get the length of the movie (on track current track)
-    m_numFrames = quicktime_video_length(m_quickfile, m_curTrack);
+    m_numFrames = quicktime_video_length(m_quickfile, m_curTrack) - 1;
     // Get the frame-rate
     m_fps = quicktime_frame_rate(m_quickfile, m_curTrack);
     // Get the video dimensions
@@ -178,10 +178,10 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
   if(imgNum>m_numFrames || imgNum<0) {
     return film::FAILURE;
   }
-  if  (imgNum>=0) {
+  if  (imgNum>0) {
     m_curFrame=imgNum;
   }
-  if(trackNum>=0) {
+  if(trackNum>0) {
     m_curTrack=trackNum;
   }
 
