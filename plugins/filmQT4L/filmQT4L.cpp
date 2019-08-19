@@ -98,6 +98,7 @@ bool filmQT4L :: open(const std::string&filename,
       return false;
     }
     m_curFrame = -1;
+    m_lastFrame = -2;
 
     // Get the number of tracks
     m_numTracks = quicktime_video_tracks(m_quickfile);
@@ -175,7 +176,7 @@ pixBlock* filmQT4L :: getFrame()
 
 film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
 {
-  if(imgNum>m_numFrames || imgNum<0) {
+  if(imgNum>=m_numFrames || imgNum<0) {
     return film::FAILURE;
   }
   if  (imgNum>=0) {
