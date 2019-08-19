@@ -18,7 +18,7 @@
 #include "textoutline.h"
 
 #if defined FTGL && !defined HAVE_FTGL_FTGL_H
-# include "FTGLOutlineFont.h"
+# include <FTGLOutlineFont.h>
 #endif
 
 CPPEXTERN_NEW_WITH_GIMME(textoutline);

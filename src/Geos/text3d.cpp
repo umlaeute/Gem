@@ -18,7 +18,7 @@
 #include "text3d.h"
 
 #if defined FTGL && !defined HAVE_FTGL_FTGL_H
-# include "FTGLPolygonFont.h"
+# include <FTGLPolygonFont.h>
 #endif
 
 CPPEXTERN_NEW_WITH_GIMME(text3d);
