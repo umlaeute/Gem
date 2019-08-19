@@ -22,5 +22,5 @@ AS_IF([test "x${have_ftgl}" != "xyes"],[
  GEM_LIB_FTGL_CFLAGS=""
  GEM_LIB_FTGL_LIBS=""
 ])
-AM_CONDITIONAL([HAVE_LIB_FTGL], [test "x{have_ftgl}" = xyes ])
+AM_CONDITIONAL([HAVE_LIB_FTGL], [test "x${have_ftgl}" = xyes ])
 ]) dnl IEM_CHECK_FTGL
