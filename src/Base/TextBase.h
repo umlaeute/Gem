@@ -35,7 +35,7 @@
 # define FONT_SCALE 0.2/3.0
 # ifdef HAVE_FTGL_FTGL_H
 #  include "FTGL/ftgl.h"
-# else
+# elif defined HAVE_FTFONT_H
 #  include "FTFont.h"
 # endif
 #else
