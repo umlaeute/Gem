@@ -39,7 +39,11 @@
 #endif
 
 #ifdef HAVE_LIBFTGL
+# if defined HAVE_FTGL_FTGL_H
 #  define FTGL
+# elif defined HAVE_FTFONT_H
+#  define FTGL
+# endif
 #endif
 
 #ifdef HAVE_PTHREAD
