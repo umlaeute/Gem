@@ -13,8 +13,10 @@ AS_IF([test "x${have_ftgl}" = "xyes"],[
  tmp_gem_check_ftgl_cppflags="$CPPFLAGS"
  CPPFLAGS="$CPPFLAGS $GEM_LIB_FTGL_CFLAGS"
 
- AC_CHECK_HEADERS([FTGL/ftgl.h])
+ have_ftgl=no
+ AC_CHECK_HEADERS([FTGL/ftgl.h FTFont.h], [have_ftgl=yes])
 
  CPPFLAGS="$tmp_gem_check_lib_cppflags"
  ])
+AM_CONDITIONAL([HAVE_LIB_FTGL], [test "x{have_ftgl}" = xyes ])
 ]) dnl IEM_CHECK_FTGL
