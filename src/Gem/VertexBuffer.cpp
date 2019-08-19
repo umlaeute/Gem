@@ -17,7 +17,7 @@
 #include "VertexBuffer.h"
 
 /* for post(), error(),... */
-#include "m_pd.h"
+#include <m_pd.h>
 
 gem::VertexBuffer:: VertexBuffer() :
   size(0),

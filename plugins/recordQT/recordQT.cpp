@@ -33,7 +33,7 @@ using namespace gem::plugins;
 #include <stdio.h>
 
 /* for post() and error() */
-#include "m_pd.h"
+#include <m_pd.h>
 
 static char* FourCC2Str(int code, char*char5) {
   char5[0] = (code >> 24) & 0xFF;

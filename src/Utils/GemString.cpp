@@ -12,7 +12,7 @@ typedef unsigned __int8 uint8_t;
 #ifdef  HAVE_FRIBIDI_H
 # include <fribidi.h>
 
-#include "m_pd.h"
+#include <m_pd.h>
 
 namespace gem
 {

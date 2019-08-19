@@ -18,10 +18,10 @@
 
 
 #include "RTE/RTE.h"
-#include "m_pd.h"
+#include <m_pd.h>
 #if defined HAVE_S_STUFF_H
 extern "C" {
-# include "s_stuff.h"
+# include <s_stuff.h>
 }
 #else
 # warning s_stuff.h missing

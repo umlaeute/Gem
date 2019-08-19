@@ -23,7 +23,7 @@
 # pragma warning( disable : 4091 )
 #endif
 
-#include "m_pd.h"
+#include <m_pd.h>
 #include "Image.h"
 #include "GemGL.h"
 #include "PixConvert.h"
