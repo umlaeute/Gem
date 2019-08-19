@@ -16,7 +16,7 @@
 #include "Gem/GemConfig.h"
 
 #include "Gem/GemGL.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 #include "gemglfw3window.h"
 

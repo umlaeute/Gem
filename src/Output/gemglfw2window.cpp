@@ -17,7 +17,7 @@
 
 #include "gemglfw2window.h"
 #include "Gem/GemGL.h"
-#include "GL/glfw.h"
+#include <GL/glfw.h>
 
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
