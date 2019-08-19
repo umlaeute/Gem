@@ -185,8 +185,10 @@ bool RTE::addSearchPath(const std::string&path, void* ctx)
     const char *inptr = path.c_str();
     char encoded[MAXPDSTRING];
     char*outptr = encoded;
+    if(!inptr) /* nothing to add */
+      return false;
     *outptr++='+';
-    while(inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
+    while(*inptr && ((outptr+2) < (encoded+MAXPDSTRING))) {
       *outptr++ = *inptr++;
       if ('+'==inptr[-1]) {
         *outptr++='+';
