@@ -176,15 +176,17 @@ pixBlock* filmQT4L :: getFrame()
 
 film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
 {
+  if(trackNum>=0 && trackNum < m_numTracks) {
+    if (m_curTrack != trackNum) {
+      m_numFrames = quicktime_video_length(m_quickfile, trackNum);
+    }
+    m_curTrack=trackNum;
+  }
   if(imgNum>=m_numFrames || imgNum<0) {
     return film::FAILURE;
   }
-  if  (imgNum>=0) {
-    m_curFrame=imgNum;
-  }
-  if(trackNum>=0) {
-    m_curTrack=trackNum;
-  }
+
+  m_curFrame=imgNum;
 
 #ifdef HAVE_QUICKTIME_SEEK_VIDEO
   lqt_seek_video        (m_quickfile, m_curTrack, m_curFrame, m_curTrack);
