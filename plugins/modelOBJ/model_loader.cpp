@@ -1116,9 +1116,9 @@ glmUnitize(GLMmodel* model)
   }
 
   /* calculate model width, height, and depth */
-  w = _glmAbs(maxx) + _glmAbs(minx);
-  h = _glmAbs(maxy) + _glmAbs(miny);
-  d = _glmAbs(maxz) + _glmAbs(minz);
+  w = maxx - minx;
+  h = maxy - miny;
+  d = maxz - minz;
 
   /* calculate center of the model */
   cx = (maxx + minx) / 2.0f;
