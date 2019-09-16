@@ -19,7 +19,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include "Gem/Image.h"
 #include <stdio.h>
 
-#include <quicktime.h>
+#include <lqt.h>
 #include <colormodels.h>
 
 /*-----------------------------------------------------------------

@@ -188,8 +188,9 @@ film::errCode filmQT4L :: changeImage(int imgNum, int trackNum)
 
   m_curFrame=imgNum;
 
-#ifdef HAVE_QUICKTIME_SEEK_VIDEO
-  lqt_seek_video        (m_quickfile, m_curTrack, m_curFrame, m_curTrack);
+#ifdef HAVE_LQT_SEEK_VIDEO
+  int64_t frametime = lqt_get_frame_time(m_quickfile, m_curTrack, m_curFrame);
+  lqt_seek_video        (m_quickfile, m_curTrack, frametime);
 #else
   if ((quicktime_set_video_position(m_quickfile, m_curFrame,
                                       m_curTrack))) {  }
