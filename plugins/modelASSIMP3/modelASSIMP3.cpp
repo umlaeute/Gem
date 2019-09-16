@@ -359,8 +359,8 @@ bool modelASSIMP3 :: open(const std::string&name,
   /* default is to rescale the object */
   float tmp;
   tmp = m_max.x-m_min.x;
-  tmp = aisgl_max(m_max.y - m_min.y,tmp);
-  tmp = aisgl_max(m_max.z - m_min.z,tmp);
+  tmp = aisgl_max(m_max.y - m_min.y, tmp);
+  tmp = aisgl_max(m_max.z - m_min.z, tmp);
   m_scale = 2.f / tmp;
 
   m_offset = m_center * (-m_scale);
