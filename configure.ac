@@ -378,13 +378,13 @@ GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loade
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
-old_ldflags=${LDFLAGS}
+old_libs=${LIBS}
 CFLAGS="${CFLAGS} $GEM_LIB_LIBQUICKTIME_CFLAGS  $GEM_LIB_LQT_CFLAGS"
-LDFLAGS="${LDFLAGS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
+LIBS="${LIBS}  $GEM_LIB_LIBQUICKTIME_LIBS  $GEM_LIB_LQT_LIBS"
 AC_CHECK_FUNCS([lqt_seek_video])
 AC_CHECK_FUNCS([lqt_open_write])
 CFLAGS=${old_cflags}
-LDFLAGS=${old_ldflags}
+LIBS=${old_libs}
 
 #video
 GEM_CHECK_LIB([libdc1394-2], [dc1394],[dc1394/dc1394.h],   [dc1394_new],,,, [video input])
