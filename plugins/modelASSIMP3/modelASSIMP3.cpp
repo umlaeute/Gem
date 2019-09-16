@@ -435,10 +435,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
       tmp = aisgl_max(m_max.y - m_min.y,tmp);
       tmp = aisgl_max(m_max.z - m_min.z,tmp);
       m_scale = 2.f / tmp;
-
-      m_offset.x=-m_center.x;
-      m_offset.y=-m_center.y;
-      m_offset.z=-m_center.z;
+      m_offset = m_center * (-m_scale);
     } else {
       // FIXXME shouldn't this be the default???
       m_scale=1.;
