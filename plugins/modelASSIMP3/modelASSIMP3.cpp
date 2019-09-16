@@ -79,7 +79,7 @@ static void get_bounding_box (const aiScene*scene, aiVector3D* min,
 
   min->x = min->y = min->z =  1e10f;
   max->x = max->y = max->z = -1e10f;
-  get_bounding_box_for_node(scene, scene->mRootNode,min,max,&trafo);
+  get_bounding_box_for_node(scene, scene->mRootNode, min, max, &trafo);
 }
 
 // ----------------------------------------------------------------------------
