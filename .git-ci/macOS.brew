@@ -1,3 +1,6 @@
+brew "llvm"
+brew "libomp"
+
 # build-system
 brew "pkg-config"
 brew "automake"
