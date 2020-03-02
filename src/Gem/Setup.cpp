@@ -185,7 +185,8 @@ static void addownpath(const char*filename)
   const char*mypath=0;
 #ifdef HAVE_M_IMP_H
   t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
-  mypath=c->c_externdir->s_name;
+  if (c && c->c_externdir)
+    mypath=c->c_externdir->s_name;
 #endif /* HAVE_S_STUFF_H */
 
   int success = 0;
