@@ -23,4 +23,4 @@ make
 @MINGW@libjpeg-turbo
 
 # video input
-@MINGW@libvncserver
+#@MINGW@libvncserver
