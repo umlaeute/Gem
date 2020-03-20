@@ -13,7 +13,7 @@ make
 # windowing
 @MINGW@glfw
 
-# font renderind
+# font rendering
 @MINGW@ftgl
 @MINGW@fribidi
 
