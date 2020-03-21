@@ -113,6 +113,8 @@ typedef GLint oglc_setvalue_t;
   oglc_setvalue_t swapInt = 1; // 1==sync to vblank
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 #endif
+	
+  [super prepareOpenGL];
   oglc_setvalue_t swapRect = 0;
   [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLContextParameterSwapRectangleEnable];
 }
