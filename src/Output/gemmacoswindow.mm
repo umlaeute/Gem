@@ -114,7 +114,7 @@ typedef GLint oglc_setvalue_t;
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 #endif
   oglc_setvalue_t swapRect = 0;
-  [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLCPSwapRectangleEnable];
+  [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLContextParameterSwapRectangleEnable];
 }
 
 - (void)drawRect:(NSRect)rect
@@ -426,7 +426,15 @@ bool gemmacoswindow :: create(void)
   attrvec.push_back(NSOpenGLPFAColorSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
   attrvec.push_back(NSOpenGLPFADepthSize);
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFASampleBuffers);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(8));
+  attrvec.push_back(NSOpenGLPFASamples);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFANoRecovery);
+  attrvec.push_back(NSOpenGLPFAMultisample);
+  
+  
   if(m_fullscreen) {
 	  // [window setContentView: m_pimpl->view]; // maybe this? doesnt seem to work though
 	  //attrvec.push_back(NSOpenGLPFAFullScreen); // depreciated
