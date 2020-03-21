@@ -429,7 +429,13 @@ bool gemmacoswindow :: create(void)
   attrvec.push_back(NSOpenGLPFAColorSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
   attrvec.push_back(NSOpenGLPFADepthSize);
-  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFASampleBuffers);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(8));
+  attrvec.push_back(NSOpenGLPFASamples);
+  attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
+  attrvec.push_back(NSOpenGLPFANoRecovery);
+  attrvec.push_back(NSOpenGLPFAMultisample);
   if(m_fullscreen) {
 	  // [window setContentView: m_pimpl->view]; // maybe this? doesnt seem to work though
 	  //attrvec.push_back(NSOpenGLPFAFullScreen); // depreciated
