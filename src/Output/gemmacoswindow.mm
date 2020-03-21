@@ -117,7 +117,7 @@ typedef GLint oglc_setvalue_t;
   [super prepareOpenGL];
   glEnable(GL_MULTISAMPLE);
   oglc_setvalue_t swapRect = 0;
-  [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLCPSwapRectangleEnable];
+  [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLContextParameterSwapRectangleEnable];
 }
 
 - (void)drawRect:(NSRect)rect
