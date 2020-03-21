@@ -115,7 +115,7 @@ typedef GLint oglc_setvalue_t;
 #endif
 	
   [super prepareOpenGL];
-  glEnable(GL_MULTISAMPLE);
+  glEnable(GL_MULTISAMPLE); // Enable multisampling for anti-aliasing (although this may not be necessary)
   oglc_setvalue_t swapRect = 0;
   [[self openGLContext] setValues:&swapRect forParameter:NSOpenGLContextParameterSwapRectangleEnable];
 }
