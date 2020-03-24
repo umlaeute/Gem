@@ -28,39 +28,6 @@ can incorporate any needed changes into the main Gem-trunk.
 
 for installation instructions see below
 
-
-NEW (Gem>=0.87):::
------------------
-(note: this NEWs only refer to the packaging, not to features of Gem)
-
-As with GEM-0.87, i have broken the distribution into various packages
-Gem-<gemver>.tgz :: quite everything (except binaries and auxiliary libraries)
-Gem-doc-<gemver>.tgz :: example-patches, manual, ...
-Gem-bin-<gemver>.zip :: W32-binary (containing a single file "Gem.dll")
-Gem-bin-doc-<gemver>.zip :: W32-binary + documentation
-
-GemLibs-<OS>-<libver>.tgz :: auxiliary libraries (used to be "AuxLibs")
-
-1) the core Gem-packages:
-the core Gem-packages all extract into the same directory Gem-<gemver>/
-there are install-scripts for windoze (and probably IRIX)
-these will install the documentation...
-
-
-2) the GemLib-package:
-Gem supports many 3rd party libraries, bundling all of them seems like a waste
-of space and might impose legal issues. OTOH, it makes it much easier to setup
-an environment to build Gem (esp. on systems that don't have package managers)
-GemLibs is a small collections of libraries that can add some capabilities to
-Gem, which it would lack otherwise (e.g. support for a given image format). It
-is far from complete and most likely outdated, so usually you are better off, if
-you just install any needed libraries manually.
-Most of these libraries are only needed to build certain plugins.
-
-GemLibs have their own version numbering, starting with 1.
-You can get the newest GemLib from the place mentioned above
-
-
 -------------------------------------
 -------------------------------------
 
