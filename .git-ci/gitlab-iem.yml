@@ -32,14 +32,15 @@ variables:
     - build/tools/systeminfo.sh || true
     - mkdir -p /etc/apt/sources.list.d/
     - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
-    - apt-get update && apt-get install -y --no-install-recommends make puredata-dev puredata-core
-    - apt-get build-dep -y --no-install-recommends gem || true
-    - apt-get install -y --no-install-recommends libassimp-dev
+    - apt-get update
+    - apt-get install -y --no-install-recommends ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
+    - apt-get build-dep -y --no-install-recommends  ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
+    - apt-get install -y --no-install-recommends  ${TARGETDEBARCH:+-a}${TARGETDEBARCH} libassimp-dev
     - date
     - g++ -v
   script:
     - ./autogen.sh
-    - ./configure --with-DeckLink=local
+    - ./configure --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
 
@@ -63,7 +64,7 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local
+    - ./configure --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -89,7 +90,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions"
+    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -115,7 +116,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local
+    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
