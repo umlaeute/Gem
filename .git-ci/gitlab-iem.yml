@@ -26,7 +26,7 @@ variables:
       - ${ARTIFACTSDIR}
 
 .build:linux: &build_linux
-  image: gcc
+  image: registry.git.iem.at/devtools/docker/debiancross:amd64
   stage: build
   before_script:
     - build/tools/systeminfo.sh || true
