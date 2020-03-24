@@ -424,7 +424,7 @@ bool gemmacoswindow :: create(void)
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
   if(m_buffer==2)
-  attrvec.push_back(NSOpenGLPFADoubleBuffer);
+    attrvec.push_back(NSOpenGLPFADoubleBuffer);
   attrvec.push_back(NSOpenGLPFAAccelerated);
   attrvec.push_back(NSOpenGLPFAColorSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
