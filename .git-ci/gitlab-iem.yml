@@ -45,7 +45,7 @@ variables:
 
 .build:macos: &build_macos
   tags:
-     - osx10.14
+     - osx
   stage: build
   before_script:
     - build/tools/systeminfo.sh || true
