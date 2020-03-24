@@ -113,7 +113,7 @@ typedef GLint oglc_setvalue_t;
   oglc_setvalue_t swapInt = 1; // 1==sync to vblank
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 #endif
-	
+
   [super prepareOpenGL];
   glEnable(GL_MULTISAMPLE); // Enable multisampling for anti-aliasing (although this may not be necessary)
   oglc_setvalue_t swapRect = 0;
