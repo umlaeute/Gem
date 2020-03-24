@@ -1,7 +1,7 @@
 ###################################################
 ### configuration templates (to be used for snapshot and release builds)
 variables:
-  PDVERSION: 0.49-0
+  PDVERSION: 0.50-2
   LANG: C
   # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
   MACOSX_DEPLOYMENT_TARGET: "10.9"
