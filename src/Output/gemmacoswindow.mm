@@ -438,7 +438,7 @@ bool gemmacoswindow :: create(void)
   attrvec.push_back(NSOpenGLPFAMultisample);
   if(m_fullscreen) {
 	  // [window setContentView: m_pimpl->view]; // maybe this? doesnt seem to work though
-	  //attrvec.push_back(NSOpenGLPFAFullScreen); // depreciated
+	  //attrvec.push_back(NSOpenGLPFAFullScreen); // deprecated
   }
 
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(0)); // last
@@ -557,7 +557,7 @@ void gemmacoswindow :: fullscreenMess(int on) {
   m_fullscreen = on;
   if(m_pimpl->view) {
     if (m_fullscreen) {
-		[[m_pimpl->view openGLContext] setFullScreen];  // replace depreciated setFullScreen with toggleFullScreen?
+		[[m_pimpl->view openGLContext] setFullScreen];  // replace deprecated setFullScreen with toggleFullScreen?
 	  //[[m_pimpl->view openGLContext] setView:[window contentView]];
 
     } else {
@@ -603,14 +603,14 @@ void gemmacoswindow :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG1(classPtr, "menubar", menubarMess, int);
 
-  // An attempt to replace depreciated SetFrontProcess
+  // An attempt to replace deprecated SetFrontProcess
   NSRunningApplication *proc = [NSRunningApplication currentApplication];
   [proc  activateWithOptions: (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
 
   //ProcessSerialNumber proc;
-  //GetCurrentProcess(&proc); // Depreciated ... now what?
+  //GetCurrentProcess(&proc); // Deprecated ... now what?
   //TransformProcessType(&proc, kProcessTransformToForegroundApplication);
-  //SetFrontProcess(&proc); // Depreciated ... now what?
+  //SetFrontProcess(&proc); // Deprecated ... now what?
 
   if(NULL==arp) {
     arp=[[NSAutoreleasePool alloc] init];
