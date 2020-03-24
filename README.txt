@@ -105,8 +105,8 @@ RUNNING:
 ========
 
 just installing Gem is not enough !
-you will have to tell pd that it should load that library !!
-you cannot create any Gem-objects without having loaded the Gem-library into pd !!!
+you will have to tell Pd that it should load that library !!
+you cannot create any Gem-objects without having loaded the Gem-library into Pd !!!
 
 make sure you have the proper binary for you OS
   - windows: Gem.dll, Gem.m_i386, Gem.m_*
@@ -116,7 +116,7 @@ make sure you have the proper binary for you OS
   - irix   : Gem.pd_irix
   - ...
 
-when starting pd, tell it to load Gem with the "-lib" flag
+when starting Pd, tell it to load Gem with the "-lib" flag
 if your Gem-binary lives in pd/extra/, you could just try "pd -lib Gem"
 if your Gem-binary lives somewhere else use something like "pd -lib /path/to/my/Gem"
 you could also use "pd -path /path/to/my -lib Gem"
@@ -128,7 +128,7 @@ NOTE: there *must not* be any file extension with the "-lib"-flag.
 NOTE: please note the spelling: it is "Gem" and not "gem" nor "GEM"
 
 if you have problems loading any library including Gem, have a look at the
-pd-documentation.
+Pd-documentation.
 if you have problems loading just Gem (but other libraries work), send me a
 bug-report (see below)
 
@@ -145,7 +145,7 @@ please specify at least the following things:
 	other hardware that is related to your problem (e.g.: camera)
 	does your system work with similar applications (e.g.: capture-software,
 	openGL (games, "glxgears")
-	what is the output of pd when you start it with the "-verbose" flag
+	what is the output of Pd when you start it with the "-verbose" flag
 	(e.g.:"pd -verbose -lib Gem")
 
 please do not use the puredata bugtracker for reporting Gem-specific bugs.
