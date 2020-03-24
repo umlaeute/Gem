@@ -67,7 +67,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - find "${ARTIFACTSDIR}" "(" -name "*.pd_darwin" -or -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32: &build_w32
   stage: build
@@ -93,7 +93,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
@@ -119,7 +119,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - find "${ARTIFACTSDIR}" -name "*.dll" -exec .git-ci/localdeps.win.sh {} +
+    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
