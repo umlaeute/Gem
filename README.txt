@@ -47,7 +47,7 @@ note: when using a git-clone of the Gem sources, you first need to run
 note: that you might want to help Gem to find the Pd-headers, e.g. by doing
 $ ./configure --with-pd=/usr/include/pd
 try
-$ ./configure --help to see more options
+$ ./configure --help=recursive to see more options
 
 -------------------------------------
 To install GEM on W32:
