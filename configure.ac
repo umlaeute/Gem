@@ -449,10 +449,12 @@ old_cflags=${CFLAGS}
 old_cxxflags=${CXXFLAGS}
 old_ldflags=${LDFLAGS}
 CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+CXXFLAGS="${CXXFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
 LDFLAGS="${LDFLAGS} ${GEM_LIB_ASSIMP_LIBS}"
 AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
 AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
 CFLAGS=${old_cflags}
+CXXFLAGS=${old_cxxflags}
 LDFLAGS=${old_ldflags}
 
 AM_CONDITIONAL([HAVE_ASSIMP2], [test "x${have_assimp2}" = "xyes" ])
