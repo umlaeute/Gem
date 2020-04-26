@@ -253,7 +253,6 @@ AS_IF([test "x$with_x" != "xno"], [
 IEM_CHECK_GL
 no_glu=yes
 AS_IF([test "x$with_GLU" != "xno"], [IEM_CHECK_GLU])
-AM_CONDITIONAL([HAVE_GLU], [test "x${no_glu}" != "xyes"])
 IEM_CHECK_GLUT
 IEM_CHECK_GLX
 IEM_CHECK_AGL
