@@ -1,4 +1,4 @@
-#N canvas 19 61 676 556 10;
+#N canvas 19 86 676 556 10;
 #X declare -lib Gem;
 #X text 482 18 GEM object;
 #X obj 7 376 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
@@ -109,13 +109,13 @@ or "#<num>" (starting from 1).;
 range 0..1.;
 #X text 21 453 Inlet 2..N (if applicable): <type>: depending on the
 settable parameter;
-#X text 22 406 Inlet 1: open <symbol>: load another plugin (if applicable)
-;
 #X text 22 419 Inlet 1: #<num> <value>: set parameter #<num> (starting
 from 1);
 #X text 22 441 Inlet 1: <name> <value>: set parameter given by <name>
 ;
 #X obj 548 18 declare -lib Gem;
+#X text 22 406 Inlet 1: load <symbol>: load another plugin (if applicable)
+;
 #X connect 22 0 23 0;
 #X connect 23 0 22 0;
 #X connect 25 0 28 0;
