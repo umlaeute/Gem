@@ -375,7 +375,7 @@ film::errCode filmQT :: changeImage(int imgNum, int trackNum)
   m_curFrame = imgNum;
 
   /* i have moved the "auto"-thing into [pix_film].
-   * this is good because the decoder-class need not care about auto-play anylonger
+   * this is good because the decoder-class need not care about auto-play any longer
    * this is bad, because we might do it more sophisticated in the decoder-class
    */
   m_movieTime = static_cast<long>(m_curFrame * m_frameDuration);
