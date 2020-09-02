@@ -46,7 +46,7 @@ REGISTER_RECORDFACTORY("NDI", recordNDI);
 /////////////////////////////////////////////////////////
 
 recordNDI :: recordNDI(void)
-  :  m_ndi_send(nullptr)
+  :  m_ndi_send(NULL)
 {
   if(!NDI)
     NDI = init_ndi_library("recordNDI");
@@ -73,7 +73,7 @@ void recordNDI :: stop(void)
 {
   if (m_ndi_send)
     NDI->send_destroy(m_ndi_send);
-  m_ndi_send = nullptr;
+  m_ndi_send = NULL;
 }
 
 bool recordNDI :: start(const std::string&filename, gem::Properties&props)

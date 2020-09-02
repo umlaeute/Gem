@@ -66,7 +66,7 @@ videoNDI :: videoNDI()
     throw(GemException("NDI failed to initialize!"));
   }
 
-  m_ndi_find = NDI->find_create_v2(nullptr);
+  m_ndi_find = NDI->find_create_v2(NULL);
 
   m_provides.push_back(m_name);
 }
@@ -205,7 +205,7 @@ MARK();
   }
   verbose(1, "[GEM:videoNDI] opening device '%s'", m_devicename.c_str());
 
-  m_ndi_recv = NDI->recv_create_v3(nullptr);
+  m_ndi_recv = NDI->recv_create_v3(NULL);
 
   NDIlib_source_t my_source;
   my_source.p_ndi_name = m_devicename.c_str();
@@ -228,7 +228,7 @@ void videoNDI :: close()
 MARK();
   if(m_ndi_recv)
     NDI->recv_destroy(m_ndi_recv);
-  m_ndi_recv = nullptr;
+  m_ndi_recv = NULL;
 }
 
 
@@ -264,7 +264,7 @@ MARK();
 /////////////////////////////////////////////////////////
 pixBlock*videoNDI::getFrame(void)
 {
-  switch(NDI->recv_capture_v2(m_ndi_recv, &m_ndi_frame, nullptr, nullptr, 0)) {
+  switch(NDI->recv_capture_v2(m_ndi_recv, &m_ndi_frame, NULL, NULL, 0)) {
   case NDIlib_frame_type_video:
     m_pixBlock.image.xsize = m_ndi_frame.xres;
     m_pixBlock.image.ysize = m_ndi_frame.yres;
@@ -282,13 +282,13 @@ pixBlock*videoNDI::getFrame(void)
     case NDIlib_FourCC_video_type_P216:
     case NDIlib_FourCC_video_type_PA16:
       verbose(1, "[GEM:videoNDI] unknown format P...");
-      return nullptr;
+      return NULL;
       break;
     case NDIlib_FourCC_video_type_YV12:
     case NDIlib_FourCC_video_type_I420:
     case NDIlib_FourCC_video_type_NV12:
       verbose(1, "[GEM:videoNDI] unknown format Y...");
-      return nullptr;
+      return NULL;
       break;
     }
     m_pixBlock.image.setCsizeByFormat();
@@ -301,7 +301,7 @@ pixBlock*videoNDI::getFrame(void)
     break;
   case NDIlib_frame_type_error:
     error("[GEM:videoNDI] lost connection");
-    return nullptr;
+    return NULL;
   case NDIlib_frame_type_audio:
     verbose(2, "[GEM:videoNDI] got audio frame");
     break;
