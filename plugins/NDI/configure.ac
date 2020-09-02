@@ -19,18 +19,20 @@ GEM_CHECK_EXTERNAL
 
 AC_LANG(C++)
 
-AC_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
-               [enable NDI video capturing (use 'local' to use an embedded copy pf the SDK)]))
+AC_ARG_WITH([ndi],
+            AC_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
+               [enable NDI video capturing (use 'local' to use an embedded copy of the SDK)]))
 
 have_ndi="no"
 AS_IF([test "x$with_ndi" != "xno"], [
   tmp_ndi_includes=""
-  AS_IF([test -d "${with_ndi}/include"],
-        [tmp_ndi_includes="${tmp_ndi_includes} -I${with_ndi}/include"],
-        AS_IF(["x${with_ndi}" = "xyes" -o "x${with_ndi}" = "xlocal" -o "x${with_ndi}" = "x"],
-              [tmp_ndi_includes="${tmp_ndi_includes} -I${srcdir}/NDI"],
-              )
-        )
+  AS_IF([test "x${with_ndi}" = "xyes" ], [ with_ndi="local" ])
+  AS_IF([test "x${with_ndi}" = "x" ], [ with_ndi="local" ])
+  AS_IF([test "x${with_ndi}" = "xlocal" ],
+        [tmp_ndi_includes="${tmp_ndi_includes} -I${srcdir}/NDI"],
+        AS_IF([test -d "${with_ndi}/include"],
+              [tmp_ndi_includes="${tmp_ndi_includes} -I${with_ndi}/include"],
+             ))
 
   CPPFLAGS="$CPPFLAGS $tmp_ndi_includes"
 
@@ -41,7 +43,7 @@ AS_IF([test "x$with_ndi" != "xno"], [
 
   CPPFLAGS="$tmp_ndi_cppflags_org"
 
-  AS_IF(["x$have_ndi" = "xyes"],[
+  AS_IF([test "x$have_ndi" = "xyes"],[
     AC_DEFINE([HAVE_NDI], [1], [video capturing using NDI by NewTek])
     GEM_NDI_CXXFLAGS="${tmp_ndi_includes}"
     GEM_NDI_LIBS=""
@@ -51,11 +53,9 @@ AS_IF([test "x$with_ndi" != "xno"], [
   AC_MSG_RESULT([$have_ndi])
 ])
 
-AM_CONDITIONAL(HAVE_NDI, test x$have_ndi = xyes)
+AM_CONDITIONAL(HAVE_NDI, [test "x$have_ndi" = "xyes"])
 
 AC_SUBST(GEM_NDI_CXXFLAGS)
 AC_SUBST(GEM_NDI_LIBS)
-
-GEM_CHECK_NDI
 
 AC_OUTPUT
