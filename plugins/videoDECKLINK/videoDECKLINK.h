@@ -63,6 +63,7 @@ public:
   virtual bool enumProperties(gem::Properties&readable,
                               gem::Properties&writeable);
   virtual void setProperties(gem::Properties&props);
+  virtual bool trySetProperties(gem::Properties&props, bool);
   virtual void getProperties(gem::Properties&props);
 
   virtual std::vector<std::string>dialogs(void);

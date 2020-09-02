@@ -23,6 +23,11 @@
 
 #include <pthread.h>
 
+#include <algorithm>
+#include <cctype>
+#include <string>
+#include <map>
+
 #include <stdio.h>
 #define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
 
@@ -95,6 +100,38 @@ namespace {
   }
 };
 #endif
+
+static std::map<std::string, BMDVideoConnection> s_connectionstrings;
+namespace {
+  BMDVideoConnection string2connection(std::string Name) {
+    static bool done = false;
+    if(!done) {
+      s_connectionstrings["auto"] = -1;
+      s_connectionstrings["sdi"] = bmdVideoConnectionSDI;
+      s_connectionstrings["hdmi"] = bmdVideoConnectionHDMI;
+      s_connectionstrings["opticalsdi"] = bmdVideoConnectionOpticalSDI;
+      s_connectionstrings["component"] = bmdVideoConnectionComponent;
+      s_connectionstrings["composite"] = bmdVideoConnectionComposite;
+      s_connectionstrings["svideo"] = bmdVideoConnectionSVideo;
+    }
+    done=true;
+    std::string name = std::string(Name);
+    std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c){ return std::tolower(c); });
+    std::map<std::string, BMDVideoConnection>::iterator it = s_connectionstrings.find(name);
+    if(s_connectionstrings.end() != it)
+      return it->second;
+    return 0;
+  }
+  std::string connection2string(BMDVideoConnection conn) {
+    static bool done = false;
+    if(!done) string2connection("");
+    done = true;
+    for (std::map<std::string, BMDVideoConnection>::iterator it = s_connectionstrings.begin(); it != s_connectionstrings.end(); ++it)
+      if (it->second == conn)
+        return it->first;
+    return "";
+  }
+};
 
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
@@ -326,7 +363,7 @@ videoDECKLINK::videoDECKLINK(void)
   , m_dlInput(NULL)
   , m_displayMode(NULL)
   , m_dlConfig(NULL)
-  , m_connectionType(bmdVideoConnectionSDI)
+  , m_connectionType(0)
   , m_dlCallback(NULL)
 {
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
@@ -335,10 +372,12 @@ videoDECKLINK::videoDECKLINK(void)
   }
   dli->Release();
 
-  m_pixBlock.image.xsize = 64;
-  m_pixBlock.image.ysize = 64;
+  m_pixBlock.image.xsize = 1920;
+  m_pixBlock.image.ysize = 1080;
   m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
+  m_pixBlock.image.xsize = -1;
+  m_pixBlock.image.ysize = -1;
 }
 
 videoDECKLINK::~videoDECKLINK(void)
@@ -382,15 +421,15 @@ bool videoDECKLINK::open(gem::Properties&props)
 {
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
   BMDPixelFormat pixformat = bmdFormat8BitYUV;
-  const std::string formatname=(("auto"==m_formatname)
+  std::string formatname=(("auto"==m_formatname)
                                 || ("automatic" == m_formatname))?"":m_formatname;
-
   //if(m_devname.empty())return false;
   close();
 
   IDeckLinkIterator*m_dlIterator = CreateDeckLinkIteratorInstance();
   if(m_dlIterator) {
     setProperties(props);
+    formatname=(("auto"==m_formatname) || ("automatic" == m_formatname))?"":m_formatname;
 
     if(m_devnum<0 && m_devname.empty()) {
       // TODO: automatic device detection, based on input and mode
@@ -600,10 +639,25 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
 }
 void videoDECKLINK::setProperties(gem::Properties&props)
 {
+  if(trySetProperties(props, true)) {
+    verbose(1, "[GEM::videoDECKLINK] needs restart");
+    if(m_dlInput) {
+      stop();
+      start();
+    }
+  }
+}
+
+bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
+{
+  bool needrestart = false;
   std::vector<std::string>keys=props.keys();
   int i=0;
+  post("setting %d Properties", keys.size());
   for(i=0; i<keys.size(); i++) {
     const std::string key =keys[i];
+    if(canrestart  && needrestart)
+      return true;
     if("format" == key) {
       std::string s;
       double d;
@@ -612,12 +666,14 @@ void videoDECKLINK::setProperties(gem::Properties&props)
         if(props.get(key, s)) {
           m_formatnum =-1;
           m_formatname=s;
+          needrestart = true;
         }
         break;
       case gem::Properties::DOUBLE:
         if(props.get(key, d)) {
           m_formatnum =(int)d;
           m_formatname="";
+          needrestart = true;
         }
         break;
       }
@@ -629,20 +685,9 @@ void videoDECKLINK::setProperties(gem::Properties&props)
       switch(props.type(key)) {
       case gem::Properties::STRING:
         if(props.get(key, s)) {
-          if      ("SDI"        == s) {
-            vconn=bmdVideoConnectionSDI;
-          } else if ("HDMI"       == s) {
-            vconn=bmdVideoConnectionHDMI;
-          } else if ("OpticalSDI" == s) {
-            vconn=bmdVideoConnectionOpticalSDI;
-          } else if ("Component"  == s) {
-            vconn=bmdVideoConnectionComponent;
-          } else if ("Composite"  == s) {
-            vconn=bmdVideoConnectionComposite;
-          } else if ("SVideo"     == s) {
-            vconn=bmdVideoConnectionSVideo;
-          }
+          vconn = string2connection(s);
         }
+        post("setting 'connection' to %d '%s'", vconn, s.c_str());
         break;
       case gem::Properties::DOUBLE:
         if(props.get(key, d)) {
@@ -670,14 +715,17 @@ void videoDECKLINK::setProperties(gem::Properties&props)
           }
         }
         break;
+
       }
       if(m_dlConfig && (m_connectionType != vconn)) {
         m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
-      }
+      } else
+        needrestart = true;
       m_connectionType = vconn;
     }
   }
   m_props=props;
+  return needrestart;
 }
 void videoDECKLINK::getProperties(gem::Properties&props)
 {
