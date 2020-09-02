@@ -106,7 +106,7 @@ namespace {
   BMDVideoConnection string2connection(std::string Name) {
     static bool done = false;
     if(!done) {
-      s_connectionstrings["auto"] = -1;
+      s_connectionstrings["auto"] = (BMDVideoConnection)-1;
       s_connectionstrings["sdi"] = bmdVideoConnectionSDI;
       s_connectionstrings["hdmi"] = bmdVideoConnectionHDMI;
       s_connectionstrings["opticalsdi"] = bmdVideoConnectionOpticalSDI;
@@ -120,7 +120,7 @@ namespace {
     std::map<std::string, BMDVideoConnection>::iterator it = s_connectionstrings.find(name);
     if(s_connectionstrings.end() != it)
       return it->second;
-    return 0;
+    return (BMDVideoConnection)0;
   }
   std::string connection2string(BMDVideoConnection conn) {
     static bool done = false;
@@ -363,7 +363,7 @@ videoDECKLINK::videoDECKLINK(void)
   , m_dlInput(NULL)
   , m_displayMode(NULL)
   , m_dlConfig(NULL)
-  , m_connectionType(0)
+  , m_connectionType((BMDVideoConnection)0)
   , m_dlCallback(NULL)
 {
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
