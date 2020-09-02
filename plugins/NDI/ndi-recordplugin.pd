@@ -1,0 +1,18 @@
+#N canvas 712 348 551 481 10;
+#X text 75 101 1- select the backend;
+#X obj 232 253 s \$1-ctl;
+#X obj 232 433 s \$1-ctl;
+#X text 89 47 recordNDI - send NDI video streams;
+#X text 89 57 ==================================;
+#X msg 261 102 codec ndi;
+#X msg 261 162 filename TestStream;
+#X msg 261 212 record 1;
+#X text 75 161 2- name the NDI-stream;
+#X text 75 211 3- start sending out stream;
+#X msg 260 362 filename Waiting\ Man;
+#X text 74 332 Your streamname can contain spaces which must escape
+with backspace., f 71;
+#X connect 5 0 1 0;
+#X connect 6 0 1 0;
+#X connect 7 0 1 0;
+#X connect 10 0 2 0;
