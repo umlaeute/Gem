@@ -96,6 +96,7 @@ AS_IF([test -d "$srcdir/plugins/videoAVT"], [AC_CONFIG_SUBDIRS([plugins/videoAVT
 AS_IF([test -d "$srcdir/plugins/videoHALCON"], [AC_CONFIG_SUBDIRS([plugins/videoHALCON])])
 AS_IF([test -d "$srcdir/plugins/videoPYLON"], [AC_CONFIG_SUBDIRS([plugins/videoPYLON])])
 AS_IF([test -d "$srcdir/plugins/videoDECKLINK"], [AC_CONFIG_SUBDIRS([plugins/videoDECKLINK])])
+AS_IF([test -d "$srcdir/plugins/NDI"], [AC_CONFIG_SUBDIRS([plugins/NDI])])
 
 AC_LANG(C++)
 

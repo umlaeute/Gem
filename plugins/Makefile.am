@@ -26,7 +26,7 @@ SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
 SUBDIRS += videoVIDS
 
 ## proprietary video capture plugins
-SUBDIRS += videoAVT videoHALCON videoPYLON videoDECKLINK
+SUBDIRS += videoAVT videoHALCON videoPYLON videoDECKLINK NDI
 if DISABLED
 SUBDIRS += videoTEST
 endif
