@@ -502,6 +502,12 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
     }
   }
 
+  if (cap.capabilities & V4L2_CAP_DEVICE_CAPS && V4L2_CAP_META_CAPTURE & cap.device_caps) {
+    verbose(0, "[GEM:videoV4L2] %s is a metadata device", dev_name);
+    closeDevice();
+    return false;
+  }
+
   if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
     verbose(0, "[GEM:videoV4L2] %s is no video capture device", dev_name);
     closeDevice();
@@ -858,7 +864,7 @@ std::vector<std::string> videoV4L2::enumerate()
     struct v4l2_capability cap;
     memset (&cap, 0, sizeof (cap));
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
-      if (cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) {
+      if ((cap.capabilities & V4L2_CAP_VIDEO_CAPTURE) && !(cap.capabilities & V4L2_CAP_DEVICE_CAPS && V4L2_CAP_META_CAPTURE & cap.device_caps)) {
         result.push_back(dev);
       } else {
         verbose(1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
