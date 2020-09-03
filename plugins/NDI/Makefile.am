@@ -18,11 +18,13 @@ endif
 
 AM_CXXFLAGS =
 AM_LDFLAGS  = -module -avoid-version -shared
-AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 if WINDOWS
 AM_LDFLAGS += -no-undefined
 endif
-AM_LIBADD   =
+if MACOSX
+else
+AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
+endif
 
 gem_videoNDI_la_LIBADD   =
 gem_recordNDI_la_LIBADD   =
