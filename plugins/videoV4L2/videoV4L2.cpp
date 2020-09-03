@@ -868,8 +868,10 @@ std::vector<std::string> videoV4L2::enumerate()
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
       if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
         verbose(1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
+#if defined V4L2_CAP_DEVICE_CAPS && defined V4L2_CAP_META_CAPTURE
       } else if (cap.capabilities & V4L2_CAP_DEVICE_CAPS && V4L2_CAP_META_CAPTURE & cap.device_caps) {
         verbose(1, "[GEM:videoV4L2] %s is a v4l2 meta device", dev.c_str());
+#endif
       } else {
         result.push_back(dev);
       }
