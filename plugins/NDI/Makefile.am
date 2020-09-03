@@ -16,46 +16,29 @@ endif
 
 # videoNDI
 
-gem_videoNDI_la_CXXFLAGS =
-gem_videoNDI_la_LDFLAGS  = -module -avoid-version -shared
-gem_videoNDI_la_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
+AM_CXXFLAGS =
+AM_LDFLAGS  = -module -avoid-version -shared
+AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 if WINDOWS
-gem_videoNDI_la_LDFLAGS += -no-undefined
+AM_LDFLAGS += -no-undefined
 endif
+AM_LIBADD   =
+
 gem_videoNDI_la_LIBADD   =
-
-# RTE
-gem_videoNDI_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
-gem_videoNDI_la_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
-# flags for building Gem externals
-gem_videoNDI_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
-gem_videoNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
-# #gem_videoNDI_la @MOREFLAGS@
-
-# Dependencies
-gem_videoNDI_la_CXXFLAGS += $(GEM_NDI_CXXFLAGS)
-gem_videoNDI_la_LIBADD   += $(GEM_NDI_LIBS)
-
-
-# recordNDI
-gem_recordNDI_la_CXXFLAGS =
-gem_recordNDI_la_LDFLAGS  = -module -avoid-version -shared
-gem_recordNDI_la_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
-if WINDOWS
-gem_recordNDI_la_LDFLAGS += -no-undefined
-endif
 gem_recordNDI_la_LIBADD   =
 
 # RTE
-gem_recordNDI_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
-gem_recordNDI_la_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
+AM_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+AM_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
 # flags for building Gem externals
-gem_recordNDI_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+AM_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
+gem_videoNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 gem_recordNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
-# #gem_recordNDI_la @MOREFLAGS@
+# #gem_videoNDI_la @MOREFLAGS@
 
 # Dependencies
-gem_recordNDI_la_CXXFLAGS += $(GEM_NDI_CXXFLAGS)
+AM_CXXFLAGS += $(GEM_NDI_CXXFLAGS)
+gem_videoNDI_la_LIBADD   += $(GEM_NDI_LIBS)
 gem_recordNDI_la_LIBADD   += $(GEM_NDI_LIBS)
 
 
