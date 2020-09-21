@@ -69,6 +69,7 @@ AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 AC_CONFIG_FILES([plugins/videoVNC/Makefile])
 
 AC_CONFIG_FILES([plugins/videoDECKLINK/Makefile])
+AC_CONFIG_FILES([plugins/NDI/Makefile])
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
@@ -97,7 +98,6 @@ AC_CONFIG_SUBDIRS([extra])
 AS_IF([test -d "$srcdir/plugins/videoAVT"], [AC_CONFIG_SUBDIRS([plugins/videoAVT])])
 AS_IF([test -d "$srcdir/plugins/videoHALCON"], [AC_CONFIG_SUBDIRS([plugins/videoHALCON])])
 AS_IF([test -d "$srcdir/plugins/videoPYLON"], [AC_CONFIG_SUBDIRS([plugins/videoPYLON])])
-AS_IF([test -d "$srcdir/plugins/NDI"], [AC_CONFIG_SUBDIRS([plugins/NDI])])
 
 AC_LANG(C++)
 
@@ -533,6 +533,46 @@ AS_IF([test "x${PKG_DECKLINK_LIBS}" = "x" || test "x${have_decklink}" = "xlocal"
 AC_SUBST([GEM_DECKLINK_USE_DLOPEN])
 
 
+# NDI-support
+AC_ARG_WITH([ndi],
+            AC_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
+               [enable NDI video capturing (use 'local' to use an embedded copy of the SDK)]))
+
+have_ndi="no"
+AS_IF([test "x$with_ndi" != "xno"], [
+  tmp_ndi_includes=""
+  AS_IF([test "x${with_ndi}" = "xyes" ], [ with_ndi="local" ])
+  AS_IF([test "x${with_ndi}" = "x" ], [ with_ndi="local" ])
+  AS_IF([test "x${with_ndi}" = "xlocal" ], [ have_ndi="yes"], [
+        AS_IF([test -d "${with_ndi}/include"],
+              [tmp_ndi_includes="${tmp_ndi_includes} -I${with_ndi}/include"],
+             )
+  CPPFLAGS="$CPPFLAGS $tmp_ndi_includes"
+
+  AC_CHECK_HEADER(Processing.NDI.Lib.h,
+                  [   have_ndi="yes"
+                  ],[ have_ndi="no"
+                  ])
+
+  CPPFLAGS="$tmp_ndi_cppflags_org"
+])
+
+  AS_IF([test "x$have_ndi" = "xyes"],[
+    AC_DEFINE([HAVE_NDI], [1], [video capturing using NDI by NewTek])
+    GEM_NDI_CXXFLAGS="${tmp_ndi_includes}"
+    GEM_NDI_LIBS=""
+  ])
+
+  AC_MSG_CHECKING([for NDI])
+  AC_MSG_RESULT([$have_ndi])
+])
+
+AM_CONDITIONAL(HAVE_NDI, [test "x$have_ndi" = "xyes"])
+AM_CONDITIONAL([GEM_NDI_LOCAL], [test "x${with_ndi}" = "xlocal"])
+AC_SUBST(GEM_NDI_CXXFLAGS)
+AC_SUBST(GEM_NDI_LIBS)
+
+
 
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???
@@ -691,6 +731,7 @@ AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
 AS_IF([test "x${have_stb}" = "xyes"], [have_stb="YES (library)"], [have_stb="YES (local)"])
 
 AS_IF([test "x${have_decklink}" = "xlocal"], [have_DeckLink="YES (local)"])
+AS_IF([test "x${with_ndi}" = "xlocal"], [have_ndi="YES (local)"])
 # TODO: have_ds
 
 AC_MSG_RESULT([
@@ -745,6 +786,7 @@ Configuration:
     use DeckLink         : ${have_DeckLink}
     use DirectShow       : NO
     use DV               : ${have_libdv}
+    use NDI              : ${have_ndi}
     use Unicap           : ${have_unicap}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
@@ -753,6 +795,7 @@ Configuration:
     use VLC              : ${have_libvlc}
     use VNC              : ${have_libvncclient}
   record-support
+    use NDI              : ${have_ndi}
     use QuickTime        : ${have_libquicktime}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}

@@ -40,6 +40,9 @@ gem_recordNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 
 # Dependencies
 AM_CXXFLAGS += $(GEM_NDI_CXXFLAGS)
+if GEM_NDI_LOCAL
+AM_CXXFLAGS += -I$(srcdir)/NDI/
+endif
 gem_videoNDI_la_LIBADD   += $(GEM_NDI_LIBS)
 gem_recordNDI_la_LIBADD   += $(GEM_NDI_LIBS)
 
