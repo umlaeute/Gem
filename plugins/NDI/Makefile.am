@@ -48,7 +48,7 @@ gem_recordNDI_la_LIBADD   += $(GEM_NDI_LIBS)
 
 
 # convenience symlinks
--include $(srcdir)/../symlink_ltlib.mk
+include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
