@@ -689,6 +689,8 @@ AS_IF([test "x${have_libdv}" != "xno"], [
 AS_IF([test "x${have_unicap}" = "x"], [have_unicap="no"])
 AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
 AS_IF([test "x${have_stb}" = "xyes"], [have_stb="YES (library)"], [have_stb="YES (local)"])
+
+AS_IF([test "x${have_decklink}" = "xlocal"], [have_DeckLink="YES (local)"])
 # TODO: have_ds
 
 AC_MSG_RESULT([
@@ -740,6 +742,7 @@ Configuration:
   capture-support
     use AVfoundation     : ${have_avfoundation_framework}
     use ieee1394         : ${have_ieee1394}
+    use DeckLink         : ${have_DeckLink}
     use DirectShow       : NO
     use DV               : ${have_libdv}
     use Unicap           : ${have_unicap}
