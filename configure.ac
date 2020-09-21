@@ -485,9 +485,6 @@ LIBS="$gem_tmp_lqt_libs"
 
 
 # DECKLINK-support
-#AC_ARG_WITH([default-font],
-#            AS_HELP_STRING([--with-DeckLink=</path/to/decklink/sdk>],[enable DeckLink video capturing (use 'local' to use an embedded copy of the SDK)])
-#           )
 GEM_DECKLINK_SYSTEM=""
 AS_CASE([${host}]
         , [*-darwin*], [GEM_DECKLINK_SYSTEM=Darwin]
