@@ -762,6 +762,6 @@ const std::string videoDECKLINK::getName(void)
 }
 
 
-#ifdef MUST_DLOPEN_DECKLINKAPI
+#ifdef GEM_DECKLINK_USE_DLOPEN
 # include <DeckLinkAPIDispatch.cpp>
 #endif
