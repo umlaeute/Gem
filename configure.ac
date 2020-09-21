@@ -68,6 +68,8 @@ AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 AC_CONFIG_FILES([plugins/videoVNC/Makefile])
 
+AC_CONFIG_FILES([plugins/videoDECKLINK/Makefile])
+
 ## extra holds additional objects/libraries
 # some of them have their own build system
 #AC_CONFIG_FILES([extra/Makefile])
@@ -95,7 +97,6 @@ AC_CONFIG_SUBDIRS([extra])
 AS_IF([test -d "$srcdir/plugins/videoAVT"], [AC_CONFIG_SUBDIRS([plugins/videoAVT])])
 AS_IF([test -d "$srcdir/plugins/videoHALCON"], [AC_CONFIG_SUBDIRS([plugins/videoHALCON])])
 AS_IF([test -d "$srcdir/plugins/videoPYLON"], [AC_CONFIG_SUBDIRS([plugins/videoPYLON])])
-AS_IF([test -d "$srcdir/plugins/videoDECKLINK"], [AC_CONFIG_SUBDIRS([plugins/videoDECKLINK])])
 AS_IF([test -d "$srcdir/plugins/NDI"], [AC_CONFIG_SUBDIRS([plugins/NDI])])
 
 AC_LANG(C++)
@@ -481,6 +482,57 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
         AC_MSG_RESULT(yes),
         AC_MSG_RESULT(no))
 LIBS="$gem_tmp_lqt_libs"
+
+
+# DECKLINK-support
+#AC_ARG_WITH([default-font],
+#            AS_HELP_STRING([--with-DeckLink=</path/to/decklink/sdk>],[enable DeckLink video capturing (use 'local' to use an embedded copy of the SDK)])
+#           )
+GEM_DECKLINK_SYSTEM=""
+AS_CASE([${host}]
+        , [*-darwin*], [GEM_DECKLINK_SYSTEM=Darwin]
+        , [*-linux*], [GEM_DECKLINK_SYSTEM=Linux]
+        , [*mingw*], [GEM_DECKLINK_SYSTEM=Windows]
+)
+AC_SUBST([GEM_DECKLINK_SYSTEM])
+
+have_decklink="no"
+AS_IF([test "x$with_DeckLink" != "xno"], [
+  tmp_decklink_includes=""
+  AS_IF([test "x${with_DeckLink}" = "xyes" ], [ with_DeckLink="local" ])
+  AS_IF([test "x${with_DeckLink}" = "x" ], [ with_DeckLink="local" ])
+  AS_IF([test "x${with_DeckLink}" = "xlocal" ],  [
+      decklink_sdkdir="${srcdir}/plugins/videoDECKLINK/SDK/${GEM_DECKLINK_SYSTEM}/"
+      AS_IF([test -e ${decklink_sdkdir}/DeckLinkAPI.h], [
+             with_DeckLink=yes
+             AC_MSG_NOTICE([using embedded copy of DeckLink-SDK])
+             have_decklink="local"
+    ], [
+             AC_MSG_WARN([requested to use embedded copy of DeckLink-SDK, but none found in ${decklink_sdkdir}])
+             with_DeckLink=no
+    ])
+    ], [
+      decklink_sdkdir=$with_DeckLink
+      AS_IF([test -e ${decklink_sdkdir}/DeckLinkAPI.h], [
+             with_DeckLink=yes
+             with_DeckLink_CFLAGS="-I${decklink_sdkdir}"
+             AC_MSG_NOTICE([using DeckLink-SDK in ${decklink_sdkdir}])
+       ],[
+             AC_MSG_WARN([requested to use DeckLink-SDK in ${decklink_sdkdir}, but none found])
+             with_DeckLink=no
+       ])
+   ])
+])
+AM_CONDITIONAL([GEM_DECKLINK_LOCAL], [test "x${have_decklink}" = "xlocal"])
+
+GEM_CHECK_LIB([DeckLink],[], [DeckLinkAPI.h],[CreateDeckLinkIteratorInstance], ,,,[video input; use 'local' to use an embedded copy of the SDK])
+AS_IF([test "x${PKG_DECKLINK_LIBS}" = "x" || test "x${have_decklink}" = "xlocal" ],[
+ AC_DEFINE(GEM_DECKLINK_USE_DLOPEN, 1, [Define to 1 to open DeckLinkAPI via dlopen()])
+ AC_MSG_NOTICE([use dlopen() to open DeckLinkAPI])
+])
+AC_SUBST([GEM_DECKLINK_USE_DLOPEN])
+
+
 
 # enabling "-freg-struct-return" (for FreeFrame)
 # i wonder could we make this the default ???

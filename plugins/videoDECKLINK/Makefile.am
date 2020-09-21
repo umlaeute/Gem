@@ -11,6 +11,11 @@ dist_plugin_DATA  =
 if HAVE_LIB_DECKLINK
 plugin_LTLIBRARIES+= gem_videoDECKLINK.la
 dist_plugin_DATA  += decklink-videoplugin.pd
+else
+if GEM_DECKLINK_LOCAL
+plugin_LTLIBRARIES+= gem_videoDECKLINK.la
+dist_plugin_DATA  += decklink-videoplugin.pd
+endif
 endif
 
 gem_videoDECKLINK_la_CXXFLAGS =
@@ -30,6 +35,9 @@ gem_videoDECKLINK_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_
 # #gem_videoDECKLINK_la @MOREFLAGS@
 
 # Dependencies
+if GEM_DECKLINK_LOCAL
+gem_videoDECKLINK_la_CXXFLAGS += -I$(srcdir)/SDK/$(GEM_DECKLINK_SYSTEM)
+endif
 gem_videoDECKLINK_la_CXXFLAGS += $(GEM_LIB_DECKLINK_CFLAGS)
 gem_videoDECKLINK_la_LIBADD   += $(GEM_LIB_DECKLINK_LIBS)
 
@@ -43,4 +51,3 @@ include $(srcdir)/../symlink_ltlib.mk
 
 ### SOURCES
 gem_videoDECKLINK_la_SOURCES= videoDECKLINK.cpp videoDECKLINK.h
-
