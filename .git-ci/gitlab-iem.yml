@@ -44,6 +44,8 @@ variables:
     - ./configure --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+  after_script:
+    - mkdir -p "${ARTIFACTSDIR}"
 
 .build:macos: &build_macos
   tags:
@@ -69,6 +71,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
+    - mkdir -p "${ARTIFACTSDIR}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32: &build_w32
@@ -95,6 +98,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
+    - mkdir -p "${ARTIFACTSDIR}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
@@ -121,6 +125,7 @@ variables:
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
+    - mkdir -p "${ARTIFACTSDIR}"
     - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
