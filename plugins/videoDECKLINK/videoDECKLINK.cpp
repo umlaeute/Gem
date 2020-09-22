@@ -113,14 +113,14 @@ namespace {
       s_connectionstrings["component"] = bmdVideoConnectionComponent;
       s_connectionstrings["composite"] = bmdVideoConnectionComposite;
       s_connectionstrings["svideo"] = bmdVideoConnectionSVideo;
-#if defined __cplusplus && __cplusplus >= 201103L
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #else
       verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires connections to be lower-case");
 #endif
     }
     done=true;
     std::string name = std::string(Name);
-#if defined __cplusplus && __cplusplus >= 201103L
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
     std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c){ return std::tolower(c); });
 #else
 #endif
