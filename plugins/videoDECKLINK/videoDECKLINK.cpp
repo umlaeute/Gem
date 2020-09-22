@@ -676,6 +676,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
           needrestart = true;
         }
         break;
+      default:  break;
       }
     }
     if("connection" == key) {
@@ -715,7 +716,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
           }
         }
         break;
-
+      default:  break;
       }
       if(m_dlConfig && (m_connectionType != vconn)) {
         m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
