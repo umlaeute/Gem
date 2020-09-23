@@ -25,7 +25,7 @@ gem_modelOBJ_la_LIBADD   += -L$(top_builddir) $(GEM_EXTERNAL_LIBS)
 
 # Dependencies
 gem_modelOBJ_la_CXXFLAGS += @GL_CFLAGS@
-gem_modelOBJ_la_LIBADD   += @GL_LIBS@ @GL_LDFLAGS@
+gem_modelOBJ_la_LIBADD   += @GL_LIBS@
 
 
 
