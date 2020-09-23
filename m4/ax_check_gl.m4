@@ -263,8 +263,9 @@ AC_DEFUN([AX_CHECK_GL],
          dnl some windows may support X11 opengl, and should be able to linked
          dnl by -lGL. However I have no machine to test it.
          [*-cygwin*|*-mingw*],[
-          _AX_CHECK_GL_MANUAL_LIBS_GENERIC([opengl32 GL gl])
           AC_CHECK_HEADERS([windows.h])
+          AC_CHECK_HEADERS([GL/gl.h OpenGL/gl.h])
+          _AX_CHECK_GL_MANUAL_LIBS_GENERIC([opengl32 GL gl])
           ],
          [PKG_PROG_PKG_CONFIG
           PKG_CHECK_MODULES([GL],[gl],
