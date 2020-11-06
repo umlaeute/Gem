@@ -17,11 +17,11 @@ dist_gemhelp_DATA  += decklink-videoplugin.pd
 endif
 endif
 
-gem_videoDECKLINK_la_CXXFLAGS =
-gem_videoDECKLINK_la_LDFLAGS  = -module -avoid-version -shared
+AM_CXXFLAGS =
+AM_LDFLAGS  = -module -avoid-version -shared
 gem_videoDECKLINK_la_LIBADD   =
 if WINDOWS
-gem_videoDECKLINK_la_LDFLAGS += -no-undefined
+AM_LDFLAGS += -no-undefined
 endif
 if MACOSX
 # nothing todo on macOS
@@ -30,18 +30,18 @@ AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 endif
 
 # RTE
-gem_videoDECKLINK_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
-gem_videoDECKLINK_la_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
+AM_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
+AM_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
 # flags for building Gem externals
-gem_videoDECKLINK_la_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS) $(GEM_THREADS_CFLAGS)
+AM_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS) $(GEM_THREADS_CFLAGS)
 gem_videoDECKLINK_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
 # #gem_videoDECKLINK_la @MOREFLAGS@
 
 # Dependencies
 if GEM_DECKLINK_LOCAL
-gem_videoDECKLINK_la_CXXFLAGS += -I$(srcdir)/SDK/$(GEM_DECKLINK_SYSTEM)
+AM_CXXFLAGS += -I$(srcdir)/SDK/$(GEM_DECKLINK_SYSTEM)
 endif
-gem_videoDECKLINK_la_CXXFLAGS += $(GEM_LIB_DECKLINK_CFLAGS)
+AM_CXXFLAGS += $(GEM_LIB_DECKLINK_CFLAGS)
 gem_videoDECKLINK_la_LIBADD   += $(GEM_LIB_DECKLINK_LIBS)
 
 if WINDOWS
