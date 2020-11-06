@@ -1,29 +1,32 @@
-ACLOCAL_AMFLAGS = -I ../../m4 -I .
-AM_CPPFLAGS = -I$(srcdir)/../../src
+ACLOCAL_AMFLAGS = -I$(top_srcdir)/m4
+AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
+
+pkglib_LTLIBRARIES =
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
 EXTRA_DIST = LICENSE.txt README.txt
 
-plugindir=$(libdir)/Gem
-
-plugin_LTLIBRARIES=
-dist_plugin_DATA  =
-
 if HAVE_LIB_DECKLINK
-plugin_LTLIBRARIES+= gem_videoDECKLINK.la
-dist_plugin_DATA  += decklink-videoplugin.pd
+pkglib_LTLIBRARIES+= gem_videoDECKLINK.la
+dist_gemhelp_DATA  += decklink-videoplugin.pd
 else
 if GEM_DECKLINK_LOCAL
-plugin_LTLIBRARIES+= gem_videoDECKLINK.la
-dist_plugin_DATA  += decklink-videoplugin.pd
+pkglib_LTLIBRARIES+= gem_videoDECKLINK.la
+dist_gemhelp_DATA  += decklink-videoplugin.pd
 endif
 endif
 
 gem_videoDECKLINK_la_CXXFLAGS =
 gem_videoDECKLINK_la_LDFLAGS  = -module -avoid-version -shared
 gem_videoDECKLINK_la_LIBADD   =
-
 if WINDOWS
 gem_videoDECKLINK_la_LDFLAGS += -no-undefined
+endif
+if MACOSX
+# nothing todo on macOS
+else
+AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 endif
 
 # RTE

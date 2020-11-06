@@ -1,17 +1,16 @@
 
-ACLOCAL_AMFLAGS = -I ../../m4 -I .
-AM_CPPFLAGS = -I$(srcdir)/../../src
+ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
+AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
-EXTRA_DIST = ndi.m4 LICENSE.txt README.txt
+pkglib_LTLIBRARIES =
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
-plugindir=$(libdir)/Gem
-
-plugin_LTLIBRARIES=
-dist_plugin_DATA  =
+EXTRA_DIST = LICENSE.txt README.txt
 
 if HAVE_NDI
-plugin_LTLIBRARIES+= gem_videoNDI.la gem_recordNDI.la
-dist_plugin_DATA  += ndi-videoplugin.pd
+pkglib_LTLIBRARIES+= gem_videoNDI.la gem_recordNDI.la
+dist_gemhelp_DATA  += ndi-videoplugin.pd
 endif
 
 # videoNDI
@@ -22,10 +21,12 @@ if WINDOWS
 AM_LDFLAGS += -no-undefined
 endif
 if MACOSX
+# nothing todo on macOS
 else
 AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 endif
 
+# no extra libraries required (libNDI is opened at runtime)
 gem_videoNDI_la_LIBADD   =
 gem_recordNDI_la_LIBADD   =
 
@@ -35,7 +36,7 @@ AM_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
 # flags for building Gem externals
 AM_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS)
 gem_videoNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
-gem_recordNDI_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
+gem_recordNDI_la_LIBADD  += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS)
 # #gem_videoNDI_la @MOREFLAGS@
 
 # Dependencies
