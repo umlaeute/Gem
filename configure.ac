@@ -68,7 +68,7 @@ AC_CONFIG_FILES([plugins/videoVIDS/Makefile])
 AC_CONFIG_FILES([plugins/videoVLC/Makefile])
 AC_CONFIG_FILES([plugins/videoVNC/Makefile])
 
-AC_CONFIG_FILES([plugins/videoDECKLINK/Makefile])
+AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
 AC_CONFIG_FILES([plugins/NDI/Makefile])
 
 ## extra holds additional objects/libraries
@@ -498,7 +498,7 @@ AS_IF([test "x$with_DeckLink" != "xno"], [
   AS_IF([test "x${with_DeckLink}" = "xyes" ], [ with_DeckLink="local" ])
   AS_IF([test "x${with_DeckLink}" = "x" ], [ with_DeckLink="local" ])
   AS_IF([test "x${with_DeckLink}" = "xlocal" ],  [
-      decklink_sdkdir="${srcdir}/plugins/videoDECKLINK/SDK/${GEM_DECKLINK_SYSTEM}/"
+      decklink_sdkdir="${srcdir}/plugins/DECKLINK/SDK/${GEM_DECKLINK_SYSTEM}/"
       AS_IF([test -e ${decklink_sdkdir}/DeckLinkAPI.h], [
              with_DeckLink=yes
              AC_MSG_NOTICE([using embedded copy of DeckLink-SDK])
