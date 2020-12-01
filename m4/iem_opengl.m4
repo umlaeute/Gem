@@ -45,14 +45,16 @@ AM_CONDITIONAL(HAVE_GL, [test "x$no_gl" != "xyes"])
 ])
 
 AC_DEFUN([IEM_CHECK_GLU],
-[AX_CHECK_GLU(no_glu=no, no_glu=yes)
+[AC_REQUIRE([AX_CHECK_GLU])
 AM_CONDITIONAL(HAVE_GLU, [test "x$no_glu" != "xyes"])
 ])
 
+
 AC_DEFUN([IEM_CHECK_GLUT],
-[AX_CHECK_GLUT(no_glut=no, no_glut=yes)
+[AC_REQUIRE([AX_CHECK_GLUT])
 AM_CONDITIONAL(HAVE_GLUT, [test "x$no_glut" != "xyes"])
 ])
+
 
 AC_DEFUN([IEM_CHECK_GLX],
 [
