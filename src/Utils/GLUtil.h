@@ -26,11 +26,7 @@ struct _symbol;
 #include <string>
 
 /* for GLenum */
-#ifdef __EMSCRIPTEN__
-#include "Gem/glew.h"
-#else
 #include "Gem/GemGL.h"
-#endif
 #include "Gem/Exception.h"
 
 
