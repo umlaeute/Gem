@@ -1,12 +1,14 @@
-[*.{c,cpp,h,m,mm}]
 root = true
+
+[*]
+# please only ever use utf-8
+charset = utf-8
+
+[*.{c,cpp,h,m,mm}]
 # indent 2 spaces, one-true-brace-style!
 indent_style = space
 indent_size = 2
 indent_brace_style = 1TBS
-
-# please only ever use utf-8
-charset = utf-8
 
 trim_trailing_whitespace = true
 insert_final_newline = true
