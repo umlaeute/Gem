@@ -43,7 +43,7 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
   m_width(-1), m_height(-1), initialized(false)
 {
   static bool first_time=true;
-  if(first_time){
+  if(first_time) {
     first_time=false;
     post("\tbased on fidtrack-library (c) R.Bencina\n\tbased on reacTIVision (c) M.Kaltenbrunner, R.Bencina\n\tsee http://www.iua.upf.es/mtg/reacTable/");
   }
@@ -53,7 +53,7 @@ pix_fiducialtrack :: pix_fiducialtrack(t_symbol*s) :
   memset(&fidtrackerx, 0, sizeof(fidtrackerx));
   memset(&treeidmap,   0, sizeof(treeidmap));
 
-  if((NULL!=s) && (&s_!=s) && (NULL!=s->s_name)){
+  if((NULL!=s) && (&s_!=s) && (NULL!=s->s_name)) {
     treeMess(s);
   } else {
     treeMess(gensym("all.trees"));
@@ -69,8 +69,9 @@ pix_fiducialtrack :: ~pix_fiducialtrack()
   deinit_segmenter();
   outlet_free(m_infoOut);
 }
-void pix_fiducialtrack::deinit_segmenter() {
-  if (initialized){
+void pix_fiducialtrack::deinit_segmenter()
+{
+  if (initialized) {
     terminate_segmenter(&segmenter);
   }
   initialized=false;
@@ -83,26 +84,28 @@ void pix_fiducialtrack::deinit_segmenter() {
 /////////////////////////////////////////////////////////
 void pix_fiducialtrack :: processGrayImage(imageStruct &image)
 {
-  if(image.xsize!=m_width || image.ysize!=m_height)
+  if(image.xsize!=m_width || image.ysize!=m_height) {
     deinit_segmenter();
+  }
 
   m_width =image.xsize;
   m_height=image.ysize;
 
-  if(!initialized){
-    initialize_segmenter( &segmenter, m_width, m_height, treeidmap.max_adjacencies );
+  if(!initialized) {
+    initialize_segmenter( &segmenter, m_width, m_height,
+                          treeidmap.max_adjacencies );
     initialized=true;
   }
 
   step_segmenter( &segmenter, image.data);
   int count = find_fiducialsX( fiducials, MAX_FIDUCIAL_COUNT,
-                               &fidtrackerx ,
+                               &fidtrackerx,
                                &segmenter,
                                m_width, m_height);
 
   int i;
-  for(i=0;i< count;i++) {
-    if(fiducials[i].id!=INVALID_FIDUCIAL_ID){
+  for(i=0; i< count; i++) {
+    if(fiducials[i].id!=INVALID_FIDUCIAL_ID) {
       SETFLOAT((m_outlist+0), (fiducials[i].id));         // id (as in treeidmap)
       SETFLOAT((m_outlist+1), (fiducials[i].x/m_width));  // x (normalized)
       SETFLOAT((m_outlist+2), (fiducials[i].y/m_height)); // y (normalized)
@@ -118,7 +121,9 @@ void pix_fiducialtrack :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_fiducialtrack :: treeMess(t_symbol*s)
 {
-  if(NULL==s || NULL==s->s_name || &s_==s)return;
+  if(NULL==s || NULL==s->s_name || &s_==s) {
+    return;
+  }
 
   std::string fn = findFile(s->s_name);
   snprintf(m_treefile, MAXPDSTRING, "%s", fn.c_str());
@@ -129,7 +134,7 @@ void pix_fiducialtrack :: treeMess(t_symbol*s)
 
   initialize_treeidmap_from_file( &treeidmap, m_treefile );
   initialize_fidtrackerX( &fidtrackerx, &treeidmap, NULL);
-  if(treeidmap.max_adjacencies<=0){
+  if(treeidmap.max_adjacencies<=0) {
     error("could not load TreeIdMap from '%s'", s->s_name);
   }
 }
@@ -151,9 +156,11 @@ void pix_fiducialtrack :: addMess(t_symbol*s)
 /////////////////////////////////////////////////////////
 void pix_fiducialtrack :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_fiducialtrack::treeMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_fiducialtrack::treeMessCallback),
                   gensym("open"), A_SYMBOL, A_NULL);
-  class_addmethod(classPtr, reinterpret_cast<t_method>(&pix_fiducialtrack::addMessCallback),
+  class_addmethod(classPtr,
+                  reinterpret_cast<t_method>(&pix_fiducialtrack::addMessCallback),
                   gensym("add"), A_SYMBOL, A_NULL);
 }
 void pix_fiducialtrack :: treeMessCallback(void *data, t_symbol* filename)

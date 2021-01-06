@@ -52,26 +52,33 @@ static double calculate_angle( double dx, double dy )
   if( fabs(dx) > 0.001 ) {
     result = atan(dy/dx) - M_PI * .5;
 
-    if( dx < 0 )
+    if( dx < 0 ) {
       result =  result - M_PI;
+    }
 
-    if( result < 0 )
+    if( result < 0 ) {
       result += 2. * M_PI;
+    }
   } else {
-    if (dy>0) result = 0;
-    else result = M_PI;
+    if (dy>0) {
+      result = 0;
+    } else {
+      result = M_PI;
+    }
   }
 
   return result;
 }
 
-static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height )
+static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width,
+                              int height )
 {
   int i;
   float leaf_size;
 
   double radius = .5 + r->depth;
-  double n = radius * radius * M_PI;  // weight according to depth circle area
+  double n = radius * radius *
+             M_PI;  // weight according to depth circle area
 
   if( r->adjacent_region_count == 1 ) {
     float x, y;
@@ -83,43 +90,44 @@ static void sum_leaf_centers( FidtrackerX *ft, Region *r, int width, int height 
     x = ((r->left + r->right) * .5f);
     y = ((r->top + r->bottom) * .5f);
 
-    if( ft->pixelwarp ){
+    if( ft->pixelwarp ) {
       int pixel = width*(int)y +(int)x;
       if ((pixel>=0) && (pixel<width*height)) {
-	x = ft->pixelwarp[ pixel ].x;
-	y = ft->pixelwarp[ pixel ].y;
+        x = ft->pixelwarp[ pixel ].x;
+        y = ft->pixelwarp[ pixel ].y;
       }
 
       if ((x>0) && (y>0)) {
-	if( r->colour == 0 ){
-	  ft->black_x_sum_warped += x * n;
-	  ft->black_y_sum_warped += y * n;
-	  ft->black_leaf_count_warped += n;
-	}else{
-	  ft->white_x_sum_warped += x * n;
-	  ft->white_y_sum_warped += y * n;
-	  ft->white_leaf_count_warped += n;
-	}
+        if( r->colour == 0 ) {
+          ft->black_x_sum_warped += x * n;
+          ft->black_y_sum_warped += y * n;
+          ft->black_leaf_count_warped += n;
+        } else {
+          ft->white_x_sum_warped += x * n;
+          ft->white_y_sum_warped += y * n;
+          ft->white_leaf_count_warped += n;
+        }
       }
     }
 
-    if( r->colour == 0 ){
+    if( r->colour == 0 ) {
       ft->black_x_sum += x * n;
       ft->black_y_sum += y * n;
       ft->black_leaf_count += n;
-    }else{
+    } else {
       ft->white_x_sum += x * n;
       ft->white_y_sum += y * n;
       ft->white_leaf_count += n;
     }
 
     ft->total_leaf_count +=n;
-  }else{
-    for( i=0; i < r->adjacent_region_count; ++i ){
+  } else {
+    for( i=0; i < r->adjacent_region_count; ++i ) {
       Region *adjacent = r->adjacent_regions[i];
       if( adjacent->level == TRAVERSED
-	  && adjacent->descendent_count < r->descendent_count )
-	sum_leaf_centers( ft, adjacent, width, height );
+          && adjacent->descendent_count < r->descendent_count ) {
+        sum_leaf_centers( ft, adjacent, width, height );
+      }
     }
   }
 }
@@ -157,15 +165,17 @@ int _USERENTRY depth_string_cmp(const void *a, const void *b)
   Region **aa = (Region**)a;
   Region **bb = (Region**)b;
 
-  if( !(*aa)->depth_string ){
-    if( !(*bb)->depth_string )
+  if( !(*aa)->depth_string ) {
+    if( !(*bb)->depth_string ) {
       return 0;
-    else
+    } else {
       return 1;
-  }else if( !(*bb)->depth_string ){
+    }
+  } else if( !(*bb)->depth_string ) {
     return -1;
-  }else{
-    return -strcmp( (*aa)->depth_string, (*bb)->depth_string ); // left heavy order
+  } else {
+    return -strcmp( (*aa)->depth_string,
+                    (*bb)->depth_string ); // left heavy order
   }
 }
 
@@ -178,35 +188,38 @@ static char *build_left_heavy_depth_string( FidtrackerX *ft, Region *r )
   char *p, *p2;
 
   //mk    assert( ft->next_depth_string < ft->depth_string_count );
-  result = &ft->depth_strings[ ft->depth_string_length * (ft->next_depth_string++) ];
+  result = &ft->depth_strings[ ft->depth_string_length *
+                                                       (ft->next_depth_string++) ];
 
   result[0] = (char)('0' + r->depth);
   result[1] = '\0';
   p = &result[1];
 
-  if( r->adjacent_region_count != 1 ){
+  if( r->adjacent_region_count != 1 ) {
 
-    for( i=0; i < r->adjacent_region_count; ++i ){
+    for( i=0; i < r->adjacent_region_count; ++i ) {
       adjacent = r->adjacent_regions[i];
       if( adjacent->level == TRAVERSED
-	  && adjacent->descendent_count < r->descendent_count ){
+          && adjacent->descendent_count < r->descendent_count ) {
 
-	adjacent->depth_string = build_left_heavy_depth_string( ft, adjacent );
-      }else{
-	adjacent->depth_string = 0;
+        adjacent->depth_string = build_left_heavy_depth_string( ft, adjacent );
+      } else {
+        adjacent->depth_string = 0;
       }
     }
 
-    qsort( r->adjacent_regions, r->adjacent_region_count, sizeof(Region*), depth_string_cmp );
+    qsort( r->adjacent_regions, r->adjacent_region_count, sizeof(Region*),
+           depth_string_cmp );
 
-    for( i=0; i < r->adjacent_region_count; ++i ){
+    for( i=0; i < r->adjacent_region_count; ++i ) {
       Region *adjacent = r->adjacent_regions[i];
-      if( adjacent->depth_string ){
-	p2 = adjacent->depth_string;
-	while( *p2 )
-	  *p++ = *p2++;
+      if( adjacent->depth_string ) {
+        p2 = adjacent->depth_string;
+        while( *p2 ) {
+          *p++ = *p2++;
+        }
 
-	adjacent->depth_string = 0;
+        adjacent->depth_string = 0;
       }
     }
 
@@ -223,14 +236,14 @@ static void print_unordered_depth_string( Region *r )
   Region *adjacent;
 
   printf( "(%d", r->depth );
-  if( r->adjacent_region_count != 1 ){
+  if( r->adjacent_region_count != 1 ) {
 
-    for( i=0; i < r->adjacent_region_count; ++i ){
+    for( i=0; i < r->adjacent_region_count; ++i ) {
       adjacent = r->adjacent_regions[i];
       if( adjacent->level == TRAVERSED
-	  && adjacent->descendent_count < r->descendent_count ){
+          && adjacent->descendent_count < r->descendent_count ) {
 
-	print_unordered_depth_string( adjacent );
+        print_unordered_depth_string( adjacent );
       }
     }
   }
@@ -240,7 +253,7 @@ static void print_unordered_depth_string( Region *r )
 #endif
 
 static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
-					 Region *r, int width, int height )
+    Region *r, int width, int height )
 {
   double all_x = 0.;
   double all_y = 0.;
@@ -275,58 +288,77 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
 
   set_depth( r, 0 );
   sum_leaf_centers( ft, r, width, height );
-  if(ft->total_leaf_count<1 || ft->black_leaf_count<1 || ft->white_leaf_count<1) {
+  if(ft->total_leaf_count<1 || ft->black_leaf_count<1
+      || ft->white_leaf_count<1) {
     //fprintf(stderr, "did not find any leafs (%d)!", ft->total_leaf_count);
     r->flags |= LOST_SYMBOL_FLAG;
     f->id = INVALID_FIDUCIAL_ID;
     return;
   }
-  ft->average_leaf_size = ft->total_leaf_size / (double)(ft->total_leaf_count);
+  ft->average_leaf_size = ft->total_leaf_size / (double)(
+                            ft->total_leaf_count);
 
-  all_x = (double)(ft->black_x_sum + ft->white_x_sum) / (double)(ft->black_leaf_count + ft->white_leaf_count);
-  all_y = (double)(ft->black_y_sum + ft->white_y_sum) / (double)(ft->black_leaf_count + ft->white_leaf_count);
+  all_x = (double)(ft->black_x_sum + ft->white_x_sum) / (double)(
+            ft->black_leaf_count + ft->white_leaf_count);
+  all_y = (double)(ft->black_y_sum + ft->white_y_sum) / (double)(
+            ft->black_leaf_count + ft->white_leaf_count);
 
   black_x = (double)ft->black_x_sum / (double)ft->black_leaf_count;
   black_y = (double)ft->black_y_sum / (double)ft->black_leaf_count;
 
   if (ft->pixelwarp) {
-    if (ft->total_leaf_count>(ft->black_leaf_count_warped+ft->white_leaf_count_warped)) {
+    if (ft->total_leaf_count>(ft->black_leaf_count_warped
+                              +ft->white_leaf_count_warped)) {
       int pixel = width*(int)all_y+(int)all_x;
 
       if ((pixel>=0) && (pixel<width*height)) {
-	all_x_warped = ft->pixelwarp[pixel].x;
-	all_y_warped = ft->pixelwarp[pixel].y;
-	if ((all_x_warped>0) || (all_y_warped>0)) {
+        all_x_warped = ft->pixelwarp[pixel].x;
+        all_y_warped = ft->pixelwarp[pixel].y;
+        if ((all_x_warped>0) || (all_y_warped>0)) {
 
-	  pixel = (int)black_y*width+(int)black_x;
-	  if ((pixel>=0) && (pixel<width*height)) {
-	    black_x_warped = ft->pixelwarp[pixel].x;
-	    black_y_warped = ft->pixelwarp[pixel].y;
-	    if ((black_x_warped>0) || (black_y_warped>0)) {
-	      f->angle = calculate_angle( all_x_warped - black_x_warped, all_y_warped - black_y_warped );
-	    } else f->angle = 0.0f;
-	  } else f->angle = 0.0f;
+          pixel = (int)black_y*width+(int)black_x;
+          if ((pixel>=0) && (pixel<width*height)) {
+            black_x_warped = ft->pixelwarp[pixel].x;
+            black_y_warped = ft->pixelwarp[pixel].y;
+            if ((black_x_warped>0) || (black_y_warped>0)) {
+              f->angle = calculate_angle( all_x_warped - black_x_warped,
+                                          all_y_warped - black_y_warped );
+            } else {
+              f->angle = 0.0f;
+            }
+          } else {
+            f->angle = 0.0f;
+          }
 
-	  f->x = all_x_warped;
-	  f->y = all_y_warped;
-	} else {
+          f->x = all_x_warped;
+          f->y = all_y_warped;
+        } else {
 
-	  f->x = 0.0f;
-	  f->y = 0.0f;
-	  f->angle = 0.0f;
-	  r->flags |= LOST_SYMBOL_FLAG;
-	}
-      } else r->flags |= LOST_SYMBOL_FLAG;
+          f->x = 0.0f;
+          f->y = 0.0f;
+          f->angle = 0.0f;
+          r->flags |= LOST_SYMBOL_FLAG;
+        }
+      } else {
+        r->flags |= LOST_SYMBOL_FLAG;
+      }
     } else {
-      all_x_warped = (double)(ft->black_x_sum_warped + ft->white_x_sum_warped) / (double)(ft->black_leaf_count_warped + ft->white_leaf_count_warped);
-      all_y_warped = (double)(ft->black_y_sum_warped + ft->white_y_sum_warped) / (double)(ft->black_leaf_count_warped + ft->white_leaf_count_warped);
+      all_x_warped = (double)(ft->black_x_sum_warped +
+                              ft->white_x_sum_warped) / (double)(ft->black_leaf_count_warped +
+                                  ft->white_leaf_count_warped);
+      all_y_warped = (double)(ft->black_y_sum_warped +
+                              ft->white_y_sum_warped) / (double)(ft->black_leaf_count_warped +
+                                  ft->white_leaf_count_warped);
 
-      black_x_warped = (double)ft->black_x_sum_warped / (double)ft->black_leaf_count_warped;
-      black_y_warped = (double)ft->black_y_sum_warped / (double)ft->black_leaf_count_warped;
+      black_x_warped = (double)ft->black_x_sum_warped / (double)
+                       ft->black_leaf_count_warped;
+      black_y_warped = (double)ft->black_y_sum_warped / (double)
+                       ft->black_leaf_count_warped;
 
       f->x = all_x_warped;
       f->y = all_y_warped;
-      f->angle = calculate_angle( all_x_warped - black_x_warped, all_y_warped - black_y_warped );
+      f->angle = calculate_angle( all_x_warped - black_x_warped,
+                                  all_y_warped - black_y_warped );
     }
 
   } else {
@@ -340,7 +372,9 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
 
   f->leaf_size = (float)(ft->average_leaf_size);
   f->root_size = r->right-r->left;
-  if ((r->bottom-r->top)>f->root_size) f->root_size = r->bottom-r->top;
+  if ((r->bottom-r->top)>f->root_size) {
+    f->root_size = r->bottom-r->top;
+  }
   f->root_colour=r->colour;
   f->node_count=r->descendent_count;
 
@@ -357,8 +391,9 @@ static void compute_fiducial_statistics( FidtrackerX *ft, FiducialX *f,
   assert( r->descendent_count <= ft->max_target_root_descendent_count );
   */
 
-  if (r->flags & LOST_SYMBOL_FLAG) f->id = INVALID_FIDUCIAL_ID;
-  else {
+  if (r->flags & LOST_SYMBOL_FLAG) {
+    f->id = INVALID_FIDUCIAL_ID;
+  } else {
     ft->next_depth_string = 0;
     depth_string = build_left_heavy_depth_string( ft, r );
 
@@ -391,11 +426,12 @@ static void set_depth( Region *r, short depth )
 
   r->depth = depth;
 
-  if( r->adjacent_region_count != 1 ){  // if not a leaf
-    for( i=0; i < r->adjacent_region_count; ++i ){
+  if( r->adjacent_region_count != 1 ) { // if not a leaf
+    for( i=0; i < r->adjacent_region_count; ++i ) {
       Region *adjacent = r->adjacent_regions[i];
-      if( adjacent->descendent_count < r->descendent_count )
-	set_depth( adjacent, child_depth );
+      if( adjacent->descendent_count < r->descendent_count ) {
+        set_depth( adjacent, child_depth );
+      }
     }
   }
 }
@@ -405,10 +441,11 @@ static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
 {
   int i;
 
-  for( i=0; i < r1->adjacent_region_count; ++i ){
+  for( i=0; i < r1->adjacent_region_count; ++i ) {
     Region *adjacent = r1->adjacent_regions[i];
-    if( adjacent == r2 )
+    if( adjacent == r2 ) {
       return 1;
+    }
   }
   return 0;
 }
@@ -431,27 +468,29 @@ static int r1_adjacent_contains_r2( Region* r1, Region* r2 )
 // during the calls to this function we store the maximum leaf-to-node depth
 // in r->depth, later this field has a different meaning
 static void propagate_descendent_count_and_max_depth_upwards(
-							     Segmenter *s, Region *r, FidtrackerX *ft)
+  Segmenter *s, Region *r, FidtrackerX *ft)
 {
   int i;
   Region *parent = 0;
 
   assert( r->level == NOT_TRAVERSED );
-  assert( r->children_visited_count == (r->adjacent_region_count - 1)         // has an untraversed parent
-	  || r->children_visited_count == r->adjacent_region_count );   // is adjacent to root region
+  assert( r->children_visited_count == (r->adjacent_region_count -
+                                        1)         // has an untraversed parent
+          || r->children_visited_count ==
+          r->adjacent_region_count );   // is adjacent to root region
 
   r->descendent_count = 0;
   r->depth = 0;
   r->level = TRAVERSING;
 
-  for( i=0; i < r->adjacent_region_count; ++i ){
+  for( i=0; i < r->adjacent_region_count; ++i ) {
     Region *adjacent = r->adjacent_regions[i];
     assert( r1_adjacent_contains_r2( adjacent, r ) );
 
-    if( adjacent->level == TRAVERSED ){
+    if( adjacent->level == TRAVERSED ) {
       r->descendent_count += (short)(adjacent->descendent_count + 1);
       r->depth = (short)MAX( r->depth, (adjacent->depth + 1) );
-    }else{
+    } else {
       assert( parent == 0 );
       parent = adjacent;
     }
@@ -460,54 +499,55 @@ static void propagate_descendent_count_and_max_depth_upwards(
   r->level = TRAVERSED;
 
   if( r->descendent_count == ft->max_target_root_descendent_count
-      && r->depth >= ft->min_depth && r->depth <= ft->max_depth ){
+      && r->depth >= ft->min_depth && r->depth <= ft->max_depth ) {
 
     // found fiducial candidate
     link_region( &ft->root_regions_head, r );
-  }else{
+  } else {
 
     if( r->descendent_count >= ft->min_target_root_descendent_count
-	&& r->descendent_count < ft->max_target_root_descendent_count
-	&& r->depth >= ft->min_depth && r->depth <= ft->max_depth ) {
+        && r->descendent_count < ft->max_target_root_descendent_count
+        && r->depth >= ft->min_depth && r->depth <= ft->max_depth ) {
       link_region( &ft->root_regions_head, r );
     } else if( r->descendent_count >= ft->min_target_root_descendent_range
-	       && r->descendent_count < ft->max_target_root_descendent_range
-	       && r->depth >= ft->min_depth && r->depth <= ft->max_depth ) {
+               && r->descendent_count < ft->max_target_root_descendent_range
+               && r->depth >= ft->min_depth && r->depth <= ft->max_depth ) {
       r->flags |= LOST_SYMBOL_FLAG;
       link_region( &ft->root_regions_head, r );
     }
 
 
     if( parent
-	&& !(r->flags & (   SATURATED_REGION_FLAG |
-			    ADJACENT_TO_ROOT_REGION_FLAG |
-			    FREE_REGION_FLAG ) ) ){
+        && !(r->flags & (   SATURATED_REGION_FLAG |
+                            ADJACENT_TO_ROOT_REGION_FLAG |
+                            FREE_REGION_FLAG ) ) ) {
 
 
       ++parent->children_visited_count;
 
       if( r->descendent_count < ft->max_target_root_descendent_count
-	  && r->depth < ft->max_depth ){
+          && r->depth < ft->max_depth ) {
 
-	// continue propagating depth and descendent count upwards
-	// so long as parent isn't a saturated node in which case it is
-	// ambiguous whether parent has a parent or not so we skip it
+        // continue propagating depth and descendent count upwards
+        // so long as parent isn't a saturated node in which case it is
+        // ambiguous whether parent has a parent or not so we skip it
 
-	if(
-	   !(parent->flags & SATURATED_REGION_FLAG)
-	   &&
-	   ( ( (!(parent->flags & (ADJACENT_TO_ROOT_REGION_FLAG | FRAGMENTED_REGION_FLAG) )
-		&& parent->children_visited_count == (parent->adjacent_region_count - 1))
-	       ||
-	       ((parent->flags & (ADJACENT_TO_ROOT_REGION_FLAG | FRAGMENTED_REGION_FLAG) )
-		&& parent->children_visited_count == parent->adjacent_region_count) ) )
-	   ){
+        if(
+          !(parent->flags & SATURATED_REGION_FLAG)
+          &&
+          ( ( (!(parent->flags & (ADJACENT_TO_ROOT_REGION_FLAG |
+                                  FRAGMENTED_REGION_FLAG) )
+               && parent->children_visited_count == (parent->adjacent_region_count - 1))
+              ||
+              ((parent->flags & (ADJACENT_TO_ROOT_REGION_FLAG | FRAGMENTED_REGION_FLAG) )
+               && parent->children_visited_count == parent->adjacent_region_count) ) )
+        ) {
 
-	  assert( r1_adjacent_contains_r2( r, parent ) );
-	  assert( r1_adjacent_contains_r2( parent, r ) );
+          assert( r1_adjacent_contains_r2( r, parent ) );
+          assert( r1_adjacent_contains_r2( parent, r ) );
 
-	  propagate_descendent_count_and_max_depth_upwards( s, parent, ft);
-	}
+          propagate_descendent_count_and_max_depth_upwards( s, parent, ft);
+        }
       }
     }
   }
@@ -521,7 +561,7 @@ static void propagate_descendent_count_and_max_depth_upwards(
 void sanity_check_region_initial_values( Segmenter *s )
 {
   int i;
-  for( i=0; i < s->region_count; ++i ){
+  for( i=0; i < s->region_count; ++i ) {
     Region *r = LOOKUP_SEGMENTER_REGION( s, i );
 
     assert( r->level == NOT_TRAVERSED );
@@ -544,15 +584,15 @@ static void find_roots( Segmenter *s, FidtrackerX *ft)
 
   // find fiducial roots beginning at leafs
 
-  for( i=0; i < s->region_count; ++i ){
+  for( i=0; i < s->region_count; ++i ) {
     Region *r = LOOKUP_SEGMENTER_REGION( s, i );
 
     if( r->adjacent_region_count == 1
-	&& !(r->flags & (   SATURATED_REGION_FLAG |
-			    FRAGMENTED_REGION_FLAG |
-			    ADJACENT_TO_ROOT_REGION_FLAG |
-			    FREE_REGION_FLAG ) )
-	){
+        && !(r->flags & (   SATURATED_REGION_FLAG |
+                            FRAGMENTED_REGION_FLAG |
+                            ADJACENT_TO_ROOT_REGION_FLAG |
+                            FREE_REGION_FLAG ) )
+      ) {
 
       assert( r->level == NOT_TRAVERSED );
       assert( r->children_visited_count == 0 );
@@ -565,22 +605,29 @@ static void find_roots( Segmenter *s, FidtrackerX *ft)
 /* -------------------------------------------------------------------------- */
 
 
-void initialize_fidtrackerX( FidtrackerX *ft, TreeIdMap *treeidmap, ShortPoint *pixelwarp )
+void initialize_fidtrackerX( FidtrackerX *ft, TreeIdMap *treeidmap,
+                             ShortPoint *pixelwarp )
 {
 
   ft->min_target_root_descendent_count = treeidmap->min_node_count - 1;
   ft->max_target_root_descendent_count = treeidmap->max_node_count - 1;
-  ft->min_target_root_descendent_range = ft->min_target_root_descendent_count - FUZZY_NODE_RANGE;
-  if (ft->min_target_root_descendent_range<3) ft->min_target_root_descendent_range = 3;
-  ft->max_target_root_descendent_range = ft->max_target_root_descendent_count + FUZZY_NODE_RANGE;
+  ft->min_target_root_descendent_range = ft->min_target_root_descendent_count
+                                         - FUZZY_NODE_RANGE;
+  if (ft->min_target_root_descendent_range<3) {
+    ft->min_target_root_descendent_range = 3;
+  }
+  ft->max_target_root_descendent_range = ft->max_target_root_descendent_count
+                                         + FUZZY_NODE_RANGE;
   ft->min_depth = treeidmap->min_depth;
   ft->max_depth = treeidmap->max_depth;
 
   ft->depth_string_count = treeidmap->max_node_count;
   ft->depth_string_length = treeidmap->max_node_count + 1;
-  ft->depth_strings = (char*)malloc( ft->depth_string_count * ft->depth_string_length );
+  ft->depth_strings = (char*)malloc( ft->depth_string_count *
+                                     ft->depth_string_length );
 
-  ft->temp_coloured_depth_string = (char*)malloc( ft->depth_string_length + 1 );
+  ft->temp_coloured_depth_string = (char*)malloc( ft->depth_string_length +
+                                   1 );
   // includes space for colour prefix
 
   ft->treeidmap = treeidmap;
@@ -596,7 +643,7 @@ void terminate_fidtrackerX( FidtrackerX *ft )
 
 
 int find_fiducialsX( FiducialX *fiducials, int max_count,
-		     FidtrackerX *ft, Segmenter *segments, int width, int height)
+                     FidtrackerX *ft, Segmenter *segments, int width, int height)
 {
   int i = 0;
   Region *next;
@@ -606,32 +653,40 @@ int find_fiducialsX( FiducialX *fiducials, int max_count,
   find_roots( segments, ft);
 
   next = ft->root_regions_head.next;
-  while( next != &ft->root_regions_head ){
+  while( next != &ft->root_regions_head ) {
 
     compute_fiducial_statistics( ft, &fiducials[i], next, width, height );
 
     next = next->next;
     ++i;
-    if( i >= max_count )
+    if( i >= max_count ) {
       return i;
+    }
   }
 
   return i;
 }
 
 int find_regionsX( RegionX *regions, int max_count,
-		   FidtrackerX *ft, Segmenter *segments, int width, int height, int min_size, int max_size)
+                   FidtrackerX *ft, Segmenter *segments, int width, int height, int min_size,
+                   int max_size)
 {
 
   int i,j=0;
   int max_object_size,min_object_size = 0;
   int pixel = 0;
 
-  if (max_size>height) max_object_size=height;
-  else max_object_size = max_size;
+  if (max_size>height) {
+    max_object_size=height;
+  } else {
+    max_object_size = max_size;
+  }
 
-  if (min_size<2) min_object_size = 2;
-  else min_object_size = min_size;
+  if (min_size<2) {
+    min_object_size = 2;
+  } else {
+    min_object_size = min_size;
+  }
 
   initialize_head_region( &ft->root_regions_head );
 
@@ -649,32 +704,41 @@ int find_regionsX( RegionX *regions, int max_count,
     regions[j].area = r->area;
     regions[j].colour = r->colour;
 
-    if ((regions[j].width>min_object_size) && (regions[j].width<max_object_size) && (regions[j].height>min_object_size) && (regions[j].height<max_object_size)) {
+    if ((regions[j].width>min_object_size)
+        && (regions[j].width<max_object_size)
+        && (regions[j].height>min_object_size)
+        && (regions[j].height<max_object_size)) {
       regions[j].x = regions[j].left+regions[j].width/2;
       regions[j].y = regions[j].top+regions[j].height/2;
 
       if(ft->pixelwarp) {
-	pixel = regions[j].y*width + regions[j].x;
-	if ((pixel<0) || (pixel>=width*height)) continue;
-	regions[j].x = ft->pixelwarp[ pixel ].x;
-	regions[j].y = ft->pixelwarp[ pixel ].y;
-	if ((regions[j].x==0) && (regions[j].y==0)) continue;
+        pixel = regions[j].y*width + regions[j].x;
+        if ((pixel<0) || (pixel>=width*height)) {
+          continue;
+        }
+        regions[j].x = ft->pixelwarp[ pixel ].x;
+        regions[j].y = ft->pixelwarp[ pixel ].y;
+        if ((regions[j].x==0) && (regions[j].y==0)) {
+          continue;
+        }
 
-	/*pixel = (int)(width * regions[j].top + regions[j].left);
-	  if ((pixel<0) || (pixel>=width*height)) continue;
-	  p = &ft->pixelwarp[ pixel ];
-	  regions[j].left = p->x;
-	  regions[j].top = p->y;
+        /*pixel = (int)(width * regions[j].top + regions[j].left);
+          if ((pixel<0) || (pixel>=width*height)) continue;
+          p = &ft->pixelwarp[ pixel ];
+          regions[j].left = p->x;
+          regions[j].top = p->y;
 
-	  pixel = (int)(width * regions[j].bottom + regions[j].right);
-	  if ((pixel<0) || (pixel>=width*height)) continue;
-	  p = &ft->pixelwarp[ pixel ];
-	  regions[j].right = p->x;
-	  regions[j].bottom = p->y;*/
+          pixel = (int)(width * regions[j].bottom + regions[j].right);
+          if ((pixel<0) || (pixel>=width*height)) continue;
+          p = &ft->pixelwarp[ pixel ];
+          regions[j].right = p->x;
+          regions[j].bottom = p->y;*/
       }
 
       j++;
-      if (j==max_count) return j;
+      if (j==max_count) {
+        return j;
+      }
     }
   }
 

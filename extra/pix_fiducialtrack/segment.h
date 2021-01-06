@@ -73,38 +73,39 @@ extern "C"
 
 #define REGION_GATE_AREA				1
 
-typedef struct Span{
-	int start, end;
-	struct Span *next;
+typedef struct Span {
+  int start, end;
+  struct Span *next;
 } Span;
 
 #define Region SegmentRegion
-typedef struct Region{
-    struct Region *previous, *next;
-    unsigned char colour;
-    short left, top, right, bottom;
-    short center_x, center_y;
+typedef struct Region {
+  struct Region *previous, *next;
+  unsigned char colour;
+  short left, top, right, bottom;
+  short center_x, center_y;
 
-	struct Span *first_span;
-	struct Span *last_span;
-	int area;
+  struct Span *first_span;
+  struct Span *last_span;
+  int area;
 
-    int flags;
+  int flags;
 
-    short level;                            /* initialized to UNKNOWN_REGION_LEVEL */
-    short depth;                            /* initialized to 0 */
-    short children_visited_count;           /* initialized to 0 */
-    short descendent_count;                 /* initialized to 0x7FFF */
-    char *depth_string;                     /* not initialized by segmenter */
+  short level;                            /* initialized to UNKNOWN_REGION_LEVEL */
+  short depth;                            /* initialized to 0 */
+  short children_visited_count;           /* initialized to 0 */
+  short descendent_count;                 /* initialized to 0x7FFF */
+  char *depth_string;                     /* not initialized by segmenter */
 
-    short adjacent_region_count;
-    struct Region *adjacent_regions[ 1 ];   /* variable length array of length max_adjacent_regions */
+  short adjacent_region_count;
+  struct Region
+    *adjacent_regions[ 1 ];   /* variable length array of length max_adjacent_regions */
 } Region;
 
 
-typedef struct RegionReference{
-    Region *region;
-    struct RegionReference *redirect;
+typedef struct RegionReference {
+  Region *region;
+  struct RegionReference *redirect;
 } RegionReference;
 
 
@@ -112,18 +113,18 @@ typedef struct RegionReference{
 //#define REGIONREF_IS_REDIRECTED(r) ((r)->redirect != (r))
 
 
-#define RESOLVE_REGIONREF_REDIRECTS( x, r )                                    \
-{                                                                              \
-    if( r->redirect != r ){                                                    \
-        RegionReference *result = r;										   \
-		while( result->redirect != result )								       \
-            result = result->redirect;                                         \
-        r->redirect = result;                                                  \
-        x = result;                                                            \
-    }else{                                                                     \
-        x = r;                                                                 \
-    }                                                                          \
-}
+#define RESOLVE_REGIONREF_REDIRECTS( x, r )                             \
+  {                                                                     \
+    if( r->redirect != r ){                                             \
+      RegionReference *result = r;                                      \
+      while( result->redirect != result )                               \
+        result = result->redirect;                                      \
+      r->redirect = result;                                             \
+      x = result;                                                       \
+    }else{                                                              \
+      x = r;                                                            \
+    }                                                                   \
+  }
 
 
 void initialize_head_region( Region *r );
@@ -131,21 +132,21 @@ void link_region( Region *head, Region* r );
 void unlink_region( Region* r );
 
 
-typedef struct Segmenter{
-    RegionReference *region_refs;
-    int region_ref_count;
-    unsigned char *regions;     /* buffer containing raw region ptrs */
-    unsigned char *spans;		/* buffer containing raw span ptrs */
-    int region_count;
-    Region *freed_regions_head;
+typedef struct Segmenter {
+  RegionReference *region_refs;
+  int region_ref_count;
+  unsigned char *regions;     /* buffer containing raw region ptrs */
+  unsigned char *spans;		/* buffer containing raw span ptrs */
+  int region_count;
+  Region *freed_regions_head;
 
-    int sizeof_region;
-    int max_adjacent_regions;
+  int sizeof_region;
+  int max_adjacent_regions;
 
-	int width, height;
+  int width, height;
 
-    RegionReference **regions_under_construction;
-}Segmenter;
+  RegionReference **regions_under_construction;
+} Segmenter;
 
 #define LOOKUP_SEGMENTER_REGION( s, index )\
     (Region*)(s->regions + (s->sizeof_region * (index)))
@@ -153,7 +154,8 @@ typedef struct Segmenter{
 #define LOOKUP_SEGMENTER_SPAN( s, index )\
     (Span*)(s->spans + (sizeof(Span) * (index)))
 
-void initialize_segmenter( Segmenter *segments, int width, int height, int max_adjacent_regions );
+void initialize_segmenter( Segmenter *segments, int width, int height,
+                           int max_adjacent_regions );
 void terminate_segmenter( Segmenter *segments );
 
 void step_segmenter( Segmenter *segments, const unsigned char *source );
@@ -163,4 +165,3 @@ void step_segmenter( Segmenter *segments, const unsigned char *source );
 }
 #endif /* __cplusplus */
 #endif /* INCLUDED_SEGMENT_H */
-

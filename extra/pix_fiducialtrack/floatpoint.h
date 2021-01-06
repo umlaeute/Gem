@@ -27,25 +27,21 @@ extern "C"
 #endif /* __cplusplus */
 
 
-typedef struct FloatPoint{
-    float x, y;
+typedef struct FloatPoint {
+  float x, y;
+} FloatPoint;
 
-}FloatPoint;
+typedef struct DoublePoint {
+  short x, y;
+} DoublePoint;
 
-typedef struct DoublePoint{
-    short x, y;
+typedef struct IntPoint {
+  short x, y;
+} IntPoint;
 
-}DoublePoint;
-
-typedef struct IntPoint{
-    short x, y;
-
-}IntPoint;
-
-typedef struct ShortPoint{
-    short x, y;
-
-}ShortPoint;
+typedef struct ShortPoint {
+  short x, y;
+} ShortPoint;
 
 #ifdef __cplusplus
 }

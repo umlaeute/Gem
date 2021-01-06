@@ -26,18 +26,18 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-typedef struct TreeIdMap{
-    void *implementation_;
+typedef struct TreeIdMap {
+  void *implementation_;
 
-    int tree_count;
-    int min_node_count, max_node_count;
-    int min_depth, max_depth;
+  int tree_count;
+  int min_node_count, max_node_count;
+  int min_depth, max_depth;
 
-    int max_adjacencies;
+  int max_adjacencies;
+} TreeIdMap;
 
-}TreeIdMap;
-
-void initialize_treeidmap_from_file( TreeIdMap* treeidmap, const char *file_name );
+void initialize_treeidmap_from_file( TreeIdMap* treeidmap,
+                                     const char *file_name );
 void initialize_treeidmap( TreeIdMap* treeidmap );
 
 void terminate_treeidmap( TreeIdMap* treeidmap );
