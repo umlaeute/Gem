@@ -22,7 +22,6 @@
 #include "default_trees.h"
 
 #include <string.h>
-#include <assert.h>
 #include <map>
 #include <vector>
 #include <string>
