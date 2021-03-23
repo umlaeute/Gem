@@ -153,7 +153,7 @@ Context::Context(void)
     if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
       errstring=
         "failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
-    } else if (GLEW_ERROR_GL_VERSION_10_ONLY) {
+    } else if (GLEW_ERROR_GL_VERSION_10_ONLY == err) {
       errstring="failed to init GLEW: your system only supports openGL-1.0";
     } else {
       errstring="failed to init GLEW";
