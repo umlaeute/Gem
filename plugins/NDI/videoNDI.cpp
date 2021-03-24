@@ -49,7 +49,9 @@ namespace {
 REGISTER_VIDEOFACTORY("NDI", videoNDI);
 
 videoNDI :: videoNDI()
-  : m_name(std::string("ndi"))
+  : m_ndi_recv(NULL)
+  , m_ndi_find(NULL)
+  , m_name(std::string("ndi"))
   , m_devicename(std::string(""))
   , m_devicenum(0)
   , m_async(true)
