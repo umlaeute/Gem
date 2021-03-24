@@ -412,7 +412,7 @@ size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablen
 void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv) {
   const std::string tabletype = s->s_name;
   std::vector<std::string>extensions;
-  std::string*names;
+  std::string*names = 0;
 
   if(tabletype == "position" || tabletype == "normal") {
     extensions.push_back("X");
@@ -432,6 +432,11 @@ void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv) {
     extensions.push_back("B");
     extensions.push_back("A");
     names = m_color;
+  }
+
+  if (!names) {
+    error("invalid tabletype '%s'", s->s_name);
+    return;
   }
 
   if((argc != 1) && (argc != extensions.size()) && (argc != extensions.size() + 1)) {
