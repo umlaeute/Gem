@@ -185,6 +185,7 @@ private:
     FFMixed call(FFUInt32 funcode)
     {
       FFMixed mixed;
+      mixed.PointerValue=0;
       return call(funcode, mixed);
     }
 
@@ -302,6 +303,7 @@ private:
   FFMixed callGlobal(FFUInt32 funcode)
   {
     FFMixed invalue;
+    invalue.PointerValue=0;
     return call(funcode, invalue, NULL);
   }
 
@@ -819,6 +821,7 @@ public:
   bool setParameter(FFUInt32 ParameterNumber)
   {
     FFMixed value;
+    value.PointerValue = 0;
     return setParameter_(ParameterNumber, value);
   }
   bool setParameter(FFUInt32 ParameterNumber, double d)
