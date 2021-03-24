@@ -59,7 +59,7 @@ bool GEMglGetMapfv :: isRunnable(void)
 void GEMglGetMapfv :: render(GemState *state)
 {
   glGetMapfv (target, query, v);
-  post("not really implemented:: got data @ %X, what should i do with it",
+  post("not really implemented:: got data @ %p, what should i do with it",
        v);
 }
 

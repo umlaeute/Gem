@@ -174,7 +174,7 @@ bool pix_record :: addHandle( std::vector<std::string>available,
     if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
       // not yet added, do so now!
       gem::plugins::record         *handle=NULL;
-      startpost("backend #%d='%s'\t", m_allhandles.size(), key.c_str());
+      startpost("backend #%d='%s'\t", (int)m_allhandles.size(), key.c_str());
       try {
         handle=gem::PluginFactory<gem::plugins::record>::getInstance(key);
       } catch (GemException&ex) {

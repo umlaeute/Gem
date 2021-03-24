@@ -62,7 +62,7 @@ bool GEMglFeedbackBuffer :: isRunnable(void)
 void GEMglFeedbackBuffer :: render(GemState *state)
 {
   glFeedbackBuffer (size, type, buffer);
-  error("i got data @ %X, but i don't know what to do with it!", buffer);
+  error("i got data @ %p, but i don't know what to do with it!", buffer);
 }
 
 /////////////////////////////////////////////////////////
