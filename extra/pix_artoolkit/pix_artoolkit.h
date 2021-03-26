@@ -144,6 +144,13 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
   OBJECT_T	m_object[MAX_OBJECTS];		//
   //		char                *config_name;	//"Data/multi/marker.dat"
   //		ARMultiMarkerInfoT  *config;		//
+#if AR_HEADER_VERSION_MAJOR >= 5
+  ARHandle      *m_arhandle;
+  AR3DHandle    *m_3dhandle;
+  ARPattHandle  *m_patterns;
+  ARParamLT     *m_paramlt;
+#endif
+
 #endif /* HAVE_ARTOOLKIT */
 
   //////////

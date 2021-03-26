@@ -39,9 +39,14 @@ pix_artoolkit :: pix_artoolkit()
 # ifdef GEM4MAX
 GemPixObj(1),
 # endif
-m_xsize(320), m_ysize(240), m_thresh(100),
-m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true),
-m_cparam_name(NULL)
+  m_outMarker(NULL)
+  , m_xsize(320), m_ysize(240), m_thresh(100)
+  , m_count(0), m_outputMode(OUTPUT_QUATERNION), m_continuous(true)
+  , m_cparam_name(NULL)
+# if AR_HEADER_VERSION_MAJOR >= 5
+  , m_arhandle(NULL), m_3dhandle(NULL)
+  , m_patterns(NULL), m_paramlt(NULL)
+# endif
 #endif
 {
 #ifdef GEM4MAX
@@ -70,6 +75,9 @@ m_cparam_name(NULL)
     m_object[i].center[1] = 0.0;
   }
   m_image.setCsizeByFormat(GEM_RGBA);
+# if AR_HEADER_VERSION_MAJOR >= 5
+  m_patterns = arPattCreateHandle();
+# endif
 #else
   error("compiled without ARToolKit support!");
 #endif
@@ -81,6 +89,14 @@ m_cparam_name(NULL)
 //////////////////////////////////////////////////////
 pix_artoolkit :: ~pix_artoolkit()
 {
+#ifdef HAVE_ARTOOLKIT
+# if AR_HEADER_VERSION_MAJOR >= 5
+  if(m_patterns)arPattDeleteHandle(m_patterns);
+  if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
+  if(m_arhandle)arDeleteHandle(m_arhandle);
+  if(m_paramlt )arParamLTFree(&m_paramlt);
+# endif
+#endif
 }
 
 #ifdef HAVE_ARTOOLKIT
@@ -99,17 +115,52 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     m_xsize = image.xsize;
     m_ysize = image.ysize;
     ::arParamChangeSize(&wparam, m_xsize, m_ysize, &m_cparam);
+#if AR_HEADER_VERSION_MAJOR < 5
     ::arInitCparam(&m_cparam);
+#endif
     ::arParamDisp(&m_cparam);
+#if AR_HEADER_VERSION_MAJOR >= 5
+    if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
+    if(m_arhandle)arDeleteHandle(m_arhandle);
+    if(m_paramlt)arParamLTFree(&m_paramlt);
+    m_paramlt=arParamLTCreate(&m_cparam, AR_PARAM_LT_DEFAULT_OFFSET);
+    m_3dhandle = ar3DCreateHandle(&m_cparam);
+    m_arhandle = arCreateHandle(m_paramlt);
+#endif
+
     //    ::argInit(&m_cparam, 1.0, 0, 0, 0, 0);
     post("ARToolKit: image size was changed (%d, %d)", m_xsize, m_ysize);
   }
 
+#if AR_HEADER_VERSION_MAJOR >= 5
+  AR2VideoBufferT frame;
+  frame.buff = image.data;
+  frame.bufPlanes = 0;
+  frame.bufPlaneCount = 0;
+  frame.buffLuma = 0; // TODO
+  frame.fillFlag = 1;
+  do {
+    double sec = 0.;
+    double usec = modf(clock_getlogicaltime(), &sec);
+    frame.time.sec = (uint64_t)sec;
+    frame.time.usec = (uint32_t)(usec*1000000.);
+  } while(0);
+  arSetLabelingThresh(m_arhandle, m_thresh);
+  if (::arDetectMarker(m_arhandle, &frame) < 0) {
+    error("ARToolKit: arDetectMarker() error");
+    return;
+  }
+  marker_num = arGetMarkerNum(m_arhandle);
+  marker_info = arGetMarker(m_arhandle);
+  if(!marker_info || marker_num<1)
+    return;
+
+#else
   if (::arDetectMarker(image.data, m_thresh, &marker_info, &marker_num) < 0) {
     error("ARToolKit: arDetectMarker() error");
     return;
   }
-
+#endif
   for (i=0; i<MAX_OBJECTS; i++) {
     if (m_object[i].patt_id == -1) continue;
     for (k = -1, j = 0; j < marker_num; j++) {
@@ -121,11 +172,24 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
              marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
     }
     m_object[i].visible = k;
+
     if (k == -1) {
       m_object[i].contFlag = false;
     } else if (k >= 0) {
       // get the transformation between the marker and the real camera
-
+#if AR_HEADER_VERSION_MAJOR >= 5
+      if (m_continuous == 0 || m_object[i].contFlag == 0) {
+        ::arGetTransMatSquare(m_3dhandle, &marker_info[i]
+            , m_object[i].width
+            , m_object[i].trans);
+      } else {
+        ::arGetTransMatSquareCont(m_3dhandle, &marker_info[i]
+            , m_object[i].trans
+            , m_object[i].width
+            , m_object[i].trans
+            );
+      }
+#else
       if (m_continuous == 0 || m_object[i].contFlag == 0) {
         ::arGetTransMat(&marker_info[k],
                         m_object[i].center,
@@ -138,6 +202,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
                             m_object[i].width,
                             m_object[i].trans);
       }
+#endif
       m_object[i].contFlag = true;
 
       verbose(3, "ID(%d), pos(%f, %f), center(%f, %f)",
@@ -223,15 +288,21 @@ void pix_artoolkit :: processYUVImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: loadmarkerMess(t_int n, t_symbol *marker_filename)
 {
+  const char*filename = marker_filename->s_name;
   if  (n > MAX_OBJECTS || n <= 0) {
     error("can't set marker number %d", n);
     return;
   }
-  if ((m_object[n - 1].patt_id = ::arLoadPatt(marker_filename->s_name)) < 0) {
+#if AR_HEADER_VERSION_MAJOR >= 5
+  m_object[n - 1].patt_id = ::arPattLoad(m_patterns, filename);
+#else
+  m_object[n - 1].patt_id = ::arLoadPatt(filename);
+#endif
+  if (m_object[n - 1].patt_id < 0) {
     error("ARToolKit: pattern load error (%d) !!", m_object[n - 1].patt_id);
     return;
   }
-  post("loaded a marker file (%s) as %d...", marker_filename->s_name, n);
+  post("loaded a marker file (%s) as %d...", filename, n);
   m_object[n].patt_name = marker_filename;
 }
 
@@ -261,10 +332,22 @@ void pix_artoolkit :: loadcparaMess(t_symbol *cparam_filename)
   }
   post("loaded camera parameter file:(%s)", cparam_filename->s_name);
   ::arParamChangeSize( &wparam, m_xsize, m_ysize, &m_cparam );
+#if AR_HEADER_VERSION_MAJOR >= 5
+#else
   ::arInitCparam( &m_cparam );
+#endif
   ::arParamDisp( &m_cparam );
   //  ::argInit(&m_cparam, 1.0, 0, 0, 0, 0);
   m_cparam_name = cparam_filename;
+
+#if AR_HEADER_VERSION_MAJOR >= 5
+  if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
+  if(m_arhandle)arDeleteHandle(m_arhandle);
+  if(m_paramlt)arParamLTFree(&m_paramlt);
+  m_paramlt=arParamLTCreate(&m_cparam, AR_PARAM_LT_DEFAULT_OFFSET);
+  m_3dhandle = ar3DCreateHandle(&m_cparam);
+  m_arhandle = arCreateHandle(m_paramlt);
+#endif
 }
 
 /////////////////////////////////////////////////////////
