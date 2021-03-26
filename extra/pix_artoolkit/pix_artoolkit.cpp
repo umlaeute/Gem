@@ -115,7 +115,9 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     m_xsize = image.xsize;
     m_ysize = image.ysize;
     ::arParamChangeSize(&wparam, m_xsize, m_ysize, &m_cparam);
-#if AR_HEADER_VERSION_MAJOR < 5
+#if AR_HEADER_VERSION_MAJOR >= 5
+    ::arParamClear(&m_cparam, m_xsize, m_ysize, AR_DIST_FUNCTION_VERSION_DEFAULT);
+#else
     ::arInitCparam(&m_cparam);
 #endif
     ::arParamDisp(&m_cparam);
@@ -146,6 +148,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     frame.time.usec = (uint32_t)(usec*1000000.);
   } while(0);
   arSetLabelingThresh(m_arhandle, m_thresh);
+  arSetPixelFormat(m_arhandle,  AR_PIXEL_FORMAT_RGBA);
   if (::arDetectMarker(m_arhandle, &frame) < 0) {
     error("ARToolKit: arDetectMarker() error");
     return;
