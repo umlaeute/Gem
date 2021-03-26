@@ -69,11 +69,7 @@ m_cparam_name(NULL)
     m_object[i].center[0] = 0.0;
     m_object[i].center[1] = 0.0;
   }
-# if defined(__APPLE__) || defined(GEM4MAX)
-  m_image.setCsizeByFormat(GL_BGRA_EXT);
-# else
-  m_image.setCsizeByFormat(GL_RGBA);
-# endif
+  m_image.setCsizeByFormat(GEM_RGBA);
 #else
   error("compiled without ARToolKit support!");
 #endif
