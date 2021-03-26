@@ -33,6 +33,11 @@ pix_artoolkit_la_LIBADD   += $(GEM_RTE_LIBS)
 
 pix_artoolkit_la_LDFLAGS += $(GEM_ARCH_LDFLAGS)
 
+# object specific libraries
+pix_artoolkit_la_CXXFLAGS += $(GEM_LIB_ARTOOLKIT_CFLAGS)
+pix_artoolkit_la_LIBADD   += $(GEM_LIB_ARTOOLKIT_LIBS)
+pix_artoolkit_la_LDFLAGS  +=
+
 
 # convenience symlinks
 ## uha, this is ugly
