@@ -35,8 +35,8 @@ pix_fiducialtrack_la_LIBADD += -L$(top_builddir) $(GEM_EXTERNAL_LIBS)
 
 pix_fiducialtrack_la_LIBADD   += libfidtrack.la
 
-libfidtrack_la_CFLAGS  =
-libfidtrack_la_CXXFLAGS  =
+libfidtrack_la_CFLAGS  = -DNDEBUG
+libfidtrack_la_CXXFLAGS  = -DNDEBUG
 libfidtrack_la_LIBADD    =
 libfidtrack_la_LDFLAGS   =
 
