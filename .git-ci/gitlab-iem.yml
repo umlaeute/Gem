@@ -51,6 +51,10 @@ variables:
 .build:macos: &build_macos
   tags:
      - osx
+  retry:
+    max: 1
+    when:
+      - runner_system_failure
   stage: build
   before_script:
     - build/tools/systeminfo.sh || true
