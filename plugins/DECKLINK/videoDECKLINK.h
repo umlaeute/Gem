@@ -38,6 +38,8 @@ private:
   IDeckLinkInputCallback*m_dlCallback;
 
 public:
+  BMDPixelFormat m_pixelFormat;
+
   videoDECKLINK(void);
 
   virtual ~videoDECKLINK(void);

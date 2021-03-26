@@ -139,6 +139,44 @@ namespace {
     return "";
   }
 };
+static std::map<std::string, BMDPixelFormat> s_pixformatstrings;
+namespace {
+  BMDPixelFormat string2pixformat(std::string Name) {
+    static bool done = false;
+    if(!done) {
+      s_pixformatstrings["yuv8"] = bmdFormat8BitYUV;
+      s_pixformatstrings["yuv10"] = bmdFormat10BitYUV;
+      s_pixformatstrings["argb8"] = bmdFormat8BitARGB;
+      s_pixformatstrings["bgra8"] = bmdFormat8BitBGRA;
+      s_pixformatstrings["yuv"] = bmdFormat8BitYUV;
+      s_pixformatstrings["argb"] = bmdFormat8BitARGB;
+      s_pixformatstrings["bgra"] = bmdFormat8BitBGRA;
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
+#else
+      verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires pixformats to be lower-case");
+#endif
+    }
+    done=true;
+    std::string name = std::string(Name);
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
+    std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c){ return std::tolower(c); });
+#else
+#endif
+    std::map<std::string, BMDPixelFormat>::iterator it = s_pixformatstrings.find(name);
+    if(s_pixformatstrings.end() != it)
+      return it->second;
+    return (BMDPixelFormat)0;
+  }
+  std::string pixformat2string(BMDPixelFormat conn) {
+    static bool done = false;
+    if(!done) string2pixformat("");
+    done = true;
+    for (std::map<std::string, BMDPixelFormat>::iterator it = s_pixformatstrings.begin(); it != s_pixformatstrings.end(); ++it)
+      if (it->second == conn)
+        return it->first;
+    return "";
+  }
+};
 
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
@@ -186,7 +224,7 @@ public:
     , m_refCount(0)
     , m_frameCount(0)
     , m_cfg_inputFlags(bmdVideoInputFlagDefault)
-    , m_cfg_pixelFormat(bmdFormat8BitYUV)
+    , m_cfg_pixelFormat(parent->m_pixelFormat)
     , m_deckLinkInput(dli)
     , m_priv(parent)
   {
@@ -291,7 +329,6 @@ public:
 
     if (m_deckLinkInput) {
       m_deckLinkInput->StopStreams();
-
       result = m_deckLinkInput->EnableVideoInput(mode->GetDisplayMode(),
                m_cfg_pixelFormat, m_cfg_inputFlags);
       if (result != S_OK) {
@@ -371,6 +408,7 @@ videoDECKLINK::videoDECKLINK(void)
   , m_displayMode(NULL)
   , m_dlConfig(NULL)
   , m_connectionType((BMDVideoConnection)0)
+  , m_pixelFormat(bmdFormat8BitYUV)
   , m_dlCallback(NULL)
 {
   IDeckLinkIterator*dli = CreateDeckLinkIteratorInstance();
@@ -515,7 +553,7 @@ bool videoDECKLINK::open(gem::Properties&props)
   BMDDisplayModeSupport displayModeSupported;
   if (S_OK != m_dlInput->DoesSupportVideoMode(
         m_displayMode->GetDisplayMode(),
-        pixformat,
+        m_pixelFormat,
         flags,
         &displayModeSupported,
         NULL)) {
@@ -536,7 +574,7 @@ bool videoDECKLINK::open(gem::Properties&props)
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
   if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(),
-                                         pixformat, flags)) {
+                                         m_pixelFormat, flags)) {
     goto bail;
   }
 
@@ -660,7 +698,6 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
   bool needrestart = false;
   std::vector<std::string>keys=props.keys();
   int i=0;
-  post("setting %d Properties", keys.size());
   for(i=0; i<keys.size(); i++) {
     const std::string key =keys[i];
     if(canrestart  && needrestart)
@@ -684,6 +721,45 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
         }
         break;
       default:  break;
+      }
+    }
+    if("pixformat" == key) {
+      BMDPixelFormat fmt = 0;
+      std::string s;
+      double d;
+      switch(props.type(key)) {
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          fmt = string2pixformat(s);
+        }
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          int idx =(int)d;
+          switch(idx) {
+          default:
+          case 0:
+            fmt=bmdFormat8BitYUV;
+            break;
+          case 1:
+            fmt=bmdFormat10BitYUV;
+            break;
+          case 2:
+            fmt=bmdFormat8BitARGB;
+            break;
+          case 3:
+            fmt=bmdFormat8BitBGRA;
+            break;
+          }
+        }
+        break;
+      default:  break;
+      }
+      if (fmt) {
+        m_pixelFormat = fmt;
+        needrestart = true;
+      } else {
+        // unknown pixelformat
       }
     }
     if("connection" == key) {
