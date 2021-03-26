@@ -36,8 +36,8 @@
 #include "Base/GemPixObj.h"
 
 #ifdef HAVE_ARTOOLKIT
-# include "AR/param.h"
 # include "AR/ar.h"
+# include "AR/param.h"
 # include "AR/arMulti.h"
 
 # define FILENAME_LENGTH 512
