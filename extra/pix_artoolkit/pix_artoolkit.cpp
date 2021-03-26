@@ -74,7 +74,7 @@ GemPixObj(1),
     m_object[i].center[0] = 0.0;
     m_object[i].center[1] = 0.0;
   }
-  m_image.setCsizeByFormat(GEM_RGBA);
+  m_image.setCsizeByFormat(GEM_GRAY);
 # if AR_HEADER_VERSION_MAJOR >= 5
   m_patterns = arPattCreateHandle();
 # endif
@@ -104,7 +104,7 @@ pix_artoolkit :: ~pix_artoolkit()
 // processRGBAImage
 //
 //////////////////////////////////////////////////////
-void pix_artoolkit :: processRGBAImage(imageStruct &image)
+void pix_artoolkit :: processGrayImage(imageStruct &image)
 {
   //	double    		gl_para[16];
   ARMarkerInfo    *marker_info;
@@ -139,7 +139,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
   frame.buff = image.data;
   frame.bufPlanes = 0;
   frame.bufPlaneCount = 0;
-  frame.buffLuma = 0; // TODO
+  frame.buffLuma = image.data;
   frame.fillFlag = 1;
   do {
     double sec = 0.;
@@ -148,7 +148,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
     frame.time.usec = (uint32_t)(usec*1000000.);
   } while(0);
   arSetLabelingThresh(m_arhandle, m_thresh);
-  arSetPixelFormat(m_arhandle,  AR_PIXEL_FORMAT_RGBA);
+  arSetPixelFormat(m_arhandle,  AR_PIXEL_FORMAT_MONO);
   if (::arDetectMarker(m_arhandle, &frame) < 0) {
     error("ARToolKit: arDetectMarker() error");
     return;
@@ -259,9 +259,9 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
 // processImage
 //
 /////////////////////////////////////////////////////////
-void pix_artoolkit :: processGrayImage(imageStruct &image)
+void pix_artoolkit :: processRGBAImage(imageStruct &image)
 {
-  error("requires RGBA images"); return;
+  error("requires Gray images"); return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromGray(image.data);
@@ -276,7 +276,7 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: processYUVImage(imageStruct &image)
 {
-  error("requires RGBA images"); return;
+  error("requires Gray images"); return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromUYVY(image.data);
