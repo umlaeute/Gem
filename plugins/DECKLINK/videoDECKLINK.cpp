@@ -724,7 +724,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
       }
     }
     if("pixformat" == key) {
-      BMDPixelFormat fmt = 0;
+      BMDPixelFormat fmt = (BMDPixelFormat)0;
       std::string s;
       double d;
       switch(props.type(key)) {
@@ -756,7 +756,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
       default:  break;
       }
       if (fmt) {
-        m_pixelFormat = fmt;
+        m_pixelFormat = (BMDPixelFormat)fmt;
         needrestart = true;
       } else {
         // unknown pixelformat
