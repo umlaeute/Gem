@@ -1,4 +1,5 @@
-#N canvas 0 0 413 451 10;
+#N canvas 6 61 413 451 10;
+#X declare -path zexy -lib zexy;
 #X obj 78 26 inlet;
 #X obj 78 60 t b a b;
 #X obj 131 121 repeat \$1;
@@ -24,6 +25,7 @@
 #X text 8 225 repeated;
 #X text 119 381 counter;
 #X text 30 419 nrepeat.pd (GPL) <claude@mathr.co.uk>;
+#X obj 227 386 declare -path zexy -lib zexy;
 #X connect 0 0 1 0;
 #X connect 1 0 7 0;
 #X connect 1 1 2 0;
