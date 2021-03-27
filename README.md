@@ -53,6 +53,59 @@ try the following, to see more available options:
 $ ./configure --help=recursive
 ~~~
 
+## DEPENDENCIES
+Gem can utilize a lot of libraries and frameworks in order to improve its capabilities.
+Most of these libraries are optional and will be detected automatically when running `./configure`.
+Some libraries won't be detected automatically and you must provide additional information
+on how to use them (see `./configure --help=recursive` for a list of options).
+
+### hard (required) dependencies
+
+The only hard requirements of Gem are:
+
+- Pure Data
+- openGL
+- GLU
+
+### soft (optional) dependencies
+
+Support for text output is optional, but will be compiled into the "core" of Gem
+(that is: once it is enabled, you will need the relevant runtime libraries in order to be able to use Gem at all)
+
+| Library/Framework | notes                   |
+|-------------------|-------------------------|
+| ftgl              | Font rendering support  |
+| fribidi           | support for RTL-scripts |
+
+Most dependencies are purely optional and are only used in plugins.
+If the runtime libraries are not available, Gem won't be able to use those plugins, but it will otherwise work as normal.
+
+
+| Library/Framework            | Operating System | notes                                                            |
+|------------------------------|------------------|------------------------------------------------------------------|
+| sdl2                         |                  | Window managment                                                 |
+| glfw3                        |                  | Window managment                                                 |
+| assimp                       |                  | 3D model loading                                                 |
+| ImageIO                      | macOS            | image reading/writing                                            |
+| QuickTime                    | macOS, Windows   | only 32bit OS are supported                                      |
+| libquicktime                 | Linux            | film reading/writing                                             |
+| ImageMagick                  |                  | image reading/writing (many formats)                             |
+| libTIFF                      |                  | TIFF image reading/writing                                       |
+| libjpeg                      |                  | JPEG image reading/writing                                       |
+| gmerlin_avdec                | (mostly) Linux   | film reading                                                     |
+| libdc1394                    | Linux            | video capture from industry-grade "IEEE 1394" cameras            |
+| libdv/libraw1394/libiec61883 | Linux            | video capture from consumer-grade "firewire" cameras             |
+| libv4l2                      | Linux            | V4L2 video capture and output                                    |
+| VLC                          |                  | open media as video capture via VLC                              |
+| libvncclient                 |                  | grab frames via the VNC protocol                                 |
+| DeckLink                     |                  | video input from  Blackmagic's DeckLink hardware                 |
+| NDI                          |                  | NDI frame capture and output                                     |
+| AVT                          |                  | grab frames from GiGE-devices via Prosilica's AVT SDK            |
+| Halcon                       |                  | grab frames from industrial grade cameras via MVTec's HALCON SDK |
+| Pylon                        |                  | grab frames from GiGE-devices via Basler's PYLON SDK             |
+| OptiTrack                    |                  | capture video from OptiTrack cameras                             |
+|                              |                  |                                                                  |
+
 # INSTALLING
 `make install` might work (mostly on linux)
 
