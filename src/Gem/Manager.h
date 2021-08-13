@@ -252,7 +252,7 @@ private:
   static void       resetValues(void);
 
   static void resizeCallback(int xsize, int ysize, void*);
-  static void dispatchWinmessCallback(void);
+  static void dispatchWinmessCallback(void *owner);
 
   //////////
   // check for supported openGL extensions we might need

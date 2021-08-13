@@ -130,7 +130,7 @@ static int s_singleContext = 0;
 // dispatchGemWindowMessages
 //
 /////////////////////////////////////////////////////////
-void GemMan::dispatchWinmessCallback()
+void GemMan::dispatchWinmessCallback(void *owner)
 {
 #ifndef GEM_MULTICONTEXT
   if (!s_windowRun) {
