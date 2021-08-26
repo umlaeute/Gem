@@ -16,7 +16,6 @@
 //
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
-#ifdef __EMSCRIPTEN__
 
 #include "GemWinCreate.h"
 #include "Gem/Event.h"
@@ -487,5 +486,3 @@ GEM_EXTERN void dispatchGemWindowMessages(WindowInfo &win)
     }
   }
 }
-
-#endif /* Emscripten */

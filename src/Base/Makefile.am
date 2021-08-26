@@ -85,10 +85,13 @@ if ENABLE_MULTICONTEXT
 else !ENABLE_MULTICONTEXT
 libBase_la_SOURCES+= \
     GemWinCreate.h \
-    GemWinCreateEM.cpp \
     GemWinCreateMac.cpp \
     GemWinCreateNT.cpp \
     GemWinCreateXWin.cpp
+if EMSCRIPTEN
+libBase_la_SOURCES+= \
+    GemWinCreateEM.cpp
+endif !EMSCRIPTEN
 endif !ENABLE_MULTICONTEXT
 
 if HAVE_LIB_FTGL
