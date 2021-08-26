@@ -91,7 +91,7 @@ libBase_la_SOURCES+= \
 if EMSCRIPTEN
 libBase_la_SOURCES+= \
     GemWinCreateEM.cpp
-endif !EMSCRIPTEN
+endif EMSCRIPTEN
 endif !ENABLE_MULTICONTEXT
 
 if HAVE_LIB_FTGL
