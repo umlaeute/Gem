@@ -194,11 +194,6 @@ libPixes_la_SOURCES=  \
     pix_scanline.h \
     pix_set.cpp \
     pix_set.h \
-    pix_share.h \
-    pix_share_read.cpp \
-    pix_share_read.h \
-    pix_share_write.cpp \
-    pix_share_write.h \
     pix_sig2pix.cpp \
     pix_sig2pix.h \
     pix_snap2tex.cpp \
@@ -232,7 +227,20 @@ libPixes_la_SOURCES=  \
     pix_yuv.cpp \
     pix_yuv.h \
     pix_zoom.cpp \
-    pix_zoom.h
+    pix_zoom.h \
+    $(empty)
+
+
+if EMSCRIPTEN
+else !EMSCRIPTEN
+libPixes_la_SOURCES+= \
+    pix_share.h \
+    pix_share_read.cpp \
+    pix_share_read.h \
+    pix_share_write.cpp \
+    pix_share_write.h \
+    $(empty)
+endif !EMSCRIPTEN
 
 CHECKUNUSED_IGNORE=$(EXTRA_DIST)
 
