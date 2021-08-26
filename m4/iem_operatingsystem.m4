@@ -17,6 +17,7 @@ MINGW=no
 CYGWIN=no
 HURD=no
 IRIX=no
+EMSCRIPTEN=no
 
 case $host_os in
 *linux*)
@@ -41,6 +42,15 @@ GNU)
   ;;
 esac
 
+AC_LANG_PUSH([C])
+AC_MSG_CHECKING([for GNU triplet])
+cc_triplet=$("${CC}" -dumpmachine 2>/dev/null || true)
+AC_MSG_RESULT([${cc_triplet}])
+AS_CASE([$cc_triplet],
+  [*-emscripten], [EMSCRIPTEN=yes],
+  [])
+AC_LANG_POP([C])
+
 
 AM_CONDITIONAL(LINUX, test x$LINUX = xyes)
 AM_CONDITIONAL(ANDROID, test x$ANDROID = xyes)
@@ -52,4 +62,5 @@ AM_CONDITIONAL(CYGWIN, test x$CYGWIN = xyes)
 AM_CONDITIONAL(MINGW, test x$MINGW = xyes)
 AM_CONDITIONAL(HURD, test x$HURD = xyes)
 AM_CONDITIONAL(IRIX, test x$IRIX = xyes)
+AM_CONDITIONAL(EMSCRIPTEN, test x$EMSCRIPTEN = xyes)
 ]) dnl IEM_OPERATING_SYSTEM
