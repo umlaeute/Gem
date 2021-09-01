@@ -25,7 +25,6 @@
 extern "C" {
 # include <gavl/log.h>
 }
-# define SET_LOG_CALLBACK(opt, priv) gavl_set_log_callback(mylogger::gavl_callback, priv)
 
 # define bgav_is_redirector(f) 0
 # define bgav_redirector_get_num_urls(f) 0
@@ -39,7 +38,6 @@ typedef enum
     GAVL_LOG_INFO    = BGAV_LOG_INFO,
     GAVL_LOG_DEBUG   = BGAV_LOG_DEBUG,
   } gavl_log_level_t;
-# define SET_LOG_CALLBACK(opt, priv) bgav_options_set_log_callback(opt, mylogger::bgav_callback, priv)
 #endif
 
 
@@ -154,20 +152,25 @@ bool filmGMERLIN :: open(const std::string&sfilename,
                          const gem::Properties&wantProps)
 {
   struct mylogger { // struct's as good as class
-    static void bgav_callback(void *data, gavl_log_level_t level,
+#ifdef HAVE_GAVL_LOG_H
+    static int gavl_callback(void *data, gavl_msg_t *msg) {
+      gavl_log_level_t level;
+      const char* log_domain;
+      const char* message;
+      int retval = gavl_log_msg_get(msg, &level, &log_domain, &message);
+      if(!retval)
+        ((filmGMERLIN*)(data))->log(level, log_domain, message);
+      return retval;
+    }
+# define SET_LOG_CALLBACK(opt, priv) gavl_set_log_callback(mylogger::gavl_callback, priv)
+#else
+    static void bgav_callback(void *data, bgav_log_level_t level,
         const char *log_domain, const char *message)
     {
       ((filmGMERLIN*)(data))->log(level, log_domain, message);
     }
-    static int gavl_callback(void *data, gavl_msg_t *msg) {
-      gavl_log_level_t level;
-      const char* domain;
-      const char* message;
-      int retval = gavl_log_msg_get(msg, &level, &domain, &message);
-      if(!retval)
-        bgav_callback(data, level, domain, message);
-      return retval;
-    }
+# define SET_LOG_CALLBACK(opt, priv) bgav_options_set_log_callback(opt, mylogger::bgav_callback, priv)
+#endif
   };
 
   close();
