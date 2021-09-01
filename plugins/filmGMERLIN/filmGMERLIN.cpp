@@ -21,13 +21,35 @@
 # define HAVE_GMERLIN
 #endif
 
+#ifdef HAVE_GAVL_LOG_H
+extern "C" {
+# include <gavl/log.h>
+}
+# define SET_LOG_CALLBACK(opt, priv) gavl_set_log_callback(mylogger::gavl_callback, priv)
+
+# define bgav_is_redirector(f) 0
+# define bgav_redirector_get_num_urls(f) 0
+# define bgav_redirector_get_url(f,i) "oops://"
+# define bgav_redirector_get_name(f, i) "<unknown>"
+#else
+typedef enum
+  {
+    GAVL_LOG_ERROR   = BGAV_LOG_ERROR,
+    GAVL_LOG_WARNING = BGAV_LOG_WARNING,
+    GAVL_LOG_INFO    = BGAV_LOG_INFO,
+    GAVL_LOG_DEBUG   = BGAV_LOG_DEBUG,
+  } gavl_log_level_t;
+# define SET_LOG_CALLBACK(opt, priv) bgav_options_set_log_callback(opt, mylogger::bgav_callback, priv)
+#endif
+
+
+
 
 #ifdef HAVE_GMERLIN
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
-
 
 //#define GEM_FILMGMERLIN_TRACKSWITCH 1
 
@@ -95,30 +117,25 @@ void filmGMERLIN :: close(void)
 // logging
 //
 /////////////////////////////////////////////////////////
-void filmGMERLIN::log(bgav_log_level_t level, const char *log_domain,
+void filmGMERLIN::log(gavl_log_level_t level, const char *log_domain,
                       const char *message)
 {
   switch(level) {
-  case BGAV_LOG_DEBUG:
+  case GAVL_LOG_DEBUG:
     verbose(1, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
-  case BGAV_LOG_INFO:
+  case GAVL_LOG_INFO:
     verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
-  case BGAV_LOG_WARNING:
+  case GAVL_LOG_WARNING:
     verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
-  case BGAV_LOG_ERROR:
+  case GAVL_LOG_ERROR:
     error("[GEM:filmGMERLIN:%s!] %s", log_domain, message);
     break;
   default:
     break;
   }
-}
-void filmGMERLIN::log_callback (void *data, bgav_log_level_t level,
-                                const char *log_domain, const char *message)
-{
-  ((filmGMERLIN*)(data))->log(level, log_domain, message);
 }
 
 bool filmGMERLIN :: isThreadable(void)
@@ -136,6 +153,23 @@ bool filmGMERLIN :: isThreadable(void)
 bool filmGMERLIN :: open(const std::string&sfilename,
                          const gem::Properties&wantProps)
 {
+  struct mylogger { // struct's as good as class
+    static void bgav_callback(void *data, gavl_log_level_t level,
+        const char *log_domain, const char *message)
+    {
+      ((filmGMERLIN*)(data))->log(level, log_domain, message);
+    }
+    static int gavl_callback(void *data, gavl_msg_t *msg) {
+      gavl_log_level_t level;
+      const char* domain;
+      const char* message;
+      int retval = gavl_log_msg_get(msg, &level, &domain, &message);
+      if(!retval)
+        bgav_callback(data, level, domain, message);
+      return retval;
+    }
+  };
+
   close();
 
   m_track=0;
@@ -157,9 +191,7 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   bgav_options_set_seek_subtitles(m_opt, 0);
   bgav_options_set_sample_accurate(m_opt, 1);
 
-  bgav_options_set_log_callback(m_opt,
-                                log_callback,
-                                this);
+  SET_LOG_CALLBACK(m_opt, this);
 
   const char*filename=sfilename.c_str();
 

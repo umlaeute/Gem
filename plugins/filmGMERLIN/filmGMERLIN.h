@@ -113,12 +113,8 @@ protected:
   bool m_doConvert;
 
 
-  virtual void log(bgav_log_level_t level, const char *log_domain,
+  virtual void log(gavl_log_level_t level, const char *log_domain,
                    const char *message);
-private:
-  static void log_callback(void *data, bgav_log_level_t level,
-                           const char *log_domain, const char *message);
-
 };
 };
 };
