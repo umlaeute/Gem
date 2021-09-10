@@ -1,5 +1,8 @@
 # backup copies
 *~
+\#*\#
+.#*
+
 # build products
 *\.la
 *\.lo
@@ -10,6 +13,9 @@
 *\.dll
 \.deps
 \.libs
+
+# out-of-tree builds
+/build-*/
 # autotools byproducts
 Makefile\.in
 /aclocal\.m4
