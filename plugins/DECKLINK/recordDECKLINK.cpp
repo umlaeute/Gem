@@ -187,6 +187,81 @@ namespace {
 
 namespace
 {
+  class ImageStructWrapper : public IDeckLinkVideoFrame
+  {
+  public:
+    imageStruct *m_img;
+    int32_t m_refCount;
+
+    ImageStructWrapper(imageStruct*img)
+      : m_img(img)
+      , m_refCount(1)
+    {    }
+    virtual long GetWidth() {
+      MARK();
+      return m_img->xsize;
+    }
+    virtual long GetHeight() {
+      MARK();
+      return m_img->ysize;
+    }
+    virtual BMDPixelFormat GetPixelFormat() {
+      MARK();
+      switch(m_img->csize) {
+      case 4:
+        printf("RGBA\n");
+        return bmdFormat8BitARGB;
+      case 2:
+        printf("YUV\n");
+        return bmdFormat8BitYUV;
+      default:
+        break;
+      }
+      return bmdFormat8BitYUV;
+    }
+    virtual long GetRowBytes() {
+      MARK();
+      return m_img->xsize * m_img->csize;
+    }
+    virtual HRESULT GetBytes(void **buffer) {
+      MARK();
+      if(m_img->data) {
+        *buffer = m_img->data;
+        return S_OK;
+      }
+      return S_FALSE;
+    }
+    virtual ULONG AddRef(void) {
+      MARK();
+      return __sync_add_and_fetch(&m_refCount, 1);
+    }
+    virtual ULONG Release(void) {
+       ULONG newRefValue = __sync_sub_and_fetch(&m_refCount, 1);
+      MARK();
+       if (!newRefValue)
+         delete this;
+       return newRefValue;
+    }
+    virtual BMDFrameFlags GetFlags (void) {
+      MARK();
+      return bmdFrameFlagDefault;
+      /* return bmdFrameFlagFlipVertical */
+    }
+    virtual HRESULT GetTimecode (BMDTimecodeFormat format, IDeckLinkTimecode **timecode) {
+      MARK();
+      return S_FALSE;
+    }
+    virtual HRESULT GetAncillaryData (/* out */ IDeckLinkVideoFrameAncillary **ancillary) {
+      MARK();
+      return S_FALSE;
+    }
+    virtual HRESULT QueryInterface(REFIID iid, LPVOID *ppv) {
+      MARK();
+      *ppv = NULL;
+      return E_NOINTERFACE;
+    }
+
+  };
 int GetRowBytes(BMDPixelFormat pixelFormat, int frameWidth)
 {
         int bytesPerRow;
@@ -265,6 +340,7 @@ public:
   IDeckLinkDisplayMode*m_displayMode;
   IDeckLinkConfiguration *m_config;
   IDeckLinkVideoFrame*m_videoFrame;
+  IDeckLinkVideoConversion*m_frameConverter;
   int32_t m_refCount;
   unsigned long m_totalFramesScheduled;
   BMDTimeValue m_frameDuration;
@@ -274,6 +350,7 @@ public:
     : m_deckLinkOutput(output)
     , m_displayMode(displaymode)
     , m_videoFrame(NULL)
+    , m_frameConverter(NULL)
     , m_refCount(1)
     , m_totalFramesScheduled(0)
   {
@@ -293,11 +370,17 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
       fprintf(stderr, "Failed to create video frame\n");
     }
     m_videoFrame = newFrame;
+    m_frameConverter = CreateVideoConversionInstance();
 
     m_displayMode->GetFrameRate(&m_frameDuration, &m_frameTimescale);
 
     m_deckLinkOutput->SetScheduledFrameCompletionCallback(this);
   };
+  ~VideoOutputter(void) {
+    if (m_frameConverter != NULL)
+      m_frameConverter->Release();
+    m_frameConverter = NULL;
+  }
 
   virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(IDeckLinkVideoFrame* completedFrame, BMDOutputFrameCompletionResult result) {
     HRESULT res = S_OK;
@@ -311,7 +394,6 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
   virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped() {
     return S_OK;
   };
-
   virtual HRESULT QueryInterface(REFIID iid, LPVOID *ppv) {
     *ppv = NULL;
     return E_NOINTERFACE;
@@ -330,8 +412,19 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     return newRefValue;
   };
 
-  void setFrame(imageStruct*img) {
+  bool setFrame(imageStruct*img) {
     /* convert the imageStruct into the IDeckLinkVideoFrame */
+    ImageStructWrapper*isw = new ImageStructWrapper(img);
+    HRESULT result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
+    post("writing image %p -> %p", img, m_videoFrame);
+    if (result != S_OK)  {
+      fprintf(stderr, "Failed to convert frame: 0x%X\n", (unsigned int)result);
+      //m_deckLinkOutput->ScheduleVideoFrame(isw, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
+      return false;
+    }
+    if(isw)
+      isw->Release();
+    return true;
   }
 };
 
@@ -508,7 +601,9 @@ bool recordDECKLINK::init(const imageStruct* dummyImage, const int framedur)
 /////////////////////////////////////////////////////////
 bool recordDECKLINK :: write(imageStruct*img)
 {
-#warning TODO write the image
+  if(m_dlCallback) {
+    return ((VideoOutputter*)m_dlCallback)->setFrame(img);
+  }
   return false;
 }
 
