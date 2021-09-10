@@ -60,7 +60,7 @@ public:
 
   //////////
   // reserve a stream-name for sending
-  // open the recordDECKLINK "filename"
+  // open the Decklink device "filename"
   // returns TRUE if opening was successfull, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&);
 
@@ -68,9 +68,7 @@ public:
   //////////
   // initialize the encoder
   // dummyImage provides meta-information.
-  // for DECKLINK, we can safely ignore this.
   // framedur is the duration of one frame in [ms]
-  // for DECKLINK, i don't know yet
   //
   // returns TRUE if init was successfull, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const int framedur);

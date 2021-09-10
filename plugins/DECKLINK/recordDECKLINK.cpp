@@ -185,6 +185,156 @@ namespace {
 };
 
 
+namespace
+{
+int GetRowBytes(BMDPixelFormat pixelFormat, int frameWidth)
+{
+        int bytesPerRow;
+
+        // Refer to DeckLink SDK Manual - 2.7.4 Pixel Formats
+        switch (pixelFormat)
+        {
+        case bmdFormat8BitYUV:
+                bytesPerRow = frameWidth * 2;
+                break;
+
+        case bmdFormat10BitYUV:
+                bytesPerRow = ((frameWidth + 47) / 48) * 128;
+                break;
+
+        case bmdFormat10BitRGB:
+                bytesPerRow = ((frameWidth + 63) / 64) * 256;
+                break;
+
+        case bmdFormat8BitARGB:
+        case bmdFormat8BitBGRA:
+        default:
+                bytesPerRow = frameWidth * 4;
+                break;
+        }
+
+        return bytesPerRow;
+}
+
+IDeckLinkDisplayMode*getDisplayMode(IDeckLinkOutput*dlo,
+                                    const std::string&formatname, int formatnum)
+{
+  IDeckLinkDisplayModeIterator*dmi = NULL;
+  IDeckLinkDisplayMode*displayMode = NULL;
+  int count=formatnum;
+  if(S_OK == dlo->GetDisplayModeIterator(&dmi)) {
+    while(S_OK == dmi->Next(&displayMode)) {
+      if (formatnum<0 && formatname.empty()) {
+        // we don't care for the format; accept the first one
+        break;
+      }
+
+      // if we have set the format name, check that
+      if(!formatname.empty()) {
+        deckstring_t dmn = NULL;
+        if (S_OK == displayMode->GetName(&dmn)) {
+          std::string dmns = deckstring2string(dmn);
+          bool found=(formatname == dmns);
+          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
+          free_deckstring(dmn);
+          if(found) {
+            break;
+          }
+        }
+      }
+      // else check the format index
+      if(formatnum>=0 && 0 == count) {
+        break;
+      }
+      --count;
+
+      displayMode->Release();
+      displayMode=NULL;
+    }
+    dmi->Release();
+  }
+  return displayMode;
+}
+};
+
+
+class VideoOutputter : public IDeckLinkVideoOutputCallback
+{
+public:
+  IDeckLinkOutput*m_deckLinkOutput;
+  IDeckLinkDisplayMode*m_displayMode;
+  IDeckLinkConfiguration *m_config;
+  IDeckLinkVideoFrame*m_videoFrame;
+  int32_t m_refCount;
+  unsigned long m_totalFramesScheduled;
+  BMDTimeValue m_frameDuration;
+  BMDTimeScale m_frameTimescale;
+
+  VideoOutputter(IDeckLinkOutput*output, IDeckLinkDisplayMode*displaymode, BMDPixelFormat pixelFormat)
+    : m_deckLinkOutput(output)
+    , m_displayMode(displaymode)
+    , m_videoFrame(NULL)
+    , m_refCount(1)
+    , m_totalFramesScheduled(0)
+  {
+    /*
+IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
+     */
+    IDeckLinkMutableVideoFrame*newFrame = NULL;
+    int width = m_displayMode->GetWidth(), height = m_displayMode->GetHeight();
+    HRESULT result = m_deckLinkOutput->CreateVideoFrame(
+        width, height,
+        GetRowBytes(pixelFormat, width),
+        pixelFormat,
+        bmdFrameFlagDefault,
+        &newFrame
+        );
+    if (result != S_OK) {
+      fprintf(stderr, "Failed to create video frame\n");
+    }
+    m_videoFrame = newFrame;
+
+    m_displayMode->GetFrameRate(&m_frameDuration, &m_frameTimescale);
+
+    m_deckLinkOutput->SetScheduledFrameCompletionCallback(this);
+  };
+
+  virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(IDeckLinkVideoFrame* completedFrame, BMDOutputFrameCompletionResult result) {
+    HRESULT res = S_OK;
+    fprintf(stderr, "scheduledframecompleted");
+    if(m_videoFrame)
+      res = m_deckLinkOutput->ScheduleVideoFrame(m_videoFrame, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
+    if(S_OK == res)
+      m_totalFramesScheduled += 1;
+    return res;
+  };
+  virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped() {
+    return S_OK;
+  };
+
+  virtual HRESULT QueryInterface(REFIID iid, LPVOID *ppv) {
+    *ppv = NULL;
+    return E_NOINTERFACE;
+  };
+
+  virtual ULONG AddRef(void) {
+    // gcc atomic operation builtin
+    return __sync_add_and_fetch(&m_refCount, 1);
+  };
+
+  ULONG Release(void) {
+    // gcc atomic operation builtin
+    ULONG newRefValue = __sync_sub_and_fetch(&m_refCount, 1);
+    if (!newRefValue)
+      delete this;
+    return newRefValue;
+  };
+
+  void setFrame(imageStruct*img) {
+    /* convert the imageStruct into the IDeckLinkVideoFrame */
+  }
+};
+
 
 using namespace gem::plugins;
 
@@ -246,23 +396,107 @@ void recordDECKLINK :: stop(void)
 bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
-#if 0
-  DECKLINKlib_send_create_t send_create;
-  send_create.p_ndi_name = filename.c_str();
-  send_create.p_groups = NULL;
-  send_create.clock_video = false;
-  send_create.clock_audio = false;
-  m_ndi_send = DECKLINK->send_create(&send_create);
-  post("[GEM::recordDECKLINK] opened '%s' as '%s'", filename.c_str(), send_create.p_ndi_name);
-  if (!m_ndi_send)
-    return false;
+  int formatnumber=-1;
+  std::string formatname="";
+  BMDVideoOutputFlags flags = bmdVideoOutputFlagDefault;
+
+  IDeckLinkIterator*dlIterator = CreateDeckLinkIteratorInstance();
+  if(dlIterator) {
+    //setProperties(props);
+    int deviceCount=0;
+    while (dlIterator->Next(&m_dl) == S_OK) {
+      if(!filename.empty()) {
+        deckstring_t deckLinkName = NULL;
+        if(S_OK == m_dl->GetDisplayName(&deckLinkName)) {
+          if (filename == deckstring2string(deckLinkName)) {
+            free_deckstring(deckLinkName);
+            break;
+          }
+          free_deckstring(deckLinkName);
+        }
+        if(S_OK == m_dl->GetModelName(&deckLinkName)) {
+          if (filename == deckstring2string(deckLinkName)) {
+            free_deckstring(deckLinkName);
+            break;
+          }
+          free_deckstring(deckLinkName);
+        }
+      }
+      m_dl->Release();
+      m_dl=NULL;
+      ++deviceCount;
+    }
+    m_dlOutput=NULL;
+    if(m_dl) {
+      if (S_OK == m_dl->QueryInterface(IID_IDeckLinkOutput, (void**)&m_dlOutput)) {
+        // check whether this device supports the selected format
+        m_displayMode=getDisplayMode(m_dlOutput, formatname, formatnumber);
+      } else {
+        m_dlOutput=NULL;
+      }
+    }
+  }
+  if(!m_displayMode) {
+    goto bail;
+  }
+
+  /* negotiate the video format */
+  if(m_dl) {
+    IDeckLinkStatus*status;
+    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkStatus, (void**)&status)) {
+      int64_t gotint=0;
+      if (S_OK == status->GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat, &gotint)) {
+        m_pixelFormat = gotint;
+        post("got pixelformat: %d -> %s", (int)gotint, pixformat2string(m_pixelFormat).c_str());
+      }
+    }
+  }
+
+
+  BMDDisplayModeSupport displayModeSupported;
+  if (S_OK != m_dlOutput->DoesSupportVideoMode(
+        m_displayMode->GetDisplayMode(),
+        m_pixelFormat,
+        flags,
+        &displayModeSupported,
+        NULL)) {
+    post("[GEM::recordDECKLINK] '%s' does not support videomode...", filename.c_str());
+    goto bail;
+  }
+  if (displayModeSupported == bmdDisplayModeNotSupported) {
+    post("[GEM::recordDECKLINK] '%s' unsupported videomode...", filename.c_str());
+    goto bail;
+  }
+  if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration,
+                                   (void**)&m_dlConfig)) {
+    m_dlConfig=NULL;
+  }
+
+  if(m_dlConfig) {
+    m_dlConfig->SetInt(bmdDeckLinkConfigVideoOutputConnection,
+                       m_connectionType);
+  }
+
+
+  m_dlCallback = new VideoOutputter(m_dlOutput, m_displayMode, m_pixelFormat);
+
+  if(S_OK != m_dlOutput->EnableVideoOutput(m_displayMode->GetDisplayMode(), flags)) {
+    post("[GEM::recordDECKLINK] '%s' couldn't enable VideoOutput...", filename.c_str());
+    goto bail;
+  }
+
+  post("[GEM::recordDECKLINK] opened '%s'", filename.c_str());
   return true;
-#endif
+#warning TODO: actually open the device
+ bail:
+  stop();
   return false;
 }
 
 bool recordDECKLINK::init(const imageStruct* dummyImage, const int framedur)
 {
+  post("===========================================");
+  post("[GEM::recordDECKLINK] init(%p, %d)", dummyImage, framedur);
   return true;
 }
 
@@ -274,31 +508,7 @@ bool recordDECKLINK::init(const imageStruct* dummyImage, const int framedur)
 /////////////////////////////////////////////////////////
 bool recordDECKLINK :: write(imageStruct*img)
 {
-#if 0
-  DECKLINKlib_video_frame_v2_t video_frame_data;
-  video_frame_data.xres = img->xsize;
-  video_frame_data.yres = img->ysize;
-  video_frame_data.p_data = img->data;
-  video_frame_data.frame_rate_N = 0;
-  video_frame_data.frame_rate_D = 0;
-  video_frame_data.picture_aspect_ratio = 0;
-  video_frame_data.frame_format_type = DECKLINKlib_frame_format_type_progressive;
-  video_frame_data.timecode = 0;
-
-  switch (img->format) {
-  case GEM_RGBA:
-    video_frame_data.FourCC = DECKLINKlib_FourCC_video_type_RGBA;
-    break;
-  case GEM_YUV:
-    video_frame_data.FourCC = DECKLINKlib_FourCC_video_type_UYVY;
-    break;
-  default:
-    return false;
-  }
-  //m_image.fixUpDown();
-  DECKLINK->send_send_video_v2(m_ndi_send, &video_frame_data);
-  return true;
-#endif
+#warning TODO write the image
   return false;
 }
 
