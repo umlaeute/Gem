@@ -529,8 +529,23 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
   readable.set("height", m_pixBlock.image.ysize);
 
   dummy_s="auto";
+  /* format:
+   * "auto", "automatic",
+   * "NTSC", "PAL", "NTSC Progressive", "PAL Progressive", "1080p30", "720p50",...
+   */
   writeable.set("format", dummy_s);
+
+  /* connection:
+   * "auto",
+   * "sdi", "hdmi", "opticalsdi", "component", "composite", "svideo",
+   */
   writeable.set("connection", dummy_s);
+
+  /* pixformat:
+   * "yuv", "argb", "bgra", "yuv8", "argb8", "bgra8", "yuv10"
+   */
+  dummy_s = pixformat2string(m_pixelFormat);
+  writeable.set("pixformat", dummy_s);
 
   return true;
 }
