@@ -294,9 +294,7 @@ public:
         long w=videoFrame->GetWidth();
         long h=videoFrame->GetHeight();
         videoFrame->GetBytes(&frameBytes);
-        m_priv->setFrame(videoFrame->GetWidth(),
-                         videoFrame->GetHeight(),
-                         GEM_YUV,
+        m_priv->setFrame(w, h, GEM_YUV,
                          (unsigned char*)frameBytes);
       }
 
