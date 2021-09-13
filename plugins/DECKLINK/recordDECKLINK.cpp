@@ -588,15 +588,6 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   return false;
 }
 
-bool recordDECKLINK::init(const imageStruct* dummyImage, const int framedur)
-{
-  post("===========================================");
-  post("[GEM::recordDECKLINK] init(%p, %d)", dummyImage, framedur);
-  return true;
-}
-
-
-
 /////////////////////////////////////////////////////////
 // do the actual encoding and writing to file
 //

@@ -66,14 +66,6 @@ public:
 
 
   //////////
-  // initialize the encoder
-  // dummyImage provides meta-information.
-  // framedur is the duration of one frame in [ms]
-  //
-  // returns TRUE if init was successfull, FALSE otherwise
-  virtual bool init(const imageStruct* dummyImage, const int framedur);
-
-  //////////
   // compress and write the next frame
   /* this is the core-function of this class !!!!
    * when called it returns TRUE on success
