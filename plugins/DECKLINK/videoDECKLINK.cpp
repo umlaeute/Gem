@@ -480,11 +480,15 @@ std::vector<std::string>videoDECKLINK::enumerate(void)
   if(dli) {
     IDeckLink*deckLink = NULL;
     while (dli->Next(&deckLink) == S_OK) {
-      deckstring_t deckLinkName = NULL;
-      HRESULT res = deckLink->GetDisplayName(&deckLinkName);
-      if (res == S_OK) {
-        result.push_back(deckstring2string(deckLinkName));
-        free_deckstring(deckLinkName);
+      IDeckLinkInput*dlInput;
+      if (S_OK == deckLink->QueryInterface(IID_IDeckLinkInput, (void**)&dlInput)) {
+        deckstring_t deckLinkName = NULL;
+        HRESULT res = deckLink->GetDisplayName(&deckLinkName);
+        if (res == S_OK) {
+          result.push_back(deckstring2string(deckLinkName));
+          free_deckstring(deckLinkName);
+        }
+        dlInput->Release();
       }
       deckLink->Release();
     }
