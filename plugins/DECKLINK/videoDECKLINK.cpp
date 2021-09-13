@@ -636,32 +636,19 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
       case gem::Properties::STRING:
         if(props.get(key, s)) {
           vconn = string2connection(s);
+          if(bmdVideoConnectionUnspecified == vconn) {
+            post("invalid connection type '%s'... ignoring", s.c_str());
+            vconn = m_connectionType;
+          }
         }
         post("setting 'connection' to %d '%s'", vconn, s.c_str());
         break;
       case gem::Properties::DOUBLE:
         if(props.get(key, d)) {
-          int idx =(int)d;
-          switch(idx) {
-          default:
-          case 0:
-            vconn=bmdVideoConnectionSDI;
-            break;
-          case 1:
-            vconn=bmdVideoConnectionHDMI;
-            break;
-          case 2:
-            vconn=bmdVideoConnectionOpticalSDI;
-            break;
-          case 3:
-            vconn=bmdVideoConnectionComponent;
-            break;
-          case 4:
-            vconn=bmdVideoConnectionComposite;
-            break;
-          case 5:
-            vconn=bmdVideoConnectionSVideo;
-            break;
+          vconn = id2connection((int)d);
+          if(bmdVideoConnectionUnspecified == vconn) {
+            post("invalid connection type '%d'... ignoring", (int)d);
+            vconn = m_connectionType;
           }
         }
         break;
