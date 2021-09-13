@@ -209,10 +209,8 @@ namespace
       MARK();
       switch(m_img->csize) {
       case 4:
-        printf("RGBA\n");
         return bmdFormat8BitARGB;
       case 2:
-        printf("YUV\n");
         return bmdFormat8BitYUV;
       default:
         break;
@@ -416,7 +414,11 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     /* convert the imageStruct into the IDeckLinkVideoFrame */
     ImageStructWrapper*isw = new ImageStructWrapper(img);
     HRESULT result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
-    post("writing image %p -> %p", img, m_videoFrame);
+    post("writing image %p[%dx%d@%s] -> %p[%dx%d@%s]"
+        , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(isw->GetPixelFormat()).c_str()
+        , m_videoFrame, (int)m_videoFrame->GetWidth(), (int)m_videoFrame->GetHeight(), pixformat2string(m_videoFrame->GetPixelFormat()).c_str()
+        );
+
     if (result != S_OK)  {
       fprintf(stderr, "Failed to convert frame: 0x%X\n", (unsigned int)result);
       //m_deckLinkOutput->ScheduleVideoFrame(isw, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
