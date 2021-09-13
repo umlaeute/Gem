@@ -129,6 +129,32 @@ namespace {
         return it->first;
     return "";
   }
+
+  int connection2id(BMDVideoConnection conn) {
+    switch(conn) {
+    default: break;
+    case bmdVideoConnectionSDI: return 0;
+    case bmdVideoConnectionHDMI: return 1;
+    case bmdVideoConnectionOpticalSDI: return 2;
+    case bmdVideoConnectionComponent: return 3;
+    case bmdVideoConnectionComposite: return 4;
+    case bmdVideoConnectionSVideo: return 5;
+    }
+    return bmdVideoConnectionUnspecified;
+  }
+  BMDVideoConnection id2connection(int id) {
+    switch(id) {
+    default: break;
+    case 0: return bmdVideoConnectionSDI;
+    case 1: return bmdVideoConnectionHDMI;
+    case 2: return bmdVideoConnectionOpticalSDI;
+    case 3: return bmdVideoConnectionComponent;
+    case 4: return bmdVideoConnectionComposite;
+    case 5: return bmdVideoConnectionSVideo;
+    }
+    /* that should return an invalid connection! */
+    return bmdVideoConnectionUnspecified;
+  }
 };
 static std::map<std::string, BMDPixelFormat> s_pixformatstrings;
 namespace {
