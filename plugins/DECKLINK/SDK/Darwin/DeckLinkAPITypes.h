@@ -61,6 +61,7 @@ enum _BMDTimecodeFlags {
 
 typedef uint32_t BMDVideoConnection;
 enum _BMDVideoConnection {
+    bmdVideoConnectionUnspecified                                = 0,
     bmdVideoConnectionSDI                                        = 1 << 0,
     bmdVideoConnectionHDMI                                       = 1 << 1,
     bmdVideoConnectionOpticalSDI                                 = 1 << 2,
