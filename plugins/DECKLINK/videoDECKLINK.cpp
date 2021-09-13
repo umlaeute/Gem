@@ -313,7 +313,6 @@ void videoDECKLINK::close(void)
 bool videoDECKLINK::open(gem::Properties&props)
 {
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
-  BMDPixelFormat pixformat = bmdFormat8BitYUV;
   std::string formatname=(("auto"==m_formatname)
                                 || ("automatic" == m_formatname))?"":m_formatname;
   //if(m_devname.empty())return false;
