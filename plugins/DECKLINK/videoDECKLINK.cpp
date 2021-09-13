@@ -688,6 +688,7 @@ void videoDECKLINK::getProperties(gem::Properties&props)
     if("height"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.ysize);
     }
+    /* TODO: report format, pixformat, connection */
   }
 }
 
