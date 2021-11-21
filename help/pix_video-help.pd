@@ -17,7 +17,7 @@
 #X text 17 486 Outlet 1: gemlist;
 #X text 17 198 Inlet 1: gemlist;
 #X text 16 308 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
-film into the specified colorspace.;
+film into the specified colorspace \, if supported by the backend., f 62;
 #X text 64 159 none;
 #X text 33 184 Inlet:;
 #X text 33 472 Outlet:;
