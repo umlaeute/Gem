@@ -61,10 +61,10 @@
 used as a texture \, bitblit or something else., f 69;
 #X text 64 249 symbol: file to load initially;
 #X text 18 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
-the movie <filename> and decodes it into the specified color-space.
+the movie <filename> \, decodes it into the specified color-space if supported.
 , f 69;
 #X text 18 336 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
-the current film into the specified colorspace., f 69;
+the current film into the specified colorspace \, if supported., f 69;
 #X text 18 365 Inlet 1: message : auto 1|0 : starts/stops automatic
 playback. (default:0), f 69;
 #X text 17 576 Outlet 3: bang: indicates that the last frame has been
@@ -160,17 +160,22 @@ on rendering (starting with 0), f 69;
 #X text 17 391 Inlet 1: message : loader <name>: open the film using
 only the specified backend(s), f 70;
 #X obj 578 8 declare -lib Gem;
-#N canvas 2 93 450 300 :: 0;
+#N canvas 2 93 450 310 :: 0;
+#X text 35 220 If a specific colorspace is required \, it is strongly
+recommended to convert using [pix_rgba] \, [pix_yuv] \, [pix_grey]
+etc. This is the only way to guarantee a colorspace., f 60;
 #X text 35 33 Note that the default colorspace may vary on different
 operating systems \, even for the same patch and same video file. For
 instance \, [pix_film] may output YUV images in macOS \, while the
-same patch and same video file may obtain RGB images in Linux.;
-#X text 35 113 It is strongly recommended \, then \, to specify the
-colorspace explicitly. While most downstream [pix] objects can adapt
-automatically to the incoming format \, there are some (e.g. [pix_chroma_key])
-which take a user-specified color as an input. Such objects are sensitive
-to the image's colorspace \, and patches using them may exhibit variable
-behavior on different OSes.;
+same patch and same video file may obtain RGB images in Linux. While
+most downstream [pix] objects can adapt automatically to the incoming
+format \, there are some (e.g. [pix_chroma_key]) which take a user-specified
+color as an input. Such objects are sensitive to the image's colorspace
+\, and patches using them may exhibit variable behavior on different
+OSes.;
+#X text 35 172 Note also that codecs may choose to disregard the colorspace
+symbol given to pix_film -- you may or may not get the requested colorspace.
+;
 #X restore 211 130 pd :: COLORSPACES;
 #X text 13 104 You can open a specified film via the "open" message
 \, which takes an optional argument for the colorspace \, to which
