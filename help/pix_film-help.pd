@@ -174,7 +174,7 @@ color as an input. Such objects are sensitive to the image's colorspace
 \, and patches using them may exhibit variable behavior on different
 OSes.;
 #X text 35 172 Note also that codecs may choose to disregard the colorspace
-symbol given to pix_film -- you may or may not get the requested colorspace.
+passed to pix_film -- you may or may not get the requested colorspace.
 ;
 #X restore 211 130 pd :: COLORSPACES;
 #X text 13 104 You can open a specified film via the "open" message
