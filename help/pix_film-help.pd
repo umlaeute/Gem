@@ -1,4 +1,4 @@
-#N canvas 163 146 704 623 10;
+#N canvas 163 143 704 623 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 9 272 cnv 15 430 340 empty empty empty 20 12 0 14 -233017 -66577
@@ -36,7 +36,7 @@
 #X restore 599 479 pd gemwin;
 #X msg 599 460 create;
 #X text 595 439 Create window:;
-#X obj 451 88 cnv 15 175 300 empty empty empty 20 12 0 14 -24198 -66577
+#X obj 451 88 cnv 15 215 300 empty empty empty 20 12 0 14 -24198 -66577
 0;
 #X obj 451 63 gemhead;
 #X text 17 503 Outlet 1: gemlist;
@@ -55,17 +55,16 @@
 #X text 71 31 Class: pix object (pix source);
 #X text 29 57 Description: load in a movie-file;
 #X obj 463 117 openpanel;
-#X msg 463 136 open \$1;
 #X obj 451 432 rectangle 4 3;
 #X text 50 12 Synopsis: [pix_film];
 #X text 15 78 [pix_film] loads in a preproduced digital-video to be
 used as a texture \, bitblit or something else., f 69;
 #X text 64 249 symbol: file to load initially;
 #X text 18 303 Inlet 1: message: open <filename> [RGBA|YUV|Grey]: opens
-the movie <filename> and decodes it into the specified color-space.
+the movie <filename> \, decodes it into the specified color-space if supported.
 , f 69;
 #X text 18 336 Inlet 1: message: colorspace "RGBA|YUV|Grey": decodes
-the current film into the specified colorspace., f 69;
+the current film into the specified colorspace \, if supported., f 69;
 #X text 18 365 Inlet 1: message : auto 1|0 : starts/stops automatic
 playback. (default:0), f 69;
 #X text 17 576 Outlet 3: bang: indicates that the last frame has been
@@ -74,13 +73,10 @@ reached. (or: an illegal frame would have been decoded), f 69;
 #X obj 469 156 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
 1;
 #X msg 480 193 colorspace Grey;
-#X text 13 104 You can open a specified film via the "open" message
-\, which takes an optional argument for the colorspace \, to which
-the movie should be decoded (RGBA \, YUV or Grey)., f 70;
 #X text 17 520 Outlet 2: list: <length> <width> <height> <fps>: gets
 the dimensions (in frames and pixels) of a film when it gets loaded.
 if length is not available (video-streams) -1 is returned., f 69;
-#N canvas 18 78 928 614 :: 0;
+#N canvas 18 93 928 614 :: 0;
 #X text 24 16 the format [pix_film] is able to decode depends on the
 system you are running Gem.;
 #X text 33 52 basically Gem's decoding capabilities are handled by
@@ -164,23 +160,45 @@ on rendering (starting with 0), f 69;
 #X text 17 391 Inlet 1: message : loader <name>: open the film using
 only the specified backend(s), f 70;
 #X obj 578 8 declare -lib Gem;
+#N canvas 2 93 450 310 :: 0;
+#X text 35 220 If a specific colorspace is required \, it is strongly
+recommended to convert using [pix_rgba] \, [pix_yuv] \, [pix_grey]
+etc. This is the only way to guarantee a colorspace., f 60;
+#X text 35 33 Note that the default colorspace may vary on different
+operating systems \, even for the same patch and same video file. For
+instance \, [pix_film] may output YUV images in macOS \, while the
+same patch and same video file may obtain RGB images in Linux. While
+most downstream [pix] objects can adapt automatically to the incoming
+format \, there are some (e.g. [pix_chroma_key]) which take a user-specified
+color as an input. Such objects are sensitive to the image's colorspace
+\, and patches using them may exhibit variable behavior on different
+OSes.;
+#X text 35 172 Note also that codecs may choose to disregard the colorspace
+symbol given to pix_film -- you may or may not get the requested colorspace.
+;
+#X restore 211 130 pd :: COLORSPACES;
+#X text 13 104 You can open a specified film via the "open" message
+\, which takes an optional argument for the colorspace \, to which
+the movie should be decoded (RGBA \, YUV or Grey). See, f 70;
+#X msg 463 136 open \$1 RGBA;
+#X text 546 129 Recommended to specify colorspace!, f 20;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
-#X connect 14 0 46 0;
-#X connect 17 0 30 0;
+#X connect 14 0 44 0;
+#X connect 17 0 29 0;
 #X connect 18 0 28 0;
-#X connect 25 0 46 1;
-#X connect 28 0 29 0;
-#X connect 29 0 46 0;
-#X connect 38 0 46 0;
-#X connect 39 0 38 0;
-#X connect 40 0 46 0;
-#X connect 44 0 21 0;
-#X connect 44 1 22 0;
-#X connect 44 2 23 0;
-#X connect 44 3 45 0;
-#X connect 46 0 17 0;
-#X connect 46 1 44 0;
-#X connect 46 2 24 0;
-#X connect 47 0 46 0;
-#X connect 51 0 46 0;
+#X connect 25 0 44 1;
+#X connect 28 0 54 0;
+#X connect 37 0 44 0;
+#X connect 38 0 37 0;
+#X connect 39 0 44 0;
+#X connect 42 0 21 0;
+#X connect 42 1 22 0;
+#X connect 42 2 23 0;
+#X connect 42 3 43 0;
+#X connect 44 0 17 0;
+#X connect 44 1 42 0;
+#X connect 44 2 24 0;
+#X connect 45 0 44 0;
+#X connect 49 0 44 0;
+#X connect 54 0 44 0;
