@@ -35,7 +35,7 @@ static std::map<GLFWwindow *, gemglfw3window*>s_windowmap;
 
 static void error_callback(int err, const char* description)
 {
-  error("[glfw3window]: %s", description);
+  pd_error(0, "[glfw3window]: %s", description);
 }
 
 CPPEXTERN_NEW(gemglfw3window);
@@ -430,7 +430,7 @@ void gemglfw3window :: obj_setupCallback(t_class *classPtr)
 #ifdef CALLBACK
 # undef CALLBACK
 #endif
-#define CALLBACK(x) gemglfw3window*g3w=s_windowmap[win]; if (!g3w){::error("couldn't find [gemglfw3window] for window#%p", win); return;} else g3w->x
+#define CALLBACK(x) gemglfw3window*g3w=s_windowmap[win]; if (!g3w){pd_error(0, "couldn't find [gemglfw3window] for window#%p", win); return;} else g3w->x
 void gemglfw3window::windowsizeCb(GLFWwindow *win,int w, int h)
 {
   CALLBACK(windowsizeCallback(w, h));

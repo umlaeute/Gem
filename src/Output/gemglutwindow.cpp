@@ -99,7 +99,7 @@ static std::string key2symbol(int c)
 }
 
 /* callbacks */
-#define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){::error("couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
+#define CALLBACK4WIN gemglutwindow*ggw=s_windowmap[glutGetWindow()]; if(!ggw){pd_error(0, "couldn't find [gemglutwindow] for window#%d", glutGetWindow()); return;} else ggw
 
 
 void displayCb(void)
