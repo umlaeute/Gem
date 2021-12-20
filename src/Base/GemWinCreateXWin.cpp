@@ -129,9 +129,9 @@ int ErrorHandler (Display *dpy, XErrorEvent *event)
   if ( xerr != BadWindow ) {
     char buf[256];
     XGetErrorText (dpy, xerr, buf, sizeof(buf));
-    error("GEM-Xwin: %s\n", buf);
+    pd_error(0, "GEM-Xwin: %s\n", buf);
   } else {
-    error("GEM-Xwin: BadWindow (%d)\n", xerr);
+    pd_error(0, "GEM-Xwin: BadWindow (%d)\n", xerr);
   }
   return (0);
 }
@@ -159,7 +159,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   XSetErrorHandler (ErrorHandler);
 
   if ( (info.dpy = XOpenDisplay(hints.display)) == NULL) {
-    error("GEM: Could not open display %s",hints.display);
+    pd_error(0, "GEM: Could not open display %s",hints.display);
     return(0);
   }
 
@@ -172,21 +172,21 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
    * if the X-server has no glx extension
    */
   if ( !glXQueryExtension(info.dpy, NULL, NULL) ) {
-    error("GEM: X server has no OpenGL GLX extension");
+    pd_error(0, "GEM: X server has no OpenGL GLX extension");
     destroyGemWindow(info);
     return 0;
   }
 
   if (fullscreen) {
     if (hints.display) {
-      error("GEM: fullscreen not available on remote display");
+      pd_error(0, "GEM: fullscreen not available on remote display");
       fullscreen=0;
     } else {
 #ifdef HAVE_LIBXXF86VM
       XF86VidModeGetAllModeLines(info.dpy, info.screen, &modeNum, &modes);
       info.deskMode = *modes[0];
 #else
-      error("GEM: no xxf86vm-support: cannot switch to fullscreen");
+      pd_error(0, "GEM: no xxf86vm-support: cannot switch to fullscreen");
 #endif
     }
   }
@@ -206,7 +206,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
         vi = glXChooseVisual(info.dpy, info.screen, dblBuf8);
       }
       if (vi == NULL) {
-        error("GEM: Unable to create double buffer window");
+        pd_error(0, "GEM: Unable to create double buffer window");
         destroyGemWindow(info);
         return(0);
       }
@@ -227,7 +227,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
         vi = glXChooseVisual(info.dpy, info.screen, snglBuf8);
       }
       if (vi == NULL) {
-        error("GEM: Unable to create single buffer window");
+        pd_error(0, "GEM: Unable to create single buffer window");
         destroyGemWindow(info);
         return(0);
       }
@@ -237,7 +237,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   }
 
   if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-    error("GEM: TrueColor visual required for this program (got %d)",
+    pd_error(0, "GEM: TrueColor visual required for this program (got %d)",
           vi->c_class);
     destroyGemWindow(info);
     return(0);
@@ -249,7 +249,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
     info.context=NULL;
   }
   if (info.context == NULL) {
-    error("GEM: Could not create rendering context");
+    pd_error(0, "GEM: Could not create rendering context");
     destroyGemWindow(info);
     return(0);
   }
@@ -257,7 +257,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   info.cmap = XCreateColormap(info.dpy, RootWindow(info.dpy, vi->screen),
                               vi->visual, AllocNone);
   if (!info.cmap) {
-    error("GEM: Could not create X colormap");
+    pd_error(0, "GEM: Could not create X colormap");
     destroyGemWindow(info);
     return(0);
   }
@@ -314,7 +314,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
                            0, vi->depth, InputOutput,
                            vi->visual, flags, &swa);
   if (!info.win) {
-    error("GEM: Could not create X window");
+    pd_error(0, "GEM: Could not create X window");
     destroyGemWindow(info);
     return(0);
   }
@@ -342,13 +342,13 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
      * LATER re-think the entire dual-context thing
      */
     if(xerr!=0) {
-      error("GEM: problems making glX-context current: refusing to continue");
-      error("GEM: try setting the environment variable GEM_SINGLE_CONTEXT=1");
+      pd_error(0, "GEM: problems making glX-context current: refusing to continue");
+      pd_error(0, "GEM: try setting the environment variable GEM_SINGLE_CONTEXT=1");
       destroyGemWindow(info);
       return(0);
     }
   } catch(void*e) {
-    error("GEM: Could not make glX-context current");
+    pd_error(0, "GEM: Could not make glX-context current");
     destroyGemWindow(info);
     return(0);
   }

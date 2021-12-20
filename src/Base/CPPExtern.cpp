@@ -164,7 +164,7 @@ void CPPExtern :: error(const char*fmt,...) const
     } else if (m_holder) {
       pd_error(m_holder, "[%s]: %s", objname, buf);
     } else {
-      ::error("[%s]: %s", objname, buf);
+      pd_error(0, "[%s]: %s", objname, buf);
     }
   } else {
     if(x_obj) {
@@ -172,7 +172,7 @@ void CPPExtern :: error(const char*fmt,...) const
     } else if (m_holder) {
       pd_error(m_holder, "%s", buf);
     } else {
-      ::error("%s", buf);
+      pd_error(0, "%s", buf);
     }
   }
 }
@@ -198,7 +198,7 @@ std::string CPPExtern::findFile(const std::string&file) const
 bool CPPExtern :: checkGemVersion(const int major, const int minor)
 {
   if(!GemVersion::versionCheck(major, minor)) {
-    ::error("GEM version mismatch: compiled for %d.%d but we are running %s",
+    pd_error(0, "GEM version mismatch: compiled for %d.%d but we are running %s",
             major, minor,
             GemVersion::versionString());
     return false;

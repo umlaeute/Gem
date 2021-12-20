@@ -513,6 +513,5 @@ void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
     }
   } else {
     error("wrong righthand arguments...");
-    ::error("post: %d", argc);
   }
 }

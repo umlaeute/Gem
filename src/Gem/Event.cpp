@@ -350,12 +350,12 @@ static void dequeueEvents(void)
 {
   CallbackList *theList=NULL;
   if (NULL==event_queue) {
-    error("dequeue NULL queue");
+    pd_error(0, "dequeue NULL queue");
     return;
   }
   gem_event_queue_item_t*events = event_queue->first;
   if(NULL==events) {
-    error("dequeue empty queue");
+    pd_error(0, "dequeue empty queue");
     return;
   }
   while(events) {

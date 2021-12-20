@@ -44,14 +44,14 @@ static gem::any atom2any(t_atom*ap)
   }
   return result;
 }
-static void addProperties(gem::Properties&props, int argc, t_atom*argv)
+static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
 {
   if(!argc) {
     return;
   }
 
   if(argv->a_type != A_SYMBOL) {
-    error("no key given...");
+    pd_error(obj, "no key given...");
     return;
   }
   std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -411,7 +411,7 @@ void pix_buffer :: clearProperties(void)
 }
 void pix_buffer :: setProperties(t_symbol*s, int argc, t_atom*argv)
 {
-  addProperties(m_writeprops, argc, argv);
+  addProperties(this, m_writeprops, argc, argv);
 }
 
 /////////////////////////////////////////////////////////

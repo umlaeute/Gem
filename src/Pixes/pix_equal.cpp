@@ -68,7 +68,7 @@ void pix_equal :: processRGBAImage(imageStruct &image)
 
 namespace
 {
-static void setvec(const char*label, unsigned char*dest, int argc,
+static void setvec(CPPExtern*obj, const char*label, unsigned char*dest, int argc,
                    t_atom*argv)
 {
   switch(argc) {
@@ -83,7 +83,7 @@ static void setvec(const char*label, unsigned char*dest, int argc,
     dest[chRed]=dest[chGreen]=dest[chBlue]=atom_getfloat(argv+0)*255.;
     break;
   default:
-    error("illegal number of arguments for %s, must be 1, 3 or 4", label);
+    pd_error(obj, "illegal number of arguments for %s, must be 1, 3 or 4", label);
     break;
   }
 }
@@ -92,7 +92,7 @@ static void setvec(const char*label, unsigned char*dest, int argc,
 void pix_equal :: vecUpperBoundMess(t_symbol*s,int argc, t_atom *argv)
 {
   m_upper[chAlpha] = 255;
-  setvec("upper bound", m_upper, argc, argv);
+  setvec(this, "upper bound", m_upper, argc, argv);
 
   setPixModified();
 }
@@ -100,7 +100,7 @@ void pix_equal :: vecUpperBoundMess(t_symbol*s,int argc, t_atom *argv)
 void pix_equal :: vecLowerBoundMess(t_symbol*s,int argc, t_atom *argv)
 {
   m_lower[chAlpha] = 0;
-  setvec("lower bound", m_lower, argc, argv);
+  setvec(this, "lower bound", m_lower, argc, argv);
 
   setPixModified();
 }

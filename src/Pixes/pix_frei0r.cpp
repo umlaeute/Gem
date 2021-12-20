@@ -103,7 +103,7 @@ public:
       err=f0r_init();
     }
     if (err<0) {
-      ::error("[pix_frei0r] failed to initialize plugin");
+      pd_error(0, "[pix_frei0r] failed to initialize plugin");
       return false;
     }
 
@@ -117,7 +117,7 @@ public:
     case (F0R_PLUGIN_TYPE_FILTER):
       break;
     default:
-      ::error("[pix_frei0r] only supports sources/filters, no mixers!");
+      pd_error(0, "[pix_frei0r] only supports sources/filters, no mixers!");
       return false;
     }
 
@@ -241,7 +241,7 @@ public:
     if(f0r_deinit) {
       int err=f0r_deinit();
       if(err) {
-        ::error("[%s] f0r_deinit() failed with %d", m_name.c_str(), err);
+        ::pd_error(0, "[%s] f0r_deinit() failed with %d", m_name.c_str(), err);
       }
     }
   }
