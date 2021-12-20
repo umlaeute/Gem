@@ -358,7 +358,7 @@ bool videoAVT :: startTransfer()
 {
   PvCaptureStart(m_grabber);
   if(!PvCommandRun(m_grabber,"AcquisitionStart")) {
-    error("[GEM:videoAVT] AcquistionStart failed");
+    pd_error(0, "[GEM:videoAVT] AcquistionStart failed");
   } else {
     PvCaptureQueueFrame(m_grabber, &m_frames[0], (tPvFrameCallback) grabCB);
   }
@@ -375,7 +375,7 @@ bool videoAVT :: stopTransfer()
   PvCaptureQueueClear(m_grabber);
 
   if(!PvCommandRun(m_grabber,"AcquisitionStop")) {
-    error("[GEM:videoAVT] AcquistionStop failed");
+    pd_error(0, "[GEM:videoAVT] AcquistionStop failed");
   }
 
   PvCaptureEnd(m_grabber);

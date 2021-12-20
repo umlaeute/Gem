@@ -501,7 +501,7 @@ void videoDS :: copyBuffer(void)
   // Check for a format change.
   if (NULL == SampleGrabber
       || FAILED(hr = SampleGrabber->GetConnectedMediaType(&pmt))) {
-    error("[GEM:videoDS] could not get sample media type.");
+    pd_error(0, "[GEM:videoDS] could not get sample media type.");
     close();
     return;
   }
@@ -568,7 +568,7 @@ bool videoDS :: startTransfer(void)
   BITMAPINFOHEADER* pbmih;
   if (NULL == SampleGrabber
       || FAILED(hr = SampleGrabber->GetConnectedMediaType(&mt))) {
-    error("[GEM:videoDS] Could not get connect media type, hr 0x%X", hr);
+    pd_error(0, "[GEM:videoDS] Could not get connect media type, hr 0x%X", hr);
     return false;
   }
   GetBitmapInfoHdr(&mt, &pbmih);
@@ -578,7 +578,7 @@ bool videoDS :: startTransfer(void)
 
   //starts the graph rendering
   if (FAILED(hr = m_pMC->Run())) {
-    error("[GEM:videoDS] Could not start graph playback, hr 0x%X", hr);
+    pd_error(0, "[GEM:videoDS] Could not start graph playback, hr 0x%X", hr);
     return false;
   }
 
@@ -593,7 +593,7 @@ bool videoDS :: stopTransfer(void)
 {
   HRESULT hr;
   if (FAILED(hr = m_pMC->Stop())) {
-    error("[GEM:videoDS] Could not stop graph playback, hr 0x%X", hr);
+    pd_error(0, "[GEM:videoDS] Could not stop graph playback, hr 0x%X", hr);
     return false;
   }
   return true;
@@ -639,7 +639,7 @@ bool videoDS :: setDimen(int x, int y, int leftmargin, int rightmargin,
       hr = pDV->put_IPDisplay(resolution);
 
       if (FAILED(hr)) {
-        error("[GEM:videoDS] Could not set decoder resolution.");
+        pd_error(0, "[GEM:videoDS] Could not set decoder resolution.");
       }
     }
     if(pDV) {
@@ -692,7 +692,7 @@ bool videoDS :: dialog(std::vector<std::string>dlg)
       } else if(type=="crossbar") {
         dialogCrossbar(m_pCG, m_pCDbase);
       } else {
-        error("[GEM:videoDS] dialog '%s' not known", type.c_str());
+        pd_error(0, "[GEM:videoDS] dialog '%s' not known", type.c_str());
       }
     }
   }
@@ -716,18 +716,18 @@ void videoDS :: startCapture(void)
     if (0 == MultiByteToWideChar(CP_ACP, 0, m_filename, strlen(m_filename),
                                  WideFileName,
                                  MAXPDSTRING)) {
-      error("[GEM:videoDS] Unable to capture to %s", m_filename);
+      pd_error(0, "[GEM:videoDS] Unable to capture to %s", m_filename);
       return;
     }
     // Set filename of output AVI. Returns pointer to a File Writer filter.
     if (FAILED(hr = m_pCG->SetOutputFileName(&MEDIASUBTYPE_Avi, WideFileName,
                     &FileFilter, NULL))) {
-      error("[GEM:videoDS] Unable to set output filename.");
+      pd_error(0, "[GEM:videoDS] Unable to set output filename.");
       return;
     }
     // Set AVI output option for interleaving.
     if (FAILED(hr = SetAviOptions(FileFilter, INTERLEAVE_NONE))) {
-      error("[GEM:videoDS] Unable to set avi options.");
+      pd_error(0, "[GEM:videoDS] Unable to set avi options.");
       return;
     }
     // Connect the Capture Device filter to the File Writer filter. Try using
@@ -738,7 +738,7 @@ void videoDS :: startCapture(void)
       if (FAILED(hr = m_pCG->RenderStream(&PIN_CATEGORY_CAPTURE,
                                           &MEDIATYPE_Video,
                                           m_pCDbase, NULL, FileFilter))) {
-        error("[GEM:videoDS] Unable to record to avi.");
+        pd_error(0, "[GEM:videoDS] Unable to record to avi.");
         return;
       }
     }
@@ -778,7 +778,7 @@ void videoDS :: fileMess(t_symbol *filename)
 void videoDS :: recordMess(int state)
 {
   if (NULL==m_filename || 0 == m_filename[0]) {
-    error("[GEM:videoDS] No filename passed");
+    pd_error(0, "[GEM:videoDS] No filename passed");
     return;
   }
 
@@ -879,15 +879,15 @@ void SetupCaptureDevice(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
                                          IID_IAMVfwCaptureDialogs, (void **)&pDlg)))) {
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source)))
       if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL))) {
-        error("[GEM:videoDS] Could not show VFW Capture Source Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Source Dialog");
       }
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
       if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL))) {
-        error("[GEM:videoDS] Could not show VFW Capture Format Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Format Dialog");
       }
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display)))
       if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL))) {
-        error("[GEM:videoDS] Could not show VFW Capture Display Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Display Dialog");
       }
     pDlg->Release();
   }
@@ -993,7 +993,7 @@ void dialogSource(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
   if (pDlg) {
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Source))) {
       if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Source, NULL))) {
-        error("[GEM:videoDS] Could not show VFW Capture Source Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Source Dialog");
       }
     }
   } else {
@@ -1023,7 +1023,7 @@ void dialogFormat(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
   if (pDlg)   {
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Format)))
       if (FAILED(hr = pDlg->ShowDialog(VfwCaptureDialog_Format, NULL))) {
-        error("[GEM:videoDS] Could not show VFW Capture Format Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Format Dialog");
       }
   } else {
     IAMStreamConfig *pSC;
@@ -1064,10 +1064,10 @@ void dialogDisplay(ICaptureGraphBuilder2* pCG, IBaseFilter * pCDbase)
   if (pDlg) {
     if (S_OK == (pDlg->HasDialog(VfwCaptureDialog_Display))) {
       if (FAILED((hr = pDlg->ShowDialog(VfwCaptureDialog_Display, NULL)))) {
-        error("[GEM:videoDS] Could not show VFW Capture Display Dialog");
+        pd_error(0, "[GEM:videoDS] Could not show VFW Capture Display Dialog");
       }
     } else {
-      error("[GEM:videoDS] No display dialog for this device");
+      pd_error(0, "[GEM:videoDS] No display dialog for this device");
     }
   }
 }
@@ -1226,7 +1226,7 @@ void GetBitmapInfoHdr(AM_MEDIA_TYPE* pmt, BITMAPINFOHEADER** ppbmih)
                   IsEqualGUID(pmt->formattype, FORMAT_VideoInfo2)) {
     *ppbmih = &(((VIDEOINFOHEADER2 *) pmt->pbFormat)->bmiHeader);
   } else {
-    error("[GEM:videoDS] Unknown media format");
+    pd_error(0, "[GEM:videoDS] Unknown media format");
     return;
   }
 }
@@ -1266,22 +1266,22 @@ HRESULT SetAviOptions(IBaseFilter *ppf, InterleavingMode INTERLEAVE_MODE)
   // QI for interface AVI Muxer
   if (FAILED(hr = ppf->QueryInterface(IID_IConfigAviMux,
                                       reinterpret_cast<PVOID *>(&pMux)))) {
-    error("[GEM:videoDS] IConfigAviMux failed.");
+    pd_error(0, "[GEM:videoDS] IConfigAviMux failed.");
   }
 
   if (FAILED(hr = pMux->SetOutputCompatibilityIndex(TRUE))) {
-    error("[GEM:videoDS] SetOutputCompatibilityIndex failed.");
+    pd_error(0, "[GEM:videoDS] SetOutputCompatibilityIndex failed.");
   }
 
   // QI for interface Interleaving
   if (FAILED(hr = ppf->QueryInterface(IID_IConfigInterleaving,
                                       reinterpret_cast<PVOID *>(&pInterleaving)))) {
-    error("[GEM:videoDS] IConfigInterleaving failed.");
+    pd_error(0, "[GEM:videoDS] IConfigInterleaving failed.");
   }
 
   // put the interleaving mode (full, none, half)
   if (FAILED(pInterleaving->put_Mode(INTERLEAVE_MODE))) {
-    error("[GEM:videoDS] put_Mode failed.");
+    pd_error(0, "[GEM:videoDS] put_Mode failed.");
   }
 
   return hr;

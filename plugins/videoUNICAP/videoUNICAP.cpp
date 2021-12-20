@@ -483,7 +483,7 @@ bool videoUNICAP :: start(void)
   }
   post_fmt(&format);
   if(format.size_count<1 || format.sizes==NULL) {
-    error("[GEM:videoUNICAP] can't get supported formats. Device might be busy.");
+    pd_error(0, "[GEM:videoUNICAP] can't get supported formats. Device might be busy.");
     return false;
   }
 
@@ -498,7 +498,7 @@ bool videoUNICAP :: start(void)
   debugPost("setting format (%d/%d)", default_format, default_size);
   post_fmt(&format);
   if( !SUCCESS( unicap_set_format( m_handle, &format ) ) )  {
-    error("[GEM:videoUNICAP]failed to set format");
+    pd_error(0, "[GEM:videoUNICAP]failed to set format");
     return false;
   }
   unicap_unregister_callback(m_handle, UNICAP_EVENT_NEW_FRAME);

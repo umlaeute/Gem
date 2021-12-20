@@ -144,7 +144,7 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL) {
-    error("[GEM:recordQT4L] starting to record to %s failed",
+    pd_error(0, "[GEM:recordQT4L] starting to record to %s failed",
           filename.c_str());
     return false;
   }
@@ -268,7 +268,7 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
     setCodec(m_codecname);
   }
   if(NULL==m_codec) {
-    error("[GEM:recordQT4L] couldn't initialize codec");
+    pd_error(0, "[GEM:recordQT4L] couldn't initialize codec");
     return false;
   }
 
@@ -343,7 +343,7 @@ bool recordQT4L :: write(imageStruct*img)
     if(!init(img, framerate)) {
       /* something went wrong! */
       stop();
-      error("[GEM:recordQT4L] unable to initialize QT4L");
+      pd_error(0, "[GEM:recordQT4L] unable to initialize QT4L");
       return false;
     }
     m_restart=false;
@@ -368,7 +368,7 @@ bool recordQT4L :: write(imageStruct*img)
     m_image.convertFrom(img, GEM_YUV);
     break;
   default:
-    error("[GEM:recordQT4L] unsupported colormodel...");
+    pd_error(0, "[GEM:recordQT4L] unsupported colormodel...");
     return false;
   }
 

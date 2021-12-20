@@ -457,10 +457,10 @@ void filmQT :: LoadRam(void)
     length = GetMovieDuration(m_movie);
     err =LoadMovieIntoRam(m_movie,m_movieTime,length,keepInRam);
     if (err) {
-      error("[GEM:filmQT] LoadMovieIntoRam failed miserably");
+      pd_error(0, "[GEM:filmQT] LoadMovieIntoRam failed miserably");
     }
   } else {
-    error("[GEM:filmQT] no movie to load into RAM!");
+    pd_error(0, "[GEM:filmQT] no movie to load into RAM!");
   }
 }
 #endif // LoadRAM

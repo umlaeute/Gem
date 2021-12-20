@@ -302,13 +302,13 @@ pixBlock*videoNDI::getFrame(void)
 
     break;
   case NDIlib_frame_type_error:
-    error("[GEM:videoNDI] lost connection");
+    pd_error(0, "[GEM:videoNDI] lost connection");
     return NULL;
   case NDIlib_frame_type_audio:
     verbose(2, "[GEM:videoNDI] got audio frame");
     break;
   case NDIlib_frame_type_none:
-    //error("[GEM:videoNDI] got no frame");
+    //pd_error(0, "[GEM:videoNDI] got no frame");
     break;
   } // switch
 

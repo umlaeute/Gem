@@ -33,9 +33,9 @@ const NDIlib_v4* init_ndi_library(const char*prefix)
     const char* p_ndi_runtime_v4 = getenv(NDILIB_REDIST_FOLDER);
     if (!p_ndi_runtime_v4)
     {       // The NDI run-time is not yet installed. Let the user know and take them to the download URL.
-      error("[GEM:%s] Please install the NewTek NDI Runtimes to use this plugin.", prefix);
+      pd_error(0, "[GEM:%s] Please install the NewTek NDI Runtimes to use this plugin.", prefix);
       if (std::string("") != NDILIB_REDIST_URL)
-        error("               get it from %s", NDILIB_REDIST_URL);
+        pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
       return 0;
     }
 
@@ -58,10 +58,10 @@ const NDIlib_v4* init_ndi_library(const char*prefix)
         FreeLibrary(hNDILib);
 
       // The NDI run-time is not installed correctly. Let the user know and take them to the download URL.
-      error("[GEM:%s] Please re-install the NewTek NDI Runtimes to use this plugin.", prefix);
-      error("               need to find the library '%s'", NDILIB_LIBRARY_NAME);
+      pd_error(0, "[GEM:%s] Please re-install the NewTek NDI Runtimes to use this plugin.", prefix);
+      pd_error(0, "               need to find the library '%s'", NDILIB_LIBRARY_NAME);
       if (std::string("") != NDILIB_REDIST_URL)
-        error("               get it from %s", NDILIB_REDIST_URL);
+        pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
       return 0;
     }
 #else
@@ -88,10 +88,10 @@ const NDIlib_v4* init_ndi_library(const char*prefix)
       if (hNDILib)
         dlclose(hNDILib);
 
-      error("[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
-      error("               need to find the library '%s'", NDILIB_LIBRARY_NAME);
+      pd_error(0, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
+      pd_error(0, "               need to find the library '%s'", NDILIB_LIBRARY_NAME);
       if (std::string("") != NDILIB_REDIST_URL)
-        error("               get it from %s", NDILIB_REDIST_URL);
+        pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
       return 0;
     }
 #endif

@@ -129,7 +129,7 @@ void filmGMERLIN::log(gavl_log_level_t level, const char *log_domain,
     verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
   case GAVL_LOG_ERROR:
-    error("[GEM:filmGMERLIN:%s!] %s", log_domain, message);
+    pd_error(0, "[GEM:filmGMERLIN:%s!] %s", log_domain, message);
     break;
   default:
     break;
@@ -376,7 +376,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
   // this really shares a lot of code with open() so it should go into a separate function
   if(trackNum) {
     if(m_numTracks>trackNum || trackNum<0) {
-      error("[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
+      pd_error(0, "[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
             m_numTracks);
     } else {
       int numvstreams=bgav_num_video_streams (m_file, m_track);
@@ -391,7 +391,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
         }
 #endif
       } else {
-        error("[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping");
+        pd_error(0, "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping");
       }
     }
   }

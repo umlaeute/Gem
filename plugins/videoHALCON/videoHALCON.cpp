@@ -144,7 +144,7 @@ bool videoHALCON :: grabFrame()
   try {
     img=m_grabber->GrabImageAsync(-1);
   } catch (Halcon::HException& except) {
-    error("[GEM:videoHALCON] GrabImage exception: '%s'", except.message);
+    pd_error(0, "[GEM:videoHALCON] GrabImage exception: '%s'", except.message);
     return false;
   }
   Halcon::HTuple pG, pB, typ, W, H;
@@ -153,14 +153,14 @@ bool videoHALCON :: grabFrame()
   try {
     r = img.GetImagePointer3(&pG, &pB, &typ, &W, &H);
   } catch (Halcon::HException& except) {
-    error("[GEM:videoHALCON] GetImagePointer exception: '%s'", except.message);
+    pd_error(0, "[GEM:videoHALCON] GetImagePointer exception: '%s'", except.message);
     return false;
   }
 
   try {
     long g,b,w,h;
 #if 0
-#define GETTUPLE(x, y) { try {x=y[0]; } catch (Halcon::HException& except) { error("HTuple exception @ %d: '%s'", __LINE__, except.message); } } while(0)
+#define GETTUPLE(x, y) { try {x=y[0]; } catch (Halcon::HException& except) { pd_error(0, "HTuple exception @ %d: '%s'", __LINE__, except.message); } } while(0)
     GETTUPLE(g, pG);
     GETTUPLE(b, pB);
     GETTUPLE(w, W);
@@ -627,7 +627,7 @@ void videoHALCON::setProperties(gem::Properties&props)
             try {
               m_grabber->SetFramegrabberParam(Param, s.c_str());
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+              pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
                     key.c_str(), except.message);
             }
           }
@@ -641,19 +641,19 @@ void videoHALCON::setProperties(gem::Properties&props)
                 long l=d;
                 m_grabber->SetFramegrabberParam(Param, l);
               } catch (Halcon::HException& except) {
-                error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+                pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
                       key.c_str(), except.message);
               }
             }
           }
           break;
         default:
-          error("[GEM:videoHALCON] SetFramegrabberParam(%s): invalid type",
+          pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s): invalid type",
                 key.c_str());
           break;
         }
       } catch (Halcon::HException& except) {
-        error("[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
+        pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
               key.c_str(), except.message);
       }
     } else {
@@ -667,7 +667,7 @@ void videoHALCON::setProperties(gem::Properties&props)
               long l=d;
               m_grabber->SetFramegrabberParam("image_width", l);
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(width) exception: '%s'",
+              pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(width) exception: '%s'",
                     except.message);
             }
           }
@@ -683,7 +683,7 @@ void videoHALCON::setProperties(gem::Properties&props)
               long l=d;
               m_grabber->SetFramegrabberParam("image_height", l);
             } catch (Halcon::HException& except) {
-              error("[GEM:videoHALCON] SetFramegrabberParam(height) exception: '%s'",
+              pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(height) exception: '%s'",
                     except.message);
             }
           }
@@ -726,7 +726,7 @@ void videoHALCON::getProperties(gem::Properties&props)
           }
         }
       } catch (Halcon::HException& except) {
-        error("[GEM:videoHALCON] GetFramegrabberParam exception: '%s'",
+        pd_error(0, "[GEM:videoHALCON] GetFramegrabberParam exception: '%s'",
               except.message);
       }
     }

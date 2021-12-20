@@ -32,7 +32,7 @@ using namespace gem::plugins;
 
 #include <stdio.h>
 
-/* for post() and error() */
+/* for post() and pd_error() */
 #include <m_pd.h>
 
 static char* FourCC2Str(int code, char*char5) {
@@ -184,13 +184,13 @@ void recordQT :: setupQT(
   //probably should be a separate function
 
   if (m_filename.empty()) {
-    error("[GEM:recordQT] no filename passed");
+    pd_error(0, "[GEM:recordQT] no filename passed");
     return;
   }
   std::string filename = gem::string::utf8string_to_nativestring(m_filename);
 
   if (!m_compressImage) {
-    error("[GEM:recordQT] no image to record");
+    pd_error(0, "[GEM:recordQT] no image to record");
     return;
   }
   touch (filename);
@@ -199,20 +199,20 @@ void recordQT :: setupQT(
     const UInt8*filename8=reinterpret_cast<const UInt8*>(filename.c_str());
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     if (err) {
-      error("[GEM:recordQT] Unable to make file ref from filename %s",
+      pd_error(0, "[GEM:recordQT] Unable to make file ref from filename %s",
             m_filename.c_str());
       return ;
     }
     err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec,
                            NULL);
     if (err != noErr) {
-      error("[GEM:recordQT] error#%d in FSGetCatalogInfo()", err);
+      pd_error(0, "[GEM:recordQT] error#%d in FSGetCatalogInfo()", err);
       return ;
     }
     err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8,
                        &theFSSpec);
     if (err != noErr && err != -37) { /* -37: invalid filename (e.g.  non-existant) */
-      error("[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
+      pd_error(0, "[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
       return;
     }
   } while(0);
@@ -220,7 +220,7 @@ void recordQT :: setupQT(
   do {
     err = ::NativePathNameToFSSpec (const_cast<char*>(filename.c_str()), &theFSSpec, 0);
     if (err != noErr && err != -37) {
-      error("[GEM:recordQT] error#%d in NativePathNameToFSSpec()", err);
+      pd_error(0, "[GEM:recordQT] error#%d in NativePathNameToFSSpec()", err);
       return;
     }
     err = CreateMovieFile(        &theFSSpec,
@@ -248,10 +248,10 @@ void recordQT :: setupQT(
   case noErr:
     break;
   case -37:
-    error("[GEM:recordQT] invalid filename '%s'", m_filename.c_str());
+    pd_error(0, "[GEM:recordQT] invalid filename '%s'", m_filename.c_str());
     return;
   default:
-    error("[GEM:recordQT] CreateMovieFile failed with error %d",err);
+    pd_error(0, "[GEM:recordQT] CreateMovieFile failed with error %d",err);
     return;
   }
 
@@ -284,7 +284,7 @@ void recordQT :: setupQT(
     m_rowBytes = m_width * 2;
     break;
   default:
-    error("[GEM:recordQT] unknown colorspace '%s'", FourCC2Str(colorspace, char5));
+    pd_error(0, "[GEM:recordQT] unknown colorspace '%s'", FourCC2Str(colorspace, char5));
     m_rowBytes = m_width;
     break;
   }
@@ -300,7 +300,7 @@ void recordQT :: setupQT(
                            m_rowBytes);
 
   if (err != noErr) {
-    error("[GEM:recordQT] QTNewGWorldFromPtr failed with error %d",err);
+    pd_error(0, "[GEM:recordQT] QTNewGWorldFromPtr failed with error %d",err);
     return;
   }
   SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
@@ -345,20 +345,20 @@ void recordQT :: setupQT(
   compErr = SCSetInfo(stdComponent, scDataRateSettingsType, &datarate);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCSetInfo failed with error#%ld", compErr);
+    pd_error(0, "[GEM:recordQT] SCSetInfo failed with error#%ld", compErr);
   }
 
   compErr = SCCompressSequenceBegin(stdComponent,GetPortPixMap(m_srcGWorld),
                                     &m_srcRect,&hImageDesc);
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceBegin failed with error#%ld",
+    pd_error(0, "[GEM:recordQT] SCCompressSequenceBegin failed with error#%ld",
           compErr);
     return;
   }
 
   err = BeginMediaEdits(media);
   if (err != noErr) {
-    error("[GEM:recordQT] BeginMediaEdits failed with error#%d",err);
+    pd_error(0, "[GEM:recordQT] BeginMediaEdits failed with error#%d",err);
     return;
   }
 
@@ -384,23 +384,23 @@ void recordQT :: stop(void)
   err = EndMediaEdits(media);
 
   if (err != noErr) {
-    error("[GEM:recordQT] EndMediaEdits failed with error %d",err);
+    pd_error(0, "[GEM:recordQT] EndMediaEdits failed with error %d",err);
     return;  //no sense in crashing after this
   }
 
   err = InsertMediaIntoTrack(track,0,0,GetMediaDuration(media),0x00010000);
   if (err != noErr) {
-    error("[GEM:recordQT] InsertMediaIntoTrack failed with error %d", err);
+    pd_error(0, "[GEM:recordQT] InsertMediaIntoTrack failed with error %d", err);
   }
 
   err = AddMovieResource(m_movie,nFileRefNum,&nResID,NULL);
   if (err != noErr) {
-    error("[GEM:recordQT] AddMovieResource failed with error %d", err);
+    pd_error(0, "[GEM:recordQT] AddMovieResource failed with error %d", err);
   }
 
   err = CloseMovieFile(nFileRefNum);
   if (err != noErr) {
-    error("[GEM:recordQT] CloseMovieFile failed with error %d", err);
+    pd_error(0, "[GEM:recordQT] CloseMovieFile failed with error %d", err);
   }
 
   DisposeMovie(m_movie);
@@ -410,7 +410,7 @@ void recordQT :: stop(void)
   compErr = SCCompressSequenceEnd(stdComponent);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceEnd failed with error %ld",
+    pd_error(0, "[GEM:recordQT] SCCompressSequenceEnd failed with error %ld",
           compErr);
   }
 
@@ -483,7 +483,7 @@ void recordQT :: compressFrame(void)
                                     &syncFlag);
 
   if (compErr != noErr) {
-    error("[GEM:recordQT] SCCompressSequenceFrame failed with error %ld",
+    pd_error(0, "[GEM:recordQT] SCCompressSequenceFrame failed with error %ld",
           compErr);
   }
 
@@ -498,7 +498,7 @@ void recordQT :: compressFrame(void)
                        NULL);
 
   if (err != noErr) {
-    error("[GEM:recordQT] AddMediaSample failed with error %d",err);
+    pd_error(0, "[GEM:recordQT] AddMediaSample failed with error %d",err);
   }
 
 #ifdef __APPLE__
@@ -542,7 +542,7 @@ bool recordQT :: write(imageStruct*img)
         compressFrame();
       }
     } else {
-      error("[GEM:recordQT] movie dimensions changed prev %dx%d now %dx%d stopping recording",
+      pd_error(0, "[GEM:recordQT] movie dimensions changed prev %dx%d now %dx%d stopping recording",
             m_prevWidth,m_prevHeight,m_width,m_height);
       m_recordStop = true;
       m_prevWidth = m_width;
@@ -584,7 +584,7 @@ bool recordQT :: dialog(void)
                                         StandardCompressionSubType);
 
     if (stdComponent == NULL) {
-      error("[GEM:recordQT] failed to open compressor component");
+      pd_error(0, "[GEM:recordQT] failed to open compressor component");
       return false;
     }
 
@@ -625,7 +625,7 @@ bool recordQT :: dialog(void)
             TemporalSettings.keyFrameRate);
     return(true);
   }
-  error("[GEM:recordQT] recording is running; refusing to show up dialog...!");
+  pd_error(0, "[GEM:recordQT] recording is running; refusing to show up dialog...!");
   return(false);
 }
 
@@ -766,7 +766,7 @@ bool recordQT :: start(const std::string&filename, gem::Properties&props)
   // on OSX changing the name while recording won't have any effect
   // but it will give the wrong message at the end if recording
   if (m_recordStart) {
-    error("[GEM:recordQT] cannot set filename while recording is running!");
+    pd_error(0, "[GEM:recordQT] cannot set filename while recording is running!");
     return false;
   }
   m_filename = filename;

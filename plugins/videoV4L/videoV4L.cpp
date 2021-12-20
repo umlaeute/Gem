@@ -155,7 +155,7 @@ bool videoV4L :: grabFrame()
   /* capturing */
   if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0) {
     if (errno == EAGAIN) {
-      error("[GEM:videoV4L] can't sync (no v4l source?)");
+      pd_error(0, "[GEM:videoV4L] can't sync (no v4l source?)");
     } else {
       perror("[GEM:videoV4L] VIDIOCMCAPTURE1");
     }
@@ -171,7 +171,7 @@ bool videoV4L :: grabFrame()
   } else {
     errorcount++;
     if(errorcount>1000) {
-      error("[GEM:videoV4L] %d capture errors in a row... I think I better stop now...",
+      pd_error(0, "[GEM:videoV4L] %d capture errors in a row... I think I better stop now...",
             errorcount);
       return false;
     }
@@ -234,7 +234,7 @@ bool videoV4L :: openDevice(gem::Properties&props)
   }
 
   if ((tvfd = v4l1_open(buf, O_RDWR)) < 0) {
-    error("[GEM:videoV4L] failed opening device: '%s'", buf);
+    pd_error(0, "[GEM:videoV4L] failed opening device: '%s'", buf);
     perror(buf);
     goto closit;
   }
@@ -391,7 +391,7 @@ bool videoV4L :: startTransfer()
     }
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
       if (errno == EAGAIN) {
-        error("[GEM:videoV4L] can't sync (no video source?)");
+        pd_error(0, "[GEM:videoV4L] can't sync (no video source?)");
       } else {
         perror("[GEM:videoV4L] VIDIOCMCAPTURE");
       }
@@ -588,7 +588,7 @@ void videoV4L::setProperties(gem::Properties&props)
       if(props.get(key, d)) {
         int channel=d;
         if(channel<0 || channel>(vcap.channels-1)) {
-          error("[GEM:videoV4L] channel %d out of range [0..%d]", channel,
+          pd_error(0, "[GEM:videoV4L] channel %d out of range [0..%d]", channel,
                 vcap.channels-1);
           continue;
         }
@@ -600,12 +600,12 @@ void videoV4L::setProperties(gem::Properties&props)
     } else if (key=="frequency") {
       if(props.get(key, d)) {
         if (v4l1_ioctl(tvfd,VIDIOCGTUNER,&vtuner) < 0) {
-          error("[GEM:videoV4L] error setting frequency -- no tuner");
+          pd_error(0, "[GEM:videoV4L] error setting frequency -- no tuner");
           continue;
         }
         unsigned long freq=d;
         if (v4l1_ioctl(tvfd,VIDIOCSFREQ,&freq) < 0) {
-          error("[GEM:videoV4L] error setting frequency");
+          pd_error(0, "[GEM:videoV4L] error setting frequency");
         }
       }
     } else if (key=="norm") {
@@ -622,7 +622,7 @@ void videoV4L::setProperties(gem::Properties&props)
         }
 
         if(i_norm<0) {
-          error("[GEM:videoV4L] unknown norm '%s'", s.c_str());
+          pd_error(0, "[GEM:videoV4L] unknown norm '%s'", s.c_str());
         } else {
           m_norm=i_norm;
           vchannel.norm=i_norm;
@@ -631,7 +631,7 @@ void videoV4L::setProperties(gem::Properties&props)
       } else if(props.get(key, d)) {
         i_norm=d;
         if(i_norm<0 || i_norm>VIDEO_MODE_AUTO) {
-          error("[GEM:videoV4L] unknown norm %d", i_norm);
+          pd_error(0, "[GEM:videoV4L] unknown norm %d", i_norm);
         } else {
           vchannel.norm=i_norm;
           do_s_chan=true;

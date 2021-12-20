@@ -452,7 +452,7 @@ MARK();
 
         LeaveCriticalSection(&critSection);
       } else {
-        error("[GEM:videoDS] SampleCB() - buffer sizes do not match %d != %d",
+        pd_error(0, "[GEM:videoDS] SampleCB() - buffer sizes do not match %d != %d",
               latestBufferLength, currentBufferLength);
       }
     }

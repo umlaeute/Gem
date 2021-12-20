@@ -12,7 +12,7 @@
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include "model_loader.h"
-/* for post(), error(),... */
+/* for post(), pd_error(),... */
 #include <m_pd.h>
 #include "Gem/GemGL.h"
 

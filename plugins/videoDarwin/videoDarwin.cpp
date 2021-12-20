@@ -129,14 +129,14 @@ bool videoDarwin :: grabFrame()
   err = SGIdle(m_sg);
 
   if (err != noErr) {
-    error("[GEM:videoDarwin] SGIdle failed with error#%d",err);
+    pd_error(0, "[GEM:videoDarwin] SGIdle failed with error#%d",err);
     m_haveVideo = 0;
     //    return false;
   } else {
     //this doesn't do anything so far
     //VDCompressDone(m_vdig,frameCount,data,size,similar,time);
     //err = SGGrabFrameComplete(m_vc,frameCount,done);
-    //if (err != noErr) error("[GEM:videoDarwin] SGGrabCompressComplete failed with error %d",err);
+    //if (err != noErr) pd_error(0, "[GEM:videoDarwin] SGGrabCompressComplete failed with error %d",err);
 
     m_haveVideo = 1;
     m_newFrame = true;
@@ -177,7 +177,7 @@ bool videoDarwin :: stopTransfer()
   //might need SGPause or SGStop here
   err = SGStop(m_sg);
   if (err != noErr) {
-    error("[GEM:videoDarwin] SGStop failed with error#%d",err);
+    pd_error(0, "[GEM:videoDarwin] SGStop failed with error#%d",err);
   }
   return true;
 }
@@ -491,7 +491,7 @@ bool videoDarwin::setIIDCProperty(OSType specifier, double value)
   featureAtom = QTFindChildByIndex(atomContainer, kParentAtomIsContainer,
                                    vdIIDCAtomTypeFeature, 1, NULL);
   if (0 == featureAtom) {
-    return false;  //error("[GEM:videoDarwin] featureAtom vdIIDCFeatureSaturation not found");
+    return false;  //pd_error(0, "[GEM:videoDarwin] featureAtom vdIIDCFeatureSaturation not found");
   }
 
   result = QTCopyAtomDataToPtr(atomContainer,
