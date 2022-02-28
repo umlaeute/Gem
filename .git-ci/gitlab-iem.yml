@@ -42,7 +42,7 @@ variables:
     - g++ -v
   script:
     - ./autogen.sh
-    - ./configure --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - ./configure --disable-dependency-tracking --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -72,7 +72,7 @@ variables:
   script:
     - /usr/local/opt/gettext/bin/gettextize
     - autoreconf -fiv
-    - ./configure --enable-fat-binary=x86_64,arm64 --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH} CXXFLAGS="-std=c++11 -g -O2"
+    - ./configure --disable-dependency-tracking --enable-fat-binary=x86_64,arm64 --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH} CXXFLAGS="-std=c++11 -g -O2"
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -99,7 +99,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -126,7 +126,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
