@@ -33,6 +33,11 @@
 # define bgav_redirector_get_num_urls(f) 0
 # define bgav_redirector_get_url(f,i) "oops://"
 # define bgav_redirector_get_name(f, i) "<unknown>"
+#else
+# define GAVL_LOG_ERROR   BGAV_LOG_ERROR
+# define GAVL_LOG_WARNING BGAV_LOG_WARNING
+# define GAVL_LOG_INFO    BGAV_LOG_INFO
+# define GAVL_LOG_DEBUG   BGAV_LOG_DEBUG
 #endif
 
 

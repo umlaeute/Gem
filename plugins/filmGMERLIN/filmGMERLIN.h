@@ -33,13 +33,7 @@ extern "C" {
 # ifdef HAVE_GAVL_LOG_H
 #  include <gavl/log.h>
 # else
-typedef enum
-  {
-    GAVL_LOG_ERROR   = BGAV_LOG_ERROR,
-    GAVL_LOG_WARNING = BGAV_LOG_WARNING,
-    GAVL_LOG_INFO    = BGAV_LOG_INFO,
-    GAVL_LOG_DEBUG   = BGAV_LOG_DEBUG,
-  } gavl_log_level_t;
+#  define gavl_log_level_t bgav_log_level_t
 # endif /* HAVE_GAVL_LOG_H */
 
 
