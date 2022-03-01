@@ -6,7 +6,7 @@ variables:
   # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
   MACOSX_DEPLOYMENT_TARGET: "10.9"
   # however, it seems that CI_JOB_NAME is not expanded here!
-  ARTIFACTSDIR: artifacts/${CI_JOB_NAME%_*}
+  ARTIFACTSDIR: artifacts
 
 .build:snapshot: &snapshot
   except:
@@ -43,9 +43,9 @@ variables:
     - ./autogen.sh
     - ./configure --disable-dependency-tracking --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - mkdir -p "${ARTIFACTSDIR}"
+    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
 
 .build:macos: &build_macos
   tags:
@@ -73,10 +73,10 @@ variables:
     - autoreconf -fiv
     - ./configure --disable-dependency-tracking --enable-fat-binary=x86_64,arm64 --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH} CXXFLAGS="-std=c++11 -g -O2"
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - mkdir -p "${ARTIFACTSDIR}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
+    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
 .build:w32: &build_w32
   stage: build
@@ -100,10 +100,10 @@ variables:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - mkdir -p "${ARTIFACTSDIR}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
+    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 .build:w64: &build_w64
   stage: build
@@ -127,10 +127,10 @@ variables:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR} libdir=/ extradir=/Gem includedir=/Gem/include
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
-    - mkdir -p "${ARTIFACTSDIR}"
-    - find "${ARTIFACTSDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
+    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
