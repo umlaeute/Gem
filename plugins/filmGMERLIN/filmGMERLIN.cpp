@@ -21,33 +21,20 @@
 # define HAVE_GMERLIN
 #endif
 
-#ifdef HAVE_GAVL_LOG_H
-extern "C" {
-# include <gavl/log.h>
-}
-
-# define bgav_is_redirector(f) 0
-# define bgav_redirector_get_num_urls(f) 0
-# define bgav_redirector_get_url(f,i) "oops://"
-# define bgav_redirector_get_name(f, i) "<unknown>"
-#else
-typedef enum
-  {
-    GAVL_LOG_ERROR   = BGAV_LOG_ERROR,
-    GAVL_LOG_WARNING = BGAV_LOG_WARNING,
-    GAVL_LOG_INFO    = BGAV_LOG_INFO,
-    GAVL_LOG_DEBUG   = BGAV_LOG_DEBUG,
-  } gavl_log_level_t;
-#endif
-
-
-
 
 #ifdef HAVE_GMERLIN
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
+
+#ifdef HAVE_GAVL_LOG_H
+# define bgav_is_redirector(f) 0
+# define bgav_redirector_get_num_urls(f) 0
+# define bgav_redirector_get_url(f,i) "oops://"
+# define bgav_redirector_get_name(f, i) "<unknown>"
+#endif
+
 
 //#define GEM_FILMGMERLIN_TRACKSWITCH 1
 
