@@ -16,7 +16,6 @@ variables:
     paths:
       - ${ARTIFACTSDIR}
       - config.log
-    expire_in: 1 week
     when: always
 
 .build:release: &release
