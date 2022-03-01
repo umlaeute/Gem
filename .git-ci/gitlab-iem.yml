@@ -171,7 +171,7 @@ deken:
   script:
     - chmod -R go-w ${ARTIFACTSDIR}/
 # remove ltlib leftovers
-    - find artifacts/ "(" -name "*.la" -or -name "*.a" ")" -delete
+    - find ${ARTIFACTSDIR}/ "(" -name "*.la" -or -name "*.a" ")" -delete
 # create a source package
     - git archive --format=tar --prefix=${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/ HEAD | tar xf -
 # create deken packages
