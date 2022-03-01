@@ -36,7 +36,6 @@ variables:
     - apt-get update
     - apt-get install -y --no-install-recommends ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
     - apt-get build-dep -y --no-install-recommends  ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
-    - apt-get install -y --no-install-recommends  ${TARGETDEBARCH:+-a}${TARGETDEBARCH} libassimp-dev
     - date
     - g++ -v
   script:
