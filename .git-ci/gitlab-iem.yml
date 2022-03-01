@@ -164,23 +164,26 @@ W64_snapshot:
 
 deken:
   stage: deploy
-  image: debian:buster
-  only:
-    - tags
-  variables:
-    DEKEN_ROOT: "yes"
+  image: registry.git.iem.at/pd/deken:latest
   before_script:
-    - apt-get update && apt-get --no-install-recommends -y install deken git
+    # we need 'git' to create a source package
+    - apt-get update && apt-get --no-install-recommends -y install git
   script:
     - chmod -R go-w artifacts/
 # remove ltlib leftovers
     - find artifacts/ "(" -name "*.la" -or -name "*.a" ")" -delete
 # create a source package
-    - git archive --format=tar --prefix=artifacts/src/${CI_PROJECT_NAME}/ HEAD | tar xf -
+    - git archive --format=tar --prefix=tmp/${CI_PROJECT_NAME}/ HEAD | tar xf -
+    - deken package --version="${CI_COMMIT_TAG#v}" "tmp/${CI_PROJECT_NAME}"
 # create deken packages
     - for d in artifacts/*/${CI_PROJECT_NAME}/; do deken package --version="${CI_COMMIT_TAG#v}" "${d}"; done
 # upload deken packages
-    - test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek
+    - test -z "${CI_COMMIT_TAG}" || test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek
+  artifacts:
+    name: deken-package
+    paths:
+      - ./*.dek
+      - ./*.dek.*
 
 include:
   # additionally run some static code analysis
