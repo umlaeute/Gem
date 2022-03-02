@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MARK startpost("%s:%d[%s] ", __FILE__, __LINE__, __FUNCTION__); post
-
 CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
@@ -34,12 +32,11 @@ CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
 //
 /////////////////////////////////////////////////////////
 scopeXYZ :: scopeXYZ(t_floatarg len)
-  : GemShape(),
-    m_requestedLength(0), m_realLength(0), m_length(0),
-    m_position(0),
-    m_vertices(NULL)
+  : GemShape()
+  , m_blocksize(64), m_length(64)
+  , m_position(0)
+  , m_vertices(64, 3)
 {
-  doLengthMess(64);
   lengthMess(static_cast<int>(len));
 
   /* channels inlet */
@@ -56,59 +53,28 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
 /////////////////////////////////////////////////////////
 scopeXYZ :: ~scopeXYZ(void)
 {
-  if(m_vertices) {
-    delete[]m_vertices;
-  }
 }
 
-void scopeXYZ :: doLengthMess(unsigned int L)
+void scopeXYZ :: doLengthMess(unsigned int l)
 {
-  // this resizes to m_requestedLength if this is set, or to L otherwise
-  // actually, resizing is done to the double-size!
+  if(l < m_blocksize)
+    l = m_blocksize;
+  m_length=l;
 
-  unsigned int length=0;
-  if(m_requestedLength>0) {
-    length=m_requestedLength;
-  } else if (L>m_requestedLength) {
-    length=L;
-  }
-
-  if(0==length) {
-    return;  // oops
-  }
-
-  m_length=length;
-
-  //post("length=%d\treal=%d\treqested=%d", m_length, m_realLength, m_requestedLength);
-
-  if(m_realLength<length) {
-    if(m_vertices) {
-      delete[]m_vertices;
-    }
-    m_realLength=length;
-
-    m_vertices = new t_sample[3* length*2];
-    //post("m_vertices: %d*3*2 samples at %x", length, m_vertices);
-
-    unsigned int i;
-    for (i = 0; i < 3*length*2; i++)  {
-      m_vertices[i]=0.0f;
-    }
-  }
-
+  m_vertices.resize(2 * m_length);
   m_position%=m_length;
 }
-
-
 void scopeXYZ :: lengthMess(int l)
 {
   if(l<=0) {
-    m_requestedLength=0;
     return;
   }
-
-  m_requestedLength=l;
-  doLengthMess();
+  doLengthMess(l);
+}
+void scopeXYZ :: setBlocksize(unsigned int bs) {
+  m_blocksize = bs;
+  m_vertices.enabled = true;
+  doLengthMess(m_length);
 }
 
 /////////////////////////////////////////////////////////
@@ -117,13 +83,9 @@ void scopeXYZ :: lengthMess(int l)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: renderShape(GemState *state)
 {
-  t_sample*vertices=m_vertices+3*m_position;
+  float*vertices=m_vertices.array+3*m_position;
   int count=m_length/2;
   GLenum typ=GL_FLOAT;
-  if(sizeof(t_sample)==sizeof(double)) {
-    typ=GL_DOUBLE;
-  }
-
   GLenum drawtype=m_drawType;
   if(drawtype==GL_DEFAULT_GEM) {
     drawtype=GL_LINE_STRIP;
@@ -131,30 +93,45 @@ void scopeXYZ :: renderShape(GemState *state)
   glNormal3f(0.0f, 0.0f, 1.0f);
   glLineWidth(m_linewidth);
 
-  // activate and specify pointer to vertex array
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3, typ, 0, vertices);
-
-  if(GemShape::m_texType) {
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    if(count==GemShape::m_texNum) {
-      // in the original code, we used whatever GemShape::m_texCoords were present
-      // if we had more vertices, the remaining vs would just use the last texCoord available
-      glTexCoordPointer(2, GL_FLOAT, 0, GemShape::m_texCoords);
-    } else {
-      // in the original code, the texcoords where normalized(!)
-      glTexCoordPointer(2, typ, sizeof(t_sample), vertices);
+  if(GLEW_VERSION_1_5) {
+    if ( !m_vertices.vbo || m_vertices.dirty ) {
+      m_vertices.create();
     }
-  }
+    if(m_vertices.render()) {
+      glVertexPointer(m_vertices.dimen, GL_FLOAT, 0, 0);
+      glEnableClientState(GL_VERTEX_ARRAY);
 
-  // draw a cube
-  glDrawArrays(drawtype, 0, m_length);
+      glDrawArrays(drawtype, m_position, m_length);
 
-  // deactivate vertex arrays after drawing
-  glDisableClientState(GL_VERTEX_ARRAY);
+      glDisableClientState(GL_VERTEX_ARRAY);
+    }
 
-  if(GemShape::m_texType) {
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  } else { /* legacy code for old openGL */
+    // activate and specify pointer to vertex array
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+
+    if(GemShape::m_texType) {
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      if(count==GemShape::m_texNum) {
+        // in the original code, we used whatever GemShape::m_texCoords were present
+        // if we had more vertices, the remaining vs would just use the last texCoord available
+        glTexCoordPointer(2, GL_FLOAT, 0, GemShape::m_texCoords);
+      } else {
+        // in the original code, the texcoords where normalized(!)
+        glTexCoordPointer(2, GL_FLOAT, sizeof(float), vertices);
+      }
+    }
+
+    // draw a cube
+    glDrawArrays(drawtype, 0, m_length);
+
+    // deactivate vertex arrays after drawing
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    if(GemShape::m_texType) {
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
   }
 
   glLineWidth(1.0);
@@ -163,8 +140,8 @@ void scopeXYZ :: renderShape(GemState *state)
 void scopeXYZ :: bangMess(void)
 {
   unsigned int i;
-  t_sample*vertL=m_vertices;
-  t_sample*vertR=m_vertices+m_length;
+  t_sample*vertL=m_vertices.array;
+  t_sample*vertR=m_vertices.array+m_length*m_vertices.dimen;
 
   post("x\ty\tz\t\tx\ty\tz");
   for(i=0; i<m_length; i++) {
@@ -210,7 +187,7 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)
 {
-  GetMyClass(data)->doLengthMess(sp[1]->s_n);
+  GetMyClass(data)->setBlocksize(sp[1]->s_n);
   dsp_add(perform, 5, data, sp[1]->s_vec, sp[2]->s_vec, sp[3]->s_vec,
           sp[1]->s_n);
 }
@@ -219,11 +196,12 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y,
                          t_sample*Z)
 {
   int position=m_position;
+  float*vertices = m_vertices.array;
+  float*vert=vertices+3*position;
 
-  t_sample*vert=m_vertices+3*position;
   unsigned int i=0;
 
-  // TODO: add some protection against segfaults when bufer is very small
+  // TODO: add some protection against segfaults when buffer is very small
   if(m_length<count) {
     count=m_length;
   }
@@ -234,27 +212,28 @@ void scopeXYZ :: perform(unsigned int count, t_sample*X, t_sample*Y,
     *vert++=*Y++;
     *vert++=*Z++;
   }
+
   /* copy the data over to the right-side of the double-array */
   if((m_position+count)>m_length) {
     // wrap around!
     // 1st copy the lower half
-    memcpy(m_vertices+3*(position+m_length),
-           m_vertices+3*(position),
+    memcpy(vertices+3*(position+m_length),
+           vertices+3*(position),
            3*(m_length-m_position)*sizeof(t_sample));
     // then the upper half
-    memcpy(m_vertices,
-           m_vertices+3*(m_length),
+    memcpy(vertices,
+           vertices+3*(m_length),
            3*(m_position+count-m_length)*sizeof(t_sample));
 
   } else {
     // ordinary copy
 
-    memcpy(m_vertices+3*(position+m_length),
-           m_vertices+3*(position),
+    memcpy(vertices+3*(position+m_length),
+           vertices+3*(position),
            3*count*sizeof(t_sample));
   }
   m_position=(m_position+count)%m_length;
-
+  m_vertices.dirty = true;
   setModified();
 }
 
