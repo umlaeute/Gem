@@ -312,6 +312,8 @@ void videoDECKLINK::close(void)
 
 bool videoDECKLINK::open(gem::Properties&props)
 {
+  bool is_supported = false;
+
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
   std::string formatname=(("auto"==m_formatname)
                                 || ("automatic" == m_formatname))?"":m_formatname;
@@ -381,13 +383,13 @@ bool videoDECKLINK::open(gem::Properties&props)
   }
   if (m_formatnum<0 && formatname.empty()) {
     // no format specified; try auto-detection
-    IDeckLinkAttributes*dlAttribs=0;
-    deckbool_t formatDetectionSupported = false;
-    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkAttributes,
+    IDeckLinkProfileAttributes*dlAttribs=0;
+
+    if (S_OK == m_dl->QueryInterface(IID_IDeckLinkProfileAttributes,
                                      (void**)&dlAttribs)) {
       if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection,
-                                     &formatDetectionSupported)) {
-        if(formatDetectionSupported) {
+                                     &is_supported)) {
+        if(is_supported) {
           flags|=bmdVideoInputEnableFormatDetection;
         }
       }
@@ -397,16 +399,16 @@ bool videoDECKLINK::open(gem::Properties&props)
     }
   }
 
-  BMDDisplayModeSupport displayModeSupported;
   if (S_OK != m_dlInput->DoesSupportVideoMode(
-        m_displayMode->GetDisplayMode(),
-        m_pixelFormat,
-        flags,
-        &displayModeSupported,
-        NULL)) {
+          m_connectionType,  /* in: (BMDVideoConnection) connection */
+          m_displayMode->GetDisplayMode(),  /* in: (BMDDisplayMode) requestedMode */
+          m_pixelFormat,  /* in: (BMDPixelFormat) requestedPixelFormat */
+          flags,  /* in: (BMDSupportedVideoModeFlags) flags */
+          &is_supported /* out: (bool) *supported */
+          )) {
     goto bail;
   }
-  if (displayModeSupported == bmdDisplayModeNotSupported) {
+  if (!is_supported) {
     goto bail;
   }
   if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration,
