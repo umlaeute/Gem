@@ -406,7 +406,9 @@ bool videoDECKLINK::open(gem::Properties&props)
           flags,  /* in: (BMDSupportedVideoModeFlags) flags */
           &is_supported /* out: (bool) *supported */
           )) {
-    goto bail;
+    /* ignore unsupported video mode for now */
+    is_supported=true;
+    //goto bail;
   }
   if (!is_supported) {
     goto bail;
