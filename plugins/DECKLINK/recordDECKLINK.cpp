@@ -233,6 +233,7 @@ void recordDECKLINK :: stop(void)
 bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
+  bool is_supported = false;
   int formatnumber=-1;
   std::string formatname="";
   BMDVideoOutputFlags flags = bmdVideoOutputFlagDefault;
@@ -289,20 +290,23 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
     }
   }
 
-
-  BMDDisplayModeSupport displayModeSupported;
-  if (S_OK != m_dlOutput->DoesSupportVideoMode(
-        m_displayMode->GetDisplayMode(),
-        m_pixelFormat,
-        flags,
-        &displayModeSupported,
-        NULL)) {
-    post("[GEM::recordDECKLINK] '%s' does not support videomode...", filename.c_str());
-    goto bail;
-  }
-  if (displayModeSupported == bmdDisplayModeNotSupported) {
-    post("[GEM::recordDECKLINK] '%s' unsupported videomode...", filename.c_str());
-    goto bail;
+  if(m_dlOutput) {
+    BMDDisplayMode actualMode;
+    if (S_OK != m_dlOutput->DoesSupportVideoMode(
+            m_connectionType,  /* in: BMDVideoConnection connection */
+            m_displayMode->GetDisplayMode(), /* in: BMDDisplayMode requestedMode */
+            m_pixelFormat,  /* in: BMDPixelFormat requestedPixelFormat */
+            flags,  /* in: BMDSupportedVideoModeFlags flags */
+            &actualMode, /* out: BMDDisplayMode *actualMode */
+            &is_supported /* out: bool *supported */
+            )) {
+      post("[GEM::recordDECKLINK] '%s' does not support videomode...", filename.c_str());
+      goto bail;
+    }
+    if (is_supported) {
+      post("[GEM::recordDECKLINK] '%s' unsupported videomode...", filename.c_str());
+      goto bail;
+    }
   }
   if(S_OK != m_dl->QueryInterface (IID_IDeckLinkConfiguration,
                                    (void**)&m_dlConfig)) {
