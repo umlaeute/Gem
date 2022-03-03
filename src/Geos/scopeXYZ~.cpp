@@ -101,9 +101,26 @@ void scopeXYZ :: renderShape(GemState *state)
       glVertexPointer(m_vertices.dimen, GL_FLOAT, 0, 0);
       glEnableClientState(GL_VERTEX_ARRAY);
 
+      if(GemShape::m_texType) {
+        m_vertices.render();
+        if(count==GemShape::m_texNum && false) {
+           /* disabled for now, as we have a bound buffer object
+            * and thus the 4th arg is not really a pointer...
+            */
+          glTexCoordPointer(2, GL_FLOAT, 0, GemShape::m_texCoords);
+        } else {
+          glTexCoordPointer(2, GL_FLOAT, sizeof(float), 0);
+        }
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      }
+
+
       glDrawArrays(drawtype, m_position, m_length);
 
       glDisableClientState(GL_VERTEX_ARRAY);
+      if(GemShape::m_texType) {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+      }
     }
 
   } else { /* legacy code for old openGL */
