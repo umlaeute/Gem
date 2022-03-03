@@ -162,7 +162,7 @@ pixBlock* filmMPEG3 :: getFrame(void)
                          m_image.image.xsize, m_image.image.ysize,
                          MPEG3_RGBA8888,
                          0)) {
-      error("[GEM:filmMPEG3]: could not read frame ! %d", m_curFrame);
+      pd_error(0, "[GEM:filmMPEG3]: could not read frame ! %d", m_curFrame);
       return 0;
     }
     // unfortunately the ALPHA is set to 0!
@@ -178,7 +178,7 @@ pixBlock* filmMPEG3 :: getFrame(void)
   } else {
     // unfortunately this is upside down.
     if(mpeg3_read_yuvframe_ptr(mpeg_file,&y,&u,&v,0)) {
-      error("[GEM:filmMPEG3]: could not read yuv-frame ! %d", m_curFrame);
+      pd_error(0, "[GEM:filmMPEG3]: could not read yuv-frame ! %d", m_curFrame);
       return 0;
     }
     m_image.image.fromYV12((unsigned char*)y, (unsigned char*)u,

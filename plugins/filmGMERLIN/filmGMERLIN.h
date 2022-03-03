@@ -30,6 +30,11 @@ extern "C" {
 #  undef USE_FRAMETABLE
 # endif
 
+# ifdef HAVE_GAVL_LOG_H
+#  include <gavl/log.h>
+# else
+#  define gavl_log_level_t bgav_log_level_t
+# endif /* HAVE_GAVL_LOG_H */
 
 
 # ifdef __cplusplus

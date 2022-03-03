@@ -162,7 +162,7 @@ PBuffer::PBuffer(int width,int height,int flags)
       throw("your system lacks PBuffer support!");
     }
   } catch(const char *err) {
-    error("PBuffer::PBuffer(): %s",err);
+    pd_error(0, "PBuffer::PBuffer(): %s",err);
     pbuffer = glXGetCurrentDrawable();
     context = old_context;
   }
@@ -198,7 +198,7 @@ void PBuffer::enable()
   data->old_context = glXGetCurrentContext();
 
   if(!glXMakeCurrent(data->display,data->pbuffer,data->context)) {
-    error("PBuffer::enable(): glXMakeCurrent() failed");
+    pd_error(0, "PBuffer::enable(): glXMakeCurrent() failed");
   }
 }
 
@@ -207,7 +207,7 @@ void PBuffer::enable()
 void PBuffer::disable()
 {
   if(!glXMakeCurrent(data->display,data->old_pbuffer,data->old_context)) {
-    error("PBuffer::disable(): glXMakeCurrent() failed");
+    pd_error(0, "PBuffer::disable(): glXMakeCurrent() failed");
   }
 }
 #elif defined __APPLE__
@@ -504,7 +504,7 @@ PBuffer::PBuffer(int width,int height,int flags) : width(width),
       throw("wglShareLists() failed");
     }
   } catch(const char *err) {
-    error("GemPBuffer: %s",err);
+    pd_error(0, "GemPBuffer: %s",err);
     hdc = old_hdc;
     context = old_context;
   }
@@ -536,7 +536,7 @@ void PBuffer::enable()
   data->old_context = wglGetCurrentContext();
 
   if(!wglMakeCurrent(data->hdc,data->context)) {
-    error("PBuffer::disable(): wglMakeCurrent() failed");
+    pd_error(0, "PBuffer::disable(): wglMakeCurrent() failed");
   }
 }
 
@@ -545,7 +545,7 @@ void PBuffer::enable()
 void PBuffer::disable()
 {
   if(!wglMakeCurrent(data->old_hdc,data->old_context)) {
-    error("PBuffer::disable(): wglMakeCurrent() failed");
+    pd_error(0, "PBuffer::disable(): wglMakeCurrent() failed");
   }
 }
 #else
@@ -561,7 +561,7 @@ PBuffer::PBuffer(int width,int height,int flags)
   , height(height)
   , data(nullptr)
 {
-  error("PBuffer::PBuffer(): no PBuffer support");
+  pd_error(0, "PBuffer::PBuffer(): no PBuffer support");
 }
 
 PBuffer::~PBuffer()
@@ -570,12 +570,12 @@ PBuffer::~PBuffer()
 
 void PBuffer::enable()
 {
-  error("PBuffer::enable(): no PBuffer support");
+  pd_error(0, "PBuffer::enable(): no PBuffer support");
 }
 
 void PBuffer::disable()
 {
-  error("PBuffer::disable(): no PBuffer support");
+  pd_error(0, "PBuffer::disable(): no PBuffer support");
 }
 
 #endif /* OS */

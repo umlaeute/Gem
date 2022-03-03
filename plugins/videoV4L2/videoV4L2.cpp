@@ -164,7 +164,7 @@ int videoV4L2::init_mmap (void)
 
   if(count<0) {
     if (EINVAL == errno) {
-      error("[GEM:videoV4L2] %s does not support memory mapping", devname);
+      pd_error(0, "[GEM:videoV4L2] %s does not support memory mapping", devname);
       return 0;
     } else {
       perror("[GEM:videoV4L2] VIDIOC_REQBUFS");
@@ -173,7 +173,7 @@ int videoV4L2::init_mmap (void)
   }
 
   if (count < V4L2_NBUF) {
-    //error("[GEM:videoV4L2] Insufficient buffer memory on %s: %d", devname, count);
+    //pd_error(0, "[GEM:videoV4L2] Insufficient buffer memory on %s: %d", devname, count);
     //return(0);
   }
 
@@ -324,7 +324,7 @@ void *videoV4L2 :: capturing(void)
     if(captureerror) {
       errorcount++;
       if(errorcount>1000) {
-        error("[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...",
+        pd_error(0, "[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...",
               errorcount);
         m_continue_thread=false;
         m_stopTransfer=true;
@@ -685,7 +685,7 @@ bool videoV4L2 :: startTransfer()
   case V4L2_PIX_FMT_GREY:
     break;
   default:
-    error("[GEM:videoV4L2] unknown format '%c%c%c%c'",
+    pd_error(0, "[GEM:videoV4L2] unknown format '%c%c%c%c'",
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
           (char)(m_gotFormat>>16),

@@ -21,33 +21,25 @@
 # define HAVE_GMERLIN
 #endif
 
-#ifdef HAVE_GAVL_LOG_H
-extern "C" {
-# include <gavl/log.h>
-}
-
-# define bgav_is_redirector(f) 0
-# define bgav_redirector_get_num_urls(f) 0
-# define bgav_redirector_get_url(f,i) "oops://"
-# define bgav_redirector_get_name(f, i) "<unknown>"
-#else
-typedef enum
-  {
-    GAVL_LOG_ERROR   = BGAV_LOG_ERROR,
-    GAVL_LOG_WARNING = BGAV_LOG_WARNING,
-    GAVL_LOG_INFO    = BGAV_LOG_INFO,
-    GAVL_LOG_DEBUG   = BGAV_LOG_DEBUG,
-  } gavl_log_level_t;
-#endif
-
-
-
 
 #ifdef HAVE_GMERLIN
 #include "filmGMERLIN.h"
 #include "plugins/PluginFactory.h"
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
+
+#ifdef HAVE_GAVL_LOG_H
+# define bgav_is_redirector(f) 0
+# define bgav_redirector_get_num_urls(f) 0
+# define bgav_redirector_get_url(f,i) "oops://"
+# define bgav_redirector_get_name(f, i) "<unknown>"
+#else
+# define GAVL_LOG_ERROR   BGAV_LOG_ERROR
+# define GAVL_LOG_WARNING BGAV_LOG_WARNING
+# define GAVL_LOG_INFO    BGAV_LOG_INFO
+# define GAVL_LOG_DEBUG   BGAV_LOG_DEBUG
+#endif
+
 
 //#define GEM_FILMGMERLIN_TRACKSWITCH 1
 
@@ -129,7 +121,7 @@ void filmGMERLIN::log(gavl_log_level_t level, const char *log_domain,
     verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
   case GAVL_LOG_ERROR:
-    error("[GEM:filmGMERLIN:%s!] %s", log_domain, message);
+    pd_error(0, "[GEM:filmGMERLIN:%s!] %s", log_domain, message);
     break;
   default:
     break;
@@ -376,7 +368,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
   // this really shares a lot of code with open() so it should go into a separate function
   if(trackNum) {
     if(m_numTracks>trackNum || trackNum<0) {
-      error("[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
+      pd_error(0, "[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
             m_numTracks);
     } else {
       int numvstreams=bgav_num_video_streams (m_file, m_track);
@@ -391,7 +383,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
         }
 #endif
       } else {
-        error("[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping");
+        pd_error(0, "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping");
       }
     }
   }

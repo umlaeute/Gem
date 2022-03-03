@@ -63,14 +63,14 @@ public:
     }
     return result;
   }
-  static void addProperties(gem::Properties&props, int argc, t_atom*argv)
+  static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
   {
     if(!argc) {
       return;
     }
 
     if(argv->a_type != A_SYMBOL) {
-      ::error("no key given...");
+      pd_error(obj, "no key given...");
       return;
     }
     std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -340,7 +340,7 @@ void pix_record :: enumPropertiesMess()
 }
 void pix_record :: setPropertiesMess(t_symbol*s, int argc, t_atom*argv)
 {
-  PIMPL::addProperties(m_props, argc, argv);
+  PIMPL::addProperties(this, m_props, argc, argv);
 }
 
 void pix_record :: clearPropertiesMess()

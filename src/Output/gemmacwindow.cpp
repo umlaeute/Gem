@@ -1096,11 +1096,11 @@ bool gemmacwindow::init(void)
   // Check QuickTime installed
   long  QDfeature;
   if (OSErr err = ::Gestalt(gestaltQuickTime, &QDfeature)) {
-    ::error("GEM: QuickTime is not installed : %d", err);
+    error("GEM: QuickTime is not installed : %d", err);
     return false;
   } else {
     if (OSErr err = ::EnterMovies()) {
-      ::error("GEM: Couldn't initialize QuickTime : %d", err);
+      error("GEM: Couldn't initialize QuickTime : %d", err);
       return false;
     }
   }
@@ -1108,7 +1108,7 @@ bool gemmacwindow::init(void)
   // check existence of OpenGL libraries
   if (reinterpret_cast<Ptr>(kUnresolvedCFragSymbolAddress) ==
       reinterpret_cast<Ptr>(aglChoosePixelFormat)) {
-    ::error("GEM: OpenGL is not installed");
+    error("GEM: OpenGL is not installed");
     return false;
   }
   // This is to create a "master context" on Gem initialization, with
@@ -1123,12 +1123,12 @@ bool gemmacwindow::init(void)
   AGLPixelFormat aglPixFmt = aglChoosePixelFormat( NULL, 0, attrib );
   GLenum err = aglGetError();
   if (AGL_NO_ERROR != err) {
-    ::error((char *)aglErrorString(err));
+    error((char *)aglErrorString(err));
   }
   masterContext = aglCreateContext( aglPixFmt, NULL );
   err = aglGetError();
   if (AGL_NO_ERROR != err) {
-    ::error((char *)aglErrorString(err));
+    error((char *)aglErrorString(err));
   }
   aglSetCurrentContext( masterContext);
 

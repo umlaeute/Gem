@@ -95,14 +95,14 @@ static gem::any atom2any(t_atom*ap)
   }
   return result;
 }
-static void addProperties(gem::Properties&props, int argc, t_atom*argv)
+static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
 {
   if(!argc) {
     return;
   }
 
   if(argv->a_type != A_SYMBOL) {
-    error("no key given...");
+    pd_error(obj, "no key given...");
     return;
   }
   std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -133,7 +133,7 @@ void model :: setPropertyMess(t_symbol*, int argc, t_atom*argv)
     error("no property specified!");
     return;
   }
-  addProperties(m_writeprops, argc, argv);
+  addProperties(this, m_writeprops, argc, argv);
 
   if(m_loader) {
     m_loader->setProperties(m_writeprops);
@@ -147,7 +147,7 @@ void model :: getPropertyMess(t_symbol*, int argc, t_atom*argv)
     m_readprops.clear();
 
     for(i=0; i<argc; i++) {
-      addProperties(m_readprops, 1, argv+i);
+      addProperties(this, m_readprops, 1, argv+i);
     }
 
   } else {
@@ -291,7 +291,7 @@ void model :: enumPropertyMess()
 
 void model :: setPropertiesMess(t_symbol*, int argc, t_atom*argv)
 {
-  addProperties(m_writeprops, argc, argv);
+  addProperties(this, m_writeprops, argc, argv);
 }
 
 void model :: applyProperties()

@@ -285,7 +285,7 @@ bool videoDV4L :: startTransfer()
   m_decoder=NULL;
 
   if (!(m_decoder=dv_decoder_new(true, true, true))) {
-    error("[GEM:videoDV4L] unable to create DV-decoder...closing");
+    pd_error(0, "[GEM:videoDV4L] unable to create DV-decoder...closing");
     return false;
   }
 
@@ -294,13 +294,13 @@ bool videoDV4L :: startTransfer()
 
   m_iec = iec61883_dv_fb_init(m_raw, iec_frame, this);
   if(NULL==m_iec) {
-    error("[GEM:videoDV4L] unable to initialize IEC grabber");
+    pd_error(0, "[GEM:videoDV4L] unable to initialize IEC grabber");
     stopTransfer();
     return false;
   }
 
   if(iec61883_dv_fb_start(m_iec, 63) < 0) {
-    error("[GEM:videoDV4L] iec61883_dv_fb_start failed");
+    pd_error(0, "[GEM:videoDV4L] iec61883_dv_fb_start failed");
     stopTransfer();
     return false;
   }

@@ -57,6 +57,6 @@ GEM_EXTERN int mem2image(imageStruct* image, const char *filename,
       return (1);
     }
   }
-  error("GEM: Unable to save image to '%s'", filename);
+  pd_error(0, "GEM: Unable to save image to '%s'", filename);
   return (0);
 }

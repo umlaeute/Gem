@@ -73,4 +73,4 @@ again: don't forget to add ${VLC_PATH} to your PATH, prior to running Pd/Gem
 
 AUTHORS
 -------
-brought to you by IOhannes m zmölnig
+brought to you by IOhannes m zmÃ¶lnig

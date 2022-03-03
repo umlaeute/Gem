@@ -295,9 +295,9 @@ static int ErrorHandler (Display *dpy, XErrorEvent *event)
     if ( xerr != BadWindow ) {
       char buf[256];
       XGetErrorText (dpy, xerr, buf, sizeof(buf));
-      error("Xwin: %s\n", buf);
+      pd_error(0, "Xwin: %s\n", buf);
     } else {
-      error("Xwin: BadWindow (%d)\n", xerr);
+      pd_error(0, "Xwin: BadWindow (%d)\n", xerr);
     }
   }
   return (0);
@@ -310,6 +310,7 @@ static Bool WaitForNotify(Display *, XEvent *e, char *arg)
 
 
 struct gemglxwindow::PIMPL {
+  CPPExtern   *parent;
   int         fs;                 // FullScreen
 
   Display     *dpy;               // X Display
@@ -333,7 +334,8 @@ struct gemglxwindow::PIMPL {
 
   bool doDispatch;
 
-  PIMPL(void) :
+  PIMPL() :
+    parent(0),
     fs(0),
     dpy(NULL),
     win(0),
@@ -398,7 +400,7 @@ struct gemglxwindow::PIMPL {
     XSetErrorHandler (ErrorHandler);
 
     if ( (dpy = XOpenDisplay(display.c_str())) == NULL) {
-      ::error("Could not open display %s",display.c_str());
+      ::pd_error(parent, "Could not open display %s",display.c_str());
       return false;
     }
     screen  = DefaultScreen(dpy);
@@ -445,7 +447,7 @@ struct gemglxwindow::PIMPL {
       if (glXChooseFBConfigFn && glXGetVisualFromFBConfigFn) {
         static int**fbbuf=0;
         switch(buffer) {
-        default: ::error("only single/double buffer supported; defaulting to double");
+        default: ::pd_error(parent, "only single/double buffer supported; defaulting to double");
         case 2:
           fbbuf=dblBufFbCfg;
           break;
@@ -483,7 +485,7 @@ struct gemglxwindow::PIMPL {
         }
 
         if(!fbconfig) {
-          ::error("Can't find valid framebuffer configuration, try again with legacy method.");
+          ::pd_error(parent, "Can't find valid framebuffer configuration, try again with legacy method.");
         } else {
           typedef void(*glXGetFBConfigAttribProc)(Display* dpy,GLXFBConfig fbconfig,
                                                   int attr, int* val);
@@ -507,7 +509,7 @@ struct gemglxwindow::PIMPL {
                       " Red Bits: %d, Green Bits: %d, Blue Bits: %d, Alpha Bits: %d, Depth Bits: %d",
                       red_bits, green_bits, blue_bits, alpha_bits, depth_bits);
           } else {
-            ::error("can't get glXGetFBConfigAttrib function pointer");
+            ::pd_error(parent, "can't get glXGetFBConfigAttrib function pointer");
           }
         }
       }
@@ -518,7 +520,7 @@ struct gemglxwindow::PIMPL {
     if (vi == NULL) { // if Xrender method doesn't work try legacy
       static int**buf=0;
       switch(buffer) {
-      default: ::error("only single/double buffer supported; defaulting to double");
+      default: pd_error(parent, "only single/double buffer supported; defaulting to double");
       case 2:
         buf=dblBufs;
         break;
@@ -557,7 +559,7 @@ struct gemglxwindow::PIMPL {
       ::verbose(0, "Only using %d color bits", vi->depth);
     }
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
-      ::error("TrueColor visual required for this program (got %d)",
+      pd_error(parent, "TrueColor visual required for this program (got %d)",
               vi->c_class);
       return false;
     }
@@ -744,6 +746,7 @@ gemglxwindow :: gemglxwindow(void) :
   m_display(std::string("")),
   m_pimpl(new PIMPL())
 {
+  m_pimpl->parent = this;
 }
 
 ////////////////////////////////////////////////////////

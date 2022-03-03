@@ -23,7 +23,7 @@ extern "C" {
 #define ANIMAL_MALLOC_OBJECT(ptr, obj_type, fname, retval)  do { \
    ptr = animal_malloc_object(obj_type);                         \
    if (!ptr) {                                                   \
-      error("pstk: could not allocate memory");                  \
+      pd_error(0, "pstk: could not allocate memory");                  \
       return retval;                                             \
    }                                                             \
    } while(0)
@@ -34,7 +34,7 @@ extern "C" {
 #define ANIMAL_MALLOC_ARRAY(ptr, obj_type, size, fname, retval) do {   \
    ptr = animal_malloc_array(obj_type,size);                           \
    if (!ptr) {                                                         \
-      error("pstk: could not allocate memory for array");              \
+      pd_error(0, "pstk: could not allocate memory for array");              \
       return retval;                                                   \
    }                                                                   \
    } while(0)

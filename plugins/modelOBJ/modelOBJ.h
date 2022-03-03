@@ -15,8 +15,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/modelloader.h"
 #include "model_loader.h"
-#include "Gem/VertexBuffer.h"
-
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------

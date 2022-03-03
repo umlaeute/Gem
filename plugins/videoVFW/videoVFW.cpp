@@ -159,7 +159,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
     return false;
   }
   if (!capGetVideoFormat(m_hWndC, videoFormat, formSize)) {
-    error("[GEM:videoVFW] Unable to get video format");
+    pd_error(0, "[GEM:videoVFW] Unable to get video format");
   }
   m_width=static_cast<int>(videoFormat->bmiHeader.biWidth);
   m_height=static_cast<int>(videoFormat->bmiHeader.biHeight);

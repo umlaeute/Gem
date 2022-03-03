@@ -55,13 +55,13 @@ static bool initGemWin(void)
   // Initialize QuickTime Media Layer
   err = InitializeQTML(0);
   if (err) {
-    error("GEM Man: Could not initialize quicktime: error %d\n", err);
+    pd_error(0, "GEM Man: Could not initialize quicktime: error %d\n", err);
     return false;
   }
   // Initialize QuickTime
   err = EnterMovies();
   if (err) {
-    error("GEM Man: Could not initialize quicktime: error %d\n", err);
+    pd_error(0, "GEM Man: Could not initialize quicktime: error %d\n", err);
     return false;
   }
   verbose(1, "Gem Man: QT init OK");
@@ -150,7 +150,7 @@ private:
       DEVMODE dmScreenSettings;                                                               // Device Mode
 
       if (!EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmScreenSettings)) {
-        ::error("GEM: couldn't get screen capabilities!");
+        pd_error(0, "GEM: couldn't get screen capabilities!");
       } else {
         w = dmScreenSettings.dmPelsWidth;
         h = dmScreenSettings.dmPelsHeight;
@@ -176,7 +176,7 @@ private:
         dmScreenSettings.dmPelsHeight = h;
         if (ChangeDisplaySettings(&dmScreenSettings,
                                   CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL) {
-          ::error("couldn't switch to fullscreen");
+          ::pd_error(0, "couldn't switch to fullscreen");
           fullscreen=false;
         }
       }

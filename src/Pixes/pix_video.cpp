@@ -563,14 +563,14 @@ static gem::any atom2any(t_atom*ap)
   }
   return result;
 }
-static void addProperties(gem::Properties&props, int argc, t_atom*argv)
+static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
 {
   if(!argc) {
     return;
   }
 
   if(argv->a_type != A_SYMBOL) {
-    error("no key given...");
+    pd_error(obj, "no key given...");
     return;
   }
   std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -601,7 +601,7 @@ void pix_video :: setPropertyMess(int argc, t_atom*argv)
     error("no property specified!");
     return;
   }
-  addProperties(m_writeprops, argc, argv);
+  addProperties(this, m_writeprops, argc, argv);
 
   if(m_videoHandle) {
     m_videoHandle->setProperties(m_writeprops);
@@ -615,7 +615,7 @@ void pix_video :: getPropertyMess(int argc, t_atom*argv)
     m_readprops.clear();
 
     for(i=0; i<argc; i++) {
-      addProperties(m_readprops, 1, argv+i);
+      addProperties(this, m_readprops, 1, argv+i);
     }
 
   } else {
@@ -770,7 +770,7 @@ void pix_video :: enumPropertyMess()
 
 void pix_video :: setPropertiesMess(int argc, t_atom*argv)
 {
-  addProperties(m_writeprops, argc, argv);
+  addProperties(this, m_writeprops, argc, argv);
 }
 
 void pix_video :: applyPropertiesMess()

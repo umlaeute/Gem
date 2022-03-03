@@ -203,7 +203,7 @@ pixBlock *videoSGI::getFrame(void)
     // Create and register a buffer for 1 frame
     m_buffer = vlCreateBuffer(m_svr, m_path, m_drn, 1);
     if ( !m_buffer ) {
-      error("[GEM:videoSGI] Unable to allocate buffer");
+      pd_error(0, "[GEM:videoSGI] Unable to allocate buffer");
       return false;
     }
 
@@ -211,7 +211,7 @@ pixBlock *videoSGI::getFrame(void)
 
     // Begin the data transfer
     if ( vlBeginTransfer(m_svr, m_path, 0, NULL) ) {
-      error("[GEM:videoSGI] Unable to start video transfer");
+      pd_error(0, "[GEM:videoSGI] Unable to start video transfer");
       vlDeregisterBuffer(m_svr, m_path, m_drn, m_buffer);
       vlDestroyBuffer(m_svr, m_buffer);
       return false;
@@ -287,7 +287,7 @@ pixBlock *videoSGI::getFrame(void)
     value.fractVal.numerator = num;
     value.fractVal.denominator = denom;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_ZOOM, &value) ) {
-      error("[GEM:videoSGI] zoom error");
+      pd_error(0, "[GEM:videoSGI] zoom error");
     }
   }
 
@@ -303,7 +303,7 @@ pixBlock *videoSGI::getFrame(void)
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_BRIGHTNESS, &value) ) {
-      error("[GEM:videoSGI] problem setting brightness");
+      pd_error(0, "[GEM:videoSGI] problem setting brightness");
     }
   }
 
@@ -319,7 +319,7 @@ pixBlock *videoSGI::getFrame(void)
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_CONTRAST, &value) ) {
-      error("[GEM:videoSGI] problem setting contrast");
+      pd_error(0, "[GEM:videoSGI] problem setting contrast");
     }
   }
 
@@ -335,7 +335,7 @@ pixBlock *videoSGI::getFrame(void)
     VLControlValue value;
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_drn, VL_HUE, &value) ) {
-      error("[GEM:videoSGI] problem setting hue");
+      pd_error(0, "[GEM:videoSGI] problem setting hue");
     }
   }
 
@@ -352,7 +352,7 @@ pixBlock *videoSGI::getFrame(void)
     value.intVal = val;
     if ( vlSetControl(m_svr, m_path, m_src, VL_VINO_INDYCAM_SATURATION,
                       &value) ) {
-      error("[GEM:videoSGI] problem setting saturation");
+      pd_error(0, "[GEM:videoSGI] problem setting saturation");
     }
   }
 

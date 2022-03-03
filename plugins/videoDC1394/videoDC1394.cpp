@@ -415,7 +415,7 @@ bool videoDC1394 :: stopTransfer()
   /* Stop transmission */
   dc1394error_t err=dc1394_video_set_transmission(m_dccamera, DC1394_OFF);
   if(DC1394_SUCCESS!=err) {
-    error("[GEM:videoDC1394] unable to stop transmission");
+    pd_error(0, "[GEM:videoDC1394] unable to stop transmission");
   }
   return true;
 }

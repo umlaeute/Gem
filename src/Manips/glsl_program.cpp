@@ -19,7 +19,7 @@ using namespace gem::utils::gl;
 CPPEXTERN_NEW(glsl_program);
 
 namespace {
-  GLenum uniform2type(GLenum type) {
+  GLenum uniform2type(CPPExtern*obj, GLenum type) {
     /* the base type for a (complex) uniform type;
        determines whether we use glUniform1f or glUniform1i
     */
@@ -83,10 +83,10 @@ namespace {
     case GL_SAMPLER_2D_RECT_ARB:
           return GL_INT;
     }
-    error("[glsl_program] unknown uniform type %d, assuming float", type);
+    obj->error("unknown uniform type %d, assuming float", type);
     return GL_FLOAT;
   }
-  GLint uniform2numelements(GLenum type) {
+  GLint uniform2numelements(CPPExtern*obj, GLenum type) {
     /* the base number of elements for a (complex) uniform type;
     */
     switch(type) {
@@ -157,7 +157,7 @@ namespace {
       return 1;
     }
 
-    error("[glsl_program] unknown base size for uniform type %d, assuming 1", type);
+    obj->error("[glsl_program] unknown base size for uniform type %d, assuming 1", type);
     return 1;
   }
 };
@@ -218,7 +218,7 @@ void glsl_program :: destroyArrays()
 {
   for(unsigned int i = 0; i<m_uniformCount; i++) {
     t_uniform&uni = m_uniform[i];
-    switch(uniform2type(uni.type)) {
+    switch(uniform2type(this, uni.type)) {
     case GL_FLOAT: {
       delete[]uni.param.f;
       uni.param.f = 0;
@@ -497,7 +497,7 @@ void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
     //   in the render cycle use it
     const int maxargc = uni.arraysize * uni.paramsize;
     if(argc > maxargc) argc=maxargc;
-    switch(uniform2type(uni.type)) {
+    switch(uniform2type(this, uni.type)) {
     case GL_FLOAT: {
       for (int j=0; j < argc; j++) {
         uni.param.f[j] = atom_getfloat(&argv[j]);
@@ -847,8 +847,8 @@ void glsl_program :: getVariables()
       uni.name=gensym(nameARB);
       uni.arraysize = 1;
     }
-    uni.paramsize = uniform2numelements(uni.type);
-    switch(uniform2type(uni.type)) {
+    uni.paramsize = uniform2numelements(this, uni.type);
+    switch(uniform2type(this, uni.type)) {
     case GL_FLOAT: {
       delete uni.param.f;
       uni.param.f = new GLfloat[uni.arraysize * uni.paramsize];

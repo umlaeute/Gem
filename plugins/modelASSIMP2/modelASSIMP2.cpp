@@ -322,7 +322,7 @@ std::vector<std::vector<float> > modelASSIMP2 :: getVector(
   if ( vectorName == "colors" ) {
     return m_colors;
   }
-  error("there is no \"%s\" vector !",vectorName.c_str());
+  pd_error(0, "there is no \"%s\" vector !",vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 

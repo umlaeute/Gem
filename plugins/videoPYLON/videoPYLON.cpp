@@ -236,7 +236,7 @@ namespace {
         break;
       case GenApi::intfICommand:
         if(!value.empty())
-          error("[GEM::videoPYLON] ignoring argument to command");
+          pd_error(0, "[GEM::videoPYLON] ignoring argument to command");
         GenApi::CCommandPtr(node)->Execute();
         break;
       case GenApi::intfIEnumeration: {
@@ -510,7 +510,7 @@ bool videoPYLON :: start()
 {
 MARK();
   if (!m_camera.CanWaitForFrameTriggerReady()) {
-    error("[GEM:videoPYLON] camera cannot be queried whether it's ready to accept the next frame trigger");
+    pd_error(0, "[GEM:videoPYLON] camera cannot be queried whether it's ready to accept the next frame trigger");
   }
 
   try {
@@ -520,7 +520,7 @@ MARK();
     if (m_camera.IsGrabbing())
       m_camera.ExecuteSoftwareTrigger();
   } catch (GenICam::GenericException &e) {
-    error("[GEM:videoPYLON] %s", e.GetDescription());
+    pd_error(0, "[GEM:videoPYLON] %s", e.GetDescription());
     return false;
   }
 
@@ -538,7 +538,7 @@ MARK();
   try {
     m_camera.StopGrabbing();
   } catch (GenICam::GenericException &e) {
-    error("[GEM:videoPYLON] %s", e.GetDescription());
+    pd_error(0, "[GEM:videoPYLON] %s", e.GetDescription());
   }
   return true;
 }
@@ -569,7 +569,7 @@ MARK();
     if (m_camera.IsGrabbing())
       m_camera.ExecuteSoftwareTrigger();
   } catch (GenICam::GenericException &e) {
-    error("[GEM:videoPYLON] %s", e.GetDescription());
+    pd_error(0, "[GEM:videoPYLON] %s", e.GetDescription());
   }
 }
 

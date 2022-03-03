@@ -83,7 +83,7 @@ void gem::VertexBuffer:: resize (unsigned int size_)
   try {
     tmp=new float[size_*dimen];
   } catch (std::bad_alloc& ba)  {
-    ::error("vertexbuffer resize failed: %s ", ba.what());
+    pd_error(0, "vertexbuffer resize failed: %s ", ba.what());
     return;
   }
   if(array) {
