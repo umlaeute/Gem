@@ -256,6 +256,56 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   std::string formatname="";
   BMDVideoOutputFlags flags = bmdVideoOutputFlagDefault;
   IDeckLinkIterator*dlIterator = CreateDeckLinkIteratorInstance();
+  BMDVideoConnection vconn = m_connectionType;
+
+  std::vector<std::string>keys=props.keys();
+  int i;
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if("format" == key) {
+      std::string s;
+      double d;
+      switch(props.type(key)) {
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          formatnumber =-1;
+          formatname=s;
+        }
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          formatnumber =(int)d;
+          formatname="";
+        }
+        break;
+      default:  break;
+      }
+      continue;
+    }
+    if("connection" == key) {
+      std::string s;
+      double d;
+      switch(props.type(key)) {
+      case gem::Properties::STRING:
+        if(props.get(key, s)) {
+          vconn = string2connection(s);
+          if(-1 == vconn) {
+            vconn == bmdVideoConnectionUnspecified;
+          }
+        }
+        post("setting 'connection' to %d '%s'", vconn, s.c_str());
+        break;
+      case gem::Properties::DOUBLE:
+        if(props.get(key, d)) {
+          vconn = id2connection((int)d);
+        }
+        break;
+      default:  break;
+      }
+      continue;
+    }
+  }
+
   if(dlIterator) {
     //setProperties(props);
     int deviceCount=0;
@@ -309,10 +359,12 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
     }
   }
 
+
+
   if(m_dlOutput) {
     BMDDisplayMode actualMode;
     if (S_OK != m_dlOutput->DoesSupportVideoMode(
-            m_connectionType /* in: BMDVideoConnection connection */
+            vconn /* in: BMDVideoConnection connection */
             , m_displayMode->GetDisplayMode() /* in: BMDDisplayMode requestedMode */
             , m_pixelFormat /* in: BMDPixelFormat requestedPixelFormat */
             , bmdSupportedVideoModeDefault /* flags */  /* in: BMDSupportedVideoModeFlags flags */
@@ -333,7 +385,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
 
   if(m_dlConfig) {
     m_dlConfig->SetInt(bmdDeckLinkConfigVideoOutputConnection,
-                       m_connectionType);
+                       vconn);
   }
 
 
@@ -409,6 +461,20 @@ const std::string recordDECKLINK::getCodecDescription(const std::string&codec)
 
 bool recordDECKLINK::enumProperties(gem::Properties&props)
 {
+  /* mode: auto, ntsc,...,1080p50 */
+  gem::any v;
   props.clear();
-  return false;
+
+  /* format:
+   * "auto", "automatic",
+   * "NTSC", "PAL", "NTSC Progressive", "PAL Progressive", "1080p30", "720p50",...
+   */
+  props.set("format", std::string("auto"));
+
+  /* connection:
+   * "auto",
+   * "sdi", "hdmi", "opticalsdi", "component", "composite", "svideo",
+   */
+  props.set("connection", std::string("auto"));
+  return true;
 }
