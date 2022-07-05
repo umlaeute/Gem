@@ -118,7 +118,7 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     m_deckLinkOutput->SetScheduledFrameCompletionCallback(this);
   };
   ~VideoOutputter(void) {
-    if (m_frameConverter != NULL)
+    if (m_frameConverter)
       m_frameConverter->Release();
     m_frameConverter = NULL;
   }
@@ -150,21 +150,33 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
   bool setFrame(imageStruct*img) {
     /* convert the imageStruct into the IDeckLinkVideoFrame */
     ImageStructWrapper*isw = new ImageStructWrapper(img);
+    imageStruct dst;
     HRESULT result = S_OK;
+    const BMDPixelFormat srcformat = isw->GetPixelFormat();
 
 #if 0
     post("writing image %p[%dx%d@%s] -> %p[%dx%d@%s] || %lu*%lu/%lu"
-        , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(isw->GetPixelFormat()).c_str()
+        , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(srcformat).c_str()
         , m_videoFrame, (int)m_videoFrame->GetWidth(), (int)m_videoFrame->GetHeight(), pixformat2string(m_videoFrame->GetPixelFormat()).c_str()
         , m_totalFramesScheduled, m_frameDuration, m_frameTimescale
         );
 #endif
 
-    if (isw->GetPixelFormat() != m_videoFrame->GetPixelFormat()) {
-      result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
+    if (m_videoFrame->GetPixelFormat() != srcformat) {
+      if(srcformat != bmdFormatUnspecified)
+        result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
+      else result = E_NOTIMPL;
+
       if (result != S_OK)  {
-        fprintf(stderr, "Failed to convert frame: 0x%X\n", (unsigned int)result);
-        return false;
+        if(isw)
+          isw->Release();
+
+        if(!dst.convertFrom(img, GEM_YUV)) {
+          post("unable to covert frame...");
+          return false;
+        }
+        img = &dst;
+        isw = new ImageStructWrapper(img);
       }
     }
 
