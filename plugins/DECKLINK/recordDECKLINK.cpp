@@ -109,6 +109,7 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     if (result != S_OK) {
       fprintf(stderr, "Failed to create video frame\n");
     }
+    //fprintf(stderr, "created video frame %dx%d@%s", width, height, pixformat2string(pixelFormat).c_str());
     m_videoFrame = newFrame;
     m_frameConverter = CreateVideoConversionInstance();
 
@@ -123,13 +124,7 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
   }
 
   virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(IDeckLinkVideoFrame* completedFrame, BMDOutputFrameCompletionResult result) {
-    HRESULT res = S_OK;
-    fprintf(stderr, "scheduledframecompleted");
-    if(m_videoFrame)
-      res = m_deckLinkOutput->ScheduleVideoFrame(m_videoFrame, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
-    if(S_OK == res)
-      m_totalFramesScheduled += 1;
-    return res;
+    return S_OK;
   };
   virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped() {
     return S_OK;
@@ -155,17 +150,31 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
   bool setFrame(imageStruct*img) {
     /* convert the imageStruct into the IDeckLinkVideoFrame */
     ImageStructWrapper*isw = new ImageStructWrapper(img);
-    HRESULT result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
-    post("writing image %p[%dx%d@%s] -> %p[%dx%d@%s]"
+    HRESULT result = S_OK;
+
+#if 0
+    post("writing image %p[%dx%d@%s] -> %p[%dx%d@%s] || %lu*%lu/%lu"
         , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(isw->GetPixelFormat()).c_str()
         , m_videoFrame, (int)m_videoFrame->GetWidth(), (int)m_videoFrame->GetHeight(), pixformat2string(m_videoFrame->GetPixelFormat()).c_str()
+        , m_totalFramesScheduled, m_frameDuration, m_frameTimescale
         );
+#endif
 
+    if (isw->GetPixelFormat() != m_videoFrame->GetPixelFormat()) {
+      result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
+      if (result != S_OK)  {
+        fprintf(stderr, "Failed to convert frame: 0x%X\n", (unsigned int)result);
+        return false;
+      }
+    }
+
+    result = m_deckLinkOutput->ScheduleVideoFrame(isw, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
     if (result != S_OK)  {
-      fprintf(stderr, "Failed to convert frame: 0x%X\n", (unsigned int)result);
-      //m_deckLinkOutput->ScheduleVideoFrame(isw, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
+      fprintf(stderr, "Failed to schedule frame: 0x%X\n", (unsigned int)result);
       return false;
     }
+    m_totalFramesScheduled++;
+
     if(isw)
       isw->Release();
     return true;
@@ -193,7 +202,7 @@ recordDECKLINK :: recordDECKLINK(void)
   , m_dlOutput(NULL)
   , m_displayMode(NULL)
   , m_dlConfig(NULL)
-  , m_connectionType((BMDVideoConnection)0)
+  , m_connectionType(bmdVideoConnectionUnspecified)
   , m_dlCallback(NULL)
   , m_pixelFormat(bmdFormat8BitYUV)
 {
@@ -237,7 +246,6 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   int formatnumber=-1;
   std::string formatname="";
   BMDVideoOutputFlags flags = bmdVideoOutputFlagDefault;
-
   IDeckLinkIterator*dlIterator = CreateDeckLinkIteratorInstance();
   if(dlIterator) {
     //setProperties(props);
@@ -275,6 +283,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
     }
   }
   if(!m_displayMode) {
+    //post("no displayMode!");
     goto bail;
   }
 
@@ -285,7 +294,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
       int64_t gotint=0;
       if (S_OK == status->GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat, &gotint)) {
         m_pixelFormat = gotint;
-        post("got pixelformat: %d -> %s", (int)gotint, pixformat2string(m_pixelFormat).c_str());
+        //post("got pixelformat: %d -> %s", (int)gotint, pixformat2string(m_pixelFormat).c_str());
       }
     }
   }
@@ -293,17 +302,16 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   if(m_dlOutput) {
     BMDDisplayMode actualMode;
     if (S_OK != m_dlOutput->DoesSupportVideoMode(
-            m_connectionType,  /* in: BMDVideoConnection connection */
-            m_displayMode->GetDisplayMode(), /* in: BMDDisplayMode requestedMode */
-            m_pixelFormat,  /* in: BMDPixelFormat requestedPixelFormat */
-            flags,  /* in: BMDSupportedVideoModeFlags flags */
-            &actualMode, /* out: BMDDisplayMode *actualMode */
-            &is_supported /* out: bool *supported */
+            m_connectionType /* in: BMDVideoConnection connection */
+            , m_displayMode->GetDisplayMode() /* in: BMDDisplayMode requestedMode */
+            , m_pixelFormat /* in: BMDPixelFormat requestedPixelFormat */
+            , bmdSupportedVideoModeDefault /* flags */  /* in: BMDSupportedVideoModeFlags flags */
+            , &actualMode /* out: BMDDisplayMode *actualMode */
+            , &is_supported /* out: bool *supported */
             )) {
-      post("[GEM::recordDECKLINK] '%s' does not support videomode...", filename.c_str());
-      goto bail;
+      is_supported=false;
     }
-    if (is_supported) {
+    if (!is_supported) {
       post("[GEM::recordDECKLINK] '%s' unsupported videomode...", filename.c_str());
       goto bail;
     }
@@ -327,8 +335,13 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   }
 
   post("[GEM::recordDECKLINK] opened '%s'", filename.c_str());
+
+  if (S_OK != m_dlOutput->StartScheduledPlayback(0, 100, 1.0)) {
+    post("[GEM::recordDECKLINK] '%s' couldn't start VideoOutput...", filename.c_str());
+    goto bail;
+  }
+
   return true;
-#warning TODO: actually open the device
  bail:
   stop();
   return false;
@@ -341,7 +354,8 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
 bool recordDECKLINK :: write(imageStruct*img)
 {
   if(m_dlCallback) {
-    return ((VideoOutputter*)m_dlCallback)->setFrame(img);
+    bool result = ((VideoOutputter*)m_dlCallback)->setFrame(img);
+    return result;
   }
   return false;
 }
