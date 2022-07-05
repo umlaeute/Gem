@@ -220,7 +220,7 @@ namespace {
       default:
         break;
       }
-      return bmdFormat8BitYUV;
+      return bmdFormatUnspecified;
     }
     virtual long GetRowBytes() {
       return m_img->xsize * m_img->csize;
