@@ -231,6 +231,21 @@ recordDECKLINK :: ~recordDECKLINK(void)
 
 void recordDECKLINK :: stop(void)
 {
+  HRESULT result = S_OK;
+  if(m_dlOutput) {
+    result = m_dlOutput->StopScheduledPlayback(0, 0, 0);
+    m_dlOutput->DisableVideoOutput();
+    m_dlOutput->Release();
+  }
+  m_dlOutput = 0;
+
+  if(m_dlCallback)
+    m_dlCallback->Release();
+  m_dlCallback = 0;
+
+  if(m_dlConfig)
+    m_dlConfig->Release();
+  m_dlConfig = 0;
 }
 
 bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
@@ -275,6 +290,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
         m_dlOutput=NULL;
       }
     }
+    dlIterator->Release();
   }
   if(!m_displayMode) {
     //post("no displayMode!");
