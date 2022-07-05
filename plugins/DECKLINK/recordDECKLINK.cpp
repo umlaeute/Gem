@@ -197,7 +197,6 @@ REGISTER_RECORDFACTORY("decklink", recordDECKLINK);
 
 recordDECKLINK :: recordDECKLINK(void)
   :  record()
-  , m_dlIterator(NULL)
   , m_dl(NULL)
   , m_dlOutput(NULL)
   , m_displayMode(NULL)
@@ -232,11 +231,6 @@ recordDECKLINK :: ~recordDECKLINK(void)
 
 void recordDECKLINK :: stop(void)
 {
-#if 0
-  if (m_ndi_send)
-    DECKLINK->send_destroy(m_ndi_send);
-  m_ndi_send = NULL;
-#endif
 }
 
 bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)

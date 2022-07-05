@@ -91,7 +91,6 @@ public:
 private:
   pixBlock m_pixBlock;
 
-  IDeckLinkIterator*m_dlIterator;
   IDeckLink*m_dl;
   IDeckLinkOutput* m_dlOutput;
   IDeckLinkDisplayMode*m_displayMode;
