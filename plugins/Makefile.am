@@ -10,7 +10,7 @@ SUBDIRS += imageQT imageIO
 
 
 ## film loading plugins
-SUBDIRS += filmAVF AVI filmAVIPLAY filmDS filmDarwin GMERLIN filmMPEG1 filmMPEG3 filmQT filmQT4L
+SUBDIRS += filmAVF AVI filmAVIPLAY filmDS filmDarwin GMERLIN MPEG1 MPEG3 filmQT filmQT4L
 if DISABLED
 SUBDIRS += filmDSATL
 SUBDIRS += filmTEST
