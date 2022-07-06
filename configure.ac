@@ -32,7 +32,7 @@ AC_CONFIG_FILES([plugins/imageSTB/Makefile])
 AC_CONFIG_FILES([plugins/imageIO/Makefile])
 
 AC_CONFIG_FILES([plugins/filmAVF/Makefile])
-AC_CONFIG_FILES([plugins/filmAVI/Makefile])
+AC_CONFIG_FILES([plugins/AVI/Makefile])
 AC_CONFIG_FILES([plugins/filmAVIPLAY/Makefile])
 AC_CONFIG_FILES([plugins/filmDS/Makefile])
 AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
