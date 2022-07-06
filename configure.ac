@@ -93,9 +93,9 @@ AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
 AC_CONFIG_SUBDIRS([extra])
 
-AS_IF([test -d "$srcdir/plugins/videoAVT"], [AC_CONFIG_SUBDIRS([plugins/videoAVT])])
-AS_IF([test -d "$srcdir/plugins/videoHALCON"], [AC_CONFIG_SUBDIRS([plugins/videoHALCON])])
-AS_IF([test -d "$srcdir/plugins/videoPYLON"], [AC_CONFIG_SUBDIRS([plugins/videoPYLON])])
+AS_IF([test -d "$srcdir/plugins/AVT"], [AC_CONFIG_SUBDIRS([plugins/AVT])])
+AS_IF([test -d "$srcdir/plugins/HALCON"], [AC_CONFIG_SUBDIRS([plugins/HALCON])])
+AS_IF([test -d "$srcdir/plugins/PYLON"], [AC_CONFIG_SUBDIRS([plugins/PYLON])])
 
 AC_LANG(C++)
 
