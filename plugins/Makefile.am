@@ -17,12 +17,12 @@ SUBDIRS += filmTEST
 endif
 
 ## Pix output (continuous) plugins
-SUBDIRS += recordQT recordQT4L recordV4L recordV4L2
+SUBDIRS += recordQT recordQT4L
 
 ## video capture plugins
 SUBDIRS += videoAVF
 SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP
-SUBDIRS += videoV4L videoV4L2 videoVFW videoVLC videoVNC
+SUBDIRS += V4L V4L2 videoVFW videoVLC videoVNC
 SUBDIRS += videoVIDS
 
 ## proprietary video capture plugins
