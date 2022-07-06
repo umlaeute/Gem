@@ -21,7 +21,7 @@ SUBDIRS += recordQT recordQT4L
 
 ## video capture plugins
 SUBDIRS += videoAVF
-SUBDIRS += videoDC1394 videoDS videoDV4L videoDarwin videoSGI videoUNICAP
+SUBDIRS += DC1394 videoDS DV4L videoDarwin videoSGI UNICAP
 SUBDIRS += V4L V4L2 VFW VLC VNC
 SUBDIRS += VIDS
 
