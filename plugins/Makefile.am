@@ -13,7 +13,6 @@ SUBDIRS += imageQT imageIO
 SUBDIRS += filmAVF AVI AVIPLAY filmDS filmDarwin GMERLIN MPEG1 MPEG3 filmQT filmQT4L
 if DISABLED
 SUBDIRS += filmDSATL
-SUBDIRS += filmTEST
 endif
 
 ## Pix output (continuous) plugins
@@ -28,7 +27,7 @@ SUBDIRS += VIDS
 ## proprietary video capture plugins
 SUBDIRS += AVT HALCON PYLON DECKLINK NDI
 if DISABLED
-SUBDIRS += videoTEST
+SUBDIRS += TEST
 endif
 
 ## asset loading plugins
@@ -37,5 +36,5 @@ SUBDIRS += OBJ ASSIMP2 ASSIMP3
 
 ## filmTEST is not built by default, but we want to ship it
 DIST_SUBDIRS = $(SUBDIRS)
-DIST_SUBDIRS += filmTEST filmDSATL
-DIST_SUBDIRS += videoTEST
+DIST_SUBDIRS += TEST filmDSATL
+DIST_SUBDIRS += TEST

@@ -6,7 +6,6 @@ AM_CXXFLAGS =
 AM_LDFLAGS  = -module -avoid-version -shared
 
 
-pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
