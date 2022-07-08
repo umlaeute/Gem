@@ -205,13 +205,13 @@ namespace {
       : m_img(img)
       , m_refCount(1)
     {    }
-    virtual long GetWidth() {
+    virtual long STDMETHODCALLTYPE GetWidth() {
       return m_img->xsize;
     }
-    virtual long GetHeight() {
+    virtual long STDMETHODCALLTYPE GetHeight() {
       return m_img->ysize;
     }
-    virtual BMDPixelFormat GetPixelFormat() {
+    virtual BMDPixelFormat STDMETHODCALLTYPE GetPixelFormat() {
       switch(m_img->csize) {
       case 4:
         return bmdFormat8BitARGB;
@@ -222,36 +222,36 @@ namespace {
       }
       return bmdFormatUnspecified;
     }
-    virtual long GetRowBytes() {
+    virtual long STDMETHODCALLTYPE GetRowBytes() {
       return m_img->xsize * m_img->csize;
     }
-    virtual HRESULT GetBytes(void **buffer) {
+    virtual HRESULT STDMETHODCALLTYPE GetBytes(void **buffer) {
       if(m_img->data) {
         *buffer = m_img->data;
         return S_OK;
       }
       return S_FALSE;
     }
-    virtual ULONG AddRef(void) {
+    virtual ULONG STDMETHODCALLTYPE AddRef(void) {
       return __sync_add_and_fetch(&m_refCount, 1);
     }
-    virtual ULONG Release(void) {
+    virtual ULONG STDMETHODCALLTYPE Release(void) {
        ULONG newRefValue = __sync_sub_and_fetch(&m_refCount, 1);
        if (!newRefValue)
          delete this;
        return newRefValue;
     }
-    virtual BMDFrameFlags GetFlags (void) {
+    virtual BMDFrameFlags STDMETHODCALLTYPE GetFlags (void) {
       return bmdFrameFlagDefault;
       /* return bmdFrameFlagFlipVertical */
     }
-    virtual HRESULT GetTimecode (BMDTimecodeFormat format, IDeckLinkTimecode **timecode) {
+    virtual HRESULT STDMETHODCALLTYPE GetTimecode (BMDTimecodeFormat format, IDeckLinkTimecode **timecode) {
       return S_FALSE;
     }
-    virtual HRESULT GetAncillaryData (/* out */ IDeckLinkVideoFrameAncillary **ancillary) {
+    virtual HRESULT STDMETHODCALLTYPE GetAncillaryData (/* out */ IDeckLinkVideoFrameAncillary **ancillary) {
       return S_FALSE;
     }
-    virtual HRESULT QueryInterface(REFIID iid, LPVOID *ppv) {
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) {
       *ppv = NULL;
       return E_NOINTERFACE;
     }
