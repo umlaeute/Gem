@@ -312,7 +312,7 @@ void videoDECKLINK::close(void)
 
 bool videoDECKLINK::open(gem::Properties&props)
 {
-  bool is_supported = false;
+  deckbool_t is_supported = false;
 
   BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
   std::string formatname=(("auto"==m_formatname)

@@ -111,7 +111,11 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     }
     //fprintf(stderr, "created video frame %dx%d@%s", width, height, pixformat2string(pixelFormat).c_str());
     m_videoFrame = newFrame;
+#ifdef _WIN32
+    m_frameConverter = NULL;
+#else
     m_frameConverter = CreateVideoConversionInstance();
+#endif
 
     m_displayMode->GetFrameRate(&m_frameDuration, &m_frameTimescale);
 
@@ -164,7 +168,7 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
 
     if (m_videoFrame->GetPixelFormat() != srcformat) {
       if(srcformat != bmdFormatUnspecified)
-        result = m_frameConverter->ConvertFrame(isw, m_videoFrame);
+        result = m_frameConverter?m_frameConverter->ConvertFrame(isw, m_videoFrame):E_NOTIMPL;
       else result = E_NOTIMPL;
 
       if (result != S_OK)  {
@@ -263,7 +267,7 @@ void recordDECKLINK :: stop(void)
 bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
-  bool is_supported = false;
+  deckbool_t is_supported = false;
   int formatnumber=-1;
   std::string formatname="";
   BMDVideoOutputFlags flags = bmdVideoOutputFlagDefault;
@@ -365,7 +369,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
     if (S_OK == m_dl->QueryInterface(IID_IDeckLinkStatus, (void**)&status)) {
       int64_t gotint=0;
       if (S_OK == status->GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat, &gotint)) {
-        m_pixelFormat = gotint;
+        m_pixelFormat = (BMDPixelFormat)gotint;
         //post("got pixelformat: %d -> %s", (int)gotint, pixformat2string(m_pixelFormat).c_str());
       }
     }
