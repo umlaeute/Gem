@@ -314,7 +314,9 @@ bool videoDECKLINK::open(gem::Properties&props)
 {
   deckbool_t is_supported = false;
 
-  BMDVideoInputFlags flags = bmdVideoInputFlagDefault;
+  BMDVideoInputFlags inputFlags = bmdVideoInputFlagDefault;
+  BMDSupportedVideoModeFlags modeFlags = bmdSupportedVideoModeDefault;
+
   std::string formatname=(("auto"==m_formatname)
                                 || ("automatic" == m_formatname))?"":m_formatname;
   //if(m_devname.empty())return false;
@@ -390,7 +392,7 @@ bool videoDECKLINK::open(gem::Properties&props)
       if (S_OK == dlAttribs->GetFlag(BMDDeckLinkSupportsInputFormatDetection,
                                      &is_supported)) {
         if(is_supported) {
-          flags|=bmdVideoInputEnableFormatDetection;
+          inputFlags|=bmdVideoInputEnableFormatDetection;
         }
       }
     }
@@ -403,7 +405,7 @@ bool videoDECKLINK::open(gem::Properties&props)
           m_connectionType,  /* in: (BMDVideoConnection) connection */
           m_displayMode->GetDisplayMode(),  /* in: (BMDDisplayMode) requestedMode */
           m_pixelFormat,  /* in: (BMDPixelFormat) requestedPixelFormat */
-          flags,  /* in: (BMDSupportedVideoModeFlags) flags */
+          modeFlags,  /* in: (BMDSupportedVideoModeFlags) flags */
           &is_supported /* out: (bool) *supported */
           )) {
     /* ignore unsupported video mode for now */
@@ -425,7 +427,7 @@ bool videoDECKLINK::open(gem::Properties&props)
 
   m_dlCallback = new DeckLinkCaptureDelegate(this, m_dlInput);
   if(S_OK != m_dlInput->EnableVideoInput(m_displayMode->GetDisplayMode(),
-                                         m_pixelFormat, flags)) {
+                                         m_pixelFormat, inputFlags)) {
     goto bail;
   }
 
