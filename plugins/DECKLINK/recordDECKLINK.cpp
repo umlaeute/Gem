@@ -133,17 +133,17 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
   virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped() {
     return S_OK;
   };
-  virtual HRESULT QueryInterface(REFIID iid, LPVOID *ppv) {
+  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) {
     *ppv = NULL;
     return E_NOINTERFACE;
   };
 
-  virtual ULONG AddRef(void) {
+  virtual ULONG STDMETHODCALLTYPE AddRef(void) {
     // gcc atomic operation builtin
     return __sync_add_and_fetch(&m_refCount, 1);
   };
 
-  ULONG Release(void) {
+  ULONG STDMETHODCALLTYPE Release(void) {
     // gcc atomic operation builtin
     ULONG newRefValue = __sync_sub_and_fetch(&m_refCount, 1);
     if (!newRefValue)
