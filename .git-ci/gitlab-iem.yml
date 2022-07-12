@@ -77,33 +77,6 @@ variables:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
-.build:w32: &build_w32
-  stage: build
-  tags:
-    - windows
-  variables:
-    IEMCI_CONFIGURATIONS: mingw32
-  before_script:
-    - build/tools/systeminfo.sh || true
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
-    - mkdir -p _pd
-    - unzip -q Pd.zip -d "_pd"
-    - mv -v "_pd"/*/* "_pd"
-    - rm -f Pd.zip
-    - rm -f _pd/bin/msvcr*.dll
-    - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
-    - date
-    - g++ -v
-  script:
-    - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
-  after_script:
-    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
-
 .build:w64: &build_w64
   stage: build
   tags:
@@ -125,6 +98,33 @@ variables:
   script:
     - autoreconf -fiv || ./autogen.sh
     - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - make check -j2
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
+  after_script:
+    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
+
+.build:w32: &build_w32
+  stage: build
+  tags:
+    - windows
+  variables:
+    IEMCI_CONFIGURATIONS: mingw32
+  before_script:
+    - build/tools/systeminfo.sh || true
+    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
+    - mkdir -p _pd
+    - unzip -q Pd.zip -d "_pd"
+    - mv -v "_pd"/*/* "_pd"
+    - rm -f Pd.zip
+    - rm -f _pd/bin/msvcr*.dll
+    - export PD="_pd/bin/pd.com"
+    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
+    - date
+    - g++ -v
+  script:
+    - autoreconf -fiv || ./autogen.sh
+    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
