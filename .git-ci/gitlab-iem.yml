@@ -97,7 +97,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=no ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
@@ -124,7 +124,7 @@ variables:
     - g++ -v
   script:
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
+    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=no CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
     - make check -j2
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
