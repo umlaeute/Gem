@@ -71,7 +71,7 @@ variables:
       - runner_system_failure
   variables:
     CXXFLAGS: "-std=c++11 -g -O2"
-    gem_defaultwindow: "gemmacoswindow"
+    gem_defaultwindow: "gemglfw3window"
     fat_binary: "x86_64,arm64"
   before_script:
     - tools/systeminfo.sh || true
