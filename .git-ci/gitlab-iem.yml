@@ -73,12 +73,14 @@ variables:
     CXXFLAGS: "-std=c++11 -g -O2"
     gem_defaultwindow: "gemglfw3window"
     fat_binary: "x86_64,arm64"
+    pd_downloadsuffix: ".mac.tar.gz"
   before_script:
     - tools/systeminfo.sh || true
-    - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
+    - downloadfile="pd-${PDVERSION}${pd_downloadsuffix}"
     - rm -rf /Applications/Pd*.app/
-    - tar xf Pd.tgz -C /Applications/
-    - rm -f Pd.tgz
+    - wget -q -O "${downloadfile}" "http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"
+    - tar xf "${downloadfile}" -C /Applications/
+    - rm -f "${downloadfile}"
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
@@ -96,17 +98,18 @@ variables:
     - windows
   variables:
     IEMCI_CONFIGURATIONS: mingw64
-    PDARCH: ""
+    pd_downloadsuffix: .msw.zip
   before_script:
     - tools/systeminfo.sh || true
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}${PDARCH}.msw.zip
-    - mkdir -p _pd
-    - unzip -q Pd.zip -d "_pd"
-    - mv -v "_pd"/*/* "_pd"
-    - rm -f Pd.zip
-    - rm -f _pd/bin/msvcr*.dll
     - export PDDIR="$(pwd)/_pd"
-    - export PD="_pd/bin/pd.com"
+    - downloadfile="pd-${PDVERSION}${pd_downloadsuffix}"
+    - wget -q -O "${downloadfile}" "http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"
+    - mkdir -p "${PDDIR}"
+    - test "x${downloadfile}" = "x${downloadfile%.zip}" || unzip -q "${downloadfile}" -d "${PDDIR}"
+    - mv -v "${PDDIR}"/*/* "${PDDIR}"
+    - rm -f "${downloadfile}"
+    - rm -f "${PDDIR}"/bin/msvcr*.dll
+    - export PD="${PDDIR}/bin/pd.com"
     - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
@@ -117,7 +120,7 @@ variables:
     - .build:w64
   variables:
     IEMCI_CONFIGURATIONS: mingw32
-    PDARCH: "-i386"
+    pd_downloadsuffix: -i386.msw.zip
     CXXFLAGS: "-g -O2 -fexceptions"
 
 ###################################################
