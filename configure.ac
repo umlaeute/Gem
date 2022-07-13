@@ -523,7 +523,12 @@ AS_IF([test "x$with_DeckLink" != "xno"], [
 AM_CONDITIONAL([GEM_DECKLINK_LOCAL], [test "x${have_decklink}" = "xlocal"])
 
 GEM_CHECK_LIB([DeckLink],[], [DeckLinkAPI.h],[CreateDeckLinkIteratorInstance], ,,,[video input; use 'local' to use an embedded copy of the SDK])
+decklink_dlopen=
 AS_IF([test "x${PKG_DECKLINK_LIBS}" = "x" || test "x${have_decklink}" = "xlocal" ],[
+ decklink_dlopen=yes
+])
+AM_CONDITIONAL([GEM_DECKLINK_APISTUB], [test "x${decklink_dlopen}" = "xyes"])
+AS_IF([test "x${decklink_dlopen}" = "xyes" ],[
  AC_DEFINE(GEM_DECKLINK_USE_DLOPEN, 1, [Define to 1 to open DeckLinkAPI via dlopen()])
  AC_MSG_NOTICE([use dlopen() to open DeckLinkAPI])
 ])

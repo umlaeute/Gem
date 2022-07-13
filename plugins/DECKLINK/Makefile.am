@@ -2,6 +2,8 @@ ACLOCAL_AMFLAGS = -I$(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
 pkglib_LTLIBRARIES =
+noinst_LTLIBRARIES =
+
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
@@ -55,10 +57,25 @@ gem_videoDECKLINK_la_LIBADD   += -lole32
 gem_recordDECKLINK_la_LIBADD   += -lole32
 endif
 
+if GEM_DECKLINK_APISTUB
+noinst_LTLIBRARIES += libDeckLinkAPIDispatch.la
+gem_videoDECKLINK_la_LIBADD  += libDeckLinkAPIDispatch.la
+gem_recordDECKLINK_la_LIBADD += libDeckLinkAPIDispatch.la
+endif
+
 # convenience symlinks
 include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
-gem_videoDECKLINK_la_SOURCES= videoDECKLINK.cpp videoDECKLINK.h
+gem_videoDECKLINK_la_SOURCES = videoDECKLINK.cpp videoDECKLINK.h
 gem_recordDECKLINK_la_SOURCES= recordDECKLINK.cpp recordDECKLINK.h
+
+libDeckLinkAPIDispatch_la_SOURCES=
+
+if GEM_DECKLINK_LOCAL
+libDeckLinkAPIDispatch_la_SOURCES += SDK/$(GEM_DECKLINK_SYSTEM)/DeckLinkAPIDispatch.cpp
+if WINDOWS
+libDeckLinkAPIDispatch_la_SOURCES += SDK/$(GEM_DECKLINK_SYSTEM)/DeckLinkAPI_i.c
+endif WINDOWS
+endif GEM_DECKLINK_LOCAL

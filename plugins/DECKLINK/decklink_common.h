@@ -24,7 +24,6 @@
 
 #ifdef _WIN32
 # include <windows.h>
-# include "DeckLinkAPI_i.c"
 typedef BOOL deckbool_t;
 typedef wchar_t* deckstring_t;
 namespace {
