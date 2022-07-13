@@ -152,6 +152,19 @@ W64:
     - .build:w64
     - .snapshot
 
+distcheck:
+  extends:
+    - .build:linux
+  stage: test
+  script:
+    - tools/systeminfo.sh || true
+    - date
+    - g++ -v
+    - mkdir -pv "${ARTIFACTSDIR}"
+    - autoreconf -fiv || ./autogen.sh
+    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_architectures:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
+    - make distcheck -j2
+
 deken:
   stage: deploy
   image: registry.git.iem.at/pd/deken:latest
