@@ -5,30 +5,51 @@ variables:
   LANG: C
   # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
   MACOSX_DEPLOYMENT_TARGET: "10.9"
-  # however, it seems that CI_JOB_NAME is not expanded here!
-  ARTIFACTSDIR: artifacts
+  ARTIFACTSDIR: 'artifacts'
 
-.build:snapshot: &snapshot
-  except:
-    - tags
+.artifacts:
   artifacts:
     name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
     paths:
-      - ${ARTIFACTSDIR}
-      - config.log
+      - "${ARTIFACTSDIR}"
     when: always
 
-.build:release: &release
+.snapshot:
+  #  except:
+  #  - tags
+  artifacts:
+    expire_in: 1 week
+
+.release:
   only:
     - tags
-  artifacts:
-    name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
-    paths:
-      - ${ARTIFACTSDIR}
 
-.build:linux: &build_linux
-  image: registry.git.iem.at/devtools/docker/debiancross:amd64
+.run-selected:
+  rules:
+    # run if IEM_CI_JOBS list is empty
+    - if: $IEM_CI_JOBS == ""
+    # run if CI_JOB_NAME is in the IEM_CI_JOBS list
+    - if: $CI_JOB_NAME =~ $IEM_CI_JOBS
+    # otherwise, don't run
+    - when: never
+
+.build:
   stage: build
+  script:
+    - tools/systeminfo.sh || true
+    - date
+    - g++ -v
+    - mkdir -pv "${ARTIFACTSDIR}"
+    - autoreconf -fiv || ./autogen.sh
+    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_architectures:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
+    - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
+    - make check -j2
+    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
+
+.build:linux:
+  extends:
+    - .build
+  image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
     - tools/systeminfo.sh || true
     - mkdir -p /etc/apt/sources.list.d/
@@ -38,22 +59,20 @@ variables:
     - apt-get build-dep ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
     - date
     - g++ -v
-  script:
-    - ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
-  after_script:
-    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
 
-.build:macos: &build_macos
+.build:macos:
+  extends:
+    - .build
   tags:
      - bigsur
   retry:
     max: 1
     when:
       - runner_system_failure
-  stage: build
+  variables:
+    CXXFLAGS: "-std=c++11 -g -O2"
+    gem_defaultwindow: "gemmacoswindow"
+    fat_binary: "x86_64,arm64"
   before_script:
     - tools/systeminfo.sh || true
     - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
@@ -65,113 +84,73 @@ variables:
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
-    - date
-    - g++ -v
-  script:
     - /usr/local/opt/gettext/bin/gettextize
-    - autoreconf -fiv
-    - ./configure --disable-dependency-tracking --enable-fat-binary=x86_64,arm64 --with-pd="${PDDIR}" --with-defaultwindow=gemmacoswindow --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH} CXXFLAGS="-std=c++11 -g -O2"
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
 
-.build:w64: &build_w64
-  stage: build
+.build:w64:
+  extends:
+    - .build
   tags:
     - windows
   variables:
     IEMCI_CONFIGURATIONS: mingw64
+    PDARCH: ""
   before_script:
     - tools/systeminfo.sh || true
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
+    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}${PDARCH}.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
     - mv -v "_pd"/*/* "_pd"
     - rm -f Pd.zip
     - rm -f _pd/bin/msvcr*.dll
+    - export PDDIR="$(pwd)/_pd"
     - export PD="_pd/bin/pd.com"
     - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
-    - date
-    - g++ -v
-  script:
-    - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
 
-.build:w32: &build_w32
-  stage: build
-  tags:
-    - windows
+.build:w32:
+  extends:
+    - .build:w64
   variables:
     IEMCI_CONFIGURATIONS: mingw32
-  before_script:
-    - tools/systeminfo.sh || true
-    - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
-    - mkdir -p _pd
-    - unzip -q Pd.zip -d "_pd"
-    - mv -v "_pd"/*/* "_pd"
-    - rm -f Pd.zip
-    - rm -f _pd/bin/msvcr*.dll
-    - export PD="_pd/bin/pd.com"
-    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
-    - date
-    - g++ -v
-  script:
-    - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking --with-pd="$(pwd)/_pd" --with-DeckLink=local CXXFLAGS="-g -O2 -fexceptions" ${pd_extension:+--with-extension=}${pd_extension} ${TARGETARCH:+--host=}${TARGETARCH}
-    - make check -j2
-    - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
-  after_script:
-    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
+    PDARCH: "-i386"
+    CXXFLAGS: "-g -O2 -fexceptions"
 
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
 
 Source:
+  extends:
+    - .artifacts
+    - .snapshot
   stage: build
   before_script:
     # we need 'git' to create a source package
     - apt-get update && apt-get --no-install-recommends -y install git
   script:
     # create a source package
-    - git archive --format=tar --prefix=${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/ HEAD | tar xf -
-  artifacts:
-    name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
-    paths:
-      - ${ARTIFACTSDIR}
+    - git archive --format=tar --prefix="${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/" HEAD | tar xf -
 
 Linux:
-  <<: *build_linux
-  <<: *release
+  extends:
+    - .build:linux
+    - .snapshot
 Darwin:
-  <<: *build_macos
-  <<: *release
+  extends:
+    - .build:macos
+    - .snapshot
 W32:
-  <<: *build_w32
-  <<: *release
+  extends:
+    - .build:w32
+    - .snapshot
 W64:
-  <<: *build_w64
-  <<: *release
-
-Linux_snapshot:
-  <<: *build_linux
-  <<: *snapshot
-Darwin_snapshot:
-  <<: *build_macos
-  <<: *snapshot
-W32_snapshot:
-  <<: *build_w32
-  <<: *snapshot
-W64_snapshot:
-  <<: *build_w64
-  <<: *snapshot
+  extends:
+    - .build:w64
+    - .snapshot
 
 deken:
   stage: deploy
