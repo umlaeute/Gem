@@ -16,6 +16,7 @@
 
 # out-of-tree builds
 /build-*/
+/build/
 # autotools byproducts
 Makefile\.in
 /aclocal\.m4
@@ -48,7 +49,6 @@ Makefile\.in
 # Makefiles are special
 # some are generated, some not
 Makefile
-!build/autoconf/Makefile
 ## OSX-byproducts
 .DS_Store
 

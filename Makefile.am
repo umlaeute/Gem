@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS =src abstractions
 SUBDIRS+=help doc examples
-SUBDIRS+=build
+SUBDIRS+=tools
 
 ## plugins
 SUBDIRS+=plugins
