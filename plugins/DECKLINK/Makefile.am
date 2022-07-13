@@ -19,6 +19,7 @@ dist_gemhelp_DATA  += decklink-videoplugin.pd
 endif
 endif
 
+AM_CFLAGS   =
 AM_CXXFLAGS =
 AM_LDFLAGS  = -module -avoid-version -shared
 gem_videoDECKLINK_la_LIBADD   =
@@ -35,25 +36,30 @@ AM_LDFLAGS  += -Wl,-rpath='$$ORIGIN'
 endif
 
 # RTE
+AM_CFLAGS   += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 AM_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 AM_LDFLAGS  += $(GEM_RTE_LIBS)   $(GEM_ARCH_LDFLAGS)
 # flags for building Gem externals
+AM_CFLAGS   += $(GEM_EXTERNAL_CFLAGS) $(GEM_THREADS_CFLAGS)
 AM_CXXFLAGS += $(GEM_EXTERNAL_CFLAGS) $(GEM_THREADS_CFLAGS)
 
-gem_videoDECKLINK_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
-gem_recordDECKLINK_la_LIBADD   += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
+gem_videoDECKLINK_la_LIBADD      += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
+gem_recordDECKLINK_la_LIBADD     += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
+libDeckLinkAPIDispatch_la_LIBADD += -L$(builddir)/../.. $(GEM_EXTERNAL_LIBS) $(GEM_THREADS_LIBS)
 # #gem_videoDECKLINK_la @MOREFLAGS@
 
 # Dependencies
 if GEM_DECKLINK_LOCAL
+AM_CFLAGS   += -I$(srcdir)/SDK/$(GEM_DECKLINK_SYSTEM)
 AM_CXXFLAGS += -I$(srcdir)/SDK/$(GEM_DECKLINK_SYSTEM)
 endif
+AM_CFLAGS   += $(GEM_LIB_DECKLINK_CFLAGS)
 AM_CXXFLAGS += $(GEM_LIB_DECKLINK_CFLAGS)
-gem_videoDECKLINK_la_LIBADD   += $(GEM_LIB_DECKLINK_LIBS)
-gem_recordDECKLINK_la_LIBADD   += $(GEM_LIB_DECKLINK_LIBS)
+gem_videoDECKLINK_la_LIBADD  += $(GEM_LIB_DECKLINK_LIBS)
+gem_recordDECKLINK_la_LIBADD += $(GEM_LIB_DECKLINK_LIBS)
 
 if WINDOWS
-gem_videoDECKLINK_la_LIBADD   += -lole32
+gem_videoDECKLINK_la_LIBADD    += -lole32
 gem_recordDECKLINK_la_LIBADD   += -lole32
 endif
 
@@ -71,9 +77,7 @@ include $(srcdir)/../symlink_ltlib.mk
 gem_videoDECKLINK_la_SOURCES = videoDECKLINK.cpp videoDECKLINK.h
 gem_recordDECKLINK_la_SOURCES= recordDECKLINK.cpp recordDECKLINK.h
 
-libDeckLinkAPIDispatch_la_SOURCES=
-
-libDeckLinkAPIDispatch_la_SOURCES += libDeckLinkAPIDispatch.cpp
+libDeckLinkAPIDispatch_la_SOURCES  = libDeckLinkAPIDispatch.cpp
 if WINDOWS
 libDeckLinkAPIDispatch_la_SOURCES += libDeckLinkAPI_i.c
 endif WINDOWS
