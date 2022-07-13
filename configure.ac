@@ -797,6 +797,7 @@ Configuration:
     use VLC              : ${have_libvlc}
     use VNC              : ${have_libvncclient}
   record-support
+    use DeckLink         : ${have_DeckLink}
     use NDI              : ${have_ndi}
     use QuickTime        : ${have_libquicktime}
     use v4l              : ${have_v4l}
