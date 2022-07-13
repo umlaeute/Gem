@@ -22,9 +22,9 @@ endif
 AM_CFLAGS   =
 AM_CXXFLAGS =
 AM_LDFLAGS  = -module -avoid-version -shared
-gem_videoDECKLINK_la_LIBADD   =
-gem_recordDECKLINK_la_LIBADD   =
-
+gem_videoDECKLINK_la_LIBADD      =
+gem_recordDECKLINK_la_LIBADD     =
+libDeckLinkAPIDispatch_la_LIBADD =
 
 if WINDOWS
 AM_LDFLAGS += -no-undefined
