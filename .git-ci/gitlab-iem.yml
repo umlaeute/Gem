@@ -30,7 +30,7 @@ variables:
   image: registry.git.iem.at/devtools/docker/debiancross:amd64
   stage: build
   before_script:
-    - build/tools/systeminfo.sh || true
+    - tools/systeminfo.sh || true
     - mkdir -p /etc/apt/sources.list.d/
     - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
     - apt-get update
@@ -55,7 +55,7 @@ variables:
       - runner_system_failure
   stage: build
   before_script:
-    - build/tools/systeminfo.sh || true
+    - tools/systeminfo.sh || true
     - wget -q -O Pd.tgz http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz
     - rm -rf /Applications/Pd*.app/
     - tar xf Pd.tgz -C /Applications/
@@ -84,7 +84,7 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw64
   before_script:
-    - build/tools/systeminfo.sh || true
+    - tools/systeminfo.sh || true
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
@@ -111,7 +111,7 @@ variables:
   variables:
     IEMCI_CONFIGURATIONS: mingw32
   before_script:
-    - build/tools/systeminfo.sh || true
+    - tools/systeminfo.sh || true
     - wget -q -O Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}-i386.msw.zip
     - mkdir -p _pd
     - unzip -q Pd.zip -d "_pd"
