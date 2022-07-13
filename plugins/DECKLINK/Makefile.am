@@ -73,9 +73,7 @@ gem_recordDECKLINK_la_SOURCES= recordDECKLINK.cpp recordDECKLINK.h
 
 libDeckLinkAPIDispatch_la_SOURCES=
 
-if GEM_DECKLINK_LOCAL
-libDeckLinkAPIDispatch_la_SOURCES += SDK/$(GEM_DECKLINK_SYSTEM)/DeckLinkAPIDispatch.cpp
+libDeckLinkAPIDispatch_la_SOURCES += libDeckLinkAPIDispatch.cpp
 if WINDOWS
-libDeckLinkAPIDispatch_la_SOURCES += SDK/$(GEM_DECKLINK_SYSTEM)/DeckLinkAPI_i.c
+libDeckLinkAPIDispatch_la_SOURCES += libDeckLinkAPI_i.c
 endif WINDOWS
-endif GEM_DECKLINK_LOCAL
