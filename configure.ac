@@ -784,10 +784,10 @@ Configuration:
     use QuickTime        : ${have_libquicktime}
   capture-support
     use AVfoundation     : ${have_avfoundation_framework}
-    use ieee1394         : ${have_ieee1394}
     use DeckLink         : ${have_DeckLink}
     use DirectShow       : NO
     use DV               : ${have_libdv}
+    use ieee1394         : ${have_ieee1394}
     use NDI              : ${have_ndi}
     use Unicap           : ${have_unicap}
     use v4l              : ${have_v4l}
