@@ -4,8 +4,10 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
 EXTRA_DIST =
+EXTRA_DIST += README.txt
 EXTRA_DIST += win-vs2003/videoVIDS.sln win-vs2003/videoVIDS.vcproj
 EXTRA_DIST += win-vs2008/videoVIDS.sln win-vs2008/videoVIDS.vcproj
+EXTRA_DIST += videoInput/notes.txt
 
 pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)

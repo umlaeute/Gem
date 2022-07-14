@@ -2,6 +2,9 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
+EXTRA_DIST =
+EXTRA_DIST += README.txt
+
 pkglib_LTLIBRARIES=
 
 if HAVE_ASSIMP3

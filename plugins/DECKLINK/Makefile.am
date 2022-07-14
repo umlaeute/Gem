@@ -7,7 +7,31 @@ noinst_LTLIBRARIES =
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
-EXTRA_DIST = LICENSE.txt README.txt
+EXTRA_DIST =
+EXTRA_DIST += LICENSE.txt README.txt
+EXTRA_DIST += \
+	SDK/Windows/DeckLinkAPI_i.c \
+	SDK/Windows/DeckLinkAPIDispatch.cpp \
+	SDK/Windows/DeckLinkAPI.h \
+	SDK/Linux/LinuxCOM.h \
+	SDK/Linux/DeckLinkAPIVersion.h \
+	SDK/Linux/DeckLinkAPITypes.h \
+	SDK/Linux/DeckLinkAPIModes.h \
+	SDK/Linux/DeckLinkAPIDispatch.cpp \
+	SDK/Linux/DeckLinkAPIDiscovery.h \
+	SDK/Linux/DeckLinkAPIDeckControl.h \
+	SDK/Linux/DeckLinkAPIConfiguration.h \
+	SDK/Linux/DeckLinkAPI.h \
+	SDK/Darwin/DeckLinkAPIVersion.h \
+	SDK/Darwin/DeckLinkAPITypes.h \
+	SDK/Darwin/DeckLinkAPIStreaming.h \
+	SDK/Darwin/DeckLinkAPIModes.h \
+	SDK/Darwin/DeckLinkAPIDispatch.cpp \
+	SDK/Darwin/DeckLinkAPIDiscovery.h \
+	SDK/Darwin/DeckLinkAPIDeckControl.h \
+	SDK/Darwin/DeckLinkAPIConfiguration.h \
+	SDK/Darwin/DeckLinkAPI.h \
+	$(empty)
 
 if HAVE_LIB_DECKLINK
 pkglib_LTLIBRARIES+= gem_videoDECKLINK.la gem_recordDECKLINK.la
@@ -74,8 +98,8 @@ include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
-gem_videoDECKLINK_la_SOURCES = videoDECKLINK.cpp videoDECKLINK.h
-gem_recordDECKLINK_la_SOURCES= recordDECKLINK.cpp recordDECKLINK.h
+gem_videoDECKLINK_la_SOURCES = videoDECKLINK.cpp videoDECKLINK.h decklink_common.h
+gem_recordDECKLINK_la_SOURCES= recordDECKLINK.cpp recordDECKLINK.h decklink_common.h
 
 libDeckLinkAPIDispatch_la_SOURCES  = libDeckLinkAPIDispatch.cpp
 if WINDOWS

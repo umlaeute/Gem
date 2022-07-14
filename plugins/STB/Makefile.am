@@ -2,7 +2,13 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
+
+
 EXTRA_DIST =
+EXTRA_DIST+= \
+	STB/stb_image_write.h \
+	STB/stb_image.h \
+	$(empty)
 
 pkglib_LTLIBRARIES= gem_imageSTB.la
 

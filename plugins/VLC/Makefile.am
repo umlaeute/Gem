@@ -2,7 +2,11 @@
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
+EXTRA_DIST =
+EXTRA_DIST += README.txt
+
 pkglib_LTLIBRARIES=
+
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 

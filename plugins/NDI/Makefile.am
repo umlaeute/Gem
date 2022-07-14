@@ -6,11 +6,27 @@ pkglib_LTLIBRARIES =
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
-EXTRA_DIST = LICENSE.txt README.txt
+EXTRA_DIST =
+EXTRA_DIST += LICENSE.txt README.txt
+EXTRA_DIST += \
+	NDI/Processing.NDI.utilities.h \
+	NDI/Processing.NDI.structs.h \
+	NDI/Processing.NDI.deprecated.h \
+	NDI/Processing.NDI.compat.h \
+	NDI/Processing.NDI.Send.h \
+	NDI/Processing.NDI.Routing.h \
+	NDI/Processing.NDI.Recv.h \
+	NDI/Processing.NDI.Recv.ex.h \
+	NDI/Processing.NDI.Lib.h \
+	NDI/Processing.NDI.Lib.cplusplus.h \
+	NDI/Processing.NDI.FrameSync.h \
+	NDI/Processing.NDI.Find.h \
+	NDI/Processing.NDI.DynamicLoad.h \
+	$(empty)
 
 if HAVE_NDI
 pkglib_LTLIBRARIES+= gem_videoNDI.la gem_recordNDI.la
-dist_gemhelp_DATA  += ndi-videoplugin.pd
+dist_gemhelp_DATA  += ndi-videoplugin.pd ndi-recordplugin.pd
 endif
 
 # videoNDI

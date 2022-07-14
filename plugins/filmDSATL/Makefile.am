@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
 EXTRA_DIST =
+EXTRA_DIST += qedit.h
 EXTRA_DIST += win-vs2003/filmDS.sln win-vs2003/filmDS.vcproj
 EXTRA_DIST += win-vs2008/filmDS.sln win-vs2008/filmDS.vcproj
 
