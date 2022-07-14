@@ -36,5 +36,5 @@ SUBDIRS += OBJ ASSIMP2 ASSIMP3
 
 ## filmTEST is not built by default, but we want to ship it
 DIST_SUBDIRS = $(SUBDIRS)
-DIST_SUBDIRS += TEST filmDSATL
 DIST_SUBDIRS += TEST
+DIST_SUBDIRS += filmDSATL
