@@ -110,7 +110,7 @@ FORCE:
 
 Version.cpp: version_current.h
 
-version_current.h: $(srcdir)/version.h.in $(sublibs)
+version_current.h: $(srcdir)/version.h.in $(wildcard $(sublibs))
 	$(SHELL) $(srcdir)/pkgversion.sh $< > $@
 
 DISTCLEANFILES += version_current.h
