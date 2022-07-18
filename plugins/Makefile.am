@@ -3,36 +3,63 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 
 SUBDIRS  =
 
-## image loading/saving plugins
-SUBDIRS += imageMAGICK imageIO
-SUBDIRS += TIFF JPEG SGI STB
+## some plugins are not built by default, but we want to ship them anyhow
+## (so add them manually to DIST_SUBDIRS)
+DIST_SUBDIRS =
+
+# alphabetically ordered (by API)
+SUBDIRS += ASSIMP2
+SUBDIRS += ASSIMP3
+SUBDIRS += AVI
+SUBDIRS += AVIPLAY
+SUBDIRS += DC1394
+SUBDIRS += DV4L
+SUBDIRS += GMERLIN
+SUBDIRS += imageIO
+SUBDIRS += imageMAGICK
+SUBDIRS += JPEG
+SUBDIRS += MPEG1
+SUBDIRS += MPEG3
+SUBDIRS += OBJ
+SUBDIRS += QT4L
 SUBDIRS += QuickTime
-
-
-## film loading plugins
-SUBDIRS += AVI AVIPLAY GMERLIN MPEG1 MPEG3 QT4L
-SUBDIRS += filmAVF filmDS filmDarwin
-if DISABLED
-SUBDIRS += filmDSATL
-endif
-
-## video capture plugins
-SUBDIRS += DC1394 DV4L UNICAP
-SUBDIRS += V4L V4L2 VFW VLC VNC
-SUBDIRS += VIDS
-SUBDIRS += videoAVF videoDS videoDarwin videoSGI
-
-## proprietary video capture plugins
-SUBDIRS += AVT HALCON PYLON DECKLINK NDI
-
-## asset loading plugins
-SUBDIRS += OBJ ASSIMP2 ASSIMP3
-
+SUBDIRS += SGI
+SUBDIRS += STB
 if DISABLED
 SUBDIRS += TEST
-endif
-
-## filmTEST is not built by default, but we want to ship it
-DIST_SUBDIRS = $(SUBDIRS)
+else
 DIST_SUBDIRS += TEST
+endif
+SUBDIRS += TIFF
+SUBDIRS += UNICAP
+SUBDIRS += V4L
+SUBDIRS += V4L2
+SUBDIRS += VFW
+SUBDIRS += VIDS
+SUBDIRS += VLC
+SUBDIRS += VNC
+
+# specific plugins
+SUBDIRS += filmAVF
+SUBDIRS += filmDS
+if DISABLED
+SUBDIRS += filmDSATL
+else
 DIST_SUBDIRS += filmDSATL
+endif
+SUBDIRS += filmDarwin
+SUBDIRS += videoAVF
+SUBDIRS += videoDS
+SUBDIRS += videoDarwin
+SUBDIRS += videoSGI
+
+# proprietary SDKs
+SUBDIRS += AVT
+SUBDIRS += DECKLINK
+SUBDIRS += HALCON
+SUBDIRS += NDI
+SUBDIRS += PYLON
+
+
+## obviously we want to ship all subdirs...
+DIST_SUBDIRS += $(SUBDIRS)
