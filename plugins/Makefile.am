@@ -4,35 +4,40 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 SUBDIRS  =
 
 ## image loading/saving plugins
-SUBDIRS += imageMAGICK TIFF JPEG
-SUBDIRS += imageSGI STB
-SUBDIRS += imageQT imageIO
+#SUBDIRS += imageMAGICK TIFF JPEG
+#SUBDIRS += imageSGI STB
+#SUBDIRS += imageQT imageIO
+SUBDIRS += imageMAGICK imageIO
+SUBDIRS += TIFF JPEG SGI STB
+SUBDIRS += imageQT
+
 
 
 ## film loading plugins
-SUBDIRS += filmAVF AVI AVIPLAY filmDS filmDarwin GMERLIN MPEG1 MPEG3 filmQT filmQT4L
+SUBDIRS += AVI AVIPLAY GMERLIN MPEG1 MPEG3 QT4L
+SUBDIRS += filmAVF filmDS filmDarwin filmQT
 if DISABLED
 SUBDIRS += filmDSATL
 endif
 
 ## Pix output (continuous) plugins
-SUBDIRS += recordQT recordQT4L
+SUBDIRS += recordQT
 
 ## video capture plugins
-SUBDIRS += videoAVF
-SUBDIRS += DC1394 videoDS DV4L videoDarwin videoSGI UNICAP
+SUBDIRS += DC1394 DV4L UNICAP
 SUBDIRS += V4L V4L2 VFW VLC VNC
 SUBDIRS += VIDS
+SUBDIRS += videoAVF videoDS videoDarwin videoSGI
 
 ## proprietary video capture plugins
 SUBDIRS += AVT HALCON PYLON DECKLINK NDI
-if DISABLED
-SUBDIRS += TEST
-endif
 
 ## asset loading plugins
 SUBDIRS += OBJ ASSIMP2 ASSIMP3
 
+if DISABLED
+SUBDIRS += TEST
+endif
 
 ## filmTEST is not built by default, but we want to ship it
 DIST_SUBDIRS = $(SUBDIRS)
