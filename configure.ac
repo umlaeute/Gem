@@ -23,24 +23,18 @@ AC_CONFIG_FILES([src/deprecated/Makefile ])
 
 ## plugins that use this autoconf instance for configuration
 AC_CONFIG_FILES([plugins/Makefile])
-AC_CONFIG_FILES([plugins/imageQT/Makefile])
+AC_CONFIG_FILES([plugins/imageIO/Makefile])
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
 AC_CONFIG_FILES([plugins/TIFF/Makefile])
 AC_CONFIG_FILES([plugins/JPEG/Makefile])
 AC_CONFIG_FILES([plugins/SGI/Makefile])
 AC_CONFIG_FILES([plugins/STB/Makefile])
-AC_CONFIG_FILES([plugins/imageIO/Makefile])
 
-AC_CONFIG_FILES([plugins/filmAVF/Makefile])
 AC_CONFIG_FILES([plugins/AVI/Makefile])
 AC_CONFIG_FILES([plugins/AVIPLAY/Makefile])
-AC_CONFIG_FILES([plugins/filmDS/Makefile])
-AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
-AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
 AC_CONFIG_FILES([plugins/GMERLIN/Makefile])
 AC_CONFIG_FILES([plugins/MPEG1/Makefile])
 AC_CONFIG_FILES([plugins/MPEG3/Makefile])
-AC_CONFIG_FILES([plugins/filmQT/Makefile])
 AC_CONFIG_FILES([plugins/QT4L/Makefile])
 AC_CONFIG_FILES([plugins/TEST/Makefile])
 
@@ -48,14 +42,8 @@ AC_CONFIG_FILES([plugins/OBJ/Makefile])
 AC_CONFIG_FILES([plugins/ASSIMP2/Makefile])
 AC_CONFIG_FILES([plugins/ASSIMP3/Makefile])
 
-AC_CONFIG_FILES([plugins/recordQT/Makefile])
-
-AC_CONFIG_FILES([plugins/videoAVF/Makefile])
 AC_CONFIG_FILES([plugins/DC1394/Makefile])
-AC_CONFIG_FILES([plugins/videoDS/Makefile])
 AC_CONFIG_FILES([plugins/DV4L/Makefile])
-AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
-AC_CONFIG_FILES([plugins/videoSGI/Makefile])
 AC_CONFIG_FILES([plugins/UNICAP/Makefile])
 AC_CONFIG_FILES([plugins/VFW/Makefile])
 AC_CONFIG_FILES([plugins/VIDS/Makefile])
@@ -66,6 +54,22 @@ AC_CONFIG_FILES([plugins/V4L/Makefile])
 AC_CONFIG_FILES([plugins/V4L2/Makefile])
 AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
 AC_CONFIG_FILES([plugins/NDI/Makefile])
+
+AC_CONFIG_FILES([plugins/imageQT/Makefile])
+
+AC_CONFIG_FILES([plugins/filmAVF/Makefile])
+AC_CONFIG_FILES([plugins/filmDS/Makefile])
+AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
+AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
+AC_CONFIG_FILES([plugins/filmQT/Makefile])
+
+AC_CONFIG_FILES([plugins/recordQT/Makefile])
+
+AC_CONFIG_FILES([plugins/videoAVF/Makefile])
+AC_CONFIG_FILES([plugins/videoDS/Makefile])
+AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
+AC_CONFIG_FILES([plugins/videoSGI/Makefile])
+
 
 ## extra holds additional objects/libraries
 # some of them have their own build system
