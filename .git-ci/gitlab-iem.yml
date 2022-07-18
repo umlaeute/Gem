@@ -36,7 +36,7 @@ variables:
 .build:
   stage: build
   script:
-    - : ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)}
+    - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
     - tools/systeminfo.sh || true
     - date
     - g++ -v
