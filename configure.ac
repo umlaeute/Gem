@@ -54,16 +54,13 @@ AC_CONFIG_FILES([plugins/V4L/Makefile])
 AC_CONFIG_FILES([plugins/V4L2/Makefile])
 AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
 AC_CONFIG_FILES([plugins/NDI/Makefile])
+AC_CONFIG_FILES([plugins/QuickTime/Makefile])
 
-AC_CONFIG_FILES([plugins/imageQT/Makefile])
 
 AC_CONFIG_FILES([plugins/filmAVF/Makefile])
 AC_CONFIG_FILES([plugins/filmDS/Makefile])
 AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
 AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
-AC_CONFIG_FILES([plugins/filmQT/Makefile])
-
-AC_CONFIG_FILES([plugins/recordQT/Makefile])
 
 AC_CONFIG_FILES([plugins/videoAVF/Makefile])
 AC_CONFIG_FILES([plugins/videoDS/Makefile])

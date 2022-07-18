@@ -4,24 +4,17 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 SUBDIRS  =
 
 ## image loading/saving plugins
-#SUBDIRS += imageMAGICK TIFF JPEG
-#SUBDIRS += imageSGI STB
-#SUBDIRS += imageQT imageIO
 SUBDIRS += imageMAGICK imageIO
 SUBDIRS += TIFF JPEG SGI STB
-SUBDIRS += imageQT
-
+SUBDIRS += QuickTime
 
 
 ## film loading plugins
 SUBDIRS += AVI AVIPLAY GMERLIN MPEG1 MPEG3 QT4L
-SUBDIRS += filmAVF filmDS filmDarwin filmQT
+SUBDIRS += filmAVF filmDS filmDarwin
 if DISABLED
 SUBDIRS += filmDSATL
 endif
-
-## Pix output (continuous) plugins
-SUBDIRS += recordQT
 
 ## video capture plugins
 SUBDIRS += DC1394 DV4L UNICAP
