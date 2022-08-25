@@ -17,8 +17,8 @@ variables:
 .snapshot:
   #  except:
   #  - tags
-  artifacts:
-    expire_in: 1 week
+  #artifacts:
+  #  expire_in: 1 week
 
 .release:
   only:
