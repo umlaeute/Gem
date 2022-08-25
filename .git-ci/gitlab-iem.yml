@@ -6,6 +6,7 @@ variables:
   # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
   MACOSX_DEPLOYMENT_TARGET: "10.9"
   ARTIFACTSDIR: 'artifacts'
+  IEM_CI_TMPDIR: .git-ci/_tmp/
 
 .artifacts:
   artifacts:
@@ -76,14 +77,30 @@ variables:
     CXXFLAGS: "-std=c++11 -g -O2"
     gem_defaultwindow: "gemglfw3window"
     fat_binary: "x86_64,arm64"
-    pd_downloadsuffix: ".mac.tar.gz"
   before_script:
     - tools/systeminfo.sh || true
-    - downloadfile="pd-${PDVERSION}${pd_downloadsuffix}"
     - rm -rf /Applications/Pd*.app/
-    - wget -q -O "${downloadfile}" "http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"
-    - tar xf "${downloadfile}" -C /Applications/
-    - rm -f "${downloadfile}"
+
+    # download Pd
+    - curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz | tar --extract --gzip --directory /Applications/ || mkdir -p "${IEM_CI_TMPDIR}"
+    # if there was no tarball, try to get a zip-file
+    - test ! -d "${IEM_CI_TMPDIR}" || wget -q -O "${IEM_CI_TMPDIR}"/Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.macos.zip
+    - test ! -f "${IEM_CI_TMPDIR}"/Pd.zip || unzip "${IEM_CI_TMPDIR}"/Pd.zip -d "${IEM_CI_TMPDIR}"
+    # the ZIP-file shoud contain a .dmg containing Pd
+    - |
+      for dmg in "${IEM_CI_TMPDIR}"/Pd*.dmg; do break; done
+    - pddisk=""
+    - test ! -f "${dmg}" || pddisk=$(hdiutil attach "${dmg}" 2>/dev/null | egrep "^/.*/Volumes/" | tail -1 | awk '{print $NF}')
+    - rm -rf "${dmg}"
+    - |
+      for app in "${pddisk}"/Pd*.app "${IEM_CI_TMPDIR}"/Pd*.app; do if test -d "${app}"; then cp -r "${app}" /Applications/; break; fi; done
+    - test ! -d "${pddisk}" || umount "${pddisk}"
+    - |
+      rm -rf "${IEM_CI_TMPDIR}"
+      dmg=""
+      pddisk=""
+      app=""
+
     - export PD=$(find /Applications/Pd*.app/Contents/Resources/bin/ type f -name pd -print -quit)
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
