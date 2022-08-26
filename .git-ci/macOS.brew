@@ -1,6 +1,3 @@
-brew "llvm"
-brew "libomp"
-
 # build-system
 brew "pkg-config"
 brew "automake"
@@ -18,6 +15,9 @@ brew "ftgl"
 brew "jpeg"
 brew "libtiff"
 #brew "imagemagick"
+## IIRC, these are sub-dependencies of 'imagemagick'
+#brew "llvm"
+#brew "libomp"
 
 # additional video support
 brew "libquicktime"
