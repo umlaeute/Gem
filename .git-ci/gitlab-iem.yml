@@ -77,6 +77,10 @@ variables:
     CXXFLAGS: "-std=c++11 -g -O2"
     gem_defaultwindow: "gemglfw3window"
     fat_binary: "x86_64,arm64"
+    HOMEBREW_NO_ANALYTICS: 1
+    HOMEBREW_NO_INSTALL_UPGRADE: 1
+    HOMEBREW_NO_INSTALL_CLEANUP: 1
+    HOMEBREW_NO_AUTO_UPDATE: 1
   before_script:
     - tools/systeminfo.sh || true
     - rm -rf /Applications/Pd*.app/
