@@ -173,12 +173,12 @@ pixBlock* filmAVF::getFrame(void)
       break;
     }
     default:
-      error("filmAVF: Unable to convert frame pixels, "
+      pd_error(0, "filmAVF: Unable to convert frame pixels, "
             "unknown format %d", (int)m_wantedFormat);
       break;
     }
   } else {
-    error("filmAVF: Unable to convert frame pixels, "
+    pd_error(0, "filmAVF: Unable to convert frame pixels, "
           "source buffer is null");
   }
 
