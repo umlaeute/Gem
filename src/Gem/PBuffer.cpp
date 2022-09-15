@@ -235,7 +235,7 @@ void reportError (char * strError)
 {
   //gErrorTime = getElapsedTime ();
   //sprintf (gErrorMessage, "Error: %s (at time: %0.1f secs)", strError, gErrorTime);
-  error ("Error: %s", strError);
+  pd_error (0, "Error: %s", strError);
 }
 
 // ---------------------------------
