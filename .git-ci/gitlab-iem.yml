@@ -53,7 +53,7 @@ variables:
     - cd "$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}/Gem"
     - (ls -lha; du -sh) || true
     - |
-      "${CI_BUILDS_DIR}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.dll *.so
+      "${CI_BUILDS_DIR}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.dll *.so || echo "ignoring problems when splitting debug info"
     - (ls -lha; du -sh) || true
     - cd "${CI_BUILDS_DIR}"
 
