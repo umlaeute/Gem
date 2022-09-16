@@ -63,12 +63,12 @@ variables:
   image: registry.git.iem.at/devtools/docker/debiancross:amd64
   before_script:
     - tools/systeminfo.sh || true
+    - date
     - mkdir -p /etc/apt/sources.list.d/
     - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
     - apt-get update
     - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
     - apt-get build-dep ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
-    - date
     - g++ -v
 
 .build:macos:
@@ -90,6 +90,7 @@ variables:
     HOMEBREW_NO_AUTO_UPDATE: 1
   before_script:
     - tools/systeminfo.sh || true
+    - date
     - rm -rf /Applications/Pd*.app/
 
     # download Pd
@@ -118,6 +119,7 @@ variables:
     - echo "PDDIR=${PDDIR}"
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - /usr/local/opt/gettext/bin/gettextize
+    - date
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
