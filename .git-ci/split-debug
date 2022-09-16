@@ -1,0 +1,57 @@
+#!/bin/sh
+
+: ${STRIP:=strip}
+: ${OBJCOPY:=objcopy}
+
+
+error() {
+	echo "$@" 1>&2
+}
+
+
+if ! command -v "${STRIP}" >/dev/null; then
+	error "Couldn't find strip: ${STRIP}"
+	exit 127
+fi
+
+if ! command -v "${OBJCOPY}" >/dev/null; then
+	error "Couldn't find objcopy: ${OBJCOPY}"
+	exit 127
+fi
+
+make_debug() {
+  # $1: unstripped binary (input)
+  # $2: debug info file (output)
+  [ -e "$2" ] || ${OBJCOPY} --only-keep-debug --compress-debug-sections "$1" "$2"
+}
+do_strip() {
+  # $1: unstripped binary (input) == stripped binary (output)
+  ${STRIP} --remove-section=.comment --remove-section=.note --strip-unneeded "$1"
+}
+do_attach() {
+  # $1: stripped binary (output)
+  # $2: debug info file (input)
+  ${OBJCOPY} --add-gnu-debuglink "$2" "$1"
+}
+
+strip_and_attach() {
+  local file="$1"
+  local debug=${file}.debug
+
+  make_debug "${file}" "${debug}"
+  do_strip "${file}"
+  do_attach "${file}" "${debug}"
+}
+
+list_files() {
+  local f
+  for f in "$@"; do
+    [ ! -e "${f}" ] || echo "${f}"
+  done | sort -u
+}
+
+
+list_files "$@" | while read f; do
+  echo "splitting debug information for $f"
+  strip_and_attach "$f"
+done
