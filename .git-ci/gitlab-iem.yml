@@ -49,6 +49,12 @@ variables:
     - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
     - make check -j"${NUMBER_OF_PROCESSORS}"
     - make install DESTDIR=$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*} libdir=/ extradir=/Gem includedir=/Gem/include
+    # finally split the binaries from the debug information
+    - cd "$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}/Gem"
+    - (ls -lha; du -sh) || true
+    - "${CI_BUILDS_DIR}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.dll *.so
+    - (ls -lha; du -sh) || true
+    - cd "${CI_BUILDS_DIR}"
 
 .build:linux:
   extends:
@@ -199,6 +205,8 @@ deken:
     - chmod -R go-w ${ARTIFACTSDIR}/
 # remove ltlib leftovers
     - find ${ARTIFACTSDIR}/ "(" -name "*.la" -or -name "*.a" ")" -delete
+# remove debug information
+    - find ${ARTIFACTSDIR}/ -name "*.debug" -delete
 # create deken packages
     - for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do deken package --version="${CI_COMMIT_TAG#v}" "${d}"; done
 # upload deken packages
