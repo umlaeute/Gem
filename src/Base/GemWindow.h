@@ -78,6 +78,7 @@ public:
   /* window resize/move */
   void dimension(unsigned int, unsigned int);
   void position (int, int);
+  void framebuffersize(unsigned int, unsigned int);
 
   /* INPUT */
 

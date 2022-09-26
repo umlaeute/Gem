@@ -309,6 +309,15 @@ void GemWindow::dimension(unsigned int w, unsigned int h)
   info(gensym("dimen"), 2, ap);
 }
 
+void GemWindow::framebuffersize(unsigned int w, unsigned int h)
+{
+  t_atom ap[2];
+  SETFLOAT (ap+0, w);
+  SETFLOAT (ap+1, h);
+
+  info(gensym("framebuffersize"), 2, ap);
+}
+
 void GemWindow::position(int x, int y)
 {
   t_atom ap[2];
