@@ -1437,6 +1437,8 @@ bool gemmacwindow::create(void)
   verbose(2,"hints: shared = %d",m_info->context);//m_shared);
   verbose(2,"hints: fsaa = %d",m_fsaa);
   hGD = NULL;
+  dimension(m_width, m_height);
+  framebuffersize(m_width, m_height);
   return createGemWindow();
 }
 

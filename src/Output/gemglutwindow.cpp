@@ -117,31 +117,32 @@ void closeCb(void)
 void keyboardCb(unsigned char c, int x, int y)
 {
   CALLBACK4WIN->motion( 0,x,y);
-  ggw->key( 0,key2symbol(c), c, 1);
+  if(ggw)ggw->key( 0,key2symbol(c), c, 1);
 }
 void keyboardupCb(unsigned char c, int x, int y)
 {
   CALLBACK4WIN->motion( 0,x,y);
-  ggw->key( 0,key2symbol(c), c, 0);
+  if(ggw)ggw->key( 0,key2symbol(c), c, 0);
 }
 void specialCb(int c, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  ggw->key(0,key2symbol(c), c, 1);
+  if(ggw)ggw->key(0,key2symbol(c), c, 1);
 }
 void specialupCb(int c, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  ggw->key(0,key2symbol(c), c, 0);
+  if(ggw)ggw->key(0,key2symbol(c), c, 0);
 }
 void reshapeCb(int x, int y)
 {
   CALLBACK4WIN->dimension(x, y);
+  if(ggw)ggw->framebuffersize(x, y);
 }
 void mouseCb(int button, int state, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  ggw->button(0,button, !state);
+  if(ggw)ggw->button(0,button, !state);
 }
 void motionCb(int x, int y)
 {

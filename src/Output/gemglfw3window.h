@@ -112,6 +112,7 @@ private:
   //////////
   // glfw callbacks
   void windowsizeCallback(int width, int height);
+  void framebuffersizeCallback(int width, int height);
   int  windowcloseCallback(void);
   void windowrefreshCallback(void);
   void keyCallback(int key, int scancode, int action, int mods);
@@ -120,6 +121,7 @@ private:
   void mouseposCallback(float x, float y);
   void scrollCallback(float x, float y);
   static void windowsizeCb(GLFWwindow*, int width, int height);
+  static void framebuffersizeCb(GLFWwindow*, int width, int height);
   static void windowcloseCb(GLFWwindow*);
   static void windowrefreshCb(GLFWwindow*);
   static void keyCb(GLFWwindow*, int key, int scancode, int action,

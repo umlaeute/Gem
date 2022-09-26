@@ -550,6 +550,7 @@ void gemmacoswindow :: moved(void) {
   m_yoffset=yoffset;
 
   if(doDimen)dimension(m_width, m_height);
+  if(doDimen)framebuffersize(m_width, m_height);
   if(doOffset)position(m_xoffset, m_yoffset);
 }
 void gemmacoswindow :: offsetMess(int x, int y) {

@@ -832,6 +832,7 @@ void gemglxwindow::dispatch(void)
         m_height=event.xconfigure.height;
         XResizeWindow(m_pimpl->dpy, m_pimpl->win, m_width, m_height);
         dimension(m_width, m_height);
+        framebuffersize(m_width, m_height);
       }
       if ((event.xconfigure.send_event) &&
           ((event.xconfigure.x != m_xoffset) ||
@@ -1007,6 +1008,7 @@ void gemglxwindow :: createMess(const std::string&display)
     return;
   }
   dimension(m_width, m_height);
+  framebuffersize(m_width, m_height);
   m_pimpl->doDispatch=true;
 }
 /////////////////////////////////////////////////////////

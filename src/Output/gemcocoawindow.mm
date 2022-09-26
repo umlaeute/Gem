@@ -471,6 +471,7 @@ void gemcocoawindow :: moved(void) {
   m_yoffset=yoffset;
 
   if(doDimen)dimension(m_width, m_height);
+  if(doDimen)framebuffersize(m_width, m_height);
   if(doOffset)position(m_xoffset, m_yoffset);
 }
 void gemcocoawindow :: offsetMess(int x, int y) {

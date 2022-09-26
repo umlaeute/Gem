@@ -394,6 +394,7 @@ bool gemw32window:: create(void)
 
   UpdateWindow(m_win->win);
   dimension(w, h);
+  framebuffersize(w, h);
   position(x, y);
   return createGemWindow();
 }

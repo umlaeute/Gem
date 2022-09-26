@@ -291,6 +291,7 @@ void gemglfw2window :: cursorMess(bool setting)
 void gemglfw2window::windowsizeCallback(int w, int h)
 {
   dimension(w, h);
+  framebuffersize(w, h);
 }
 int gemglfw2window::windowcloseCallback()
 {

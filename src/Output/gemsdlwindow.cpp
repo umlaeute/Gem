@@ -431,6 +431,7 @@ void gemsdlwindow :: dispatch()
       break;
     case SDL_VIDEORESIZE:
       dimension(event.resize.w, event.resize.h);
+      framebuffersize(event.resize.w, event.resize.h);
       break;
     case SDL_VIDEOEXPOSE:
       info("window", "exposed");

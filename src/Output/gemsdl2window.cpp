@@ -407,6 +407,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
       break;
     case SDL_WINDOWEVENT_SIZE_CHANGED:
       dimension(event.window.data1, event.window.data2);
+      framebuffersize(event.window.data1, event.window.data2);
       break;
     case SDL_WINDOWEVENT_MINIMIZED:
       info("window", "minimized");

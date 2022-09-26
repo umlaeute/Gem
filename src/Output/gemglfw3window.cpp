@@ -284,7 +284,13 @@ bool gemglfw3window :: create(void)
   glfwSetMouseButtonCallback  (m_window, mousebuttonCb);
   glfwSetCursorPosCallback    (m_window, mouseposCb);
   glfwSetScrollCallback       (m_window, scrollCb);
+  glfwSetFramebufferSizeCallback(m_window, framebuffersizeCb);
   dispatch();
+
+  int width=0, height=0;
+  glfwGetFramebufferSize(m_window, &width, &height);
+  framebuffersize(width, height);
+
   return (0!=m_window);
 }
 void gemglfw3window :: createMess(const std::string&)
@@ -332,6 +338,10 @@ void gemglfw3window :: cursorMess(bool setting)
 void gemglfw3window::windowsizeCallback(int w, int h)
 {
   dimension(w, h);
+}
+void gemglfw3window::framebuffersizeCallback(int w, int h)
+{
+  framebuffersize(w, h);
 }
 int gemglfw3window::windowcloseCallback()
 {
@@ -434,6 +444,10 @@ void gemglfw3window :: obj_setupCallback(t_class *classPtr)
 void gemglfw3window::windowsizeCb(GLFWwindow *win,int w, int h)
 {
   CALLBACK(windowsizeCallback(w, h));
+}
+void gemglfw3window::framebuffersizeCb(GLFWwindow *win,int w, int h)
+{
+  CALLBACK(framebuffersizeCallback(w, h));
 }
 void gemglfw3window::windowcloseCb(GLFWwindow *win)
 {
