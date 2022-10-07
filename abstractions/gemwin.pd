@@ -236,7 +236,7 @@ GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #N canvas 6 61 450 300 gemman 0;
 #X obj 130 195 gemmanager;
 #X msg 130 172 dimen \$1 \$2;
-#X obj 247 124 r \$0-realdimen;
+#X obj 247 124 r \$0-framebuffersize;
 #X obj 130 149 list prepend 500 500;
 #X obj 130 26 inlet;
 #X obj 130 49 t b;
