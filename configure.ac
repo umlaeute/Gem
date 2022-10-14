@@ -39,6 +39,7 @@ AC_CONFIG_FILES([plugins/MPEG1/Makefile])
 AC_CONFIG_FILES([plugins/MPEG3/Makefile])
 AC_CONFIG_FILES([plugins/NDI/Makefile])
 AC_CONFIG_FILES([plugins/OBJ/Makefile])
+AC_CONFIG_FILES([plugins/PNM/Makefile])
 AC_CONFIG_FILES([plugins/QT4L/Makefile])
 AC_CONFIG_FILES([plugins/QuickTime/Makefile])
 AC_CONFIG_FILES([plugins/SGI/Makefile])
@@ -795,6 +796,7 @@ Configuration:
   record-support
     use DeckLink         : ${have_DeckLink}
     use NDI              : ${have_ndi}
+    use PNM              : YES (local)
     use QuickTime        : ${have_libquicktime}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
