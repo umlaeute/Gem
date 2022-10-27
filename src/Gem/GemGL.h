@@ -75,6 +75,14 @@ GEM_EXTERN GLXEWContext*glxewGetContext(void);
 #endif /* GL_YUV422_GEM */
 
 
+#ifndef GL_RGB_GEM
+# ifdef __APPLE__
+#  define GL_RGB_GEM GL_BGR_EXT
+# else
+#  define GL_RGB_GEM GL_RGB
+# endif
+#endif /* GL_RGB_GEM */
+
 #ifndef GL_RGBA_GEM
 # ifdef __APPLE__
 #  define GL_RGBA_GEM GL_BGRA_EXT

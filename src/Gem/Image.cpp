@@ -43,7 +43,7 @@
 # error RGBA colortype broken
 #endif
 
-#if GEM_RGB != GL_RGB
+#if GEM_RGB != GL_RGB_GEM
 # error RGB colortype broken
 #endif
 

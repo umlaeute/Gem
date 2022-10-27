@@ -29,20 +29,20 @@ LOG
 
 /* RGBA: on Apple this is really BGRA_EXT */
 #ifndef __APPLE__
-# define GEM_RGBA 0x1908
+# define GEM_RGB  0x1907 /* GL_RGB */
+# define GEM_RGBA 0x1908 /* GL_RGBA */
 const int chRed   = 0;
 const int chGreen = 1;
 const int chBlue  = 2;
 const int chAlpha = 3;
 #else /* APPLE */
-# define GEM_RGBA 0x80E1
+# define GEM_RGB  0x80E0 /* GL_BGR_EXT */
+# define GEM_RGBA 0x80E1 /* GL_BGRA_EXT */
 const int chAlpha = 0;
 const int chRed   = 1;
 const int chGreen = 2;
 const int chBlue  = 3;
 #endif
-
-#define GEM_RGB 0x1907
 
 /* Gray */
 #define GEM_GRAY 0x1909
