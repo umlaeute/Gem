@@ -16,7 +16,7 @@
 #include "pix_test.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW(pix_test);
+CPPEXTERN_NEW_WITH_GIMME(pix_test);
 
 namespace
 {
@@ -199,6 +199,36 @@ void makeSMPTE_Grey(unsigned int rows, unsigned int cols,
 // Constructor
 //
 /////////////////////////////////////////////////////////
+pix_test :: pix_test(int argc, t_atom*argv)
+{
+  m_pix.image.xsize=m_pix.image.ysize=128;
+  switch(argc) {
+  case 0: break;
+  case 1:
+    if(A_FLOAT == argv->a_type && ((int)atom_getfloat(argv))>0) {
+      m_pix.image.xsize=m_pix.image.ysize=atom_getfloat(argv);
+    } else {
+      error("usage: pix_test <width=height>]");
+    }
+    break;
+  case 2:
+    if(A_FLOAT == argv[0].a_type && A_FLOAT == argv[1].a_type) {
+      int i = atom_getfloat(argv);
+      if(i>0)m_pix.image.xsize = i;
+      i = atom_getfloat(argv+1);
+      if(i>0)m_pix.image.ysize = i;
+    } else {
+      error("usage: pix_test [<width> <height>]");
+    }
+    break;
+  default:
+      error("usage: pix_test [<width> [<height>]]");
+      break;
+  }
+
+  m_pix.image.setCsizeByFormat(GEM_RGBA);
+  m_pix.image.reallocate();
+}
 pix_test :: pix_test()
 {
   m_pix.image.xsize=m_pix.image.ysize=128;
