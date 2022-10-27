@@ -125,6 +125,7 @@ void pix_movement2 :: processImage(imageStruct &image)
   }
 
   // 1. store the current frame as gray-image in the appropriate buffer
+  m_frame[m_frameIndex].setCsizeByFormat();
   if(!m_frame[m_frameIndex].convertFrom(&image)) {
     error("no method for this kind of color");
     return;

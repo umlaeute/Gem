@@ -1008,6 +1008,7 @@ void pix_freeframe :: processImage(imageStruct &image)
   }
 
   // convert the current image into a format that suits the FreeFrame-plugin
+  m_image.setCsizeByFormat();
   if(image.format != m_image.format) {
     if(m_image.convertFrom(&image)) {
       m_plugin->processFrame(m_image);

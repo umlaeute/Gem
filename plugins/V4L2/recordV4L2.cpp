@@ -198,6 +198,7 @@ bool recordV4L2 :: write(imageStruct*img)
       return true;
     }
   }
+  m_image.setCsizeByFormat();
   m_image.convertFrom(img);
 
   //  m_image.upsidedown=!m_image.upsidedown;

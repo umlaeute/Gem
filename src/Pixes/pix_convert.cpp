@@ -56,6 +56,7 @@ void pix_convert :: processImage(imageStruct &image)
   if (image.format==m_image.format) {
     return;
   }
+  m_image.setCsizeByFormat();
   if(!m_image.convertFrom(&image)) {
     post("no method for this format !!!");
     post("if you know how to convert this format (0x%X) to (0x%X),\n"

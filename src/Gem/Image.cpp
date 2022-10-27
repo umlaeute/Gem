@@ -441,8 +441,6 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
 
   if(to_format>0) {
     setCsizeByFormat(to_format);
-  } else {
-    setCsizeByFormat();
   }
 
   upsidedown=from->upsidedown;
@@ -480,8 +478,6 @@ GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
   to->ysize=ysize;
   if(fmt>0) {
     to->setCsizeByFormat(fmt);
-  } else {
-    to->setCsizeByFormat();
   }
 
   to->upsidedown=upsidedown;
