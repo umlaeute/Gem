@@ -489,14 +489,16 @@ void pix_frei0r :: openMess(t_symbol*s)
   }
 }
 
-static void swapBytes(imageStruct &image) {
-  size_t pixelnum=image.xsize*image.ysize;
-  unsigned int *pixels=(unsigned int*)image.data;
-  while(pixelnum--) {
-    unsigned int p = __builtin_bswap32(*pixels);
-    *pixels++ = p;
+namespace {
+  void swapBytes(imageStruct &image) {
+    size_t pixelnum=image.xsize*image.ysize;
+    unsigned int *pixels=(unsigned int*)image.data;
+    while(pixelnum--) {
+      unsigned int p = __builtin_bswap32(*pixels);
+      *pixels++ = p;
+    }
   }
-}
+};
 
 /////////////////////////////////////////////////////////
 // processImage
@@ -512,16 +514,14 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
   m_image.xsize=image.xsize;
   m_image.ysize=image.ysize;
   m_image.reallocate();
-#if __APPLE__
-  swapBytes(image);
-#endif
+  if(GL_UNSIGNED_INT_8_8_8_8 == m_image.type)
+    swapBytes(image);
   m_plugin->process(time, image, m_image);
   time++;
 
   image.data   = m_image.data;
-#if __APPLE__
-  swapBytes(image);
-#endif
+  if(GL_UNSIGNED_INT_8_8_8_8 == image.type)
+    swapBytes(image);
   image.notowned = true;
   image.setCsizeByFormat(m_image.format);
 }
