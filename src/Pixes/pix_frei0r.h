@@ -60,6 +60,7 @@ protected:
   void        processRGBAImage(imageStruct &image);
 
   imageStruct m_image;
+  imageStruct m_converterImage;
   class F0RPlugin;
   F0RPlugin*m_plugin;
 
