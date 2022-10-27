@@ -669,6 +669,28 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
   case GL_RGBA:
     memcpy(data, rgbadata, pixelnum*csize);
     break;
+  case GL_ABGR_EXT:
+    if(pixels==rgbadata) {
+      while(pixelnum--) {
+        unsigned char dummy=pixels[3];
+        pixels[3]=pixels[0];
+        pixels[0]=dummy;
+        dummy=pixels[1];
+        pixels[1]=pixels[2];
+        pixels[2]=dummy;
+        pixels+=4;
+      }
+    } else {
+      while(pixelnum--) {
+        pixels[0]=rgbadata[3];
+        pixels[1]=rgbadata[2];
+        pixels[2]=rgbadata[1];
+        pixels[3]=rgbadata[0];
+        pixels+=4;
+        rgbadata+=4;
+      }
+    }
+    break;
   case GL_BGRA:
     if(pixels==rgbadata) {
       while(pixelnum--) {
