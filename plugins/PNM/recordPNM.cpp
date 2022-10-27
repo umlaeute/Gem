@@ -164,7 +164,7 @@ bool recordPNM :: write(imageStruct*img)
   }
 
   size_t stride = m_image.xsize * m_image.csize;
-  if (! m_image.upsidedown) {
+  if (m_image.upsidedown) {
     if(fwrite(m_image.data, m_image.ysize * stride, 1, m_file) != 1) {
       pd_error(0, "[GEM:recordPNM] error writing image data...");
       return false;
