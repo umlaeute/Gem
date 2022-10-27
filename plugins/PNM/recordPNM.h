@@ -4,8 +4,6 @@ GEM - Graphics Environment for Multimedia
 
 Record a sequence of images to a single-file PNM stream.
 
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
 Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 Copyright (c) 2022 Claude Heiland-Allen. claude@mathr.co.uk
 For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -17,8 +15,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE_GEMPLUGIN__RECORDPNM_RECORDFFMPEG_H_
 
 #include "plugins/record.h"
-
-#define GEM_USE_RECORDPNM
 
 #include <map>
 
@@ -50,8 +46,6 @@ public:
   ////////
   // Destructor
   virtual ~recordPNM(void);
-
-#if defined GEM_USE_RECORDPNM
 
   //////////
   // close the movie file
@@ -101,8 +95,6 @@ private:
 
   /* converted image */
   imageStruct m_image;
-
-#endif /* PNM */
 };
 };
 };

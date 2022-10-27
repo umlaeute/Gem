@@ -35,9 +35,7 @@ using namespace gem::plugins;
 
 #include <stdio.h>
 
-#ifdef  GEM_USE_RECORDPNM
 REGISTER_RECORDFACTORY("PNM", recordPNM);
-#endif
 
 /////////////////////////////////////////////////////////
 //
@@ -48,15 +46,11 @@ REGISTER_RECORDFACTORY("PNM", recordPNM);
 //
 /////////////////////////////////////////////////////////
 recordPNM :: recordPNM(void)
-#if defined  GEM_USE_RECORDPNM
   : m_file(NULL)
   , m_channels(3)
   , m_image()
 {
 }
-#else
-{}
-#endif
 
 ////////////////////////////////////////////////////////
 // Destructor
@@ -67,7 +61,6 @@ recordPNM :: ~recordPNM(void)
   stop();
 }
 
-#if defined  GEM_USE_RECORDPNM
 void recordPNM :: stop(void)
 {
   if(m_file) {
@@ -240,5 +233,3 @@ bool recordPNM :: enumProperties(gem::Properties&props)
   props.clear();
   return true;
 }
-
-#endif
