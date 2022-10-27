@@ -309,77 +309,52 @@ imageStruct&imageStruct::operator=(const imageStruct&org)
 
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
 {
-#ifdef __APPLE__
   switch(setformat) {
   case GL_LUMINANCE:
-    format=GL_LUMINANCE;
-    type  =GL_UNSIGNED_BYTE;
-    csize =1;
-    break;
-
-  case GL_YUV422_GEM:
-  default:
-    format=GL_YUV422_GEM;
-    type  =
-#ifdef __BIG_ENDIAN__
-      GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-#else
-      GL_UNSIGNED_SHORT_8_8_APPLE;
-#endif
-    csize =2;
-    break;
-
-  case GL_RGB:
-  case GL_BGR_EXT:
-    format=GL_BGR_EXT;
-    type  =GL_UNSIGNED_BYTE;
-    csize =3;
-    break;
-
-  case GL_RGBA:
-  case GL_BGRA_EXT:
-    format=GL_BGRA_EXT;
-#ifdef __BIG_ENDIAN__
-    type  =GL_UNSIGNED_INT_8_8_8_8_REV;
-#else
-    type  =GL_UNSIGNED_INT_8_8_8_8;
-#endif
-    csize =4;
-    break;
-  }
-#else /* !__APPLE__ */
-  switch(setformat) {
-  case GL_LUMINANCE:
-    format=GL_LUMINANCE;
+    format=setformat;
     type=GL_UNSIGNED_BYTE;
     csize=1;
     break;
 
   case GL_YUV422_GEM:
-    format=GL_YUV422_GEM;
+    format=setformat;
+#ifdef __APPLE__
+# ifdef __BIG_ENDIAN__
+      GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+# else
+      GL_UNSIGNED_SHORT_8_8_APPLE;
+# endif
+#else
     type=GL_UNSIGNED_BYTE;
+#endif
     csize=2;
     break;
 
-  case GL_RGB:
-    format=GL_RGB;
+  case GL_RGB: case GL_BGR:
+    format=setformat;
     type=GL_UNSIGNED_BYTE;
     csize=3;
     break;
 
-  case GL_RGBA:
+  case GL_RGBA: case GL_BGRA:
   default:
-    format=GL_RGBA;
-#ifdef __BIG_ENDIAN__
+    format=setformat;
+#ifdef __APPLE__
+# ifdef __BIG_ENDIAN__
     type=GL_UNSIGNED_INT_8_8_8_8_REV;
+# else
+    type=GL_UNSIGNED_INT_8_8_8_8;
+# endif
 #else
+# ifdef __BIG_ENDIAN__
+    type=GL_UNSIGNED_INT_8_8_8_8_REV;
+# else
     type=GL_UNSIGNED_BYTE;
-    //type  =GL_UNSIGNED_INT_8_8_8_8;
+# endif
 #endif
     csize=4;
     break;
   }
-#endif /* __APPLE__ */
 
   return csize;
 }
