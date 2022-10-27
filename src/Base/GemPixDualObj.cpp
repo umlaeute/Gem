@@ -156,8 +156,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
 
   bool found = false;
   switch (image.format) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
+  case GL_RGBA: case GL_BGRA_EXT:
     PROCESS_COLORSPACE(PROCESS_DUALIMAGE_SIMD(RGBA),
                        PROCESS_DUALIMAGE(RGBA, YUV),
                        PROCESS_DUALIMAGE(RGBA, Gray));
@@ -190,8 +189,7 @@ std::string format2string(GLenum fmt)
 {
   std::string result="unknown";
   switch (fmt) {
-  case GL_RGBA:
-  case GL_BGRA_EXT:
+  case GL_RGBA: case GL_BGRA_EXT:
     result = "RGBA";
     break;
   case GL_LUMINANCE:
