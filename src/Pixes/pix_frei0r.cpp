@@ -617,7 +617,7 @@ void pix_frei0r :: parmMess(int key, int argc, t_atom *argv)
     error("param#%02d('%s') is of UNKNOWN type", key, name);
     break;
   }
-
+  setPixModified();
 }
 
 static const int offset_pix_=strlen("pix_");

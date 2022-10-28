@@ -1046,7 +1046,7 @@ void pix_freeframe :: parmMess(std::string key, t_atom *value)
   }
   props.set(key, v);
   m_plugin->setParameters(props);
-  setModified();
+  setPixModified();
 }
 
 
