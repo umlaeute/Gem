@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SCRIPTPATH=${0%/*}
-ASTYLECONF=${SCRIPTPATH}/../../doc/astyle.rc
+ASTYLECONF=${SCRIPTPATH}/../doc/astyle.rc
 
 do_indent() {
  astyle -n --options=${ASTYLECONF} $1
