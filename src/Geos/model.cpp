@@ -18,7 +18,8 @@
 #include "plugins/modelloader.h"
 #include <algorithm> // std::min
 
-namespace {
+namespace
+{
 static char mytolower(char in)
 {
   if(in<='Z' && in>='A') {
@@ -534,9 +535,15 @@ void model :: render(GemState *state)
     float*colors = m_color.size?m_color.array:0;
     float*normals = m_normal.size?m_normal.array:0;
     unsigned int size = m_position.size;
-    if(textures && m_texture.size < size) size = m_texture.size;
-    if(colors && m_color.size < size) size = m_color.size;
-    if(normals && m_normal.size < size) size = m_normal.size;
+    if(textures && m_texture.size < size) {
+      size = m_texture.size;
+    }
+    if(colors && m_color.size < size) {
+      size = m_color.size;
+    }
+    if(normals && m_normal.size < size) {
+      size = m_normal.size;
+    }
 
     glBegin(m_drawType);
     for (unsigned int i=0; i<size; i++) {

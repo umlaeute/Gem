@@ -94,7 +94,9 @@ void gemvertexbuffer :: renderShape(GemState *state)
   if(m_position.render()) {
     glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
-    if(!vb_size)vb_size=m_position.size;
+    if(!vb_size) {
+      vb_size=m_position.size;
+    }
   }
   if(m_texture.render()) {
     glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);

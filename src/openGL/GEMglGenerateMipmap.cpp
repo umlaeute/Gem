@@ -29,7 +29,8 @@ GEMglGenerateMipmap :: GEMglGenerateMipmap (int argc, t_atom*argv) :
   target(0)
 {
   switch(argc) {
-  case 0: break;
+  case 0:
+    break;
   case 1:
     targetMess(argv[0]);
     break;
@@ -87,7 +88,7 @@ void GEMglGenerateMipmap :: obj_setupCallback(t_class *classPtr)
 };
 
 void GEMglGenerateMipmap :: targetMessCallback (void* data, t_symbol*, int argc,
-                                     t_atom*argv)
+    t_atom*argv)
 {
   if(argc==1) {
     GetMyClass(data)->targetMess ( argv[0]);

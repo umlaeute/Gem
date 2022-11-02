@@ -37,7 +37,8 @@ pix_threshold :: pix_threshold(int argc, t_atom*argv) :
   m_thresh[chRed] = m_thresh[chGreen] = m_thresh[chBlue] = m_thresh[chAlpha]
                                         = 0;
   switch(argc) {
-  case 0: break;
+  case 0:
+    break;
   case 1:
     floatThreshMess(atom_getfloat(argv+0));
     break;

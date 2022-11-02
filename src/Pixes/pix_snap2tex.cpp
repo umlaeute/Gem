@@ -189,8 +189,12 @@ void pix_snap2tex :: snapMess(void)
     if(GL_TEXTURE_2D == m_textureType) {
       int x_2 = powerOfTwo(width);
       int y_2 = powerOfTwo(height);
-      if(!x_2)x_2=1;
-      if(!y_2)y_2=1;
+      if(!x_2) {
+        x_2=1;
+      }
+      if(!y_2) {
+        y_2=1;
+      }
       m_texWidth = x_2;
       m_texHeight = y_2;
       setTexCoords((float)width / (float)x_2, (float)height / (float)y_2);

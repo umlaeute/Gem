@@ -320,9 +320,9 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
     format=setformat;
 #ifdef __APPLE__
 # ifdef __BIG_ENDIAN__
-      GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+    GL_UNSIGNED_SHORT_8_8_REV_APPLE;
 # else
-      GL_UNSIGNED_SHORT_8_8_APPLE;
+    GL_UNSIGNED_SHORT_8_8_APPLE;
 # endif
 #else
     type=GL_UNSIGNED_BYTE;
@@ -330,13 +330,15 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
     csize=2;
     break;
 
-  case GL_RGB: case GL_BGR:
+  case GL_RGB:
+  case GL_BGR:
     format=setformat;
     type=GL_UNSIGNED_BYTE;
     csize=3;
     break;
 
-  case GL_RGBA: case GL_BGRA:
+  case GL_RGBA:
+  case GL_BGRA:
   default:
     format=setformat;
 #ifdef __APPLE__
@@ -1180,7 +1182,8 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   default:
     pd_error(0, "%s: unable to convert to %d", __FUNCTION__, format);
     return false;
-  case GL_RGB: case GL_BGR:
+  case GL_RGB:
+  case GL_BGR:
     while(pixelnum--) {
       grey=*greydata++;
       *pixels++=grey;
@@ -1189,7 +1192,8 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
       greydata++;
     }
     break;
-  case GL_RGBA: case GL_BGRA:
+  case GL_RGBA:
+  case GL_BGRA:
     while(pixelnum--) {
       grey=*greydata++;
       pixels[chRed]=grey;
@@ -1229,7 +1233,8 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
   default:
     pd_error(0, "%s: unable to convert to %d", __FUNCTION__, format);
     return false;
-  case GL_RGB: case GL_BGR:
+  case GL_RGB:
+  case GL_BGR:
     while(pixelnum--) {
       grey=*greydata++;
       *pixels++=grey;
@@ -1238,7 +1243,8 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
       greydata++;
     }
     break;
-  case GL_RGBA: case GL_BGRA:
+  case GL_RGBA:
+  case GL_BGRA:
     while(pixelnum--) {
       grey=*greydata++;
       pixels[chRed]=grey;
@@ -1301,7 +1307,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
-  case GL_RGB:  case GL_BGR: {
+  case GL_RGB:
+  case GL_BGR: {
     // of course this is stupid, RGB isn't BGR
     unsigned char *pixels1=data;
     unsigned char *pixels2=data+xsize*3;
@@ -1355,7 +1362,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     }
   }
   break;
-  case GL_RGBA: case GL_BGRA: {
+  case GL_RGBA:
+  case GL_BGRA: {
     unsigned char *pixels1=data;
     unsigned char *pixels2=data+xsize*4;
 
@@ -1479,7 +1487,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
   case GL_LUMINANCE:
     memcpy(data, Y, pixelnum);
     break;
-  case GL_RGB: case GL_BGR: {
+  case GL_RGB:
+  case GL_BGR: {
     // of course this is stupid, RGB isn't BGR
     unsigned char *pixels1=data;
     unsigned char *pixels2=data+xsize*csize;
@@ -1568,7 +1577,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     }
   }
   break;
-  case GL_RGBA: case GL_BGRA: {
+  case GL_RGBA:
+  case GL_BGRA: {
     unsigned char *pixels1=data;
     unsigned char *pixels2=data+xsize*csize;
 
@@ -1703,7 +1713,8 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
       yuvdata+=4;
     }
     break;
-  case GL_RGB: case GL_BGR: {
+  case GL_RGB:
+  case GL_BGR: {
     unsigned char *pixels=data;
     START_TIMING;
     switch(m_simd) {
@@ -1744,7 +1755,8 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     STOP_TIMING("YUV2RGB");
   }
   break;
-  case GL_RGBA: case GL_BGRA: {
+  case GL_RGBA:
+  case GL_BGRA: {
     START_TIMING;
     switch(m_simd) {
 #ifdef __VEC__
@@ -1828,7 +1840,8 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char
       yuvdata+=4;
     }
     break;
-  case GL_RGB: case GL_BGR: {
+  case GL_RGB:
+  case GL_BGR: {
     unsigned char *pixels=data;
     pixelnum>>=1;
 
@@ -1858,7 +1871,8 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char
     }
   }
   break;
-  case GL_RGBA: case GL_BGRA: {
+  case GL_RGBA:
+  case GL_BGRA: {
     unsigned char *pixels=data;
     pixelnum>>=1;
     while(pixelnum--) {
@@ -1926,7 +1940,8 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
       yuvdata+=4;
     }
     break;
-  case GL_RGB: case GL_BGR: {
+  case GL_RGB:
+  case GL_BGR: {
     unsigned char *pixels=data;
     pixelnum>>=1;
 
@@ -1956,7 +1971,8 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
     }
   }
   break;
-  case GL_RGBA: case GL_BGRA: {
+  case GL_RGBA:
+  case GL_BGRA: {
     unsigned char *pixels=data;
     pixelnum>>=1;
     while(pixelnum--) {
@@ -2045,7 +2061,8 @@ GEM_EXTERN void imageStruct::swapRedBlue(void)
       pixels+=4;
     }
     break;
-  case GL_RGB: case GL_BGR:
+  case GL_RGB:
+  case GL_BGR:
     while(pixelnum--) {
       unsigned char dummy=pixels[chRed];
       pixels[chRed]=pixels[chBlue];
@@ -2053,7 +2070,8 @@ GEM_EXTERN void imageStruct::swapRedBlue(void)
       pixels+=3;
     }
     break;
-  case GL_RGBA: case GL_BGRA:
+  case GL_RGBA:
+  case GL_BGRA:
     while(pixelnum--) {
       unsigned char dummy=pixels[chRed];
       pixels[chRed]=pixels[chBlue];
@@ -2187,10 +2205,12 @@ GEM_EXTERN bool imageStruct::getYUV(int X, int Y, unsigned char*y,
   case GL_LUMINANCE:
     luma=pixels[0];
     break;
-  case GL_RGB: case GL_BGR:
+  case GL_RGB:
+  case GL_BGR:
     pd_error(0, "getYUV not implemented for RGB");
     return false;
-  case GL_RGBA: case GL_BGRA:
+  case GL_RGBA:
+  case GL_BGRA:
     pd_error(0, "getYUV not implemented for RGBA");
     return false;
   case GL_YUV422_GEM:

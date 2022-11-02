@@ -35,7 +35,8 @@ using namespace gem::plugins;
 /* for post() and pd_error() */
 #include <m_pd.h>
 
-static char* FourCC2Str(int code, char*char5) {
+static char* FourCC2Str(int code, char*char5)
+{
   char5[0] = (code >> 24) & 0xFF;
   char5[1] = (code >> 16) & 0xFF;
   char5[2] = (code >>  8) & 0xFF;
@@ -200,7 +201,7 @@ void recordQT :: setupQT(
     err = ::FSPathMakeRef(filename8, &ref, NULL);
     if (err) {
       pd_error(0, "[GEM:recordQT] Unable to make file ref from filename %s",
-            m_filename.c_str());
+               m_filename.c_str());
       return ;
     }
     err = FSGetCatalogInfo(&ref, kFSCatInfoNodeFlags, NULL, NULL, &theFSSpec,
@@ -352,7 +353,7 @@ void recordQT :: setupQT(
                                     &m_srcRect,&hImageDesc);
   if (compErr != noErr) {
     pd_error(0, "[GEM:recordQT] SCCompressSequenceBegin failed with error#%ld",
-          compErr);
+             compErr);
     return;
   }
 
@@ -411,7 +412,7 @@ void recordQT :: stop(void)
 
   if (compErr != noErr) {
     pd_error(0, "[GEM:recordQT] SCCompressSequenceEnd failed with error %ld",
-          compErr);
+             compErr);
   }
 
   m_recordStop = false;
@@ -484,7 +485,7 @@ void recordQT :: compressFrame(void)
 
   if (compErr != noErr) {
     pd_error(0, "[GEM:recordQT] SCCompressSequenceFrame failed with error %ld",
-          compErr);
+             compErr);
   }
 
   err = AddMediaSample(media,
@@ -543,7 +544,7 @@ bool recordQT :: write(imageStruct*img)
       }
     } else {
       pd_error(0, "[GEM:recordQT] movie dimensions changed prev %dx%d now %dx%d stopping recording",
-            m_prevWidth,m_prevHeight,m_width,m_height);
+               m_prevWidth,m_prevHeight,m_width,m_height);
       m_recordStop = true;
       m_prevWidth = m_width;
       m_prevHeight = m_height; //go ahead and change dimensions

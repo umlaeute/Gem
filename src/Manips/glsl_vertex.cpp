@@ -278,7 +278,8 @@ void glsl_vertex :: startRendering()
     return;
   }
 }
-void glsl_vertex :: stopRendering() {
+void glsl_vertex :: stopRendering()
+{
   if(m_shader) {
     glDeleteShader( m_shader );
   }

@@ -34,13 +34,13 @@ class GEM_EXPORT pix_mano : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_mano, GemPixObj)
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_mano();
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -78,7 +78,7 @@ class GEM_EXPORT pix_mano : public GemPixObj
   int prev_tip;
   float tp_i[50], tp_x[50], tp_y[50], tp_m[50], tp_a[50], tp_s[50];
 
- private:
+private:
   class PIMPL;
   PIMPL*m_pimpl;
 };

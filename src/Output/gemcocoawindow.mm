@@ -32,10 +32,12 @@ static NSDate *distantFuture, *distantPast;
 @interface WindowResponder
 @end
 @implementation WindowResponder
-- (void)windowDidMove:(NSNotification*)notification {
+- (void)windowDidMove:(NSNotification*)notification
+{
   ::post ("window moved");
 }
-- (void)windowDidResize:(NSNotification*)notification {
+- (void)windowDidResize:(NSNotification*)notification
+{
   ::post ("window resized");
 }
 @end
@@ -109,10 +111,12 @@ struct gemcocoawindow :: PIMPL {
     modifierFlags(0)
   {}
 
-  ~PIMPL(void) {
+  ~PIMPL(void)
+  {
     cleanup();
   }
-  void cleanup(void) {
+  void cleanup(void)
+  {
     if(window) {
       [window autorelease];
       [window setReleasedWhenClosed: YES];
@@ -162,20 +166,26 @@ gemcocoawindow :: ~gemcocoawindow()
   m_pimpl=NULL;
 }
 
-bool gemcocoawindow :: makeCurrent(){
-  if(!m_pimpl->view)return false;
+bool gemcocoawindow :: makeCurrent()
+{
+  if(!m_pimpl->view) {
+    return false;
+  }
   [[m_pimpl->view openGLContext] makeCurrentContext];
   return(true);
 }
-void gemcocoawindow :: swapBuffers() {
+void gemcocoawindow :: swapBuffers()
+{
   [[ m_pimpl->view openGLContext ] flushBuffer ];
 }
-void gemcocoawindow :: renderMess() {
+void gemcocoawindow :: renderMess()
+{
   bang();
   swapBuffers();
 };
 
-void gemcocoawindow :: render() {
+void gemcocoawindow :: render()
+{
 #if 1
   GemWindow::render();
 #else
@@ -185,62 +195,132 @@ void gemcocoawindow :: render() {
 #endif
 }
 
-void gemcocoawindow :: dispatch() {
+void gemcocoawindow :: dispatch()
+{
   NSEvent *e = NULL;
-  if(!m_pimpl->window)return;
+  if(!m_pimpl->window) {
+    return;
+  }
   while (( e = [NSApp nextEventMatchingMask: NSAnyEventMask
                       // untilDate: distantFuture // blocking
                       untilDate: distantPast      // nonblocking
                       inMode: NSDefaultRunLoopMode
                       dequeue: YES])) {
-    if ([e window] == m_pimpl->window) dispatchEvent(e);
+    if ([e window] == m_pimpl->window) {
+      dispatchEvent(e);
+    }
     [NSApp sendEvent: e];
   }
   [NSApp updateWindows];
   [m_pimpl->window flushWindowIfNeeded];
 }
 
-static std::string key2name(NSString*s, unsigned short keycode) {
+static std::string key2name(NSString*s, unsigned short keycode)
+{
   std::string keysym = std::string([s UTF8String]);
   switch (keycode) {
-  case 36:  keysym = "Return"; break;
-  case 51:  keysym = "BackSpace"; break;
-  case 53:  keysym = "Escape"; break;
-  case 76:  keysym = "KP_Return"; break;
-  case 18:  keysym = "D1"; break;
-  case 19:  keysym = "D2"; break;
-  case 20:  keysym = "D3"; break;
-  case 21:  keysym = "D4"; break;
-  case 23:  keysym = "D5"; break;
-  case 22:  keysym = "D6"; break;
-  case 26:  keysym = "D7"; break;
-  case 28:  keysym = "D8"; break;
-  case 25:  keysym = "D9"; break;
-  case 29:  keysym = "D0"; break;
-  case 123: keysym = "Left"; break;
-  case 124: keysym = "Right"; break;
-  case 126: keysym = "Up"; break;
-  case 125: keysym = "Down"; break;
-  case 116: keysym = "Prior"; break;
-  case 121: keysym = "Next"; break;
-  case 115: keysym = "Home"; break;
-  case 119: keysym = "End"; break;
-  case 122: keysym = "F1"; break;
-  case 120: keysym = "F2"; break;
-  case 99:  keysym = "F3"; break;
-  case 118: keysym = "F4"; break;
-  case 96:  keysym = "F5"; break;
-  case 97:  keysym = "F6"; break;
-  case 98:  keysym = "F7"; break;
-  case 48:  keysym = "Tab"; break;
-  default: break;
+  case 36:
+    keysym = "Return";
+    break;
+  case 51:
+    keysym = "BackSpace";
+    break;
+  case 53:
+    keysym = "Escape";
+    break;
+  case 76:
+    keysym = "KP_Return";
+    break;
+  case 18:
+    keysym = "D1";
+    break;
+  case 19:
+    keysym = "D2";
+    break;
+  case 20:
+    keysym = "D3";
+    break;
+  case 21:
+    keysym = "D4";
+    break;
+  case 23:
+    keysym = "D5";
+    break;
+  case 22:
+    keysym = "D6";
+    break;
+  case 26:
+    keysym = "D7";
+    break;
+  case 28:
+    keysym = "D8";
+    break;
+  case 25:
+    keysym = "D9";
+    break;
+  case 29:
+    keysym = "D0";
+    break;
+  case 123:
+    keysym = "Left";
+    break;
+  case 124:
+    keysym = "Right";
+    break;
+  case 126:
+    keysym = "Up";
+    break;
+  case 125:
+    keysym = "Down";
+    break;
+  case 116:
+    keysym = "Prior";
+    break;
+  case 121:
+    keysym = "Next";
+    break;
+  case 115:
+    keysym = "Home";
+    break;
+  case 119:
+    keysym = "End";
+    break;
+  case 122:
+    keysym = "F1";
+    break;
+  case 120:
+    keysym = "F2";
+    break;
+  case 99:
+    keysym = "F3";
+    break;
+  case 118:
+    keysym = "F4";
+    break;
+  case 96:
+    keysym = "F5";
+    break;
+  case 97:
+    keysym = "F6";
+    break;
+  case 98:
+    keysym = "F7";
+    break;
+  case 48:
+    keysym = "Tab";
+    break;
+  default:
+    break;
   }
 
   return keysym;
 }
 
-void gemcocoawindow :: dispatchEvent(NSEvent*e) {
-  if(!e)return;
+void gemcocoawindow :: dispatchEvent(NSEvent*e)
+{
+  if(!e) {
+    return;
+  }
   NSEventType type = [e type];
   int devID=0;
 
@@ -258,14 +338,13 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
   case(NSMouseMoved):
   case(NSLeftMouseDragged):
   case(NSRightMouseDragged):
-  case(NSOtherMouseDragged):
-    {
-      NSPoint p=[e locationInWindow];
-      motion(devID, static_cast<int>(p.x), static_cast<int>(p.y));
-    }
-    break;
-    break;
-    break;
+  case(NSOtherMouseDragged): {
+    NSPoint p=[e locationInWindow];
+    motion(devID, static_cast<int>(p.x), static_cast<int>(p.y));
+  }
+  break;
+  break;
+  break;
   case(NSMouseEntered):
     info("mouse", "entered");
     break;
@@ -313,7 +392,7 @@ void gemcocoawindow :: dispatchEvent(NSEvent*e) {
     break;
 
 #if 0
-    // these are only supported starting with OSX-10.6 (or .5?)
+  // these are only supported starting with OSX-10.6 (or .5?)
   case(NSEventTypeGesture):
     break;
   case(NSEventTypeMagnify):
@@ -353,13 +432,15 @@ bool gemcocoawindow :: create(void)
   if(m_fullscreen) {
     contentRect=screenRect;
   }
-  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask backing:NSBackingStoreBuffered defer:YES];
+  window = [[NSWindow alloc] initWithContentRect:contentRect styleMask:m_border?(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask):NSBorderlessWindowMask
+                             backing:NSBackingStoreBuffered defer:YES];
 
   NSView *contentView = [window contentView];
   std::vector<NSOpenGLPixelFormatAttribute>attrvec;
 
-  if(m_buffer==2)
+  if(m_buffer==2) {
     attrvec.push_back(NSOpenGLPFADoubleBuffer);
+  }
   attrvec.push_back(NSOpenGLPFAAccelerated);
   attrvec.push_back(NSOpenGLPFAColorSize);
   attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(32));
@@ -394,7 +475,8 @@ bool gemcocoawindow :: create(void)
   bool cgw=  createGemWindow();
   return cgw;
 }
-void gemcocoawindow :: createMess(const std::string&s) {
+void gemcocoawindow :: createMess(const std::string&s)
+{
   if(m_pimpl->view) {
     error("window already made!");
     return;
@@ -420,13 +502,15 @@ void gemcocoawindow :: destroyMess(void)
 
 /////////////////////////////////////////////////////////
 // messages
-void gemcocoawindow :: titleMess(const std::string&s) {
+void gemcocoawindow :: titleMess(const std::string&s)
+{
   m_title = s;
   if(m_pimpl->window) {
     [m_pimpl->window setTitle:[NSString stringWithUTF8String:m_title.c_str()]];
   }
 }
-void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
+void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height)
+{
   if (width <= 0) {
     error("width must be greater than 0");
     return;
@@ -440,7 +524,8 @@ void gemcocoawindow :: dimensionsMess(unsigned int width, unsigned int height) {
   m_height = height;
   move();
 }
-void gemcocoawindow :: move(void) {
+void gemcocoawindow :: move(void)
+{
   if(m_pimpl->window) {
     NSRect  screenRect = [[NSScreen mainScreen] frame];
     // NSWindow is bottom/left, but our offset is top/left
@@ -450,8 +535,11 @@ void gemcocoawindow :: move(void) {
     [m_pimpl->window setFrame: frame display: YES];
   }
 }
-void gemcocoawindow :: moved(void) {
-  if(!m_pimpl->window) return;
+void gemcocoawindow :: moved(void)
+{
+  if(!m_pimpl->window) {
+    return;
+  }
 
   NSRect  screenRect = [[NSScreen mainScreen] frame];
   NSRect            bounds = [m_pimpl->window frame];
@@ -463,23 +551,32 @@ void gemcocoawindow :: moved(void) {
   bool doDimen=(width!=m_width || height != m_height);
   bool doOffset=(xoffset!=m_xoffset || yoffset != m_yoffset);
 
-  doDimen=true; doOffset=true;
+  doDimen=true;
+  doOffset=true;
 
   m_width=width;
   m_height=height;
   m_xoffset=xoffset;
   m_yoffset=yoffset;
 
-  if(doDimen)dimension(m_width, m_height);
-  if(doDimen)framebuffersize(m_width, m_height);
-  if(doOffset)position(m_xoffset, m_yoffset);
+  if(doDimen) {
+    dimension(m_width, m_height);
+  }
+  if(doDimen) {
+    framebuffersize(m_width, m_height);
+  }
+  if(doOffset) {
+    position(m_xoffset, m_yoffset);
+  }
 }
-void gemcocoawindow :: offsetMess(int x, int y) {
+void gemcocoawindow :: offsetMess(int x, int y)
+{
   m_xoffset = x;
   m_yoffset = y;
   move();
 }
-void gemcocoawindow :: fullscreenMess(int on) {
+void gemcocoawindow :: fullscreenMess(int on)
+{
 #warning fullscreen
   m_fullscreen = on;
   if(m_pimpl->view) {
@@ -490,7 +587,8 @@ void gemcocoawindow :: fullscreenMess(int on) {
     }
   }
 }
-void gemcocoawindow :: cursorMess(bool setting) {
+void gemcocoawindow :: cursorMess(bool setting)
+{
   m_cursor=setting;
   if(m_cursor) {
     [NSCursor unhide];
@@ -498,22 +596,28 @@ void gemcocoawindow :: cursorMess(bool setting) {
     [NSCursor hide];
   }
 }
-void gemcocoawindow :: menubarMess(int state) {
+void gemcocoawindow :: menubarMess(int state)
+{
 #if 0
   // seems to not work anymore on recent OSX
   if (state == 0)
     SetSystemUIMode( kUIModeAllHidden, kUIOptionDisableAppleMenu | kUIOptionDisableProcessSwitch |
                      kUIOptionDisableSessionTerminate | kUIOptionDisableForceQuit );
-  else if (state > 0)
+  else if (state > 0) {
     SetSystemUIMode( kUIModeNormal, 0 );
-  else
+  } else {
     SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
+  }
 #else
   // plain Cocoa, but how to AutoHide?
   switch(state) {
-  case 0: [NSMenu setMenuBarVisible:NO]; break;
+  case 0:
+    [NSMenu setMenuBarVisible:NO];
+    break;
   default:
-  case 1: [NSMenu setMenuBarVisible:YES]; break;
+  case 1:
+    [NSMenu setMenuBarVisible:YES];
+    break;
   }
 #endif
 

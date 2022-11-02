@@ -61,8 +61,9 @@ gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
 
   unsigned int typesignature = 0;
   for(int i=0; i<4; i++) {
-    if(i>=argc)
+    if(i>=argc) {
       break;
+    }
     switch(argv[i].a_type) {
     default:
       break;

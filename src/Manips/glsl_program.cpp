@@ -18,148 +18,155 @@ using namespace gem::utils::gl;
 
 CPPEXTERN_NEW(glsl_program);
 
-namespace {
-  GLenum uniform2type(CPPExtern*obj, GLenum type) {
-    /* the base type for a (complex) uniform type;
-       determines whether we use glUniform1f or glUniform1i
-    */
-    switch(type) {
-        default: break;
-        case GL_FLOAT:
-        case GL_FLOAT_VEC2:
-        case GL_FLOAT_VEC3:
-        case GL_FLOAT_VEC4:
-        case GL_FLOAT_MAT2:
-        case GL_FLOAT_MAT3:
-        case GL_FLOAT_MAT4:
-          return GL_FLOAT;
-        case GL_INT:
-        case GL_INT_VEC2:
-        case GL_INT_VEC3:
-        case GL_INT_VEC4:
-          return GL_INT;
-        case GL_BOOL:
-        case GL_BOOL_VEC2:
-        case GL_BOOL_VEC3:
-        case GL_BOOL_VEC4:
-          return GL_INT;
-        case GL_SAMPLER_1D:
-        case GL_SAMPLER_2D:
-        case GL_SAMPLER_3D:
-        case GL_SAMPLER_CUBE:
-        case GL_SAMPLER_1D_SHADOW:
-        case GL_SAMPLER_2D_SHADOW:
-        case GL_SAMPLER_2D_RECT_ARB:
-          return GL_INT;
-    }
-    /* ARB types */
-    switch(type) {
-    default: break;
-    case GL_FLOAT:
-    case GL_FLOAT_VEC2_ARB:
-    case GL_FLOAT_VEC3_ARB:
-    case GL_FLOAT_VEC4_ARB:
-          return GL_FLOAT;
-    case GL_INT:
-    case GL_INT_VEC2_ARB:
-    case GL_INT_VEC3_ARB:
-    case GL_INT_VEC4_ARB:
-          return GL_INT;
-    case GL_BOOL_ARB:
-    case GL_BOOL_VEC2_ARB:
-    case GL_BOOL_VEC3_ARB:
-    case GL_BOOL_VEC4_ARB:
-          return GL_INT;
-    case GL_FLOAT_MAT2_ARB:
-    case GL_FLOAT_MAT3_ARB:
-    case GL_FLOAT_MAT4_ARB:
-          return GL_FLOAT;
-    case GL_SAMPLER_1D_ARB:
-    case GL_SAMPLER_2D_ARB:
-    case GL_SAMPLER_3D_ARB:
-    case GL_SAMPLER_CUBE_ARB:
-    case GL_SAMPLER_1D_SHADOW_ARB:
-    case GL_SAMPLER_2D_SHADOW_ARB:
-    case GL_SAMPLER_2D_RECT_ARB:
-          return GL_INT;
-    }
-    obj->error("unknown uniform type %d, assuming float", type);
+namespace
+{
+GLenum uniform2type(CPPExtern*obj, GLenum type)
+{
+  /* the base type for a (complex) uniform type;
+     determines whether we use glUniform1f or glUniform1i
+  */
+  switch(type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_FLOAT_VEC2:
+  case GL_FLOAT_VEC3:
+  case GL_FLOAT_VEC4:
+  case GL_FLOAT_MAT2:
+  case GL_FLOAT_MAT3:
+  case GL_FLOAT_MAT4:
     return GL_FLOAT;
+  case GL_INT:
+  case GL_INT_VEC2:
+  case GL_INT_VEC3:
+  case GL_INT_VEC4:
+    return GL_INT;
+  case GL_BOOL:
+  case GL_BOOL_VEC2:
+  case GL_BOOL_VEC3:
+  case GL_BOOL_VEC4:
+    return GL_INT;
+  case GL_SAMPLER_1D:
+  case GL_SAMPLER_2D:
+  case GL_SAMPLER_3D:
+  case GL_SAMPLER_CUBE:
+  case GL_SAMPLER_1D_SHADOW:
+  case GL_SAMPLER_2D_SHADOW:
+  case GL_SAMPLER_2D_RECT_ARB:
+    return GL_INT;
   }
-  GLint uniform2numelements(CPPExtern*obj, GLenum type) {
-    /* the base number of elements for a (complex) uniform type;
-    */
-    switch(type) {
-    default: break;
-    case GL_FLOAT:
-    case GL_INT:
-    case GL_BOOL:
-      return 1;
-    case GL_FLOAT_VEC2:
-    case GL_INT_VEC2:
-    case GL_BOOL_VEC2:
-      return 2;
-    case GL_FLOAT_VEC3:
-    case GL_INT_VEC3:
-    case GL_BOOL_VEC3:
-      return 3;
-    case GL_FLOAT_VEC4:
-    case GL_INT_VEC4:
-    case GL_BOOL_VEC4:
-      return 4;
-    case GL_FLOAT_MAT2:
-      return 4;
-    case GL_FLOAT_MAT3:
-      return 9;
-    case GL_FLOAT_MAT4:
-      return 16;
-    case GL_SAMPLER_1D:
-    case GL_SAMPLER_2D:
-    case GL_SAMPLER_3D:
-    case GL_SAMPLER_CUBE:
-    case GL_SAMPLER_1D_SHADOW:
-    case GL_SAMPLER_2D_SHADOW:
-    case GL_SAMPLER_2D_RECT_ARB:
-      return 1;
-    }
-    /* ARB */
-    switch(type) {
-    default: break;
-    case GL_FLOAT:
-    case GL_INT:
-    case GL_BOOL_ARB:
-      return 1;
-    case GL_FLOAT_VEC2_ARB:
-    case GL_INT_VEC2_ARB:
-    case GL_BOOL_VEC2_ARB:
-      return 2;
-    case GL_FLOAT_VEC3_ARB:
-    case GL_INT_VEC3_ARB:
-    case GL_BOOL_VEC3_ARB:
-      return 3;
-    case GL_FLOAT_VEC4_ARB:
-    case GL_INT_VEC4_ARB:
-    case GL_BOOL_VEC4_ARB:
-      return 4;
-    case GL_FLOAT_MAT2_ARB:
-      return 4;
-    case GL_FLOAT_MAT3_ARB:
-      return 9;
-    case GL_FLOAT_MAT4_ARB:
-      return 16;
-    case GL_SAMPLER_1D_ARB:
-    case GL_SAMPLER_2D_ARB:
-    case GL_SAMPLER_3D_ARB:
-    case GL_SAMPLER_CUBE_ARB:
-    case GL_SAMPLER_1D_SHADOW_ARB:
-    case GL_SAMPLER_2D_SHADOW_ARB:
-    case GL_SAMPLER_2D_RECT_ARB:
-      return 1;
-    }
-
-    obj->error("[glsl_program] unknown base size for uniform type %d, assuming 1", type);
+  /* ARB types */
+  switch(type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_FLOAT_VEC2_ARB:
+  case GL_FLOAT_VEC3_ARB:
+  case GL_FLOAT_VEC4_ARB:
+    return GL_FLOAT;
+  case GL_INT:
+  case GL_INT_VEC2_ARB:
+  case GL_INT_VEC3_ARB:
+  case GL_INT_VEC4_ARB:
+    return GL_INT;
+  case GL_BOOL_ARB:
+  case GL_BOOL_VEC2_ARB:
+  case GL_BOOL_VEC3_ARB:
+  case GL_BOOL_VEC4_ARB:
+    return GL_INT;
+  case GL_FLOAT_MAT2_ARB:
+  case GL_FLOAT_MAT3_ARB:
+  case GL_FLOAT_MAT4_ARB:
+    return GL_FLOAT;
+  case GL_SAMPLER_1D_ARB:
+  case GL_SAMPLER_2D_ARB:
+  case GL_SAMPLER_3D_ARB:
+  case GL_SAMPLER_CUBE_ARB:
+  case GL_SAMPLER_1D_SHADOW_ARB:
+  case GL_SAMPLER_2D_SHADOW_ARB:
+  case GL_SAMPLER_2D_RECT_ARB:
+    return GL_INT;
+  }
+  obj->error("unknown uniform type %d, assuming float", type);
+  return GL_FLOAT;
+}
+GLint uniform2numelements(CPPExtern*obj, GLenum type)
+{
+  /* the base number of elements for a (complex) uniform type;
+  */
+  switch(type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_INT:
+  case GL_BOOL:
+    return 1;
+  case GL_FLOAT_VEC2:
+  case GL_INT_VEC2:
+  case GL_BOOL_VEC2:
+    return 2;
+  case GL_FLOAT_VEC3:
+  case GL_INT_VEC3:
+  case GL_BOOL_VEC3:
+    return 3;
+  case GL_FLOAT_VEC4:
+  case GL_INT_VEC4:
+  case GL_BOOL_VEC4:
+    return 4;
+  case GL_FLOAT_MAT2:
+    return 4;
+  case GL_FLOAT_MAT3:
+    return 9;
+  case GL_FLOAT_MAT4:
+    return 16;
+  case GL_SAMPLER_1D:
+  case GL_SAMPLER_2D:
+  case GL_SAMPLER_3D:
+  case GL_SAMPLER_CUBE:
+  case GL_SAMPLER_1D_SHADOW:
+  case GL_SAMPLER_2D_SHADOW:
+  case GL_SAMPLER_2D_RECT_ARB:
     return 1;
   }
+  /* ARB */
+  switch(type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_INT:
+  case GL_BOOL_ARB:
+    return 1;
+  case GL_FLOAT_VEC2_ARB:
+  case GL_INT_VEC2_ARB:
+  case GL_BOOL_VEC2_ARB:
+    return 2;
+  case GL_FLOAT_VEC3_ARB:
+  case GL_INT_VEC3_ARB:
+  case GL_BOOL_VEC3_ARB:
+    return 3;
+  case GL_FLOAT_VEC4_ARB:
+  case GL_INT_VEC4_ARB:
+  case GL_BOOL_VEC4_ARB:
+    return 4;
+  case GL_FLOAT_MAT2_ARB:
+    return 4;
+  case GL_FLOAT_MAT3_ARB:
+    return 9;
+  case GL_FLOAT_MAT4_ARB:
+    return 16;
+  case GL_SAMPLER_1D_ARB:
+  case GL_SAMPLER_2D_ARB:
+  case GL_SAMPLER_3D_ARB:
+  case GL_SAMPLER_CUBE_ARB:
+  case GL_SAMPLER_1D_SHADOW_ARB:
+  case GL_SAMPLER_2D_SHADOW_ARB:
+  case GL_SAMPLER_2D_RECT_ARB:
+    return 1;
+  }
+
+  obj->error("[glsl_program] unknown base size for uniform type %d, assuming 1", type);
+  return 1;
+}
 };
 
 /////////////////////////////////////////////////////////
@@ -292,7 +299,7 @@ void glsl_program :: renderGL2()
           glUniform4fv( uni.loc, uni.arraysize, uni.param.f );
           break;
 
-          /* int vectors */
+        /* int vectors */
         case GL_INT:
           glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
           break;
@@ -306,7 +313,7 @@ void glsl_program :: renderGL2()
           glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
           break;
 
-          /* bool vectors */
+        /* bool vectors */
         case GL_BOOL:
           glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
           break;
@@ -320,7 +327,7 @@ void glsl_program :: renderGL2()
           glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
           break;
 
-          /* float matrices */
+        /* float matrices */
         case GL_FLOAT_MAT2:
           // GL_TRUE = row major order, GL_FALSE = column major
           glUniformMatrix2fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
@@ -448,7 +455,8 @@ void glsl_program :: renderARB()
   }
 }
 
-void glsl_program :: startRendering() {
+void glsl_program :: startRendering()
+{
   LinkProgram();
 }
 
@@ -482,21 +490,25 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
 {
-  if (!(m_program || m_programARB))
+  if (!(m_program || m_programARB)) {
     return;
+  }
 
   int unicount;
   for(unicount=0; unicount<m_uniformCount; unicount++) {
     t_uniform&uni = m_uniform[unicount];
-    if(s!=uni.name)
+    if(s!=uni.name) {
       continue;
+    }
 
     // don't know what to do with that...
     // sketch:
     //   copy the values into memory and add a flag that we have them for this parameter
     //   in the render cycle use it
     const int maxargc = uni.arraysize * uni.paramsize;
-    if(argc > maxargc) argc=maxargc;
+    if(argc > maxargc) {
+      argc=maxargc;
+    }
     switch(uniform2type(this, uni.type)) {
     case GL_FLOAT: {
       for (int j=0; j < argc; j++) {
@@ -836,10 +848,11 @@ void glsl_program :: getVariables()
                          &uni.type, name);
       uni.loc = glGetUniformLocation( m_program, name );
       uni.name=gensym(name);
-      if (glGetActiveUniformsiv)
+      if (glGetActiveUniformsiv) {
         glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &uni.arraysize);
-      else
+      } else {
         uni.arraysize = 1;
+      }
     } else if (GLEW_ARB_shader_objects) {
       glGetActiveUniformARB(m_programARB, i, m_maxLength, &length, &uni.size,
                             &uni.type, nameARB);
@@ -852,15 +865,17 @@ void glsl_program :: getVariables()
     case GL_FLOAT: {
       delete uni.param.f;
       uni.param.f = new GLfloat[uni.arraysize * uni.paramsize];
-      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
+      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++) {
         uni.param.f[n] = 0.;
+      }
       break;
     }
     case GL_INT: {
       delete uni.param.i;
       uni.param.i = new GLint[uni.arraysize * uni.paramsize];
-      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++)
+      for(GLint n=0; n<uni.arraysize * uni.paramsize; n++) {
         uni.param.i[n] = 0;
+      }
       break;
     }
     }

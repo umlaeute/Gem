@@ -77,7 +77,7 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_artoolkit, GemPixObj)
 
-    public:
+public:
 
   //////////
   // Constructor
@@ -89,7 +89,7 @@ class GEM_EXPORT pix_artoolkit : public GemPixObj
     OUTPUT_EULER = 2
   };
 
- protected:
+protected:
 
   //////////
   // Destructor

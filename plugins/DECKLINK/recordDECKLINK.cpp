@@ -30,7 +30,8 @@
 // for MARK()
 #include <stdio.h>
 
-namespace {
+namespace
+{
 IDeckLinkDisplayMode*getDisplayMode(IDeckLinkOutput*dlo,
                                     const std::string&formatname, int formatnum)
 {
@@ -95,17 +96,17 @@ public:
     , m_totalFramesScheduled(0)
   {
     /*
-IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
+    IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
      */
     IDeckLinkMutableVideoFrame*newFrame = NULL;
     int width = m_displayMode->GetWidth(), height = m_displayMode->GetHeight();
     HRESULT result = m_deckLinkOutput->CreateVideoFrame(
-        width, height,
-        GetRowBytes(pixelFormat, width),
-        pixelFormat,
-        bmdFrameFlagDefault,
-        &newFrame
-        );
+                       width, height,
+                       GetRowBytes(pixelFormat, width),
+                       pixelFormat,
+                       bmdFrameFlagDefault,
+                       &newFrame
+                     );
     if (result != S_OK) {
       fprintf(stderr, "Failed to create video frame\n");
     }
@@ -121,37 +122,46 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
 
     m_deckLinkOutput->SetScheduledFrameCompletionCallback(this);
   };
-  ~VideoOutputter(void) {
-    if (m_frameConverter)
+  ~VideoOutputter(void)
+  {
+    if (m_frameConverter) {
       m_frameConverter->Release();
+    }
     m_frameConverter = NULL;
   }
 
-  virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(IDeckLinkVideoFrame* completedFrame, BMDOutputFrameCompletionResult result) {
+  virtual HRESULT STDMETHODCALLTYPE ScheduledFrameCompleted(IDeckLinkVideoFrame* completedFrame, BMDOutputFrameCompletionResult result)
+  {
     return S_OK;
   };
-  virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped() {
+  virtual HRESULT STDMETHODCALLTYPE ScheduledPlaybackHasStopped()
+  {
     return S_OK;
   };
-  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv) {
+  virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, LPVOID *ppv)
+  {
     *ppv = NULL;
     return E_NOINTERFACE;
   };
 
-  virtual ULONG STDMETHODCALLTYPE AddRef(void) {
+  virtual ULONG STDMETHODCALLTYPE AddRef(void)
+  {
     // gcc atomic operation builtin
     return __sync_add_and_fetch(&m_refCount, 1);
   };
 
-  ULONG STDMETHODCALLTYPE Release(void) {
+  ULONG STDMETHODCALLTYPE Release(void)
+  {
     // gcc atomic operation builtin
     ULONG newRefValue = __sync_sub_and_fetch(&m_refCount, 1);
-    if (!newRefValue)
+    if (!newRefValue) {
       delete this;
+    }
     return newRefValue;
   };
 
-  bool setFrame(imageStruct*img) {
+  bool setFrame(imageStruct*img)
+  {
     /* convert the imageStruct into the IDeckLinkVideoFrame */
     ImageStructWrapper*isw = new ImageStructWrapper(img);
     imageStruct dst;
@@ -160,20 +170,23 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
 
 #if 0
     post("writing image %p[%dx%d@%s] -> %p[%dx%d@%s] || %lu*%lu/%lu"
-        , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(srcformat).c_str()
-        , m_videoFrame, (int)m_videoFrame->GetWidth(), (int)m_videoFrame->GetHeight(), pixformat2string(m_videoFrame->GetPixelFormat()).c_str()
-        , m_totalFramesScheduled, m_frameDuration, m_frameTimescale
+         , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(srcformat).c_str()
+         , m_videoFrame, (int)m_videoFrame->GetWidth(), (int)m_videoFrame->GetHeight(), pixformat2string(m_videoFrame->GetPixelFormat()).c_str()
+         , m_totalFramesScheduled, m_frameDuration, m_frameTimescale
         );
 #endif
 
     if (m_videoFrame->GetPixelFormat() != srcformat) {
-      if(srcformat != bmdFormatUnspecified)
+      if(srcformat != bmdFormatUnspecified) {
         result = m_frameConverter?m_frameConverter->ConvertFrame(isw, m_videoFrame):E_NOTIMPL;
-      else result = E_NOTIMPL;
+      } else {
+        result = E_NOTIMPL;
+      }
 
       if (result != S_OK)  {
-        if(isw)
+        if(isw) {
           isw->Release();
+        }
 
         if(!dst.convertFrom(img, GEM_YUV)) {
           post("unable to covert frame...");
@@ -191,8 +204,9 @@ IDeckLinkStatus::GetInt(bmdDeckLinkStatusCurrentVideoInputPixelFormat)
     }
     m_totalFramesScheduled++;
 
-    if(isw)
+    if(isw) {
       isw->Release();
+    }
     return true;
   }
 };
@@ -255,12 +269,14 @@ void recordDECKLINK :: stop(void)
   }
   m_dlOutput = 0;
 
-  if(m_dlCallback)
+  if(m_dlCallback) {
     m_dlCallback->Release();
+  }
   m_dlCallback = 0;
 
-  if(m_dlConfig)
+  if(m_dlConfig) {
     m_dlConfig->Release();
+  }
   m_dlConfig = 0;
 }
 
@@ -294,7 +310,8 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
           formatname="";
         }
         break;
-      default:  break;
+      default:
+        break;
       }
       continue;
     }
@@ -316,7 +333,8 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
           vconn = id2connection((int)d);
         }
         break;
-      default:  break;
+      default:
+        break;
       }
       continue;
     }
@@ -380,13 +398,13 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   if(m_dlOutput) {
     BMDDisplayMode actualMode;
     if (S_OK != m_dlOutput->DoesSupportVideoMode(
-            vconn /* in: BMDVideoConnection connection */
-            , m_displayMode->GetDisplayMode() /* in: BMDDisplayMode requestedMode */
-            , m_pixelFormat /* in: BMDPixelFormat requestedPixelFormat */
-            , bmdSupportedVideoModeDefault /* flags */  /* in: BMDSupportedVideoModeFlags flags */
-            , &actualMode /* out: BMDDisplayMode *actualMode */
-            , &is_supported /* out: bool *supported */
-            )) {
+          vconn /* in: BMDVideoConnection connection */
+          , m_displayMode->GetDisplayMode() /* in: BMDDisplayMode requestedMode */
+          , m_pixelFormat /* in: BMDPixelFormat requestedPixelFormat */
+          , bmdSupportedVideoModeDefault /* flags */  /* in: BMDSupportedVideoModeFlags flags */
+          , &actualMode /* out: BMDDisplayMode *actualMode */
+          , &is_supported /* out: bool *supported */
+        )) {
       is_supported=false;
     }
     if (!is_supported) {
@@ -420,7 +438,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   }
 
   return true;
- bail:
+bail:
   stop();
   return false;
 }

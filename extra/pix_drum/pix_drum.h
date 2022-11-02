@@ -39,33 +39,33 @@ DESCRIPTION
 -----------------------------------------------------------------*/
 class GEM_EXPORT pix_drum : public GemPixObj
 {
-    CPPEXTERN_HEADER(pix_drum, GemPixObj)
+  CPPEXTERN_HEADER(pix_drum, GemPixObj)
 
-    public:
+public:
 
-        //////////
-        // Constructor
-    	pix_drum();
+  //////////
+  // Constructor
+  pix_drum();
 
-    protected:
+protected:
 
-    	//////////
-    	// Destructor
-    	virtual ~pix_drum();
-    	virtual void 	processGrayImage(imageStruct &image);
+  //////////
+  // Destructor
+  virtual ~pix_drum();
+  virtual void 	processGrayImage(imageStruct &image);
 
-    	void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
-    	void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
+  void	    	vecBoundsMess(t_symbol*,int argc, t_atom *argv);
+  void	    	vecThreshMess(t_symbol*,int argc, t_atom *argv);
 
-		t_outlet *outlet1;
-		t_outlet *outlet2;
-		t_outlet *outlet3;
-		t_outlet *outlet4;
-    	unsigned char  	m_thresh[4];
-		int head, bottom, right, left, mode, pix_dist, min_width, pix_dist_ctr;
-		float thresh, min_height;
+  t_outlet *outlet1;
+  t_outlet *outlet2;
+  t_outlet *outlet3;
+  t_outlet *outlet4;
+  unsigned char  	m_thresh[4];
+  int head, bottom, right, left, mode, pix_dist, min_width, pix_dist_ctr;
+  float thresh, min_height;
 
-    private:
+private:
 
 };
 

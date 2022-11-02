@@ -20,7 +20,8 @@
 #include <string.h>
 #include <stdio.h>
 
-namespace {
+namespace
+{
 static char mytolower(char in)
 {
   if(in<='Z' && in>='A') {

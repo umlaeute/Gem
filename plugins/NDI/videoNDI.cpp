@@ -32,8 +32,9 @@ using namespace gem::plugins;
 #endif
 
 #include "init_ndi_library.hh"
-namespace {
-  const NDIlib_v4* NDI = 0;
+namespace
+{
+const NDIlib_v4* NDI = 0;
 };
 
 
@@ -58,11 +59,13 @@ videoNDI :: videoNDI()
   , m_gotone(false)
 {
   MARK();
-  if(!NDI)
+  if(!NDI) {
     NDI = init_ndi_library("videoNDI");
+  }
 
-  if(!NDI)
+  if(!NDI) {
     throw(GemException("couldn't initialize libNDI"));
+  }
 
   if (!NDI->initialize()) {
     throw(GemException("NDI failed to initialize!"));
@@ -79,19 +82,19 @@ videoNDI :: videoNDI()
 /////////////////////////////////////////////////////////
 videoNDI :: ~videoNDI()
 {
-MARK();
+  MARK();
   close();
   NDI->destroy();
 }
 
 const std::string videoNDI::getName(void)
 {
-MARK();
+  MARK();
   return m_name;
 }
 bool videoNDI::provides(const std::string&name)
 {
-MARK();
+  MARK();
   for(unsigned int i=0; i<m_provides.size(); i++)
     if(name == m_provides[i]) {
       return true;
@@ -100,12 +103,12 @@ MARK();
 }
 std::vector<std::string>videoNDI::provides(void)
 {
-MARK();
+  MARK();
   return m_provides;
 }
 
 bool videoNDI::enumProperties(gem::Properties&readable,
-                                gem::Properties&writeable)
+                              gem::Properties&writeable)
 {
   int dummy_i;
 
@@ -140,12 +143,14 @@ void videoNDI::getProperties(gem::Properties&props)
 std::vector<std::string> videoNDI::enumerate()
 {
   std::vector<std::string> result;
-  if (!m_ndi_find) /* Failed to create finder */
+  if (!m_ndi_find) { /* Failed to create finder */
     return result;
+  }
   uint32_t no_srcs; // This will contain how many senders have been found so far.
   const NDIlib_source_t* p_senders = NDI->find_get_current_sources(m_ndi_find, &no_srcs);
-  if((no_srcs<1) || !p_senders)
+  if((no_srcs<1) || !p_senders) {
     return result;
+  }
 
   for(uint32_t i=0; i<no_srcs; i++) {
     result.push_back(p_senders[i].p_ndi_name);
@@ -157,12 +162,12 @@ std::vector<std::string> videoNDI::enumerate()
 
 bool videoNDI::setDevice(int ID)
 {
-MARK();
+  MARK();
   return false;
 }
 bool videoNDI::setDevice(const std::string&device)
 {
-MARK();
+  MARK();
   m_devicename=device;
   return true;
 }
@@ -175,7 +180,7 @@ MARK();
 
 bool videoNDI :: open(gem::Properties&props)
 {
-MARK();
+  MARK();
   if(m_devicename.empty()) {
     return false;
   }
@@ -188,12 +193,14 @@ MARK();
   }
   post("[GEM:videoNDI] future = %d", future);
   if(!future) {
-    if (!m_ndi_find)
+    if (!m_ndi_find) {
       return false;
+    }
     uint32_t no_srcs; // This will contain how many senders have been found so far.
     const NDIlib_source_t* p_senders = NDI->find_get_current_sources(m_ndi_find, &no_srcs);
-    if((no_srcs<1) || !p_senders)
+    if((no_srcs<1) || !p_senders) {
       return false;
+    }
     uint32_t src_num = 0;
     for(src_num=0; src_num<no_srcs; src_num++) {
       if (p_senders[src_num].p_ndi_name == m_devicename || p_senders[src_num].p_url_address == m_devicename) {
@@ -227,9 +234,10 @@ MARK();
 /////////////////////////////////////////////////////////
 void videoNDI :: close()
 {
-MARK();
-  if(m_ndi_recv)
+  MARK();
+  if(m_ndi_recv) {
     NDI->recv_destroy(m_ndi_recv);
+  }
   m_ndi_recv = NULL;
 }
 
@@ -255,7 +263,7 @@ bool videoNDI :: stop()
 
 bool videoNDI :: reset()
 {
-MARK();
+  MARK();
   verbose(0, "[GEM:videoNDI] 'reset' not implemented");
   return false;
 }
@@ -316,21 +324,24 @@ pixBlock*videoNDI::getFrame(void)
 }
 void videoNDI::releaseFrame(void)
 {
-  if(m_ndi_recv && m_gotone)
+  if(m_ndi_recv && m_gotone) {
     NDI->recv_free_video_v2(m_ndi_recv, &m_ndi_frame);
+  }
   m_pixBlock.newimage = 0;
   m_pixBlock.newfilm = 0;
   m_gotone = false;
 }
 
 
-bool videoNDI::grabAsynchronous(bool async) {
+bool videoNDI::grabAsynchronous(bool async)
+{
   MARK();
   bool ret = m_async;
   m_async = async;
   return ret;
 }
-bool videoNDI::setColor(int format) {
+bool videoNDI::setColor(int format)
+{
   MARK();
   return false;
 }

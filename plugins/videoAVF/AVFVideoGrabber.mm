@@ -27,20 +27,21 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #include <iostream>
 
 
-void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
+void printSampleBuffer(CMSampleBufferRef sampleBuffer)
+{
   fprintf(stderr, "sampleBuffer: %p\tvalid:%d\tready:%d\n"
-    , sampleBuffer
-    , CMSampleBufferIsValid(sampleBuffer)
-    , CMSampleBufferDataIsReady(sampleBuffer)
-    );
+          , sampleBuffer
+          , CMSampleBufferIsValid(sampleBuffer)
+          , CMSampleBufferDataIsReady(sampleBuffer)
+         );
   fprintf(stderr, "\tdecode@: %lld\t%lld\n"
-    , CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value
-    , CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value
-    );
+          , CMSampleBufferGetDecodeTimeStamp(sampleBuffer).value
+          , CMSampleBufferGetOutputDecodeTimeStamp(sampleBuffer).value
+         );
   fprintf(stderr, "\tpresen@: %lld\t%lld\n"
-    , CMSampleBufferGetPresentationTimeStamp(sampleBuffer).value
-    , CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer).value
-    );
+          , CMSampleBufferGetPresentationTimeStamp(sampleBuffer).value
+          , CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer).value
+         );
 };
 
 @interface AVFVideoGrabber ()
@@ -328,10 +329,12 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer) {
 {
   @autoreleasepool {
     CMTime ts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen)) {
+    if(CMTIME_IS_INVALID(lastSeen) || CMTIME_COMPARE_INLINE(ts, >, lastSeen))
+    {
       lastSeen=ts;
       //fprintf(stderr, "new frame @ %lld %d\n", lastSeen.value, CMTIME_IS_VALID(lastSeen));
-    } else {
+    } else
+    {
       printSampleBuffer(sampleBuffer);
       return;
     }

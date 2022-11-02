@@ -628,7 +628,7 @@ void videoHALCON::setProperties(gem::Properties&props)
               m_grabber->SetFramegrabberParam(Param, s.c_str());
             } catch (Halcon::HException& except) {
               pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
-                    key.c_str(), except.message);
+                       key.c_str(), except.message);
             }
           }
           break;
@@ -642,19 +642,19 @@ void videoHALCON::setProperties(gem::Properties&props)
                 m_grabber->SetFramegrabberParam(Param, l);
               } catch (Halcon::HException& except) {
                 pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
-                      key.c_str(), except.message);
+                         key.c_str(), except.message);
               }
             }
           }
           break;
         default:
           pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s): invalid type",
-                key.c_str());
+                   key.c_str());
           break;
         }
       } catch (Halcon::HException& except) {
         pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(%s) exception: '%s'",
-              key.c_str(), except.message);
+                 key.c_str(), except.message);
       }
     } else {
       if("width" == key) {
@@ -668,7 +668,7 @@ void videoHALCON::setProperties(gem::Properties&props)
               m_grabber->SetFramegrabberParam("image_width", l);
             } catch (Halcon::HException& except) {
               pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(width) exception: '%s'",
-                    except.message);
+                       except.message);
             }
           }
           m_width=d;
@@ -684,7 +684,7 @@ void videoHALCON::setProperties(gem::Properties&props)
               m_grabber->SetFramegrabberParam("image_height", l);
             } catch (Halcon::HException& except) {
               pd_error(0, "[GEM:videoHALCON] SetFramegrabberParam(height) exception: '%s'",
-                    except.message);
+                       except.message);
             }
           }
           m_height=d;
@@ -727,7 +727,7 @@ void videoHALCON::getProperties(gem::Properties&props)
         }
       } catch (Halcon::HException& except) {
         pd_error(0, "[GEM:videoHALCON] GetFramegrabberParam exception: '%s'",
-              except.message);
+                 except.message);
       }
     }
   }

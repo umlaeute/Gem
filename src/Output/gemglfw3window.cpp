@@ -406,89 +406,164 @@ CPPEXTERN_NEW(gemglfw3window);
 # define GLFW_KEY_MENU 348
 #endif
 
-static std::string get_keyname(int key, int scancode) {
+static std::string get_keyname(int key, int scancode)
+{
   const char*sid;
 
   sid = glfwGetKeyName(key, scancode);
-  if(sid)
+  if(sid) {
     return (sid);
+  }
   sid = glfwGetKeyName(GLFW_KEY_UNKNOWN, scancode);
-  if(sid)
+  if(sid) {
     return (sid);
+  }
 
   switch (key) {
-  case GLFW_KEY_SPACE: return ("Space");
-  case GLFW_KEY_ESCAPE: return ("Escape");
-  case GLFW_KEY_ENTER: return ("Return");
-  case GLFW_KEY_TAB: return ("Tab");
-  case GLFW_KEY_BACKSPACE: return ("BackSpace");
-  case GLFW_KEY_INSERT: return ("Insert");
-  case GLFW_KEY_DELETE: return ("Delete");
-  case GLFW_KEY_RIGHT: return ("Right");
-  case GLFW_KEY_LEFT: return ("Left");
-  case GLFW_KEY_DOWN: return ("Down");
-  case GLFW_KEY_UP: return ("Up");
-  case GLFW_KEY_PAGE_UP: return ("Prior");
-  case GLFW_KEY_PAGE_DOWN: return ("Next");
-  case GLFW_KEY_HOME: return ("Home");
-  case GLFW_KEY_END: return ("End");
-  case GLFW_KEY_CAPS_LOCK: return ("Caps_Lock");
-  case GLFW_KEY_SCROLL_LOCK: return ("Scroll_Lock");
-  case GLFW_KEY_NUM_LOCK: return ("Num_Lock");
-  case GLFW_KEY_PRINT_SCREEN: return ("Print");
-  case GLFW_KEY_PAUSE: return ("Pause");
-  case GLFW_KEY_F1: return ("F1");
-  case GLFW_KEY_F2: return ("F2");
-  case GLFW_KEY_F3: return ("F3");
-  case GLFW_KEY_F4: return ("F4");
-  case GLFW_KEY_F5: return ("F5");
-  case GLFW_KEY_F6: return ("F6");
-  case GLFW_KEY_F7: return ("F7");
-  case GLFW_KEY_F8: return ("F8");
-  case GLFW_KEY_F9: return ("F9");
-  case GLFW_KEY_F10: return ("F10");
-  case GLFW_KEY_F11: return ("F11");
-  case GLFW_KEY_F12: return ("F12");
-  case GLFW_KEY_F13: return ("F13");
-  case GLFW_KEY_F14: return ("F14");
-  case GLFW_KEY_F15: return ("F15");
-  case GLFW_KEY_F16: return ("F16");
-  case GLFW_KEY_F17: return ("F17");
-  case GLFW_KEY_F18: return ("F18");
-  case GLFW_KEY_F19: return ("F19");
-  case GLFW_KEY_F20: return ("F20");
-  case GLFW_KEY_F21: return ("F21");
-  case GLFW_KEY_F22: return ("F22");
-  case GLFW_KEY_F23: return ("F23");
-  case GLFW_KEY_F24: return ("F24");
-  case GLFW_KEY_F25: return ("F25");
-  case GLFW_KEY_KP_0: return ("KP_0");
-  case GLFW_KEY_KP_1: return ("KP_1");
-  case GLFW_KEY_KP_2: return ("KP_2");
-  case GLFW_KEY_KP_3: return ("KP_3");
-  case GLFW_KEY_KP_4: return ("KP_4");
-  case GLFW_KEY_KP_5: return ("KP_5");
-  case GLFW_KEY_KP_6: return ("KP_6");
-  case GLFW_KEY_KP_7: return ("KP_7");
-  case GLFW_KEY_KP_8: return ("KP_8");
-  case GLFW_KEY_KP_9: return ("KP_9");
-  case GLFW_KEY_KP_DECIMAL: return ("KP_Separator");
-  case GLFW_KEY_KP_DIVIDE: return ("KP_Divide");
-  case GLFW_KEY_KP_MULTIPLY: return ("KP_Multiply");
-  case GLFW_KEY_KP_SUBTRACT: return ("KP_Subtract");
-  case GLFW_KEY_KP_ADD: return ("KP_Add");
-  case GLFW_KEY_KP_ENTER: return ("KP_Enter");
-  case GLFW_KEY_KP_EQUAL: return ("KP_Equal");
-  case GLFW_KEY_LEFT_SHIFT: return ("Shift_L");
-  case GLFW_KEY_LEFT_CONTROL: return ("Control_L");
-  case GLFW_KEY_LEFT_ALT: return ("Alt_L");
-  case GLFW_KEY_LEFT_SUPER: return ("Super_L");
-  case GLFW_KEY_RIGHT_SHIFT: return ("Shift_R");
-  case GLFW_KEY_RIGHT_CONTROL: return ("Control_R");
-  case GLFW_KEY_RIGHT_ALT: return ("Mode"); /* Alt_R? ISO_Level3_Shift? */
-  case GLFW_KEY_RIGHT_SUPER: return ("Super_R");
-  case GLFW_KEY_MENU: return ("Menu");
-  default: break;
+  case GLFW_KEY_SPACE:
+    return ("Space");
+  case GLFW_KEY_ESCAPE:
+    return ("Escape");
+  case GLFW_KEY_ENTER:
+    return ("Return");
+  case GLFW_KEY_TAB:
+    return ("Tab");
+  case GLFW_KEY_BACKSPACE:
+    return ("BackSpace");
+  case GLFW_KEY_INSERT:
+    return ("Insert");
+  case GLFW_KEY_DELETE:
+    return ("Delete");
+  case GLFW_KEY_RIGHT:
+    return ("Right");
+  case GLFW_KEY_LEFT:
+    return ("Left");
+  case GLFW_KEY_DOWN:
+    return ("Down");
+  case GLFW_KEY_UP:
+    return ("Up");
+  case GLFW_KEY_PAGE_UP:
+    return ("Prior");
+  case GLFW_KEY_PAGE_DOWN:
+    return ("Next");
+  case GLFW_KEY_HOME:
+    return ("Home");
+  case GLFW_KEY_END:
+    return ("End");
+  case GLFW_KEY_CAPS_LOCK:
+    return ("Caps_Lock");
+  case GLFW_KEY_SCROLL_LOCK:
+    return ("Scroll_Lock");
+  case GLFW_KEY_NUM_LOCK:
+    return ("Num_Lock");
+  case GLFW_KEY_PRINT_SCREEN:
+    return ("Print");
+  case GLFW_KEY_PAUSE:
+    return ("Pause");
+  case GLFW_KEY_F1:
+    return ("F1");
+  case GLFW_KEY_F2:
+    return ("F2");
+  case GLFW_KEY_F3:
+    return ("F3");
+  case GLFW_KEY_F4:
+    return ("F4");
+  case GLFW_KEY_F5:
+    return ("F5");
+  case GLFW_KEY_F6:
+    return ("F6");
+  case GLFW_KEY_F7:
+    return ("F7");
+  case GLFW_KEY_F8:
+    return ("F8");
+  case GLFW_KEY_F9:
+    return ("F9");
+  case GLFW_KEY_F10:
+    return ("F10");
+  case GLFW_KEY_F11:
+    return ("F11");
+  case GLFW_KEY_F12:
+    return ("F12");
+  case GLFW_KEY_F13:
+    return ("F13");
+  case GLFW_KEY_F14:
+    return ("F14");
+  case GLFW_KEY_F15:
+    return ("F15");
+  case GLFW_KEY_F16:
+    return ("F16");
+  case GLFW_KEY_F17:
+    return ("F17");
+  case GLFW_KEY_F18:
+    return ("F18");
+  case GLFW_KEY_F19:
+    return ("F19");
+  case GLFW_KEY_F20:
+    return ("F20");
+  case GLFW_KEY_F21:
+    return ("F21");
+  case GLFW_KEY_F22:
+    return ("F22");
+  case GLFW_KEY_F23:
+    return ("F23");
+  case GLFW_KEY_F24:
+    return ("F24");
+  case GLFW_KEY_F25:
+    return ("F25");
+  case GLFW_KEY_KP_0:
+    return ("KP_0");
+  case GLFW_KEY_KP_1:
+    return ("KP_1");
+  case GLFW_KEY_KP_2:
+    return ("KP_2");
+  case GLFW_KEY_KP_3:
+    return ("KP_3");
+  case GLFW_KEY_KP_4:
+    return ("KP_4");
+  case GLFW_KEY_KP_5:
+    return ("KP_5");
+  case GLFW_KEY_KP_6:
+    return ("KP_6");
+  case GLFW_KEY_KP_7:
+    return ("KP_7");
+  case GLFW_KEY_KP_8:
+    return ("KP_8");
+  case GLFW_KEY_KP_9:
+    return ("KP_9");
+  case GLFW_KEY_KP_DECIMAL:
+    return ("KP_Separator");
+  case GLFW_KEY_KP_DIVIDE:
+    return ("KP_Divide");
+  case GLFW_KEY_KP_MULTIPLY:
+    return ("KP_Multiply");
+  case GLFW_KEY_KP_SUBTRACT:
+    return ("KP_Subtract");
+  case GLFW_KEY_KP_ADD:
+    return ("KP_Add");
+  case GLFW_KEY_KP_ENTER:
+    return ("KP_Enter");
+  case GLFW_KEY_KP_EQUAL:
+    return ("KP_Equal");
+  case GLFW_KEY_LEFT_SHIFT:
+    return ("Shift_L");
+  case GLFW_KEY_LEFT_CONTROL:
+    return ("Control_L");
+  case GLFW_KEY_LEFT_ALT:
+    return ("Alt_L");
+  case GLFW_KEY_LEFT_SUPER:
+    return ("Super_L");
+  case GLFW_KEY_RIGHT_SHIFT:
+    return ("Shift_R");
+  case GLFW_KEY_RIGHT_CONTROL:
+    return ("Control_R");
+  case GLFW_KEY_RIGHT_ALT:
+    return ("Mode"); /* Alt_R? ISO_Level3_Shift? */
+  case GLFW_KEY_RIGHT_SUPER:
+    return ("Super_R");
+  case GLFW_KEY_MENU:
+    return ("Menu");
+  default:
+    break;
   }
   return ("<unknown>");
 }

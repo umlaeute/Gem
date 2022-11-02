@@ -36,8 +36,9 @@ pix_motionblur :: pix_motionblur(int argc, t_atom*argv) :
   m_savedImage.setCsizeByFormat(GEM_RGBA);
   m_savedImage.reallocate();
   m_savedImage.setBlack();
-  if(argc)
+  if(argc) {
     motionblurMessage(0, argc, argv);
+  }
 }
 
 /////////////////////////////////////////////////////////

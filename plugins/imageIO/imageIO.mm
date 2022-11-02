@@ -30,27 +30,29 @@ using namespace gem::plugins;
 REGISTER_IMAGELOADERFACTORY("imageIO", imageIO);
 REGISTER_IMAGESAVERFACTORY("imageIO", imageIO);
 
-CFStringRef mime2uti(const std::string&mimetype) {
-  if(mimetype == "image/jpeg")
+CFStringRef mime2uti(const std::string&mimetype)
+{
+  if(mimetype == "image/jpeg") {
     return kUTTypeJPEG;
-  else if ((mimetype == "image/jp2") || (mimetype == "image/jpx") || (mimetype == "image/jpm"))
+  } else if ((mimetype == "image/jp2") || (mimetype == "image/jpx") || (mimetype == "image/jpm")) {
     return kUTTypeJPEG2000;
-  else if ((mimetype == "image/tiff") || (mimetype == "image/x-tiff"))
+  } else if ((mimetype == "image/tiff") || (mimetype == "image/x-tiff")) {
     return kUTTypeTIFF;
-  else if ((mimetype == "image/pict") || (mimetype == "image/x-pict"))
+  } else if ((mimetype == "image/pict") || (mimetype == "image/x-pict")) {
     return kUTTypePICT;
-  else if ((mimetype == "image/gif"))
+  } else if ((mimetype == "image/gif")) {
     return kUTTypeGIF;
-  else if ((mimetype == "image/png"))
+  } else if ((mimetype == "image/png")) {
     return kUTTypePNG;
-  else if ((mimetype == "image/x-quicktime"))
+  } else if ((mimetype == "image/x-quicktime")) {
     return kUTTypeQuickTimeImage;
-  else if ((mimetype == "image/icns"))
+  } else if ((mimetype == "image/icns")) {
     return kUTTypeAppleICNS;
-  else if ((mimetype == "image/bmp") || (mimetype == "image/x-windows-bmp"))
+  } else if ((mimetype == "image/bmp") || (mimetype == "image/x-windows-bmp")) {
     return kUTTypeBMP;
-  else if ((mimetype == "image/x-icon"))
+  } else if ((mimetype == "image/x-icon")) {
     return kUTTypeICO;
+  }
 
   return 0;
 }
@@ -106,19 +108,19 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   myImageSource = CGImageSourceCreateWithURL((CFURLRef)url, myOptions);
   CFRelease(myOptions);
   // Make sure the image source exists before continuing
-  if (!myImageSource){
+  if (!myImageSource) {
     fprintf(stderr, "Image source '%s' is NULL.", filename.c_str());
     return false;
   }
 
   // Create an image from the first item in the image source.
   myImage = CGImageSourceCreateImageAtIndex(myImageSource,
-                                            0,
-                                            NULL);
+            0,
+            NULL);
 
   CFRelease(myImageSource);
   // Make sure the image exists before continuing
-  if (!myImage){
+  if (!myImage) {
     fprintf(stderr, "Image not created from image source.");
     return false;
   }
@@ -135,24 +137,29 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CGContextRef context;
   void*data;
   colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-  if(!colorSpace)
+  if(!colorSpace) {
     goto done;
+  }
 #warning get rid of premultiplied alpha channel
   context = CGBitmapContextCreate(result.data,
                                   result.xsize, result.ysize, 8, result.xsize * result.csize,
                                   colorSpace, kCGImageAlphaPremultipliedFirst);
-  if(!context)
+  if(!context) {
     goto done;
+  }
 
   CGContextDrawImage(context, rect, myImage);
-  if(CGBitmapContextGetData (context) == result.data)
+  if(CGBitmapContextGetData (context) == result.data) {
     success=true;
+  }
 
 done:
-  if(context)
+  if(context) {
     CGContextRelease(context);
-  if(colorSpace)
+  }
+  if(colorSpace) {
     CGColorSpaceRelease(colorSpace);
+  }
   CFRelease(myImage);
   return success;
 }
@@ -184,11 +191,12 @@ bool imageIO::save(const imageStruct&img,
   CGImageRef myImage = NULL;
   CGImageDestinationRef myImageDest = NULL;
   CGDataProviderRef data = CGDataProviderCreateWithData(NULL,
-                                                        img.data,
-                                                        img.xsize * img.ysize * img.csize,
-                                                        NULL);
-  if(!data)
+                           img.data,
+                           img.xsize * img.ysize * img.csize,
+                           NULL);
+  if(!data) {
     goto done;
+  }
   myImage = CGImageCreate(img.xsize, img.ysize,
                           8, 8 * img.csize,
                           img.xsize * img.csize,
@@ -211,14 +219,18 @@ bool imageIO::save(const imageStruct&img,
   success=true;
 
 done:
-  if(myImageDest)
+  if(myImageDest) {
     CFRelease(myImageDest);
-  if(myImage)
+  }
+  if(myImage) {
     CFRelease(myImage);
-  if(data)
+  }
+  if(data) {
     CFRelease(data);
-  if(myOptions)
+  }
+  if(myOptions) {
     CFRelease(myOptions);
+  }
   return success;
 }
 
@@ -230,8 +242,9 @@ float imageIO::estimateSave(const imageStruct&img,
   float result=0;
   CFStringRef uti = mime2uti(mimetype);
 
-  if(uti)
+  if(uti) {
     result += 100;
+  }
 
 #if 0
   if(gem::Properties::UNSET != props.type("xresolution")) {

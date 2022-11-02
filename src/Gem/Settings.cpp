@@ -225,17 +225,18 @@ struct PIMPL {
       char fullpath[PATH_MAX];
       const char*fp = fullpath;
 #ifdef _WIN32
-      char** lppPart={NULL};
+      char** lppPart= {NULL};
       GetFullPathName(c->c_externdir->s_name,
-                                   PATH_MAX,
-                                   fullpath,
-                                   lppPart);
+                      PATH_MAX,
+                      fullpath,
+                      lppPart);
 #else
       fp = realpath(c->c_externdir->s_name, fullpath);
 #endif
       sys_unbashfilename(fullpath, fullpath);
-      if(!fp)
+      if(!fp) {
         fp = c->c_externdir->s_name;
+      }
       set("gem.path", fp);
     }
   }

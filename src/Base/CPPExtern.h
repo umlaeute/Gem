@@ -333,7 +333,9 @@ static void obj_setupCallback(t_class *classPtr);
 // a static copy of this class is created at runtime, to actually do the setup-call
 ///////////////////////////////////////////////////////////////////////////////
 typedef void (*t_class_setup)(void);
-extern "C" { GEM_EXTERN void gem_register_class_setup(const char*name, t_class_setup); }
+extern "C" {
+  GEM_EXTERN void gem_register_class_setup(const char*name, t_class_setup);
+}
 
 #ifdef NO_AUTO_REGISTER_CLASS
 // if NO_AUTO_REGISTER_CLASS is defined, we will not register the class

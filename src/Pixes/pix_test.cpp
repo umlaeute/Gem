@@ -253,7 +253,8 @@ pix_test :: pix_test(int argc, t_atom*argv)
 {
   m_pix.image.xsize=m_pix.image.ysize=128;
   switch(argc) {
-  case 0: break;
+  case 0:
+    break;
   case 1:
     if(A_FLOAT == argv->a_type && ((int)atom_getfloat(argv))>0) {
       m_pix.image.xsize=m_pix.image.ysize=atom_getfloat(argv);
@@ -264,16 +265,20 @@ pix_test :: pix_test(int argc, t_atom*argv)
   case 2:
     if(A_FLOAT == argv[0].a_type && A_FLOAT == argv[1].a_type) {
       int i = atom_getfloat(argv);
-      if(i>0)m_pix.image.xsize = i;
+      if(i>0) {
+        m_pix.image.xsize = i;
+      }
       i = atom_getfloat(argv+1);
-      if(i>0)m_pix.image.ysize = i;
+      if(i>0) {
+        m_pix.image.ysize = i;
+      }
     } else {
       error("usage: pix_test [<width> <height>]");
     }
     break;
   default:
-      error("usage: pix_test [<width> [<height>]]");
-      break;
+    error("usage: pix_test [<width> [<height>]]");
+    break;
   }
 
   m_pix.image.setCsizeByFormat(GEM_RGBA);
@@ -311,7 +316,7 @@ void pix_test :: render(GemState*state)
     break;
   case GEM_RGB:
     makeSMPTE_RGB(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
-                   scale);
+                  scale);
     break;
   case GEM_YUV:
     makeSMPTE_YUV(m_pix.image.ysize, m_pix.image.ysize, m_pix.image.data,
@@ -345,20 +350,23 @@ void pix_test :: csMess(std::string cs)
   if(len>0) {
     char col[5];
     int i;
-    if(len > 4) len = 4;
-    for(i=0; i<len; i++)
+    if(len > 4) {
+      len = 4;
+    }
+    for(i=0; i<len; i++) {
       col[i] = tolower(cs[i]);
+    }
     color = col;
   }
-  if ("rgba" == color)
+  if ("rgba" == color) {
     fmt=GEM_RGBA;
-  else if ("rgb" == color)
+  } else if ("rgb" == color) {
     fmt=GEM_RGB;
-  else if ("yuv" == color)
+  } else if ("yuv" == color) {
     fmt=GEM_YUV;
-  else if (("grey" == color) || ("gray" == color))
+  } else if (("grey" == color) || ("gray" == color)) {
     fmt=GEM_GRAY;
-  else {
+  } else {
     error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",
           cs.c_str());
     return;

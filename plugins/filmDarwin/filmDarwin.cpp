@@ -213,7 +213,7 @@ bool filmDarwin :: open(const std::string&filename,
   m_image.image.setCsizeByFormat();
 
   m_image.image.data = new unsigned
-    char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];
+  char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];
   m_rowBytes = m_image.image.xsize * m_image.image.csize;
   SetMoviePlayHints(m_movie, hints, hints);
   err = QTNewGWorldFromPtr(     &m_srcGWorld,

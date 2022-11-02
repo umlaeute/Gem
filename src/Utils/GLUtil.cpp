@@ -151,84 +151,89 @@ void GLuintMap::del(float f)
 #define __glPi 3.14159265358979323846
 static void normalize(float v[3])
 {
-    float r;
+  float r;
 
-    r = sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
-    if (r == 0.0) return;
+  r = sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
+  if (r == 0.0) {
+    return;
+  }
 
-    v[0] /= r;
-    v[1] /= r;
-    v[2] /= r;
+  v[0] /= r;
+  v[1] /= r;
+  v[2] /= r;
 }
 
 static void cross(float v1[3], float v2[3], float result[3])
 {
-    result[0] = v1[1]*v2[2] - v1[2]*v2[1];
-    result[1] = v1[2]*v2[0] - v1[0]*v2[2];
-    result[2] = v1[0]*v2[1] - v1[1]*v2[0];
+  result[0] = v1[1]*v2[2] - v1[2]*v2[1];
+  result[1] = v1[2]*v2[0] - v1[0]*v2[2];
+  result[2] = v1[0]*v2[1] - v1[1]*v2[0];
 }
 
-void gem::utils::gl::gluLookAt (GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx, GLdouble centery, GLdouble centerz, GLdouble upx, GLdouble upy, GLdouble upz) {
-    float forward[3], side[3], up[3];
-    GLfloat m[4][4];
+void gem::utils::gl::gluLookAt (GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx, GLdouble centery, GLdouble centerz, GLdouble upx, GLdouble upy, GLdouble upz)
+{
+  float forward[3], side[3], up[3];
+  GLfloat m[4][4];
 
-    forward[0] = centerx - eyex;
-    forward[1] = centery - eyey;
-    forward[2] = centerz - eyez;
+  forward[0] = centerx - eyex;
+  forward[1] = centery - eyey;
+  forward[2] = centerz - eyez;
 
-    up[0] = upx;
-    up[1] = upy;
-    up[2] = upz;
+  up[0] = upx;
+  up[1] = upy;
+  up[2] = upz;
 
-    normalize(forward);
+  normalize(forward);
 
-    /* Side = forward x up */
-    cross(forward, up, side);
-    normalize(side);
+  /* Side = forward x up */
+  cross(forward, up, side);
+  normalize(side);
 
-    /* Recompute up as: up = side x forward */
-    cross(side, forward, up);
+  /* Recompute up as: up = side x forward */
+  cross(side, forward, up);
 
-    for(size_t i=0; i<4; i++)
-      for(size_t j=0; j<4; j++)
-        m[i][j] = (i==j)?1.:0.;
+  for(size_t i=0; i<4; i++)
+    for(size_t j=0; j<4; j++) {
+      m[i][j] = (i==j)?1.:0.;
+    }
 
-    m[0][0] = side[0];
-    m[1][0] = side[1];
-    m[2][0] = side[2];
+  m[0][0] = side[0];
+  m[1][0] = side[1];
+  m[2][0] = side[2];
 
-    m[0][1] = up[0];
-    m[1][1] = up[1];
-    m[2][1] = up[2];
+  m[0][1] = up[0];
+  m[1][1] = up[1];
+  m[2][1] = up[2];
 
-    m[0][2] = -forward[0];
-    m[1][2] = -forward[1];
-    m[2][2] = -forward[2];
+  m[0][2] = -forward[0];
+  m[1][2] = -forward[1];
+  m[2][2] = -forward[2];
 
-    glMultMatrixf(&m[0][0]);
-    glTranslated(-eyex, -eyey, -eyez);
+  glMultMatrixf(&m[0][0]);
+  glTranslated(-eyex, -eyey, -eyez);
 }
 
 void gem::utils::gl::gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar)
 {
-    GLdouble m[4][4];
-    double sine, cotangent, deltaZ;
-    double radians = fovy / 2 * __glPi / 180;
+  GLdouble m[4][4];
+  double sine, cotangent, deltaZ;
+  double radians = fovy / 2 * __glPi / 180;
 
-    deltaZ = zFar - zNear;
-    sine = sin(radians);
-    if ((deltaZ == 0) || (sine == 0) || (aspect == 0)) {
-	return;
+  deltaZ = zFar - zNear;
+  sine = sin(radians);
+  if ((deltaZ == 0) || (sine == 0) || (aspect == 0)) {
+    return;
+  }
+  cotangent = cos(radians) / sine;
+  for(size_t i=0; i<4; i++)
+    for(size_t j=0; j<4; j++) {
+      m[i][j] = (i==j)?1.:0.;
     }
-    cotangent = cos(radians) / sine;
-    for(size_t i=0; i<4; i++)
-      for(size_t j=0; j<4; j++)
-        m[i][j] = (i==j)?1.:0.;
-    m[0][0] = cotangent / aspect;
-    m[1][1] = cotangent;
-    m[2][2] = -(zFar + zNear) / deltaZ;
-    m[2][3] = -1;
-    m[3][2] = -2 * zNear * zFar / deltaZ;
-    m[3][3] = 0;
-    glMultMatrixd(&m[0][0]);
+  m[0][0] = cotangent / aspect;
+  m[1][1] = cotangent;
+  m[2][2] = -(zFar + zNear) / deltaZ;
+  m[2][3] = -1;
+  m[3][2] = -2 * zNear * zFar / deltaZ;
+  m[3][3] = 0;
+  glMultMatrixd(&m[0][0]);
 }

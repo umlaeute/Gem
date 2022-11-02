@@ -189,8 +189,8 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
 #ifdef DEBUG
   post("MAC: createGemWindow()");
 #endif
-  EventTypeSpec list[] =
-  {              //{ kEventClassWindow, kEventWindowActivated },
+  EventTypeSpec list[] = {
+    //{ kEventClassWindow, kEventWindowActivated },
     //{ kEventClassWindow, kEventWindowGetClickActivation },
     { kEventClassWindow, kEventWindowClosed },
     { kEventClassMouse, kEventMouseDown },

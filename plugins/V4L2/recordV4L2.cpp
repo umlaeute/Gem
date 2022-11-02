@@ -112,7 +112,7 @@ bool recordV4L2 :: start(const std::string&filename, gem::Properties&props)
   }
   if( !(vid_caps.capabilities & V4L2_CAP_VIDEO_OUTPUT) ) {
     pd_error(0, "[GEM:recordV4L2] device '%s' is not a video4linux2 output device",
-          filename.c_str());
+             filename.c_str());
     stop();
     return false;
   }

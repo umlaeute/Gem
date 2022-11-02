@@ -109,7 +109,7 @@ bool recordPNM :: start(const std::string&filename, gem::Properties&props)
   m_file = fopen(filename.c_str(), "wb");
   if(m_file==NULL) {
     pd_error(0, "[GEM:recordPNM] starting to record to %s failed",
-          filename.c_str());
+             filename.c_str());
     return false;
   }
 
@@ -153,12 +153,12 @@ bool recordPNM :: write(imageStruct*img)
 
   if (m_image.csize != m_channels) {
     pd_error(0, "[GEM:recordPNM] unsupported data layout %d != %d...",
-        m_image.csize, m_channels);
+             m_image.csize, m_channels);
     return false;
   }
 
   if(fprintf(m_file, "P%d\n%d %d\n255\n",
-        m_channels == 1 ? 5 : 6, m_image.xsize, m_image.ysize) < 0) {
+             m_channels == 1 ? 5 : 6, m_image.xsize, m_image.ysize) < 0) {
     pd_error(0, "[GEM:recordPNM] error writing image header...");
     return false;
   }
@@ -169,8 +169,7 @@ bool recordPNM :: write(imageStruct*img)
       pd_error(0, "[GEM:recordPNM] error writing image data...");
       return false;
     }
-  }
-  else {
+  } else {
     for (int y = m_image.ysize - 1; y >= 0; --y) {
       if(fwrite(m_image.data + y * stride, stride, 1, m_file) != 1) {
         pd_error(0, "[GEM:recordPNM] error writing image data row...");
@@ -213,11 +212,9 @@ const std::string recordPNM :: getCodecDescription(const std::string&codecname)
 {
   if(codecname == "ppm") {
     return "Portable Pixmap (PPM)";
-  }
-  else if(codecname == "pgm") {
+  } else if(codecname == "pgm") {
     return "Portable Greymap (PGM)";
-  }
-  else {
+  } else {
     pd_error(0, "[GEM:recordPNM] cannot describe unknown codec...");
     return "(unknown codec)";
   }

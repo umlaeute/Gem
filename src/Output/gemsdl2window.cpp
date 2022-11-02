@@ -29,9 +29,9 @@ CPPEXTERN_NEW(gemsdl2window);
 
 namespace
 {
-  static unsigned int sdl_count = 0;
-  static std::map<Uint32, gemsdl2window*>s_windowmap;
-  static SDL_GLContext s_context = 0;
+static unsigned int sdl_count = 0;
+static std::map<Uint32, gemsdl2window*>s_windowmap;
+static SDL_GLContext s_context = 0;
 };
 
 #ifdef __APPLE__
@@ -67,23 +67,24 @@ void pre_init() {;}
 
 namespace
 {
-  template <class T>
-  struct autoidmap {
-    std::map<T, unsigned int> m_map;
-    unsigned int operator[] (T x) {
-      unsigned int result = m_map[x];
-      if(!result) {
-        /* wrap it so that single precision float can represent the value */
-        result = m_map.size() % 16777216;
-        m_map[x] = result;
-      }
-      return result;
+template <class T>
+struct autoidmap {
+  std::map<T, unsigned int> m_map;
+  unsigned int operator[] (T x)
+  {
+    unsigned int result = m_map[x];
+    if(!result) {
+      /* wrap it so that single precision float can represent the value */
+      result = m_map.size() % 16777216;
+      m_map[x] = result;
     }
-  };
+    return result;
+  }
+};
 
-  static autoidmap<SDL_TouchID> s_touchId;
-  static autoidmap<SDL_FingerID> s_fingerId;
-  static autoidmap<SDL_GestureID> s_gestureId;
+static autoidmap<SDL_TouchID> s_touchId;
+static autoidmap<SDL_FingerID> s_fingerId;
+static autoidmap<SDL_GestureID> s_gestureId;
 };
 
 /////////////////////////////////////////////////////////
@@ -316,11 +317,13 @@ void gemsdl2window :: dispatch()
   while (SDL_PollEvent(&event)) {
     Uint32 winid = 0;
     switch(event.type) {
-    default: break;
+    default:
+      break;
     case SDL_WINDOWEVENT:
       winid = event.window.windowID;
       break;
-    case SDL_KEYUP: case SDL_KEYDOWN:
+    case SDL_KEYUP:
+    case SDL_KEYDOWN:
       winid = event.key.windowID;
       break;
     case SDL_TEXTEDITING:
@@ -332,7 +335,8 @@ void gemsdl2window :: dispatch()
     case SDL_MOUSEMOTION:
       winid = event.motion.windowID;
       break;
-    case SDL_MOUSEBUTTONUP: case SDL_MOUSEBUTTONDOWN:
+    case SDL_MOUSEBUTTONUP:
+    case SDL_MOUSEBUTTONDOWN:
       winid = event.button.windowID;
       break;
     case SDL_MOUSEWHEEL:
@@ -353,21 +357,24 @@ void gemsdl2window :: dispatch()
       auto it = s_windowmap.find(winid);
       if (it != s_windowmap.end()) {
         gemsdl2window*that = it->second;
-        if(that)
+        if(that) {
           that->dispatch(event);
+        }
       }
     } else {
       /* dispatch to all windows(?) */
       for (auto it = s_windowmap.begin(); it != s_windowmap.end(); ++it) {
         gemsdl2window*that = it->second;
-        if(that)
+        if(that) {
           that->dispatch(event);
+        }
       }
     }
   }
 }
 
-void gemsdl2window :: dispatch(SDL_Event&event) {
+void gemsdl2window :: dispatch(SDL_Event&event)
+{
 #define PUSHATOM_F(atomlist, tmpatom, value) {        \
     SETFLOAT(&tmpatom, value);                        \
     atomlist.push_back(tmpatom);                      \
@@ -387,7 +394,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     PUSHATOM_F(alist, a, event.type);
     info(alist);
   }
-    break;
+  break;
   case SDL_WINDOWEVENT:
     switch (event.window.event) {
     case SDL_WINDOWEVENT_SHOWN:
@@ -448,13 +455,13 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
   case SDL_KEYDOWN:
     /* FIXME: event.key.repeat */
     key
-      (
-        /* SDL2 dropped event.key.which */
-        devID
-        , key2symbol(event.key.keysym.sym)
-        , event.key.keysym.scancode
-        , event.key.state==SDL_PRESSED
-        );
+    (
+      /* SDL2 dropped event.key.which */
+      devID
+      , key2symbol(event.key.keysym.sym)
+      , event.key.keysym.scancode
+      , event.key.state==SDL_PRESSED
+    );
     break;
   case SDL_MOUSEMOTION:
     motion(event.motion.which, event.motion.x, event.motion.y);
@@ -467,43 +474,45 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     break;
   case SDL_DROPFILE: {
 #if SDL_VERSION_ATLEAST(2, 0, 5)
-  case SDL_DROPTEXT:
-  case SDL_DROPBEGIN:
-  case SDL_DROPCOMPLETE:
-#endif
-    const char*droptype = 0;
-    switch(event.type) {
-#if SDL_VERSION_ATLEAST(2, 0, 5)
     case SDL_DROPTEXT:
-      droptype = "text";
-      break;
     case SDL_DROPBEGIN:
-      droptype = "begin";
-      break;
     case SDL_DROPCOMPLETE:
-      droptype = "end";
-      break;
 #endif
-    default:
-      droptype = "file";
-      break;
+      const char*droptype = 0;
+      switch(event.type) {
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+      case SDL_DROPTEXT:
+        droptype = "text";
+        break;
+      case SDL_DROPBEGIN:
+        droptype = "begin";
+        break;
+      case SDL_DROPCOMPLETE:
+        droptype = "end";
+        break;
+#endif
+      default:
+        droptype = "file";
+        break;
+      }
+      char*dropped = event.drop.file;
+      std::vector<t_atom>alist;
+      t_atom a;
+      PUSHATOM_S(alist, a, "drop");
+      PUSHATOM_S(alist, a, droptype);
+      if(dropped) {
+        PUSHATOM_S(alist, a, dropped);
+      }
+      info(alist);
+      SDL_free(dropped);
     }
-    char*dropped = event.drop.file;
-    std::vector<t_atom>alist;
-    t_atom a;
-    PUSHATOM_S(alist, a, "drop");
-    PUSHATOM_S(alist, a, droptype);
-    if(dropped) {
-      PUSHATOM_S(alist, a, dropped);
-    }
-    info(alist);
-    SDL_free(dropped);
-  }
     break;
   case SDL_QUIT:
     info("window", "destroy");
     break;
-  case SDL_FINGERDOWN: case SDL_FINGERUP: case SDL_FINGERMOTION: {
+  case SDL_FINGERDOWN:
+  case SDL_FINGERUP:
+  case SDL_FINGERMOTION: {
     std::vector<t_atom>alist;
     t_atom a;
     const char*direction = "unknown";
@@ -537,7 +546,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
       info(alist);
     }
   }
-    break;
+  break;
   case SDL_MULTIGESTURE: {
     std::vector<t_atom>alist;
     t_atom a;
@@ -550,7 +559,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     PUSHATOM_F(alist, a, event.mgesture.dDist);
     info(alist);
   }
-    break;
+  break;
   case SDL_DOLLARGESTURE: {
     std::vector<t_atom>alist;
     t_atom a;
@@ -563,7 +572,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     PUSHATOM_F(alist, a, event.dgesture.error);
     info(alist);
   }
-    break;
+  break;
   case SDL_DOLLARRECORD: {
     std::vector<t_atom>alist;
     t_atom a;
@@ -572,7 +581,7 @@ void gemsdl2window :: dispatch(SDL_Event&event) {
     PUSHATOM_F(alist, a, event.dgesture.gestureId);
     info(alist);
   }
-    break;
+  break;
   }
 }
 
@@ -613,7 +622,7 @@ void gemsdl2window :: titleMess(const std::string&s)
 //
 /////////////////////////////////////////////////////////
 void gemsdl2window :: dimensionsMess(unsigned int width,
-                                    unsigned int height)
+                                     unsigned int height)
 {
   if (width < 1) {
     error("width must be greater than 0");
@@ -645,8 +654,9 @@ void gemsdl2window :: offsetMess(int x, int y)
 void gemsdl2window :: fullscreenMess(int on)
 {
   m_fullscreen = on;
-  if(!m_window)
+  if(!m_window) {
     return;
+  }
   if(!SDL_SetWindowFullscreen(m_window, m_fullscreen?SDL_WINDOW_FULLSCREEN:0)) {
     const char*errstr = SDL_GetError();
     error("fullscreen failed: %s", (errstr&&*errstr)?errstr:"unknown reason");
@@ -655,8 +665,9 @@ void gemsdl2window :: fullscreenMess(int on)
 void gemsdl2window :: borderMess(bool on)
 {
   m_border = on;
-  if(m_window)
+  if(m_window) {
     SDL_SetWindowBordered(m_window, m_border?SDL_TRUE:SDL_FALSE);
+  }
 }
 void gemsdl2window :: cursorMess(bool state)
 {
@@ -665,8 +676,9 @@ void gemsdl2window :: cursorMess(bool state)
 }
 void gemsdl2window :: topmostMess(bool state)
 {
-  if(m_window)
+  if(m_window) {
     SDL_RaiseWindow(m_window);
+  }
 }
 void gemsdl2window :: grabmouseMess(bool state)
 {
@@ -683,8 +695,9 @@ void gemsdl2window :: relativemouseMess(bool state)
 void gemsdl2window :: opacityMess(float opacity)
 {
   m_opacity = opacity;
-  if(m_window)
+  if(m_window) {
     SDL_SetWindowOpacity(m_window, m_opacity);
+  }
 }
 void gemsdl2window :: userGestureMess(t_symbol*, int argc, t_atom*argv)
 {
@@ -710,17 +723,19 @@ bool gemsdl2window :: create(void)
   Uint32 flags = SDL_WINDOW_OPENGL;
   flags |= SDL_WINDOW_RESIZABLE; /* Enable window resizing */
   flags |= SDL_WINDOW_INPUT_GRABBED;
-  if(m_fullscreen)
+  if(m_fullscreen) {
     flags |= SDL_WINDOW_FULLSCREEN;
-  if(!m_border)
+  }
+  if(!m_border) {
     flags |= SDL_WINDOW_BORDERLESS;
+  }
 
   /* get a SDL surface */
   m_window = SDL_CreateWindow(
-    m_title.c_str(),
-    m_xoffset, m_yoffset,
-    m_width, m_height,
-    flags );
+               m_title.c_str(),
+               m_xoffset, m_yoffset,
+               m_width, m_height,
+               flags );
 
   if(!m_window) {
     return false;
@@ -781,18 +796,21 @@ void gemsdl2window :: destroy(void)
 {
   destroyGemWindow();
   s_windowmap.erase(SDL_GetWindowID(m_window));
-  if(m_window)
+  if(m_window) {
     SDL_DestroyWindow(m_window);
+  }
   m_window=NULL;
   info("window", "closed");
 }
 void gemsdl2window :: destroyMess(void)
 {
   if(makeCurrent()) {
-    if(m_context)
+    if(m_context) {
       SDL_GL_DeleteContext(m_context);
-    if(s_context == m_context)
+    }
+    if(s_context == m_context) {
       s_context = 0;
+    }
     m_context = 0;
   }
   destroy();

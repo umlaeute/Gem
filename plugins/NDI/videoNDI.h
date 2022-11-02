@@ -64,7 +64,7 @@ public:
     return std::vector<std::string>();
   }
   virtual bool dialog(std::vector<std::string>names=
-                      std::vector<std::string>())
+                        std::vector<std::string>())
   {
     return false;
   }
@@ -97,7 +97,11 @@ public:
   virtual void releaseFrame(void);
 
   // threading
-  virtual bool isThreadable(void) { MARK(); return false; }
+  virtual bool isThreadable(void)
+  {
+    MARK();
+    return false;
+  }
   virtual bool grabAsynchronous(bool);
 
   // color conversion

@@ -23,7 +23,8 @@ pix_contrast :: pix_contrast(int argc, t_atom*argv):
                     gensym("saturation"));
 
   switch(argc) {
-  case 0: break;
+  case 0:
+    break;
   case 2:
     m_saturation=atom_getfloat(argv+1);
   case 1:

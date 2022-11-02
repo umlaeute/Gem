@@ -91,8 +91,9 @@ bool pix_multitexture :: isRunnable(void)
     GLint numTexUnits=0;
     glGetIntegerv( GL_MAX_TEXTURE_UNITS_ARB, &numTexUnits );
     m_useTexUnits = m_reqTexUnits;
-    if(m_useTexUnits>numTexUnits)
+    if(m_useTexUnits>numTexUnits) {
       m_useTexUnits=numTexUnits;
+    }
     return true;
   }
   m_useTexUnits=0;
@@ -169,7 +170,9 @@ void pix_multitexture :: render(GemState *state)
 
     glEnable( m_textureType );
 
-    if(!m_texID[i])continue;
+    if(!m_texID[i]) {
+      continue;
+    }
     glBindTexture( m_textureType, m_texID[i] );
     glTexParameteri( m_textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     glTexParameteri( m_textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );

@@ -35,16 +35,14 @@
 #define DEF_MINIMUM 1
 #define DEF_MIN_DISTANCE 0.01
 
-enum areaTypes
-{
+enum areaTypes {
   rectangle,
   circle,
   line
 };
 
 // TODO: this should be a union!
-typedef struct _hitarea
-{
+typedef struct _hitarea {
   areaTypes type;
   float x;
   float y;
@@ -57,13 +55,13 @@ class GEM_EXPORT pix_hit : public GemPixObj
 {
   CPPEXTERN_HEADER(pix_hit, GemPixObj);
 
-    public:
+public:
 
   //////////
   // Constructor
   pix_hit(void);
 
- protected:
+protected:
 
   //////////
   // Destructor
@@ -97,7 +95,7 @@ class GEM_EXPORT pix_hit : public GemPixObj
 
   t_outlet    	*m_hits;
 
- private:
+private:
 
   static void	thresholdCallback(void *data, t_float thresh);
   static void	minimumCallback(void *data, t_float min);

@@ -431,7 +431,7 @@ public:
   //------------------------------------------------
   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample)
   {
-MARK();
+    MARK();
     BYTE * ptrBuffer = NULL;
     HRESULT hr = pSample->GetPointer(&ptrBuffer);
 
@@ -446,18 +446,19 @@ MARK();
         bNewPixels = true;
 
         //this is just so we know if there is a new frame
-        if(Time != curMovieTime)
+        if(Time != curMovieTime) {
           bFrameNew = true;
+        }
         curMovieTime = Time;
 
         LeaveCriticalSection(&critSection);
       } else {
         pd_error(0, "[GEM:videoDS] SampleCB() - buffer sizes do not match %d != %d",
-              latestBufferLength, currentBufferLength);
+                 latestBufferLength, currentBufferLength);
       }
     }
 
-MARK();
+    MARK();
     return S_OK;
   }
 
@@ -1027,8 +1028,9 @@ MARK();
 #ifdef USE_CALLBACKS
   pixBlock*getPixels(void)
   {
-    if(!bVideoOpened)
+    if(!bVideoOpened) {
       return 0;
+    }
     pix.newfilm = bNewlyOpened;
     bNewlyOpened = false;
     if(pix.image.xsize != getWidth()  || pix.image.ysize != getHeight()) {
@@ -1063,10 +1065,12 @@ MARK();
 
 #else
   //this is the non-callback approach
-  bool getPixels(imageStruct&img){
-    if(!bVideoOpened)
+  bool getPixels(imageStruct&img)
+  {
+    if(!bVideoOpened) {
       return false;
-    if(isFrameNew()){
+    }
+    if(isFrameNew()) {
       long bufferSize = img.xsize * img.ysize * img.csize;
       post("fetching %d bytes into %p", bufferSize, img.data);
       HRESULT hr = m_pGrabber->GetCurrentBuffer(&bufferSize, (long *)img.data);
@@ -1155,9 +1159,9 @@ bool filmDS::open(const std::string&path, const gem::Properties&props)
     double d=0.;
     if(props.get("auto", d)) {
     }
-    if(d>-1e-8 && d<1e-8)
+    if(d>-1e-8 && d<1e-8) {
       player->setPaused(true);
-    else {
+    } else {
       player->setSpeed(d);
       player->play();
     }
@@ -1226,9 +1230,9 @@ void filmDS::setProperties(gem::Properties&props)
   double d;
   if(props.get("auto", d)) {
     if(player) {
-      if(d>-1e-8 && d<1e-8)
+      if(d>-1e-8 && d<1e-8) {
         player->setPaused(true);
-      else {
+      } else {
         player->setSpeed(d);
         player->play();
       }

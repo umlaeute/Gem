@@ -86,7 +86,8 @@ typedef struct class_setup_list_ {
 
 static class_setup_list_t *register_class_setup_list = 0;
 
-void gem_register_class_setup(const char*name, t_class_setup setup) {
+void gem_register_class_setup(const char*name, t_class_setup setup)
+{
   class_setup_list_t*x = new class_setup_list_t;
   x->next = register_class_setup_list;
   x->setup = setup;
@@ -185,8 +186,9 @@ static void addownpath(const char*filename)
   const char*mypath=0;
 #ifdef HAVE_M_IMP_H
   t_class *c = (t_class*)class_new(gensym("Gem"), 0, 0, 0, 0, A_NULL);
-  if (c && c->c_externdir)
+  if (c && c->c_externdir) {
     mypath=c->c_externdir->s_name;
+  }
 #endif /* HAVE_S_STUFF_H */
 
   int success = 0;
@@ -215,7 +217,7 @@ static void addownpath(const char*filename)
       pd_error(0, "GEM: unable to find Gem's abstractions");
     }
     pd_error(0, "GEM: please manually add Gem path%s to Pd's search path",
-          qpath.c_str());
+             qpath.c_str());
   }
 
   checkVersion(mypath, filename, flags);
@@ -243,7 +245,9 @@ namespace gem
 void setup()
 {
   static bool firsttime = true;
-  if(!firsttime) return;
+  if(!firsttime) {
+    return;
+  }
   firsttime = false;
   // startup GEM
   post("GEM: Graphics Environment for Multimedia");
@@ -290,7 +294,7 @@ void caseinsensitive_error(const char*gem)
    * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.
    */
   pd_error(0, "GEM: rejecting incorrect spelling '%s' for cross-platform reasons: use 'Gem'!",
-        gem);
+           gem);
 }
 };
 

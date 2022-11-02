@@ -413,12 +413,12 @@ void gemsdlwindow :: dispatch()
     case SDL_KEYUP:
     case SDL_KEYDOWN:
       key
-        (
-          event.key.which
+      (
+        event.key.which
         , key2symbol(event.key.keysym.sym, event.key.keysym.unicode)
         , event.key.keysym.scancode
         , event.key.state==SDL_PRESSED
-        );
+      );
       break;
     case SDL_MOUSEMOTION:
       motion(event.motion.which, event.motion.x, event.motion.y);

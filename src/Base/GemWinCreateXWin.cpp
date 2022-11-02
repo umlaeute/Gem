@@ -238,7 +238,7 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
 
   if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
     pd_error(0, "GEM: TrueColor visual required for this program (got %d)",
-          vi->c_class);
+             vi->c_class);
     destroyGemWindow(info);
     return(0);
   }

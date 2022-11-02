@@ -172,7 +172,7 @@ bool videoV4L :: grabFrame()
     errorcount++;
     if(errorcount>1000) {
       pd_error(0, "[GEM:videoV4L] %d capture errors in a row... I think I better stop now...",
-            errorcount);
+               errorcount);
       return false;
     }
   }
@@ -589,7 +589,7 @@ void videoV4L::setProperties(gem::Properties&props)
         int channel=d;
         if(channel<0 || channel>(vcap.channels-1)) {
           pd_error(0, "[GEM:videoV4L] channel %d out of range [0..%d]", channel,
-                vcap.channels-1);
+                   vcap.channels-1);
           continue;
         }
         m_channel=channel;

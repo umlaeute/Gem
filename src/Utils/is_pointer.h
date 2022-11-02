@@ -8,27 +8,25 @@
 
 namespace gem
 {
-  template <typename T>
-    struct is_pointer_type
-    {
-      enum { value = false };
-    };
+template <typename T>
+struct is_pointer_type {
+  enum { value = false };
+};
 
-  template <typename T>
-    struct is_pointer_type<T*>
-    {
-      enum { value = true };
-    };
+template <typename T>
+struct is_pointer_type<T*> {
+  enum { value = true };
+};
 
-  template <typename T>
-    bool is_pointer(void)
-    {
-      return is_pointer_type<T>::value;
-    }
-  template <typename T>
-    bool is_pointer(const T&)
-    {
-      return is_pointer_type<T>::value;
-    }
+template <typename T>
+bool is_pointer(void)
+{
+  return is_pointer_type<T>::value;
+}
+template <typename T>
+bool is_pointer(const T&)
+{
+  return is_pointer_type<T>::value;
+}
 };
 #endif // GEM_IS_POITNER_H_

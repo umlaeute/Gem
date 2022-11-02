@@ -119,16 +119,25 @@ static std::string key2symbol(int c)
     return std::string("End");
   case GLUT_KEY_INSERT:
     return std::string("Insert");
-    /* freeglut_ext.h */
-  case GLUT_KEY_NUM_LOCK: return std::string("Num_Lock");
-  case GLUT_KEY_BEGIN: return std::string("Begin");
-  case GLUT_KEY_DELETE: return std::string("Delete");
-  case GLUT_KEY_SHIFT_L: return std::string("Shift_L");
-  case GLUT_KEY_SHIFT_R: return std::string("Shift_R");
-  case GLUT_KEY_CTRL_L: return std::string("Control_L");
-  case GLUT_KEY_CTRL_R: return std::string("Control_R");
-  case GLUT_KEY_ALT_L: return std::string("Alt_L");
-  case GLUT_KEY_ALT_R: return std::string("Alt_R");
+  /* freeglut_ext.h */
+  case GLUT_KEY_NUM_LOCK:
+    return std::string("Num_Lock");
+  case GLUT_KEY_BEGIN:
+    return std::string("Begin");
+  case GLUT_KEY_DELETE:
+    return std::string("Delete");
+  case GLUT_KEY_SHIFT_L:
+    return std::string("Shift_L");
+  case GLUT_KEY_SHIFT_R:
+    return std::string("Shift_R");
+  case GLUT_KEY_CTRL_L:
+    return std::string("Control_L");
+  case GLUT_KEY_CTRL_R:
+    return std::string("Control_R");
+  case GLUT_KEY_ALT_L:
+    return std::string("Alt_L");
+  case GLUT_KEY_ALT_R:
+    return std::string("Alt_R");
   default:
     break;
   }
@@ -155,32 +164,44 @@ void closeCb(void)
 void keyboardCb(unsigned char c, int x, int y)
 {
   CALLBACK4WIN->motion( 0,x,y);
-  if(ggw)ggw->key( 0,key2symbol(c), c, 1);
+  if(ggw) {
+    ggw->key( 0,key2symbol(c), c, 1);
+  }
 }
 void keyboardupCb(unsigned char c, int x, int y)
 {
   CALLBACK4WIN->motion( 0,x,y);
-  if(ggw)ggw->key( 0,key2symbol(c), c, 0);
+  if(ggw) {
+    ggw->key( 0,key2symbol(c), c, 0);
+  }
 }
 void specialCb(int c, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  if(ggw)ggw->key(0,key2symbol(c), c, 1);
+  if(ggw) {
+    ggw->key(0,key2symbol(c), c, 1);
+  }
 }
 void specialupCb(int c, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  if(ggw)ggw->key(0,key2symbol(c), c, 0);
+  if(ggw) {
+    ggw->key(0,key2symbol(c), c, 0);
+  }
 }
 void reshapeCb(int x, int y)
 {
   CALLBACK4WIN->dimension(x, y);
-  if(ggw)ggw->framebuffersize(x, y);
+  if(ggw) {
+    ggw->framebuffersize(x, y);
+  }
 }
 void mouseCb(int button, int state, int x, int y)
 {
   CALLBACK4WIN->motion(0,x,y);
-  if(ggw)ggw->button(0,button, !state);
+  if(ggw) {
+    ggw->button(0,button, !state);
+  }
 }
 void motionCb(int x, int y)
 {

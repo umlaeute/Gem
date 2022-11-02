@@ -291,13 +291,26 @@ void GemWindow::key(int devId, const std::string& sid, int iid, int state)
 
   if(keyname[0] && !keyname[1]) {
     switch(keyname[0]) {
-    case '\b': keyname = "BackSpace"; break;
-    case '\t': keyname = "Tab"; break;
-    case '\r': keyname = "Return"; break;
-    case ' ': keyname = "Space"; break;
-    case 27: keyname = "Escape"; break;
-    case 127: keyname = "Delete"; break;
-    default: break;
+    case '\b':
+      keyname = "BackSpace";
+      break;
+    case '\t':
+      keyname = "Tab";
+      break;
+    case '\r':
+      keyname = "Return";
+      break;
+    case ' ':
+      keyname = "Space";
+      break;
+    case 27:
+      keyname = "Escape";
+      break;
+    case 127:
+      keyname = "Delete";
+      break;
+    default:
+      break;
     }
   }
 

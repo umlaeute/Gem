@@ -145,7 +145,7 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL) {
     pd_error(0, "[GEM:recordQT4L] starting to record to %s failed",
-          filename.c_str());
+             filename.c_str());
     return false;
   }
 

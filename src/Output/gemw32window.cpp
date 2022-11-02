@@ -85,8 +85,9 @@ public:
     dc(NULL),
     context(NULL)
   {
-    if(fullscreen)
+    if(fullscreen) {
       border = false;
+    }
     try {
       create(hInstance, buffer, fullscreen, border, title, x, y, w, h);
     } catch(GemException&x) {

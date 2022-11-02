@@ -233,8 +233,9 @@ void modelOBJ :: getProperties(gem::Properties&props)
       props.set(keys[i], m_currentH);
     }
     if("groups" == keys[i]) {
-      if(m_model)
+      if(m_model) {
         props.set(keys[i], glmGetNumGroups(m_model));
+      }
     }
   }
 }

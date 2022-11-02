@@ -199,8 +199,8 @@ bool CPPExtern :: checkGemVersion(const int major, const int minor)
 {
   if(!GemVersion::versionCheck(major, minor)) {
     pd_error(0, "GEM version mismatch: compiled for %d.%d but we are running %s",
-            major, minor,
-            GemVersion::versionString());
+             major, minor,
+             GemVersion::versionString());
     return false;
   }
   return true;

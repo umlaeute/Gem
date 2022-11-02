@@ -149,7 +149,9 @@ void GemMan::resizeCallback(int xSize, int ySize, void *)
 #ifndef GEM_MULTICONTEXT
 
   float xDivy = (float)xSize / (float)ySize;
-  if (ySize == 0) xDivy = 1;
+  if (ySize == 0) {
+    xDivy = 1;
+  }
   GemMan::m_h = ySize;
   GemMan::m_w = xSize;
   GemMan::m_height = ySize;
@@ -333,8 +335,12 @@ void GemMan :: resetValues()
 
   // setup the transformation matrices
   float xDivy = (float)m_w / (float)m_h;
-  if (m_w == 0) xDivy = 1;
-  if (m_h == 0) xDivy = 1;
+  if (m_w == 0) {
+    xDivy = 1;
+  }
+  if (m_h == 0) {
+    xDivy = 1;
+  }
 
   if(GLEW_ARB_imaging) {
     glMatrixMode(GL_COLOR);
@@ -357,7 +363,7 @@ void GemMan :: resetValues()
   //   shouldn't this be called here?
   //  glLoadIdentity();
   gem::utils::gl::gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-            m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
+                            m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
 
   if (m_fogMode == FOG_OFF) {
     //  TODO:
@@ -607,7 +613,9 @@ void GemMan :: render(void *)
     int xSize = m_w / 2;
     int ySize = m_h;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
-    if (ySize == 0) xDivy = 1;
+    if (ySize == 0) {
+      xDivy = 1;
+    }
 
     // setup the left viewpoint
     glViewport(0, 0, xSize, ySize);
@@ -624,8 +632,8 @@ void GemMan :: render(void *)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
     fillGemState(currentState);
@@ -652,8 +660,8 @@ void GemMan :: render(void *)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
     fillGemState(currentState);
@@ -695,7 +703,9 @@ void GemMan :: render(void *)
     int xSize = m_w;
     int ySize = m_h;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
-    if (ySize == 0) xDivy = 1;
+    if (ySize == 0) {
+      xDivy = 1;
+    }
 
     color_t left_color=RED;
     color_t right_color=GREEN;
@@ -721,8 +731,8 @@ void GemMan :: render(void *)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
     fillGemState(currentState);
@@ -749,8 +759,8 @@ void GemMan :: render(void *)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
     fillGemState(currentState);
@@ -770,7 +780,9 @@ void GemMan :: render(void *)
     int xSize = m_w;
     int ySize = m_h;
     float xDivy = static_cast<float>(xSize) / static_cast<float>(ySize);
-    if (ySize == 0) xDivy = 1;
+    if (ySize == 0) {
+      xDivy = 1;
+    }
 
     // setup the left viewpoint
 
@@ -788,8 +800,8 @@ void GemMan :: render(void *)
 
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] - m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render left view
     fillGemState(currentState);
@@ -816,8 +828,8 @@ void GemMan :: render(void *)
 
     glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0] + m_stereoSep / 100.f, m_lookat[1], m_lookat[2],
-              m_lookat[3], m_lookat[4],
-              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[3], m_lookat[4],
+                              m_lookat[5] + m_stereoFocal, m_lookat[6], m_lookat[7], m_lookat[8]);
 
     // render right view
     fillGemState(currentState);
@@ -1215,7 +1227,9 @@ void GemMan :: swapBuffers()
     glFlush();
     // setup the transformation matrices
     float xDivy = static_cast<float>(m_w) / static_cast<float>(m_h);
-    if (m_h == 0) xDivy = 1;
+    if (m_h == 0) {
+      xDivy = 1;
+    }
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -1228,7 +1242,7 @@ void GemMan :: swapBuffers()
     // shouldn't this be called here?
     //          glLoadIdentity();
     gem::utils::gl::gluLookAt(m_lookat[0], m_lookat[1], m_lookat[2], m_lookat[3], m_lookat[4],
-              m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
+                              m_lookat[5], m_lookat[6], m_lookat[7], m_lookat[8]);
   }
 #endif /* GEM_MULTICONTEXT */
 }

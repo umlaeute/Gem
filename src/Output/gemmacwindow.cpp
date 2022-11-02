@@ -1216,8 +1216,8 @@ bool gemmacwindow::create(void)
   short whichDevice =
     1; // number of device to try (0 = 1st device, 1 = 2nd/external device)
   verbose(2,"MAC: createGemWindow()");
-  EventTypeSpec list[] =
-  {              //{ kEventClassWindow, kEventWindowActivated },
+  EventTypeSpec list[] = {
+    //{ kEventClassWindow, kEventWindowActivated },
     //{ kEventClassWindow, kEventWindowGetClickActivation },
     { kEventClassWindow, kEventWindowClosed },
     { kEventClassMouse, kEventMouseDown },

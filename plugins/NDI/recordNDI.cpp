@@ -28,8 +28,9 @@
 
 
 #include "init_ndi_library.hh"
-namespace {
-  const NDIlib_v4* NDI = 0;
+namespace
+{
+const NDIlib_v4* NDI = 0;
 };
 
 using namespace gem::plugins;
@@ -48,11 +49,13 @@ REGISTER_RECORDFACTORY("NDI", recordNDI);
 recordNDI :: recordNDI(void)
   :  m_ndi_send(NULL)
 {
-  if(!NDI)
+  if(!NDI) {
     NDI = init_ndi_library("recordNDI");
+  }
 
-  if(!NDI)
+  if(!NDI) {
     throw(GemException("couldn't initialize libNDI"));
+  }
 
   if (!NDI->initialize()) {
     throw(GemException("NDI failed to initialize!"));
@@ -71,8 +74,9 @@ recordNDI :: ~recordNDI(void)
 
 void recordNDI :: stop(void)
 {
-  if (m_ndi_send)
+  if (m_ndi_send) {
     NDI->send_destroy(m_ndi_send);
+  }
   m_ndi_send = NULL;
 }
 
@@ -87,8 +91,9 @@ bool recordNDI :: start(const std::string&filename, gem::Properties&props)
   send_create.clock_audio = false;
   m_ndi_send = NDI->send_create(&send_create);
   post("[GEM::recordNDI] opened '%s' as '%s'", filename.c_str(), send_create.p_ndi_name);
-  if (!m_ndi_send)
+  if (!m_ndi_send) {
     return false;
+  }
   return true;
 }
 

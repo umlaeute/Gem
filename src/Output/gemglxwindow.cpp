@@ -519,7 +519,8 @@ struct gemglxwindow::PIMPL {
     if (vi == NULL) { // if Xrender method doesn't work try legacy
       static int**buf=0;
       switch(buffer) {
-      default: pd_error(parent, "only single/double buffer supported; defaulting to double");
+      default:
+        pd_error(parent, "only single/double buffer supported; defaulting to double");
       case 2:
         buf=dblBufs;
         break;
@@ -559,7 +560,7 @@ struct gemglxwindow::PIMPL {
     }
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
       pd_error(parent, "TrueColor visual required for this program (got %d)",
-              vi->c_class);
+               vi->c_class);
       return false;
     }
     // create the rendering context

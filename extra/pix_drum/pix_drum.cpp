@@ -35,7 +35,7 @@ CPPEXTERN_NEW(pix_drum)
 // Constructor
 /////////////////////////////////////////////////////////
 pix_drum :: pix_drum(void) :
-outlet1(0), outlet2(0), outlet3(0), outlet4(0),
+  outlet1(0), outlet2(0), outlet3(0), outlet4(0),
   head(0), bottom(240), right(320), left(0), mode(0), pix_dist(0), min_width(10), pix_dist_ctr(0),
   thresh(0.), min_height(.14)
 {
@@ -74,22 +74,36 @@ void pix_drum :: processGrayImage(imageStruct &image)
   totalyes = i = xval = hor = ver = 0;
   L_peaky = R_peakx = R_peaky = 0;
   L_area = R_area = 0;	// = totalyesx = totalyesy
-  for (n=0;n<image.xsize;n++)
-    yesx[n] = 0; //clear histograms
-  for (n=0;n<image.ysize;n++)
+  for (n=0; n<image.xsize; n++) {
+    yesx[n] = 0;  //clear histograms
+  }
+  for (n=0; n<image.ysize; n++) {
     yesy[n] = 0;
+  }
 
-  if (mode == 0){
+  if (mode == 0) {
     // check bounds are within limits
-    if (left	< 0)		left	= 0;
-    if (right	> xsize)	right	= xsize;
-    if (head	< 0)		head	= 0;
-    if (bottom	> ysize)	bottom	= ysize;
+    if (left	< 0) {
+      left	= 0;
+    }
+    if (right	> xsize)	{
+      right	= xsize;
+    }
+    if (head	< 0) {
+      head	= 0;
+    }
+    if (bottom	> ysize)	{
+      bottom	= ysize;
+    }
     // thresh the image and make histograms
     for (ycount = 0; ycount < bottom; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
       for (xcount = left; xcount < right; xcount++) {
         xcoord = image.csize * xcount + ycoord;
         if (base[chGray + xcoord] < (thresh*256.)) {
@@ -97,8 +111,9 @@ void pix_drum :: processGrayImage(imageStruct &image)
           yesx[xcount] += 1;	// make a histogram of each axis
           yesy[ycount] += 1;	//
           totalyes++;
+        } else {
+          base[chGray + xcoord] = 255;
         }
-        else {	base[chGray + xcoord] = 255;	}
       }
     }
     // find x (hor) and y (ver) coordinates
@@ -106,8 +121,12 @@ void pix_drum :: processGrayImage(imageStruct &image)
     xval_max = left;
     xval = left;
     for (i = left; i < right; i++) {
-      if (yesx[i] > yesx[xval]) xval = i;
-      if (yesx[i] >= yesx[xval_max]) xval_max = i;
+      if (yesx[i] > yesx[xval]) {
+        xval = i;
+      }
+      if (yesx[i] >= yesx[xval_max]) {
+        xval_max = i;
+      }
     }
     hor = (xval + xval_max) / 2;
     ver = yesx[hor];
@@ -116,17 +135,23 @@ void pix_drum :: processGrayImage(imageStruct &image)
     float *px=new float[right]();
     int spL, spR;
 
-    for (i = left; i < hor; i++) L_area += yesx[i];
+    for (i = left; i < hor; i++) {
+      L_area += yesx[i];
+    }
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((right - hor) * (ver));
     xval = 0;
 
     for (i = left;	i < right; i++) {
-      if		(i< pix_dist) px[i] = 0;
-      else if (i>right-pix_dist-2) px[i] = 0;
-      else
-        px[i] = (yesx[i-pix_dist]*-0.5 + yesx[i] + yesx[i+pix_dist]*-0.5 + yesx[i-pix_dist+1]*-0.5 + yesx[i+1] + yesx[i+pix_dist+1]*-0.5 + yesx[i-pix_dist+2]*-0.5 + yesx[i+2] + yesx[i+pix_dist+2]*-0.5)/3;
+      if		(i< pix_dist) {
+        px[i] = 0;
+      } else if (i>right-pix_dist-2) {
+        px[i] = 0;
+      } else {
+        px[i] = (yesx[i-pix_dist]*-0.5 + yesx[i] + yesx[i+pix_dist]*-0.5 + yesx[i-pix_dist+1]*-0.5 + yesx[i+1] + yesx[i+pix_dist+1]*-0.5 + yesx[i-pix_dist+2]*-0.5 + yesx[i+2] + yesx[i
+                 +pix_dist+2]*-0.5)/3;
+      }
     }
 
     float highest, temp_highest;
@@ -148,8 +173,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
           temp_highest_int = i + 1;
         }
         p++;
-      }
-      else if (tempint == 1){
+      } else if (tempint == 1) {
         tempint = 0;
         if (p > min_width) {
           spL_x[spL] = temp_highest_int;
@@ -172,16 +196,19 @@ void pix_drum :: processGrayImage(imageStruct &image)
 
     // draw lines of coordinates (only to use in mode 2)
     for (ycount = 0; ycount < image.ysize; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
-      if (ycount == (ver + head)){
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
+      if (ycount == (ver + head)) {
         for (xcount = 0; xcount < image.xsize; xcount++) {
           xcoord = image.csize * xcount + ycoord;
           base[chGray + xcoord] = 0;
         }
-      }
-      else{
+      } else {
         xcount = hor;
         xcoord = image.csize * xcount + ycoord;
         base[chGray + xcoord] = 0;
@@ -191,8 +218,11 @@ void pix_drum :: processGrayImage(imageStruct &image)
     int side;
 
     for(i = 0; i < spL; i++) {
-      if (spL_x[i] <= hor)	{side = 0;}
-      else					{side = 1;};
+      if (spL_x[i] <= hor)	{
+        side = 0;
+      } else					{
+        side = 1;
+      };
       SETFLOAT(&as[0], side);
       SETFLOAT(&as[1], i);
       SETFLOAT(&as[2], spL_x[i]);
@@ -314,15 +344,27 @@ void pix_drum :: processGrayImage(imageStruct &image)
   // #####################################################
   else if (mode == 1) {
     // check bounds are within limits
-    if (left	< 0)		left	= 0;
-    if (right	> xsize)	right	= xsize;
-    if (head	< 0)		head	= 0;
-    if (bottom	> ysize)	bottom	= ysize;
+    if (left	< 0) {
+      left	= 0;
+    }
+    if (right	> xsize)	{
+      right	= xsize;
+    }
+    if (head	< 0) {
+      head	= 0;
+    }
+    if (bottom	> ysize)	{
+      bottom	= ysize;
+    }
     // thresh the image and make histograms
     for (ycount = 0; ycount < bottom; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
       for (xcount = left; xcount < right; xcount++) {
         xcoord = image.csize * xcount + ycoord;
         if (base[chGray + xcoord] < (thresh*256.)) {
@@ -330,14 +372,17 @@ void pix_drum :: processGrayImage(imageStruct &image)
           yesx[xcount] += 1;	// make a histogram of each axis
           yesy[ycount] += 1;	//
           totalyes++;
+        } else {
+          base[chGray + xcoord] = 255;
         }
-        else {	base[chGray + xcoord] = 255;	}
       }
     }
     // find x (hor) and y (ver) coordinates
     xval = 5;
     for (i = 6; i < right; i++)
-      if (yesx[i] > yesx[xval]) xval = i;
+      if (yesx[i] > yesx[xval]) {
+        xval = i;
+      }
     hor = xval;
     ver = yesx[xval];
     // find secondary peaks
@@ -345,7 +390,9 @@ void pix_drum :: processGrayImage(imageStruct &image)
     int spL, spR;
 
     spL = spR = 0;
-    for (i = left; i < hor; i++) L_area += yesx[i];
+    for (i = left; i < hor; i++) {
+      L_area += yesx[i];
+    }
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((320 - hor) * (ver));
@@ -385,16 +432,19 @@ void pix_drum :: processGrayImage(imageStruct &image)
 
     // draw lines of coordinates (only to use in mode 2)
     for (ycount = 0; ycount < image.ysize; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
-      if (ycount == (ver + head)){
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
+      if (ycount == (ver + head)) {
         for (xcount = 0; xcount < image.xsize; xcount++) {
           xcoord = image.csize * xcount + ycoord;
           base[chGray + xcoord] = 0;
         }
-      }
-      else {
+      } else {
         xcount = hor;
         xcoord = image.csize * xcount + ycoord;
         base[chGray + xcoord] = 0;
@@ -427,15 +477,27 @@ void pix_drum :: processGrayImage(imageStruct &image)
   else if (mode == 2) {
     int*yesx_s = new int[ysize]();
     // check bounds are within limits
-    if (left	< 0)		left	= 0;
-    if (right	> xsize)	right	= xsize;
-    if (head	< 0)		head	= 0;
-    if (bottom	> ysize)	bottom	= ysize;
+    if (left	< 0) {
+      left	= 0;
+    }
+    if (right	> xsize)	{
+      right	= xsize;
+    }
+    if (head	< 0) {
+      head	= 0;
+    }
+    if (bottom	> ysize)	{
+      bottom	= ysize;
+    }
     // thresh the image and make histograms
     for (ycount = 0; ycount < bottom; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
       for (xcount = left; xcount < right; xcount++) {
         xcoord = image.csize * xcount + ycoord;
         if (base[chGray + xcoord] < (thresh*256.)) {
@@ -443,23 +505,32 @@ void pix_drum :: processGrayImage(imageStruct &image)
           yesx[xcount] += 1;	// make a histogram of each axis
           yesy[ycount] += 1;	//
           totalyes++;
+        } else {
+          base[chGray + xcoord] = 255;
         }
-        else {	base[chGray + xcoord] = 255;	}
       }
     }
     // smooth values
     for (i = left; i < right; i++) {
-      if 	(i == left) 	yesx_s[i] = yesx[i];
-      else if (i == right)	yesx_s[i] = yesx[i];
-      else 			yesx[i] = (yesx[i-1] + yesx[i] + yesx[i+1]) / 3;
+      if 	(i == left) {
+        yesx_s[i] = yesx[i];
+      } else if (i == right)	{
+        yesx_s[i] = yesx[i];
+      } else {
+        yesx[i] = (yesx[i-1] + yesx[i] + yesx[i+1]) / 3;
+      }
     }
     // find x (hor) and y (ver) coordinates
     int xval_max;
     xval_max = left;
     xval = left;
     for (i = left; i < right; i++) {
-      if (yesx[i] > yesx[xval]) xval = i;
-      if (yesx[i] >= yesx[xval_max]) xval_max = i;
+      if (yesx[i] > yesx[xval]) {
+        xval = i;
+      }
+      if (yesx[i] >= yesx[xval_max]) {
+        xval_max = i;
+      }
     }
     hor = (xval + xval_max) / 2;
     ver = yesx[hor];
@@ -468,17 +539,23 @@ void pix_drum :: processGrayImage(imageStruct &image)
     float *px=new float[right]();
     int spL, spR;
 
-    for (i = left; i < hor; i++) L_area += yesx[i];
+    for (i = left; i < hor; i++) {
+      L_area += yesx[i];
+    }
     R_area  = (totalyes - L_area);
     L_area /= ((hor)       * (ver));
     R_area /= ((right - hor) * (ver));
     xval = 0;
 
     for (i = left;	i < right; i++) {
-      if		(i< pix_dist) px[i] = 0;
-      else if (i>right-pix_dist-2) px[i] = 0;
-      else
-        px[i] = (yesx[i-pix_dist]*-0.5 + yesx[i] + yesx[i+pix_dist]*-0.5 + yesx[i-pix_dist+1]*-0.5 + yesx[i+1] + yesx[i+pix_dist+1]*-0.5 + yesx[i-pix_dist+2]*-0.5 + yesx[i+2] + yesx[i+pix_dist+2]*-0.5)/3;
+      if		(i< pix_dist) {
+        px[i] = 0;
+      } else if (i>right-pix_dist-2) {
+        px[i] = 0;
+      } else {
+        px[i] = (yesx[i-pix_dist]*-0.5 + yesx[i] + yesx[i+pix_dist]*-0.5 + yesx[i-pix_dist+1]*-0.5 + yesx[i+1] + yesx[i+pix_dist+1]*-0.5 + yesx[i-pix_dist+2]*-0.5 + yesx[i+2] + yesx[i
+                 +pix_dist+2]*-0.5)/3;
+      }
     }
 
     float highest, temp_highest;
@@ -500,8 +577,7 @@ void pix_drum :: processGrayImage(imageStruct &image)
           temp_highest_int = i + 1;
         }
         p++;
-      }
-      else if (tempint == 1){
+      } else if (tempint == 1) {
         tempint = 0;
         if (p > min_width) {
           spL_x[spL] = temp_highest_int;
@@ -524,16 +600,19 @@ void pix_drum :: processGrayImage(imageStruct &image)
 
     // draw lines of coordinates (only to use in mode 2)
     for (ycount = 0; ycount < image.ysize; ycount++) {
-      if (ycount < head)			continue;
-      else if (ycount > bottom)	continue;
-      else ycoord = image.csize * image.xsize * ycount;
-      if (ycount == (ver + head)){
+      if (ycount < head) {
+        continue;
+      } else if (ycount > bottom)	{
+        continue;
+      } else {
+        ycoord = image.csize * image.xsize * ycount;
+      }
+      if (ycount == (ver + head)) {
         for (xcount = 0; xcount < image.xsize; xcount++) {
           xcoord = image.csize * xcount + ycoord;
           base[chGray + xcoord] = 0;
         }
-      }
-      else{
+      } else {
         xcount = hor;
         xcoord = image.csize * xcount + ycoord;
         base[chGray + xcoord] = 0;
@@ -543,8 +622,11 @@ void pix_drum :: processGrayImage(imageStruct &image)
     int side;
 
     for(i = 0; i < spL; i++) {
-      if (spL_x[i] <= hor)	{side = 0;}
-      else					{side = 1;};
+      if (spL_x[i] <= hor)	{
+        side = 0;
+      } else					{
+        side = 1;
+      };
       SETFLOAT(&as[0], side);
       SETFLOAT(&as[1], i);
       SETFLOAT(&as[2], spL_x[i]);
@@ -567,7 +649,8 @@ void pix_drum :: processGrayImage(imageStruct &image)
     delete[]yesx_s;
     delete[]px;
   }
-  delete[]yesx; delete[]yesy;
+  delete[]yesx;
+  delete[]yesy;
 }
 /////////////////////////////////////////////////////////
 // vecBoundsMess

@@ -89,7 +89,8 @@ void GemPixObj :: render(GemState *state)
     image = &cachedPixBlock;
     if (m_processOnOff) {
       switch(image->image.format) {
-      case GL_RGBA: case GL_BGRA_EXT:
+      case GL_RGBA:
+      case GL_BGRA_EXT:
         switch(m_simd) {
         case(GEM_SIMD_MMX):
           processRGBAMMX(image->image);
@@ -104,7 +105,8 @@ void GemPixObj :: render(GemState *state)
           processRGBAImage(image->image);
         }
         break;
-      case GL_RGB: case GL_BGR_EXT:
+      case GL_RGB:
+      case GL_BGR_EXT:
         processRGBImage(image->image);
         break;
       case GL_LUMINANCE:
@@ -159,10 +161,12 @@ void GemPixObj :: postrender(GemState *state)
 void GemPixObj :: processImage(imageStruct &image)
 {
   switch (image.format) {
-  case GL_RGBA: case GL_BGRA_EXT:
+  case GL_RGBA:
+  case GL_BGRA_EXT:
     error("cannot handle RGBA image");
     break;
-  case GL_RGB: case GL_BGR_EXT:
+  case GL_RGB:
+  case GL_BGR_EXT:
     error("cannot handle RGB image");
     break;
   case GL_LUMINANCE:

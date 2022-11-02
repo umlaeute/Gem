@@ -37,7 +37,7 @@ pix_artoolkit :: pix_artoolkit()
 #ifdef HAVE_ARTOOLKIT
   :
 # ifdef GEM4MAX
-GemPixObj(1),
+  GemPixObj(1),
 # endif
   m_outMarker(NULL)
   , m_xsize(320), m_ysize(240), m_thresh(100)
@@ -91,10 +91,18 @@ pix_artoolkit :: ~pix_artoolkit()
 {
 #ifdef HAVE_ARTOOLKIT
 # if AR_HEADER_VERSION_MAJOR >= 5
-  if(m_patterns)arPattDeleteHandle(m_patterns);
-  if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
-  if(m_arhandle)arDeleteHandle(m_arhandle);
-  if(m_paramlt )arParamLTFree(&m_paramlt);
+  if(m_patterns) {
+    arPattDeleteHandle(m_patterns);
+  }
+  if(m_3dhandle) {
+    ar3DDeleteHandle(&m_3dhandle);
+  }
+  if(m_arhandle) {
+    arDeleteHandle(m_arhandle);
+  }
+  if(m_paramlt ) {
+    arParamLTFree(&m_paramlt);
+  }
 # endif
 #endif
 }
@@ -122,9 +130,15 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
 #endif
     ::arParamDisp(&m_cparam);
 #if AR_HEADER_VERSION_MAJOR >= 5
-    if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
-    if(m_arhandle)arDeleteHandle(m_arhandle);
-    if(m_paramlt)arParamLTFree(&m_paramlt);
+    if(m_3dhandle) {
+      ar3DDeleteHandle(&m_3dhandle);
+    }
+    if(m_arhandle) {
+      arDeleteHandle(m_arhandle);
+    }
+    if(m_paramlt) {
+      arParamLTFree(&m_paramlt);
+    }
     m_paramlt=arParamLTCreate(&m_cparam, AR_PARAM_LT_DEFAULT_OFFSET);
     m_3dhandle = ar3DCreateHandle(&m_cparam);
     m_arhandle = arCreateHandle(m_paramlt);
@@ -155,8 +169,9 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
   }
   marker_num = arGetMarkerNum(m_arhandle);
   marker_info = arGetMarker(m_arhandle);
-  if(!marker_info || marker_num<1)
+  if(!marker_info || marker_num<1) {
     return;
+  }
 
 #else
   if (::arDetectMarker(image.data, m_thresh, &marker_info, &marker_num) < 0) {
@@ -165,14 +180,19 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
   }
 #endif
   for (i=0; i<MAX_OBJECTS; i++) {
-    if (m_object[i].patt_id == -1) continue;
+    if (m_object[i].patt_id == -1) {
+      continue;
+    }
     for (k = -1, j = 0; j < marker_num; j++) {
       if (m_object[i].patt_id == marker_info[j].id) {
-        if (k == -1) k = j;
-        else if (marker_info[k].cf < marker_info[j].cf) k = j;
+        if (k == -1) {
+          k = j;
+        } else if (marker_info[k].cf < marker_info[j].cf) {
+          k = j;
+        }
       }
       verbose(3, "ID: %d (%f, %f)",
-             marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
+              marker_info[j].id, marker_info[j].pos[0], marker_info[j].pos[1]);
     }
     m_object[i].visible = k;
 
@@ -183,14 +203,14 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
 #if AR_HEADER_VERSION_MAJOR >= 5
       if (m_continuous == 0 || m_object[i].contFlag == 0) {
         ::arGetTransMatSquare(m_3dhandle, &marker_info[i]
-            , m_object[i].width
-            , m_object[i].trans);
+                              , m_object[i].width
+                              , m_object[i].trans);
       } else {
         ::arGetTransMatSquareCont(m_3dhandle, &marker_info[i]
-            , m_object[i].trans
-            , m_object[i].width
-            , m_object[i].trans
-            );
+                                  , m_object[i].trans
+                                  , m_object[i].width
+                                  , m_object[i].trans
+                                 );
       }
 #else
       if (m_continuous == 0 || m_object[i].contFlag == 0) {
@@ -209,9 +229,9 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
       m_object[i].contFlag = true;
 
       verbose(3, "ID(%d), pos(%f, %f), center(%f, %f)",
-             i + 1,
-             marker_info[k].pos[0], marker_info[k].pos[1],
-             m_object[i].center[0], m_object[i].center[1]);
+              i + 1,
+              marker_info[k].pos[0], marker_info[k].pos[1],
+              m_object[i].center[0], m_object[i].center[1]);
       double q[4], p[3], x, y, z, w;
       ::arUtilMat2QuatPos(m_object[i].trans, q, p);
 
@@ -261,7 +281,8 @@ void pix_artoolkit :: processGrayImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: processRGBAImage(imageStruct &image)
 {
-  error("requires Gray images"); return;
+  error("requires Gray images");
+  return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromGray(image.data);
@@ -276,7 +297,8 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
 /////////////////////////////////////////////////////////
 void pix_artoolkit :: processYUVImage(imageStruct &image)
 {
-  error("requires Gray images"); return;
+  error("requires Gray images");
+  return;
   m_image.xsize = image.xsize;
   m_image.ysize = image.ysize;
   m_image.fromUYVY(image.data);
@@ -344,9 +366,15 @@ void pix_artoolkit :: loadcparaMess(t_symbol *cparam_filename)
   m_cparam_name = cparam_filename;
 
 #if AR_HEADER_VERSION_MAJOR >= 5
-  if(m_3dhandle)ar3DDeleteHandle(&m_3dhandle);
-  if(m_arhandle)arDeleteHandle(m_arhandle);
-  if(m_paramlt)arParamLTFree(&m_paramlt);
+  if(m_3dhandle) {
+    ar3DDeleteHandle(&m_3dhandle);
+  }
+  if(m_arhandle) {
+    arDeleteHandle(m_arhandle);
+  }
+  if(m_paramlt) {
+    arParamLTFree(&m_paramlt);
+  }
   m_paramlt=arParamLTCreate(&m_cparam, AR_PARAM_LT_DEFAULT_OFFSET);
   m_3dhandle = ar3DCreateHandle(&m_cparam);
   m_arhandle = arCreateHandle(m_paramlt);
@@ -496,10 +524,11 @@ void pix_artoolkit :: obj_setupCallback(t_class *classPtr)
 void pix_artoolkit :: loadmarkerMessCallback(void *data, t_symbol*, int argc, t_atom*argv)
 {
 # ifdef HAVE_ARTOOLKIT
-  if(argc==2)
+  if(argc==2) {
     GetMyClass(data)->loadmarkerMess(atom_getint(argv), atom_getsymbol(argv+1));
-  else
+  } else {
     GetMyClass(data)->error("invalide arguments to loadmarker <#id> <filename>");
+  }
 
 # endif /* HAVE_ARTOOLKIT */
 }

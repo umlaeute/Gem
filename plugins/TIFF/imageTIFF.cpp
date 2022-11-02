@@ -141,7 +141,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     unsigned char *buf = new unsigned char [TIFFScanlineSize(tif)];
     if (buf == NULL) {
       pd_error(0, "[GEM:imageTIFF] can't allocate memory for scanline buffer: %s",
-            filename.c_str());
+               filename.c_str());
       TIFFClose(tif);
       return(false);
     }
@@ -200,7 +200,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
                       uint32)));
     if (raster == NULL) {
       pd_error(0, "[GEM:imageTIFF] Unable to allocate memory for image '%s'",
-            filename.c_str());
+               filename.c_str());
       TIFFClose(tif);
       return(false);
     }

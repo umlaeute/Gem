@@ -65,16 +65,19 @@ filmAVIPLAY :: ~filmAVIPLAY(void)
 }
 void filmAVIPLAY :: close(void)
 {
-  if(m_aviimage)
+  if(m_aviimage) {
     m_aviimage->Release();
+  }
   m_aviimage = 0;
 
-  if (m_avistream)
+  if (m_avistream) {
     m_avistream->StopStreaming();
+  }
   m_avistream = 0;
 
-  if (m_avifile)
+  if (m_avifile) {
     delete m_avifile;
+  }
   m_avifile = 0;
 }
 
@@ -111,7 +114,9 @@ bool filmAVIPLAY :: open(const std::string&filename,
   }
   try {
     int curtrack = m_curTrack;
-    if(curtrack<0)curtrack = 0;
+    if(curtrack<0) {
+      curtrack = 0;
+    }
     m_avistream=m_avifile->GetStream(curtrack,AviStream::Video);
   } catch (const char* string) {
     m_avistream = 0;

@@ -64,8 +64,9 @@ bool imageSTB :: load(std::string filename, imageStruct&result,
   int xsize, ysize, csize;
   unsigned char *data = stbi_load(filename.c_str(), &xsize, &ysize, &csize, 4);
 
-  if(!data)
+  if(!data) {
     return(false);
+  }
 
   result.xsize=xsize;
   result.ysize=ysize;
@@ -101,8 +102,9 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
   img.fromABGR(img.data);
 #endif /* !APPLE */
 
-  if(!img.upsidedown)
+  if(!img.upsidedown) {
     stbi_flip_vertically_on_write(1);
+  }
   if("image/png" == mimetype) {
     err = stbi_write_png(filename.c_str(), img.xsize, img.ysize, img.csize, img.data, img.xsize * img.csize);
   } else if ("image/bmp" == mimetype) {

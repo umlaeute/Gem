@@ -325,7 +325,7 @@ void *videoV4L2 :: capturing(void)
       errorcount++;
       if(errorcount>1000) {
         pd_error(0, "[GEM:videoV4L2] %d capture errors in a row... I think I better stop now...",
-              errorcount);
+                 errorcount);
         m_continue_thread=false;
         m_stopTransfer=true;
       }
@@ -686,10 +686,10 @@ bool videoV4L2 :: startTransfer()
     break;
   default:
     pd_error(0, "[GEM:videoV4L2] unknown format '%c%c%c%c'",
-          (char)(m_gotFormat),
-          (char)(m_gotFormat>>8),
-          (char)(m_gotFormat>>16),
-          (char)(m_gotFormat>>24));
+             (char)(m_gotFormat),
+             (char)(m_gotFormat>>8),
+             (char)(m_gotFormat>>16),
+             (char)(m_gotFormat>>24));
     /* we should really return here! */
   }
 

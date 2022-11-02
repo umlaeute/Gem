@@ -318,7 +318,7 @@ bool videoDECKLINK::open(gem::Properties&props)
   BMDSupportedVideoModeFlags modeFlags = bmdSupportedVideoModeDefault;
 
   std::string formatname=(("auto"==m_formatname)
-                                || ("automatic" == m_formatname))?"":m_formatname;
+                          || ("automatic" == m_formatname))?"":m_formatname;
   //if(m_devname.empty())return false;
   close();
 
@@ -402,12 +402,12 @@ bool videoDECKLINK::open(gem::Properties&props)
   }
 
   if (S_OK != m_dlInput->DoesSupportVideoMode(
-          m_connectionType,  /* in: (BMDVideoConnection) connection */
-          m_displayMode->GetDisplayMode(),  /* in: (BMDDisplayMode) requestedMode */
-          m_pixelFormat,  /* in: (BMDPixelFormat) requestedPixelFormat */
-          modeFlags,  /* in: (BMDSupportedVideoModeFlags) flags */
-          &is_supported /* out: (bool) *supported */
-          )) {
+        m_connectionType,  /* in: (BMDVideoConnection) connection */
+        m_displayMode->GetDisplayMode(),  /* in: (BMDDisplayMode) requestedMode */
+        m_pixelFormat,  /* in: (BMDPixelFormat) requestedPixelFormat */
+        modeFlags,  /* in: (BMDSupportedVideoModeFlags) flags */
+        &is_supported /* out: (bool) *supported */
+      )) {
     /* ignore unsupported video mode for now */
     is_supported=true;
     //goto bail;
@@ -572,8 +572,9 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
   int i=0;
   for(i=0; i<keys.size(); i++) {
     const std::string key =keys[i];
-    if(canrestart  && needrestart)
+    if(canrestart  && needrestart) {
       return true;
+    }
     if("format" == key) {
       std::string s;
       double d;
@@ -592,7 +593,8 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
           needrestart = true;
         }
         break;
-      default:  break;
+      default:
+        break;
       }
     }
     if("pixformat" == key) {
@@ -625,7 +627,8 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
           }
         }
         break;
-      default:  break;
+      default:
+        break;
       }
       if (fmt) {
         m_pixelFormat = (BMDPixelFormat)fmt;
@@ -658,12 +661,14 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
           }
         }
         break;
-      default:  break;
+      default:
+        break;
       }
       if(m_dlConfig && (m_connectionType != vconn)) {
         m_dlConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, vconn);
-      } else
+      } else {
         needrestart = true;
+      }
       m_connectionType = vconn;
     }
   }

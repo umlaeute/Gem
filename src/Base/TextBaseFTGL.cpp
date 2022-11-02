@@ -126,9 +126,10 @@ void TextBase :: render(GemState *)
   glEnable(GL_BLEND);
   if(glBlendFuncSeparate)
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
-        GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-  else
+                        GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  else {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
   // step through the lines
   for(i=0; i<m_theText.size(); i++) {
     renderLine(m_theText[i].c_str(),
@@ -262,8 +263,9 @@ void TextBase :: setJustification(JustifyWidth wType)
 
 void TextBase :: getBBox()
 {
-  if(!m_font || m_theText.empty())
+  if(!m_font || m_theText.empty()) {
     return;
+  }
 
   std::vector<gem::any>atoms;
   float x0, y0, z0, x1, y1, z1;
@@ -275,9 +277,12 @@ void TextBase :: getBBox()
     m_font->BBox(m_theText[i].c_str(), _x0, _y0, _z0, _x1, _y1, _z1);
     Justification just=justifyFont(_x0, _y0, _z0, _x1, _y1, _z1, dist);
 #define JUST(var, offset) var = (var - offset) * just.scale
-    JUST(_x0, just.width);  JUST(_x1, just.width);
-    JUST(_y0, just.height); JUST(_y1, just.height);
-    JUST(_z0, just.depth);  JUST(_z1, just.depth);
+    JUST(_x0, just.width);
+    JUST(_x1, just.width);
+    JUST(_y0, just.height);
+    JUST(_y1, just.height);
+    JUST(_z0, just.depth);
+    JUST(_z1, just.depth);
 
     atoms.clear();
     atoms.push_back(i);
@@ -290,9 +295,12 @@ void TextBase :: getBBox()
     m_infoOut.send("bboxline", atoms);
 
     // get the bounding box for all lines
-    x0 = MIN(x0, _x0);  x1 = MAX(x1, _x1);
-    y0 = MIN(y0, _y0);  y1 = MAX(y1, _y1);
-    z0 = MIN(z0, _z0);  z1 = MAX(z1, _z1);
+    x0 = MIN(x0, _x0);
+    x1 = MAX(x1, _x1);
+    y0 = MIN(y0, _y0);
+    y1 = MAX(y1, _y1);
+    z0 = MIN(z0, _z0);
+    z1 = MAX(z1, _z1);
   }
   atoms.clear();
   atoms.push_back(x0);

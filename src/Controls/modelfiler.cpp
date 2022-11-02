@@ -22,12 +22,15 @@
 CPPEXTERN_NEW_WITH_GIMME(modelfiler);
 
 
-namespace {
-std::string checkArrays(const std::string*tablenames, size_t count) {
+namespace
+{
+std::string checkArrays(const std::string*tablenames, size_t count)
+{
   gem::RTE::Array a;
   for(size_t i=0; i<count; i++) {
-    if(!a.name(tablenames[i]))
+    if(!a.name(tablenames[i])) {
       return tablenames[i];
+    }
   }
   return std::string();
 }
@@ -379,9 +382,11 @@ void modelfiler :: openMess(const std::string&filename)
   PRINTSUCCESS(normals);
 }
 
-size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablenames, size_t count) {
-  if((count > 0) && tablenames[0].empty())
+size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablenames, size_t count)
+{
+  if((count > 0) && tablenames[0].empty()) {
     return 0;
+  }
   std::string failed = checkArrays(tablenames, count);
   if(!failed.empty()) {
     error("no such array '%s' for %s", failed.c_str(), name.c_str());
@@ -391,8 +396,9 @@ size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablen
   std::vector<gem::RTE::Array> tabs;
 
   size_t size = data.size();
-  if(!size)
+  if(!size) {
     return size;
+  }
 
   for(size_t i=0; i<count; i++) {
     gem::RTE::Array a(tablenames[i]);
@@ -409,7 +415,8 @@ size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablen
 }
 
 
-void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv) {
+void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv)
+{
   const std::string tabletype = s->s_name;
   std::vector<std::string>extensions;
   std::string*names = 0;
@@ -418,10 +425,11 @@ void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv) {
     extensions.push_back("X");
     extensions.push_back("Y");
     extensions.push_back("Z");
-    if("position" == tabletype)
+    if("position" == tabletype) {
       names = m_position;
-    else
+    } else {
       names = m_normal;
+    }
   } else if (tabletype == "texture") {
     extensions.push_back("U");
     extensions.push_back("V");

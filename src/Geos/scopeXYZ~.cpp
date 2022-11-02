@@ -57,8 +57,9 @@ scopeXYZ :: ~scopeXYZ(void)
 
 void scopeXYZ :: doLengthMess(unsigned int l)
 {
-  if(l < m_blocksize)
+  if(l < m_blocksize) {
     l = m_blocksize;
+  }
   m_length=l;
 
   m_vertices.resize(2 * m_length);
@@ -71,7 +72,8 @@ void scopeXYZ :: lengthMess(int l)
   }
   doLengthMess(l);
 }
-void scopeXYZ :: setBlocksize(unsigned int bs) {
+void scopeXYZ :: setBlocksize(unsigned int bs)
+{
   m_blocksize = bs;
   m_vertices.enabled = true;
   doLengthMess(m_length);
@@ -104,9 +106,9 @@ void scopeXYZ :: renderShape(GemState *state)
       if(GemShape::m_texType) {
         m_vertices.render();
         if(count==GemShape::m_texNum && false) {
-           /* disabled for now, as we have a bound buffer object
-            * and thus the 4th arg is not really a pointer...
-            */
+          /* disabled for now, as we have a bound buffer object
+           * and thus the 4th arg is not really a pointer...
+           */
           glTexCoordPointer(2, GL_FLOAT, 0, GemShape::m_texCoords);
         } else {
           glTexCoordPointer(2, GL_FLOAT, sizeof(float), 0);

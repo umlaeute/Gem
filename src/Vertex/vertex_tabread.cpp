@@ -76,8 +76,9 @@ static t_float* checkarray(t_symbol *s, int &length)
     error("vertex_tabread: table %s is zero-lengthed", s->s_name);
     return 0;
   }
-  if(!fp)
+  if(!fp) {
     return 0;
+  }
   return &fp->w_float;
 }
 

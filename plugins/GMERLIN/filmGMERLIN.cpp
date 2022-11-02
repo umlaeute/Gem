@@ -145,19 +145,21 @@ bool filmGMERLIN :: open(const std::string&sfilename,
 {
   struct mylogger { // struct's as good as class
 #ifdef HAVE_GAVL_LOG_H
-    static int gavl_callback(void *data, gavl_msg_t *msg) {
+    static int gavl_callback(void *data, gavl_msg_t *msg)
+    {
       gavl_log_level_t level;
       const char* log_domain;
       const char* message;
       int retval = gavl_log_msg_get(msg, &level, &log_domain, &message);
-      if(!retval)
+      if(!retval) {
         ((filmGMERLIN*)(data))->log(level, log_domain, message);
+      }
       return retval;
     }
 # define SET_LOG_CALLBACK(opt, priv) gavl_set_log_callback(mylogger::gavl_callback, priv)
 #else
     static void bgav_callback(void *data, bgav_log_level_t level,
-        const char *log_domain, const char *message)
+                              const char *log_domain, const char *message)
     {
       ((filmGMERLIN*)(data))->log(level, log_domain, message);
     }
@@ -369,7 +371,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
   if(trackNum) {
     if(m_numTracks>trackNum || trackNum<0) {
       pd_error(0, "[GEM:filmGMERLIN] selected invalid track %d of %d", trackNum,
-            m_numTracks);
+               m_numTracks);
     } else {
       int numvstreams=bgav_num_video_streams (m_file, m_track);
       verbose(1, "[GEM:filmGMERLIN] track %d contains %d video streams", m_track,
