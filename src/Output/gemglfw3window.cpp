@@ -43,6 +43,458 @@ CPPEXTERN_NEW(gemglfw3window);
 /* starting with GLFW-3.2, we can use glfwGetKeyName() */
 #define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
 
+#if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,2,0)
+
+#ifndef GLFW_KEY_SPACE
+# define GLFW_KEY_SPACE 32
+#endif
+#ifndef GLFW_KEY_APOSTROPHE
+# define GLFW_KEY_APOSTROPHE 39
+#endif
+#ifndef GLFW_KEY_COMMA
+# define GLFW_KEY_COMMA 44
+#endif
+#ifndef GLFW_KEY_MINUS
+# define GLFW_KEY_MINUS 45
+#endif
+#ifndef GLFW_KEY_PERIOD
+# define GLFW_KEY_PERIOD 46
+#endif
+#ifndef GLFW_KEY_SLASH
+# define GLFW_KEY_SLASH 47
+#endif
+#ifndef GLFW_KEY_0
+# define GLFW_KEY_0 48
+#endif
+#ifndef GLFW_KEY_1
+# define GLFW_KEY_1 49
+#endif
+#ifndef GLFW_KEY_2
+# define GLFW_KEY_2 50
+#endif
+#ifndef GLFW_KEY_3
+# define GLFW_KEY_3 51
+#endif
+#ifndef GLFW_KEY_4
+# define GLFW_KEY_4 52
+#endif
+#ifndef GLFW_KEY_5
+# define GLFW_KEY_5 53
+#endif
+#ifndef GLFW_KEY_6
+# define GLFW_KEY_6 54
+#endif
+#ifndef GLFW_KEY_7
+# define GLFW_KEY_7 55
+#endif
+#ifndef GLFW_KEY_8
+# define GLFW_KEY_8 56
+#endif
+#ifndef GLFW_KEY_9
+# define GLFW_KEY_9 57
+#endif
+#ifndef GLFW_KEY_SEMICOLON
+# define GLFW_KEY_SEMICOLON 59
+#endif
+#ifndef GLFW_KEY_EQUAL
+# define GLFW_KEY_EQUAL 61
+#endif
+#ifndef GLFW_KEY_A
+# define GLFW_KEY_A 65
+#endif
+#ifndef GLFW_KEY_B
+# define GLFW_KEY_B 66
+#endif
+#ifndef GLFW_KEY_C
+# define GLFW_KEY_C 67
+#endif
+#ifndef GLFW_KEY_D
+# define GLFW_KEY_D 68
+#endif
+#ifndef GLFW_KEY_E
+# define GLFW_KEY_E 69
+#endif
+#ifndef GLFW_KEY_F
+# define GLFW_KEY_F 70
+#endif
+#ifndef GLFW_KEY_G
+# define GLFW_KEY_G 71
+#endif
+#ifndef GLFW_KEY_H
+# define GLFW_KEY_H 72
+#endif
+#ifndef GLFW_KEY_I
+# define GLFW_KEY_I 73
+#endif
+#ifndef GLFW_KEY_J
+# define GLFW_KEY_J 74
+#endif
+#ifndef GLFW_KEY_K
+# define GLFW_KEY_K 75
+#endif
+#ifndef GLFW_KEY_L
+# define GLFW_KEY_L 76
+#endif
+#ifndef GLFW_KEY_M
+# define GLFW_KEY_M 77
+#endif
+#ifndef GLFW_KEY_N
+# define GLFW_KEY_N 78
+#endif
+#ifndef GLFW_KEY_O
+# define GLFW_KEY_O 79
+#endif
+#ifndef GLFW_KEY_P
+# define GLFW_KEY_P 80
+#endif
+#ifndef GLFW_KEY_Q
+# define GLFW_KEY_Q 81
+#endif
+#ifndef GLFW_KEY_R
+# define GLFW_KEY_R 82
+#endif
+#ifndef GLFW_KEY_S
+# define GLFW_KEY_S 83
+#endif
+#ifndef GLFW_KEY_T
+# define GLFW_KEY_T 84
+#endif
+#ifndef GLFW_KEY_U
+# define GLFW_KEY_U 85
+#endif
+#ifndef GLFW_KEY_V
+# define GLFW_KEY_V 86
+#endif
+#ifndef GLFW_KEY_W
+# define GLFW_KEY_W 87
+#endif
+#ifndef GLFW_KEY_X
+# define GLFW_KEY_X 88
+#endif
+#ifndef GLFW_KEY_Y
+# define GLFW_KEY_Y 89
+#endif
+#ifndef GLFW_KEY_Z
+# define GLFW_KEY_Z 90
+#endif
+#ifndef GLFW_KEY_LEFT_BRACKET
+# define GLFW_KEY_LEFT_BRACKET 91
+#endif
+#ifndef GLFW_KEY_BACKSLASH
+# define GLFW_KEY_BACKSLASH 92
+#endif
+#ifndef GLFW_KEY_RIGHT_BRACKET
+# define GLFW_KEY_RIGHT_BRACKET 93
+#endif
+#ifndef GLFW_KEY_GRAVE_ACCENT
+# define GLFW_KEY_GRAVE_ACCENT 96
+#endif
+#ifndef GLFW_KEY_WORLD_1
+# define GLFW_KEY_WORLD_1 161
+#endif
+#ifndef GLFW_KEY_WORLD_2
+# define GLFW_KEY_WORLD_2 162
+#endif
+#ifndef GLFW_KEY_ESCAPE
+# define GLFW_KEY_ESCAPE 256
+#endif
+#ifndef GLFW_KEY_ENTER
+# define GLFW_KEY_ENTER 257
+#endif
+#ifndef GLFW_KEY_TAB
+# define GLFW_KEY_TAB 258
+#endif
+#ifndef GLFW_KEY_BACKSPACE
+# define GLFW_KEY_BACKSPACE 259
+#endif
+#ifndef GLFW_KEY_INSERT
+# define GLFW_KEY_INSERT 260
+#endif
+#ifndef GLFW_KEY_DELETE
+# define GLFW_KEY_DELETE 261
+#endif
+#ifndef GLFW_KEY_RIGHT
+# define GLFW_KEY_RIGHT 262
+#endif
+#ifndef GLFW_KEY_LEFT
+# define GLFW_KEY_LEFT 263
+#endif
+#ifndef GLFW_KEY_DOWN
+# define GLFW_KEY_DOWN 264
+#endif
+#ifndef GLFW_KEY_UP
+# define GLFW_KEY_UP 265
+#endif
+#ifndef GLFW_KEY_PAGE_UP
+# define GLFW_KEY_PAGE_UP 266
+#endif
+#ifndef GLFW_KEY_PAGE_DOWN
+# define GLFW_KEY_PAGE_DOWN 267
+#endif
+#ifndef GLFW_KEY_HOME
+# define GLFW_KEY_HOME 268
+#endif
+#ifndef GLFW_KEY_END
+# define GLFW_KEY_END 269
+#endif
+#ifndef GLFW_KEY_CAPS_LOCK
+# define GLFW_KEY_CAPS_LOCK 280
+#endif
+#ifndef GLFW_KEY_SCROLL_LOCK
+# define GLFW_KEY_SCROLL_LOCK 281
+#endif
+#ifndef GLFW_KEY_NUM_LOCK
+# define GLFW_KEY_NUM_LOCK 282
+#endif
+#ifndef GLFW_KEY_PRINT_SCREEN
+# define GLFW_KEY_PRINT_SCREEN 283
+#endif
+#ifndef GLFW_KEY_PAUSE
+# define GLFW_KEY_PAUSE 284
+#endif
+#ifndef GLFW_KEY_F1
+# define GLFW_KEY_F1 290
+#endif
+#ifndef GLFW_KEY_F2
+# define GLFW_KEY_F2 291
+#endif
+#ifndef GLFW_KEY_F3
+# define GLFW_KEY_F3 292
+#endif
+#ifndef GLFW_KEY_F4
+# define GLFW_KEY_F4 293
+#endif
+#ifndef GLFW_KEY_F5
+# define GLFW_KEY_F5 294
+#endif
+#ifndef GLFW_KEY_F6
+# define GLFW_KEY_F6 295
+#endif
+#ifndef GLFW_KEY_F7
+# define GLFW_KEY_F7 296
+#endif
+#ifndef GLFW_KEY_F8
+# define GLFW_KEY_F8 297
+#endif
+#ifndef GLFW_KEY_F9
+# define GLFW_KEY_F9 298
+#endif
+#ifndef GLFW_KEY_F10
+# define GLFW_KEY_F10 299
+#endif
+#ifndef GLFW_KEY_F11
+# define GLFW_KEY_F11 300
+#endif
+#ifndef GLFW_KEY_F12
+# define GLFW_KEY_F12 301
+#endif
+#ifndef GLFW_KEY_F13
+# define GLFW_KEY_F13 302
+#endif
+#ifndef GLFW_KEY_F14
+# define GLFW_KEY_F14 303
+#endif
+#ifndef GLFW_KEY_F15
+# define GLFW_KEY_F15 304
+#endif
+#ifndef GLFW_KEY_F16
+# define GLFW_KEY_F16 305
+#endif
+#ifndef GLFW_KEY_F17
+# define GLFW_KEY_F17 306
+#endif
+#ifndef GLFW_KEY_F18
+# define GLFW_KEY_F18 307
+#endif
+#ifndef GLFW_KEY_F19
+# define GLFW_KEY_F19 308
+#endif
+#ifndef GLFW_KEY_F20
+# define GLFW_KEY_F20 309
+#endif
+#ifndef GLFW_KEY_F21
+# define GLFW_KEY_F21 310
+#endif
+#ifndef GLFW_KEY_F22
+# define GLFW_KEY_F22 311
+#endif
+#ifndef GLFW_KEY_F23
+# define GLFW_KEY_F23 312
+#endif
+#ifndef GLFW_KEY_F24
+# define GLFW_KEY_F24 313
+#endif
+#ifndef GLFW_KEY_F25
+# define GLFW_KEY_F25 314
+#endif
+#ifndef GLFW_KEY_KP_0
+# define GLFW_KEY_KP_0 320
+#endif
+#ifndef GLFW_KEY_KP_1
+# define GLFW_KEY_KP_1 321
+#endif
+#ifndef GLFW_KEY_KP_2
+# define GLFW_KEY_KP_2 322
+#endif
+#ifndef GLFW_KEY_KP_3
+# define GLFW_KEY_KP_3 323
+#endif
+#ifndef GLFW_KEY_KP_4
+# define GLFW_KEY_KP_4 324
+#endif
+#ifndef GLFW_KEY_KP_5
+# define GLFW_KEY_KP_5 325
+#endif
+#ifndef GLFW_KEY_KP_6
+# define GLFW_KEY_KP_6 326
+#endif
+#ifndef GLFW_KEY_KP_7
+# define GLFW_KEY_KP_7 327
+#endif
+#ifndef GLFW_KEY_KP_8
+# define GLFW_KEY_KP_8 328
+#endif
+#ifndef GLFW_KEY_KP_9
+# define GLFW_KEY_KP_9 329
+#endif
+#ifndef GLFW_KEY_KP_DECIMAL
+# define GLFW_KEY_KP_DECIMAL 330
+#endif
+#ifndef GLFW_KEY_KP_DIVIDE
+# define GLFW_KEY_KP_DIVIDE 331
+#endif
+#ifndef GLFW_KEY_KP_MULTIPLY
+# define GLFW_KEY_KP_MULTIPLY 332
+#endif
+#ifndef GLFW_KEY_KP_SUBTRACT
+# define GLFW_KEY_KP_SUBTRACT 333
+#endif
+#ifndef GLFW_KEY_KP_ADD
+# define GLFW_KEY_KP_ADD 334
+#endif
+#ifndef GLFW_KEY_KP_ENTER
+# define GLFW_KEY_KP_ENTER 335
+#endif
+#ifndef GLFW_KEY_KP_EQUAL
+# define GLFW_KEY_KP_EQUAL 336
+#endif
+#ifndef GLFW_KEY_LEFT_SHIFT
+# define GLFW_KEY_LEFT_SHIFT 340
+#endif
+#ifndef GLFW_KEY_LEFT_CONTROL
+# define GLFW_KEY_LEFT_CONTROL 341
+#endif
+#ifndef GLFW_KEY_LEFT_ALT
+# define GLFW_KEY_LEFT_ALT 342
+#endif
+#ifndef GLFW_KEY_LEFT_SUPER
+# define GLFW_KEY_LEFT_SUPER 343
+#endif
+#ifndef GLFW_KEY_RIGHT_SHIFT
+# define GLFW_KEY_RIGHT_SHIFT 344
+#endif
+#ifndef GLFW_KEY_RIGHT_CONTROL
+# define GLFW_KEY_RIGHT_CONTROL 345
+#endif
+#ifndef GLFW_KEY_RIGHT_ALT
+# define GLFW_KEY_RIGHT_ALT 346
+#endif
+#ifndef GLFW_KEY_RIGHT_SUPER
+# define GLFW_KEY_RIGHT_SUPER 347
+#endif
+#ifndef GLFW_KEY_MENU
+# define GLFW_KEY_MENU 348
+#endif
+
+static std::string get_keyname(int key, int scancode) {
+  const char*sid;
+
+  sid = glfwGetKeyName(key, scancode);
+  if(sid)
+    return (sid);
+  sid = glfwGetKeyName(GLFW_KEY_UNKNOWN, scancode);
+  if(sid)
+    return (sid);
+
+  switch (key) {
+  case GLFW_KEY_SPACE: return ("Space");
+  case GLFW_KEY_ESCAPE: return ("Escape");
+  case GLFW_KEY_ENTER: return ("Return");
+  case GLFW_KEY_TAB: return ("Tab");
+  case GLFW_KEY_BACKSPACE: return ("BackSpace");
+  case GLFW_KEY_INSERT: return ("Insert");
+  case GLFW_KEY_DELETE: return ("Delete");
+  case GLFW_KEY_RIGHT: return ("Right");
+  case GLFW_KEY_LEFT: return ("Left");
+  case GLFW_KEY_DOWN: return ("Down");
+  case GLFW_KEY_UP: return ("Up");
+  case GLFW_KEY_PAGE_UP: return ("Prior");
+  case GLFW_KEY_PAGE_DOWN: return ("Next");
+  case GLFW_KEY_HOME: return ("Home");
+  case GLFW_KEY_END: return ("End");
+  case GLFW_KEY_CAPS_LOCK: return ("Caps_Lock");
+  case GLFW_KEY_SCROLL_LOCK: return ("Scroll_Lock");
+  case GLFW_KEY_NUM_LOCK: return ("Num_Lock");
+  case GLFW_KEY_PRINT_SCREEN: return ("Print");
+  case GLFW_KEY_PAUSE: return ("Pause");
+  case GLFW_KEY_F1: return ("F1");
+  case GLFW_KEY_F2: return ("F2");
+  case GLFW_KEY_F3: return ("F3");
+  case GLFW_KEY_F4: return ("F4");
+  case GLFW_KEY_F5: return ("F5");
+  case GLFW_KEY_F6: return ("F6");
+  case GLFW_KEY_F7: return ("F7");
+  case GLFW_KEY_F8: return ("F8");
+  case GLFW_KEY_F9: return ("F9");
+  case GLFW_KEY_F10: return ("F10");
+  case GLFW_KEY_F11: return ("F11");
+  case GLFW_KEY_F12: return ("F12");
+  case GLFW_KEY_F13: return ("F13");
+  case GLFW_KEY_F14: return ("F14");
+  case GLFW_KEY_F15: return ("F15");
+  case GLFW_KEY_F16: return ("F16");
+  case GLFW_KEY_F17: return ("F17");
+  case GLFW_KEY_F18: return ("F18");
+  case GLFW_KEY_F19: return ("F19");
+  case GLFW_KEY_F20: return ("F20");
+  case GLFW_KEY_F21: return ("F21");
+  case GLFW_KEY_F22: return ("F22");
+  case GLFW_KEY_F23: return ("F23");
+  case GLFW_KEY_F24: return ("F24");
+  case GLFW_KEY_F25: return ("F25");
+  case GLFW_KEY_KP_0: return ("KP_0");
+  case GLFW_KEY_KP_1: return ("KP_1");
+  case GLFW_KEY_KP_2: return ("KP_2");
+  case GLFW_KEY_KP_3: return ("KP_3");
+  case GLFW_KEY_KP_4: return ("KP_4");
+  case GLFW_KEY_KP_5: return ("KP_5");
+  case GLFW_KEY_KP_6: return ("KP_6");
+  case GLFW_KEY_KP_7: return ("KP_7");
+  case GLFW_KEY_KP_8: return ("KP_8");
+  case GLFW_KEY_KP_9: return ("KP_9");
+  case GLFW_KEY_KP_DECIMAL: return ("KP_Separator");
+  case GLFW_KEY_KP_DIVIDE: return ("KP_Divide");
+  case GLFW_KEY_KP_MULTIPLY: return ("KP_Multiply");
+  case GLFW_KEY_KP_SUBTRACT: return ("KP_Subtract");
+  case GLFW_KEY_KP_ADD: return ("KP_Add");
+  case GLFW_KEY_KP_ENTER: return ("KP_Enter");
+  case GLFW_KEY_KP_EQUAL: return ("KP_Equal");
+  case GLFW_KEY_LEFT_SHIFT: return ("Shift_L");
+  case GLFW_KEY_LEFT_CONTROL: return ("Control_L");
+  case GLFW_KEY_LEFT_ALT: return ("Alt_L");
+  case GLFW_KEY_LEFT_SUPER: return ("Super_L");
+  case GLFW_KEY_RIGHT_SHIFT: return ("Shift_R");
+  case GLFW_KEY_RIGHT_CONTROL: return ("Control_R");
+  case GLFW_KEY_RIGHT_ALT: return ("Mode"); /* Alt_R? ISO_Level3_Shift? */
+  case GLFW_KEY_RIGHT_SUPER: return ("Super_R");
+  case GLFW_KEY_MENU: return ("Menu");
+  default: break;
+  }
+  return ("<unknown>");
+}
+#endif
+
+
 /////////////////////////////////////////////////////////
 //
 // gemglfw3window
@@ -356,8 +808,7 @@ void gemglfw3window::keyCallback(int key, int scancode, int action,
                                  int mods)
 {
 #if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,2,0)
-  const char*sid = glfwGetKeyName(key, scancode);
-  gemglfw3window::key(0, std::string(sid?sid:"<unknown>"), key, action);
+  gemglfw3window::key(0, get_keyname(key, scancode), key, action);
 #else
   t_atom ap[4];
   SETFLOAT (ap+0, 0);
