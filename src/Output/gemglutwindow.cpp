@@ -48,6 +48,34 @@ static std::string key2symbol(unsigned char c)
 
 static std::string key2symbol(int c)
 {
+#ifndef GLUT_KEY_NUM_LOCK
+# define GLUT_KEY_NUM_LOCK 0x006D
+#endif
+#ifndef GLUT_KEY_BEGIN
+# define GLUT_KEY_BEGIN    0x006E
+#endif
+#ifndef GLUT_KEY_DELETE
+# define GLUT_KEY_DELETE   0x006F
+#endif
+#ifndef GLUT_KEY_SHIFT_L
+# define GLUT_KEY_SHIFT_L  0x0070
+#endif
+#ifndef GLUT_KEY_SHIFT_R
+# define GLUT_KEY_SHIFT_R  0x0071
+#endif
+#ifndef GLUT_KEY_CTRL_L
+# define GLUT_KEY_CTRL_L   0x0072
+#endif
+#ifndef GLUT_KEY_CTRL_R
+# define GLUT_KEY_CTRL_R   0x0073
+#endif
+#ifndef GLUT_KEY_ALT_L
+# define GLUT_KEY_ALT_L    0x0074
+#endif
+#ifndef GLUT_KEY_ALT_R
+# define GLUT_KEY_ALT_R    0x0075
+#endif
+
   switch(c) {
   case GLUT_KEY_F1:
     return std::string("F1");
@@ -91,6 +119,16 @@ static std::string key2symbol(int c)
     return std::string("End");
   case GLUT_KEY_INSERT:
     return std::string("Insert");
+    /* freeglut_ext.h */
+  case GLUT_KEY_NUM_LOCK: return std::string("Num_Lock");
+  case GLUT_KEY_BEGIN: return std::string("Begin");
+  case GLUT_KEY_DELETE: return std::string("Delete");
+  case GLUT_KEY_SHIFT_L: return std::string("Shift_L");
+  case GLUT_KEY_SHIFT_R: return std::string("Shift_R");
+  case GLUT_KEY_CTRL_L: return std::string("Control_L");
+  case GLUT_KEY_CTRL_R: return std::string("Control_R");
+  case GLUT_KEY_ALT_L: return std::string("Alt_L");
+  case GLUT_KEY_ALT_R: return std::string("Alt_R");
   default:
     break;
   }
