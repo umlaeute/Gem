@@ -287,9 +287,23 @@ void GemWindow::entry(int devId, int state)
 void GemWindow::key(int devId, const std::string& sid, int iid, int state)
 {
   t_atom ap[4];
+  const char*keyname = sid.c_str();
+
+  if(keyname[0] && !keyname[1]) {
+    switch(keyname[0]) {
+    case '\b': keyname = "BackSpace"; break;
+    case '\t': keyname = "Tab"; break;
+    case '\r': keyname = "Return"; break;
+    case ' ': keyname = "Space"; break;
+    case 27: keyname = "Escape"; break;
+    case 127: keyname = "Delete"; break;
+    default: break;
+    }
+  }
+
   SETFLOAT (ap+0, devId);
   SETSYMBOL(ap+1, gensym("keyname"));
-  SETSYMBOL(ap+2, gensym(sid.c_str()));
+  SETSYMBOL(ap+2, gensym(keyname));
   SETFLOAT (ap+3, state);
   info(gensym("keyboard"), 4, ap);
 
