@@ -372,12 +372,12 @@ struct gemglxwindow::PIMPL {
       len=XLookupString(kb,keystring,2,&keysym_return,NULL);
     }
 
-    if ( (keysym_return & 0xff00)== 0xff00 ) {
+    if ( !len || (keysym_return & 0xff00)== 0xff00 ) {
       //non alphanumeric key: use keysym
       return std::string(XKeysymToString(keysym_return));
     }
 
-    if (len==0) {
+    if (!len) {
       //modifier key:use keysym
       //triggerKeyboardEvent(XKeysymToString(keysym_return), kb->keycode, 1);
     } else if(len<KEYSTRING_SIZE) {
@@ -385,7 +385,6 @@ struct gemglxwindow::PIMPL {
     } else {
       keystring[KEYSTRING_SIZE-1]=0;
     }
-
     return std::string(keystring);
   }
 
