@@ -96,7 +96,7 @@ manual_autoreconf () {
   #SUBDIRS=autoconf_getsubdirs
 
   SUBDIRS="."
-  SUBDIRS="${SUBDIRS} plugins/videoAVT plugins/videoHALCON plugins/videoPYLON"
+  SUBDIRS="${SUBDIRS} plugins/AVT plugins/HALCON plugins/PYLON"
   SUBDIRS="${SUBDIRS} extra extra/pix_artoolkit"
  fi
 
