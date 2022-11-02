@@ -612,9 +612,16 @@ LONG WINAPI gemw32window::event(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
   // keyboard action
   case WM_KEYUP:
-  case WM_KEYDOWN:
-    key(devID, (char*)&wParam, (int)wParam, (uMsg==WM_KEYDOWN));
+  case WM_KEYDOWN: {
+#define KEYBUFSIZE 256
+    char aKeyBuf[ KEYBUFSIZE ];
+    const char*keyname=(const char*)&wParam;
+    if (GetKeyNameTextA (lParam, (LPSTR) aKeyBuf, KEYBUFSIZE)) {
+      keyname = aKeyBuf;
+    }
+    key(devID, keyname, (int)wParam, (uMsg==WM_KEYDOWN));
     break;
+  }
   // resize event
   case WM_SIZE:
     m_width=LOWORD(lParam);
