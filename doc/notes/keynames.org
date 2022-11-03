@@ -1,0 +1,706 @@
+* keynames as reported by [gemwin]
+
+# emacs --batch keynames.org  --eval '(org-table-map-tables (quote org-table-export))'
+
+Special keys are basically tested like this:
+- the top row (FN-keys, up to Print/ScrollLock/Pause)
+- the meta-navigation block in the middle/top (Insert/Delete/PgUp/PgDown/...)
+- the arrow keys in the middle/bottom
+- the meta keys in the main section, counterclockwise from Tab via Space to BackSpace
+- the KeyPad
+  - first the border (NumLock to Enter)
+  - the number keys ([0-9,])
+  - the number keys ([0-9,]) again (but this time without NumLock)
+
+Notes:
+- keynames in quotes (e.g. ~'\x20'~) are byte-literals (typically with non-printable chars).
+- question marks for keycode/keyname indicate that this wasn't tested (e.g. because the key is otherwise captured)
+- if keycode/keyname are left empty, no output was generated
+
+
+
+** Linux/glfw3
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.linux_glfw3.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | keycode | keyname       |
+|--------------+---------+---------------|
+| Esc          |     256 | "Escape"      |
+| F1           |     290 | "F1"          |
+| F2           |     291 | "F2"          |
+| F3           |     292 | "F3"          |
+| F4           |     293 | "F4"          |
+| F5           |     294 | "F5"          |
+| F6           |     295 | "F6"          |
+| F7           |     296 | "F7"          |
+| F8           |     297 | "F8"          |
+| F9           |     298 | "F9"          |
+| F10          |     299 | "F10"         |
+| F11          |     300 | "F11"         |
+| F12          |       ? | ?             |
+| Print        |     283 | "Print"       |
+| ScrollLock   |     281 | "Scroll_Lock" |
+| Pause        |     284 | "Pause"       |
+|--------------+---------+---------------|
+| Insert       |     260 | "Insert"      |
+| Delete       |     261 | "Delete"      |
+| Home         |     268 | "Home"        |
+| End          |     269 | "End"         |
+| PgUp         |     266 | "Prior"       |
+| PgDown       |     267 | "Next"        |
+|--------------+---------+---------------|
+| Up           |     265 | "Up"          |
+| Down         |     264 | "Down"        |
+| Left         |     263 | "Left"        |
+| Right        |     262 | "Right"       |
+|--------------+---------+---------------|
+| Tab          |     258 | "Tab"         |
+| CapsLock     |     280 | "Caps_Lock"   |
+| LeftShift    |     340 | "Shift_L"     |
+| LeftControl  |     341 | "Control_L"   |
+| LeftWindows  |     343 | "Super_L"     |
+| LeftAlt      |     342 | "Alt_L"       |
+| Space        |      32 | "Space"       |
+| AltGr        |     346 | "Mode"        |
+| RightWindows |     347 | "Super_R"     |
+| Menu         |     348 | "Menu"        |
+| RightControl |     345 | "Control_R"   |
+| RightShift   |     344 | "Shift_R"     |
+| Return       |     257 | "Return"      |
+| BackSpace    |     259 | "BackSpace"   |
+|--------------+---------+---------------|
+| NumLock      |     282 | "Num_Lock"    |
+| KP_Divide    |     331 | "/"           |
+| KP_Multiply  |     332 | "*"           |
+| KP_Subtract  |     333 | "-"           |
+| KP_Add       |     334 | "+"           |
+| KP_Enter     |     335 | "KP_Enter"    |
+| KP_0         |     320 | "0"           |
+| KP_1         |     321 | "1"           |
+| KP_2         |     322 | "2"           |
+| KP_3         |     323 | "3"           |
+| KP_4         |     324 | "4"           |
+| KP_5         |     325 | "5"           |
+| KP_6         |     326 | "6"           |
+| KP_7         |     327 | "7"           |
+| KP_8         |     328 | "8"           |
+| KP_9         |     329 | "9"           |
+| KP_Separator |     330 | "."           |
+| KP_Insert    |     320 | "0"           |
+| KP_End       |     321 | "1"           |
+| KP_Down      |     322 | "2"           |
+| KP_Next      |     323 | "3"           |
+| KP_Left      |     324 | "4"           |
+| KP_Begin     |     325 | "5"           |
+| KP_Right     |     326 | "6"           |
+| KP_Home      |     327 | "7"           |
+| KP_Up        |     328 | "8"           |
+| KP_Prior     |     329 | "9"           |
+| KP_Delete    |     330 | "."           |
+
+** Linux/GLUT
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.linux_glut.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | key | keyname     |
+|--------------+-----+-------------|
+| Esc          |  27 | "Escape"    |
+| F1           |   1 | "F1"        |
+| F2           |   2 | "F2"        |
+| F3           |   3 | "F3"        |
+| F4           |   4 | "F4"        |
+| F5           |   5 | "F5"        |
+| F6           |   6 | "F6"        |
+| F7           |   7 | "F7"        |
+| F8           |   8 | "F8"        |
+| F9           |   9 | "F9"        |
+| F10          |  10 | "F10"       |
+| F11          |  11 | "F11"       |
+| F12          |   ? | ?           |
+| Print        |     |             |
+| ScrollLock   |     |             |
+| Pause        |     |             |
+|--------------+-----+-------------|
+| Insert       | 108 | "Insert"    |
+| Delete       | 127 | "Delete"    |
+| Home         | 106 | "Home"      |
+| End          | 107 | "End"       |
+| PgUp         | 104 | "PageUp"    |
+| PgDown       | 105 | "PageDown"  |
+|--------------+-----+-------------|
+| Up           | 101 | "Up"        |
+| Down         | 103 | "Down"      |
+| Left         | 100 | "Left"      |
+| Right        | 102 | "Right"     |
+|--------------+-----+-------------|
+| Tab          |   9 | "Tab"       |
+| CapsLock     |     |             |
+| LeftShift    | 112 | "Shift_L"   |
+| LeftControl  | 114 | "Control_L" |
+| LeftWindows  |     |             |
+| LeftAlt      | 116 | "Alt_L"     |
+| Space        |  32 | "Space"     |
+| AltGr        |     |             |
+| RightWindows |     |             |
+| Menu         |     |             |
+| RightControl | 115 | "Control_R" |
+| RightShift   | 113 | "Shift_R"   |
+| Return       |  13 | "Return"    |
+| BackSpace    |   8 | "BackSpace" |
+|--------------+-----+-------------|
+| NumLock      | 109 | "Num_Lock"  |
+| KP_Divide    |  47 | "/"         |
+| KP_Multiply  |  42 | "*"         |
+| KP_Subtract  |  45 | "-"         |
+| KP_Add       |  43 | "+"         |
+| KP_Enter     |  13 | "Return"    |
+| KP_0         |  48 | "0"         |
+| KP_1         |  49 | "1"         |
+| KP_2         |  50 | "2"         |
+| KP_3         |  51 | "3"         |
+| KP_4         |  52 | "4"         |
+| KP_5         |  53 | "5"         |
+| KP_6         |  54 | "6"         |
+| KP_7         |  55 | "7"         |
+| KP_8         |  56 | "8"         |
+| KP_9         |  57 | "9"         |
+| KP_Separator |  44 | ","         |
+| KP_Insert    | 108 | "Insert"    |
+| KP_End       | 107 | "End"       |
+| KP_Down      | 103 | "Down"      |
+| KP_Next      | 105 | "PageDown"  |
+| KP_Left      | 100 | "Left"      |
+| KP_Begin     | 110 | "Begin"     |
+| KP_Right     | 102 | "Right"     |
+| KP_Home      | 106 | "Home"      |
+| KP_Up        | 101 | "Up"        |
+| KP_Prior     | 104 | "PageUp"    |
+| KP_Delete    | 111 | "Delete"    |
+
+** Linux/glx
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.linux_glx.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | key | keyname            |
+|--------------+-----+--------------------|
+| Esc          |   9 | "Escape"           |
+| F1           |  67 | "F1"               |
+| F2           |  68 | "F2"               |
+| F3           |  69 | "F3"               |
+| F4           |  70 | "F4"               |
+| F5           |  71 | "F5"               |
+| F6           |  72 | "F6"               |
+| F7           |  73 | "F7"               |
+| F8           |  74 | "F8"               |
+| F9           |  75 | "F9"               |
+| F10          |  76 | "F10"              |
+| F11          |  95 | "F11"              |
+| F12          |   ? | ?                  |
+| Print        | 107 | "Print"            |
+| ScrollLock   |  78 | "Scroll_Lock"      |
+| Pause        | 127 | "Pause"            |
+|--------------+-----+--------------------|
+| Insert       | 118 | "Insert"           |
+| Delete       | 119 | "Delete"           |
+| Home         | 110 | "Home"             |
+| End          | 115 | "End"              |
+| PgUp         | 112 | "Prior"            |
+| PgDown       | 117 | "Next"             |
+|--------------+-----+--------------------|
+| Up           | 111 | "Up"               |
+| Down         | 116 | "Down"             |
+| Left         | 113 | "Left"             |
+| Right        | 114 | "Right"            |
+|--------------+-----+--------------------|
+| Tab          |  23 | "Tab"              |
+| CapsLock     |  66 | "Caps_Lock"        |
+| LeftShift    |  50 | "Shift_L"          |
+| LeftControl  |  37 | "Control_L"        |
+| LeftWindows  | 133 | "Super_L"          |
+| LeftAlt      |  64 | "Alt_L"            |
+| Space        |  65 | "Space"            |
+| AltGr        | 108 | "ISO_Level3_Shift" |
+| RightWindows | 134 | "Super_R"          |
+| Menu         | 135 | "Menu"             |
+| RightControl | 105 | "Control_R"        |
+| RightShift   |  62 | "Shift_R"          |
+| Return       |  36 | "Return"           |
+| BackSpace    |  22 | "BackSpace"        |
+|--------------+-----+--------------------|
+| NumLock      |  77 | "Num_Lock"         |
+| KP_Divide    | 106 | "KP_Divide"        |
+| KP_Multiply  |  63 | "KP_Multiply"      |
+| KP_Subtract  |  82 | "KP_Subtract"      |
+| KP_Add       |  86 | "KP_Add"           |
+| KP_Enter     | 104 | "KP_Enter"         |
+| KP_0         |  90 | "KP_0"             |
+| KP_1         |  87 | "KP_1"             |
+| KP_2         |  88 | "KP_2"             |
+| KP_3         |  89 | "KP_3"             |
+| KP_4         |  83 | "KP_4"             |
+| KP_5         |  84 | "KP_5"             |
+| KP_6         |  85 | "KP_6"             |
+| KP_7         |  79 | "KP_7"             |
+| KP_8         |  80 | "KP_8"             |
+| KP_9         |  81 | "KP_9"             |
+| KP_Separator |  91 | "KP_Separator"     |
+| KP_Insert    |  90 | "KP_Insert"        |
+| KP_End       |  87 | "KP_End"           |
+| KP_Down      |  88 | "KP_Down"          |
+| KP_Next      |  89 | "KP_Next"          |
+| KP_Left      |  83 | "KP_Left"          |
+| KP_Begin     |  84 | "KP_Begin"         |
+| KP_Right     |  85 | "KP_Right"         |
+| KP_Home      |  79 | "KP_Home"          |
+| KP_Up        |  80 | "KP_Up"            |
+| KP_Prior     |  81 | "KP_Prior"         |
+| KP_Delete    |  91 | "KP_Delete"        |
+
+
+** Linux/SDL
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.linux_sdl.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | key | keyname        |
+|--------------+-----+----------------|
+| Esc          |   9 | "Escape"       |
+| F1           |  67 | "F1"           |
+| F2           |  68 | "F2"           |
+| F3           |  69 | "F3"           |
+| F4           |  70 | "F4"           |
+| F5           |  71 | "F5"           |
+| F6           |  72 | "F6"           |
+| F7           |  73 | "F7"           |
+| F8           |  74 | "F8"           |
+| F9           |  75 | "F9"           |
+| F10          |  76 | "F10"          |
+| F11          |  95 | "F11"          |
+| F12          |   ? | ?              |
+| Print        | 107 | "Print"        |
+| ScrollLock   |  78 | "Scroll_Lock"  |
+| Pause        | 127 | "Pause"        |
+|--------------+-----+----------------|
+| Insert       | 118 | "Insert"       |
+| Delete       | 119 | "Delete"       |
+| Home         | 110 | "Home"         |
+| End          | 115 | "End"          |
+| PgUp         | 112 | "Prior"        |
+| PgDown       | 117 | "Next"         |
+|--------------+-----+----------------|
+| Up           | 111 | "Up"           |
+| Down         | 116 | "Down"         |
+| Left         | 113 | "Left"         |
+| Right        | 114 | "Right"        |
+|--------------+-----+----------------|
+| Tab          |  23 | "Tab"          |
+| CapsLock     |  66 | "Caps_Lock"    |
+| LeftShift    |  50 | "Shift_L"      |
+| LeftControl  |  37 | "Control_L"    |
+| LeftWindows  | 133 | "Super_L"      |
+| LeftAlt      |  64 | "Alt_L"        |
+| Space        |  65 | "Space"        |
+| AltGr        | 108 | "Mode"         |
+| RightWindows | 134 | "Super_R"      |
+| Menu         | 135 | "Menu"         |
+| RightControl | 105 | "Control_R"    |
+| RightShift   |  62 | "Shift_R"      |
+| Return       |  36 | "Return"       |
+| BackSpace    |  22 | "BackSpace"    |
+|--------------+-----+----------------|
+| NumLock      |  77 | "Num_Lock"     |
+| KP_Divide    | 106 | "KeyPad_/"     |
+| KP_Multiply  |  63 | "KeyPad_*"     |
+| KP_Subtract  |  82 | "KeyPad_-"     |
+| KP_Add       |  86 | "KeyPad_+"     |
+| KP_Enter     | 104 | "KeyPad_Enter" |
+| KP_0         |  90 | "KeyPad_0"     |
+| KP_1         |  87 | "KeyPad_1"     |
+| KP_2         |  88 | "KeyPad_2"     |
+| KP_3         |  89 | "KeyPad_3"     |
+| KP_4         |  83 | "KeyPad_4"     |
+| KP_5         |  84 | "KeyPad_5"     |
+| KP_6         |  85 | "KeyPad_6"     |
+| KP_7         |  79 | "KeyPad_7"     |
+| KP_8         |  80 | "KeyPad_8"     |
+| KP_9         |  81 | "KeyPad_9"     |
+| KP_Separator |  91 | "KeyPad_."     |
+| KP_Insert    |  90 | "KeyPad_0"     |
+| KP_End       |  87 | "KeyPad_1"     |
+| KP_Down      |  88 | "KeyPad_2"     |
+| KP_Next      |  89 | "KeyPad_3"     |
+| KP_Left      |  83 | "KeyPad_4"     |
+| KP_Begin     |  84 | "KeyPad_5"     |
+| KP_Right     |  85 | "KeyPad_6"     |
+| KP_Home      |  79 | "KeyPad_7"     |
+| KP_Up        |  80 | "KeyPad_8"     |
+| KP_Prior     |  81 | "KeyPad_9"     |
+| KP_Delete    |  91 | "KeyPad_."     |
+
+** macOS/gemmacoswindow
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.macos_macos.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+
+i can no longer remember why this worked at all (presumable on Catalina)
+
+| description   | key | keyname                   |
+|---------------+-----+---------------------------|
+| Print         | 105 | '\xef\x9c\x90'            |
+| Control Left  |  59 | "Control"                 |
+| Windows Left  |  55 | "Command"                 |
+| Alt Left      |  58 | "Option"                  |
+| Control Right |  62 | "Control"                 |
+| Windows Right |   - | "-"                       |
+| Menu          | 110 | '\x10' (Data Link Escape) |
+| Alt Right     |  61 | "Option"                  |
+| KP_Enter      |  76 | "KP_Return"               |
+| F1-F7         |     | "F1-F7"                   |
+| F8            | 100 | '\xef\x9c\x8b'            |
+| F9            | 101 | '\xef\x9c\x8c'            |
+| F10           | 109 | '\xef\x9c\x8d'            |
+| F11           | 109 | '\xef\x9c\x8e' (?)        |
+| F12           | 109 | '\xef\x9c\x8f'            |
+|               |     |                           |
+
+** macOS/GLUT
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.macos_glut.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  |         key | keyname        |
+|--------------+-------------+----------------|
+| Esc          |          27 | "Escape"       |
+| F1           |           1 | "F1"           |
+| F2           |           2 | "F2"           |
+| F3           |           3 | "F3"           |
+| F4           |           4 | "F4"           |
+| F5           |           5 | "F5"           |
+| F6           |           6 | "F6"           |
+| F7           |           7 | "F7"           |
+| F8           |           8 | "F8"           |
+| F9           |           9 | "F9"           |
+| F10          |          10 | "F10"          |
+| F11          |          11 | "F11"          |
+| F12          |          12 | "F12"          |
+| Print        | 239 156 144 | '\xef\x9c\x90' |
+| ScrollLock   | 239 156 145 | '\xef\x9c\x91' |
+| Pause        | 239 156 146 | '\xef\x9c\x92' |
+|--------------+-------------+----------------|
+| Insert       |             |                |
+| Delete       |           8 | "BackSpace"    |
+| Home         |         106 | "Home"         |
+| End          |         107 | "End"          |
+| PgUp         |         104 | "PageUp"       |
+| PgDown       |         105 | "PageDown"     |
+|--------------+-------------+----------------|
+| Up           |         101 | "Up"           |
+| Down         |         103 | "Down"         |
+| Left         |         100 | "Left"         |
+| Right        |         102 | "Right"        |
+|--------------+-------------+----------------|
+| Tab          |           9 | "Tab"          |
+| CapsLock     |             |                |
+| LeftShift    |             |                |
+| LeftControl  |             |                |
+| LeftWindows  |             |                |
+| LeftAlt      |             |                |
+| Space        |          32 | "Space"        |
+| AltGr        |             |                |
+| RightWindows |             |                |
+| Menu         |          16 | '\x10'         |
+| RightControl |             |                |
+| RightShift   |             |                |
+| Return       |          13 | "Return"       |
+| BackSpace    |             |                |
+|--------------+-------------+----------------|
+| NumLock      |             |                |
+| KP_Divide    |          47 | "/"            |
+| KP_Multiply  |          42 | "*"            |
+| KP_Subtract  |          45 | "-"            |
+| KP_Add       |          43 | "+"            |
+| KP_Enter     |           3 | '\x03'         |
+| KP_0         |          48 | "0"            |
+| KP_1         |          49 | "1"            |
+| KP_2         |          50 | "2"            |
+| KP_3         |          51 | "3"            |
+| KP_4         |          52 | "4"            |
+| KP_5         |          53 | "5"            |
+| KP_6         |          54 | "6"            |
+| KP_7         |          55 | "7"            |
+| KP_8         |          56 | "8"            |
+| KP_9         |          57 | "9"            |
+| KP_Separator |          46 | "."            |
+| KP_Insert    |          48 | "0"            |
+| KP_End       |          49 | "1"            |
+| KP_Down      |          50 | "2"            |
+| KP_Next      |          51 | "3"            |
+| KP_Left      |          52 | "4"            |
+| KP_Begin     |          53 | "5"            |
+| KP_Right     |          54 | "6"            |
+| KP_Home      |          55 | "7"            |
+| KP_Up        |          56 | "8"            |
+| KP_Prior     |          57 | "9"            |
+| KP_Delete    |          46 | "."            |
+
+
+*** GLUT/macOS
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.glut0.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+Somewhen I managed to get a reaction for the ~Insert~ key, but I know longer do.
+
+| description | keycode     | keyname | "notes"    |
+|-------------+-------------+---------+------------|
+| Insert      | 239 157 134 |         | no keydown |
+
+
+
+** macOS/SDL
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.macos_sdl.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | key | keyname        |
+|--------------+-----+----------------|
+| Esc          |     | "Escape"       |
+| F1           | 122 | "F1"           |
+| F2           | 120 | "F2"           |
+| F3           |  99 | "F3"           |
+| F4           | 118 | "F4"           |
+| F5           |  96 | "F5"           |
+| F6           |  97 | "F6"           |
+| F7           |  98 | "F7"           |
+| F8           | 100 | "F8"           |
+| F9           | 101 | "F9"           |
+| F10          | 109 | "F10"          |
+| F11          |     |                |
+| F12          | 111 | "F12"          |
+| Print        | 105 | "F13"          |
+| ScrollLock   |     |                |
+| Pause        |     |                |
+| Insert       | 114 | "Insert"       |
+| Delete       | 117 | "Delete"       |
+| Home         | 115 | "Home"         |
+| End          | 119 | "End"          |
+| PgUp         | 116 | "Prior"        |
+| PgDown       | 121 | "Next"         |
+| Up           | 126 | "Up"           |
+| Down         | 125 | "Down"         |
+| Left         | 123 | "Left"         |
+| Right        | 124 | "Right"        |
+| Tab          |  48 | "Tab"          |
+| CapsLock     |   0 | "Caps_Lock"    |
+| LeftShift    |   0 | "Shift_L"      |
+| LeftControl  |   0 | "Control_L"    |
+| LeftWindows  |   0 | "Meta_L"       |
+| LeftAlt      |   0 | "Alt_L"        |
+| Space        |  49 | "Space"        |
+| AltGr        |   0 | "AltGr"        |
+| RightWindows |     |                |
+| Menu         | 110 | '\x10'         |
+| RightControl |   0 | "Control_R"    |
+| RightShift   |   0 | "Shift_R"      |
+| Return       |  36 | "Return"       |
+| BackSpace    |  51 | "BackSpace"    |
+| NumLock      |  71 | "Num_Lock"     |
+| KP_Divide    |  75 | "KeyPad_/"     |
+| KP_Multiply  |  67 | "KeyPad_*"     |
+| KP_Subtract  |  78 | "KeyPad_-"     |
+| KP_Add       |  69 | "KeyPad_+"     |
+| KP_Enter     |  76 | "KeyPad_Enter" |
+| KP_0         |  82 | "KeyPad_0"     |
+| KP_1         |  83 | "KeyPad_1"     |
+| KP_2         |  84 | "KeyPad_2"     |
+| KP_3         |  85 | "KeyPad_3"     |
+| KP_4         |  86 | "KeyPad_4"     |
+| KP_5         |  87 | "KeyPad_5"     |
+| KP_6         |  88 | "KeyPad_6"     |
+| KP_7         |  89 | "KeyPad_7"     |
+| KP_8         |  91 | "KeyPad_8"     |
+| KP_9         |  92 | "KeyPad_9"     |
+| KP_Separator |  65 | "KeyPad_."     |
+| KP_Insert    |  82 | "KeyPad_0"     |
+| KP_End       |  83 | "KeyPad_1"     |
+| KP_Down      |  84 | "KeyPad_2"     |
+| KP_Next      |  85 | "KeyPad_3"     |
+| KP_Left      |  86 | "KeyPad_4"     |
+| KP_Begin     |  87 | "KeyPad_5"     |
+| KP_Right     |  88 | "KeyPad_6"     |
+| KP_Home      |  89 | "KeyPad_7"     |
+| KP_Up        |  91 | "KeyPad_8"     |
+| KP_Prior     |  92 | "KeyPad_9"     |
+| KP_Delete    |  65 | "KeyPad_."     |
+
+
+** W64/gemw32window
+
+seems to report mostly garbage (is this a problem with the VM?)
+
+** Wine64/gemw32window
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.wine64_w32.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+
+| description  | key | keyname            |
+|--------------+-----+--------------------|
+| Esc          |  27 | "Escape"           |
+| F1           | 112 | "F1"               |
+| F2           | 113 | "F2"               |
+| F3           | 114 | "F3"               |
+| F4           | 115 | "F4"               |
+| F5           | 116 | "F5"               |
+| F6           | 117 | "F6"               |
+| F7           | 118 | "F7"               |
+| F8           | 119 | "F8"               |
+| F9           | 120 | "F9"               |
+| F10          |     |                    |
+| F11          | 122 | "F11"              |
+| F12          |   ? | ?                  |
+| Print        |  44 | "Print"            |
+| ScrollLock   | 145 | "Scroll_Lock"      |
+| Pause        |  19 | "Pause"            |
+|--------------+-----+--------------------|
+| Insert       |  45 | "Insert"           |
+| Delete       |  46 | "Delete"           |
+| Home         |  36 | "Home"             |
+| End          |  35 | "End"              |
+| PgUp         |  33 | "Prior"            |
+| PgDown       |  34 | "Next"             |
+|--------------+-----+--------------------|
+| Up           |  38 | "Up"               |
+| Down         |  40 | "Down"             |
+| Left         |  37 | "Left"             |
+| Right        |  39 | "Right"            |
+|--------------+-----+--------------------|
+| Tab          |   9 | "Tab"              |
+| CapsLock     |  20 | "Caps_Lock"        |
+| LeftShift    |  16 | "Shift"            |
+| LeftControl  |  17 | "Control"          |
+| LeftWindows  |  91 | "Super_L"          |
+| LeftAlt      |  32 | "space"            |
+| Space        | 227 | "ISO_Level3_Shift" |
+| AltGr        |  92 | "Super_R"          |
+| RightWindows |  92 | "Super_R"          |
+| Menu         |  93 | "Menu"             |
+| RightControl |  17 | "Control"          |
+| RightShift   |  16 | "Shift"            |
+| Return       |  13 | "Return"           |
+| BackSpace    |   8 | "BackSpace"        |
+|--------------+-----+--------------------|
+| NumLock      | 144 | "Num_Lock"         |
+| KP_Divide    | 111 | "KP_Divide"        |
+| KP_Multiply  | 106 | "KP_Multiply"      |
+| KP_Subtract  | 109 | "KP_Subtract"      |
+| KP_Add       | 107 | "KP_Add"           |
+| KP_Enter     |  13 | "KP_Enter"         |
+| KP_0         |  96 | "KP_Insert"        |
+| KP_1         |  97 | "KP_End"           |
+| KP_2         |  98 | "KP_Down"          |
+| KP_3         |  99 | "KP_Next"          |
+| KP_4         | 100 | "KP_Left"          |
+| KP_5         | 101 | "KP_Begin"         |
+| KP_6         | 102 | "KP_Right"         |
+| KP_7         | 103 | "KP_Home"          |
+| KP_8         | 104 | "KP_Up"            |
+| KP_9         | 105 | "KP_Prior"         |
+| KP_Separator | 110 | "KP_Delete"        |
+| KP_Insert    |  45 | "KP_Insert"        |
+| KP_End       |  35 | "KP_End"           |
+| KP_Down      |  40 | "KP_Down"          |
+| KP_Next      |  34 | "KP_Next"          |
+| KP_Left      |  37 | "KP_Left"          |
+| KP_Begin     |  12 | "KP_Begin"         |
+| KP_Right     |  39 | "KP_Right"         |
+| KP_Home      |  36 | "KP_Home"          |
+| KP_Up        |  38 | "KP_Up"            |
+| KP_Prior     |  33 | "KP_Prior"         |
+| KP_Delete    |  46 | "KP_Delete"        |
+|              |     |                    |
+
+
+** W64/GLUT
+:PROPERTIES:
+:TABLE_EXPORT_FILE: keynames.w64_glut.csv
+:TABLE_EXPORT_FORMAT: orgtbl-to-csv
+:END:
+| description  | key | keyname     |
+|--------------+-----+-------------|
+| Esc          |  27 | "Escape"    |
+| F1           |   1 | "F1"        |
+| F2           |   2 | "F2"        |
+| F3           |   3 | "F3"        |
+| F4           |   4 | "F4"        |
+| F5           |   5 | "F5"        |
+| F6           |   6 | "F6"        |
+| F7           |   7 | "F7"        |
+| F8           |   8 | "F8"        |
+| F9           |   9 | "F9"        |
+| F10          |  10 | "F10"       |
+| F11          |   ? | ?           |
+| F12          |   ? | ?           |
+| Print        |     |             |
+| ScrollLock   |     |             |
+| Pause        |     |             |
+|--------------+-----+-------------|
+| Insert       | 108 | "Insert"    |
+| Delete       | 127 | "Delete"    |
+| Home         | 106 | "Home"      |
+| End          | 107 | "End"       |
+| PgUp         | 104 | "PageUp"    |
+| PgDown       | 105 | "PageDown"  |
+|--------------+-----+-------------|
+| Up           | 101 | "Up"        |
+| Down         | 103 | "Down"      |
+| Left         | 100 | "Left"      |
+| Right        | 102 | "Right"     |
+|--------------+-----+-------------|
+| Tab          |   9 | "Tab"       |
+| CapsLock     |     |             |
+| LeftShift    | 112 | "Shift_L"   |
+| LeftControl  | 114 | "Control_L" |
+| LeftWindows  |     |             |
+| LeftAlt      | 116 | "Alt_L"     |
+| Space        |  32 | "Space"     |
+| AltGr        | 117 | "Alt_R"     |
+| RightWindows |     |             |
+| Menu         |     |             |
+| RightControl | 115 | "Control_R" |
+| RightShift   | 113 | "Shift_R"   |
+| Return       |  13 | "Return"    |
+| BackSpace    |   8 | "BackSpace" |
+|--------------+-----+-------------|
+| NumLock      |     |             |
+| KP_Divide    |  47 | "/"         |
+| KP_Multiply  |  42 | "*"         |
+| KP_Subtract  |  45 | "-"         |
+| KP_Add       |  43 | "+"         |
+| KP_Enter     |  13 | "Return"    |
+| KP_0         |  48 | "0"         |
+| KP_1         |  49 | "1"         |
+| KP_2         |  50 | "2"         |
+| KP_3         |  51 | "3"         |
+| KP_4         |  52 | "4"         |
+| KP_5         |  53 | "5"         |
+| KP_6         |  54 | "6"         |
+| KP_7         |  55 | "7"         |
+| KP_8         |  56 | "8"         |
+| KP_9         |  57 | "9"         |
+| KP_Separator |     |             |
+| KP_Insert    | 108 | "Insert"    |
+| KP_End       | 107 | "End"       |
+| KP_Down      | 103 | "Down"      |
+| KP_Next      | 105 | "PageDown"  |
+| KP_Left      | 100 | "Left"      |
+| KP_Begin     |     |             |
+| KP_Right     | 102 | "Right"     |
+| KP_Home      | 106 | "Home"      |
+| KP_Up        | 101 | "Up"        |
+| KP_Prior     | 104 | "PageUp"    |
+| KP_Delete    |     |             |
