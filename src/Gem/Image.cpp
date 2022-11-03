@@ -1177,7 +1177,7 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
-  register unsigned char grey=0;
+  unsigned char grey=0;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %d", __FUNCTION__, format);
@@ -1228,7 +1228,7 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
   setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
-  register short grey=0;
+  short grey=0;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %d", __FUNCTION__, format);

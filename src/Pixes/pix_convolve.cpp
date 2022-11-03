@@ -127,32 +127,20 @@ void pix_convolve :: calculateRGBA3x3(imageStruct &image,
 #endif
     {
       //      res =  m_imatrix[0]*(int)((unsigned char*)val1)[j];
-      res =  m_imatrix[0]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val1)[j]);
-      res += m_imatrix[1]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val2)[j]);
-      res += m_imatrix[2]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val3)[j]);
-      res += m_imatrix[3]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val4)[j]);
-      res += m_imatrix[4]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val5)[j]);
-      res += m_imatrix[5]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val6)[j]);
-      res += m_imatrix[6]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val7)[j]);
-      res += m_imatrix[7]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val8)[j]);
-      res += m_imatrix[8]*static_cast<int>(reinterpret_cast<unsigned char*>
-                                           (val9)[j]);
+      res =  m_imatrix[0]*static_cast<int>(reinterpret_cast<unsigned char*>(val1)[j]);
+      res += m_imatrix[1]*static_cast<int>(reinterpret_cast<unsigned char*>(val2)[j]);
+      res += m_imatrix[2]*static_cast<int>(reinterpret_cast<unsigned char*>(val3)[j]);
+      res += m_imatrix[3]*static_cast<int>(reinterpret_cast<unsigned char*>(val4)[j]);
+      res += m_imatrix[4]*static_cast<int>(reinterpret_cast<unsigned char*>(val5)[j]);
+      res += m_imatrix[5]*static_cast<int>(reinterpret_cast<unsigned char*>(val6)[j]);
+      res += m_imatrix[6]*static_cast<int>(reinterpret_cast<unsigned char*>(val7)[j]);
+      res += m_imatrix[7]*static_cast<int>(reinterpret_cast<unsigned char*>(val8)[j]);
+      res += m_imatrix[8]*static_cast<int>(reinterpret_cast<unsigned char*>(val9)[j]);
       res*=m_irange;
       res>>=16;
       ((unsigned char*)dest)[i*csize+j] = CLAMP(res);
     }
-
   }
-
-
 }
 
 void pix_convolve :: processRGBAImage(imageStruct &image)
@@ -326,9 +314,9 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
 
   short* src = (short*) tempImg.data;
   short* dest = (short*)image.data;
-  register int mat1,mat2,mat3,mat4,mat5,mat6,mat7,mat8,mat9;
-  register int res1,res2,res3,res4,res5,res6,res7,res8,res9;
-  register int range;
+  int mat1,mat2,mat3,mat4,mat5,mat6,mat7,mat8,mat9;
+  int res1,res2,res3,res4,res5,res6,res7,res8,res9;
+  int range;
 
   mat1 = m_imatrix[0];
   mat2 = m_imatrix[1];
@@ -345,25 +333,25 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
     int i = xsize;
 
 #ifdef i386
-    register unsigned char val1 = 0;
-    register unsigned char val2 = src[i-xsize+1];
-    register unsigned char val3 = src[i-xsize+3];
-    register unsigned char val4 = src[i-1];
-    register unsigned char val5 = src[i+1];
-    register unsigned char val6 = src[i+3];
-    register unsigned char val7 = src[i+xsize-1];
-    register unsigned char val8 = src[i+xsize+1];
-    register unsigned char val9 = src[i+xsize+3];
+    unsigned char val1 = 0;
+    unsigned char val2 = src[i-xsize+1];
+    unsigned char val3 = src[i-xsize+3];
+    unsigned char val4 = src[i-1];
+    unsigned char val5 = src[i+1];
+    unsigned char val6 = src[i+3];
+    unsigned char val7 = src[i+xsize-1];
+    unsigned char val8 = src[i+xsize+1];
+    unsigned char val9 = src[i+xsize+3];
 #else
-    register unsigned char val1 = 0;
-    register unsigned char val2 = src[i-xsize+1];
-    register unsigned char val3 = src[i-xsize+3];
-    register unsigned char val4 = src[i-1];
-    register unsigned char val5 = src[i+1];
-    register unsigned char val6 = src[i+3];
-    register unsigned char val7 = src[i+xsize-1];
-    register unsigned char val8 = src[i+xsize+1];
-    register unsigned char val9 = src[i+xsize+3];
+    unsigned char val1 = 0;
+    unsigned char val2 = src[i-xsize+1];
+    unsigned char val3 = src[i-xsize+3];
+    unsigned char val4 = src[i-1];
+    unsigned char val5 = src[i+1];
+    unsigned char val6 = src[i+3];
+    unsigned char val7 = src[i+xsize-1];
+    unsigned char val8 = src[i+xsize+1];
+    unsigned char val9 = src[i+xsize+3];
 #endif
 
     //unroll this 2x to fill the registers? (matrix*y1*y2= 9*9*9 =27)
@@ -423,15 +411,15 @@ void pix_convolve :: calculate3x3YUV(imageStruct &image,
     short* val8 = src+i+xsize; //val8 = src[i+xsize];
     short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];
     /*
-    register short* val1 = 0;
-    register short* val2 = src+i-xsize; //val2 = src[i-xsize];
-    register short* val3 = src+i-xsize+1; //val3 = src[i-xsize+1];
-    register short* val4 = src+i-1; //val4 = src[i-1];
-    register short* val5 = src+i; //val5 = src[i];
-    register short* val6 = src+i+1; //val6 = src[i+1];
-    register short* val7 = src+i+xsize-1; //val7 = src[i+xsize-1];
-    register short* val8 = src+i+xsize; //val8 = src[i+xsize];
-    register short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];*/
+    short* val1 = 0;
+    short* val2 = src+i-xsize; //val2 = src[i-xsize];
+    short* val3 = src+i-xsize+1; //val3 = src[i-xsize+1];
+    short* val4 = src+i-1; //val4 = src[i-1];
+    short* val5 = src+i; //val5 = src[i];
+    short* val6 = src+i+1; //val6 = src[i+1];
+    short* val7 = src+i+xsize-1; //val7 = src[i+xsize-1];
+    short* val8 = src+i+xsize; //val8 = src[i+xsize];
+    short* val9 = src+i+xsize+1; //val9 = src[i+xsize+1];*/
     //int res;
 // for (i=xsize+1;i<size;i++) {
     for (int k=1; k<ysize; k++) {
@@ -506,14 +494,12 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,
 
   vector unsigned char one;
   vector signed short mat1,mat2,mat3,mat4,mat5,mat6,mat7,mat8,mat9;
-  vector unsigned char  val1,val2,val3,val4,val5,val6,val7,val8,val9;
-  register vector signed int  res1,res2,res3,res4,res5,res6,res7,res8,res9;
-  vector signed int  yhi,ylo;
-  register vector signed int  res1a,res2a,res3a,res4a,res5a,res6a,res7a,
-           res8a,res9a;
+  vector unsigned char val1,val2,val3,val4,val5,val6,val7,val8,val9;
+  vector signed int res1,res2,res3,res4,res5,res6,res7,res8,res9;
+  vector signed int yhi,ylo;
+  vector signed int res1a,res2a,res3a,res4a,res5a,res6a,res7a,res8a,res9a;
   vector unsigned int bitshift;
-  register vector signed short y1,y2,y3,y4,y5,y6,y7,y8,y9,yres,uvres,hiImage,
-           loImage;
+  vector signed short y1,y2,y3,y4,y5,y6,y7,y8,y9,yres,uvres,hiImage,loImage;
   vector signed short range,uvnone,uv128;
   unsigned char *dst =  (unsigned char*) image.data;
   unsigned char *src =  (unsigned char*) tempImg.data;
@@ -606,27 +592,17 @@ void pix_convolve :: calculate3x3YUVAltivec(imageStruct &image,
       val9 = vec_ld(0,src+(i+xsize+2));
 
       //extract the Y for processing
-      y1 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val1);
-      y2 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val2);
-      y3 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val3);
-      y4 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val4);
-      y5 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val5);
-      y6 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val6);
-      y7 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val7);
-      y8 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val8);
-      y9 = (vector signed short)vec_mulo((vector unsigned char)one,
-                                         (vector unsigned char)val9);
+      y1 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val1);
+      y2 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val2);
+      y3 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val3);
+      y4 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val4);
+      y5 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val5);
+      y6 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val6);
+      y7 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val7);
+      y8 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val8);
+      y9 = (vector signed short)vec_mulo((vector unsigned char)one, (vector unsigned char)val9);
 
-      uvres = (vector signed short)vec_mule((vector unsigned char)one,
-                                            (vector unsigned char)val5);
+      uvres = (vector signed short)vec_mule((vector unsigned char)one, (vector unsigned char)val5);
 
       //mult the Y by the matrix coefficient
       res1 = vec_mulo(mat1,y1);

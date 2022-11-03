@@ -66,7 +66,7 @@ void pix_contrast :: processYUVAltivec(imageStruct &image)
   vector signed short Y, UV,hiImage, loImage;
   vector signed short con, sat,szero;
   vector signed short clampLO,clampHI;
-  register vector signed int UVhi,UVlo,Yhi,Ylo;
+  vector signed int UVhi,UVlo,Yhi,Ylo;
 
   vector unsigned char permuteY,permuteUV, permuteYUV, zero;
 

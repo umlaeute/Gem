@@ -45,9 +45,9 @@ pix_subtract :: ~pix_subtract()
 void pix_subtract :: processRGBA_RGBA(imageStruct &image,
                                       imageStruct &right)
 {
-  register int datasize = (image.xsize * image.ysize)>>3;
-  register unsigned char *leftPix = image.data;
-  register unsigned char *rightPix = right.data;
+  int datasize = (image.xsize * image.ysize)>>3;
+  unsigned char *leftPix = image.data;
+  unsigned char *rightPix = right.data;
 
   while (datasize--) {
     SUB8_NOALPHA(leftPix,rightPix);
@@ -77,7 +77,7 @@ void pix_subtract :: processRGBA_Gray(imageStruct &image,
   unsigned char *rightPix = right.data;
 
   while(datasize--)    {
-    register int alpha = *rightPix++;
+    int alpha = *rightPix++;
     leftPix[chRed]   = CLAMP_LOW(static_cast<int>(leftPix[chRed])   - alpha);
     leftPix[chGreen] = CLAMP_LOW(static_cast<int>(leftPix[chGreen]) - alpha);
     leftPix[chBlue]  = CLAMP_LOW(static_cast<int>(leftPix[chBlue])  - alpha);
@@ -319,8 +319,8 @@ void pix_subtract :: processDualImage(imageStruct &image,
   }
   int datasize = (image.xsize * image.ysize * image.csize)>>5;
   int restsize = image.xsize * image.ysize * image.csize - datasize;
-  register unsigned char *leftPix  = image.data;
-  register unsigned char *rightPix = right.data;
+  unsigned char *leftPix  = image.data;
+  unsigned char *rightPix = right.data;
 
   while (datasize--) {
     SUB8(leftPix,rightPix);

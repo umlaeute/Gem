@@ -56,8 +56,7 @@ void pix_motionblur :: processRGBAImage(imageStruct &image)
 {
   int h,w,height,width;
   long src=0;
-  register int R,R1,G,G1,B,
-           B1; //too many for x86?  i really don't know or care
+  int R,R1,G,G1,B, B1; //too many for x86?  i really don't know or care
   int rightGain,imageGain;
   unsigned char *pixels=image.data;
   unsigned char *saved = m_savedImage.data;
@@ -163,11 +162,11 @@ void pix_motionblur :: processYUVImage(imageStruct &image)
   }
   saved=m_savedImage.data;
 
-  register long src,dst;
+  long src,dst;
 
-  register int rightGain,imageGain;
-  register int y1,y1a,y2,y2a,y1res,y2res,u,u1,v,v1;
-  register int loadU,loadV,loadY1, loadY2,loadU1,loadV1,loadY1a, loadY2a;
+  int rightGain,imageGain;
+  int y1,y1a,y2,y2a,y1res,y2res,u,u1,v,v1;
+  int loadU,loadV,loadY1, loadY2,loadU1,loadV1,loadY1a, loadY2a;
 
   src = 0;
   dst = 0;
@@ -345,15 +344,14 @@ void pix_motionblur :: processYUVAltivec(imageStruct &image)
     vector      unsigned int v;
   } bitBuffer;
 
-  register vector signed short gainAdd, hiImage, loImage,hiRight,loRight,
-           YImage, UVImage;
-  // register vector signed short loadhiImage, loadloImage,loadhiRight,loadloRight;
-  register vector unsigned char loadImage, loadRight;
-  register vector unsigned char zero = vec_splat_u8(0);
-  register vector signed int UVhi,UVlo,Yhi,Ylo;
-  register vector signed int UVhiR,UVloR,YhiR,YloR;
-  register vector signed short gainSub,gain,gainR;//,d;
-  register vector unsigned int bitshift;
+  vector signed short gainAdd, hiImage, loImage,hiRight,loRight, YImage, UVImage;
+  // vector signed short loadhiImage, loadloImage,loadhiRight,loadloRight;
+  vector unsigned char loadImage, loadRight;
+  vector unsigned char zero = vec_splat_u8(0);
+  vector signed int UVhi,UVlo,Yhi,Ylo;
+  vector signed int UVhiR,UVloR,YhiR,YloR;
+  vector signed short gainSub,gain,gainR;//,d;
+  vector unsigned int bitshift;
   vector unsigned char *inData = (vector unsigned char*) image.data;
   vector unsigned char *rightData = (vector unsigned char*) saved;
 

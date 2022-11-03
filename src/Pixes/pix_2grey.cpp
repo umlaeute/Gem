@@ -77,18 +77,18 @@ void pix_2grey :: processRGBAMMX(imageStruct &image)
 {
   __m64*data      =(__m64*)image.data;
 
-  register __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
-                                         (unsigned char)0x00,
-                                         (unsigned char)0x00,
-                                         (unsigned char)0xFF,
-                                         (unsigned char)0x00,
-                                         (unsigned char)0x00,
-                                         (unsigned char)0x00,
-                                         (unsigned char)0xFF);
-  register __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN,
-                                          RGB2GRAY_BLUE, 0);
-  register __m64 pixel, y1, y2, y1_2;
-  register int pixsize = (image.ysize * image.xsize)>>1;
+  __m64 alpha_mask=_mm_setr_pi8((unsigned char)0x00,
+                                (unsigned char)0x00,
+                                (unsigned char)0x00,
+                                (unsigned char)0xFF,
+                                (unsigned char)0x00,
+                                (unsigned char)0x00,
+                                (unsigned char)0x00,
+                                (unsigned char)0xFF);
+  __m64 rgb2Y     =_mm_setr_pi16(RGB2GRAY_RED, RGB2GRAY_GREEN,
+                                 RGB2GRAY_BLUE, 0);
+  __m64 pixel, y1, y2, y1_2;
+  int pixsize = (image.ysize * image.xsize)>>1;
 
   while(pixsize--) {
     pixel=data[pixsize]; /* RGBARGBA */
@@ -130,27 +130,27 @@ void pix_2grey :: processRGBAMMX(imageStruct &image)
 # endif /* APPLE */
 void pix_2grey :: processYUVMMX(imageStruct &image)
 {
-  register int pixsize = (image.ysize * image.xsize)>>2;
+  int pixsize = (image.ysize * image.xsize)>>2;
 
-  register __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
-                                          (unsigned char)0xFF,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0xFF,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0xFF,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0xFF);
-  register __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0x80,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0x80,
-                                          (unsigned char)0x00,
-                                          (unsigned char)0x80,
-                                          (unsigned char)0x00);
+  __m64 mask_64   = _mm_setr_pi8((unsigned char)0x00,
+                                 (unsigned char)0xFF,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0xFF,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0xFF,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0xFF);
+  __m64 offset_64 = _mm_setr_pi8((unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00,
+                                 (unsigned char)0x80,
+                                 (unsigned char)0x00);
   __m64*data_p= (__m64*)image.data;
 
-  register __m64 pixel;
+  __m64 pixel;
   while(pixsize--) {
     pixel = *data_p;
     pixel = _mm_and_si64(pixel, mask_64);
@@ -163,21 +163,21 @@ void pix_2grey :: processYUVMMX(imageStruct &image)
 #ifdef __SSE2__
 void pix_2grey :: processYUVSSE2(imageStruct &image)
 {
-  register int pixsize = (image.ysize * image.xsize)>>3;
+  int pixsize = (image.ysize * image.xsize)>>3;
 
-  register __m128i mask_128   = _mm_set_epi8(
-                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
-                                  (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
-  register __m128i offset_128 = _mm_set_epi8(
-                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
-                                  (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
+  __m128i mask_128   = _mm_set_epi8(
+                         (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                         (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                         (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00,
+                         (const char)0xFF, (const char)0x00, (const char)0xFF, (const char)0x00);
+  __m128i offset_128 = _mm_set_epi8(
+                         (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                         (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                         (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80,
+                         (const char)0x00, (const char)0x80, (const char)0x00, (const char)0x80);
   __m128i *data_p= (__m128i*)image.data;
 
-  register __m128i pixel;
+  __m128i pixel;
   while(pixsize--) {
     pixel = *data_p;
     pixel = _mm_and_si128(pixel, mask_128);

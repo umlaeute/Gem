@@ -496,22 +496,17 @@ void pix_chroma_key :: processYUV_Altivec(imageStruct &image,
     vector unsigned int     v;
   } longBuffer;
 
-  register vector unsigned short      UVres1, Yres1, UVres2,
-           Yres2;//interleave;
-  register vector unsigned short      hiImage, loImage;
-  register vector bool short          Ymasklo,Ymaskhi,
-           UVmaskhi;//UVmasklo, Vmaskhi, Vmasklo;
-  register vector unsigned short      Yhi,Ylo;//UVhi,UVlo;Vhi,Vlo;
-  register vector unsigned char       one = vec_splat_u8(1);
-  register vector unsigned short      sone = vec_splat_u16(1);
-  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,
-           Ures,Vres;
-  register vector bool int                    Umasklo, Umaskhi, Vmaskhi,
-           Vmasklo;
+  vector unsigned short UVres1, Yres1, UVres2, Yres2; //interleave;
+  vector unsigned short hiImage, loImage;
+  vector bool short     Ymasklo,Ymaskhi, UVmaskhi; //UVmasklo, Vmaskhi, Vmasklo;
+  vector unsigned short Yhi,Ylo; //UVhi,UVlo;Vhi,Vlo;
+  vector unsigned char  one = vec_splat_u8(1);
+  vector unsigned short sone = vec_splat_u16(1);
+  vector unsigned int   Uhi, Ulo, Vhi, Vlo, Ures,Vres;
+  vector bool int       Umasklo, Umaskhi, Vmaskhi, Vmasklo;
 
-  vector unsigned char        *inData = (vector unsigned char*) image.data;
-  vector unsigned char        *rightData = (vector unsigned char*)
-      right.data;
+  vector unsigned char *inData = (vector unsigned char*) image.data;
+  vector unsigned char *rightData = (vector unsigned char*)right.data;
 
   shortBuffer.s[0] = CLAMP(m_Yvalue + m_Yrange);
   Yhi = shortBuffer.v;

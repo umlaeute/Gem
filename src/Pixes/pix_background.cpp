@@ -372,7 +372,7 @@ void pix_background :: processGrayMMX(imageStruct &image)
 #ifdef __VEC__
 void pix_background :: processYUVAltivec(imageStruct &image)
 {
-  register int h,w,i,j;
+  int h,w,i,j;
   int pixsize = image.xsize * image.ysize * image.csize;
   h = image.ysize;
   w = image.xsize/8;
@@ -404,22 +404,18 @@ void pix_background :: processYUVAltivec(imageStruct &image)
     m_reset = 0;
   }
 
-  register vector unsigned short      UVres1, Yres1, UVres2,
-           Yres2;//interleave;
-  register vector unsigned short      hiImage, loImage;
-  register vector unsigned short      Yrange, UVrange, Yblank,UVblank,blank;
-  register vector bool short          Ymasklo,Ymaskhi,  UVmaskhi;
-  register vector unsigned short      Yhi,Ylo,UVhi,UVlo;
-  register vector unsigned char       one = vec_splat_u8(1);
-  register vector unsigned short      sone = vec_splat_u16(1);
-  register vector unsigned int                        Uhi, Ulo, Vhi, Vlo,
-           Ures,Vres;
-  register vector bool int                    Umasklo, Umaskhi, Vmaskhi,
-           Vmasklo;
+  vector unsigned short UVres1, Yres1, UVres2, Yres2;//interleave;
+  vector unsigned short hiImage, loImage;
+  vector unsigned short Yrange, UVrange, Yblank, UVblank, blank;
+  vector bool short     Ymasklo,Ymaskhi,  UVmaskhi;
+  vector unsigned short Yhi,Ylo,UVhi,UVlo;
+  vector unsigned char  one = vec_splat_u8(1);
+  vector unsigned short sone = vec_splat_u16(1);
+  vector unsigned int   Uhi, Ulo, Vhi, Vlo, Ures, Vres;
+  vector bool int       Umasklo, Umaskhi, Vmaskhi, Vmasklo;
 
-  vector unsigned char        *inData = (vector unsigned char*) image.data;
-  vector unsigned char        *rightData = (vector unsigned char*)
-      m_savedImage.data;
+  vector unsigned char *inData = (vector unsigned char*) image.data;
+  vector unsigned char *rightData = (vector unsigned char*)m_savedImage.data;
 
   shortBuffer.s[0] =  m_Yrange;
   Yrange = shortBuffer.v;

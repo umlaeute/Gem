@@ -201,16 +201,16 @@ void pix_gain :: processRGBAMMX(imageStruct &image)
     return;
   }
 
-  register int pixsize = (image.ysize * image.xsize)>>1;
+  int pixsize = (image.ysize * image.xsize)>>1;
 #if defined __APPLE__ && defined BYTE_ORDER && defined LITTLE_ENDIAN && (BYTE_ORDER == LITTLE_ENDIAN)
 # warning this should be fixed in chRed,...
-  register __m64 gain_64 = _mm_setr_pi16(A, R, G, B);
+  __m64 gain_64 = _mm_setr_pi16(A, R, G, B);
 #else
-  register __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
+  __m64 gain_64 = _mm_setr_pi16(R, G, B, A);
 #endif
-  register __m64*data_p= reinterpret_cast<__m64*>(image.data);
-  register __m64 null_64 = _mm_setzero_si64();
-  register __m64 a0,a1;
+  __m64*data_p= reinterpret_cast<__m64*>(image.data);
+  __m64 null_64 = _mm_setzero_si64();
+  __m64 a0,a1;
 
   while(pixsize--) {
     a1 = data_p[0];
@@ -251,11 +251,11 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
   } bitBuffer;
 
 
-  register vector signed short d, hiImage, loImage, YImage, UVImage;
+  vector signed short d, hiImage, loImage, YImage, UVImage;
   vector unsigned char zero = vec_splat_u8(0);
-  register vector signed int UVhi,UVlo,Yhi,Ylo;
-  register vector signed short c,gain;
-  register vector unsigned int bitshift;
+  vector signed int UVhi,UVlo,Yhi,Ylo;
+  vector signed short c,gain;
+  vector unsigned int bitshift;
   vector unsigned char *inData = (vector unsigned char*) image.data;
 
 
