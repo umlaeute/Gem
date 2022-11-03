@@ -7,7 +7,7 @@ EXTRA_DIST += win-vs2003/filmAVI.sln win-vs2003/filmAVI.vcproj
 EXTRA_DIST += win-vs2008/filmAVI.sln win-vs2008/filmAVI.vcproj
 
 pkglib_LTLIBRARIES=
-if WINDOWS
+if HAVE_VFW32
 pkglib_LTLIBRARIES += gem_filmAVI.la
 endif
 

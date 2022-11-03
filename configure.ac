@@ -431,6 +431,7 @@ dnl GEM_CHECK_LIB([vfw32], [vfw32],, [AVIFileInit],,,, [video input])
 GEM_CHECK_LIB([vfw32], [vfw32],[vfw.h], [capGetVideoFormat],,,, [video input])
 # is this needed?
 dnl GEM_CHECK_LIB([avicap32],[avicap32],,[main],,,,[video input])
+AM_CONDITIONAL([HAVE_VFW32], test "x${have_vfw32}" = "xyes")
 
 # VLC
 GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [video input])

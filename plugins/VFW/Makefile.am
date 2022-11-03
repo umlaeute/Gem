@@ -9,7 +9,7 @@ pkglib_LTLIBRARIES=
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
-if WINDOWS
+if HAVE_VFW32
 pkglib_LTLIBRARIES+= gem_videoVFW.la
 dist_gemhelp_DATA +=VFW-videoplugin.pd
 endif
