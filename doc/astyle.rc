@@ -5,7 +5,8 @@
 lineend=linux
 
 ## make sure that code fits on an old-school terminal
-max-code-length=75
+#max-code-length=75
+max-code-length=200
 # maximum indentation on continuation lines
 max-instatement-indent=40
 
