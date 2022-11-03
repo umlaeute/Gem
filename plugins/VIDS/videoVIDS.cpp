@@ -323,6 +323,7 @@ bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
         }
       }
     }
+    // *INDENT-OFF*
     else VIDS_SET_FILTER("brightness", m_vi->propBrightness);
     else VIDS_SET_FILTER("contrast", m_vi->propContrast);
     else VIDS_SET_FILTER("hue", m_vi->propHue);
@@ -341,6 +342,7 @@ bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
     else VIDS_SET_CAMERA("exposure", m_vi->propExposure);
     else VIDS_SET_CAMERA("iris", m_vi->propIris);
     else VIDS_SET_CAMERA("focus", m_vi->propFocus);
+    // *INDENT-ON*
   }
   return needrestart;
 }
@@ -361,6 +363,7 @@ void videoVIDS::getProperties(gem::Properties&props)
     } else if("height"==key) {
       props.set(key, m_pixBlock.image.ysize);
     }
+    // *INDENT-OFF*
     else VIDS_GET_FILTER("brightness", m_vi->propBrightness);
     else VIDS_GET_FILTER("contrast", m_vi->propContrast);
     else VIDS_GET_FILTER("hue", m_vi->propHue);
@@ -379,6 +382,7 @@ void videoVIDS::getProperties(gem::Properties&props)
     else VIDS_GET_CAMERA("exposure", m_vi->propExposure);
     else VIDS_GET_CAMERA("iris", m_vi->propIris);
     else VIDS_GET_CAMERA("focus", m_vi->propFocus);
+    // *INDENT-ON*
   }
 }
 
