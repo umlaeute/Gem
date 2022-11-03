@@ -40,6 +40,7 @@ AC_CONFIG_FILES([plugins/MPEG3/Makefile])
 AC_CONFIG_FILES([plugins/NDI/Makefile])
 AC_CONFIG_FILES([plugins/OBJ/Makefile])
 AC_CONFIG_FILES([plugins/PNM/Makefile])
+AC_CONFIG_FILES([plugins/PIPEWIRE/Makefile])
 AC_CONFIG_FILES([plugins/QT4L/Makefile])
 AC_CONFIG_FILES([plugins/QuickTime/Makefile])
 AC_CONFIG_FILES([plugins/SGI/Makefile])
@@ -407,6 +408,27 @@ AS_IF([test "x$have_libunicap"], [have_unicap="yes"])
 AM_CONDITIONAL([HAVE_LIB_UNICAP], [test "x${have_unicap}" = "xyes"])
 
 
+
+# pipewire
+AC_ARG_VAR([PKG_PIPEWIRE_CFLAGS], [C compiler flags for pipewire, overriding pkg-config])dnl
+AC_ARG_VAR([PKG_PIPEWIRE_LIBS], [linker flags for pipewire, overriding pkg-config])dnl
+AC_ARG_VAR([PKG_LIBPIPEWIRE_0_3_CFLAGS],[(Use PKG_PIPEWIRE_CFLAGS instead)])
+AC_ARG_VAR([PKG_LIBPIPEWIRE_0_3_LIBS],[(Use PKG_PIPEWIRE_LIBS instead)])
+
+AS_IF([test "x${PKG_PIPEWIRE_CFLAGS}" != x],
+      [PKG_LIBPIPEWIRE_0_3_CFLAGS=${PKG_PIPEWIRE_CFLAGS}])
+AS_IF([test "x${PKG_PIPEWIRE_LIBS}" != x],
+      [PKG_LIBPIPEWIRE_0_3_LIBS=${PKG_PIPEWIRE_LIBS}])
+GEM_ARG_WITH([pipewire], [video input/output], [force])
+GEM_CHECK_LIB([libpipewire-0.3], [pipewire-0.3], [pipewire/pipewire.h], [pw_get_library_version],
+              ,,, [video input/output], [$with_pipewire])
+GEM_LIB_PIPEWIRE_CFLAGS=${GEM_LIB_LIBPIPEWIRE_0_3_CFLAGS}
+GEM_LIB_PIPEWIRE_LIBS=${GEM_LIB_LIBPIPEWIRE_0_3_LIBS}
+AC_SUBST([GEM_LIB_PIPEWIRE_CFLAGS])
+AC_SUBST([GEM_LIB_PIPEWIRE_LIBS])
+have_pipewire="${have_libpipewire_0_3}"
+AM_CONDITIONAL([HAVE_PIPEWIRE], [test "x${have_pipewire}" = "xyes"])
+
 have_v4l="no"
 GEM_ARG_WITH([v4l], [video input], [force])
 AC_CHECK_HEADERS([linux/videodev.h], have_v4l="yes")
@@ -727,6 +749,7 @@ AS_IF([test "x${have_libdv}" != "xno"], [
   AS_IF([test "x${have_libraw1394}" != "xyes"], [have_libdv="no (missing libraw1394)"])
 ])
 AS_IF([test "x${have_unicap}" = "x"], [have_unicap="no"])
+AS_IF([test "x${have_pipewire}" = "x"], [have_pipewire="no"])
 AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
 AS_IF([test "x${have_stb}" = "xyes"], [have_stb="YES (library)"], [have_stb="YES (local)"])
 
@@ -787,6 +810,7 @@ Configuration:
     use DV               : ${have_libdv}
     use ieee1394         : ${have_ieee1394}
     use NDI              : ${have_ndi}
+    use PipeWire         : ${have_pipewire}
     use Unicap           : ${have_unicap}
     use v4l              : ${have_v4l}
     use v4l2             : ${have_v4l2}
