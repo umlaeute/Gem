@@ -322,43 +322,25 @@ bool videoVIDS::trySetProperties(gem::Properties&props, bool canrestart)
           m_vi->setFormat(m_ID, format);
         }
       }
-    } else {
-      VIDS_SET_FILTER("brightness", m_vi->propBrightness);
-    } else {
-      VIDS_SET_FILTER("contrast", m_vi->propContrast);
-    } else {
-      VIDS_SET_FILTER("hue", m_vi->propHue);
-    } else {
-      VIDS_SET_FILTER("saturation", m_vi->propSaturation);
-    } else {
-      VIDS_SET_FILTER("sharpness", m_vi->propSharpness);
-    } else {
-      VIDS_SET_FILTER("gamma", m_vi->propGamma);
-    } else {
-      VIDS_SET_FILTER("colorenable", m_vi->propColorEnable);
-    } else {
-      VIDS_SET_FILTER("whitebalance", m_vi->propWhiteBalance);
-    } else {
-      VIDS_SET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
-    } else {
-      VIDS_SET_FILTER("gain", m_vi->propGain);
     }
+    else VIDS_SET_FILTER("brightness", m_vi->propBrightness);
+    else VIDS_SET_FILTER("contrast", m_vi->propContrast);
+    else VIDS_SET_FILTER("hue", m_vi->propHue);
+    else VIDS_SET_FILTER("saturation", m_vi->propSaturation);
+    else VIDS_SET_FILTER("sharpness", m_vi->propSharpness);
+    else VIDS_SET_FILTER("gamma", m_vi->propGamma);
+    else VIDS_SET_FILTER("colorenable", m_vi->propColorEnable);
+    else VIDS_SET_FILTER("whitebalance", m_vi->propWhiteBalance);
+    else VIDS_SET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
+    else VIDS_SET_FILTER("gain", m_vi->propGain);
 
-    else {
-      VIDS_SET_CAMERA("pan", m_vi->propPan);
-    } else {
-      VIDS_SET_CAMERA("tilt", m_vi->propTilt);
-    } else {
-      VIDS_SET_CAMERA("roll", m_vi->propRoll);
-    } else {
-      VIDS_SET_CAMERA("zoom", m_vi->propZoom);
-    } else {
-      VIDS_SET_CAMERA("exposure", m_vi->propExposure);
-    } else {
-      VIDS_SET_CAMERA("iris", m_vi->propIris);
-    } else {
-      VIDS_SET_CAMERA("focus", m_vi->propFocus);
-    }
+    else VIDS_SET_CAMERA("pan", m_vi->propPan);
+    else VIDS_SET_CAMERA("tilt", m_vi->propTilt);
+    else VIDS_SET_CAMERA("roll", m_vi->propRoll);
+    else VIDS_SET_CAMERA("zoom", m_vi->propZoom);
+    else VIDS_SET_CAMERA("exposure", m_vi->propExposure);
+    else VIDS_SET_CAMERA("iris", m_vi->propIris);
+    else VIDS_SET_CAMERA("focus", m_vi->propFocus);
   }
   return needrestart;
 }
@@ -378,43 +360,25 @@ void videoVIDS::getProperties(gem::Properties&props)
       props.set(key, m_pixBlock.image.xsize);
     } else if("height"==key) {
       props.set(key, m_pixBlock.image.ysize);
-    } else {
-      VIDS_GET_FILTER("brightness", m_vi->propBrightness);
-    } else {
-      VIDS_GET_FILTER("contrast", m_vi->propContrast);
-    } else {
-      VIDS_GET_FILTER("hue", m_vi->propHue);
-    } else {
-      VIDS_GET_FILTER("saturation", m_vi->propSaturation);
-    } else {
-      VIDS_GET_FILTER("sharpness", m_vi->propSharpness);
-    } else {
-      VIDS_GET_FILTER("gamma", m_vi->propGamma);
-    } else {
-      VIDS_GET_FILTER("colorenable", m_vi->propColorEnable);
-    } else {
-      VIDS_GET_FILTER("whitebalance", m_vi->propWhiteBalance);
-    } else {
-      VIDS_GET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
-    } else {
-      VIDS_GET_FILTER("gain", m_vi->propGain);
     }
+    else VIDS_GET_FILTER("brightness", m_vi->propBrightness);
+    else VIDS_GET_FILTER("contrast", m_vi->propContrast);
+    else VIDS_GET_FILTER("hue", m_vi->propHue);
+    else VIDS_GET_FILTER("saturation", m_vi->propSaturation);
+    else VIDS_GET_FILTER("sharpness", m_vi->propSharpness);
+    else VIDS_GET_FILTER("gamma", m_vi->propGamma);
+    else VIDS_GET_FILTER("colorenable", m_vi->propColorEnable);
+    else VIDS_GET_FILTER("whitebalance", m_vi->propWhiteBalance);
+    else VIDS_GET_FILTER("backlightcompensation", m_vi->propBacklightCompensation);
+    else VIDS_GET_FILTER("gain", m_vi->propGain);
 
-    else {
-      VIDS_GET_CAMERA("pan", m_vi->propPan);
-    } else {
-      VIDS_GET_CAMERA("tilt", m_vi->propTilt);
-    } else {
-      VIDS_GET_CAMERA("roll", m_vi->propRoll);
-    } else {
-      VIDS_GET_CAMERA("zoom", m_vi->propZoom);
-    } else {
-      VIDS_GET_CAMERA("exposure", m_vi->propExposure);
-    } else {
-      VIDS_GET_CAMERA("iris", m_vi->propIris);
-    } else {
-      VIDS_GET_CAMERA("focus", m_vi->propFocus);
-    }
+    else VIDS_GET_CAMERA("pan", m_vi->propPan);
+    else VIDS_GET_CAMERA("tilt", m_vi->propTilt);
+    else VIDS_GET_CAMERA("roll", m_vi->propRoll);
+    else VIDS_GET_CAMERA("zoom", m_vi->propZoom);
+    else VIDS_GET_CAMERA("exposure", m_vi->propExposure);
+    else VIDS_GET_CAMERA("iris", m_vi->propIris);
+    else VIDS_GET_CAMERA("focus", m_vi->propFocus);
   }
 }
 
