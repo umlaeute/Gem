@@ -15,6 +15,7 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
+#include <pipewire/pipewire.h>
 
 namespace gem
 {
@@ -24,10 +25,10 @@ class GEM_EXPORT videoPIPEWIRE : public video
 {
 private:
   std::string m_name;
-  bool m_open;
   pixBlock m_pixBlock;
   Properties m_props;
-  unsigned int m_type;
+
+  struct pw_stream *m_stream;
 public:
   videoPIPEWIRE(void);
 
@@ -81,14 +82,16 @@ public:
 
 
   virtual void close(void) {};
-  virtual bool start(void)
-  {
-    return true;
-  };
-  virtual bool stop(void)
-  {
-    return true;
-  };
+  virtual bool start(void);
+  virtual bool stop(void);
+  void on_process(void);
+  void on_param_changed(uint32_t id, const struct spa_pod *param);
+private:
+  static void process_cb(void*);
+  static void param_changed_cb(void*, uint32_t id, const struct spa_pod *param);
+  struct pw_stream_events m_stream_events;
+
+
 };
 };
 }; // namespace
