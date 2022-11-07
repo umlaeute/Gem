@@ -16,9 +16,14 @@
 
 #include <spa/param/video/format-utils.h>
 #include <spa/debug/types.h>
-#include <spa/param/video/type-info.h>
 
 #include "m_pd.h"
+
+#ifdef __BIG_ENDIAN__
+# define GEM_SPA_GRAY16 SPA_VIDEO_FORMAT_GRAY16_BE
+#else
+# define GEM_SPA_GRAY16 SPA_VIDEO_FORMAT_GRAY16_LE
+#endif
 
 using namespace gem::plugins;
 
@@ -29,7 +34,6 @@ namespace {
   static unsigned int s_loopcount = 0;
 
   bool videoPIPEWIRE_init(void) {
-    pd_error(0, "creating loop %d", s_loopcount);
     if(s_loop) {
       s_loopcount++;
       return false;
@@ -41,32 +45,33 @@ namespace {
       return false;
     }
     pw_thread_loop_start(s_loop);
-    ::post("lop %p started", s_loop);
+    //::post("lop %p started", s_loop);
     s_loopcount = 1;
     return true;
   }
   void videoPIPEWIRE_deinit(void) {
-    pd_error(0, "destroying loop %d", s_loopcount);
     if(!s_loopcount) return;
     if(--s_loopcount)return;
     pw_thread_loop_stop(s_loop);
     pw_thread_loop_destroy(s_loop);
     s_loop=0;
     pw_deinit();
-    pd_error(0, "destroyed loop");
   }
 }
 
 
 videoPIPEWIRE::videoPIPEWIRE(void)
   : video()
-  , m_name(std::string("test")
-    )
+  , m_name(std::string("test"))
+  , m_stream(0)
+  , m_format(SPA_VIDEO_FORMAT_UNKNOWN)
+
 {
-  m_pixBlock.image.xsize = 64;
-  m_pixBlock.image.ysize = 64;
+  m_pixBlock.image.xsize = 1;
+  m_pixBlock.image.ysize = 1;
   m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
+  m_pixBlock.image.setBlack();
   videoPIPEWIRE_init();
   m_stream_events = {
     PW_VERSION_STREAM_EVENTS,
@@ -98,10 +103,10 @@ bool videoPIPEWIRE::open(gem::Properties&props)
   struct spa_rectangle maxsize = SPA_RECTANGLE(4096, 4096);
   struct spa_rectangle stpsize = SPA_RECTANGLE(1,1);
   struct spa_fraction minrate  = SPA_FRACTION(25, 1);
-  struct spa_fraction maxrate  = SPA_FRACTION(0, 1);
-  struct spa_fraction stprate  = SPA_FRACTION(1000, 1);
-  int flags = PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS;
-
+  struct spa_fraction maxrate  = SPA_FRACTION(1000, 1);
+  struct spa_fraction stprate  = SPA_FRACTION(0, 1);
+  //int flags = PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS;
+  int flags = PW_STREAM_FLAG_MAP_BUFFERS;
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
@@ -119,14 +124,20 @@ bool videoPIPEWIRE::open(gem::Properties&props)
                                          SPA_FORMAT_mediaType,       SPA_POD_Id(SPA_MEDIA_TYPE_video),
                                          SPA_FORMAT_mediaSubtype,    SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
                                          SPA_FORMAT_VIDEO_format,    SPA_POD_CHOICE_ENUM_Id(
-                                           3,
+                                           9,
+                                           SPA_VIDEO_FORMAT_RGB,
                                            SPA_VIDEO_FORMAT_RGBA,
+                                           SPA_VIDEO_FORMAT_BGR,
+                                           SPA_VIDEO_FORMAT_BGRA,
+                                           SPA_VIDEO_FORMAT_RGB16,
                                            SPA_VIDEO_FORMAT_YUY2,
-                                           SPA_VIDEO_FORMAT_GRAY8),
+                                           SPA_VIDEO_FORMAT_UYVY,
+                                           SPA_VIDEO_FORMAT_GRAY8,
+                                           GEM_SPA_GRAY16),
                                          SPA_FORMAT_VIDEO_size,      SPA_POD_CHOICE_RANGE_Rectangle(
-                                           &minsize, &maxsize, &stpsize),
+                                           &minsize, &stpsize, &maxsize),
                                          SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
-                                           &minrate, &maxrate, &stprate));
+                                           &minrate, &stprate, &maxrate));
 
   pw_stream_connect(m_stream,
                     PW_DIRECTION_INPUT,
@@ -142,12 +153,42 @@ err:
 }
 
 bool videoPIPEWIRE::start() {
+  if(!s_loop || !m_stream)
+    return false;
+  struct timespec abstime;
+  const char*error=0;
   pw_thread_loop_lock (s_loop);
+  pw_stream_set_active(m_stream, true);
+  pw_thread_loop_get_time (s_loop, &abstime,
+                           3 * SPA_NSEC_PER_SEC);
+  while (false) {
+    enum pw_stream_state state;
+    state = pw_stream_get_state (m_stream, &error);
+    if (state >= PW_STREAM_STATE_PAUSED)
+      break;
+
+    if (state == PW_STREAM_STATE_ERROR)
+      goto start_error;
+
+    if (pw_thread_loop_timed_wait_full (s_loop, &abstime) < 0) {
+      error = "timeout";
+      goto start_error;
+    }
+  }
   pw_thread_loop_signal (s_loop, false);
   pw_thread_loop_unlock (s_loop);
   return (true);
+start_error:
+  {
+    ::pd_error(0, "ERROR: %s", error);
+    pw_thread_loop_unlock (s_loop);
+    return false;
+  }
 }
 bool videoPIPEWIRE::stop() {
+  if(!m_stream)
+    return (false);
+  pw_stream_set_active(m_stream, false);
   return (true);
 }
 
@@ -155,18 +196,29 @@ bool videoPIPEWIRE::stop() {
 
 pixBlock*videoPIPEWIRE::getFrame(void)
 {
+  m_mutex.lock();
+  if(!m_pixBlock.image.csize) {
+    m_mutex.unlock();
+    return 0;
+  }
+  return &m_pixBlock;
+
   m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   const unsigned int count = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
   unsigned int i=0;
   unsigned char*data=m_pixBlock.image.data;
-  ::post("%s", __FUNCTION__);
+  //::post("%s", __FUNCTION__);
   m_pixBlock.newimage = true;
   pw_thread_loop_lock (s_loop);
   pw_thread_loop_signal (s_loop, false);
   pw_thread_loop_unlock (s_loop);
 
   return &m_pixBlock;
+}
+void videoPIPEWIRE::releaseFrame(void) {
+  m_pixBlock.newimage = false;
+  m_mutex.unlock();
 }
 
 std::vector<std::string>videoPIPEWIRE::enumerate(void)
@@ -251,12 +303,58 @@ const std::string videoPIPEWIRE::getName(void)
 
 void videoPIPEWIRE::on_process(void)
 {
-  ::post("%s", __FUNCTION__);
+  //pw_thread_loop_signal (s_loop, false);
+  struct pw_buffer *b;
+  struct spa_buffer *buf;
+
+  if ((b = pw_stream_dequeue_buffer(m_stream)) == NULL) {
+    pw_log_warn("out of buffers: %m");
+    return;
+  }
+
+  buf = b->buffer;
+  if (buf->datas[0].data == NULL)
+    return;
+
+  m_mutex.lock();
+  switch(m_format) {
+  case SPA_VIDEO_FORMAT_RGB:
+    m_pixBlock.image.fromRGB((unsigned char*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_BGR:
+    m_pixBlock.image.fromBGR((unsigned char*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_BGRA:
+    m_pixBlock.image.fromBGRA((unsigned char*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_RGB16:
+    m_pixBlock.image.fromRGB16((unsigned char*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_YUY2:
+    m_pixBlock.image.fromYUY2((unsigned char*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  case GEM_SPA_GRAY16:
+    m_pixBlock.image.fromGray((short*)buf->datas[0].data);
+    m_pixBlock.image.notowned = false;
+    break;
+  default:
+    m_pixBlock.image.data = (unsigned char*)buf->datas[0].data;
+    m_pixBlock.image.notowned = true;
+  }
+
+  m_pixBlock.newimage = true;
+  m_mutex.unlock();
+
+  pw_stream_queue_buffer(m_stream, b);
 }
 
 void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 {
-  ::post("%s", __FUNCTION__);
   if (param == NULL || id != SPA_PARAM_Format)
     return;
   struct spa_video_info format;
@@ -271,6 +369,35 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 
   if (spa_format_video_raw_parse(param, &format.info.raw) < 0)
     return;
+
+
+  m_mutex.lock();
+  m_pixBlock.newfilm = true;
+  m_pixBlock.image.xsize = format.info.raw.size.width;
+  m_pixBlock.image.ysize = format.info.raw.size.height;
+  m_format = format.info.raw.format;
+  switch(format.info.raw.format) {
+  case(SPA_VIDEO_FORMAT_RGB):
+    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+    break;
+  case(SPA_VIDEO_FORMAT_RGBA):
+    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+    break;
+  case(SPA_VIDEO_FORMAT_YUY2):
+    m_pixBlock.image.setCsizeByFormat(GEM_YUV);
+    break;
+  case(SPA_VIDEO_FORMAT_UYVY):
+    m_pixBlock.image.setCsizeByFormat(GEM_YUV);
+    break;
+  case(SPA_VIDEO_FORMAT_GRAY8):
+    m_pixBlock.image.setCsizeByFormat(GEM_GRAY);
+    break;
+    m_pixBlock.image.csize = 0;
+  default: break;
+  }
+  m_mutex.unlock();
+  //return;
+
   ::post("got video format:");
   ::post("  format: %d (%s)", format.info.raw.format,
          spa_debug_type_find_name(spa_type_video_format,
@@ -283,11 +410,11 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 }
 
 void videoPIPEWIRE::process_cb(void*data) {
-  videoPIPEWIRE*p = (videoPIPEWIRE*)data;
-  p->on_process();
+  //::pd_error(0, "process");
+  ((videoPIPEWIRE*)data)->on_process();
 }
 void videoPIPEWIRE::param_changed_cb(void*data, uint32_t id, const struct spa_pod *param)
 {
-  videoPIPEWIRE*p = (videoPIPEWIRE*)data;
-  p->on_param_changed(id, param);
+  //::pd_error(0, "param_changed");
+  ((videoPIPEWIRE*)data)->on_param_changed(id, param);
 }

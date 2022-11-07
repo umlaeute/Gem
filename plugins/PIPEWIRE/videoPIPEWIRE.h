@@ -15,7 +15,9 @@
 
 #include "plugins/video.h"
 #include "Gem/Image.h"
+#include "Utils/ThreadMutex.h"
 #include <pipewire/pipewire.h>
+#include <spa/param/video/type-info.h>
 
 namespace gem
 {
@@ -27,8 +29,9 @@ private:
   std::string m_name;
   pixBlock m_pixBlock;
   Properties m_props;
-
+  gem::thread::Mutex m_mutex;
   struct pw_stream *m_stream;
+  spa_video_format m_format;
 public:
   videoPIPEWIRE(void);
 
@@ -65,7 +68,7 @@ public:
   {
     return true;
   }
-  virtual void releaseFrame(void) {}
+  virtual void releaseFrame(void);
   virtual bool grabAsynchronous(bool)
   {
     return true;
@@ -90,8 +93,6 @@ private:
   static void process_cb(void*);
   static void param_changed_cb(void*, uint32_t id, const struct spa_pod *param);
   struct pw_stream_events m_stream_events;
-
-
 };
 };
 }; // namespace
