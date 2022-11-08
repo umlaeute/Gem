@@ -94,26 +94,61 @@ videoPIPEWIRE::~videoPIPEWIRE(void)
 
 bool videoPIPEWIRE::open(gem::Properties&props)
 {
-  if(!s_loop)return false;
+  if(!s_loop) {
+    return false;
+  }
+
+  std::string media_role = "Camera";
+  std::string node_name = "Gem";
+  std::string app_name = "Pd";
+  uint32_t width = 320;
+  uint32_t height = 240;
+  bool autoconnect = false;
+
+  std::vector<std::string>keys=props.keys();
+  for(int i=0; i<keys.size(); i++) {
+    const std::string key =keys[i];
+    std::string s;
+    double d;
+    if (0) ;
+    else if (("MediaRole" == key) && (props.get(key, s))) {
+      media_role = s;
+    } else if (("AppName" == key) && (props.get(key, s))) {
+      app_name = s;
+    } else if (("NodeName" == key) && (props.get(key, s))) {
+      node_name = s;
+    } else if (("width" == key) && (props.get(key, d))) {
+      width=(int)d;
+    } else if (("height" == key) && (props.get(key, d))) {
+      height=(int)d;
+    } else if (("autoconnect" == key) && (props.get(key, d))) {
+      autoconnect=(int)d;
+    }
+  }
+
   struct pw_properties *pwprops = pw_properties_new(PW_KEY_MEDIA_TYPE, "Video",
-                                                    PW_KEY_MEDIA_CATEGORY, "Capture",
-                                                    PW_KEY_MEDIA_ROLE, "Camera",
-                                                    PW_KEY_APP_NAME, "Pd",
-                                                    PW_KEY_APP_ID, "info.puredata.gem",
-                                                    PW_KEY_NODE_NAME, "Gem",
-                                                    NULL);
+                                  PW_KEY_MEDIA_CATEGORY, "Capture",
+                                  PW_KEY_MEDIA_ROLE, media_role.c_str(),
+                                  PW_KEY_APP_NAME, app_name.c_str(),
+                                  PW_KEY_APP_ID, "at.iem.gem",
+                                  PW_KEY_NODE_NAME, node_name.c_str(),
+                                  NULL);
 
   uint8_t buffer[1024];
   const struct spa_pod *params[1];
   struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
-  struct spa_rectangle minsize = SPA_RECTANGLE(320, 240);
+  struct spa_rectangle defsize = SPA_RECTANGLE(width, height);
   struct spa_rectangle maxsize = SPA_RECTANGLE(4096, 4096);
-  struct spa_rectangle stpsize = SPA_RECTANGLE(1,1);
-  struct spa_fraction minrate  = SPA_FRACTION(25, 1);
+  struct spa_rectangle minsize = SPA_RECTANGLE(1,1);
+  struct spa_fraction defrate  = SPA_FRACTION(25, 1);
   struct spa_fraction maxrate  = SPA_FRACTION(1000, 1);
-  struct spa_fraction stprate  = SPA_FRACTION(0, 1);
-  //int flags = PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS;
-  int flags = PW_STREAM_FLAG_MAP_BUFFERS;
+  struct spa_fraction minrate  = SPA_FRACTION(0, 1);
+  int flags = PW_STREAM_FLAG_NONE;
+  flags |= PW_STREAM_FLAG_INACTIVE;
+  flags |= PW_STREAM_FLAG_MAP_BUFFERS;
+  if(autoconnect) {
+    flags |= PW_STREAM_FLAG_AUTOCONNECT;
+  }
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
@@ -127,24 +162,24 @@ bool videoPIPEWIRE::open(gem::Properties&props)
   }
 
   params[0] = (const spa_pod*)spa_pod_builder_add_object(&b,
-                                         SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
-                                         SPA_FORMAT_mediaType,       SPA_POD_Id(SPA_MEDIA_TYPE_video),
-                                         SPA_FORMAT_mediaSubtype,    SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
-                                         SPA_FORMAT_VIDEO_format,    SPA_POD_CHOICE_ENUM_Id(
-                                           9,
-                                           SPA_VIDEO_FORMAT_RGB,
-                                           SPA_VIDEO_FORMAT_RGBA,
-                                           SPA_VIDEO_FORMAT_BGR,
-                                           SPA_VIDEO_FORMAT_BGRA,
-                                           SPA_VIDEO_FORMAT_RGB16,
-                                           SPA_VIDEO_FORMAT_YUY2,
-                                           SPA_VIDEO_FORMAT_UYVY,
-                                           SPA_VIDEO_FORMAT_GRAY8,
-                                           GEM_SPA_GRAY16),
-                                         SPA_FORMAT_VIDEO_size,      SPA_POD_CHOICE_RANGE_Rectangle(
-                                           &minsize, &stpsize, &maxsize),
-                                         SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
-                                           &minrate, &stprate, &maxrate));
+              SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
+              SPA_FORMAT_mediaType,       SPA_POD_Id(SPA_MEDIA_TYPE_video),
+              SPA_FORMAT_mediaSubtype,    SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
+              SPA_FORMAT_VIDEO_format,    SPA_POD_CHOICE_ENUM_Id(
+                9,
+                SPA_VIDEO_FORMAT_RGB,
+                SPA_VIDEO_FORMAT_RGBA,
+                SPA_VIDEO_FORMAT_BGR,
+                SPA_VIDEO_FORMAT_BGRA,
+                SPA_VIDEO_FORMAT_RGB16,
+                SPA_VIDEO_FORMAT_YUY2,
+                SPA_VIDEO_FORMAT_UYVY,
+                SPA_VIDEO_FORMAT_GRAY8,
+                GEM_SPA_GRAY16),
+              SPA_FORMAT_VIDEO_size,      SPA_POD_CHOICE_RANGE_Rectangle(
+                &defsize, &minsize, &maxsize),
+              SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
+                &defrate, &minrate, &maxrate));
 
   pw_stream_connect(m_stream,
                     PW_DIRECTION_INPUT,
@@ -180,6 +215,7 @@ bool videoPIPEWIRE::start()
   pw_stream_set_active(m_stream, true);
   pw_thread_loop_get_time (s_loop, &abstime,
                            3 * SPA_NSEC_PER_SEC);
+  /* don't wait until somebody is connected...*/
   while (false) {
     enum pw_stream_state state;
     state = pw_stream_get_state (m_stream, &error);
@@ -271,7 +307,10 @@ bool videoPIPEWIRE::enumProperties(gem::Properties&readable,
   writeable.set("height", 64);
   readable.set("height", 64);
 
-  //writeable.set("type", std::string("noise"));
+  writeable.set("MediaRole", std::string("Camera"));
+  writeable.set("AppName", std::string("Pd"));
+  writeable.set("NodeName", std::string("Gem"));
+  writeable.set("autoconnect", 0);
   return true;
 }
 void videoPIPEWIRE::setProperties(gem::Properties&props)
