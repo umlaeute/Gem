@@ -69,7 +69,7 @@ void videoPIPEWIRE_deinit(void)
 
 videoPIPEWIRE::videoPIPEWIRE(void)
   : video()
-  , m_name(std::string("test"))
+  , m_name(std::string("pipewire"))
   , m_stream(0)
   , m_format(SPA_VIDEO_FORMAT_UNKNOWN)
 
@@ -307,6 +307,7 @@ std::vector<std::string>videoPIPEWIRE::provides(void)
 {
   std::vector<std::string>result;
   result.push_back(m_name);
+  result.push_back("pw");
   return result;
 }
 const std::string videoPIPEWIRE::getName(void)
