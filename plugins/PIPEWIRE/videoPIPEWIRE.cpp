@@ -300,17 +300,15 @@ bool videoPIPEWIRE::enumProperties(gem::Properties&readable,
 {
   readable.clear();
   writeable.clear();
-
-
-  writeable.set("width", 64);
-  readable.set("width", 64);
-  writeable.set("height", 64);
-  readable.set("height", 64);
-
-  writeable.set("MediaRole", std::string("Camera"));
-  writeable.set("AppName", std::string("Pd"));
-  writeable.set("NodeName", std::string("Gem"));
+#define RWSET(id, value) writeable.set(id, value); readable.set(id, value)
+  RWSET("width", 64);
+  RWSET("height", 64);
+  RWSET("MediaRole", std::string("Camera"));
+  RWSET("AppName", std::string("Pd"));
+  RWSET("NodeName", std::string("Gem"));
   writeable.set("autoconnect", 0);
+  readable.set("NodeID", 0);
+
   return true;
 }
 void videoPIPEWIRE::setProperties(gem::Properties&props)
@@ -331,14 +329,50 @@ void videoPIPEWIRE::setProperties(gem::Properties&props)
 }
 void videoPIPEWIRE::getProperties(gem::Properties&props)
 {
-  std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
-    if("width"==keys[i]) {
-      props.set(keys[i], m_pixBlock.image.xsize);
+
+  const struct pw_properties* pwprops = 0;
+  if(m_stream) {
+    pwprops = pw_stream_get_properties(m_stream);
+#if 0
+    const struct spa_dict_item *item;
+    spa_dict_for_each(item, &pwprops->dict) {
+      ::post("\t\t%s: \"%s\"", item->key, item->value);
     }
-    if("height"==keys[i]) {
-      props.set(keys[i], m_pixBlock.image.ysize);
+#endif
+  }
+  std::vector<std::string>keys=props.keys();
+  for(unsigned int i=0; i<keys.size(); i++) {
+    const std::string key =keys[i];
+
+    if (false) {
+      ;
+    } else if("width"==key) {
+      props.set(key, m_pixBlock.image.xsize);
+    } else if("height"==key) {
+      props.set(key, m_pixBlock.image.ysize);
+    }
+
+    if(m_stream) {
+      if (false) {
+        ;
+      } else if("NodeID"==key) {
+        props.set(key, pw_stream_get_node_id(m_stream));
+      }
+    }
+
+    if(pwprops) {
+      const char*s = 0;
+      if (false) {
+        ;
+      } else if("MediaRole"==key && ((s = pw_properties_get(pwprops, PW_KEY_MEDIA_ROLE)))) {
+        props.set(key, std::string(s));
+      } else if("AppName"==key && ((s = pw_properties_get(pwprops, PW_KEY_APP_NAME)))) {
+        props.set(key, std::string(s));
+      } else if("NodeName"==key && ((s = pw_properties_get(pwprops, PW_KEY_NODE_NAME)))) {
+        props.set(key, std::string(s));
+      } else if("ClientID"==key && ((s = pw_properties_get(pwprops, PW_KEY_CLIENT_ID)))) {
+        props.set(key, std::string(s));
+      }
     }
   }
 }
