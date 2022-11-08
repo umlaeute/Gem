@@ -98,12 +98,20 @@ bool videoPIPEWIRE::open(gem::Properties&props)
     return false;
   }
 
-  std::string media_role = "Camera";
-  std::string node_name = "Gem";
-  std::string app_name = "Pd";
   uint32_t width = 320;
   uint32_t height = 240;
-  bool autoconnect = false;
+
+  int flags = PW_STREAM_FLAG_NONE;
+  flags |= PW_STREAM_FLAG_INACTIVE;
+  flags |= PW_STREAM_FLAG_MAP_BUFFERS;
+
+  struct pw_properties *pwprops = pw_properties_new(PW_KEY_MEDIA_TYPE, "Video",
+                                  PW_KEY_MEDIA_CATEGORY, "Capture",
+                                  PW_KEY_MEDIA_ROLE, "Camera",
+                                  PW_KEY_APP_NAME, "Pd",
+                                  PW_KEY_APP_ID, "at.iem.gem",
+                                  PW_KEY_NODE_NAME, "Gem",
+                                  NULL);
 
   std::vector<std::string>keys=props.keys();
   for(int i=0; i<keys.size(); i++) {
@@ -111,28 +119,26 @@ bool videoPIPEWIRE::open(gem::Properties&props)
     std::string s;
     double d;
     if (0) ;
-    else if (("MediaRole" == key) && (props.get(key, s))) {
-      media_role = s;
-    } else if (("AppName" == key) && (props.get(key, s))) {
-      app_name = s;
-    } else if (("NodeName" == key) && (props.get(key, s))) {
-      node_name = s;
+    else if (("MediaRole" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_MEDIA_ROLE, s.c_str());
+    } else if (("AppName" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_APP_NAME, s.c_str());
+    } else if (("NodeName" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_NODE_NAME, s.c_str());
+#if 0
+    } else if (("PortName" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_PORT_NAME, s.c_str());
+#endif
     } else if (("width" == key) && (props.get(key, d))) {
       width=(int)d;
     } else if (("height" == key) && (props.get(key, d))) {
       height=(int)d;
     } else if (("autoconnect" == key) && (props.get(key, d))) {
-      autoconnect=(int)d;
+      if((int)d) {
+        flags |= PW_STREAM_FLAG_AUTOCONNECT;
+      }
     }
   }
-
-  struct pw_properties *pwprops = pw_properties_new(PW_KEY_MEDIA_TYPE, "Video",
-                                  PW_KEY_MEDIA_CATEGORY, "Capture",
-                                  PW_KEY_MEDIA_ROLE, media_role.c_str(),
-                                  PW_KEY_APP_NAME, app_name.c_str(),
-                                  PW_KEY_APP_ID, "at.iem.gem",
-                                  PW_KEY_NODE_NAME, node_name.c_str(),
-                                  NULL);
 
   uint8_t buffer[1024];
   const struct spa_pod *params[1];
@@ -143,12 +149,6 @@ bool videoPIPEWIRE::open(gem::Properties&props)
   struct spa_fraction defrate  = SPA_FRACTION(25, 1);
   struct spa_fraction maxrate  = SPA_FRACTION(1000, 1);
   struct spa_fraction minrate  = SPA_FRACTION(0, 1);
-  int flags = PW_STREAM_FLAG_NONE;
-  flags |= PW_STREAM_FLAG_INACTIVE;
-  flags |= PW_STREAM_FLAG_MAP_BUFFERS;
-  if(autoconnect) {
-    flags |= PW_STREAM_FLAG_AUTOCONNECT;
-  }
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
