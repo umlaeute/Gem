@@ -29,34 +29,41 @@ using namespace gem::plugins;
 
 REGISTER_VIDEOFACTORY("pipewire", videoPIPEWIRE);
 
-namespace {
-  static struct pw_thread_loop *s_loop = NULL;
-  static unsigned int s_loopcount = 0;
+namespace
+{
+static struct pw_thread_loop *s_loop = NULL;
+static unsigned int s_loopcount = 0;
 
-  bool videoPIPEWIRE_init(void) {
-    if(s_loop) {
-      s_loopcount++;
-      return false;
-    }
-    pw_init(0, 0);
-    s_loop = pw_thread_loop_new("pd-gem", NULL);
-    if(!s_loop) {
-      pw_deinit();
-      return false;
-    }
-    pw_thread_loop_start(s_loop);
-    //::post("lop %p started", s_loop);
-    s_loopcount = 1;
-    return true;
+bool videoPIPEWIRE_init(void)
+{
+  if(s_loop) {
+    s_loopcount++;
+    return false;
   }
-  void videoPIPEWIRE_deinit(void) {
-    if(!s_loopcount) return;
-    if(--s_loopcount)return;
-    pw_thread_loop_stop(s_loop);
-    pw_thread_loop_destroy(s_loop);
-    s_loop=0;
+  pw_init(0, 0);
+  s_loop = pw_thread_loop_new("pd-gem", NULL);
+  if(!s_loop) {
     pw_deinit();
+    return false;
   }
+  pw_thread_loop_start(s_loop);
+  //::post("lop %p started", s_loop);
+  s_loopcount = 1;
+  return true;
+}
+void videoPIPEWIRE_deinit(void)
+{
+  if(!s_loopcount) {
+    return;
+  }
+  if(--s_loopcount) {
+    return;
+  }
+  pw_thread_loop_stop(s_loop);
+  pw_thread_loop_destroy(s_loop);
+  s_loop=0;
+  pw_deinit();
+}
 }
 
 
@@ -110,11 +117,11 @@ bool videoPIPEWIRE::open(gem::Properties&props)
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
-    pw_thread_loop_get_loop(s_loop),
-    "video-capture",
-    pwprops,
-    &m_stream_events,
-    this);
+               pw_thread_loop_get_loop(s_loop),
+               "video-capture",
+               pwprops,
+               &m_stream_events,
+               this);
   if(!m_stream) {
     goto err;
   }
@@ -152,9 +159,11 @@ err:
   return false;
 }
 
-bool videoPIPEWIRE::start() {
-  if(!s_loop || !m_stream)
-    return false;
+bool videoPIPEWIRE::start()
+{
+  if(!m_stream) {
+    return (false);
+  }
   struct timespec abstime;
   const char*error=0;
   pw_thread_loop_lock (s_loop);
@@ -164,11 +173,13 @@ bool videoPIPEWIRE::start() {
   while (false) {
     enum pw_stream_state state;
     state = pw_stream_get_state (m_stream, &error);
-    if (state >= PW_STREAM_STATE_PAUSED)
+    if (state >= PW_STREAM_STATE_PAUSED) {
       break;
+    }
 
-    if (state == PW_STREAM_STATE_ERROR)
+    if (state == PW_STREAM_STATE_ERROR) {
       goto start_error;
+    }
 
     if (pw_thread_loop_timed_wait_full (s_loop, &abstime) < 0) {
       error = "timeout";
@@ -178,16 +189,17 @@ bool videoPIPEWIRE::start() {
   pw_thread_loop_signal (s_loop, false);
   pw_thread_loop_unlock (s_loop);
   return (true);
-start_error:
-  {
+start_error: {
     ::pd_error(0, "ERROR: %s", error);
     pw_thread_loop_unlock (s_loop);
     return false;
   }
 }
-bool videoPIPEWIRE::stop() {
-  if(!m_stream)
+bool videoPIPEWIRE::stop()
+{
+  if(!m_stream) {
     return (false);
+  }
   pw_stream_set_active(m_stream, false);
   return (true);
 }
@@ -216,7 +228,8 @@ pixBlock*videoPIPEWIRE::getFrame(void)
 
   return &m_pixBlock;
 }
-void videoPIPEWIRE::releaseFrame(void) {
+void videoPIPEWIRE::releaseFrame(void)
+{
   m_pixBlock.newimage = false;
   m_mutex.unlock();
 }
@@ -237,7 +250,7 @@ bool videoPIPEWIRE::setDevice(const std::string&device)
   return ("pipewire"==device);
 }
 bool videoPIPEWIRE::enumProperties(gem::Properties&readable,
-                               gem::Properties&writeable)
+                                   gem::Properties&writeable)
 {
   readable.clear();
   writeable.clear();
@@ -313,8 +326,9 @@ void videoPIPEWIRE::on_process(void)
   }
 
   buf = b->buffer;
-  if (buf->datas[0].data == NULL)
+  if (buf->datas[0].data == NULL) {
     return;
+  }
 
   m_mutex.lock();
   switch(m_format) {
@@ -355,20 +369,24 @@ void videoPIPEWIRE::on_process(void)
 
 void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 {
-  if (param == NULL || id != SPA_PARAM_Format)
+  if (param == NULL || id != SPA_PARAM_Format) {
     return;
+  }
   struct spa_video_info format;
 
   if (spa_format_parse(param,
                        &format.media_type,
-                       &format.media_subtype) < 0)
+                       &format.media_subtype) < 0) {
     return;
+  }
   if (format.media_type != SPA_MEDIA_TYPE_video ||
-      format.media_subtype != SPA_MEDIA_SUBTYPE_raw)
+      format.media_subtype != SPA_MEDIA_SUBTYPE_raw) {
     return;
+  }
 
-  if (spa_format_video_raw_parse(param, &format.info.raw) < 0)
+  if (spa_format_video_raw_parse(param, &format.info.raw) < 0) {
     return;
+  }
 
 
   m_mutex.lock();
@@ -393,7 +411,8 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
     m_pixBlock.image.setCsizeByFormat(GEM_GRAY);
     break;
     m_pixBlock.image.csize = 0;
-  default: break;
+  default:
+    break;
   }
   m_mutex.unlock();
   //return;
@@ -409,7 +428,8 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 
 }
 
-void videoPIPEWIRE::process_cb(void*data) {
+void videoPIPEWIRE::process_cb(void*data)
+{
   //::pd_error(0, "process");
   ((videoPIPEWIRE*)data)->on_process();
 }
