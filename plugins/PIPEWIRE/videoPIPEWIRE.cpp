@@ -501,6 +501,11 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
   default:
     break;
   }
+  if(m_pixBlock.image.csize) {
+    m_pixBlock.image.reallocate();
+  } else {
+    m_pixBlock.image.reallocate(m_pixBlock.image.xsize * m_pixBlock.image.ysize * 4);
+  }
   m_mutex.unlock();
   //return;
 
