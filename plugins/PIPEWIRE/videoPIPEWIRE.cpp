@@ -98,6 +98,7 @@ bool videoPIPEWIRE::open(gem::Properties&props)
     return false;
   }
 
+  spa_video_format defformat = SPA_VIDEO_FORMAT_RGBA;
   uint32_t width = 320;
   uint32_t height = 240;
 
@@ -166,7 +167,8 @@ bool videoPIPEWIRE::open(gem::Properties&props)
               SPA_FORMAT_mediaType,       SPA_POD_Id(SPA_MEDIA_TYPE_video),
               SPA_FORMAT_mediaSubtype,    SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
               SPA_FORMAT_VIDEO_format,    SPA_POD_CHOICE_ENUM_Id(
-                9,
+                10,
+                defformat,
                 SPA_VIDEO_FORMAT_RGB,
                 SPA_VIDEO_FORMAT_RGBA,
                 SPA_VIDEO_FORMAT_BGR,
@@ -415,30 +417,31 @@ void videoPIPEWIRE::on_process(void)
   }
 
   m_mutex.lock();
+  m_pixBlock.image.notowned = false;
   switch(m_format) {
   case SPA_VIDEO_FORMAT_RGB:
     m_pixBlock.image.fromRGB((unsigned char*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_RGBA:
+    m_pixBlock.image.fromRGBA((unsigned char*)buf->datas[0].data);
     break;
   case SPA_VIDEO_FORMAT_BGR:
     m_pixBlock.image.fromBGR((unsigned char*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
     break;
   case SPA_VIDEO_FORMAT_BGRA:
     m_pixBlock.image.fromBGRA((unsigned char*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
     break;
   case SPA_VIDEO_FORMAT_RGB16:
     m_pixBlock.image.fromRGB16((unsigned char*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
     break;
   case SPA_VIDEO_FORMAT_YUY2:
     m_pixBlock.image.fromYUY2((unsigned char*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
+    break;
+  case SPA_VIDEO_FORMAT_GRAY8:
+    m_pixBlock.image.fromGray((unsigned char*)buf->datas[0].data);
     break;
   case GEM_SPA_GRAY16:
     m_pixBlock.image.fromGray((short*)buf->datas[0].data);
-    m_pixBlock.image.notowned = false;
     break;
   default:
     m_pixBlock.image.data = (unsigned char*)buf->datas[0].data;
