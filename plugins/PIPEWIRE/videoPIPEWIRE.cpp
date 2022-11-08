@@ -159,6 +159,16 @@ err:
   return false;
 }
 
+void videoPIPEWIRE::close()
+{
+  if(!m_stream) {
+    return;
+  }
+  pw_stream_disconnect(m_stream);
+  pw_stream_destroy(m_stream);
+}
+
+
 bool videoPIPEWIRE::start()
 {
   if(!m_stream) {

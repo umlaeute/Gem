@@ -84,7 +84,7 @@ public:
   }
 
 
-  virtual void close(void) {};
+  virtual void close(void);
   virtual bool start(void);
   virtual bool stop(void);
   void on_process(void);
