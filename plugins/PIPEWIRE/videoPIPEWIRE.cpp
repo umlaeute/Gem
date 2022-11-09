@@ -164,21 +164,22 @@ bool videoPIPEWIRE::open(gem::Properties&props)
 
   params[0] = (const spa_pod*)spa_pod_builder_add_object(&b,
               SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
-              SPA_FORMAT_mediaType,       SPA_POD_Id(SPA_MEDIA_TYPE_video),
-              SPA_FORMAT_mediaSubtype,    SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
-              SPA_FORMAT_VIDEO_format,    SPA_POD_CHOICE_ENUM_Id(
-                10,
-                defformat,
-                SPA_VIDEO_FORMAT_RGB,
-                SPA_VIDEO_FORMAT_RGBA,
-                SPA_VIDEO_FORMAT_BGR,
-                SPA_VIDEO_FORMAT_BGRA,
-                SPA_VIDEO_FORMAT_RGB16,
-                SPA_VIDEO_FORMAT_YUY2,
-                SPA_VIDEO_FORMAT_UYVY,
-                SPA_VIDEO_FORMAT_GRAY8,
-                GEM_SPA_GRAY16),
-              SPA_FORMAT_VIDEO_size,      SPA_POD_CHOICE_RANGE_Rectangle(
+              SPA_FORMAT_mediaType, SPA_POD_Id(SPA_MEDIA_TYPE_video),
+              SPA_FORMAT_mediaSubtype, SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
+              SPA_FORMAT_VIDEO_format, SPA_POD_CHOICE_ENUM_Id(
+                10
+                , defformat
+                , SPA_VIDEO_FORMAT_RGB
+                , SPA_VIDEO_FORMAT_RGBA
+                , SPA_VIDEO_FORMAT_BGR
+                , SPA_VIDEO_FORMAT_BGRA
+                , SPA_VIDEO_FORMAT_RGB16
+                , SPA_VIDEO_FORMAT_YUY2
+                , SPA_VIDEO_FORMAT_UYVY
+                , SPA_VIDEO_FORMAT_GRAY8
+                , GEM_SPA_GRAY16
+              ),
+              SPA_FORMAT_VIDEO_size, SPA_POD_CHOICE_RANGE_Rectangle(
                 &defsize, &minsize, &maxsize),
               SPA_FORMAT_VIDEO_framerate, SPA_POD_CHOICE_RANGE_Fraction(
                 &defrate, &minrate, &maxrate));
