@@ -122,10 +122,10 @@ bool videoPIPEWIRE::open(gem::Properties&props)
     if (0) ;
     else if (("MediaRole" == key) && (props.get(key, s)) && !s.empty()) {
       pw_properties_set(pwprops, PW_KEY_MEDIA_ROLE, s.c_str());
-    } else if (("AppName" == key) && (props.get(key, s)) && !s.empty()) {
-      pw_properties_set(pwprops, PW_KEY_APP_NAME, s.c_str());
-    } else if (("NodeName" == key) && (props.get(key, s)) && !s.empty()) {
-      pw_properties_set(pwprops, PW_KEY_NODE_NAME, s.c_str());
+    } else if (("AppName" == key) && (props.get(key, s))) {
+      pw_properties_set(pwprops, PW_KEY_APP_NAME, s.empty()?nullptr:s.c_str());
+    } else if (("NodeName" == key) && (props.get(key, s))) {
+      pw_properties_set(pwprops, PW_KEY_NODE_NAME, s.empty()?nullptr:s.c_str());
 #if 0
     } else if (("PortName" == key) && (props.get(key, s)) && !s.empty()) {
       pw_properties_set(pwprops, PW_KEY_PORT_NAME, s.c_str());
