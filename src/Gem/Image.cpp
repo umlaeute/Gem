@@ -1236,7 +1236,7 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
   case GL_RGB:
   case GL_BGR:
     while(pixelnum--) {
-      grey=*greydata++;
+      grey=(*greydata++)>>8;
       *pixels++=grey;
       *pixels++=grey;
       *pixels++=grey;
@@ -1246,7 +1246,7 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
   case GL_RGBA:
   case GL_BGRA:
     while(pixelnum--) {
-      grey=*greydata++;
+      grey=(*greydata++)>>8;
       pixels[chRed]=grey;
       pixels[chGreen]=grey;
       pixels[chBlue]=grey;
@@ -1255,13 +1255,15 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
     }
     break;
   case GL_LUMINANCE:
-    memcpy(data, greydata, pixelnum);
+    while(pixelnum--) {
+      *pixels++ = (*greydata++)>>8;
+    }
     break;
   case GL_YUV422_GEM:
     pixelnum>>=1;
     while(pixelnum--) {
-      pixels[chY0]=(*greydata++)>>7;
-      pixels[chY1]=(*greydata++)>>7;
+      pixels[chY0]=(*greydata++)>>8;
+      pixels[chY1]=(*greydata++)>>8;
       pixels[chU]=pixels[chV]=128;
       pixels+=4;
     }
