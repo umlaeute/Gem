@@ -484,22 +484,23 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
   m_format = format.info.raw.format;
   switch(format.info.raw.format) {
   case(SPA_VIDEO_FORMAT_RGB):
-    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
-    break;
   case(SPA_VIDEO_FORMAT_RGBA):
+  case(SPA_VIDEO_FORMAT_BGR):
+  case(SPA_VIDEO_FORMAT_BGRA):
+  case(SPA_VIDEO_FORMAT_RGB16):
     m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
     break;
   case(SPA_VIDEO_FORMAT_YUY2):
-    m_pixBlock.image.setCsizeByFormat(GEM_YUV);
-    break;
   case(SPA_VIDEO_FORMAT_UYVY):
     m_pixBlock.image.setCsizeByFormat(GEM_YUV);
     break;
   case(SPA_VIDEO_FORMAT_GRAY8):
+  case(SPA_VIDEO_FORMAT_GRAY16_BE):
+  case(SPA_VIDEO_FORMAT_GRAY16_LE):
     m_pixBlock.image.setCsizeByFormat(GEM_GRAY);
     break;
-    m_pixBlock.image.csize = 0;
   default:
+    m_pixBlock.image.csize = 0;
     break;
   }
   if(m_pixBlock.image.csize) {
