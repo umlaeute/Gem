@@ -89,6 +89,7 @@ videoPIPEWIRE::videoPIPEWIRE(void)
 
 videoPIPEWIRE::~videoPIPEWIRE(void)
 {
+  close();
   videoPIPEWIRE_deinit();
 }
 
@@ -154,7 +155,7 @@ bool videoPIPEWIRE::open(gem::Properties&props)
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
                pw_thread_loop_get_loop(s_loop),
-               "video-capture",
+               "gem-capture",
                pwprops,
                &m_stream_events,
                this);
@@ -202,6 +203,7 @@ void videoPIPEWIRE::close()
   if(!m_stream) {
     return;
   }
+  stop();
   pw_stream_disconnect(m_stream);
   pw_stream_destroy(m_stream);
 }
