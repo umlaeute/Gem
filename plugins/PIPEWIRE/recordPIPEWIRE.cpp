@@ -155,18 +155,18 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
-    pw_thread_loop_get_loop(s_loop),
-    "gem-output",
-    pw_properties_new(
-      PW_KEY_MEDIA_CLASS, "Video/Source",
-      PW_KEY_MEDIA_TYPE, "Video",
-      PW_KEY_MEDIA_ROLE, "Camera",
-      PW_KEY_APP_NAME, "Pd",
-      PW_KEY_APP_ID, "at.iem.gem",
-      PW_KEY_NODE_NAME, "Gem",
-      NULL),
-    &m_stream_events,
-    this);
+               pw_thread_loop_get_loop(s_loop),
+               "gem-output",
+               pw_properties_new(
+                 PW_KEY_MEDIA_CLASS, "Video/Source",
+                 PW_KEY_MEDIA_TYPE, "Video",
+                 PW_KEY_MEDIA_ROLE, "Camera",
+                 PW_KEY_APP_NAME, "Pd",
+                 PW_KEY_APP_ID, "at.iem.gem",
+                 PW_KEY_NODE_NAME, "Gem",
+                 NULL),
+               &m_stream_events,
+               this);
   if(!m_stream) {
     //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
     pw_thread_loop_unlock(s_loop);
