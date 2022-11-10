@@ -248,9 +248,6 @@ bool recordPIPEWIRE :: init(imageStruct*img)
     pw_stream_update_params(m_stream, params, 1);
   } while(0);
 
-  img->copy2ImageStruct(&m_image);
-  m_image.reallocate();
-
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   pw_thread_loop_signal (s_loop, false);
   return true;
@@ -268,6 +265,7 @@ bool recordPIPEWIRE :: write(imageStruct*img)
   }
 
   bool restart = false;
+  /* re-initialize the stream-caps is needed */
   if(false
       || (m_image.xsize != img->xsize)
       || (m_image.ysize != img->ysize)
@@ -277,6 +275,11 @@ bool recordPIPEWIRE :: write(imageStruct*img)
   }
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   if(restart) {
+    m_mutex.lock();
+    img->copy2ImageStruct(&m_image);
+    m_image.reallocate();
+    m_mutex.unlock();
+
     pw_thread_loop_lock(s_loop);
     init(img);
     pw_thread_loop_unlock(s_loop);
