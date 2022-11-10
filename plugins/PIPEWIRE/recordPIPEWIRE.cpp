@@ -101,7 +101,8 @@ recordPIPEWIRE :: recordPIPEWIRE(void)
   , m_stream(nullptr)
 {
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
-  m_image.xsize = m_image.ysize = 0;
+  m_image.xsize = 640;
+  m_image.ysize = 480;
   m_image.setCsizeByFormat(GEM_RGBA);
   recordPIPEWIRE_init();
   m_stream_events = {
@@ -146,7 +147,16 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
   stop();
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   m_filename = filename;
-  m_image.xsize = m_image.ysize = 0;
+  if(!m_image.xsize) {
+    m_image.xsize = 640;
+  }
+  if(!m_image.ysize) {
+    m_image.ysize = 480;
+  }
+  if(!m_image.csize) {
+    m_image.setCsizeByFormat(GL_RGBA);
+  }
+  m_image.reallocate();
 
   int flags = PW_STREAM_FLAG_NONE;
   flags |= PW_STREAM_FLAG_INACTIVE;
