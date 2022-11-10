@@ -287,6 +287,9 @@ bool recordPIPEWIRE :: write(imageStruct*img)
       return false;
     }
   }
+  m_mutex.lock();
+  m_image.convertFrom(img);
+  m_mutex.unlock();
 
   return true;
 }
