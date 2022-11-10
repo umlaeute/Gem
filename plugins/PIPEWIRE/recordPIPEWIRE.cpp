@@ -264,7 +264,6 @@ bool recordPIPEWIRE :: init(imageStruct*img)
 bool recordPIPEWIRE :: write(imageStruct*img)
 {
   bool restart = false;
-  //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   if(false
       || (m_image.xsize != img->xsize)
       || (m_image.ysize != img->ysize)
@@ -330,7 +329,7 @@ bool recordPIPEWIRE :: enumProperties(gem::Properties&props)
 
 void recordPIPEWIRE::process_cb(void*data)
 {
-  ::pd_error(0, "process");
+  //::pd_error(0, "process");
   ((recordPIPEWIRE*)data)->on_process();
 }
 void recordPIPEWIRE::param_changed_cb(void*data, uint32_t id, const struct spa_pod *param)
@@ -345,16 +344,18 @@ void recordPIPEWIRE::on_process(void)
   //pw_thread_loop_signal (s_loop, false);
   struct pw_buffer *b;
   struct spa_buffer *buf;
-  //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
+  ::post("%s:%d@%s<", __FILE__, __LINE__, __FUNCTION__);
 
   if ((b = pw_stream_dequeue_buffer(m_stream)) == NULL) {
     pw_log_warn("out of buffers: %m");
     return;
   }
 
+  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   //::post("%s", __FUNCTION__);
 
   pw_stream_queue_buffer(m_stream, b);
+  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
 }
 
 void recordPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
