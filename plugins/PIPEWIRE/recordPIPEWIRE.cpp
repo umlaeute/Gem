@@ -233,7 +233,7 @@ bool recordPIPEWIRE :: init(imageStruct*img)
     uint8_t buffer[1024];
     struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
     spa_video_format defformat = format_gem2spa(img->format);
-    struct spa_rectangle size = SPA_RECTANGLE(img->xsize, img->ysize);
+    struct spa_rectangle size = SPA_RECTANGLE((uint32_t)img->xsize, (uint32_t)img->ysize);
     struct spa_fraction framerate  = SPA_FRACTION(25, 1);
     //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
 
