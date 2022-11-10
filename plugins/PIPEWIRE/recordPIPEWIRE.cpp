@@ -263,6 +263,10 @@ bool recordPIPEWIRE :: init(imageStruct*img)
 /////////////////////////////////////////////////////////
 bool recordPIPEWIRE :: write(imageStruct*img)
 {
+  if(!s_loop) {
+    return false;
+  }
+
   bool restart = false;
   if(false
       || (m_image.xsize != img->xsize)
