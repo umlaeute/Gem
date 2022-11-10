@@ -281,8 +281,11 @@ bool recordPIPEWIRE :: write(imageStruct*img)
     m_mutex.unlock();
 
     pw_thread_loop_lock(s_loop);
-    init(img);
+    bool success = init(img);
     pw_thread_loop_unlock(s_loop);
+    if(!success) {
+      return false;
+    }
   }
 
   return true;
