@@ -355,16 +355,29 @@ void recordPIPEWIRE::param_changed_cb(void*data, uint32_t id, const struct spa_p
 void recordPIPEWIRE::on_process(void)
 {
   //pw_thread_loop_signal (s_loop, false);
-  struct pw_buffer *b;
-  struct spa_buffer *buf;
   ::post("%s:%d@%s<", __FILE__, __LINE__, __FUNCTION__);
 
-  if ((b = pw_stream_dequeue_buffer(m_stream)) == NULL) {
+  struct pw_buffer *b = pw_stream_dequeue_buffer(m_stream);
+  if (!b) {
     pw_log_warn("out of buffers: %m");
     return;
   }
 
+  struct spa_buffer *buf = b->buffer;
+  if (!buf->datas[0].data) {
+    pw_log_warn("NULL buffers: %m");
+    return;
+  }
+
   ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
+  m_mutex.lock();
+  buf->datas[0].chunk->offset = 0;
+  buf->datas[0].chunk->size = m_image.xsize * m_image.ysize * m_image.csize;
+  buf->datas[0].chunk->offset = 0;
+  memcpy(buf->datas[0].data, m_image.data, buf->datas[0].chunk->size);
+
+  m_mutex.unlock();
+
   //::post("%s", __FUNCTION__);
 
   pw_stream_queue_buffer(m_stream, b);
