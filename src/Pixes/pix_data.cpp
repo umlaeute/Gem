@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_data, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 //
 /////////////////////////////////////////////////////////
 pix_data :: pix_data(t_floatarg x, t_floatarg y) :
-  m_quality(NONE), m_mode(NORMALIZED)
+  m_quality(NONE), m_normalize(NORMALIZED)
 {
   // create the new inlet for the X position
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -72,8 +72,8 @@ void pix_data :: trigger()
   t_float maxX= m_pixRight->image.xsize - 1;
   t_float maxY= m_pixRight->image.ysize - 1;
 
-  t_float fxPos = m_position[0] * ((RAW == m_mode)?1.:maxX);
-  t_float fyPos = m_position[1] * ((RAW == m_mode)?1.:maxY);
+  t_float fxPos = m_position[0] * ((RAW == m_normalize)?1.:maxX);
+  t_float fyPos = m_position[1] * ((RAW == m_normalize)?1.:maxY);
 
   if(fxPos<0) {
     fxPos=0;
@@ -195,17 +195,17 @@ void pix_data :: qualityMess(int q)
     error("quality must be 0|1");
   }
 }
-void pix_data :: modeMess(int q)
+void pix_data :: normalizeMess(int q)
 {
   switch((int)q) {
   case 0:
-    m_mode = RAW;
+    m_normalize = RAW;
     break;
   case 1:
-    m_mode = NORMALIZED;
+    m_normalize = NORMALIZED;
     break;
   default:
-    error("mode must be 0|1");
+    error("normalize must be 0|1");
   }
 }
 
@@ -222,5 +222,5 @@ void pix_data :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "list", listMess);
 
   CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
-  CPPEXTERN_MSG1(classPtr, "mode", modeMess, int);
+  CPPEXTERN_MSG1(classPtr, "normalize", normalizeMess, int);
 }
