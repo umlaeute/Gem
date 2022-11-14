@@ -72,8 +72,15 @@ void pix_data :: trigger()
   t_float maxX= m_pixRight->image.xsize - 1;
   t_float maxY= m_pixRight->image.ysize - 1;
 
-  t_float fxPos = m_position[0] * ((RAW == m_normalize)?1.:maxX);
-  t_float fyPos = m_position[1] * ((RAW == m_normalize)?1.:maxY);
+  t_float fxPos = m_position[0];
+  t_float fyPos = m_position[1];
+
+
+  if(NORMALIZED == m_normalize) {
+    fxPos *= (maxX+1);
+    fyPos *= (maxY+1);
+  }
+
 
   if(fxPos<0) {
     fxPos=0;
