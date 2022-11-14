@@ -127,12 +127,12 @@ void pix_data :: trigger()
     t_float xy10=   xFrac *(1-yFrac);
     t_float xy11=   xFrac *   yFrac ;
 
-#define BILIN4(x) (xy00*x[0][0] + xy01*x[0][1] + xy10*x[1][0] + xy11*x[1][1])
-    red   = BILIN4(r) / 255.;
-    green = BILIN4(g) / 255.;
-    blue  = BILIN4(b) / 255.;
-    alpha = BILIN4(a) / 255.;
-    grey  = BILIN4(G) / 255.;
+#define INTERPOLATE_LIN2D(x) (xy00*x[0][0] + xy01*x[0][1] + xy10*x[1][0] + xy11*x[1][1])
+    red   = INTERPOLATE_LIN2D(r) / 255.;
+    green = INTERPOLATE_LIN2D(g) / 255.;
+    blue  = INTERPOLATE_LIN2D(b) / 255.;
+    alpha = INTERPOLATE_LIN2D(a) / 255.;
+    grey  = INTERPOLATE_LIN2D(G) / 255.;
   }
   break;
   case 0: {
@@ -140,12 +140,12 @@ void pix_data :: trigger()
     m_pixRight->image.getRGB(ixPos0, iyPos0, &r, &g, &b, &a);
     m_pixRight->image.getGrey(ixPos0, iyPos0, &G);
 
-#define NONLIN(x) (x)
-    red   = NONLIN(r) / 255.;
-    green = NONLIN(g) / 255.;
-    blue  = NONLIN(b) / 255.;
-    alpha = NONLIN(a) / 255.;
-    grey  = NONLIN(G) / 255.;
+#define INTERPOLATE_NONE(x) (x)
+    red   = INTERPOLATE_NONE(r) / 255.;
+    green = INTERPOLATE_NONE(g) / 255.;
+    blue  = INTERPOLATE_NONE(b) / 255.;
+    alpha = INTERPOLATE_NONE(a) / 255.;
+    grey  = INTERPOLATE_NONE(G) / 255.;
   }
   break;
   }
