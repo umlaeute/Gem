@@ -764,6 +764,7 @@ bool gemglfw3window :: create(void)
   }
 
   glfwWindowHint(GLFW_SAMPLES, m_fsaa);
+  glfwWindowHint(GLFW_DOUBLEBUFFER, (1==m_buffer)?GLFW_FALSE:GLFW_TRUE);
 
   /* do we want OpenGL-ES */
   glfwWindowHint(GLFW_CLIENT_API, m_gles?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
