@@ -1007,7 +1007,7 @@
 #X obj 175 200 f -1;
 #X obj 206 221 * 1;
 #X obj 206 200 f 1;
-#X obj 387 97 r \$0-realdimen;
+#X obj 378 97 r \$0-framebuffersize;
 #X obj 387 122 /;
 #X obj 378 155 t b f f;
 #X obj 164 151 t b b;
@@ -1427,7 +1427,7 @@
 #X obj 163 120 t l l;
 #X obj 156 312 r \$0-stereoLine;
 #X obj 95 327 spigot 1;
-#X obj 293 65 r \$0-realdimen;
+#X obj 293 65 r \$0-framebuffersize;
 #X obj 453 369 outlet render;
 #X obj 358 374 outlet osd;
 #N canvas 352 50 672 526 render-2screen 0;
@@ -1892,7 +1892,7 @@
 #X obj 146 182 /;
 #X obj 54 177 t a a;
 #X obj 54 362 GEMglColorMask 1 1 1 1;
-#X obj 276 100 r \$0-realdimen;
+#X obj 276 100 r \$0-framebuffersize;
 #X obj 282 271 outlet render;
 #X obj 146 265 outlet osd;
 #N canvas 346 50 672 526 renderAnaglyph 0;
@@ -2344,7 +2344,7 @@
 #X obj 146 182 /;
 #X obj 54 177 t a a;
 #X obj 54 362 GEMglColorMask 1 1 1 1;
-#X obj 276 100 r \$0-realdimen;
+#X obj 276 100 r \$0-framebuffersize;
 #X obj 86 265 outlet osd;
 #X obj 216 271 outlet render;
 #N canvas 352 50 672 526 renderCrystalEye 0;
@@ -2937,7 +2937,7 @@
 #X obj 175 200 f -1;
 #X obj 206 221 * 1;
 #X obj 206 200 f 1;
-#X obj 387 97 r \$0-realdimen;
+#X obj 378 97 r \$0-framebuffersize;
 #X obj 387 122 /;
 #X obj 378 155 t b f f;
 #X obj 164 151 t b b;
