@@ -163,11 +163,11 @@ void pix_data :: trigger()
 
 void pix_data :: xPos(t_float f)
 {
-  m_position[0]=FLOAT_CLAMP(f);
+  m_position[0]=f;
 }
 void pix_data :: yPos(t_float f)
 {
-  m_position[1]=FLOAT_CLAMP(f);
+  m_position[1]=f;
 }
 void pix_data :: listMess(t_symbol *s, int argc, t_atom* argv)
 {
