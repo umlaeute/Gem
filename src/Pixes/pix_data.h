@@ -77,7 +77,8 @@ protected:
 
   //////////
   void                    qualityMess(int q);
-  int m_quality;
+  enum QualityType   { NONE, LINEAR2D };
+  QualityType m_quality;
 
   //////////
   // The color outlet

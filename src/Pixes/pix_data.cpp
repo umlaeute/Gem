@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_data, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFF
 //
 /////////////////////////////////////////////////////////
 pix_data :: pix_data(t_floatarg x, t_floatarg y) :
-  m_quality(0)
+  m_quality(NONE)
 {
   // create the new inlet for the X position
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -92,7 +92,8 @@ void pix_data :: trigger()
   int iyPos0 = 0+static_cast<int>(fyPos);
 
   switch(m_quality) {
-  default: {
+  default:
+  case LINEAR2D: {
     int ixPos1 = 1+static_cast<int>(fxPos);
     int iyPos1 = 1+static_cast<int>(fyPos);
 
@@ -135,7 +136,7 @@ void pix_data :: trigger()
     grey  = INTERPOLATE_LIN2D(G) / 255.;
   }
   break;
-  case 0: {
+  case NONE: {
     unsigned char r, g, b, a, G;
     m_pixRight->image.getRGB(ixPos0, iyPos0, &r, &g, &b, &a);
     m_pixRight->image.getGrey(ixPos0, iyPos0, &G);
@@ -170,10 +171,17 @@ void pix_data :: yPos(t_float f)
 }
 void pix_data :: qualityMess(int q)
 {
-  if(q>=0) {
-    m_quality=q;
-  } else {
-    error("qualiy must be 0|1");
+  switch((int)q) {
+  case 0:
+    m_quality = NONE;
+    break;
+  case 1:
+    m_quality = LINEAR2D;
+    break;
+  default:
+    error("quality must be 0|1");
+  }
+}
   }
 
 }
