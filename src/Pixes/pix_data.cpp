@@ -81,6 +81,9 @@ void pix_data :: trigger()
     fyPos *= (maxY+1);
   }
 
+  if(!m_pixRight->image.upsidedown) {
+    fyPos = maxY - fyPos;
+  }
 
   if(fxPos<0) {
     fxPos=0;
