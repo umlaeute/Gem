@@ -69,23 +69,21 @@ void pix_data :: trigger()
   t_float red, green, blue, alpha, grey;
 
 
-  t_float maxX= m_pixRight->image.xsize;
-  t_float maxY= m_pixRight->image.ysize;
+  t_float maxX= m_pixRight->image.xsize - 1;
+  t_float maxY= m_pixRight->image.ysize - 1;
 
-  t_float fxPos = m_position[0] * maxX;
-  t_float fyPos = m_position[1] * maxY;
 
   if(fxPos<0) {
     fxPos=0;
   }
-  if(fxPos>=maxX-1) {
-    fxPos=maxX-1;
+  if(fxPos>=maxX) {
+    fxPos=maxX;
   }
   if(fyPos<0) {
     fyPos=0;
   }
-  if(fyPos>=maxY-1) {
-    fyPos=maxY-1;
+  if(fyPos>=maxY) {
+    fyPos=maxY;
   }
 
   int ixPos0 = 0+static_cast<int>(fxPos);
@@ -97,10 +95,10 @@ void pix_data :: trigger()
     int ixPos1 = 1+static_cast<int>(fxPos);
     int iyPos1 = 1+static_cast<int>(fyPos);
 
-    if(ixPos1>=maxX-1) {
+    if(ixPos1>=maxX) {
       ixPos1=ixPos0;
     }
-    if(iyPos1>=maxY-1) {
+    if(iyPos1>=maxY) {
       iyPos1=iyPos0;
     }
 
