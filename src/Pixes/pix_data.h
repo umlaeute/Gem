@@ -68,9 +68,8 @@ protected:
 
   //////////
   void                    xPos(t_float pos);
-
-  //////////
   void                    yPos(t_float pos);
+  void                    listMess(t_symbol *s, int argc, t_atom* argv);
 
   //////////
   t_float                 m_position[2];

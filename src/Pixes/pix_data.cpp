@@ -169,6 +169,19 @@ void pix_data :: yPos(t_float f)
 {
   m_position[1]=FLOAT_CLAMP(f);
 }
+void pix_data :: listMess(t_symbol *s, int argc, t_atom* argv)
+{
+  switch(argc) {
+  case 2:
+    m_position[0] = atom_getfloat(argv+0);
+    m_position[1] = atom_getfloat(argv+1);
+    trigger();
+    break;
+  default:
+    error("usage: list <xpos> <ypos>");
+  }
+}
+
 void pix_data :: qualityMess(int q)
 {
   switch((int)q) {
@@ -197,6 +210,7 @@ void pix_data :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
   CPPEXTERN_MSG1(classPtr, "xPos", xPos, t_float);
   CPPEXTERN_MSG1(classPtr, "yPos", yPos, t_float);
+  CPPEXTERN_MSG (classPtr, "list", listMess);
 
   CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
 }
