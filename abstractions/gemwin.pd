@@ -1008,7 +1008,7 @@
 #X obj 206 221 * 1;
 #X obj 206 200 f 1;
 #X obj 378 97 r \$0-framebuffersize;
-#X obj 387 122 /;
+#X obj 378 122 /;
 #X obj 378 155 t b f f;
 #X obj 164 151 t b b;
 #X connect 0 0 1 0;
@@ -2938,7 +2938,7 @@
 #X obj 206 221 * 1;
 #X obj 206 200 f 1;
 #X obj 378 97 r \$0-framebuffersize;
-#X obj 387 122 /;
+#X obj 378 122 /;
 #X obj 378 155 t b f f;
 #X obj 164 151 t b b;
 #X connect 0 0 1 0;
