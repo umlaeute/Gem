@@ -288,7 +288,7 @@ namespace
 {
 void caseinsensitive_error(const char*gem)
 {
-  /* traditionally Gem can be loaded with wrong spelling on a case-insenstive platform
+  /* traditionally Gem can be loaded with wrong spelling on a case-insensitive platform
    * starting with 0.94 we issue a fat warning.
    * however, much of Gem's loading is done via CTORs and the gem::setup() only finishes
    * the init phase; so we probably can never get rid of wrongly-spelled libraries ever.

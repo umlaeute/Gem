@@ -59,8 +59,8 @@ protected:
 
   /**
    * close the video device, freeing all resources
-   * once the device has been closed it should be useable by other applications,...
-   * this get's called when switching to another backend or when deleting the object
+   * once the device has been closed it should be usable by other applications,...
+   * this gets called when switching to another backend or when deleting the object
    */
   virtual void          closeDevice(void) = 0;
 
@@ -225,7 +225,7 @@ protected:
   /**
    * in the constructor, you ought to call provide() for each generic backend your plugin is capable of
    * e.g. the DirectShow plugin will call: provide("analog"); provide("dv");
-   * everything you add here, will be automaticalyl enumerated with the provides() methods
+   * everything you add here, will be automatically enumerated with the provides() methods
    */
   void provide(const std::string&);
 
@@ -307,7 +307,7 @@ public:
   // get a list of all provided devices
   virtual std::vector<std::string>provides(void);
 
-  // get's the name of the backend (e.g. "v4l")
+  // gets the name of the backend (e.g. "v4l")
   virtual const std::string getName(void);
 
 

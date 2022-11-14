@@ -98,7 +98,7 @@ protected:
   // this gets called in the before the startRendering() routine
   // if it returns TRUE, the object's startRendering(), render() and stopRendering() functions will be called
   // it it returns FALSE, the object will be disabled
-  // when rendering is restarted, this function get's called again
+  // when rendering is restarted, this function gets called again
   // the default is to enable rendering
   // this function is important if you want to disable an object because it cannot be used (e.g. missing driver support)
   virtual bool isRunnable(void);

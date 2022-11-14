@@ -214,7 +214,7 @@ struct GEM_EXTERN any {
 
     any_detail::fxn_ptr_table* x_table = any_detail::get_table<T>::get();
     if (table == x_table) {
-      // if so, we can avoid deallocating and resuse memory
+      // if so, we can avoid deallocating and reuse memory
 
 #if defined(__GNUC__) && __GNUC__ >= 6
 # pragma GCC diagnostic push

@@ -220,7 +220,7 @@ glUniform2i:
 
 make returns an error (but does not tell you, what went wrong):
 	this usually only occurs when there are still traces of old
-	builds lying around; try the followin:
+	builds lying around; try the following:
 	1. try "make distclean" before "make"
 	2. delete all "*/*.d" files (in ...Gem/src)
 	3. delete all "*/*.o" files (in ...Gem/src)

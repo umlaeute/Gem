@@ -51,7 +51,7 @@ public:
 protected:
   ////
   // the worker!
-  // get's called from an alternative thread
+  // gets called from an alternative thread
   // if TRUE is returned, process() will be called again
   //  until stop() is called
   // if FALSE is returned, the thread may exit

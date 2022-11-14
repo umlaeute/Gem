@@ -118,7 +118,7 @@ void sphere3d :: print(void)
 {
   int i=0, j=0;
 
-  post("%d lines of longitude and %d lines of lattitude and %d poles",
+  post("%d lines of longitude and %d lines of latitude and %d poles",
        m_numSlices, m_numStacks-1, 2);
 
   print(i, j);

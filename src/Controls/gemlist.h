@@ -27,8 +27,8 @@ class GemCache;
 
   DESCRIPTION
 
-  "gemlist" - send the curent gemlist when banged.
-  The curent gemlist can be set via the hot or cold inlet
+  "gemlist" - send the current gemlist when banged.
+  The current gemlist can be set via the hot or cold inlet
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN gemlist : public GemBase
@@ -70,7 +70,7 @@ protected:
 
 
   //////////
-  // curent state
+  // current state
   GemState      m_state;
   bool          m_validState;
 

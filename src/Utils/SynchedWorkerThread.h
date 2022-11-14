@@ -55,7 +55,7 @@ public:
   virtual unsigned int dequeue(void);
 
 protected:
-  // this get's called from the main thread(!) with each
+  // this gets called from the main thread(!) with each
   // finished data chunk
   virtual void done(id_t ID, void*data) = 0;
 

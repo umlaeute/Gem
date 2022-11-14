@@ -1,7 +1,7 @@
 this intends to make Gem into a real openGL-wrapper
 
 the idea came from the DIPS-project (Digital Image Processing with Sound) by some japanese-guys who presented it at the icmc2002.
-They did a very Gem-like thing for jmax, and i did like this idea of being able to programm openGL without having to (re)compile.
+They did a very Gem-like thing for jmax, and i did like this idea of being able to program openGL without having to (re)compile.
 
 
 the policy is quite simple:

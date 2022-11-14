@@ -113,7 +113,7 @@ int GemSIMD :: simd_runtime_check(void)
   unsigned int    feature;
 #define _MMX_FEATURE_BIT        0x00800000
   /* on w32 we assume that there is only x86 */
-  /* _MSC_VER and __GNUC__ are different in how you inline assember */
+  /* _MSC_VER and __GNUC__ are different in how you inline assembler */
   __asm {
     push ebx
     push ecx

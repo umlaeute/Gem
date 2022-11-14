@@ -22,7 +22,7 @@
  * states:
  *
  * INIT: a context has just been created; initialize the object for this context
- * DISABLED: the object is not useable in this context
+ * DISABLED: the object is not usable in this context
  * ENABLED: the object can run in this context; however, no context-ressources have been allocated yet (needs startRendering())
  * RENDERING: startRendering() has been called and we can render this object just fine...
  * MODIFIED: the object has been modified, and need to free it's context-ressources (stopRendering()) and request new ones (startRendering())

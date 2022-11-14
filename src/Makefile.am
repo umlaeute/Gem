@@ -33,7 +33,7 @@ sublibs =
 # LIBADD or LDADD for convenience libraries?
 sublibs += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
-## Output: get's build directly from $(topsrcdir)
+## Output: gets build directly from $(topsrcdir)
 #if DISABLED
 #SUBDIRS+=Output
 #endif

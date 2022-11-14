@@ -257,7 +257,7 @@ gemreceive :: ~gemreceive()
 /////////////////////////////////////////////////////////
 void gemreceive :: receive(t_symbol*s, int argc, t_atom*argv)
 {
-  debug_post("receiveing....%p", m_outlet);
+  debug_post("receiving....%p", m_outlet);
   outlet_anything(m_outlet, s, argc, argv);
 }
 

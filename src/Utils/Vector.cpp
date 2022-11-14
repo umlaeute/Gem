@@ -113,7 +113,7 @@ CVector3 CVector3::normalize() const
 
   return vNormal;                         // Return the normal
 }
-// compares to vectores and resturns true is they are equal (within a certain threshold)
+// compares two vectors and returns true if they are equal (within a certain threshold)
 // An epsilon that works fairly well is 0.000001.
 bool CVector3::equals(CVector3 vVector, float epsilon) const
 {

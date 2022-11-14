@@ -63,7 +63,7 @@ protected:
 
   ////
   // the worker!
-  // get's called from an alternative thread(s)
+  // gets called from an alternative thread(s)
   // when the queue is non-empty,
   // the first element is removed from the TODO queue,
   // and this function is called with the 1st element as data
@@ -71,10 +71,10 @@ protected:
   virtual void* process(id_t ID, void*data) = 0;
 
   ////
-  // this get's called to indicate that new data is in the DONE queue
+  // this gets called to indicate that new data is in the DONE queue
   // you can use it to set a semaphore in the main thread, to fetch
   // the data
-  // it get's called once after process() has been successful
+  // it gets called once after process() has been successful
   // and will not be called before dequeue has been called at least once
   //
   virtual void signal(void);

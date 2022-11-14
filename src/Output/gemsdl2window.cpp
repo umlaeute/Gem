@@ -743,7 +743,7 @@ bool gemsdl2window :: create(void)
   s_windowmap[SDL_GetWindowID(m_window)] = this;
   if(s_context) {
     if (SDL_GL_MakeCurrent(m_window, s_context)) {
-      error("unable to make shared openGL context currect: %s", SDL_GetError());
+      error("unable to make shared openGL context current: %s", SDL_GetError());
       destroyMess();
       return false;
     }

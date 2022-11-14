@@ -109,7 +109,7 @@ public:
   virtual bool create(void) = 0;
 
   /* destroy an established context+infrastructuure *
-   * make sure that this get's called from your destroy() implementation
+   * make sure that this gets called from your destroy() implementation
    */
   void destroyGemWindow();
   /* create the current window

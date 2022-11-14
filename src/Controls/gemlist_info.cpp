@@ -124,7 +124,7 @@ void gemlist_info :: render(GemState *state)
   shearZX /= ScaleZ;
   shearZY /= ScaleZ;
 
-  // maybee some test could be inserted here.
+  // maybe some test could be inserted here.
   // The matrix can only be decomposed if it's determinent is not 0.
 
   Y = asin(-mi[8]);

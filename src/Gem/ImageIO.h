@@ -65,7 +65,7 @@ public:
    * userdata is is the pointer supplied when calling async();
    * id is the ID returned by async()
    * img holds a reference to the newly loaded image
-   *  the image is allocated by the loder, but
+   *  the image is allocated by the loader, but
    *  the callback (you!) is responsible for freeing the image
    *  once it is no more needed
    *  if image loading failed, img is set to NULL

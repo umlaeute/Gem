@@ -342,7 +342,7 @@ extern "C" {
 # define AUTO_REGISTER_CLASS(NEW_CLASS) \
   static int NEW_CLASS ## _dummyinstance
 #else
-// for debugging we can show the which classes are auto-registering
+// for debugging we can show which classes are auto-registering
 # define AUTO_REGISTER_CLASS(NEW_CLASS)                                 \
   class NEW_CLASS ## _cppclass {                                        \
   public:                                                               \

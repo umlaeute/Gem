@@ -522,7 +522,7 @@ bool gemmacoswindow :: create(void)
     attrvec.push_back(static_cast<NSOpenGLPixelFormatAttribute>(23));
   }
   if(m_fullscreen) {
-    // [window setContentView: m_pimpl->view]; // maybe this? doesnt seem to work though
+    // [window setContentView: m_pimpl->view]; // maybe this? doesn't seem to work though
     //attrvec.push_back(NSOpenGLPFAFullScreen); // deprecated
   }
 

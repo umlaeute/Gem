@@ -223,7 +223,7 @@ GEM_EXTERN extern int cursorGemWindow(WindowInfo &info, int state);
 GEM_EXTERN extern int topmostGemWindow(WindowInfo &info, int state);
 
 //////////
-// swap the buffers (get's called in double-buffered mode)
+// swap the buffers (gets called in double-buffered mode)
 GEM_EXTERN extern void gemWinSwapBuffers(WindowInfo &nfo);
 /////////
 // reestablish a context

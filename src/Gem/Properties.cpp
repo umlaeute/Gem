@@ -75,7 +75,7 @@ void Properties::set(const std::string&key, gem::any value)
     pt = DOUBLE;
     d=any_cast<unsigned int>(value);
 #if 0
-    /* "long"s cannot be stored in "double"s without loosing precision... */
+    /* "long"s cannot be stored in "double"s without losing precision... */
   } else if(ISTYPE(long)) {
     pt = DOUBLE;
     d=any_cast<long>(value);

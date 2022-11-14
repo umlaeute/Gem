@@ -47,7 +47,7 @@ struct structGLInfo { // storage for setup info
   Boolean fAcceleratedMust;     // input: must renderer be accelerated?
   GLint aglAttributes[64];      // input: pixel format attributes always required (reset to what was actually allocated)
   SInt32 VRAM;          // input: minimum VRAM; output: actual (if successful otherwise input)
-  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
+  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allocation to ensure enough texture
   AGLPixelFormat        fmt;    // input: none; output pixel format...
   SInt32 freq;          // input: frequency request for display; output: actual
 };
@@ -59,11 +59,11 @@ struct structGLWindowInfo { // storage for setup info
   Boolean fAcceleratedMust;     // input: must renderer be accelerated?
   GLint aglAttributes[64];      // input: pixel format attributes always required (reset to what was actually allocated)
   SInt32 VRAM;          // input: minimum VRAM; output: actual (if successful otherwise input)
-  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allcoation to ensure enough texture
+  SInt32 textureRAM;            // input: amount of texture RAM required on card; output: same (used in allocation to ensure enough texture
   AGLPixelFormat        fmt;    // input: none; output pixel format...
-  Boolean fDraggable;           // input: is window going to be dragable,
+  Boolean fDraggable;           // input: is window going to be draggable,
   //        if so renderer check (accel, VRAM, textureRAM) will look at all renderers vice just the current one
-  //        if window is not dragable renderer check will either check the single device or short
+  //        if window is not draggable renderer check will either check the single device or short
   //            circuit to software if window spans multiple devices
   // software renderer is consider to have unlimited VRAM, unlimited textureRAM and to not be accelerated
 };
@@ -145,7 +145,7 @@ static Boolean CheckWindowExtents (GDHandle hGD, short width,
 OSStatus DestroyGL (AGLDrawable* paglDraw, AGLContext* paglContext,
                     pstructGLInfo pcontextInfo);
 
-// same as above except that it takes a window as input and attempts to build requested conext on that
+// same as above except that it takes a window as input and attempts to build requested context on that
 OSStatus BuildGLFromWindow (WindowPtr pWindow, AGLContext* paglContext,
                             pstructGLWindowInfo pcontextInfo, AGLContext aglShareContext);
 
@@ -290,7 +290,7 @@ GEM_EXTERN int createGemWindow(WindowInfo &info, WindowHints &hints)
              (displayRect.origin.y))
            );
 
-    //this winodw has no attributes like a title bar etc
+    //this window has no attributes like a title bar etc
     err = CreateNewWindow ( kDocumentWindowClass,
                             kWindowNoAttributes,
                             &info.r,
@@ -549,7 +549,7 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth,
 
   // different possible pixel format choices for different renderers
   // basics requirements are RGBA and double buffer
-  // OpenGL will select acclerated context if available
+  // OpenGL will select accelerated context if available
 
   short i = 0;
   attrib [i++] = AGL_RGBA; // red green blue and alpha
@@ -563,7 +563,7 @@ AGLContext SetupAGLFullScreen (GDHandle display, short * pWidth,
   attrib [i++] = AGL_NONE;
 
   fmt = aglChoosePixelFormat(&display, 1,
-                             attrib); // this may fail if looking for acclerated across multiple monitors
+                             attrib); // this may fail if looking for accelerated across multiple monitors
   if (NULL == fmt) {
     post("Could not find valid pixel format");
     return NULL;
@@ -1101,7 +1101,7 @@ static Boolean CheckRenderer (GDHandle hGD, long* pVRAM, long* pTextureRAM,
 
 // Inputs:      pVRAM: pointer to VRAM in bytes required; out is actual min VRAM of all renderers found, otherwise it is the input parameter
 //                      pTextureRAM:  pointer to texture RAM in bytes required; out is same (implementation assume VRAM returned by card is total so we add texture and VRAM)
-//                      fAccelMust: do we check fro acceleration
+//                      fAccelMust: do we check for acceleration
 
 // Returns: true if any renderer for on each device complies (not necessarily the same renderer), false otherwise
 
