@@ -80,6 +80,11 @@ protected:
   QualityType m_quality;
 
   //////////
+  void                    modeMess(int r);
+  enum ModeType   { RAW, NORMALIZED };
+  ModeType m_mode;
+
+  //////////
   // The color outlet
   t_outlet        *m_colorOut;
 
