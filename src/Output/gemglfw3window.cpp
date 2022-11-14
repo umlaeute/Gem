@@ -583,6 +583,7 @@ gemglfw3window :: gemglfw3window(void) :
   m_window(0),
   m_gles(false)
 {
+  m_width = m_height = 0;
   if(s_instances==0) {
     glfwSetErrorCallback(error_callback);
     if(!glfwInit()) {
@@ -751,6 +752,8 @@ bool gemglfw3window :: create(void)
     return false;
   }
   glfwDefaultWindowHints();
+  unsigned int width = m_width;
+  unsigned int height = m_height;
 
   GLFWmonitor*monitor=NULL;
   if(m_fullscreen) {
@@ -761,10 +764,17 @@ bool gemglfw3window :: create(void)
     } else {
       monitor=monitors[m_fullscreen];
     }
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    if(!width)width = mode->width;
+    if(!height)height = mode->height;
+  } else {
+    if(!width)width = 500;
+    if(!height)height = 500;
   }
 
   glfwWindowHint(GLFW_SAMPLES, m_fsaa);
   glfwWindowHint(GLFW_DOUBLEBUFFER, (1==m_buffer)?GLFW_FALSE:GLFW_TRUE);
+  glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 
   /* do we want OpenGL-ES */
   glfwWindowHint(GLFW_CLIENT_API, m_gles?GLFW_OPENGL_ES_API:GLFW_OPENGL_API);
@@ -775,7 +785,7 @@ bool gemglfw3window :: create(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_profile_minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   }
-  m_window=glfwCreateWindow(m_width, m_height,
+  m_window=glfwCreateWindow(width, height,
                             m_title.c_str(),
                             monitor,
                             NULL);
@@ -815,9 +825,9 @@ bool gemglfw3window :: create(void)
   glfwSetFramebufferSizeCallback(m_window, framebuffersizeCb);
   dispatch();
 
-  int width=0, height=0;
-  glfwGetFramebufferSize(m_window, &width, &height);
-  framebuffersize(width, height);
+  int fb_width=0, fb_height=0;
+  glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
+  framebuffersize(fb_width, fb_height);
 
   return (0!=m_window);
 }
