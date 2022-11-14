@@ -52,27 +52,18 @@
 #X connect 21 2 16 0;
 #X restore 390 87 pd argument;
 #N canvas 216 61 991 633 messages 0;
-#X text 94 19 bang float render title create createStereo createstereo
-buffer fullscreen menubar secondscreen dimen offset color clearmask
-perspec view fog fogcolor fogmode ambient specular shininess cursor
-blur reset destroy print profile lighting stereo stereoSep stereosep
-stereoFoc stereofoc stereoLine stereoline border frame fps topmost
-FSAA;
+#X text 94 19 bang float render title create createStereo createstereo buffer fullscreen menubar secondscreen dimen offset color clearmask perspec view fog fogcolor fogmode ambient specular shininess cursor blur reset destroy print profile lighting stereo stereoSep stereosep stereoFoc stereofoc stereoLine stereoline border frame fps topmost FSAA;
 #X text 66 132 window specific:;
-#X text 113 152 title create buffer fullscreen menubar secondscreen
-dimen offset cursor reset destroy print border topmost FSAA;
-#X text 121 217 createStereo createstereo stereo stereoSep stereosep
-stereoFoc stereofoc stereoLine stereoline;
+#X text 113 152 title create buffer fullscreen menubar secondscreen dimen offset cursor reset destroy print border topmost FSAA;
+#X text 121 217 createStereo createstereo stereo stereoSep stereosep stereoFoc stereofoc stereoLine stereoline;
 #X text 72 339 lighting/color:;
 #X text 128 293 view perspec;
-#X text 120 356 color clearmask ambient specular shininess lighting
-;
+#X text 120 356 color clearmask ambient specular shininess lighting;
 #X text 106 413 fog fogcolor fogmode;
 #X text 73 390 fog:;
 #X text 70 275 viewpoint:;
 #X text 66 203 stereo:;
-#X text 80 471 bang float render buffer blur reset destroy print profile
-frame fps;
+#X text 80 471 bang float render buffer blur reset destroy print profile frame fps;
 #X text 72 452 misc:;
 #X text 66 524 multiple:;
 #X text 106 544 buffer reset print;
@@ -85,8 +76,7 @@ frame fps;
 #X obj 282 664 outlet;
 #X text 417 23 messages to be understood:;
 #N canvas 6 61 450 300 messages 0;
-#X text 22 100 create destroy dimen offset secondscreen fullscreen
-cursor menubar border title topmost buffer reset print FSAA;
+#X text 22 100 create destroy dimen offset secondscreen fullscreen cursor menubar border title topmost buffer reset print FSAA;
 #X restore 639 19 pd messages;
 #X text 458 91 create destroy;
 #X text 459 112 cursor menubar topmost;
@@ -172,8 +162,7 @@ cursor menubar border title topmost buffer reset print FSAA;
 #N canvas 401 296 464 399 live 0;
 #X obj 92 273 outlet gemwin;
 #X obj 92 235 t a;
-#X text 44 67 appearance that is changeable after window has been made
-;
+#X text 44 67 appearance that is changeable after window has been made;
 #X obj 92 123 r \$0-cursor;
 #X msg 92 147 cursor \$1;
 #X obj 182 123 r \$0-menubar;
@@ -194,16 +183,14 @@ cursor menubar border title topmost buffer reset print FSAA;
 #X obj 282 288 t a;
 #X obj 282 309 list trim;
 #X text 435 479 info callbacks;
-#X text 449 495 (LATER: trigger these by sending their name (without
-args) into the object);
+#X text 449 495 (LATER: trigger these by sending their name (without args) into the object);
 #N canvas 1331 424 855 424 default 0;
 #X obj 56 80 inlet;
 #X obj 56 122 route reset;
 #X obj 31 186 outlet;
 #X obj 195 216 outlet gemwin;
 #X obj 195 154 t b;
-#X msg 195 177 dimen 500 500 \, offset 50 50 \, fullscreen 0 \, title
-GEM \, buffer 2 \, cursor 1 \, topmost 0;
+#X msg 195 177 dimen 500 500 \, offset 50 50 \, fullscreen 0 \, title GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #X connect 0 0 1 0;
 #X connect 1 0 4 0;
 #X connect 1 1 2 0;
@@ -273,8 +260,7 @@ GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #X connect 38 2 39 0;
 #X connect 38 3 40 0;
 #X restore 131 285 pd window;
-#X text 55 19 meant as a modular replacement for the internal [gemwin]
-;
+#X text 55 19 meant as a modular replacement for the internal [gemwin];
 #X text 53 38 TODO: quite everything;
 #X obj 390 60 r \$0-loadbang;
 #N canvas 64 81 1119 651 README 0;
@@ -282,39 +268,25 @@ GEM \, buffer 2 \, cursor 1 \, topmost 0;
 #X text 67 145 this has some major drawbacks:;
 #X text 66 57 for legacy reasons \, [gemwin] is the interface to:;
 #X text 79 72 - the rendering context (e.g. window creation);
-#X text 79 84 - the general rendering engine (e.g. turning on/off rendering)
-;
-#X text 80 110 - global settings of the rendered scene (e.g. background
-colour);
+#X text 79 84 - the general rendering engine (e.g. turning on/off rendering);
+#X text 80 110 - global settings of the rendered scene (e.g. background colour);
 #X text 95 190 - non-modular;
-#X text 94 160 - blackbox for the users (no way to change how certain
-things work without hacking the C++-code);
+#X text 94 160 - blackbox for the users (no way to change how certain things work without hacking the C++-code);
 #X text 94 207 - single-window;
 #X text 50 252 make it better:;
-#X text 94 292 - [gemwindow]: low level interface to the window manager
-;
+#X text 94 292 - [gemwindow]: low level interface to the window manager;
 #X text 73 271 [gemwin] now consists of several modules;
 #X text 94 333 - Pd-(sub)patches for global render settings;
 #X text 94 313 - Pd-(sub)patches for render-control;
-#X text 77 495 mouse/keyboard events are now handled by the window
-itself and [s]ent to the (compat) [gemmouse] and [gemkeyboard] objects
-on a global receiver.;
+#X text 77 495 mouse/keyboard events are now handled by the window itself and [s]ent to the (compat) [gemmouse] and [gemkeyboard] objects on a global receiver.;
 #X text 56 476 user-interaction:;
-#X text 80 542 however \, users can as well grab the mouse/keyboard
-data directly from the [gemwindow] object \, so this info can be attached
-to a certain window.;
+#X text 80 542 however \, users can as well grab the mouse/keyboard data directly from the [gemwindow] object \, so this info can be attached to a certain window.;
 #X text 57 376 rendering:;
-#X text 74 392 rendering is now done by explicitely sending bangs via
-global receivers to the [gemhead] abstractions.;
-#X text 77 427 users can implement their own [gemhead]s (and senders
-for that matter as well) \, in order to (e.g.) render certain parts
-of the graph into a specific window/framebuffer/...;
+#X text 74 392 rendering is now done by explicitely sending bangs via global receivers to the [gemhead] abstractions.;
+#X text 77 427 users can implement their own [gemhead]s (and senders for that matter as well) \, in order to (e.g.) render certain parts of the graph into a specific window/framebuffer/...;
 #X text 628 371 modularity:;
-#X text 642 387 obviously \, users can modify the default [gemwin]
-abstractions to strip it from whatever they don't need (and add whatever
-they do need).;
-#X text 641 450 the sole purpose of this abstraction is to provide
-a minimum compatibility with old patches;
+#X text 642 387 obviously \, users can modify the default [gemwin] abstractions to strip it from whatever they don't need (and add whatever they do need).;
+#X text 641 450 the sole purpose of this abstraction is to provide a minimum compatibility with old patches;
 #X restore 592 3 pd README;
 #N canvas 148 119 544 526 callbacks 0;
 #N canvas 61 50 963 457 viewpoint 0;
@@ -341,8 +313,7 @@ a minimum compatibility with old patches;
 #X msg 143 59 0;
 #X text 179 81 x y z azm elv;
 #X obj 72 344 pack 0 0 0 0 0 0 0 0 0;
-#X text 234 347 eyeX eyeY eyeZ centerX centerY centerZ upX upY upZ
-;
+#X text 234 347 eyeX eyeY eyeZ centerX centerY centerZ upX upY upZ;
 #X obj 72 117 t f l;
 #X obj 104 144 unpack 0 0 0 0 0;
 #N canvas 694 467 450 300 dx 0;
@@ -358,8 +329,7 @@ a minimum compatibility with old patches;
 #X obj 251 74 f;
 #X obj 52 94 * 0.0174533;
 #X obj 52 53 t f b b;
-#X obj 52 130 expr cos($f2)*sin($f1) \; sin($f2) \; -cos($f2)*cos($f1)
-;
+#X obj 52 130 expr cos($f2)*sin($f1) \; sin($f2) \; -cos($f2)*cos($f1);
 #X connect 0 0 11 0;
 #X connect 1 0 9 1;
 #X connect 5 0 6 1;
@@ -707,8 +677,7 @@ a minimum compatibility with old patches;
 #X obj 111 53 inlet;
 #X obj 700 421 outlet;
 #X obj 111 109 route create destroy;
-#X text 300 17 create destroy \; dimen fullscreen offset secondscreen
-\; border title \; cursor topmost menubar \; buffer \; FSAA;
+#X text 300 17 create destroy \; dimen fullscreen offset secondscreen \; border title \; cursor topmost menubar \; buffer \; FSAA;
 #X obj 111 283 route border title;
 #X obj 111 403 route cursor topmost menubar;
 #X obj 570 420 route buffer FSAA;
@@ -719,8 +688,7 @@ a minimum compatibility with old patches;
 #X msg 71 162 1;
 #X msg 104 162 2;
 #X obj 203 183 print error;
-#X msg 203 158 "buffer" must be 1 (single-buffered) or 2 (double-buffered)
-;
+#X msg 203 158 "buffer" must be 1 (single-buffered) or 2 (double-buffered);
 #X connect 0 0 1 0;
 #X connect 1 0 3 0;
 #X connect 1 1 4 0;
@@ -802,13 +770,10 @@ a minimum compatibility with old patches;
 #X obj 329 186 i;
 #X obj 329 208 != 0;
 #X obj 329 230 s \$0-secondscreen;
-#X msg 606 120 border 1 \, title GEM \, cursor 1 \, topmost 0 \, menubar
-0 \, buffer 2 \, FSAA 0 \, dimen 500 500 \, fullscreen 0 \, offset
--1 -1 \, secondscreen 0;
+#X msg 606 120 border 1 \, title GEM \, cursor 1 \, topmost 0 \, menubar 0 \, buffer 2 \, FSAA 0 \, dimen 500 500 \, fullscreen 0 \, offset -1 -1 \, secondscreen 0;
 #X obj 277 106 t a b;
 #X msg 320 107 0;
-#X obj 111 162 route dimen fullscreen offset secondscreen transparent
-;
+#X obj 111 162 route dimen fullscreen offset secondscreen transparent;
 #X obj 457 185 i;
 #X obj 457 207 != 0;
 #X obj 605 99 r \$0-reset;
@@ -870,8 +835,7 @@ a minimum compatibility with old patches;
 #N canvas 1521 50 810 323 stereo 0;
 #X obj 101 28 inlet;
 #X obj 258 31 outlet;
-#X obj 109 80 route createStereo createstereo stereo stereoSep stereosep
-stereoFoc stereofoc stereoLine stereoline;
+#X obj 109 80 route createStereo createstereo stereo stereoSep stereosep stereoFoc stereofoc stereoLine stereoline;
 #X obj 243 117 t f;
 #X obj 332 172 t f;
 #X obj 422 125 t f;
@@ -1282,8 +1246,7 @@ stereoFoc stereofoc stereoLine stereoline;
 #N canvas 1355 50 986 299 ambient 0;
 #X obj 89 194 outlet gemlist;
 #X obj 89 128 inlet gemlist;
-#X obj 89 161 GEMglMaterialfv GL_FRONT_AND_BACK GL_AMBIENT 0.1 0.1
-0.1 1;
+#X obj 89 161 GEMglMaterialfv GL_FRONT_AND_BACK GL_AMBIENT 0.1 0.1 0.1 1;
 #X obj 492 133 r \$0-ambient;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
@@ -1292,8 +1255,7 @@ stereoFoc stereofoc stereoLine stereoline;
 #N canvas 1355 50 986 299 specular 0;
 #X obj 89 194 outlet gemlist;
 #X obj 89 128 inlet gemlist;
-#X obj 89 161 GEMglMaterialfv GL_FRONT_AND_BACK GL_SPECULAR 1 1 1 1
-;
+#X obj 89 161 GEMglMaterialfv GL_FRONT_AND_BACK GL_SPECULAR 1 1 1 1;
 #X obj 457 133 r \$0-specular;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
@@ -1881,8 +1843,7 @@ stereoFoc stereofoc stereoLine stereoline;
 #X obj 91 321 s \$0-stereo;
 #X obj 91 277 t b b;
 #X obj 208 309 print error;
-#X msg 208 274 CrystalGlasses stereo not supported by your gfx-card!
-\, falling back to NO stereo;
+#X msg 208 274 CrystalGlasses stereo not supported by your gfx-card! \, falling back to NO stereo;
 #X obj 91 176 GEMglGetFloatv GL_STEREO;
 #X obj 91 210 t f;
 #X msg 91 300 0;
