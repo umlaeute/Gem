@@ -326,6 +326,6 @@ void gemhead :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "float", renderOnOff, int);
-  CPPEXTERN_MSG1(classPtr, "set", setMess, int);
+  CPPEXTERN_MSG1(classPtr, "set", setMess, float);
   CPPEXTERN_MSG1(classPtr, "context", setContext, std::string);
 }
