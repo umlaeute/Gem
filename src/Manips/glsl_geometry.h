@@ -41,7 +41,7 @@ public:
   //////////
   // Constructor
   glsl_geometry(void);
-  glsl_geometry(t_symbol *filename);
+  glsl_geometry(t_symbol* filename);
 
 protected:
 

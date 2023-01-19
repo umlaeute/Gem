@@ -124,7 +124,7 @@ private:
   static void   colorMessCallback(void *data, t_symbol*,int,t_atom*);
   static void   ambientMessCallback(void *data, t_symbol*,int,t_atom*);
   static void   specularMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void   fogMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void   fogMessCallback(void *, t_symbol*, int argc, t_atom *argv);
   static void   fogColorMessCallback(void *, t_symbol*,int,t_atom*);
 
   // just call GemMan directly
@@ -135,9 +135,9 @@ private:
   static void   lightingMessCallback(void *, t_float state);
   static void   borderMessCallback(void *, t_float state);
   static void   frameMessCallback(void *, t_float framesPerSecond);
-  static void   perspectiveMessCallback(void *, t_symbol *, int argc,
+  static void   perspectiveMessCallback(void *, t_symbol*, int argc,
                                         t_atom *argv);
-  static void   viewMessCallback(void *, t_symbol *, int argc, t_atom *argv);
+  static void   viewMessCallback(void *, t_symbol*, int argc, t_atom *argv);
   static void   stereoMessCallback(void *data, t_float state);
   static void   stereoFocMessCallback(void *, t_float state);
   static void   stereoSepMessCallback(void *, t_float state);

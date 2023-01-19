@@ -53,9 +53,9 @@ static const char*s_configdir[] = {
 
 /* this is ripped from m_imp.h */
 struct _gemclass {
-  t_symbol *c_name;                   /* name (mostly for error reporting) */
-  t_symbol *c_helpname;               /* name of help file */
-  t_symbol *c_externdir;              /* directory extern was loaded from */
+  t_symbol* c_name;                   /* name (mostly for error reporting) */
+  t_symbol* c_helpname;               /* name of help file */
+  t_symbol* c_externdir;              /* directory extern was loaded from */
   /* ... */ /* the real t_class continues here... */
 };
 # define t_gemclass struct _gemclass

@@ -394,7 +394,7 @@ void pix_tIIR :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG(classPtr, "set", setMess);
 }
 
-void pix_tIIR :: setMess(t_symbol *s, int argc, t_atom* argv)
+void pix_tIIR :: setMess(t_symbol* s, int argc, t_atom* argv)
 {
   set = true;
   set_zero = (argc>0 && atom_getint(argv)==0);

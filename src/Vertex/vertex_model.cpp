@@ -56,7 +56,7 @@ vertex_model :: ~vertex_model()
 // openMess
 //
 /////////////////////////////////////////////////////////
-void vertex_model :: openMess(t_symbol *filename)
+void vertex_model :: openMess(t_symbol* filename)
 {
   GLMgroup*      group;
   GLMtriangle*   triangle;
@@ -310,7 +310,7 @@ void vertex_model :: obj_setupCallback(t_class *classPtr)
                   gensym("open"), A_SYMBOL, A_NULL);
 }
 
-void vertex_model :: openMessCallback(void *data, t_symbol *filename)
+void vertex_model :: openMessCallback(void *data, t_symbol* filename)
 {
   GetMyClass(data)->openMess(filename);
 }

@@ -273,7 +273,7 @@ void GemPixDualObj :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&GemPixDualObj::gem_rightMessCallback),
                   gensym("gem_right"), A_GIMME, A_NULL);
 }
-void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol *s,
+void GemPixDualObj :: gem_rightMessCallback(void *data, t_symbol* s,
     int argc, t_atom *argv)
 {
   if (argc==1 && argv->a_type==A_FLOAT) {

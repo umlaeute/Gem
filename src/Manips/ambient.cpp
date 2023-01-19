@@ -95,7 +95,7 @@ void ambient :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&ambient::ambientMessCallback),
                   gensym("ambient"), A_GIMME, A_NULL);
 }
-void ambient :: ambientMessCallback(void *data, t_symbol *, int argc,
+void ambient :: ambientMessCallback(void *data, t_symbol*, int argc,
                                     t_atom *argv)
 {
   float alpha = 1.0;

@@ -343,7 +343,7 @@ void pix_histo :: obj_setupCallback(t_class *classPtr)
                   gensym("set"), A_GIMME,0);
 }
 
-void pix_histo :: setMessCallback(void *data, t_symbol *s, int argc,
+void pix_histo :: setMessCallback(void *data, t_symbol* s, int argc,
                                   t_atom* argv)
 {
   GetMyClass(data)->setMess(argc, argv);

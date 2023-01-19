@@ -17,7 +17,7 @@
 
 #include "glsl_tesseval.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(glsl_tesseval, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(glsl_tesseval, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -27,7 +27,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_tesseval, t_symbol *, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-glsl_tesseval :: glsl_tesseval(t_symbol *filename)
+glsl_tesseval :: glsl_tesseval(t_symbol* filename)
   : glsl_vertex()
 {
   openMess(filename);

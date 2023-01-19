@@ -21,7 +21,7 @@
 #include "Gem/State.h"
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYMBOL,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol*, A_DEFSYMBOL,
                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYMBOL,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_imageInPlace :: pix_imageInPlace(t_symbol *filename,
+pix_imageInPlace :: pix_imageInPlace(t_symbol* filename,
                                      t_floatarg baseImage, t_floatarg topImage, t_floatarg skipRate)
   : pix_multiimage(filename, baseImage, topImage, skipRate),
     m_wantDownload(false),
@@ -134,7 +134,7 @@ void pix_imageInPlace :: stopRendering()
 // preloadMess
 //
 /////////////////////////////////////////////////////////
-void pix_imageInPlace :: preloadMess(t_symbol *filename, int baseImage,
+void pix_imageInPlace :: preloadMess(t_symbol* filename, int baseImage,
                                      int topImage, int skipRate)
 {
   openMess(filename, baseImage, topImage, skipRate);
@@ -261,7 +261,7 @@ void pix_imageInPlace :: obj_setupCallback(t_class *classPtr)
 }
 
 void pix_imageInPlace :: preloadMessCallback(void *data,
-    t_symbol *filename, t_float baseImage,
+    t_symbol* filename, t_float baseImage,
     t_floatarg topImage, t_floatarg skipRate)
 {
   if ((int)skipRate == 0) {

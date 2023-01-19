@@ -58,7 +58,7 @@ GemPathBase :: ~GemPathBase()
 // openMess
 //
 /////////////////////////////////////////////////////////
-void GemPathBase :: openMess(t_symbol *arrayname)
+void GemPathBase :: openMess(t_symbol* arrayname)
 {
   m_array = (t_garray *)pd_findbyclass(arrayname, garray_class);
   if (!m_array) {

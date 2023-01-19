@@ -22,7 +22,7 @@
 #include "Gem/State.h"
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -32,7 +32,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movie, t_symbol *, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_movie :: pix_movie(t_symbol *filename) :
+pix_movie :: pix_movie(t_symbol* filename) :
   pix_film(filename)
 {
   // we don't want the additional in/outlet of [pix_texture]

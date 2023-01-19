@@ -46,7 +46,7 @@ public:
 
   //////////
   // Constructor
-  pix_image(t_symbol *filename);
+  pix_image(t_symbol* filename);
 
 protected:
 

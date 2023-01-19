@@ -482,7 +482,7 @@ void pix_cubemap :: mapMess(int unit)
   m_map=unit;
 }
 
-void pix_cubemap :: rightImageMess(t_symbol *s, int argc, t_atom *argv)
+void pix_cubemap :: rightImageMess(t_symbol* s, int argc, t_atom *argv)
 {
   int id=-1;
   if(gensym("gem_imageX+")==s) {

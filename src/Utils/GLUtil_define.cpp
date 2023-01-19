@@ -80,7 +80,7 @@ int gem::utils::gl::getGLdefine(const t_atom *ap)
   return _GL_UNDEFINED;
 }
 
-int gem::utils::gl::getGLdefine(const t_symbol *s)
+int gem::utils::gl::getGLdefine(const t_symbol* s)
 {
   if (s && s->s_name) {
     return getGLdefine(s->s_name);

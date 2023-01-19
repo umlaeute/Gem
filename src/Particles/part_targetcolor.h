@@ -68,7 +68,7 @@ private:
 
   //////////
   // static member functions
-  static void     colorMessCallback(void *data, t_symbol *, int argc,
+  static void     colorMessCallback(void *data, t_symbol*, int argc,
                                     t_atom *argv);
 };
 

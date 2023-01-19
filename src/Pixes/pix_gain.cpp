@@ -409,7 +409,7 @@ void pix_gain :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&pix_gain::saturateMessCallback),
                   gensym("saturate"), A_FLOAT, A_NULL);
 }
-void pix_gain :: vecGainMessCallback(void *data, t_symbol *, int argc,
+void pix_gain :: vecGainMessCallback(void *data, t_symbol*, int argc,
                                      t_atom *argv)
 {
   GetMyClass(data)->vecGainMess(argc, argv);

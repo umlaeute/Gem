@@ -66,7 +66,7 @@ void TextBase :: setPrecision(float prec)
 { }
 void TextBase :: linedistMess(float dist)
 { }
-void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc,
+void TextBase :: justifyMessCallback(void *data, t_symbol* s, int argc,
                                      t_atom*argv)
 { }
 

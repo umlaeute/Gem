@@ -175,7 +175,7 @@ void primTri :: vect3MessCallback(void *data, t_float x, t_float y,
   GetMyClass(data)->vectMess(2, x, y, z);
 }
 
-void primTri :: col1MessCallback(void *data, t_symbol *, int argc,
+void primTri :: col1MessCallback(void *data, t_symbol*, int argc,
                                  t_atom *argv)
 {
   float alpha = 1.f;
@@ -186,7 +186,7 @@ void primTri :: col1MessCallback(void *data, t_symbol *, int argc,
                             atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
-void primTri :: col2MessCallback(void *data, t_symbol *, int argc,
+void primTri :: col2MessCallback(void *data, t_symbol*, int argc,
                                  t_atom *argv)
 {
   float alpha = 1.f;
@@ -197,7 +197,7 @@ void primTri :: col2MessCallback(void *data, t_symbol *, int argc,
                             atom_getfloat(&argv[1]),
                             atom_getfloat(&argv[2]), alpha);
 }
-void primTri :: col3MessCallback(void *data, t_symbol *, int argc,
+void primTri :: col3MessCallback(void *data, t_symbol*, int argc,
                                  t_atom *argv)
 {
   float alpha = 1.f;

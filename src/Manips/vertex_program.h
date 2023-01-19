@@ -48,7 +48,7 @@ public:
   //////////
   // Constructor
   vertex_program(void);
-  vertex_program(t_symbol *filename);
+  vertex_program(t_symbol* filename);
 
 protected:
 
@@ -61,7 +61,7 @@ protected:
   virtual void closeMess(void);
   //////////
   // open a program up
-  virtual void openMess(t_symbol *filename);
+  virtual void openMess(t_symbol* filename);
 
 
   //////////

@@ -32,7 +32,7 @@ static char mytolower(char in)
 };
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYMBOL, t_floatarg,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol*, A_DEFSYMBOL, t_floatarg,
                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYMBOL, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-multimodel :: multimodel(t_symbol *filename, t_floatarg baseModel,
+multimodel :: multimodel(t_symbol* filename, t_floatarg baseModel,
                          t_floatarg topModel, t_floatarg skipRate)
   :  m_loader(NULL),
      m_size_change_flag(false),
@@ -245,7 +245,7 @@ void multimodel :: backendMess(t_symbol*s, int argc, t_atom*argv)
   if(argc) {
     for(i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
-        t_symbol *b=atom_getsymbol(argv+i);
+        t_symbol* b=atom_getsymbol(argv+i);
         m_backends.push_back(b->s_name);
       } else {
         error("%s must be symbolic", s->s_name);

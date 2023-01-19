@@ -61,7 +61,7 @@ protected:
   //////////
   void                  trigger(void);
   virtual void rightRender(GemCache*cache, GemState *state);
-  void         rightMess(t_symbol *s, int argc, t_atom *argv);
+  void         rightMess(t_symbol* s, int argc, t_atom *argv);
 
   virtual void ticktimeMess(t_float ticktime);
   virtual void lightingMess(bool state);

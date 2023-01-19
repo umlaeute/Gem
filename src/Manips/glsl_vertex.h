@@ -49,7 +49,7 @@ public:
   //////////
   // Constructor
   glsl_vertex(void);
-  glsl_vertex(t_symbol *filename);
+  glsl_vertex(t_symbol* filename);
 
 protected:
 
@@ -64,7 +64,7 @@ protected:
   // open a shader up
   virtual bool openMessGL2(void);
   virtual bool openMessARB(void);
-  virtual void openMess(t_symbol *filename);
+  virtual void openMess(t_symbol* filename);
   virtual void loadShader(void);
 
 

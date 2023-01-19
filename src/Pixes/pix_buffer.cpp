@@ -89,7 +89,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYMBOL,t_float,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer :: pix_buffer(t_symbol *s,t_float f=100.0)
+pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   : m_buffer(NULL),
     m_numframes(0),
     m_bindname(NULL),

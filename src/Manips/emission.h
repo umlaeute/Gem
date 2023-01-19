@@ -68,7 +68,7 @@ private:
 
   //////////
   // static member functions
-  static void     emissionMessCallback(void *data, t_symbol *, int argc,
+  static void     emissionMessCallback(void *data, t_symbol*, int argc,
                                        t_atom *argv);
 };
 

@@ -40,7 +40,7 @@ public:
 
   //////////
   // Constructor
-  pix_movie(t_symbol *filename);
+  pix_movie(t_symbol* filename);
 
 protected:
 

@@ -65,7 +65,7 @@ protected:
 
   //////////
   // How the object should be drawn
-  virtual void  typeMess(t_symbol *type);
+  virtual void  typeMess(t_symbol* type);
 
   //-----------------------------------
   // GROUP:     Utility functions

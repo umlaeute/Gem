@@ -44,7 +44,7 @@ class GEM_EXTERN pix_film : public GemBase
 public:
   //////////
   // Constructor
-  pix_film(t_symbol *filename);
+  pix_film(t_symbol* filename);
 
 protected:
 
@@ -157,7 +157,7 @@ protected:
   //////////
   // static member functions
   static void openMessCallback   (void *data, t_symbol*,int,t_atom*);
-  static void changeImageCallback(void *data, t_symbol *, int argc,
+  static void changeImageCallback(void *data, t_symbol*, int argc,
                                   t_atom *argv);
 };
 

@@ -70,10 +70,10 @@ protected:
   //////////
   // Do the rendering
   virtual void    render(GemState *state);
-  virtual void    openMess(t_symbol *filename);
+  virtual void    openMess(t_symbol* filename);
 
 private:
-  static void     openMessCallback(void *data, t_symbol *filename);
+  static void     openMessCallback(void *data, t_symbol* filename);
 
 };
 

@@ -246,7 +246,7 @@ private:
 
   //////////
   // Static member functions
-  static void   justifyMessCallback(void *data, t_symbol *, int, t_atom*);
+  static void   justifyMessCallback(void *data, t_symbol*, int, t_atom*);
 };
 
 #endif  // for header file

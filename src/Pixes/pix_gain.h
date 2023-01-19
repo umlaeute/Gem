@@ -91,7 +91,7 @@ private:
 
   //////////
   // Static member functions
-  static void     vecGainMessCallback(void *data, t_symbol *, int argc,
+  static void     vecGainMessCallback(void *data, t_symbol*, int argc,
                                       t_atom *argv);
   static void     floatGainMessCallback(void *data, t_float gain);
   static void     saturateMessCallback(void *data, t_float saturate);

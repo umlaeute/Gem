@@ -86,9 +86,9 @@ protected:
 private:
   //////////
   // Static member functions
-  static void     vertCallback(void *data, t_symbol *type, int argc,
+  static void     vertCallback(void *data, t_symbol* type, int argc,
                                t_atom*argv);
-  static void     listCallback(void *data, t_symbol *type, int argc,
+  static void     listCallback(void *data, t_symbol* type, int argc,
                                t_atom*argv);
 };
 

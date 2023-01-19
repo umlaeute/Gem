@@ -136,7 +136,7 @@ static std::vector<std::string> split(const std::string &s, char delim)
   return split(s, delim, elems);
 }
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol*, A_DEFSYMBOL);
 
 #ifdef HAVE_PTHREADS
 /* the "capturing"-thread */
@@ -188,7 +188,7 @@ void *pix_film :: grabThread(void*you)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_film :: pix_film(t_symbol *filename) :
+pix_film :: pix_film(t_symbol* filename) :
   m_haveMovie(0),
   m_auto(0), m_format(GEM_RGBA),
   m_numFrames(0), m_reqFrame(0), m_curFrame(0),
@@ -567,7 +567,7 @@ void pix_film :: changeImage(int imgNum, int trackNum)
 // colorSpace
 //
 /////////////////////////////////////////////////////////
-void pix_film :: csMess(t_symbol *s, bool immediately)
+void pix_film :: csMess(t_symbol* s, bool immediately)
 {
   char c =*s->s_name;
   switch (c) {
@@ -634,7 +634,7 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
   if(argc) {
     for(i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
-        t_symbol *b=atom_getsymbol(argv+i);
+        t_symbol* b=atom_getsymbol(argv+i);
         m_backends.push_back(b->s_name);
       } else if (A_FLOAT == argv->a_type) {
         int num = atom_getint(argv);
@@ -778,7 +778,7 @@ illegal_openmess:
 
 }
 
-void pix_film :: changeImageCallback(void *data, t_symbol *, int argc,
+void pix_film :: changeImageCallback(void *data, t_symbol*, int argc,
                                      t_atom *argv)
 {
   GetMyClass(data)->changeImage((argc<1)?0:atom_getint(argv),

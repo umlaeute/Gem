@@ -179,7 +179,7 @@ void pix_data :: yPos(t_float f)
 {
   m_position[1]=f;
 }
-void pix_data :: listMess(t_symbol *s, int argc, t_atom* argv)
+void pix_data :: listMess(t_symbol* s, int argc, t_atom* argv)
 {
   switch(argc) {
   case 2:

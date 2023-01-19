@@ -261,12 +261,12 @@ void pix_rectangle :: obj_setupCallback(t_class *classPtr)
                   gensym("color"), A_GIMME, A_NULL);
 
 }
-void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol *,
+void pix_rectangle :: vecCoordMessCallback(void *data, t_symbol*,
     int argc, t_atom *argv)
 {
   GetMyClass(data)->vecCoordMess(argc, argv);
 }
-void pix_rectangle :: vecColorMessCallback(void *data, t_symbol *,
+void pix_rectangle :: vecColorMessCallback(void *data, t_symbol*,
     int argc, t_atom *argv)
 {
   GetMyClass(data)->vecColorMess(argc, argv);

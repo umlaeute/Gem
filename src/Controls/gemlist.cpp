@@ -201,7 +201,7 @@ void gemlist :: drawMess(t_symbol*s, int argc, t_atom*argv)
     drawMess(argv[0]);
   }
 }
-void gemlist::rightMess(t_symbol *s, int argc, t_atom *argv)
+void gemlist::rightMess(t_symbol* s, int argc, t_atom *argv)
 {
   GemCache*cache=NULL;
   GemState*state=NULL;

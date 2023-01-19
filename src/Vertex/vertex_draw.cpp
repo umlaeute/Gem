@@ -285,7 +285,7 @@ void vertex_draw :: render(GemState *state)
 // typeMess
 //
 /////////////////////////////////////////////////////////
-void vertex_draw :: typeMess(t_symbol *type)
+void vertex_draw :: typeMess(t_symbol* type)
 {
   char c=*type->s_name;
   switch (c) {
@@ -356,7 +356,7 @@ void vertex_draw :: texcoordMessCallback(void *data, t_float t)
 {
   GetMyClass(data)->m_texcoord=(static_cast<int>(t));
 }
-void vertex_draw :: typeMessCallback(void *data, t_symbol *type)
+void vertex_draw :: typeMessCallback(void *data, t_symbol* type)
 {
   GetMyClass(data)->typeMess(type);
 }

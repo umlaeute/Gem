@@ -65,7 +65,7 @@ protected:
   //////////
   // set the tables that hold the interleaved data (vertex, color, ...)
   virtual void tableMess(int,t_atom*);
-  t_symbol *m_Vtable, *m_Ctable, *m_Ttable, *m_Ntable;
+  t_symbol* m_Vtable, *m_Ctable, *m_Ttable, *m_Ntable;
 
 private:
   static void     tableMessCallback(void *data, t_symbol*,int,t_atom*);

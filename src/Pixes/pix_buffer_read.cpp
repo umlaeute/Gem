@@ -41,7 +41,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_read, t_symbol*,A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_buffer_read :: pix_buffer_read(t_symbol *s) :
+pix_buffer_read :: pix_buffer_read(t_symbol* s) :
   m_frame(0.f), m_auto(0.f), m_loop(0),
   m_haveImage(false),
   m_bindname(NULL),

@@ -500,7 +500,7 @@ void pix_record :: autoMess(bool on)
   m_automatic=on;
 }
 
-void pix_record :: codecMessCallback(void *data, t_symbol *s, int argc,
+void pix_record :: codecMessCallback(void *data, t_symbol* s, int argc,
                                      t_atom *argv)
 {
   if(argc) {

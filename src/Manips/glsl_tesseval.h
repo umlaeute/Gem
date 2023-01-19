@@ -36,7 +36,7 @@ public:
   //////////
   // Constructor
   glsl_tesseval(void);
-  glsl_tesseval(t_symbol *filename);
+  glsl_tesseval(t_symbol* filename);
 
 protected:
 

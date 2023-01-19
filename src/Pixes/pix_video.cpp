@@ -910,7 +910,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "reset", resetMess);
 
 }
-void pix_video :: dimenMessCallback(void *data, t_symbol *s, int ac,
+void pix_video :: dimenMessCallback(void *data, t_symbol* s, int ac,
                                     t_atom *av)
 {
   GetMyClass(data)->dimenMess(static_cast<int>(atom_getfloatarg(0, ac, av)),

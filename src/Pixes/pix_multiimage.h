@@ -43,7 +43,7 @@ public:
 
   //////////
   // Constructor
-  pix_multiimage(t_symbol *filename, t_floatarg baseImage,
+  pix_multiimage(t_symbol* filename, t_floatarg baseImage,
                  t_floatarg topImage, t_floatarg skipRate);
 
   class multiImageCache
@@ -87,7 +87,7 @@ protected:
 
   //////////
   // When an open is received
-  virtual void    openMess(t_symbol *filename, int baseImage, int topImage,
+  virtual void    openMess(t_symbol* filename, int baseImage, int topImage,
                            int skipRate);
 
   //////////
@@ -134,7 +134,7 @@ private:
 
   //////////
   // static member functions
-  static void     openMessCallback(void *data, t_symbol *filename,
+  static void     openMessCallback(void *data, t_symbol* filename,
                                    t_float baseImage, t_float topImage, t_float skipRate);
   static void     changeImageCallback(void *data, t_float imgNum);
 };

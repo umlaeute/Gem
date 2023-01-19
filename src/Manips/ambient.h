@@ -72,7 +72,7 @@ private:
 
   //////////
   // static member functions
-  static void     ambientMessCallback(void *data, t_symbol *, int argc,
+  static void     ambientMessCallback(void *data, t_symbol*, int argc,
                                       t_atom *argv);
 };
 

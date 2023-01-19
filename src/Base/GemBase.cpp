@@ -272,7 +272,7 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
   _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
 
 }
-void GemBase :: gem_MessCallback(void *data, t_symbol *s, int argc,
+void GemBase :: gem_MessCallback(void *data, t_symbol* s, int argc,
                                  t_atom *argv)
 {
   if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {

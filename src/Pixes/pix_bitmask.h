@@ -82,7 +82,7 @@ private:
 
   //////////
   // Static member functions
-  static void     vecMaskMessCallback(void *data, t_symbol *, int argc,
+  static void     vecMaskMessCallback(void *data, t_symbol*, int argc,
                                       t_atom *argv);
   static void     floatMaskMessCallback(void *data, t_float gain);
 };

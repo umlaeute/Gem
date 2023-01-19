@@ -55,7 +55,7 @@ vertex_tabread :: ~vertex_tabread()
 // check if array exists and whether it is a floatarray
 //
 ///////////////
-static t_float* checkarray(t_symbol *s, int &length)
+static t_float* checkarray(t_symbol* s, int &length)
 {
   t_garray *a = 0;
   t_word  *fp = 0;

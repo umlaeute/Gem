@@ -122,7 +122,7 @@ private:
   // static member functions
   void  autoMess(bool on);
   void  bangMess();
-  static void   codecMessCallback(void *data, t_symbol *s, int argc,
+  static void   codecMessCallback(void *data, t_symbol* s, int argc,
                                   t_atom *argv);
 
   static void   minMessCallback(void *data, t_float min);

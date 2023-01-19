@@ -84,7 +84,7 @@ private:
 
   //////////
   // Static member callbacks
-  static void gainMessCallback(void *dump, t_symbol *, int argc,
+  static void gainMessCallback(void *dump, t_symbol*, int argc,
                                t_atom *argv);
   static void channelMessCallback(void *dump, t_float channel);
 };

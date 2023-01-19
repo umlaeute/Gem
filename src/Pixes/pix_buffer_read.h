@@ -39,7 +39,7 @@ public:
 
   //////////
   // Constructor
-  pix_buffer_read(t_symbol *s);
+  pix_buffer_read(t_symbol* s);
 
 protected:
 
@@ -85,7 +85,7 @@ protected:
 
   //////////
   // the name of the buffer we bind to
-  t_symbol *m_bindname;
+  t_symbol* m_bindname;
 
   //////////
   // update pix_buffer & image

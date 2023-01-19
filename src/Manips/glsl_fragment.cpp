@@ -17,7 +17,7 @@
 
 #include "glsl_fragment.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -28,7 +28,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(glsl_fragment, t_symbol *, A_DEFSYMBOL);
 //
 /////////////////////////////////////////////////////////
 
-glsl_fragment :: glsl_fragment(t_symbol *filename) :
+glsl_fragment :: glsl_fragment(t_symbol* filename) :
   glsl_vertex()
 {
   openMess(filename);

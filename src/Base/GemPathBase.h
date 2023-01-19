@@ -45,7 +45,7 @@ protected:
 
   //////////
   // When an open is received
-  virtual void    openMess(t_symbol *arrayname);
+  virtual void    openMess(t_symbol* arrayname);
 
   //////////
   // When a float val is received

@@ -175,7 +175,7 @@ private:
 
   static void asynchronousMessCallback(void *data, t_float);
 
-  static void dimenMessCallback(void *data, t_symbol *s, int ac, t_atom *av);
+  static void dimenMessCallback(void *data, t_symbol* s, int ac, t_atom *av);
   static void channelMessCallback(void *data, t_symbol*,int,t_atom*);
   static void normMessCallback(void *data, t_symbol*format);
   static void modeMessCallback(void *data, t_symbol*,int,t_atom*);

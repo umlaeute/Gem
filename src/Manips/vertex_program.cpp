@@ -29,7 +29,7 @@
 
 #include "Utils/GLUtil.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(vertex_program, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -48,7 +48,7 @@ vertex_program :: vertex_program() :
   m_envNum(-1)
 {
 }
-vertex_program :: vertex_program(t_symbol *filename) :
+vertex_program :: vertex_program(t_symbol* filename) :
   m_programType(GEM_PROGRAM_none),
   m_programID(0),
   m_programString(NULL), m_size(0),
@@ -125,7 +125,7 @@ GLint vertex_program :: queryProgramtype(char*program)
 }
 
 
-void vertex_program :: openMess(t_symbol *filename)
+void vertex_program :: openMess(t_symbol* filename)
 {
   if(NULL==filename || NULL==filename->s_name || &s_==filename
       || 0==*filename->s_name) {

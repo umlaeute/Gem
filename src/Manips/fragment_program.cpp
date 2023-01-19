@@ -19,7 +19,7 @@
 #include "fragment_program.h"
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -29,7 +29,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(fragment_program, t_symbol *, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-fragment_program :: fragment_program(t_symbol *filename) :
+fragment_program :: fragment_program(t_symbol* filename) :
   vertex_program()
 {
   openMess(filename);

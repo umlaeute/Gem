@@ -98,7 +98,7 @@ void specular :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&specular::specularMessCallback),
                   gensym("specular"), A_GIMME, A_NULL);
 }
-void specular :: specularMessCallback(void *data, t_symbol *, int argc,
+void specular :: specularMessCallback(void *data, t_symbol*, int argc,
                                       t_atom *argv)
 {
   float alpha = 1;

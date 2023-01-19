@@ -41,7 +41,7 @@ public:
 
   //////////
   // Constructor
-  pix_imageInPlace(t_symbol *filename, t_floatarg baseImage,
+  pix_imageInPlace(t_symbol* filename, t_floatarg baseImage,
                    t_floatarg topImage, t_floatarg skipRate);
 
 protected:
@@ -70,7 +70,7 @@ protected:
 
   //////////
   // When a preload is received
-  virtual void    preloadMess(t_symbol *filename, int baseImage,
+  virtual void    preloadMess(t_symbol* filename, int baseImage,
                               int topImage, int skipRate);
 
   //////////
@@ -98,7 +98,7 @@ private:
 
   //////////
   // static member functions
-  static void     preloadMessCallback(void *data, t_symbol *filename,
+  static void     preloadMessCallback(void *data, t_symbol* filename,
                                       t_float baseImage, t_float topImage, t_float skipRate);
 };
 

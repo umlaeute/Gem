@@ -302,7 +302,7 @@ void modelfiler :: backendMess(t_symbol*s, int argc, t_atom*argv)
   if(argc) {
     for(int i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
-        t_symbol *b=atom_getsymbol(argv+i);
+        t_symbol* b=atom_getsymbol(argv+i);
         m_backends.push_back(b->s_name);
       } else {
         error("%s must be symbolic", s->s_name);

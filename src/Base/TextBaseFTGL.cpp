@@ -590,7 +590,7 @@ void TextBase :: obj_setupCallback(t_class *classPtr)
                   gensym("justify"), A_GIMME, A_NULL);
 }
 
-void TextBase :: justifyMessCallback(void *data, t_symbol *s, int argc,
+void TextBase :: justifyMessCallback(void *data, t_symbol* s, int argc,
                                      t_atom*argv)
 {
   JustifyWidth  wType=CENTER;

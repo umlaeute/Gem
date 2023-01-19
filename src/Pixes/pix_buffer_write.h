@@ -38,7 +38,7 @@ public:
 
   //////////
   // Constructor
-  pix_buffer_write(t_symbol *s);
+  pix_buffer_write(t_symbol* s);
 
 protected:
 
@@ -56,7 +56,7 @@ protected:
 
   int m_frame;
   int m_lastframe;
-  t_symbol *m_bindname;
+  t_symbol* m_bindname;
 
 private:
 

@@ -358,7 +358,7 @@ public:
 
 static std::map<const t_symbol*, std::string>s_class2filename;
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_frei0r,  t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

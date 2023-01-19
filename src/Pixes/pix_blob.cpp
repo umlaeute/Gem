@@ -258,7 +258,7 @@ void pix_blob :: obj_setupCallback(t_class *classPtr)
                   gensym("gain"), A_GIMME, A_NULL);
 }
 
-void pix_blob :: gainMessCallback(void *data, t_symbol *, int argc,
+void pix_blob :: gainMessCallback(void *data, t_symbol*, int argc,
                                   t_atom *argv)
 {
   GetMyClass(data)->GainMess(argc, argv);

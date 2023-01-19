@@ -27,8 +27,8 @@
 #include "Gem/State.h"
 #include "Gem/GLStack.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL,
-                            t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol*, A_DEFSYMBOL,
+                            t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -38,7 +38,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(gemcubeframebuffer, t_symbol *, A_DEFSYMBOL,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemcubeframebuffer :: gemcubeframebuffer(t_symbol *format, t_symbol *type)
+gemcubeframebuffer :: gemcubeframebuffer(t_symbol* format, t_symbol* type)
   : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
     m_depthBufferIndex(0),
     m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0), m_face(0),

@@ -41,7 +41,7 @@ public:
 
   //////////
   // Constructor
-  fragment_program(t_symbol *filename);
+  fragment_program(t_symbol* filename);
 
 protected:
 

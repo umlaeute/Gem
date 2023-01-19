@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include "Gem/Cache.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol*, A_DEFSYMBOL);
 
 
 
@@ -45,7 +45,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_image, t_symbol *, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_image :: pix_image(t_symbol *filename) :
+pix_image :: pix_image(t_symbol* filename) :
   m_wantThread(true),
   m_loadedImage(NULL),
   m_id(gem::image::load::INVALID),

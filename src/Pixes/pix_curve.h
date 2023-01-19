@@ -63,7 +63,7 @@ protected:
 
   //////////
   // tables to hold the curves
-  t_symbol *name_R, *name_G, *name_B, *name_A;
+  t_symbol* name_R, *name_G, *name_B, *name_A;
 
   //////////
   // mode

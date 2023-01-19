@@ -29,7 +29,7 @@ static char mytolower(char in)
 }
 };
 
-CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYMBOL);
+CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //
@@ -39,7 +39,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-model :: model(t_symbol *filename) :
+model :: model(t_symbol* filename) :
   m_loader(gem::plugins::modelloader::getInstance()),
   m_loaded(false),
   m_size_change_flag(false),
@@ -443,7 +443,7 @@ void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
   if(argc) {
     for(i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
-        t_symbol *b=atom_getsymbol(argv+i);
+        t_symbol* b=atom_getsymbol(argv+i);
         m_backends.push_back(b->s_name);
       } else {
         error("%s must be symbolic", s->s_name);

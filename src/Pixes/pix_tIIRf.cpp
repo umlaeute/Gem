@@ -294,7 +294,7 @@ void pix_tIIRf :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "list", listMess);
 }
 
-void pix_tIIRf :: setMess(t_symbol *s, int argc, t_atom* argv)
+void pix_tIIRf :: setMess(t_symbol* s, int argc, t_atom* argv)
 {
   m_set = SET;
   if(argc>0 && atom_getint(argv)==0) {
@@ -303,7 +303,7 @@ void pix_tIIRf :: setMess(t_symbol *s, int argc, t_atom* argv)
   setPixModified();
 }
 
-void pix_tIIRf :: listMess(t_symbol *s, int argc, t_atom* argv)
+void pix_tIIRf :: listMess(t_symbol* s, int argc, t_atom* argv)
 {
   int i=0;
   if(argc != (m_fbnum+m_ffnum)) {

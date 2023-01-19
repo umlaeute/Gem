@@ -126,7 +126,7 @@ private:
 
   friend class    gemhead;
   static void   obj_setupCallback(t_class *classPtr);
-  static void   gem_MessCallback(void *, t_symbol *,int, t_atom*);
+  static void   gem_MessCallback(void *, t_symbol*,int, t_atom*);
 
   /* whether the object is internally disabled or not
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features

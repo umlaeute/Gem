@@ -44,7 +44,7 @@ public:
 
   //////////
   // Constructor
-  gemcubeframebuffer(t_symbol *format, t_symbol *type);
+  gemcubeframebuffer(t_symbol* format, t_symbol* type);
 
 protected:
 

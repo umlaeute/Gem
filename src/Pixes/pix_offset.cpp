@@ -375,7 +375,7 @@ void pix_offset :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&pix_offset::saturateMessCallback),
                   gensym("saturate"), A_FLOAT, A_NULL);
 }
-void pix_offset :: vecOffsetMessCallback(void *data, t_symbol *, int argc,
+void pix_offset :: vecOffsetMessCallback(void *data, t_symbol*, int argc,
     t_atom *argv)
 {
   GetMyClass(data)->vecOffsetMess(argc, argv);

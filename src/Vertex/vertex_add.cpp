@@ -226,7 +226,7 @@ void vertex_add :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&vertex_add::typeMessCallback),
                   gensym("type"), A_GIMME, A_NULL);
 }
-void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc,
+void vertex_add :: gem_rightMessCallback(void *data, t_symbol* s, int argc,
     t_atom *argv)
 {
   if (argc==1 && argv->a_type==A_FLOAT) {
@@ -238,7 +238,7 @@ void vertex_add :: gem_rightMessCallback(void *data, t_symbol *s, int argc,
     GetMyClass(data)->error("wrong righthand arguments....");
   }
 }
-void vertex_add :: typeMessCallback(void *data, t_symbol *s, int argc,
+void vertex_add :: typeMessCallback(void *data, t_symbol* s, int argc,
                                     t_atom *argv)
 {
   GetMyClass(data)->typeMess(argc, argv);

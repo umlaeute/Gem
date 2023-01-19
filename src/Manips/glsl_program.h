@@ -149,7 +149,7 @@ private:
 
   //////////
   // static member functions
-  static void paramMessCallback (void *data, t_symbol *, int, t_atom*);
+  static void paramMessCallback (void *data, t_symbol*, int, t_atom*);
 
   static void intypeMessCallback  (void *, t_symbol*, int, t_atom*);
   static void outtypeMessCallback  (void *, t_symbol*, int, t_atom*);

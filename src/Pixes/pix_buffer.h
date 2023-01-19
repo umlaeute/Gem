@@ -56,7 +56,7 @@ public:
 
   //////////
   // Constructor
-  pix_buffer(t_symbol *s,t_float f);
+  pix_buffer(t_symbol* s,t_float f);
   virtual bool  putMess(imageStruct*img,unsigned int pos);
   virtual imageStruct* getMess(unsigned int pos);
   virtual unsigned int numFrames(void);
@@ -84,7 +84,7 @@ public:
 protected:
   imageStruct    *m_buffer;
   unsigned int m_numframes;
-  t_symbol *m_bindname;
+  t_symbol* m_bindname;
 
   gem::Properties m_writeprops;
 

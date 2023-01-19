@@ -724,7 +724,7 @@ void pix_convolve :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&pix_convolve::chromaMessCallback),
                   gensym("chroma"), A_FLOAT, A_NULL);
 }
-void pix_convolve :: matrixMessCallback(void *data, t_symbol *, int argc,
+void pix_convolve :: matrixMessCallback(void *data, t_symbol*, int argc,
                                         t_atom *argv)
 {
   GetMyClass(data)->matrixMess(argc, argv);

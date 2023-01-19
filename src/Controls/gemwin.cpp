@@ -567,7 +567,7 @@ void gemwin :: lightingMessCallback(void *, t_float state)
 {
   GemMan::lightingOnOff(static_cast<int>(state));
 }
-void gemwin :: fogMessCallback(void *data, t_symbol *, int argc,
+void gemwin :: fogMessCallback(void *data, t_symbol*, int argc,
                                t_atom *argv)
 {
   switch (argc) {
@@ -639,7 +639,7 @@ void gemwin :: frameMessCallback(void *, t_float rate)
 {
   GemMan::frameRate(static_cast<float>(rate));
 }
-void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc,
+void gemwin :: perspectiveMessCallback(void *data, t_symbol*, int argc,
                                        t_atom *argv)
 {
   if (argc != 6) {
@@ -653,7 +653,7 @@ void gemwin :: perspectiveMessCallback(void *data, t_symbol *, int argc,
   GemMan::m_perspect[4] = atom_getfloat(&argv[4]);      // front
   GemMan::m_perspect[5] = atom_getfloat(&argv[5]);      // back
 }
-void gemwin :: viewMessCallback(void *data, t_symbol *, int argc,
+void gemwin :: viewMessCallback(void *data, t_symbol*, int argc,
                                 t_atom *argv)
 {
   const float DEG2RAD = 0.01745329251994f;

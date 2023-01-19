@@ -22,7 +22,7 @@
 #include "Gem/State.h"
 #include "Gem/ImageIO.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYMBOL,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol*, A_DEFSYMBOL,
                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
@@ -35,7 +35,7 @@ pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_multiimage :: pix_multiimage(t_symbol *filename, t_floatarg baseImage,
+pix_multiimage :: pix_multiimage(t_symbol* filename, t_floatarg baseImage,
                                  t_floatarg topImage, t_floatarg skipRate)
   : m_numImages(0), m_curImage(-1), m_loadedCache(NULL)
 {
@@ -70,7 +70,7 @@ pix_multiimage :: ~pix_multiimage()
 // openMess
 //
 /////////////////////////////////////////////////////////
-void pix_multiimage :: openMess(t_symbol *filename, int baseImage,
+void pix_multiimage :: openMess(t_symbol* filename, int baseImage,
                                 int topImage, int skipRate)
 {
   cleanImages();
@@ -321,7 +321,7 @@ void pix_multiimage :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&pix_multiimage::changeImageCallback),
                   gensym("img_num"), A_FLOAT, A_NULL);
 }
-void pix_multiimage :: openMessCallback(void *data, t_symbol *filename,
+void pix_multiimage :: openMessCallback(void *data, t_symbol* filename,
                                         t_float baseImage,
                                         t_floatarg topImage, t_floatarg skipRate)
 {

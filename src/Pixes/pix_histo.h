@@ -63,7 +63,7 @@ protected:
 
   //////////
   // tables to hold the curves
-  t_symbol *name_R, *name_G, *name_B, *name_A;
+  t_symbol* name_R, *name_G, *name_B, *name_A;
 
   //////////
   // mode
@@ -80,7 +80,7 @@ protected:
 
   //////////
   // the methods
-  static void setMessCallback(void *data, t_symbol *s, int argc,
+  static void setMessCallback(void *data, t_symbol* s, int argc,
                               t_atom* argv);
 
 };

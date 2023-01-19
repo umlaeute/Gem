@@ -52,7 +52,7 @@ public:
 
   //////////
   // Constructor
-  multimodel(t_symbol *filename, t_floatarg baseModel, t_floatarg topModel,
+  multimodel(t_symbol* filename, t_floatarg baseModel, t_floatarg topModel,
              t_floatarg skipRate);
 
 protected:

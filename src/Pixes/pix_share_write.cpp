@@ -425,7 +425,7 @@ void pix_share_write :: obj_setupCallback(t_class *classPtr)
                   gensym("set"), A_GIMME, A_NULL);
 }
 
-void pix_share_write :: setMessCallback(void *data, t_symbol *s, int argc,
+void pix_share_write :: setMessCallback(void *data, t_symbol* s, int argc,
                                         t_atom *argv)
 {
   if(argc) {

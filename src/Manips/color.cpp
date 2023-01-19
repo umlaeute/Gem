@@ -86,7 +86,7 @@ void color :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&color::colorMessCallback),
                   gensym("color"), A_GIMME, A_NULL);
 }
-void color :: colorMessCallback(void *data, t_symbol *, int argc,
+void color :: colorMessCallback(void *data, t_symbol*, int argc,
                                 t_atom *argv)
 {
   float alpha = 1;

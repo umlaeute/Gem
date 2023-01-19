@@ -98,7 +98,7 @@ void emission :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&emission::emissionMessCallback),
                   gensym("emission"), A_GIMME, A_NULL);
 }
-void emission :: emissionMessCallback(void *data, t_symbol *, int argc,
+void emission :: emissionMessCallback(void *data, t_symbol*, int argc,
                                       t_atom *argv)
 {
   float alpha = 1;

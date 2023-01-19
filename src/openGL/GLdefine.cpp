@@ -42,7 +42,7 @@ GLdefine :: ~GLdefine ()
 /////////////////////////////////////////////////////////
 // Variables
 //
-void GLdefine :: symMess (t_symbol *s)          // FUN
+void GLdefine :: symMess (t_symbol* s)          // FUN
 {
   t_atom ap;
   SETSYMBOL(&ap, s);
@@ -100,11 +100,11 @@ void GLdefine :: obj_setupCallback(t_class *classPtr)
   class_addanything(classPtr, GLdefine::anyMessCallback);
 };
 
-void GLdefine :: symMessCallback (void* data, t_symbol *arg0)
+void GLdefine :: symMessCallback (void* data, t_symbol* arg0)
 {
   GetMyClass(data)->symMess (arg0);
 }
-void GLdefine :: anyMessCallback (void* data, t_symbol *arg0, int argc,
+void GLdefine :: anyMessCallback (void* data, t_symbol* arg0, int argc,
                                   t_atom*argv)
 {
   GetMyClass(data)->symMess (arg0);
@@ -113,7 +113,7 @@ void GLdefine :: bangMessCallback (void* data)
 {
   GetMyClass(data)->bangMess ();
 }
-void GLdefine :: listMessCallback (void* data, t_symbol *arg0, int argc,
+void GLdefine :: listMessCallback (void* data, t_symbol* arg0, int argc,
                                    t_atom*argv)
 {
   GetMyClass(data)->listMess (argc, argv);

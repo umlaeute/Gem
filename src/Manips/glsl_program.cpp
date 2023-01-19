@@ -1043,12 +1043,12 @@ void glsl_program :: linkMess(t_symbol*, int argc, t_atom*argv)
     shaderMess(argc, argv);
   }
 }
-void glsl_program :: paramMessCallback(void *data, t_symbol *s, int argc,
+void glsl_program :: paramMessCallback(void *data, t_symbol* s, int argc,
                                        t_atom *argv)
 {
   GetMyClass(data)->paramMess(s, argc, argv);
 }
-void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc,
+void glsl_program :: intypeMessCallback(void *data, t_symbol* s, int argc,
                                         t_atom *argv)
 {
   if(argc==1) {
@@ -1057,7 +1057,7 @@ void glsl_program :: intypeMessCallback(void *data, t_symbol *s, int argc,
     GetMyClass(data)->error("input-type must be exactly one parameter");
   }
 }
-void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc,
+void glsl_program :: outtypeMessCallback(void *data, t_symbol* s, int argc,
     t_atom *argv)
 {
   if(argc==1) {
@@ -1066,7 +1066,7 @@ void glsl_program :: outtypeMessCallback(void *data, t_symbol *s, int argc,
     GetMyClass(data)->error("output type must be exactly one parameter");
   }
 }
-void glsl_program :: typeMessCallback(void *data, t_symbol *s, int argc,
+void glsl_program :: typeMessCallback(void *data, t_symbol* s, int argc,
                                       t_atom *argv)
 {
   if(argc==2) {

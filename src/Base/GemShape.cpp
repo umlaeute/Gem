@@ -192,7 +192,7 @@ void GemShape :: sizeMess(float size)
 // typeMess
 //
 /////////////////////////////////////////////////////////
-void GemShape :: typeMess(t_symbol *type)
+void GemShape :: typeMess(t_symbol* type)
 {
   if(0==m_drawTypes.size()) {
     error("unable to change drawstyle");

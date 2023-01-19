@@ -192,7 +192,7 @@ private:
   //////////
   // Static member functions
   static void     obj_setupCallback(t_class *classPtr);
-  static void     gem_rightMessCallback(void *x, t_symbol *s, int argc,
+  static void     gem_rightMessCallback(void *x, t_symbol* s, int argc,
                                         t_atom *argv);
 };
 #endif  // for header file

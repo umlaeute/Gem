@@ -116,7 +116,7 @@ void pix_writer :: obj_setupCallback(t_class *classPtr)
                   gensym("auto"), A_FLOAT, A_NULL);
 }
 
-void pix_writer :: fileMessCallback(void *data, t_symbol *s, int argc,
+void pix_writer :: fileMessCallback(void *data, t_symbol* s, int argc,
                                     t_atom *argv)
 {
   GetMyClass(data)->fileMess(argc, argv);

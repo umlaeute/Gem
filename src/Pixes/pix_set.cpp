@@ -114,7 +114,7 @@ void pix_set :: postrender(GemState *state)
 // DATAMess
 //
 /////////////////////////////////////////////////////////
-void pix_set :: DATAMess(t_symbol *s, int argc, t_atom *argv)
+void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
 {
   int picturesize, counter, n;
   int i = 0;
@@ -278,7 +278,7 @@ void pix_set :: SETMess(int xsize, int ysize)
 // CLEARMess
 //
 /////////////////////////////////////////////////////////
-void pix_set :: FILLMess(t_symbol *s, int argc, t_atom *argv)
+void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
 {
   unsigned char   *buffer;
   unsigned char r,g,b,a;

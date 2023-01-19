@@ -145,7 +145,7 @@ void pix_coordinate :: obj_setupCallback(t_class *classPtr)
                   reinterpret_cast<t_method>(&pix_coordinate::coordsMessCallback),
                   gensym("coords"), A_GIMME, A_NULL);
 }
-void pix_coordinate :: coordsMessCallback(void *data, t_symbol *, int argc,
+void pix_coordinate :: coordsMessCallback(void *data, t_symbol*, int argc,
     t_atom *argv)
 {
   GetMyClass(data)->coordsMess(argc, argv);

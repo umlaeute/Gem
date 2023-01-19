@@ -106,7 +106,7 @@ void part_targetcolor :: obj_setupCallback(t_class *classPtr)
                   gensym("color"), A_GIMME, A_NULL);
   CPPEXTERN_MSG1(classPtr, "ft1", scaleMess, float);
 }
-void part_targetcolor :: colorMessCallback(void *data, t_symbol *,
+void part_targetcolor :: colorMessCallback(void *data, t_symbol*,
     int argc, t_atom *argv)
 {
   float alpha = 1;

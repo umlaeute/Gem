@@ -52,7 +52,7 @@ public:
 
   //////////
   // Constructor
-  model(t_symbol *filename);
+  model(t_symbol* filename);
 
 protected:
 

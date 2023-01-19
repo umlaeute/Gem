@@ -42,7 +42,7 @@ public:
   //////////
   // Constructor
   glsl_fragment(void);
-  glsl_fragment(t_symbol *filename);
+  glsl_fragment(t_symbol* filename);
 
 protected:
 

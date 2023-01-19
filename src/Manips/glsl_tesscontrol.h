@@ -37,7 +37,7 @@ public:
   //////////
   // Constructor
   glsl_tesscontrol(void);
-  glsl_tesscontrol(t_symbol *filename);
+  glsl_tesscontrol(t_symbol* filename);
 
 protected:
 
