@@ -187,91 +187,91 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // NO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW(NEW_CLASS)                     \
-  REAL_NEW__CLASS(NEW_CLASS);                    \
-  static void* create_ ## NEW_CLASS (void)       \
-    REAL_NEW__CREATE1(NEW_CLASS)                 \
-    obj->data = new NEW_CLASS();                 \
-    REAL_NEW__CREATE2(NEW_CLASS)                 \
-    REAL_NEW__SETUP1(NEW_CLASS)                  \
-    REAL_NEW__SETUP2(NEW_CLASS)
-
-//
-// ONE ARGUMENT
-/////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_ONE_ARG(NEW_CLASS, TYPE, PD_TYPE)    \
-  REAL_NEW__CLASS(NEW_CLASS);                    \
-  static void* create_ ## NEW_CLASS (TYPE arg)   \
-    REAL_NEW__CREATE1(NEW_CLASS)                 \
-    obj->data = new NEW_CLASS(arg);              \
-    REAL_NEW__CREATE2(NEW_CLASS)                 \
-    REAL_NEW__SETUP1(NEW_CLASS)                  \
-         PD_TYPE,                                \
+#define CPPEXTERN_NEW(NEW_CLASS)                \
+  REAL_NEW__CLASS(NEW_CLASS);                   \
+  static void* create_ ## NEW_CLASS (void)      \
+    REAL_NEW__CREATE1(NEW_CLASS)                \
+    obj->data = new NEW_CLASS();                \
+  REAL_NEW__CREATE2(NEW_CLASS)                  \
+  REAL_NEW__SETUP1(NEW_CLASS)                   \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 //
 // GIMME ARGUMENT
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)                     \
-  REAL_NEW__CLASS(NEW_CLASS);                    \
+#define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)                             \
+  REAL_NEW__CLASS(NEW_CLASS);                                           \
   static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) \
-    REAL_NEW__CREATE1(NEW_CLASS)                 \
-       obj->data = new NEW_CLASS(argc,argv);     \
-    REAL_NEW__CREATE2(NEW_CLASS)                 \
-    REAL_NEW__SETUP1(NEW_CLASS)                  \
-         A_GIMME,              \
+    REAL_NEW__CREATE1(NEW_CLASS)                                        \
+    obj->data = new NEW_CLASS(argc,argv);                               \
+  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__SETUP1(NEW_CLASS)                                           \
+  A_GIMME,                                                              \
+    REAL_NEW__SETUP2(NEW_CLASS)
+
+//
+// ONE ARGUMENT
+/////////////////////////////////////////////////
+#define CPPEXTERN_NEW_WITH_ONE_ARG(NEW_CLASS, TYPE1, PD_TYPE1)  \
+  REAL_NEW__CLASS(NEW_CLASS);                                   \
+  static void* create_ ## NEW_CLASS (TYPE1 arg)                 \
+    REAL_NEW__CREATE1(NEW_CLASS)                                \
+    obj->data = new NEW_CLASS(arg);                             \
+  REAL_NEW__CREATE2(NEW_CLASS)                                  \
+  REAL_NEW__SETUP1(NEW_CLASS)                                   \
+  PD_TYPE1,                                                     \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 //
 // TWO ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO)     \
-  REAL_NEW__CLASS(NEW_CLASS);                     \
-  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2) \
-    REAL_NEW__CREATE1(NEW_CLASS)           \
-    obj->data = new NEW_CLASS(arg, arg2);  \
-    REAL_NEW__CREATE2(NEW_CLASS)           \
-    REAL_NEW__SETUP1(NEW_CLASS)            \
-         PD_TYPE, PD_TWO,                  \
+#define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2) \
+  REAL_NEW__CLASS(NEW_CLASS);                                           \
+  static void* create_ ## NEW_CLASS (TYPE1 arg, TYPE2 arg2)             \
+    REAL_NEW__CREATE1(NEW_CLASS)                                        \
+    obj->data = new NEW_CLASS(arg, arg2);                               \
+  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__SETUP1(NEW_CLASS)                                           \
+  PD_TYPE1, PD_TYPE2,                                                   \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 //
 // THREE ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE) \
-  REAL_NEW__CLASS(NEW_CLASS);                        \
-  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3)  \
-    REAL_NEW__CREATE1(NEW_CLASS)                    \
-       obj->data = new NEW_CLASS(arg, arg2, arg3);  \
-    REAL_NEW__CREATE2(NEW_CLASS)                    \
-    REAL_NEW__SETUP1(NEW_CLASS)                     \
-         PD_TYPE, PD_TWO, PD_THREE,                 \
+#define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3) \
+  REAL_NEW__CLASS(NEW_CLASS);                                           \
+  static void* create_ ## NEW_CLASS (TYPE1 arg, TYPE2 arg2, TYPE3 arg3) \
+    REAL_NEW__CREATE1(NEW_CLASS)                                        \
+    obj->data = new NEW_CLASS(arg, arg2, arg3);                         \
+  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__SETUP1(NEW_CLASS)                                           \
+  PD_TYPE1, PD_TYPE2, PD_TYPE3,                                         \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 //
 // FOUR ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_FOUR_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR) \
-  REAL_NEW__CLASS(NEW_CLASS);                             \
-  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3, TFOUR arg4) \
-    REAL_NEW__CREATE1(NEW_CLASS)                         \
-       obj->data = new NEW_CLASS(arg, arg2, arg3, arg4); \
-    REAL_NEW__CREATE2(NEW_CLASS)                         \
-    REAL_NEW__SETUP1(NEW_CLASS)                          \
-         PD_TYPE, PD_TWO, PD_THREE, PD_FOUR,             \
+#define CPPEXTERN_NEW_WITH_FOUR_ARGS(NEW_CLASS, TYPE, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3, TYPE4, PD_TYPE4) \
+  REAL_NEW__CLASS(NEW_CLASS);                                           \
+  static void* create_ ## NEW_CLASS (TYPE arg, TYPE2 arg2, TYPE3 arg3, TYPE4 arg4) \
+    REAL_NEW__CREATE1(NEW_CLASS)                                        \
+    obj->data = new NEW_CLASS(arg, arg2, arg3, arg4);                   \
+  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__SETUP1(NEW_CLASS)                                           \
+  PD_TYPE1, PD_TYPE2, PD_TYPE3, PD_TYPE4,                               \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 //
 // FIVE ARGUMENTS
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_WITH_FIVE_ARGS(NEW_CLASS, TYPE, PD_TYPE, TTWO, PD_TWO, TTHREE, PD_THREE, TFOUR, PD_FOUR, TFIVE, PD_FIVE) \
-  REAL_NEW__CLASS(NEW_CLASS);                                   \
-  static void* create_ ## NEW_CLASS (TYPE arg, TTWO arg2, TTHREE arg3, TFOUR arg4, TFIVE arg5) \
-    REAL_NEW__CREATE1(NEW_CLASS)                               \
-       obj->data = new NEW_CLASS(arg, arg2, arg3, arg4, arg5); \
-    REAL_NEW__CREATE2(NEW_CLASS)                               \
-    REAL_NEW__SETUP1(NEW_CLASS)                                \
-         PD_TYPE, PD_TWO, PD_THREE, PD_FOUR, PD_FIVE           \
+#define CPPEXTERN_NEW_WITH_FIVE_ARGS(NEW_CLASS, TYPE, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3, TYPE4, PD_TYPE4, TYPE5, PD_TYPE5) \
+  REAL_NEW__CLASS(NEW_CLASS);                                           \
+  static void* create_ ## NEW_CLASS (TYPE arg, TYPE2 arg2, TYPE3 arg3, TYPE4 arg4, TYPE5 arg5) \
+    REAL_NEW__CREATE1(NEW_CLASS)                                        \
+    obj->data = new NEW_CLASS(arg, arg2, arg3, arg4, arg5);             \
+  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__SETUP1(NEW_CLASS)                                           \
+  PD_TYPE1, PD_TYPE2, PD_TYPE3, PD_TYPE4, PD_TYPE5,                     \
     REAL_NEW__SETUP2(NEW_CLASS)
 
 
