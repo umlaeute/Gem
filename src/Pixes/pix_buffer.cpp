@@ -82,7 +82,7 @@ static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYM,t_float,
+CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYMBOL,t_float,
                             A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer),
                    gensym("pix_depot"),
-                   A_DEFSYM, A_DEFFLOAT, A_NULL);
+                   A_DEFSYMBOL, A_DEFFLOAT, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "resize", resizeMess, int);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);

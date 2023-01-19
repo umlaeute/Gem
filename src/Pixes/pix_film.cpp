@@ -136,7 +136,7 @@ static std::vector<std::string> split(const std::string &s, char delim)
   return split(s, delim, elems);
 }
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_film, t_symbol *, A_DEFSYMBOL);
 
 #ifdef HAVE_PTHREADS
 /* the "capturing"-thread */
@@ -707,7 +707,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
     ::verbose(2, "not registering [pix_filmQT] again...");
   } else {
     class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film),
-                     gensym("pix_filmQT"), A_DEFSYM, A_NULL);
+                     gensym("pix_filmQT"), A_DEFSYMBOL, A_NULL);
   }
 
   class_addmethod(classPtr,

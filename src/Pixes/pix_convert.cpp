@@ -19,7 +19,7 @@
 
 #include "pix_convert.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_convert, t_symbol*, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_convert, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

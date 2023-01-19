@@ -887,7 +887,7 @@ public:
 #endif /* DONT_WANT_FREEFRAME */
 
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_freeframe,  t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

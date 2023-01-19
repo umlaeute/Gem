@@ -21,7 +21,7 @@
 #include "Gem/State.h"
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYM,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_imageInPlace, t_symbol *, A_DEFSYMBOL,
                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////

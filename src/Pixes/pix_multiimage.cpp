@@ -22,7 +22,7 @@
 #include "Gem/State.h"
 #include "Gem/ImageIO.h"
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYM,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(pix_multiimage, t_symbol *, A_DEFSYMBOL,
                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 pix_multiimage::multiImageCache *pix_multiimage::s_imageCache = NULL;

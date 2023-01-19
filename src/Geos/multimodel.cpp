@@ -32,7 +32,7 @@ static char mytolower(char in)
 };
 
 
-CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYM, t_floatarg,
+CPPEXTERN_NEW_WITH_FOUR_ARGS(multimodel, t_symbol *, A_DEFSYMBOL, t_floatarg,
                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////

@@ -17,7 +17,7 @@
 
 #include "glsl_tesscontrol.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(glsl_tesscontrol, t_symbol *, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(glsl_tesscontrol, t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

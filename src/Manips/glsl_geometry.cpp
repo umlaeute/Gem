@@ -17,7 +17,7 @@
 
 #include "glsl_geometry.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(glsl_geometry, t_symbol *, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(glsl_geometry, t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

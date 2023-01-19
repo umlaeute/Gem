@@ -29,7 +29,7 @@ static char mytolower(char in)
 }
 };
 
-CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol *, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

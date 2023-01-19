@@ -17,7 +17,7 @@
 
 #include "pix_flip.h"
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_flip, t_symbol*, A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_flip, t_symbol*, A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 //

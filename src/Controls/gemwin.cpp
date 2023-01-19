@@ -459,10 +459,10 @@ void gemwin :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "render", renderMess);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&gemwin::titleMessCallback),
-                  gensym("title"), A_DEFSYM,A_NULL);
+                  gensym("title"), A_DEFSYMBOL,A_NULL);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&gemwin::createMessCallback),
-                  gensym("create"), A_DEFSYM,A_NULL);
+                  gensym("create"), A_DEFSYMBOL,A_NULL);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&gemwin::createStereoMessCallback),
                   gensym("createStereo"), A_NULL);

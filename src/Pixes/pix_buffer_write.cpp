@@ -32,7 +32,7 @@ extern t_class *pix_buffer_class;
 //
 /////////////////////////////////////////////////////////
 
-CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYM);
+CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYMBOL);
 
 /////////////////////////////////////////////////////////
 // Constructor
@@ -122,7 +122,7 @@ void pix_buffer_write :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer_write),
                    gensym("pix_put"),
-                   A_DEFSYM, A_NULL);
+                   A_DEFSYMBOL, A_NULL);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&pix_buffer_write::setMessCallback),
                   gensym("set"), A_SYMBOL, A_NULL);
