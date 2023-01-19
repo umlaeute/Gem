@@ -32,6 +32,8 @@ libRTE_la_SOURCES= \
         RTE.h \
         Array.cpp \
         Array.h \
+        Atom.cpp \
+        Atom.h \
         MessageCallbacks.h \
         Outlet.cpp \
         Outlet.h \
