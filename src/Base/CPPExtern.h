@@ -97,7 +97,7 @@ public:
 
   //////////
   // The Pd header
-  t_object          *x_obj;
+  t_object* x_obj;
 
   //////////
   // Destructor
@@ -105,19 +105,19 @@ public:
 
   //////////
   // Get the object's canvas
-  const t_canvas            *getCanvas(void) const
+  const t_canvas* getCanvas(void) const
   {
     return(m_canvas);
   }
 
   //////////
   // This is a holder - don't touch it
-  static t_object     *m_holder;
+  static t_object* m_holder;
 
   //////////
   // my name
-  static const char    *m_holdname;
-  t_symbol             *m_objectname;
+  static const char* m_holdname;
+  t_symbol* m_objectname;
 
 protected:
 
@@ -135,16 +135,15 @@ private:
 
   //////////
   // The canvas that the object is in
-  t_canvas            *m_canvas;
+  t_canvas* m_canvas;
 
 public:
   // these call pd's print-functions, and eventually prepend the object's name
-  void            startpost(const char*format, ...) const;
-  void            post(const char*format, ...) const;
-  void            endpost(void) const;
-  void            verbose(const int level, const char*format, ...) const;
-  void            error(const char*format,
-                        ...) const; /* internally uses pd_error() */
+  void startpost(const char*format, ...) const;
+  void post(const char*format, ...) const;
+  void endpost(void) const;
+  void verbose(const int level, const char*format, ...) const;
+  void error(const char*format, ...) const; /* internally uses pd_error() */
 
   // searches for a file based on the parent abstraction's path
   // wraps open_via_path() and canvas_makefilename()
