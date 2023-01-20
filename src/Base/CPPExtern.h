@@ -191,9 +191,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                           \
   const int typespecs[] = {};                                           \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS();                                          \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -201,9 +201,9 @@ static void obj_setupCallback(t_class *classPtr);
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS)                             \
   REAL_NEW__CLASS(NEW_CLASS);                                           \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS(argc,argv);                                 \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -214,9 +214,9 @@ static void obj_setupCallback(t_class *classPtr);
   const int typespecs[] = {PD_TYPE1};                           \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                      \
   REAL_NEW__MAKEVAR(1, TYPE1);                                  \
-  REAL_NEW__CREATE1(NEW_CLASS)                                  \
+  REAL_NEW__CREATE1(NEW_CLASS);                                 \
   obj->data = new NEW_CLASS(arg1);                              \
-  REAL_NEW__CREATE2(NEW_CLASS)                                  \
+  REAL_NEW__CREATE2(NEW_CLASS);                                 \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -228,9 +228,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS(arg1, arg2);                                \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -243,9 +243,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS(arg1, arg2, arg3);                          \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -259,9 +259,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
   REAL_NEW__MAKEVAR(4, TYPE4);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS(arg1, arg2, arg3, arg4);                    \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 //
@@ -276,9 +276,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
   REAL_NEW__MAKEVAR(4, TYPE4);                                          \
   REAL_NEW__MAKEVAR(5, TYPE5);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS)                                          \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   obj->data = new NEW_CLASS(arg1, arg2, arg3, arg4, arg5);              \
-  REAL_NEW__CREATE2(NEW_CLASS)                                          \
+  REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS)
 
 
@@ -290,8 +290,38 @@ static void obj_setupCallback(t_class *classPtr);
 
 #define REAL_NEW__CLASS(NEW_CLASS)                                      \
   STATIC_CLASS t_class * NEW_CLASS ## _class;                           \
-  static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) { \
-  (void)s
+  static void* create_ ## NEW_CLASS (t_symbol*s, int realargc, t_atom*argv) { \
+  (void)s;                                                              \
+  int argc = realargc;                                                  \
+  t_symbol*my_semi = gensym(";");                                       \
+  for(int i=0; i<realargc; i++) {                                       \
+    if ((A_SYMBOL == argv[i].a_type) && (my_semi == argv[i].a_w.w_symbol)) { \
+      argc=i;                                                           \
+      break;                                                            \
+    }                                                                   \
+  }                                                                     \
+  class NEW_CLASS ## _initmsgclass { public:                            \
+  void forwardmsg(t_pd*x, int argc, t_atom*argv) {                      \
+    if(argc>0) {                                                        \
+      if (A_SYMBOL == argv->a_type)                                     \
+        pd_typedmess(x, argv->a_w.w_symbol, argc-1, argv+1);            \
+      else                                                              \
+        pd_typedmess(x, gensym("list"), argc, argv);                    \
+    }                                                                   \
+  }                                                                     \
+  NEW_CLASS ## _initmsgclass(t_pd*x, int argc, t_atom*argv) {           \
+    if(argc < 0)return;                                                 \
+    int i, start=0;                                                     \
+    t_symbol* semi = gensym(";");                                       \
+    for(i=start; i<argc; i++) {                                     \
+      if ((A_SYMBOL != argv[i].a_type) || (semi != argv[i].a_w.w_symbol)) \
+        continue;                                                       \
+      forwardmsg(x, i-start, argv+start);                               \
+      start = i = i + 1;                                                \
+    }                                                                   \
+    if(i>argc)i=argc;                                                   \
+    if(i>start) forwardmsg(x, i-start, argv+start);                     \
+  } }
 
 
 #define REAL_NEW__CREATE0(NEW_CLASS, types)                             \
@@ -301,18 +331,19 @@ static void obj_setupCallback(t_class *classPtr);
 
 #define REAL_NEW__CREATE1(NEW_CLASS)                                    \
   try {                                                                 \
-  Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-  CPPExtern::m_holder = &obj->pd_obj;                                   \
-  CPPExtern::m_holdname=(char*)#NEW_CLASS;
+    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
+    CPPExtern::m_holder = &obj->pd_obj;                                 \
+    CPPExtern::m_holdname=(char*)#NEW_CLASS
 
-#define REAL_NEW__CREATE2(NEW_CLASS)                            \
-  CPPExtern::m_holder = NULL;                                   \
-  CPPExtern::m_holdname=NULL;                                   \
-  return(obj);                                                          \
+#define REAL_NEW__CREATE2(NEW_CLASS)                                    \
+    if(obj) { NEW_CLASS ## _initmsgclass initmsg((t_pd*)obj, realargc-argc-1, argv+argc+1); } \
+    CPPExtern::m_holder = NULL;                                         \
+    CPPExtern::m_holdname=NULL;                                         \
+    return(obj);                                                        \
   } catch (...) {gem::catchGemException(CPPExtern::m_holdname, CPPExtern::m_holder); return NULL;} \
   }
 
-#define REAL_NEW__SETUP(NEW_CLASS)                                     \
+#define REAL_NEW__SETUP(NEW_CLASS)                                      \
   extern "C" {                                                          \
   GEM_EXPORT void NEW_CLASS ## _setup(void)                             \
   {                                                                     \
