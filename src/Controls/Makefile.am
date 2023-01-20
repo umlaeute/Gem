@@ -18,6 +18,8 @@ libControls_la_LIBADD   += $(GEM_RTE_LIBS)
 libControls_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
 libControls_la_SOURCES=  \
+    gemargs.cpp \
+    gemargs.h \
     gemframebuffer.cpp \
     gemframebuffer.h \
     gemcubeframebuffer.cpp \
