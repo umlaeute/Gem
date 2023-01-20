@@ -294,6 +294,7 @@ static void obj_setupCallback(t_class *classPtr);
   (void)s;                                                              \
   int argc = realargc;                                                  \
   t_symbol*my_semi = gensym(";");                                       \
+  if (GEM_ARGMESSAGES)                                                  \
   for(int i=0; i<realargc; i++) {                                       \
     if ((A_SYMBOL == argv[i].a_type) && (my_semi == argv[i].a_w.w_symbol)) { \
       argc=i;                                                           \
@@ -426,6 +427,9 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef GEM_CLASSFLAGS
 # define GEM_CLASSFLAGS 0
+#endif
+#ifndef GEM_ARGMESSAGES
+# define GEM_ARGMESSAGES 1
 #endif
 
 // macros for boilerplate code to object messages
