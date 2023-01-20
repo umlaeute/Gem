@@ -313,14 +313,14 @@ static void obj_setupCallback(t_class *classPtr);
     if(argc < 0)return;                                                 \
     int i, start=0;                                                     \
     t_symbol* semi = gensym(";");                                       \
-    for(i=start; i<argc; i++) {                                     \
+    for(i=start; i<argc; i++) {                                         \
       if ((A_SYMBOL != argv[i].a_type) || (semi != argv[i].a_w.w_symbol)) \
         continue;                                                       \
       forwardmsg(x, i-start, argv+start);                               \
       start = i = i + 1;                                                \
     }                                                                   \
     if(i>argc)i=argc;                                                   \
-    if(i>start) forwardmsg(x, i-start, argv+start);                     \
+    if(i>start)forwardmsg(x, i-start, argv+start);                      \
   } }
 
 
