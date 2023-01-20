@@ -181,7 +181,7 @@ void sphere3d :: setSpherical(int i, int j,
 // render
 //
 /////////////////////////////////////////////////////////
-void sphere3d :: render(GemState *state)
+void sphere3d :: renderShape(GemState *state)
 {
   GLint slices=m_numSlices;
   GLint stacks=m_numStacks;

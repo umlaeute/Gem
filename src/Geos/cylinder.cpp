@@ -58,7 +58,7 @@ void cylinder :: setupParameters(void)
   slices=m_numSlices;
   stacks=m_numSlices;
 }
-void cylinder :: render(GemState *state)
+void cylinder :: renderShape(GemState *state)
 {
   setupParameters();
   if(m_drawType==GL_DEFAULT_GEM) {

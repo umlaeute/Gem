@@ -86,7 +86,7 @@ void torus :: innerRadius(float radius)
 // render
 //
 /////////////////////////////////////////////////////////
-void torus :: render(GemState *state)
+void torus :: renderShape(GemState *state)
 {
   TexCoord*texCoords=NULL;
   bool lighting = false;

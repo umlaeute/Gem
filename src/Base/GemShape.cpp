@@ -227,8 +227,11 @@ void GemShape :: blendMess(float blend)
 
 void GemShape :: render(GemState *state)
 {
-  if (m_drawType == GL_LINE_LOOP || m_drawType == GL_LINE_STRIP
-      || m_drawType == GL_LINES) {
+  if (m_drawType == GL_LINE_LOOP
+      || m_drawType == GL_LINE_STRIP
+      || m_drawType == GL_LINES
+      || m_drawType == GL_LINE
+    ) {
     glLineWidth(m_linewidth);
   }
 

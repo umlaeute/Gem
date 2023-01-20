@@ -238,7 +238,7 @@ void sphere :: createSphere(GemState *state)
 // render
 //
 /////////////////////////////////////////////////////////
-void sphere :: render(GemState *state)
+void sphere :: renderShape(GemState *state)
 {
   GLdouble radius=m_size;
   GLint slices=(m_numSlices>0)?m_numSlices:10;

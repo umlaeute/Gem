@@ -48,7 +48,7 @@ protected:
 
   //////////
   // Do the rendering
-  virtual void    render(GemState *state);
+  virtual void    renderShape(GemState *state);
 
   virtual void    createSphere3d(void);
 
