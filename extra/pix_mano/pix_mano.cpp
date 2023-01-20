@@ -31,7 +31,7 @@
 
 #include "pix_mano.h"
 
-CPPEXTERN_NEW(pix_mano)
+CPPEXTERN_NEW(pix_mano);
 
 class pix_mano::PIMPL
 {

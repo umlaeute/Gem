@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-CPPEXTERN_NEW(pix_artoolkit)
+CPPEXTERN_NEW(pix_artoolkit);
 
 #ifndef M_PI
 # ifdef PI
