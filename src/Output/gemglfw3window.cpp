@@ -927,6 +927,16 @@ void gemglfw3window::charCallback(unsigned int character)
 void gemglfw3window::mousebuttonCallback(int button, int action, int mods)
 {
   int devID=0;
+  switch(button) {
+  default: break;
+    /* 'middle' and 'right' button are swapped in GLFW */
+  case GLFW_MOUSE_BUTTON_MIDDLE:
+    button=GLFW_MOUSE_BUTTON_RIGHT;
+    break;
+  case GLFW_MOUSE_BUTTON_RIGHT:
+    button=GLFW_MOUSE_BUTTON_MIDDLE;
+    break;
+  }
   gemglfw3window:: button(devID, button, action);
 }
 void gemglfw3window::mouseposCallback(float x, float y)
