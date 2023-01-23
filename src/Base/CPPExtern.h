@@ -420,7 +420,7 @@ extern "C" {
 #endif /* HELPSYMBOL */
 
 #define REAL_NEW__MAKEVAR(num, type)     \
-  type arg##num = gem::RTE::Atom(num > argc?0:(argv+num-1))
+  type arg##num = (num>argc)?gem::RTE::Atom():gem::RTE::Atom(argv+num-1)
 
 ///////////////////////////////////////////////////////////////////////////////
 // setting the class-flags

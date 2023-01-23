@@ -102,10 +102,14 @@ gem::RTE::Atom&gem::RTE::Atom::operator=(double f)
 
 std::string gem::RTE::Atom::getString(void) const
 {
+  if(A_NULL == m_pimpl->atom.a_type)
+    return "";
   return std::string(atom_getsymbol(&m_pimpl->atom)->s_name);
 }
 t_symbol* gem::RTE::Atom::getSymbol(void) const
 {
+  if(A_NULL == m_pimpl->atom.a_type)
+    return gensym("");
   return atom_getsymbol(&m_pimpl->atom);
 }
 double gem::RTE::Atom::getFloat(void) const
