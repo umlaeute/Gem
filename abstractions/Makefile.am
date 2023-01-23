@@ -8,6 +8,9 @@ nodist_gemabs_DATA = \
 	gemdefaultwindow.pd
 
 dist_gemabs_DATA = \
+	gemargs-help.pd \
+	gemargs-test.pd \
+	gemargs.pd \
 	gemhead.pd \
 	gemkeyboard.pd \
 	gemkeyname.pd \
