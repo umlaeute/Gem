@@ -49,8 +49,8 @@ gemargs :: gemargs(int depth)
 
   m_argcanvas = canvas;
 
-  m_msgout = outlet_new(this->x_obj, 0);
   m_argout = outlet_new(this->x_obj, 0);
+  m_msgout = outlet_new(this->x_obj, 0);
 }
 
 /////////////////////////////////////////////////////////
