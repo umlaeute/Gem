@@ -116,7 +116,7 @@ double gem::RTE::Atom::getFloat(void) const
 {
   return atom_getfloat(&m_pimpl->atom);
 }
-t_atom*gem::RTE::Atom::getRTEAtom(void) const
+const t_atom*gem::RTE::Atom::getRTEAtom(void) const
 {
   return&m_pimpl->atom;
 }

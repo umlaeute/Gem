@@ -47,7 +47,7 @@ public:
   virtual std::string getString(void) const;
   virtual struct _symbol*getSymbol(void) const;
   virtual double getFloat(void) const;
-  virtual struct _atom*getRTEAtom(void) const;
+  virtual const struct _atom*getRTEAtom(void) const;
 
   virtual operator std::string(void)
   {
@@ -59,7 +59,7 @@ public:
     return getSymbol();
   }
 
-  virtual operator struct _atom*(void)
+  virtual operator const struct _atom*(void)
   {
     return getRTEAtom();
   }
