@@ -226,11 +226,11 @@ AC_CHECK_LIB([dl],[dlopen])
 ## w32 compatibility library
 #AC_CHECK_LIB([OLDNAMES], [close])
 #AC_CHECK_LIB([coldname], [close])
-## Standard C++ Libray:
+## Standard C++ Library:
 #AC_CHECK_LIB([libcpmt], [main])
 ## C runtime library:
 #AC_CHECK_LIB([msvcrt], [fclose])
-## Standard C++ Libray:
+## Standard C++ Library:
 #AC_CHECK_LIB([msvcprt], [main])
 
 ## on OSX X shouldn't be used by default as there are other ways
@@ -363,7 +363,7 @@ GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
 GEM_CHECK_LIB([stb], [stb],[stb/stb_image.h], [stbi_load],,,,[image loader])
 
 IEM_CHECK_FTGL()
-GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidrectional text rendering using FriBidi])
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidirectional text rendering using FriBidi])
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie loader])
@@ -604,7 +604,7 @@ GEM_CHECK_CXXFLAGS([-freg-struct-return],
 
 AS_IF([test "x$enable_registerstruct" = "xyes" ], [
  AC_MSG_RESULT([enabling "register struct return"
-   allows to make use of FreeFrame-effects without recompiling them
+   allows Gem to make use of FreeFrame-effects without recompiling them
    might break things, if you are using several different compilers])
 ])])
 
@@ -637,7 +637,7 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 # proposal:
 # by default the configure-task should only enable flags that are known
 # to work on the machine we are compiling.
-# the user can override this by explicitely stating that they want the
+# the user can override this by explicitly stating that they want the
 # flag to be enabled (if possible)
 # e.g. "./configure --enable-sse2" on a pentium-3 should
 # produce a binary that will only run on machines with SSE2 registers
@@ -688,7 +688,7 @@ AS_IF([test "x${GEM_DEFAULT_WINDOW}" = "x"], [
 AC_SUBST(GEM_DEFAULT_WINDOW)
 AC_CONFIG_FILES([abstractions/gemdefaultwindow.pd])
 
-## allow to override the build date string
+## allow us to override the build date string
 AC_ARG_WITH([build-date],
             AC_HELP_STRING([--with-build-date=<str>],
                            [alternative date string]))
