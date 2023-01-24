@@ -23,6 +23,7 @@
 #include "Gem/Properties.h"
 #include "Gem/Exception.h"
 
+
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
@@ -94,6 +95,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   if (avformat_open_input(&m_avformat, filename, NULL, NULL) < 0) {
     return false;
   }
+  m_avformat->seek2any = 1;
   if (avformat_find_stream_info(m_avformat, NULL) < 0) {
     verbose(0, "[GEM:filmFFMPEG] Unable to find stream information in %s", filename);
     close();
@@ -126,6 +128,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
     close();
     return false;
   }
+
   /* Copy codec parameters from input stream to output codec context */
   if ((ret = avcodec_parameters_to_context(m_avdecoder, st->codecpar)) < 0) {
     verbose(0, "[GEM:filmFFMPEG] Failed to copy video codec parameters to decoder context");
@@ -139,6 +142,13 @@ bool filmFFMPEG :: open(const std::string&sfilename,
     return false;
   }
 
+  m_avstream = st;
+  m_stream = stream_index;
+  m_fps = av_q2d(m_avstream->avg_frame_rate);
+  m_image.image.xsize = m_avdecoder->width;
+  m_image.image.ysize = m_avdecoder->height;
+  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.reallocate();
   return true;
 }
 
@@ -148,9 +158,38 @@ bool filmFFMPEG :: open(const std::string&sfilename,
 /////////////////////////////////////////////////////////
 pixBlock* filmFFMPEG :: getFrame(void)
 {
-  if(!m_avdecoder) {
+  if(!m_avdecoder || !m_avformat) {
     return NULL;
   }
+  while(1) {
+    if(av_read_frame(m_avformat, m_avpacket) < 0) {
+      return NULL;
+    }
+    if(m_avpacket->stream_index == m_stream)
+      break;
+    av_packet_unref(m_avpacket);
+  }
+
+  int ret = avcodec_send_packet(m_avdecoder, m_avpacket);
+  if(ret < 0) {
+    verbose(0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
+    return NULL;
+  }
+  while(ret >= 0) {
+    ret = avcodec_receive_frame(m_avdecoder, m_avframe);
+    if(ret < 0) {
+      if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN)) {
+        post("bye");
+      } else {
+        verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
+      }
+      return NULL;
+    }
+    post("received frame");
+    av_frame_unref(m_avframe);
+  }
+  post("gotFrame()");
+
   return &m_image;
 }
 
