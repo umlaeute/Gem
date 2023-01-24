@@ -282,29 +282,28 @@ bool pix_video::restart(void)
 // driverMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: driverMess(std::string s)
+bool pix_video :: driverMess(std::string s)
 {
   if("auto"==s) {
-    driverMess(-1);
-    return;
+    return driverMess(-1);
   } else {
     unsigned int dev;
     for(dev=0; dev<m_videoHandles.size(); dev++) {
       if(m_videoHandles[dev]->provides(s)) {
-        driverMess(dev);
-        return;
+        return driverMess(dev);
       }
     }
   }
   error("could not find a backend for driver '%s'", s.c_str());
+  return false;
 }
-void pix_video :: driverMess(int dev)
+bool pix_video :: driverMess(int dev)
 {
   if(dev>=0) {
     unsigned int udev=(unsigned int)dev;
     if(udev>=m_videoHandles.size()) {
       error("driverID (%d) must not exceed %d", udev, m_videoHandles.size());
-      return;
+      return false;
     }
 
     if(m_videoHandle) {
@@ -324,6 +323,30 @@ void pix_video :: driverMess(int dev)
     post("automatic driver selection");
   }
   m_driver=dev;
+  return true;
+}
+bool pix_video :: driverMess(t_symbol*s, int argc, t_atom*argv)
+{
+  switch(argc) {
+  case 0:
+    driverMess();
+    return true;
+  case 1:
+    break;
+  default:
+    error("'driver' takes a single numeric or symbolic driver ID");
+    return false;
+  }
+
+  switch(argv->a_type) {
+  case A_FLOAT:
+    return driverMess(atom_getint(argv));
+  case A_SYMBOL:
+    return driverMess(atom_getsymbol(argv)->s_name);
+  default: break;
+  }
+  error("'driver' takes a single numeric or symbolic driver ID");
+  return false;
 }
 
 void pix_video :: driverMess()
@@ -378,19 +401,41 @@ void pix_video :: driverMess()
   }
 }
 
+
 /////////////////////////////////////////////////////////
 // deviceMess
 //
 /////////////////////////////////////////////////////////
-void pix_video :: deviceMess(int dev)
+bool pix_video :: deviceMess(int dev)
 {
   WITH_VIDEOHANDLES_DO(setDevice(dev));
-  restart();
+  return restart();
 }
-void pix_video :: deviceMess(std::string s)
+bool pix_video :: deviceMess(std::string s)
 {
   WITH_VIDEOHANDLES_DO(setDevice(s));
-  restart();
+  return restart();
+}
+bool pix_video :: deviceMess(t_symbol*, int argc, t_atom*argv)
+{
+  if(argc!=1) {
+    error("can only set to 1 device at a time");
+    return false;
+  }
+  switch(argv->a_type) {
+    case A_FLOAT:
+      deviceMess(atom_getint(argv));
+      break;
+    case A_SYMBOL:
+      deviceMess(atom_getsymbol(argv)->s_name);
+      break;
+    default:
+      error("device must be integer or symbol");
+      return false;
+    }
+  return true;
+}
+
 }
 
 void pix_video :: closeMess()
@@ -841,8 +886,6 @@ void pix_video :: runningMess(bool state)
   }
 }
 
-
-
 /////////////////////////////////////////////////////////
 // static member function
 //
@@ -851,13 +894,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "enumerate", enumerateMess);
 
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_video::driverMessCallback),
-                  gensym("driver"), A_GIMME, A_NULL);
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_video::deviceMessCallback),
-                  gensym("device"), A_GIMME, A_NULL);
-
+  CPPEXTERN_MSG (classPtr, "driver", driverMess);
+  CPPEXTERN_MSG (classPtr, "device", deviceMess);
   CPPEXTERN_MSG0(classPtr, "close", closeMess);
 
   class_addmethod(classPtr,
@@ -967,43 +1005,6 @@ void pix_video :: colorMessCallback(void *data, t_symbol* nop, int argc,
   }
 }
 
-void pix_video :: deviceMessCallback(void *data, t_symbol*,int argc,
-                                     t_atom*argv)
-{
-  if(argc==1) {
-    switch(argv->a_type) {
-    case A_FLOAT:
-      GetMyClass(data)->deviceMess(atom_getint(argv));
-      break;
-    case A_SYMBOL:
-      GetMyClass(data)->deviceMess(atom_getsymbol(argv)->s_name);
-      break;
-    default:
-      GetMyClass(data)->error("device must be integer or symbol");
-    }
-  } else {
-    GetMyClass(data)->error("can only set to 1 device at a time");
-  }
-}
-void pix_video :: driverMessCallback(void *data, t_symbol*s, int argc,
-                                     t_atom*argv)
-{
-  if(!argc) {
-    GetMyClass(data)->driverMess();
-    return;
-  }
-  if(argc!=1) {
-    GetMyClass(
-      data)->error("'driver' takes a single numeric or symbolic driver ID");
-  } else if (argv->a_type == A_FLOAT) {
-    GetMyClass(data)->driverMess(atom_getint(argv));
-  } else if (argv->a_type == A_SYMBOL) {
-    GetMyClass(data)->driverMess(atom_getsymbol(argv)->s_name);
-  } else {
-    GetMyClass(
-      data)->error("'driver' takes a single numeric or symbolic driver ID");
-  }
-}
 void pix_video :: dialogMessCallback(void *data, t_symbol*s, int argc,
                                      t_atom*argv)
 {

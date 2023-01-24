@@ -75,16 +75,18 @@ protected:
   // returns true, if a new backend could be found
   virtual bool restart(void);
 
-  virtual void  deviceMess(std::string);
-  virtual void  deviceMess(int dev);
+  virtual bool  deviceMess(std::string);
+  virtual bool  deviceMess(int dev);
+  virtual bool  deviceMess(t_symbol*, int, t_atom*);
+
+  // Set the driver architecture
+  virtual bool  driverMess(int dev);
+  virtual bool  driverMess(std::string);
+  virtual bool  driverMess(t_symbol*, int, t_atom*);
+  virtual void  driverMess(void);
 
   virtual void  closeMess(void);
   virtual void  resetMess(void);
-
-  // Set the driver architecture; (probably this makes only sense under linux right now: you can choose between video4linux(0) and video1394(1))
-  virtual void  driverMess(int dev);
-  virtual void  driverMess(std::string);
-  virtual void  driverMess(void);
 
   // List the available devices
   virtual void  enumerateMess();
@@ -152,8 +154,6 @@ private:
   //////////
   // static member functions
 
-  static void deviceMessCallback(void *data, t_symbol*,int,t_atom*);
-  static void driverMessCallback(void *data, t_symbol*,int,t_atom*);
 
   static void openMessCallback(void *data, t_symbol*, int, t_atom*);
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
