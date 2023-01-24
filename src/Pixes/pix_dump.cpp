@@ -210,7 +210,7 @@ void pix_dump :: trigger()
       b = static_cast<t_float>(data[chBlue]) * scale;
       SETFLOAT(&m_buffer[i], b);
       i++;
-      if ( m_mode == GEM_RGBA ) {
+      if ( GEM_RGBA == m_mode ) {
         t_float a = static_cast<t_float>(data[chAlpha]) * scale;
         SETFLOAT(&m_buffer[i], a);
         i++;
@@ -237,7 +237,7 @@ void pix_dump :: trigger()
         v = static_cast<t_float>(data[2]) * scale;
         SETFLOAT(&m_buffer[i], v);
         i++;
-        if ( m_mode == GEM_RGBA ) {
+        if ( GEM_RGBA == m_mode ) {
           t_float y1 = static_cast<t_float>(data[3]) * scale;
           SETFLOAT(&m_buffer[i], y1);
           i++;
@@ -263,7 +263,7 @@ void pix_dump :: trigger()
       v = static_cast<t_float>(data[2]) * scale;
       SETFLOAT(&m_buffer[i+2], v);
       i+=3;
-      if ( m_mode == GEM_RGBA ) {
+      if ( GEM_RGBA == m_mode ) {
         v = static_cast<t_float>(data[3]) * scale;
         SETFLOAT(&m_buffer[i], v);
         i++;
