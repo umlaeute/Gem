@@ -62,7 +62,6 @@ public:
 
   //////////
   // get the next frame
-  int decodePacket(void);
   virtual pixBlock* getFrame(void);
 
   //////////
@@ -96,6 +95,10 @@ protected:
   AVStream*m_avstream;
   AVFrame*m_avframe;
   AVPacket*m_avpacket;
+
+  /* helpers to get the frame */
+  int decodePacket(void);
+  int convertFrame(void);
 };
 };
 };

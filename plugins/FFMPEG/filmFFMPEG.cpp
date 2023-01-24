@@ -158,6 +158,21 @@ bool filmFFMPEG :: open(const std::string&sfilename,
 // render
 //
 /////////////////////////////////////////////////////////
+int filmFFMPEG :: convertFrame(void)
+{
+#if 0
+      /* get the best destination format when converting
+         https://ffmpeg.org/doxygen/trunk/group__lavc__misc__pixfmt.html
+      */
+      avcodec_find_best_pix_fmt_of_list();
+      /* use libswscale for colorspace conversion
+         https://ffmpeg.org/doxygen/trunk/group__libsws.html
+         https://ffmpeg.org/doxygen/trunk/scaling_video_8c-example.html#a1
+      */
+
+#endif
+  return 0;
+}
 int filmFFMPEG :: decodePacket(void)
 {
   // submit the packet to the decoder
@@ -187,19 +202,7 @@ int filmFFMPEG :: decodePacket(void)
               , (unsigned long)m_avframe->pts, (unsigned long)m_avframe->pkt_dts
               , m_avframe->width, m_avframe->height, av_get_pix_fmt_name(pix_fmt)
         );
-      //ret = output_video_frame(m_avframe);
-#if 0
-      /* get the best destination format when converting
-         https://ffmpeg.org/doxygen/trunk/group__lavc__misc__pixfmt.html
-      */
-      avcodec_find_best_pix_fmt_of_list();
-      /* use libswscale for colorspace conversion
-         https://ffmpeg.org/doxygen/trunk/group__libsws.html
-         https://ffmpeg.org/doxygen/trunk/scaling_video_8c-example.html#a1
-      */
-
-#endif
-      ret = 1;
+      ret = convertFrame();
     } else {
       verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
     }
