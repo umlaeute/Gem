@@ -436,6 +436,40 @@ bool pix_video :: deviceMess(t_symbol*, int argc, t_atom*argv)
   return true;
 }
 
+void pix_video :: openMess(t_symbol *s, int argc, t_atom *argv)
+{
+  switch(argc) {
+  case 0:
+    startRendering();
+    return;
+  case 2:
+    switch(argv[1].a_type) {
+    case A_SYMBOL: case A_FLOAT:
+        break;
+    default:
+      goto bad;
+    }
+    /* fall through */
+  case 1:
+    switch(argv[0].a_type) {
+    case A_SYMBOL:
+      break;
+    default:
+      goto bad;
+    }
+    break;
+  default:
+    goto bad;
+  }
+
+  if(argc>1) {
+    if (!driverMess(s, 1, argv+1))
+      return;
+  }
+  deviceMess(s, 1, argv);
+  return;
+ bad:
+  error("usage: open [device [driver]]");
 }
 
 void pix_video :: closeMess()
@@ -896,11 +930,8 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG (classPtr, "driver", driverMess);
   CPPEXTERN_MSG (classPtr, "device", deviceMess);
+  CPPEXTERN_MSG (classPtr, "open", openMess);
   CPPEXTERN_MSG0(classPtr, "close", closeMess);
-
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&pix_video::openMessCallback),
-                  gensym("open"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "float", runningMess, bool);
 
@@ -1025,14 +1056,4 @@ void pix_video :: setPropertiesMessCallback(void *data, t_symbol*s,
     int argc, t_atom*argv)
 {
   GetMyClass(data)->setPropertiesMess(argc, argv);
-}
-
-void pix_video :: openMessCallback(void *data, t_symbol*s, int argc,
-                                   t_atom*argv)
-{
-  if(argc) {
-    driverMessCallback(data, s, argc, argv);
-  } else {
-    GetMyClass(data)->startRendering();
-  }
 }

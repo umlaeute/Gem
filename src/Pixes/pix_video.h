@@ -85,6 +85,7 @@ protected:
   virtual bool  driverMess(t_symbol*, int, t_atom*);
   virtual void  driverMess(void);
 
+  virtual void  openMess(t_symbol*, int, t_atom*);
   virtual void  closeMess(void);
   virtual void  resetMess(void);
 
@@ -155,7 +156,6 @@ private:
   // static member functions
 
 
-  static void openMessCallback(void *data, t_symbol*, int, t_atom*);
   static void dialogMessCallback(void *data, t_symbol*,int,t_atom*);
 
   static void getPropertyMessCallback(void *data, t_symbol*,int, t_atom*);
