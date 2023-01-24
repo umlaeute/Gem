@@ -238,10 +238,11 @@ void pix_dump :: trigger()
         SETFLOAT(&m_buffer[i], v);
         i++;
         if ( GEM_RGBA == m_mode ) {
-          t_float y1 = static_cast<t_float>(data[3]) * scale;
-          SETFLOAT(&m_buffer[i], y1);
+          y = static_cast<t_float>(data[3]) * scale;
+          SETFLOAT(&m_buffer[i], y);
           i++;
         }
+
         m++;
         data = line + static_cast<int>(m_xstep * static_cast<float>(m));
       }
