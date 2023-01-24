@@ -193,7 +193,7 @@ void scopeXYZ :: linewidthMess(float linewidth)
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ),
-                   gensym("scopeXYZ~"), A_DEFFLOAT, A_NULL);
+                   gensym("scopeXYZ~"), A_GIMME, A_NULL);
 
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);

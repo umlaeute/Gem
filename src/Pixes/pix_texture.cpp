@@ -910,7 +910,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_texture),
-                   gensym("pix_texture2"), A_NULL);
+                   gensym("pix_texture2"), A_GIMME, A_NULL);
 }
 
 void pix_texture :: extTextureMess(t_symbol*s, int argc, t_atom*argv)

@@ -198,7 +198,7 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix),
-                   gensym("pix_sig2pix~"), A_DEFFLOAT, A_DEFFLOAT, A_NULL);
+                   gensym("pix_sig2pix~"), A_GIMME, A_NULL);
 
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
   class_addmethod(classPtr,

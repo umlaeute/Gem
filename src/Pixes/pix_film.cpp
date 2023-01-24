@@ -707,7 +707,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
     ::verbose(2, "not registering [pix_filmQT] again...");
   } else {
     class_addcreator(reinterpret_cast<t_newmethod>(create_pix_film),
-                     gensym("pix_filmQT"), A_DEFSYMBOL, A_NULL);
+                     gensym("pix_filmQT"), A_GIMME, A_NULL);
   }
 
   class_addmethod(classPtr,

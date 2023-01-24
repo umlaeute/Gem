@@ -422,7 +422,7 @@ void pix_buffer :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_buffer),
                    gensym("pix_depot"),
-                   A_DEFSYMBOL, A_DEFFLOAT, A_NULL);
+                   A_GIMME, A_NULL);
 
   CPPEXTERN_MSG1(classPtr, "resize", resizeMess, int);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);

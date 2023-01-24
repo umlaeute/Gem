@@ -526,7 +526,7 @@ void pix_colorreduce :: Pete_ColorReduce_SetupInverseColorMap(
 void pix_colorreduce :: obj_setupCallback(t_class *classPtr)
 {
   class_addcreator(reinterpret_cast<t_newmethod>(create_pix_colorreduce),
-                   gensym("pix_colourreduce"), A_NULL);
+                   gensym("pix_colourreduce"), A_GIMME, A_NULL);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&pix_colorreduce::countCallback),
                   gensym("count"), A_DEFFLOAT, A_NULL);
