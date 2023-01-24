@@ -179,6 +179,7 @@ void pix_dump :: trigger()
   int roi_y2=m_ysize;
 
   unsigned char *buffer = m_data;
+  t_float scale = m_bytemode?1:(1./255.);
 
   if ( m_doROI ) {
     roi_x1=m_roi.x1*(0.5+m_xsize);
@@ -200,38 +201,20 @@ void pix_dump :: trigger()
   switch(m_csize) {
   case 4:
     while (picturesize-- > 0) {
-      if (!m_bytemode) {
-        float r, g, b;
-        r = static_cast<float>(data[chRed]) / 255.f;
-        SETFLOAT(&m_buffer[i], r);
+      t_float r, g, b;
+      r = static_cast<t_float>(data[chRed]) * scale;
+      SETFLOAT(&m_buffer[i], r);
+      i++;
+      g = static_cast<t_float>(data[chGreen]) * scale;
+      SETFLOAT(&m_buffer[i], g);
+      i++;
+      b = static_cast<t_float>(data[chBlue]) * scale;
+      SETFLOAT(&m_buffer[i], b);
+      i++;
+      if ( m_mode == GEM_RGBA ) {
+        t_float a = static_cast<t_float>(data[chAlpha]) * scale;
+        SETFLOAT(&m_buffer[i], a);
         i++;
-        g = static_cast<float>(data[chGreen]) / 255.f;
-        SETFLOAT(&m_buffer[i], g);
-        i++;
-        b = static_cast<float>(data[chBlue]) / 255.f;
-        SETFLOAT(&m_buffer[i], b);
-        i++;
-        if ( m_mode == GEM_RGBA ) {
-          float a = static_cast<float>(data[chAlpha]) / 255.f;
-          SETFLOAT(&m_buffer[i], a);
-          i++;
-        }
-      } else {
-        unsigned char r, g, b;
-        r = static_cast<unsigned char>(data[chRed]);
-        SETFLOAT(&m_buffer[i], r);
-        i++;
-        g = static_cast<unsigned char>(data[chGreen]);
-        SETFLOAT(&m_buffer[i], g);
-        i++;
-        b = static_cast<unsigned char>(data[chBlue]);
-        SETFLOAT(&m_buffer[i], b);
-        i++;
-        if ( m_mode == GEM_RGBA ) {
-          unsigned char a = static_cast<unsigned char>(data[chAlpha]);
-          SETFLOAT(&m_buffer[i], a);
-          i++;
-        }
       }
       j++;
       if ( m_doROI ) {
@@ -245,38 +228,20 @@ void pix_dump :: trigger()
   case 2:
     while (n < m_ysize) {
       while (m < m_xsize/2) {
-        if (!m_bytemode) {
-          float y,u,v;
-          u = static_cast<float>(data[0]) / 255.f;
-          SETFLOAT(&m_buffer[i], u);
+        t_float y,u,v;
+        u = static_cast<t_float>(data[0]) * scale;
+        SETFLOAT(&m_buffer[i], u);
+        i++;
+        y = static_cast<t_float>(data[1]) * scale;
+        SETFLOAT(&m_buffer[i], y);
+        i++;
+        v = static_cast<t_float>(data[2]) * scale;
+        SETFLOAT(&m_buffer[i], v);
+        i++;
+        if ( m_mode == GEM_RGBA ) {
+          t_float y1 = static_cast<t_float>(data[3]) * scale;
+          SETFLOAT(&m_buffer[i], y1);
           i++;
-          y = static_cast<float>(data[1]) / 255.f;
-          SETFLOAT(&m_buffer[i], y);
-          i++;
-          v = static_cast<float>(data[2]) / 255.f;
-          SETFLOAT(&m_buffer[i], v);
-          i++;
-          if ( m_mode == GEM_RGBA ) {
-            float y1 = static_cast<float>(data[3]) / 255.f;
-            SETFLOAT(&m_buffer[i], y1);
-            i++;
-          }
-        } else {
-          unsigned char y,u,v;
-          u = static_cast<unsigned char>(data[0]);
-          SETFLOAT(&m_buffer[i], u);
-          i++;
-          y = static_cast<unsigned char>(data[1]);
-          SETFLOAT(&m_buffer[i], y);
-          i++;
-          v = static_cast<unsigned char>(data[2]);
-          SETFLOAT(&m_buffer[i], v);
-          i++;
-          if ( m_mode == GEM_RGBA ) {
-            unsigned char y1 = static_cast<unsigned char>(data[3]);
-            SETFLOAT(&m_buffer[i], y1);
-            i++;
-          }
         }
         m++;
         data = line + static_cast<int>(m_xstep * static_cast<float>(m));
@@ -291,63 +256,32 @@ void pix_dump :: trigger()
     int datasize=m_xsize*m_ysize*m_csize/4;
     int leftover=m_xsize*m_ysize*m_csize-datasize*4;
     while (datasize--) {
-      if ( !m_bytemode ) {
-        float v;
-        v = static_cast<float>(data[0]) / 255.f;
+      t_float v;
+      v = static_cast<t_float>(data[0]) * scale;
+      SETFLOAT(&m_buffer[i+0], v);
+      v = static_cast<t_float>(data[1]) * scale;
+      SETFLOAT(&m_buffer[i+1], v);
+      v = static_cast<t_float>(data[2]) * scale;
+      SETFLOAT(&m_buffer[i+2], v);
+      i+=3;
+      if ( m_mode == GEM_RGBA ) {
+        v = static_cast<t_float>(data[3]) * scale;
         SETFLOAT(&m_buffer[i], v);
-        v = static_cast<float>(data[1]) / 255.f;
-        SETFLOAT(&m_buffer[i+1], v);
-        v = static_cast<float>(data[2]) / 255.f;
-        SETFLOAT(&m_buffer[i+2], v);
-        i+=3;
-        if ( m_mode == GEM_RGBA ) {
-          v = static_cast<float>(data[3]) / 255.f;
-          SETFLOAT(&m_buffer[i], v);
-          i++;
-        }
-        if ( m_doROI ) {
-          j++;
-          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
-                                   (j % (roi_x2-roi_x1)) + roi_x1) ;
-        } else {
-          data+=4;
-        }
+        i++;
+      }
+      if ( m_doROI ) {
+        j++;
+        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
+                                 (j % (roi_x2-roi_x1)) + roi_x1) ;
       } else {
-        unsigned char v;
-        v = static_cast<unsigned char>(data[0]);
-        SETFLOAT(&m_buffer[i], v);
-        v = static_cast<unsigned char>(data[1]);
-        SETFLOAT(&m_buffer[i+1], v);
-        v = static_cast<unsigned char>(data[2]);
-        SETFLOAT(&m_buffer[i+2], v);
-        i+=3;
-        if ( m_mode == GEM_RGBA ) {
-          v = static_cast<unsigned char>(data[3]);
-          SETFLOAT(&m_buffer[i], v);
-          i++;
-        }
-        if ( m_doROI ) {
-          j++;
-          data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
-                                   (j % (roi_x2-roi_x1)) + roi_x1) ;
-        } else {
-          data+=4;
-        }
+        data+=4;
       }
     }
 
-    if ( !m_bytemode ) {
-      while (leftover--) {
-        float v = static_cast<float>(*data++) / 255.f;
-        SETFLOAT(&m_buffer[i], v);
-        i++;
-      }
-    } else {
-      while (leftover--) {
-        unsigned char v = static_cast<unsigned char>(*data++);
-        SETFLOAT(&m_buffer[i], v);
-        i++;
-      }
+    while (leftover--) {
+      t_float v = static_cast<t_float>(*data++) * scale;
+      SETFLOAT(&m_buffer[i], v);
+      i++;
     }
   }
   outlet_list(m_dataOut, gensym("list"), i, m_buffer);
