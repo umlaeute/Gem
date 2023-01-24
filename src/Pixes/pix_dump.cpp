@@ -251,6 +251,7 @@ void pix_dump :: trigger()
       line = m_data + static_cast<int>(m_ystep*n);
       data = line;
     }
+    break;
   case 1:
   default:
     int datasize=m_xsize*m_ysize*m_csize/4;
