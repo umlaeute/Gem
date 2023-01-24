@@ -81,7 +81,8 @@ pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
 pix_dump :: ~pix_dump()
 {
   outlet_free(m_dataOut);
-  delete[]m_buffer;
+  delete [] m_buffer;
+  m_buffer = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -104,20 +105,18 @@ void pix_dump :: processImage(imageStruct &image)
   if (image.csize != m_csize) {
     m_csize = image.csize;
   }
-
-  if ( (m_xsize != x) || (m_ysize != y) || (m_csize != c) ) {
+  if(m_xsize * m_ysize * m_csize != m_bufsize) {
     // resize the image buffer
     if(m_buffer) {
       delete [] m_buffer;
+      m_buffer = 0;
     }
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
-
-    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
-                         (m_xsize));
-    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
-                         (m_ysize)) * image.xsize;
   }
+
+  m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
+  m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
 
   m_data = image.data;
 }
@@ -143,20 +142,20 @@ void pix_dump :: processYUVImage(imageStruct &image)
     m_csize = image.csize;
   }
 
-  if ( (m_xsize != x) || (m_ysize != y) || (m_csize != c) ) {
+  if(m_xsize * m_ysize * m_csize != m_bufsize) {
     // resize the image buffer
     if(m_buffer) {
       delete [] m_buffer;
+      m_buffer = 0;
     }
     m_bufsize = m_xsize * m_ysize * m_csize;
     m_buffer = new t_atom[m_bufsize];
-
-    m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
-                         (m_xsize));
-    m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
-                         (m_ysize)) * image.xsize;
   }
 
+  m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
+                       (m_xsize));
+  m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
+                       (m_ysize)) * image.xsize;
   m_data = image.data;
 }
 
