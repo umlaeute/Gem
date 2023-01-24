@@ -197,15 +197,19 @@ bool gem::RTE::Atom::checkSignature(int argc, const t_atom*argv, int numtypes, c
     return true;
   bool result = do_checkSignature(argc, argv, numtypes, types);
   if(name && !result) {
-    pd_error(0, "[%s] wrong arguments", name);
+    std::string haveargs="";
+    for(int i=0; i<argc; i++) {
+      if(i)haveargs+=" ";
+      haveargs+=arg2name(argv[i].a_type);
+    }
+    std::string wantargs="";
+    for(int i=0; i<numtypes; i++) {
+      if(i)wantargs+=" ";
+      wantargs+=arg2name(types[i]);
+    }
 
-    startpost("received:");
-    for(int i=0; i<argc; i++) startpost(" %s", arg2name(argv[i].a_type));
-    endpost();
-
-    startpost("expected:");
-    for(int i=0; i<numtypes; i++) startpost(" %s", arg2name(types[i]));
-    endpost();
+    pd_error(0, "[%s] wrong arguments: expected <%s>, but got <%s>",
+             name, wantargs.c_str(), haveargs.c_str());
   }
   return result;
 }
