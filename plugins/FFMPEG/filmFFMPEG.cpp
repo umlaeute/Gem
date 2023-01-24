@@ -23,7 +23,6 @@
 #include "Gem/Properties.h"
 #include "Gem/Exception.h"
 
-
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
@@ -38,7 +37,7 @@ REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
 /////////////////////////////////////////////////////////
 
 filmFFMPEG :: filmFFMPEG(void)
-  :  m_numFrames(-1), m_numTracks(-1)
+  : m_numFrames(-1), m_numTracks(-1)
   , m_track(0), m_stream(0)
   , m_fps(0.)
   , m_doConvert(false)
@@ -145,10 +144,13 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   m_avstream = st;
   m_stream = stream_index;
   m_fps = av_q2d(m_avstream->avg_frame_rate);
+  m_numFrames = m_avstream->nb_frames;
   m_image.image.xsize = m_avdecoder->width;
   m_image.image.ysize = m_avdecoder->height;
   m_image.image.setCsizeByFormat(GEM_RGBA);
   m_image.image.reallocate();
+  m_image.newfilm = true;
+
   return true;
 }
 
@@ -156,40 +158,79 @@ bool filmFFMPEG :: open(const std::string&sfilename,
 // render
 //
 /////////////////////////////////////////////////////////
+int filmFFMPEG :: decodePacket(void)
+{
+  // submit the packet to the decoder
+  int ret = avcodec_send_packet(m_avdecoder, m_avpacket);
+  if (ret < 0) {
+    verbose(0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
+    return ret;
+  }
+
+  // get all the available frames from the decoder
+  while (ret >= 0) {
+    ret = avcodec_receive_frame(m_avdecoder, m_avframe);
+    if (ret < 0) {
+      // those two return values are special and mean there is no output
+      // frame available, but there were no errors during decoding
+      if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN))
+        return 0;
+
+      verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
+      return ret;
+    }
+
+    // write the frame data to output file
+    if (m_avdecoder->codec->type == AVMEDIA_TYPE_VIDEO) {
+      enum AVPixelFormat pix_fmt = (AVPixelFormat)m_avframe->format;
+      verbose(0, "[GEM:filmFFMPEG] decoded VIDEO for %lu/%lu: %dx%d@%s!"
+              , (unsigned long)m_avframe->pts, (unsigned long)m_avframe->pkt_dts
+              , m_avframe->width, m_avframe->height, av_get_pix_fmt_name(pix_fmt)
+        );
+      //ret = output_video_frame(m_avframe);
+#if 0
+      /* get the best destination format when converting
+         https://ffmpeg.org/doxygen/trunk/group__lavc__misc__pixfmt.html
+      */
+      avcodec_find_best_pix_fmt_of_list();
+      /* use libswscale for colorspace conversion
+         https://ffmpeg.org/doxygen/trunk/group__libsws.html
+         https://ffmpeg.org/doxygen/trunk/scaling_video_8c-example.html#a1
+      */
+
+#endif
+      ret = 1;
+    } else {
+      verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
+    }
+
+    av_frame_unref(m_avframe);
+    if (ret < 0)
+      return ret;
+  }
+
+  return 0;
+}
 pixBlock* filmFFMPEG :: getFrame(void)
 {
   if(!m_avdecoder || !m_avformat) {
     return NULL;
   }
-  while(1) {
-    if(av_read_frame(m_avformat, m_avpacket) < 0) {
-      return NULL;
-    }
-    if(m_avpacket->stream_index == m_stream)
-      break;
-    av_packet_unref(m_avpacket);
-  }
 
-  int ret = avcodec_send_packet(m_avdecoder, m_avpacket);
-  if(ret < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
-    return NULL;
-  }
-  while(ret >= 0) {
-    ret = avcodec_receive_frame(m_avdecoder, m_avframe);
-    if(ret < 0) {
-      if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN)) {
-        post("bye");
-      } else {
-        verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
-      }
-      return NULL;
+  if (av_read_frame(m_avformat, m_avpacket) >= 0) {
+    int ret = -1;
+    if (m_avpacket->stream_index == m_stream) {
+      ret = decodePacket();
+      av_packet_unref(m_avpacket);
+    } else {
+      av_packet_unref(m_avpacket);
     }
-    post("received frame");
-    av_frame_unref(m_avframe);
-  }
-  post("gotFrame()");
+    if (ret >= 0) {
 
+    } else {
+      // ouch
+    }
+  }
   return &m_image;
 }
 
@@ -200,25 +241,28 @@ pixBlock* filmFFMPEG :: getFrame(void)
 /////////////////////////////////////////////////////////
 film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
 {
+  if(!m_avformat) {
+    return film::FAILURE;
+  }
+
   if(trackNum<0) {
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
     return film::SUCCESS;
   }
 
-  if(!m_avdecoder) {
+  int ret = avformat_seek_file(m_avformat
+    , m_stream
+    , imgNum-1, imgNum, imgNum+1
+    , AVSEEK_FLAG_FRAME | AVSEEK_FLAG_ANY | AVSEEK_FLAG_BACKWARD
+    );
+  if (ret < 0)
     return film::FAILURE;
-  }
 
   if(imgNum>=m_numFrames || imgNum<0) {
-    return film::FAILURE;
+    return film::DONTKNOW;
   }
 
-#if 0
-  /* TODO: implement seeking */
   return film::SUCCESS;
-#endif
-
-  return film::FAILURE;
 }
 ///////////////////////////////
 // Properties

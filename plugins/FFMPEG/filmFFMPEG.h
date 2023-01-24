@@ -20,6 +20,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
+#include <libavutil/imgutils.h>
 }
 
 
@@ -61,6 +62,7 @@ public:
 
   //////////
   // get the next frame
+  int decodePacket(void);
   virtual pixBlock* getFrame(void);
 
   //////////
