@@ -31,6 +31,7 @@ AC_CONFIG_FILES([plugins/AVIPLAY/Makefile])
 AC_CONFIG_FILES([plugins/DC1394/Makefile])
 AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
 AC_CONFIG_FILES([plugins/DV4L/Makefile])
+AC_CONFIG_FILES([plugins/FFMPEG/Makefile])
 AC_CONFIG_FILES([plugins/GMERLIN/Makefile])
 AC_CONFIG_FILES([plugins/imageIO/Makefile])
 AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
@@ -375,6 +376,12 @@ GEM_CHECK_LIB([mpeg], [mpeg],[mpeg.h], [OpenMPEG],,,,[movie loader])
 GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie loader])
 GEM_CHECK_LIB([libquicktime], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
+
+GEM_CHECK_LIB([ffmpeg], [avformat], [libavformat/avformat.h], [avformat_open_input],,,,[movie loader])
+
+## TODO: wrap this into proper configure checks
+GEM_LIB_FFMPEG_CFLAGS=$(pkg-config --cflags libavformat libavutil libavcodec)
+GEM_LIB_FFMPEG_LIBS=$(pkg-config --libs   libavformat libavutil libavcodec)
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
@@ -799,6 +806,7 @@ Configuration:
     use AVI              : ${WINDOWS}
     use aviplay          : ${have_avifile}
     use DirectShow       : ${WINDOWS}
+    use FFMPEG           : ${have_ffmpeg}
     use gmerlin          : ${have_gmerlin_avdec}
     use mpeg             : ${have_mpeg}
     use mpeg-3           : ${have_libmpeg3}
