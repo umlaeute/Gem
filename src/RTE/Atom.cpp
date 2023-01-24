@@ -193,6 +193,8 @@ const char*arg2name(int argtype) {
 };
 
 bool gem::RTE::Atom::checkSignature(int argc, const t_atom*argv, int numtypes, const int*types, const char*name) {
+  if(!numtypes)
+    return true;
   bool result = do_checkSignature(argc, argv, numtypes, types);
   if(name && !result) {
     pd_error(0, "[%s] wrong arguments", name);
