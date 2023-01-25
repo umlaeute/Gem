@@ -355,7 +355,9 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
   if(!m_avformat) {
     return film::FAILURE;
   }
-
+  if(!m_numFrames) {
+    return film::DONTKNOW;
+  }
   if(trackNum<0) {
     /* just automatically proceed to the next frame: this might speed up things for linear decoding */
     return film::SUCCESS;
