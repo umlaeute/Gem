@@ -250,7 +250,7 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
     m_image.image.ysize = height;
     m_image.image.setCsizeByFormat(gformat);
     m_image.image.reallocate();
-    m_image.newfilm = 1;
+    m_image.newfilm = true;
   }
 }
 
@@ -276,7 +276,7 @@ int filmFFMPEG :: convertFrame(void)
   sws_scale(m_avconverter,
             (const uint8_t **)(m_avframe->data), m_avframe->linesize, 0, m_avframe->height,
             &dst_data, &dst_linesize);
-  m_image.newimage = 1;
+  m_image.newimage = true;
   return 0;
 }
 int filmFFMPEG :: decodePacket(void)
