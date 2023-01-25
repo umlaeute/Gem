@@ -21,6 +21,7 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 #include <libavutil/imgutils.h>
+#include <libswscale/swscale.h>
 }
 
 
@@ -82,12 +83,12 @@ public:
 protected:
   pixBlock m_image; // output image
   int m_numFrames, m_numTracks; // number of frames in video
-
+  unsigned int  m_wantedFormat; // format requested by the user
   int m_track, m_stream;
   double m_fps;
 
   // whether we need to convert the image before using it in Gem
-  bool m_doConvert;
+  bool m_resetConverter;
 
 
   AVFormatContext *m_avformat;
@@ -95,10 +96,19 @@ protected:
   AVStream*m_avstream;
   AVFrame*m_avframe;
   AVPacket*m_avpacket;
+  struct SwsContext *m_avconverter;
+
+  struct {
+    int width;
+    int height;
+    int srcformat;
+    int dstformat;
+  } m_convertinfo;
 
   /* helpers to get the frame */
   int decodePacket(void);
   int convertFrame(void);
+  void initConverter(const int width, const int height, const int format);
 };
 };
 };

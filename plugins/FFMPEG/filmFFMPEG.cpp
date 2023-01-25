@@ -40,12 +40,13 @@ filmFFMPEG :: filmFFMPEG(void)
   : m_numFrames(-1), m_numTracks(-1)
   , m_track(0), m_stream(0)
   , m_fps(0.)
-  , m_doConvert(false)
+  , m_resetConverter(false)
   , m_avformat(0)
   , m_avdecoder(0)
   , m_avstream(0)
   , m_avframe(0)
   , m_avpacket(0)
+  , m_avconverter(0)
 {
   m_avframe = av_frame_alloc();
   m_avpacket = av_packet_alloc();
@@ -65,6 +66,8 @@ filmFFMPEG :: ~filmFFMPEG(void)
   close();
   av_packet_free(&m_avpacket);
   av_frame_free(&m_avframe);
+  sws_freeContext(m_avconverter);
+
 }
 
 bool filmFFMPEG :: isThreadable(void)
@@ -100,11 +103,8 @@ bool filmFFMPEG :: open(const std::string&sfilename,
     close();
     return false;
   }
-  /* create a codec */
-  #if 0
-  if (open_codec_context(&video_stream_idx, &video_dec_ctx, fmt_ctx, AVMEDIA_TYPE_VIDEO) >= 0);
-  #endif
 
+  /* create a codec */
   AVStream *st;
   const AVCodec *dec = 0;
   int ret = av_find_best_stream(m_avformat, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
@@ -158,19 +158,107 @@ bool filmFFMPEG :: open(const std::string&sfilename,
 // render
 //
 /////////////////////////////////////////////////////////
+void filmFFMPEG :: initConverter(const int width, const int height, const int format) {
+  /* check if we need a new decoder object */
+  if(width != m_convertinfo.width ||
+     height != m_convertinfo.height ||
+     format != m_convertinfo.srcformat ||
+     m_resetConverter
+     ) {
+    /* things have changed, reset the converter */
+    AVPixelFormat dstformats[] = {
+      AV_PIX_FMT_GRAY8,
+      AV_PIX_FMT_YUYV422,
+      AV_PIX_FMT_RGBA,
+      AV_PIX_FMT_NONE
+    };
+    switch(m_wantedFormat) {
+    default: break;
+    case GEM_GRAY:
+      dstformats[0] = AV_PIX_FMT_GRAY8;
+      dstformats[1] = AV_PIX_FMT_NONE;
+      break;
+    case GEM_YUV:
+      dstformats[0] = AV_PIX_FMT_YUYV422;
+      dstformats[1] = AV_PIX_FMT_NONE;
+      break;
+    case GEM_RGBA:
+      dstformats[0] = AV_PIX_FMT_RGBA;
+      dstformats[1] = AV_PIX_FMT_NONE;
+      break;
+    }
+    int loss;
+    int has_alpha = 1;
+    AVPixelFormat srcformat = (AVPixelFormat)format;
+    /* get the best destination format when converting
+       https://ffmpeg.org/doxygen/trunk/group__lavc__misc__pixfmt.html
+    */
+    AVPixelFormat dstformat = avcodec_find_best_pix_fmt_of_list(
+        dstformats, srcformat,
+        has_alpha, &loss);
+
+    m_convertinfo.width = width;
+    m_convertinfo.height = height;
+    m_convertinfo.srcformat = srcformat;
+    m_convertinfo.dstformat = dstformat;
+
+    sws_freeContext(m_avconverter);
+    m_avconverter = sws_getContext(
+        width, height, srcformat,
+        width, height, dstformat,
+        SWS_FAST_BILINEAR, NULL, NULL, NULL);
+    m_resetConverter = (0 == m_avconverter);
+  }
+
+  /* finally adjust our output image */
+  int gformat;
+  switch(m_convertinfo.dstformat) {
+  case AV_PIX_FMT_GRAY8:
+    gformat = GEM_GRAY;
+    break;
+  case AV_PIX_FMT_YUYV422:
+    gformat = GEM_YUV;
+    break;
+  case AV_PIX_FMT_RGBA:
+  default:
+    gformat = GEM_RGBA;
+    break;
+  }
+  if(width != m_image.image.xsize ||
+     height != m_image.image.ysize ||
+     gformat != m_image.image.format
+     ) {
+    m_image.image.xsize = width;
+    m_image.image.ysize = height;
+    m_image.image.setCsizeByFormat(gformat);
+    m_image.image.reallocate();
+    m_image.newfilm = 1;
+  }
+}
+
 int filmFFMPEG :: convertFrame(void)
 {
-#if 0
-      /* get the best destination format when converting
-         https://ffmpeg.org/doxygen/trunk/group__lavc__misc__pixfmt.html
-      */
-      avcodec_find_best_pix_fmt_of_list();
-      /* use libswscale for colorspace conversion
-         https://ffmpeg.org/doxygen/trunk/group__libsws.html
-         https://ffmpeg.org/doxygen/trunk/scaling_video_8c-example.html#a1
-      */
+  /* use libswscale for colorspace conversion
+     https://ffmpeg.org/doxygen/trunk/group__libsws.html
+     https://ffmpeg.org/doxygen/trunk/scaling_video_8c-example.html#a1
+  */
 
-#endif
+  /* (re)create the colorspace converter */
+  initConverter(m_avdecoder->width, m_avdecoder->height, m_avdecoder->pix_fmt);
+  if(!m_avconverter)
+    return -1;
+  /* dst_linesize:
+     GREY   : linesize={w*1, 0,...}, data={%p, NULL,...}
+     YUVV422: linesize={w*2, 0,...}, data={%p, NULL,...}
+     RGBA   : linesize={w*4, 0,...}, data={%p, NULL,...}
+  */
+  int dst_linesize = m_image.image.csize * m_image.image.xsize;
+  uint8_t*dst_data = (uint8_t*)m_image.image.data;
+
+  sws_scale(m_avconverter,
+            (const uint8_t **)(m_avframe->data), m_avframe->linesize, 0, m_avframe->height,
+            &dst_data, &dst_linesize);
+  m_image.newimage = 1;
   return 0;
 }
 int filmFFMPEG :: decodePacket(void)
@@ -282,11 +370,18 @@ bool filmFFMPEG::enumProperties(gem::Properties&readable,
   readable.set("width", value);
   readable.set("height", value);
 
+  writeable.set("colorspace", value);
+
   return false;
 }
 
 void filmFFMPEG::setProperties(gem::Properties&props)
 {
+  double d;
+  if(props.get("colorspace", d)) {
+    m_wantedFormat=d;
+    m_resetConverter = true;
+  }
 }
 
 void filmFFMPEG::getProperties(gem::Properties&props)
