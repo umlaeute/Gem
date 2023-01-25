@@ -377,11 +377,15 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
 #endif
   }
 
+  /* setting the minimum-frame to '0' will prevent an error if we reach the end.
+   * also, it seems that some movies don't correctly play back...
+   */
   int ret = avformat_seek_file(m_avformat
     , m_stream
-    , frameNum-1, frameNum, frameNum+1
+    , frameNum, frameNum, frameNum
     , AVSEEK_FLAG_FRAME | AVSEEK_FLAG_ANY | AVSEEK_FLAG_BACKWARD
     );
+
   if (ret < 0)
     return film::FAILURE;
 
