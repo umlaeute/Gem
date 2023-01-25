@@ -297,11 +297,13 @@ int filmFFMPEG :: decodePacket(void)
 
     // write the frame data to output file
     if (m_avdecoder->codec->type == AVMEDIA_TYPE_VIDEO) {
+#if 0
       enum AVPixelFormat pix_fmt = (AVPixelFormat)m_avframe->format;
       verbose(0, "[GEM:filmFFMPEG] decoded VIDEO for %lu/%lu: %dx%d@%s!"
               , (unsigned long)m_avframe->pts, (unsigned long)m_avframe->pkt_dts
               , m_avframe->width, m_avframe->height, av_get_pix_fmt_name(pix_fmt)
         );
+#endif
       ret = convertFrame();
     } else {
       verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
@@ -360,9 +362,11 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
     frameNum = (int)((long int)imgNum *
                      (m_avstream->time_base.den * m_avstream->r_frame_rate.den) /
                      (m_avstream->time_base.num * m_avstream->r_frame_rate.num));
+#if 0
     post("frame_rate=%d/%d", m_avstream->r_frame_rate.num, m_avstream->r_frame_rate.den);
     post("time_base=%d/%d", m_avstream->time_base.num, m_avstream->time_base.den);
     post("frame: %d => %d", imgNum, frameNum);
+#endif
   }
 
   int ret = avformat_seek_file(m_avformat
