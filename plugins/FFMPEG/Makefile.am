@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 
 pkglib_LTLIBRARIES=
-if HAVE_LIB_FFMPEG
+if HAVE_FFMPEG
 pkglib_LTLIBRARIES+= gem_filmFFMPEG.la
 endif
 

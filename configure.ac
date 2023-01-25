@@ -377,11 +377,22 @@ GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie load
 GEM_CHECK_LIB([libquicktime], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
 
-GEM_CHECK_LIB([ffmpeg], [avformat], [libavformat/avformat.h], [avformat_open_input],,,,[movie loader])
-
-## TODO: wrap this into proper configure checks
-GEM_LIB_FFMPEG_CFLAGS=$(pkg-config --cflags libavformat libavutil libavcodec libswscale)
-GEM_LIB_FFMPEG_LIBS=$(pkg-config --libs   libavformat libavutil libavcodec libswscale)
+### ffmpeg is a bit complicated, as it depends on multiple libs
+### for now, we only support pkg-config (or manual configuration)
+GEM_ARG_WITH([ffmpeg], [movie loader])
+AS_IF([ test "x${with_ffmpeg}" = "x" ], [ with_ffmpeg="${with_ALL}" ])
+AS_IF([ test "x${with_ffmpeg}" = "xno" ], [
+  have_ffmpeg="no (forced)"
+],[
+  have_ffmpeg="no (needs check)"
+  PKG_CHECK_MODULES([FFMPEG], [libavformat libavutil libavcodec libswscale],
+                    [have_ffmpeg=yes], [have_ffmpeg=no])
+])
+GEM_LIB_FFMPEG_CFLAGS=${FFMPEG_CFLAGS}
+GEM_LIB_FFMPEG_LIBS=${FFMPEG_LIBS}
+AC_SUBST([GEM_LIB_FFMPEG_CFLAGS])
+AC_SUBST([GEM_LIB_FFMPEG_LIBS])
+AM_CONDITIONAL(HAVE_FFMPEG, [test "x${have_ffmpeg}" = "xyes"])
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
