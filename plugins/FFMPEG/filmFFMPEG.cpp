@@ -25,6 +25,10 @@
 
 using namespace gem::plugins;
 
+#define GEMFFMPEG_GREY AV_PIX_FMT_GRAY8
+#define GEMFFMPEG_YUV AV_PIX_FMT_UYVY422
+#define GEMFFMPEG_RGBA AV_PIX_FMT_RGBA
+
 REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
 
 /////////////////////////////////////////////////////////
@@ -167,23 +171,23 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
      ) {
     /* things have changed, reset the converter */
     AVPixelFormat dstformats[] = {
-      AV_PIX_FMT_GRAY8,
-      AV_PIX_FMT_YUYV422,
-      AV_PIX_FMT_RGBA,
+      GEMFFMPEG_YUV,
+      GEMFFMPEG_RGBA,
+      //GEMFFMPEG_GREY,
       AV_PIX_FMT_NONE
     };
     switch(m_wantedFormat) {
     default: break;
     case GEM_GRAY:
-      dstformats[0] = AV_PIX_FMT_GRAY8;
+      dstformats[0] = GEMFFMPEG_GREY;
       dstformats[1] = AV_PIX_FMT_NONE;
       break;
     case GEM_YUV:
-      dstformats[0] = AV_PIX_FMT_YUYV422;
+      dstformats[0] = GEMFFMPEG_YUV;
       dstformats[1] = AV_PIX_FMT_NONE;
       break;
     case GEM_RGBA:
-      dstformats[0] = AV_PIX_FMT_RGBA;
+      dstformats[0] = GEMFFMPEG_RGBA;
       dstformats[1] = AV_PIX_FMT_NONE;
       break;
     }
@@ -213,13 +217,13 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
   /* finally adjust our output image */
   int gformat;
   switch(m_convertinfo.dstformat) {
-  case AV_PIX_FMT_GRAY8:
+  case GEMFFMPEG_GREY:
     gformat = GEM_GRAY;
     break;
-  case AV_PIX_FMT_YUYV422:
+  case GEMFFMPEG_YUV:
     gformat = GEM_YUV;
     break;
-  case AV_PIX_FMT_RGBA:
+  case GEMFFMPEG_RGBA:
   default:
     gformat = GEM_RGBA;
     break;
