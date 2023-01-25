@@ -353,9 +353,21 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
     return film::SUCCESS;
   }
 
+  int frameNum = imgNum;
+  if (m_avstream &&
+      (m_avstream->r_frame_rate.den && m_avstream->r_frame_rate.num) &&
+      (m_avstream->time_base.den && m_avstream->time_base.num)) {
+    frameNum = (int)((long int)imgNum *
+                     (m_avstream->time_base.den * m_avstream->r_frame_rate.den) /
+                     (m_avstream->time_base.num * m_avstream->r_frame_rate.num));
+    post("frame_rate=%d/%d", m_avstream->r_frame_rate.num, m_avstream->r_frame_rate.den);
+    post("time_base=%d/%d", m_avstream->time_base.num, m_avstream->time_base.den);
+    post("frame: %d => %d", imgNum, frameNum);
+  }
+
   int ret = avformat_seek_file(m_avformat
     , m_stream
-    , imgNum-1, imgNum, imgNum+1
+    , frameNum-1, frameNum, frameNum+1
     , AVSEEK_FLAG_FRAME | AVSEEK_FLAG_ANY | AVSEEK_FLAG_BACKWARD
     );
   if (ret < 0)
