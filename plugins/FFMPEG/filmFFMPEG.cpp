@@ -120,7 +120,13 @@ bool filmFFMPEG :: open(const std::string&sfilename,
     return false;
   }
   st = m_avformat->streams[stream_index];
-  dec = avcodec_find_decoder(st->codecpar->codec_id);
+#if 1
+  if (AV_CODEC_ID_VP9 == st->codecpar->codec_id) {
+    dec = avcodec_find_decoder_by_name("libvpx-vp9");
+  }
+#endif
+  if(!dec)
+    dec = avcodec_find_decoder(st->codecpar->codec_id);
   if(!dec) {
     verbose(0, "[GEM:filmFFMPEG] Failed to find video codec for %s", filename);
     close();
