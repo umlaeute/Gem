@@ -28,6 +28,7 @@ using namespace gem::plugins;
 #define GEMFFMPEG_GREY AV_PIX_FMT_GRAY8
 #define GEMFFMPEG_YUV AV_PIX_FMT_UYVY422
 #define GEMFFMPEG_RGBA AV_PIX_FMT_RGBA
+#define GEMFFMPEG_RGB AV_PIX_FMT_RGB24
 
 REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
 
@@ -190,6 +191,10 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
       dstformats[0] = GEMFFMPEG_RGBA;
       dstformats[1] = AV_PIX_FMT_NONE;
       break;
+    case GEM_RGB:
+      dstformats[0] = GEMFFMPEG_RGB;
+      dstformats[1] = AV_PIX_FMT_NONE;
+      break;
     }
     int loss;
     int has_alpha = 1;
@@ -222,6 +227,9 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
     break;
   case GEMFFMPEG_YUV:
     gformat = GEM_YUV;
+    break;
+  case GEMFFMPEG_RGB:
+    gformat = GEM_RGB;
     break;
   case GEMFFMPEG_RGBA:
   default:
