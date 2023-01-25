@@ -380,8 +380,8 @@ GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loade
 GEM_CHECK_LIB([ffmpeg], [avformat], [libavformat/avformat.h], [avformat_open_input],,,,[movie loader])
 
 ## TODO: wrap this into proper configure checks
-GEM_LIB_FFMPEG_CFLAGS=$(pkg-config --cflags libavformat libavutil libavcodec)
-GEM_LIB_FFMPEG_LIBS=$(pkg-config --libs   libavformat libavutil libavcodec)
+GEM_LIB_FFMPEG_CFLAGS=$(pkg-config --cflags libavformat libavutil libavcodec libswscale)
+GEM_LIB_FFMPEG_LIBS=$(pkg-config --libs   libavformat libavutil libavcodec libswscale)
 
 # special function in libquicktime
 old_cflags=${CFLAGS}
