@@ -24,3 +24,6 @@ make
 
 # video input
 #@MINGW@libvncserver
+
+# film reading
+@MINGW@ffmpeg

@@ -21,6 +21,7 @@ brew "libtiff"
 
 # additional video support
 brew "libquicktime"
+brew "ffmpeg"
 #brew "x11vnc"
 
 # model loading
