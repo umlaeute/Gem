@@ -44,8 +44,9 @@ filmFFMPEG :: filmFFMPEG(void)
   : m_numFrames(-1), m_numTracks(-1)
   , m_track(0), m_stream(0)
   , m_fps(0.)
+  , m_wantedFormat(0)
+  , m_wantedCodec("")
   , m_resetConverter(false)
-  , m_wantCodec("")
   , m_avformat(0)
   , m_avdecoder(0)
   , m_avstream(0)
@@ -124,7 +125,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   st = m_avformat->streams[stream_index];
 
   if(!dec) {
-    dec = avcodec_find_decoder_by_name(m_wantCodec.c_str());
+    dec = avcodec_find_decoder_by_name(m_wantedCodec.c_str());
   }
 #if 1
   if (!dec && AV_CODEC_ID_VP9 == st->codecpar->codec_id) {
@@ -438,7 +439,7 @@ void filmFFMPEG::setProperties(gem::Properties&props)
       continue;
     }
     if(props.get("codec", s)) {
-      m_wantCodec = s;
+      m_wantedCodec = s;
       continue;
     }
   }

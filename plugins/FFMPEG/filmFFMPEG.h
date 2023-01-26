@@ -87,9 +87,12 @@ protected:
   int m_track, m_stream;
   double m_fps;
 
+  // the user can wish for some things
+  unsigned int  m_wantedFormat;
+  std::string m_wantedCodec;
+
   // whether we need to convert the image before using it in Gem
   bool m_resetConverter;
-  std::string m_wantCodec;
 
   AVFormatContext *m_avformat;
   AVCodecContext *m_avdecoder;
