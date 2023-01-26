@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+(OS-independent parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -50,7 +50,7 @@ public:
 
   ////////
   // Destructor
-  /* free what is apropriate */
+  /* free what is appropriate */
   virtual ~recordDECKLINK(void);
 
   //////////
@@ -61,7 +61,7 @@ public:
   //////////
   // reserve a stream-name for sending
   // open the Decklink device "filename"
-  // returns TRUE if opening was successfull, FALSE otherwise
+  // returns TRUE if opening was successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&);
 
 

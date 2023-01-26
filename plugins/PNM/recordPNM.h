@@ -55,7 +55,7 @@ public:
   //////////
   // open a movie up
   // open the recordPNM "filename" (think better about URIs ?)
-  // returns TRUE if opening was successfull, FALSE otherwise
+  // returns TRUE if opening was successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&props);
 
   //////////
@@ -63,7 +63,7 @@ public:
   // dummyImage provides meta-information (e.g. size) that must not change during the encoding cycle
   // fps is the number of frames per second
   //
-  // returns TRUE if init was successfull, FALSE otherwise
+  // returns TRUE if init was successful, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const double fps);
 
   //////////

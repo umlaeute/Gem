@@ -57,7 +57,7 @@ public:
   //////////
   // prepare the stream
   // this doesn't do much, as we need an image to setup our pwprops
-  // returns TRUE if opening could be successfull, FALSE otherwise
+  // returns TRUE if opening could be successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&props);
 
   //////////

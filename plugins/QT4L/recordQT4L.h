@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+(OS-independent parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -68,7 +68,7 @@ public:
 
   ////////
   // Destructor
-  /* free what is apropriate */
+  /* free what is appropriate */
   virtual ~recordQT4L(void);
 
 #if defined GEM_USE_RECORDQT4L
@@ -81,7 +81,7 @@ public:
   //////////
   // open a movie up
   // open the recordQT4L "filename" (think better about URIs ?)
-  // returns TRUE if opening was successfull, FALSE otherwise
+  // returns TRUE if opening was successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&props);
 
 
@@ -92,7 +92,7 @@ public:
   // (if it does, abort the recording session)
   // fps is the number of frames per second
   //
-  // returns TRUE if init was successfull, FALSE otherwise
+  // returns TRUE if init was successful, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const double fps);
 
 
@@ -149,7 +149,7 @@ private:
   /* re-initialize the recorder */
   bool m_restart;
 
-  /* wheter we real timestamps or fake (const) them */
+  /* whether we real timestamps or fake (const) them */
   bool m_useTimeStamp;
   /* time when recording started (to calculate current timestamp) */
   double m_startTime;

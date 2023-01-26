@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+(OS-independent parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -56,7 +56,7 @@ public:
 
   ////////
   // Destructor
-  /* free what is apropriate */
+  /* free what is appropriate */
   virtual ~recordV4L2(void);
 
   //////////
@@ -67,7 +67,7 @@ public:
   //////////
   // open a movie up
   // open the recordV4L2 "filename" (or URI)
-  // returns TRUE if opening was successfull, FALSE otherwise
+  // returns TRUE if opening was successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&);
 
 
@@ -77,7 +77,7 @@ public:
   // (if it does, abort the recording session)
   // framedur is the duration of one frame in [ms]
   //
-  // returns TRUE if init was successfull, FALSE otherwise
+  // returns TRUE if init was successful, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const int framedur);
 
   //////////

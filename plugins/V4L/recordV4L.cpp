@@ -518,7 +518,7 @@ static void *signal_loop(void *arg)
         ioctl(outputfd, VIDIOCSINVALID);
       }
       if(ioctl(outputfd, cmd, ioctlbuf+sizeof(unsigned long int))) {
-        fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessfull.\n", cmd);
+        fprintf(stderr, "[GEM:recordV4L] ioctl %lx unsuccessful.\n", cmd);
       }
     }
   }

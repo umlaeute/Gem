@@ -5,7 +5,7 @@
     grab images using HALCON
 
     HALCON is a proprietary machine vision library by MVtec, that supports a wide range
-    of image acquisition devices (most noteable: GigE-cameras)
+    of image acquisition devices (most notable: GigE-cameras)
 
     see http://halcon.de/
 

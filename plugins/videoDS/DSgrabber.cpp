@@ -84,7 +84,7 @@ int g_cTemplates = sizeof(g_Templates)/sizeof(g_Templates[0]);
 /******************************Public*Routine******************************\
 *
 * Exported entry points for registration and unregistration (in this case
-* they only call through to default implmentations).
+* they only call through to default implementations).
 *
 *\**************************************************************************/
 STDAPI

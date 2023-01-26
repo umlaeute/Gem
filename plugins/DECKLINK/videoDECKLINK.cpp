@@ -127,7 +127,7 @@ public:
     // Handle Video Frame
     if (videoFrame) {
 #if 0
-      // If 3D mode is enabled we retreive the 3D extensions interface which gives.
+      // If 3D mode is enabled we retrieve the 3D extensions interface which gives.
       // us access to the right eye frame by calling GetFrameForRightEye() .
       if ( (videoFrame->QueryInterface(IID_IDeckLinkVideoFrame3DExtensions,
                                        (void **) &threeDExtensions) != S_OK) ||

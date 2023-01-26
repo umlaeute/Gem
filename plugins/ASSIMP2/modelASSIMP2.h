@@ -2,7 +2,7 @@
 
 GEM - Graphics Environment for Multimedia
 
-Load an asset (like .obj oder .dxf)
+Load an asset (like .obj or .dxf)
 
 Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
 For information on usage and redistribution, and for a DISCLAIMER OF ALL

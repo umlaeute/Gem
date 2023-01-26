@@ -351,7 +351,7 @@ bool filmDS :: open(const std::string&filename,
   }
 
   // DS filter chain is FileSource -> SampleGrabber -> NullRenderer
-  // DS can put any neeeded filters in the chain for format or colorspace conversion
+  // DS can put any needed filters in the chain for format or colorspace conversion
   // decompression or other transforms
 
   // Connect the SampleFilter to the VideoFilter

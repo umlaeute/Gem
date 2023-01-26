@@ -189,7 +189,7 @@ public:
         }
 
         if(!dst.convertFrom(img, GEM_YUV)) {
-          post("unable to covert frame...");
+          post("unable to convert frame...");
           return false;
         }
         img = &dst;

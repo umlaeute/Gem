@@ -57,7 +57,7 @@ public:
   // get a list of all provided devices
   virtual std::vector<std::string>provides(void);
 
-  // get's the name of the backend (e.g. "v4l")
+  // gets the name of the backend (e.g. "v4l")
   virtual const std::string getName(void);
 
   virtual bool isThreadable(void)

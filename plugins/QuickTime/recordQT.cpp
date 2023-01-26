@@ -212,7 +212,7 @@ void recordQT :: setupQT(
     }
     err = FSMakeFSSpec(theFSSpec.vRefNum, theFSSpec.parID, filename8,
                        &theFSSpec);
-    if (err != noErr && err != -37) { /* -37: invalid filename (e.g.  non-existant) */
+    if (err != noErr && err != -37) { /* -37: invalid filename (e.g.  non-existent) */
       pd_error(0, "[GEM:recordQT] error#%d in FSMakeFSSpec()", err);
       return;
     }
@@ -307,7 +307,7 @@ void recordQT :: setupQT(
   SetMovieGWorld(m_movie,m_srcGWorld,GetGWorldDevice(m_srcGWorld));
 
 #ifdef __APPLE__
-  //there is a discrepency between what is really upside down and not.
+  //there is a discrepancy between what is really upside down and not.
   //since QT has flipped Y compared to GL it is upside down to GL but not to itself
   //so while the upsidedown flag is set for QT images sent to GL it is not correct for pix_ processing.
   //this is a hack on OSX since the native is YUV for pix_ and the only BGRA will usually be from pix_snap

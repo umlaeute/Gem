@@ -166,7 +166,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
           if( (floor(range.minFrameRate) <= framerate
                && ceil(range.maxFrameRate) >= framerate) ) {
             verbose(1,
-                    "[GEM:videoAVF] found good framerate range %f .. %f for requrest %d",
+                    "[GEM:videoAVF] found good framerate range %f .. %f for request %d",
                     range.minFrameRate, range.maxFrameRate, framerate);
             desiredRange = range;
             numMatch++;

@@ -272,7 +272,7 @@ int filmFFMPEG :: convertFrame(void)
     return -1;
   /* dst_linesize:
      GREY   : linesize={w*1, 0,...}, data={%p, NULL,...}
-     YUVV422: linesize={w*2, 0,...}, data={%p, NULL,...}
+     YUYV422: linesize={w*2, 0,...}, data={%p, NULL,...}
      RGBA   : linesize={w*4, 0,...}, data={%p, NULL,...}
   */
   int dst_linesize = m_image.image.csize * m_image.image.xsize;

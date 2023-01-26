@@ -220,7 +220,7 @@ void LocalFreeMediaType(AM_MEDIA_TYPE& mt)
     mt.pbFormat = NULL;
   }
   if (mt.pUnk != NULL) {
-    // Unecessary because pUnk should not be used, but safest.
+    // Unnecessary because pUnk should not be used, but safest.
     mt.pUnk->Release();
     mt.pUnk = NULL;
   }
@@ -704,13 +704,13 @@ public:
       if( FAILED(hr) || width == 0 || height == 0 ) {
         tearDown();
         verbose(1,
-                "[GEM:videoDS] Error occured while playing or pausing or opening the file");
+                "[GEM:videoDS] Error occurred while playing or pausing or opening the file");
         return false;
       }
     } else {
       tearDown();
       verbose(1,
-              "[GEM:videoDS] Error occured while playing or pausing or opening the file");
+              "[GEM:videoDS] Error occurred while playing or pausing or opening the file");
       return false;
     }
 

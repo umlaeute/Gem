@@ -3,7 +3,7 @@
 GEM - Graphics Environment for Multimedia
 
 Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
-(OS independant parent-class)
+(OS-independent parent-class)
 
 Copyright (c) 1997-1999 Mark Danks. mark@danks.org
 Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -48,7 +48,7 @@ public:
 
   ////////
   // Destructor
-  /* free what is apropriate */
+  /* free what is appropriate */
   virtual ~recordNDI(void);
 
   //////////
@@ -59,7 +59,7 @@ public:
   //////////
   // reserve a stream-name for sending
   // open the recordNDI "filename"
-  // returns TRUE if opening was successfull, FALSE otherwise
+  // returns TRUE if opening was successful, FALSE otherwise
   virtual bool start(const std::string&filename, gem::Properties&);
 
 
@@ -70,7 +70,7 @@ public:
   // framedur is the duration of one frame in [ms]
   // for NDI, i don't know yet
   //
-  // returns TRUE if init was successfull, FALSE otherwise
+  // returns TRUE if init was successful, FALSE otherwise
   virtual bool init(const imageStruct* dummyImage, const int framedur);
 
   //////////

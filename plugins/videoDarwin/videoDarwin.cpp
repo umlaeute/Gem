@@ -207,7 +207,7 @@ bool videoDarwin :: initSeqGrabber()
 
   anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not make new SG channnel error %d",
+    verbose(0, "[GEM:videoDarwin] could not make new SG channel error %d",
             anErr);
     return false;
   }
@@ -215,7 +215,7 @@ bool videoDarwin :: initSeqGrabber()
   enumerate();
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not get SG channnel Device List");
+    verbose(0, "[GEM:videoDarwin] could not get SG channel Device List");
   } else {
     deviceCount = (*devices)->count;
     m_inputDevice = (*devices)->selectedIndex;
@@ -699,18 +699,18 @@ std::vector<std::string> videoDarwin::enumerate()
 
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not get SG channnel Device List");
+    verbose(0, "[GEM:videoDarwin] could not get SG channel Device List");
   } else {
     short deviceCount = (*devices)->count;
     short deviceIndex = (*devices)->selectedIndex;
     short inputIndex;
-    verbose(1, "[GEM:videoDarwin] SG channnel Device List count %d index %d",
+    verbose(1, "[GEM:videoDarwin] SG channel Device List count %d index %d",
             deviceCount,deviceIndex);
     int i;
     m_devices.clear();
     for (i = 0; i < deviceCount; i++) {
       m_devices.push_back(pascal2str((*devices)->entry[i].name));
-      verbose(1, "[GEM:videoDarwin] SG channnel Device List[%d]  %s", i,
+      verbose(1, "[GEM:videoDarwin] SG channel Device List[%d]  %s", i,
               m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
@@ -725,7 +725,7 @@ std::vector<std::string> videoDarwin::enumerate()
     //walk through the list
     for (i = 0; i < inputIndex; i++) {
       std::string input=pascal2str((*theSGInputList)->entry[i].name);
-      verbose(1, "[GEM:videoDarwin] SG channnel Input Device List %d %s",
+      verbose(1, "[GEM:videoDarwin] SG channel Input Device List %d %s",
               i, input.c_str());
     }
   }

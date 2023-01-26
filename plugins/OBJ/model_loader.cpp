@@ -1475,7 +1475,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
 
   /* pack the normals array (we previously allocated the maximum
      number of normals that could possibly be created (numtriangles *
-     3), so get rid of some of them (usually alot unless none of the
+     3), so get rid of some of them (usually a lot unless none of the
      facet normals were averaged)) */
   normals = model->normals;
   model->normals = new GLfloat[3* (model->numnormals+1)];
