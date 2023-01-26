@@ -32,6 +32,15 @@ using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
 
+
+namespace {
+  /* the default prefix aligns with '[GEM:filmFFMPEG] ' */
+  static void show_error(int errcode, const char*prefix="                 ") {
+    char errbuf[MAXPDSTRING];
+    verbose(0, "%s%s", prefix, av_make_error_string(errbuf, sizeof(errbuf), errcode));
+  }
+};
+
 /////////////////////////////////////////////////////////
 //
 // filmFFMPEG
@@ -102,12 +111,14 @@ bool filmFFMPEG :: open(const std::string&sfilename,
 
   const char*filename = sfilename.c_str();
   int ret;
-  if (avformat_open_input(&m_avformat, filename, NULL, NULL) < 0) {
+
+  if ((ret = avformat_open_input(&m_avformat, filename, NULL, NULL)) < 0) {
     return false;
   }
   m_avformat->seek2any = 1;
-  if (avformat_find_stream_info(m_avformat, NULL) < 0) {
+  if ((ret = avformat_find_stream_info(m_avformat, NULL)) < 0) {
     verbose(0, "[GEM:filmFFMPEG] Unable to find stream information in %s", filename);
+    show_error(ret);
     close();
     return false;
   }
@@ -119,6 +130,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   int stream_index = ret;
   if(ret < 0) {
     verbose(0, "[GEM:filmFFMPEG] Could not find video stream in %s", filename);
+    show_error(ret);
     close();
     return false;
   }
@@ -149,12 +161,14 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   /* Copy codec parameters from input stream to output codec context */
   if ((ret = avcodec_parameters_to_context(m_avdecoder, st->codecpar)) < 0) {
     verbose(0, "[GEM:filmFFMPEG] Failed to copy video codec parameters to decoder context");
+    show_error(ret);
     close();
     return false;
   }
   /* Init the decoders */
   if ((ret = avcodec_open2(m_avdecoder, dec, NULL)) < 0) {
     verbose(0, "[GEM:filmFFMPEG] Failed to open codec");
+    show_error(ret);
     close();
     return false;
   }
@@ -292,6 +306,7 @@ int filmFFMPEG :: decodePacket(void)
   int ret = avcodec_send_packet(m_avdecoder, m_avpacket);
   if (ret < 0) {
     verbose(0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
+    show_error(ret);
     return ret;
   }
 
@@ -305,6 +320,7 @@ int filmFFMPEG :: decodePacket(void)
         return 0;
 
       verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
+      show_error(ret);
       return ret;
     }
 
@@ -393,8 +409,10 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
     , AVSEEK_FLAG_FRAME | AVSEEK_FLAG_ANY | AVSEEK_FLAG_BACKWARD
     );
 
-  if (ret < 0)
+  if (ret < 0) {
+    //show_error(ret);
     return film::FAILURE;
+  }
 
   if(imgNum>=m_numFrames || imgNum<0) {
     return film::DONTKNOW;
