@@ -400,17 +400,19 @@ film::errCode filmFFMPEG :: changeImage(int imgNum, int trackNum)
 bool filmFFMPEG::enumProperties(gem::Properties&readable,
                                  gem::Properties&writeable)
 {
+  std::string dummy_s = "auto";
+  int dummy_i = 0;
+  double dummy_f = 0.;
+
   readable.clear();
   writeable.clear();
 
-  gem::any value;
-  value=0.;
-  readable.set("fps", value);
-  readable.set("frames", value);
-  readable.set("width", value);
-  readable.set("height", value);
+  readable.set("fps", dummy_f);
+  readable.set("frames", dummy_i);
+  readable.set("width", dummy_i);
+  readable.set("height", dummy_i);
 
-  writeable.set("colorspace", value);
+  writeable.set("colorspace", dummy_i);
 
   return false;
 }
