@@ -187,7 +187,7 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
     AVPixelFormat dstformats[] = {
       GEMFFMPEG_YUV,
       GEMFFMPEG_RGBA,
-      //GEMFFMPEG_GREY,
+      //GEMFFMPEG_GREY, /* disabled for now, as ffmpeg always prefers this... */
       AV_PIX_FMT_NONE
     };
     switch(m_wantedFormat) {
