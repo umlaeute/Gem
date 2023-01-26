@@ -89,7 +89,7 @@ protected:
 
   // whether we need to convert the image before using it in Gem
   bool m_resetConverter;
-
+  std::string m_wantCodec;
 
   AVFormatContext *m_avformat;
   AVCodecContext *m_avdecoder;

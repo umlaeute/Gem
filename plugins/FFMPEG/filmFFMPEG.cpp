@@ -46,6 +46,7 @@ filmFFMPEG :: filmFFMPEG(void)
   , m_track(0), m_stream(0)
   , m_fps(0.)
   , m_resetConverter(false)
+  , m_wantCodec("")
   , m_avformat(0)
   , m_avdecoder(0)
   , m_avstream(0)
@@ -120,8 +121,12 @@ bool filmFFMPEG :: open(const std::string&sfilename,
     return false;
   }
   st = m_avformat->streams[stream_index];
+
+  if(!dec) {
+    dec = avcodec_find_decoder_by_name(m_wantCodec.c_str());
+  }
 #if 1
-  if (AV_CODEC_ID_VP9 == st->codecpar->codec_id) {
+  if (!dec && AV_CODEC_ID_VP9 == st->codecpar->codec_id) {
     dec = avcodec_find_decoder_by_name("libvpx-vp9");
   }
 #endif
@@ -411,8 +416,10 @@ bool filmFFMPEG::enumProperties(gem::Properties&readable,
   readable.set("frames", dummy_i);
   readable.set("width", dummy_i);
   readable.set("height", dummy_i);
+  readable.set("codec", dummy_s);
 
   writeable.set("colorspace", dummy_i);
+  writeable.set("codec", dummy_s);
 
   return false;
 }
@@ -427,6 +434,10 @@ void filmFFMPEG::setProperties(gem::Properties&props)
     if(props.get("colorspace", d)) {
       m_wantedFormat = d;
       m_resetConverter = true;
+      continue;
+    }
+    if(props.get("codec", s)) {
+      m_wantCodec = s;
       continue;
     }
   }
@@ -469,6 +480,14 @@ void filmFFMPEG::getProperties(gem::Properties&props)
       d=m_image.image.ysize;
       value=d;
       props.set(key, value);
+      continue;
+    }
+    if("codec"==key) {
+      const AVCodecDescriptor*desc=m_avdecoder?avcodec_descriptor_get(m_avdecoder->codec_id):0;
+      if(desc) {
+        std::string s = desc->name;
+        props.set(key, s);
+      }
       continue;
     }
   }
