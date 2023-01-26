@@ -40,7 +40,6 @@ REGISTER_FILMFACTORY("ffmpeg", filmFFMPEG);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-
 filmFFMPEG :: filmFFMPEG(void)
   : m_numFrames(-1), m_numTracks(-1)
   , m_track(0), m_stream(0)
@@ -98,8 +97,10 @@ void filmFFMPEG :: close(void)
 bool filmFFMPEG :: open(const std::string&sfilename,
                          const gem::Properties&wantProps)
 {
-  const char*filename = sfilename.c_str();
   close();
+
+  const char*filename = sfilename.c_str();
+  int ret;
   if (avformat_open_input(&m_avformat, filename, NULL, NULL) < 0) {
     return false;
   }
@@ -113,7 +114,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   /* create a codec */
   AVStream *st;
   const AVCodec *dec = 0;
-  int ret = av_find_best_stream(m_avformat, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
+  ret = av_find_best_stream(m_avformat, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
   int stream_index = ret;
   if(ret < 0) {
     verbose(0, "[GEM:filmFFMPEG] Could not find video stream in %s", filename);
