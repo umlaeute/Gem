@@ -83,7 +83,6 @@ public:
 protected:
   pixBlock m_image; // output image
   int m_numFrames, m_numTracks; // number of frames in video
-  unsigned int  m_wantedFormat; // format requested by the user
   int m_track, m_stream;
   double m_fps;
 
