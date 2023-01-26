@@ -417,10 +417,16 @@ bool filmFFMPEG::enumProperties(gem::Properties&readable,
 
 void filmFFMPEG::setProperties(gem::Properties&props)
 {
-  double d;
-  if(props.get("colorspace", d)) {
-    m_wantedFormat=d;
-    m_resetConverter = true;
+  std::vector<std::string>keys=props.keys();
+  for(int i=0; i<keys.size(); i++) {
+    double d;
+    std::string s;
+    const std::string key =keys[i];
+    if(props.get("colorspace", d)) {
+      m_wantedFormat = d;
+      m_resetConverter = true;
+      continue;
+    }
   }
 }
 
@@ -437,26 +443,31 @@ void filmFFMPEG::getProperties(gem::Properties&props)
       d=m_fps;
       value=d;
       props.set(key, value);
+      continue;
     }
     if("frames"==key && m_numFrames>=0) {
       d=m_numFrames;
       value=d;
       props.set(key, value);
+      continue;
     }
     if("tracks"==key && m_numTracks>=0) {
       d=m_numTracks;
       value=d;
       props.set(key, value);
+      continue;
     }
     if("width"==key) {
       d=m_image.image.xsize;
       value=d;
       props.set(key, value);
+      continue;
     }
     if("height"==key) {
       d=m_image.image.ysize;
       value=d;
       props.set(key, value);
+      continue;
     }
   }
 }
