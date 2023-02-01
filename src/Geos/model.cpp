@@ -39,16 +39,16 @@ CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol*, A_DEFSYMBOL);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-model :: model(t_symbol* filename) :
-  m_loader(gem::plugins::modelloader::getInstance()),
-  m_loaded(false),
-  m_size_change_flag(false),
-  m_position(0,3),
-  m_texture (0,2),
-  m_color   (0,4),
-  m_normal  (0,3),
-  m_infoOut(gem::RTE::Outlet(this)),
-  m_drawType(GL_TRIANGLES)
+model :: model(t_symbol* filename)
+  : m_loader(gem::plugins::modelloader::getInstance())
+  , m_loaded(false)
+  , m_size_change_flag(false)
+  , m_position(0,3)
+  , m_texture (0,2)
+  , m_color   (0,4)
+  , m_normal  (0,3)
+  , m_infoOut(gem::RTE::Outlet(this))
+  , m_drawType(GL_TRIANGLES)
 {
   m_drawTypes.clear();
   m_drawTypes["default"]=m_drawType;
