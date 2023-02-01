@@ -138,10 +138,10 @@ bool modelOBJ :: enumProperties(gem::Properties&readable,
 
   writeable.clear();
   writeable.set("textype", std::string("default"));
+  writeable.set("_texwidth", 1);
+  writeable.set("_texheight", 1);
   writeable.set("rescale", 1);
   writeable.set("smooth", 0);
-  writeable.set("texwidth", 1);
-  writeable.set("texheight", 1);
   writeable.set("usematerials", 0);
   writeable.set("group", 0);
   writeable.set("reverse", 0);
@@ -186,7 +186,7 @@ void modelOBJ :: setProperties(gem::Properties&props)
       continue;
     }
 
-    if("texwidth" == key) {
+    if("_texwidth" == key) {
       if(props.get(key, d)) {
         if(d!=m_currentW) {
           m_rebuild=true;
@@ -197,7 +197,7 @@ void modelOBJ :: setProperties(gem::Properties&props)
       continue;
     }
 
-    if("texheight" == key) {
+    if("_texheight" == key) {
       if(props.get(key, d)) {
         if(d!=m_currentH) {
           m_rebuild=true;
