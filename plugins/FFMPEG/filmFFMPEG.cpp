@@ -300,6 +300,8 @@ int filmFFMPEG :: convertFrame(void)
   m_image.newimage = true;
   return 0;
 }
+
+/* decodes a single packet */
 int filmFFMPEG :: decodePacket(void)
 {
   // submit the packet to the decoder
@@ -310,38 +312,39 @@ int filmFFMPEG :: decodePacket(void)
     return ret;
   }
 
-  // get all the available frames from the decoder
-  while (ret >= 0) {
-    ret = avcodec_receive_frame(m_avdecoder, m_avframe);
-    if (ret < 0) {
-      // those two return values are special and mean there is no output
-      // frame available, but there were no errors during decoding
-      if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN))
-        return 0;
+  // get all the frame from the decoder
+  /* with video decoding, one packet always has a single frame */
+  ret = avcodec_receive_frame(m_avdecoder, m_avframe);
+  if (ret < 0) {
+    // those two return values are special and mean there is no output
+    // frame available, but there were no errors during decoding
+    if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN))
+      return 0;
 
-      verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
-      show_error(ret);
-      return ret;
-    }
+    verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
+    show_error(ret);
+    return ret;
+  }
 
-    // write the frame data to output file
-    if (m_avdecoder->codec->type == AVMEDIA_TYPE_VIDEO) {
+  // write the frame data to output file
+  if (m_avdecoder->codec->type == AVMEDIA_TYPE_VIDEO) {
 #if 0
+    if(1) {
       enum AVPixelFormat pix_fmt = (AVPixelFormat)m_avframe->format;
       verbose(0, "[GEM:filmFFMPEG] decoded VIDEO for %lu/%lu: %dx%d@%s!"
               , (unsigned long)m_avframe->pts, (unsigned long)m_avframe->pkt_dts
               , m_avframe->width, m_avframe->height, av_get_pix_fmt_name(pix_fmt)
-        );
-#endif
-      ret = convertFrame();
-    } else {
-      verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
+              );
     }
-
-    av_frame_unref(m_avframe);
-    if (ret < 0)
-      return ret;
+#endif
+    ret = convertFrame();
+  } else {
+    verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
   }
+
+  av_frame_unref(m_avframe);
+  if (ret < 0)
+    return ret;
 
   return 0;
 }
