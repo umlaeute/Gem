@@ -16,6 +16,8 @@
 
 #include "model.h"
 #include "plugins/modelloader.h"
+#include "Gem/State.h"
+
 #include <algorithm> // std::min
 
 namespace
@@ -59,6 +61,7 @@ model :: model(t_symbol* filename)
   m_drawTypes["line"]=GL_LINES;
   m_drawTypes["lines"]=GL_LINES;
   m_drawTypes["fill"]=GL_TRIANGLES;
+  m_texscale[0] = m_texscale[1] = 1.;
 
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) {
@@ -544,6 +547,30 @@ void model :: render(GemState *state)
 
   if(!m_loaded) {
     return;
+  }
+
+  int texType = 0;
+  state->get(GemState::_GL_TEX_TYPE, texType);
+  if(texType) {
+    bool rebuild = false;
+    TexCoord*texCoords = 0;
+    int texNum = 0;
+    state->get(GemState::_GL_TEX_COORDS, texCoords);
+    state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
+    if(texNum>1 && texCoords) {
+      if(texCoords[1].s != m_texscale[0])
+        rebuild = true;
+      if(texCoords[1].t != m_texscale[1])
+        rebuild = true;
+      m_texscale[0] = texCoords[1].s;
+      m_texscale[1] = texCoords[1].t;
+    }
+    if(rebuild) {
+      gem::Properties props = gem::Properties(m_writeprops);
+      props.set("_texwidth", m_texscale[0]);
+      props.set("_texheight", m_texscale[1]);
+      m_loader->setProperties(props);
+    }
   }
 
   switch(m_drawType) {
