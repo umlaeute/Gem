@@ -499,11 +499,14 @@ bool modelASSIMP2 :: compile(void)
   recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
 
+  float texscale[2];
+  texscale[0] = 1.;
+  texscale[1] = 1.;
   if (m_textype.empty() && m_have_texcoords) {;}
   else if("spheremap" == m_textype) {
-    modelutils::genTexture_Spheremap(m_texcoords, m_normals);
+    modelutils::genTexture_Spheremap(m_texcoords, m_normals, texscale);
   } else {
-    modelutils::genTexture_Linear(m_texcoords, m_vertices);
+    modelutils::genTexture_Linear(m_texcoords, m_vertices, texscale);
   }
 
   fillVBOarray();
