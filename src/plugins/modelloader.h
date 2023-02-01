@@ -154,20 +154,23 @@ public:
 namespace modelutils
 {
 static void genTexture_Linear(std::vector<std::vector<float> >& tex,
-                              const std::vector<std::vector<float> >& pos)
+                              const std::vector<std::vector<float> >& pos,
+                              const float scale[2])
 {
   tex.clear();
   std::vector<float>vec;
   unsigned int i;
   for (i=0; i<pos.size(); i++) {
     vec.clear();
-    vec.push_back((pos[i][0] + 1.0) / 2.0);
-    vec.push_back((pos[i][2] + 1.0) / 2.0);
+    vec.push_back(scale[0] * (pos[i][0] + 1.0) / 2.0);
+    vec.push_back(scale[1] * (pos[i][2] + 1.0) / 2.0);
     tex.push_back(vec);
   }
 }
 static void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
-                                 const std::vector<std::vector<float> >& norm)
+                                 const std::vector<std::vector<float> >& norm,
+                                 const float scale[2])
+
 {
   tex.clear();
   std::vector<float>vec;
@@ -197,8 +200,8 @@ static void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
         theta = (float)asin(y / r) + (M_PI / 2.0f);
       }
     }
-    vec.push_back(theta / M_PI);
-    vec.push_back(phi   / M_PI);
+    vec.push_back(scale[0] * theta / M_PI);
+    vec.push_back(scale[1] * phi   / M_PI);
     tex.push_back(vec);
   }
 }

@@ -550,11 +550,15 @@ bool modelASSIMP3 :: compile(void)
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
 
+  float texscale[2];
+  texscale[0] = m_texscale.x;
+  texscale[1] = m_texscale.y;
+
   if (m_textype.empty() && m_have_texcoords) {;}
   else if("spheremap" == m_textype) {
-    modelutils::genTexture_Spheremap(m_texcoords, m_normals);
+    modelutils::genTexture_Spheremap(m_texcoords, m_normals, texscale);
   } else {
-    modelutils::genTexture_Linear(m_texcoords, m_vertices);
+    modelutils::genTexture_Linear(m_texcoords, m_vertices, texscale);
   }
 
   fillVBOarray();
