@@ -179,14 +179,6 @@ static void apply_material(const struct aiMaterial *mtl)
 }
 
 // ----------------------------------------------------------------------------
-
-// Can't send color down as a pointer to aiColor4D because AI colors are ABGR.
-static void Color4f(const aiColor4D *color)
-{
-  glColor4f(color->r, color->g, color->b, color->a);
-}
-
-// ----------------------------------------------------------------------------
 static void recursive_render (const struct aiScene*scene,
                               const struct aiScene *sc, const struct aiNode* nd,
                               const bool use_material,
