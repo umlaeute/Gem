@@ -49,6 +49,8 @@ model :: model(t_symbol* filename)
   , m_normal  (0,3)
   , m_infoOut(gem::RTE::Outlet(this))
   , m_drawType(GL_TRIANGLES)
+  , m_blend(false)
+  , m_linewidth(1.0)
 {
   m_drawTypes.clear();
   m_drawTypes["default"]=m_drawType;
@@ -394,6 +396,18 @@ void model :: groupMess(int state)
   applyProperties();
 }
 
+void model :: blendMess(bool mode)
+{
+  m_blend = mode;
+  setModified();
+}
+void model :: linewidthMess(t_float w)
+{
+  m_linewidth = w;
+  setModified();
+}
+
+
 /////////////////////////////////////////////////////////
 // drawStyle
 //
@@ -525,8 +539,23 @@ void model :: startRendering()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
+  bool blend = m_blend;
+  bool setwidth = false;
+
   if(!m_loaded) {
     return;
+  }
+
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+  case GL_LINE_STRIP:
+  case GL_LINES:
+  case GL_LINE:
+    setwidth = true;
+    break;
+  default:
+    setwidth = false;
+    break;
   }
 
   if(!GLEW_VERSION_1_5) {
@@ -545,6 +574,15 @@ void model :: render(GemState *state)
       size = m_normal.size;
     }
 
+    if(setwidth) {
+      glLineWidth(m_linewidth);
+    }
+    if(blend) {
+      glEnable(GL_POLYGON_SMOOTH);
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+      glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+    }
     glBegin(m_drawType);
     for (unsigned int i=0; i<size; i++) {
       if(normals) {
@@ -565,6 +603,13 @@ void model :: render(GemState *state)
       }
     }
     glEnd();
+    if(blend) {
+      glDisable(GL_POLYGON_SMOOTH);
+      glDisable(GL_BLEND);
+    }
+    if(setwidth) {
+      glLineWidth(1.0);
+    }
     return;
   }
 
@@ -576,6 +621,16 @@ void model :: render(GemState *state)
   getVBOarray();
 
   std::vector<unsigned int> sizeList;
+
+  if(setwidth) {
+    glLineWidth(m_linewidth);
+  }
+  if(blend) {
+    glEnable(GL_POLYGON_SMOOTH);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+  }
 
   if(m_position.render()) {
     glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
@@ -615,6 +670,14 @@ void model :: render(GemState *state)
   if ( m_normal.enabled   ) {
     glDisableClientState(GL_NORMAL_ARRAY);
   }
+
+  if(blend) {
+    glDisable(GL_POLYGON_SMOOTH);
+    glDisable(GL_BLEND);
+  }
+  if(setwidth) {
+    glLineWidth(1.0);
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -641,6 +704,8 @@ void model :: obj_setupCallback(t_class *classPtr)
 
   CPPEXTERN_MSG1(classPtr, "draw", drawMess, std::string);
   CPPEXTERN_MSG1(classPtr, "type", drawMess, int);
+  CPPEXTERN_MSG1(classPtr, "width", linewidthMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "blend", blendMess, bool);
 }
 
 void model :: createVBO(void)

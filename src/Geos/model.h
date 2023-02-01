@@ -71,21 +71,14 @@ protected:
   virtual void setPropertiesMess(t_symbol*, int, t_atom*);
   virtual void applyProperties(void);
 
-  //////////
-  // When a rescale is received
   virtual void  rescaleMess(bool state);
-  //////////
-  // When a reverse is received
   virtual void  reverseMess(bool state);
-  //////////
-  // Which texture type (linear, spheric)
   virtual void  textureMess(int state);
-  //////////
-  // Set smoothing factor
   virtual void  smoothMess(t_float fsmooth);
-  //////////
-  // Set material mode
   virtual void  materialMess(int material);
+
+  virtual void blendMess(bool blend);
+  virtual void linewidthMess(t_float linewidth);
 
   //////////
   // Set groups to render
@@ -122,6 +115,8 @@ protected:
 
   GLenum m_drawType;
   std::map<std::string, GLenum>m_drawTypes;
+  bool m_blend;
+  GLfloat m_linewidth;
 };
 
 #endif  // for header file
