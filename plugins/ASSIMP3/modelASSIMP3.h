@@ -91,6 +91,8 @@ protected:
 
   bool m_have_texcoords;
   std::string m_textype;
+
+  aiVector2D m_texscale;
 };
 };
 }; // namespace gem::plugins

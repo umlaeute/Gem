@@ -182,11 +182,13 @@ static void apply_material(const struct aiMaterial *mtl)
 static void recursive_render (const struct aiScene*scene,
                               const struct aiScene *sc, const struct aiNode* nd,
                               const bool use_material,
+                              const aiVector2D&tex_scale,
                               std::vector<std::vector<float> >& vertices,
                               std::vector<std::vector<float> >& normals,
                               std::vector<std::vector<float> >& texcoords,
                               std::vector<std::vector<float> >& colors,
-                              aiMatrix4x4* trafo)
+                              aiMatrix4x4* trafo
+                              )
 {
   int i;
   unsigned int n = 0, t;
@@ -256,8 +258,8 @@ static void recursive_render (const struct aiScene*scene,
 
         if(mesh->HasTextureCoords(0)) {
           vec.clear();
-          vec.push_back(mesh->mTextureCoords[0][index].x);
-          vec.push_back(mesh->mTextureCoords[0][index].y);
+          vec.push_back(mesh->mTextureCoords[0][index].x * tex_scale.x);
+          vec.push_back(mesh->mTextureCoords[0][index].y * tex_scale.y);
           texcoords.push_back(vec);
         }
 
@@ -273,8 +275,8 @@ static void recursive_render (const struct aiScene*scene,
 
   // draw all children
   for (n = 0; n < nd->mNumChildren; ++n) {
-    recursive_render(scene, sc, nd->mChildren[n], use_material, vertices,
-                     normals, texcoords, colors, trafo);
+    recursive_render(scene, sc, nd->mChildren[n], use_material, tex_scale,
+                     vertices, normals, texcoords, colors, trafo);
   }
 
   *trafo = prev;
@@ -282,14 +284,15 @@ static void recursive_render (const struct aiScene*scene,
 
 };
 
-modelASSIMP3 :: modelASSIMP3(void) :
-  m_rebuild(true),
-  m_scene(NULL),
-  m_scale(1.f),
-  m_useMaterial(false),
-  m_refresh(false),
-  m_have_texcoords(false),
-  m_textype("")
+modelASSIMP3 :: modelASSIMP3(void)
+  : m_rebuild(true)
+  , m_scene(NULL)
+  , m_scale(1.f)
+  , m_useMaterial(false)
+  , m_refresh(false)
+  , m_have_texcoords(false)
+  , m_textype("")
+  , m_texscale(1., 1.)
 {
 }
 
@@ -385,8 +388,13 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
 {
   gem::any typ;
   readable.clear();
+  readable.set("texwidth", 1);
+  readable.set("texheight", 1);
+
   writeable.clear();
   writeable.set("textype", std::string("UV"));
+  writeable.set("_texwidth", 1);
+  writeable.set("_texheight", 1);
   writeable.set("rescale", 0);
   writeable.set("usematerials", 0);
 
@@ -415,6 +423,25 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
           m_textype = s;
         }
         m_rebuild = true;
+      }
+      continue;
+    }
+    if("_texwidth" == key) {
+      if(props.get(key, d)) {
+        if(d != m_texscale.x) {
+          m_rebuild=true;
+        }
+
+        m_texscale.x = d;
+      }
+      continue;
+    }
+    if("_texheight" == key) {
+      if(props.get(key, d)) {
+        if(d != m_texscale.y) {
+          m_rebuild=true;
+        }
+        m_texscale.y = d;
       }
       continue;
     }
@@ -454,6 +481,20 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
 }
 void modelASSIMP3 :: getProperties(gem::Properties&props)
 {
+  std::vector<std::string>keys=props.keys();
+  unsigned int i;
+  props.clear();
+  for(i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    if("texwidth" == key) {
+      props.set(key, m_texscale.x);
+      continue;
+    }
+    if("texheight" == key) {
+      props.set(key, m_texscale.y);
+      continue;
+    }
+  }
 }
 
 void modelASSIMP3 :: fillVBOarray()
@@ -505,7 +546,7 @@ bool modelASSIMP3 :: compile(void)
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
                                   aiQuaterniont<float>(), m_offset);
 
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, use_material,
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, use_material, m_texscale,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
 
