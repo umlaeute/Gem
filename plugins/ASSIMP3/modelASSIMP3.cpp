@@ -386,7 +386,7 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
   gem::any typ;
   readable.clear();
   writeable.clear();
-  writeable.set("texttype", std::string("UV"));
+  writeable.set("textype", std::string("UV"));
   writeable.set("rescale", 0);
   writeable.set("usematerials", 0);
 
