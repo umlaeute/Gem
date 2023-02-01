@@ -20,6 +20,13 @@
 
 #define T(x) (model->triangles[(x)])
 
+#if 0
+// uv    : model->texcoords[2 * i + 1] = model->uvtexcoords[2*i+1]*h;
+# define FLIPTEX(x) (x)
+#else
+// uv    : model->texcoords[2 * i + 1] = (1-model->uvtexcoords[2*i+1]) * h;
+# define FLIPTEX(x) (1-(x))
+#endif
 
 /* GLMmaterial: Structure that defines a material in a model.
  */
@@ -1515,7 +1522,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
   /* do the calculations */
   for(i = 1; i <= model->numtexcoords; i++) {
     model->texcoords[2*i+0] = model->uvtexcoords[2*i+0]*w;
-    model->texcoords[2*i+1] = model->uvtexcoords[2*i+1]*h;
+    model->texcoords[2*i+1] = FLIPTEX(model->uvtexcoords[2*i+1])*h;
   }
 
   /* go through and put texture coordinate indices in all the triangles */
@@ -1566,7 +1573,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     x = model->vertices[3 * i + 0] * scalefactor;
     y = model->vertices[3 * i + 2] * scalefactor;
     model->texcoords[2 * i + 0] = ((x + 1.0f) / 2.0f) * w;
-    model->texcoords[2 * i + 1] = ((y + 1.0f) / 2.0f) * h;
+    model->texcoords[2 * i + 1] = FLIPTEX((y + 1.0f) / 2.0f) * h;
   }
 
   /* go through and put texture coordinate indices in all the triangles */
@@ -1641,7 +1648,7 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     }
 
     model->texcoords[2 * i + 0] = w * theta / M_PI;
-    model->texcoords[2 * i + 1] = h * phi / M_PI;
+    model->texcoords[2 * i + 1] = h * FLIPTEX(phi / M_PI);
   }
 
   /* go through and put texcoord indices in all the triangles */

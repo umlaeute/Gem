@@ -338,7 +338,7 @@ bool modelASSIMP3 :: open(const std::string&name,
   destroy();
 
   m_scene = aiImportFile(name.c_str(),
-                         aiProcessPreset_TargetRealtime_Quality);
+                         aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs);
   if(!m_scene) {
     return false;
   }
