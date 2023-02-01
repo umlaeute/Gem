@@ -150,72 +150,77 @@ bool modelOBJ :: enumProperties(gem::Properties&readable,
 
 void modelOBJ :: setProperties(gem::Properties&props)
 {
-  double d;
-
-  if(props.get("smooth", d)) {
-    if(d<0.) {
-      d=0.;
-    }
-    if(d>1.) {
-      d=1.;
-    }
-    if(m_model) {
-      glmVertexNormals(m_model, d*180.);
-    }
-    m_rebuild=true;
-  }
-  if(props.get("texwidth", d)) {
-    if(d!=m_currentW) {
-      m_rebuild=true;
-    }
-
-    m_currentW=d;
-  }
-  if(props.get("texheight", d)) {
-    if(d!=m_currentH) {
-      m_rebuild=true;
-    }
-    m_currentH=d;
-  }
-  if(props.get("usematerials", d)) {
-    int flags=GLM_SMOOTH | GLM_TEXTURE;
-    if(d) {
-      flags |= GLM_MATERIAL;
+  std::vector<std::string>keys=props.keys();
+  for(unsigned int i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    std::string s;
+    double d;
+    if("smooth" == key) {
+      if(props.get(key, d)) {
+        if(d<0.) {
+          d=0.;
+        }
+        if(d>1.) {
+          d=1.;
+        }
+        if(m_model) {
+          glmVertexNormals(m_model, d*180.);
+        }
+        m_rebuild=true;
+      }
+      continue;
     }
 
-    if(flags!=m_flags) {
-      m_rebuild=true;
-    }
-    m_flags=flags;
-  }
+    if("textype" == key) {
+      if(props.get(key, s)) {
+        if("UV"==s) {
+          m_textype= GLM_TEX_UV;
+        } else if("linear"==s) {
+          m_textype= GLM_TEX_LINEAR;
+        } else if("spheremap"==s) {
+          m_textype= GLM_TEX_SPHEREMAP;
+        }
 
-
-  std::string s;
-  if(props.get("textype", s)) {
-    if("UV"==s) {
-      m_textype= GLM_TEX_UV;
-    } else if("linear"==s) {
-      m_textype= GLM_TEX_LINEAR;
-    } else if("spheremap"==s) {
-      m_textype= GLM_TEX_SPHEREMAP;
+        m_rebuild=true;
+      }
+      continue;
     }
 
-    m_rebuild=true;
-  }
+    if("usematerials" == key) {
+      if(props.get(key, d)) {
+        int flags=GLM_SMOOTH | GLM_TEXTURE;
+        if(d) {
+          flags |= GLM_MATERIAL;
+        }
 
-  if(props.get("group", d)) {
-    m_group=d;
-    m_rebuild=true;
-  }
-
-  if(props.get("reverse", d)) {
-    // LATER:move this to compile()
-    bool reverse=d;
-    if((reverse!=m_reverse) && m_model) {
-      glmReverseWinding(m_model);
-      m_rebuild=true;
+        if(flags!=m_flags) {
+          m_rebuild=true;
+        }
+        m_flags=flags;
+      }
+      continue;
     }
-    m_reverse=reverse;
+
+    if("group" == key) {
+      if(props.get(key, d)) {
+        m_group=d;
+        m_rebuild=true;
+      }
+      continue;
+    }
+
+    if("reverse" == key) {
+      if(props.get(key, d)) {
+        // LATER:move this to compile()
+        bool reverse=d;
+        if((reverse!=m_reverse) && m_model) {
+          glmReverseWinding(m_model);
+          m_rebuild=true;
+        }
+        m_reverse=reverse;
+      }
+      continue;
+    }
   }
 
   render();
@@ -226,15 +231,16 @@ void modelOBJ :: getProperties(gem::Properties&props)
   unsigned int i;
   props.clear();
   for(i=0; i<keys.size(); i++) {
-    if("texwidth" == keys[i]) {
-      props.set(keys[i], m_currentW);
+    std::string key=keys[i];
+    if("texwidth" == key) {
+      props.set(key, m_currentW);
     }
-    if("texheight" == keys[i]) {
-      props.set(keys[i], m_currentH);
+    if("texheight" == key) {
+      props.set(key, m_currentH);
     }
-    if("groups" == keys[i]) {
+    if("groups" == key) {
       if(m_model) {
-        props.set(keys[i], glmGetNumGroups(m_model));
+        props.set(key, glmGetNumGroups(m_model));
       }
     }
   }

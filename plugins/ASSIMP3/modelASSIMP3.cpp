@@ -395,51 +395,59 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
 
 void modelASSIMP3 :: setProperties(gem::Properties&props)
 {
-  double d;
-
-#if 0
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
+    std::string key=keys[i];
+    std::string s;
+    double d;
+#if 0
     verbose(1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(),
             props.type(keys[i]));
-  }
 #endif
+    if("textype" == key) {
+      if(props.get(key, s)) {
+        // if there are NO texcoords, we only accept 'linear' and 'spheremap'
+        // else, we also allow 'UV'
+        // not-accepted textype, simply use the last one
+        if(m_have_texcoords && "UV" == s) {
+          m_textype = "";
+        } else if(("linear" == s) || ("spheremap" == s)) {
+          m_textype = s;
+        }
+        m_rebuild = true;
+      }
+      continue;
+    }
 
-  std::string s;
-  if(props.get("textype", s)) {
-    // if there are NO texcoords, we only accept 'linear' and 'spheremap'
-    // else, we also allow 'UV'
-    // not-accepted textype, simply use the last one
-    if(m_have_texcoords && "UV" == s) {
-      m_textype = "";
-    } else if(("linear" == s) || ("spheremap" == s)) {
-      m_textype = s;
+    if("rescale" == key) {
+      if(props.get(key, d)) {
+        bool b=(bool)d;
+        if(b) {
+          float tmp;
+          tmp = m_max.x-m_min.x;
+          tmp = aisgl_max(m_max.y - m_min.y,tmp);
+          tmp = aisgl_max(m_max.z - m_min.z,tmp);
+          m_scale = 2.f / tmp;
+          m_offset = m_center * (-m_scale);
+        } else {
+          // FIXXME shouldn't this be the default???
+          m_scale=1.;
+          m_offset.x=m_offset.y=m_offset.z=0.f;
+        }
+      }
+      continue;
     }
-    m_rebuild = true;
-  }
 
-  if(props.get("rescale", d)) {
-    bool b=(bool)d;
-    if(b) {
-      float tmp;
-      tmp = m_max.x-m_min.x;
-      tmp = aisgl_max(m_max.y - m_min.y,tmp);
-      tmp = aisgl_max(m_max.z - m_min.z,tmp);
-      m_scale = 2.f / tmp;
-      m_offset = m_center * (-m_scale);
-    } else {
-      // FIXXME shouldn't this be the default???
-      m_scale=1.;
-      m_offset.x=m_offset.y=m_offset.z=0.f;
+    if("usematerials" == key) {
+      if(props.get(key, d)) {
+        bool useMaterial=d;
+        if(useMaterial!=m_useMaterial) {
+          m_rebuild=true;
+        }
+        m_useMaterial=useMaterial;
+      }
+      continue;
     }
-  }
-  if(props.get("usematerials", d)) {
-    bool useMaterial=d;
-    if(useMaterial!=m_useMaterial) {
-      m_rebuild=true;
-    }
-    m_useMaterial=useMaterial;
   }
 
   render();
