@@ -475,11 +475,16 @@ bool modelASSIMP3 :: compile(void)
   if(!m_scene) {
     return false;
   }
-
+#ifdef __GNUC__
+# warning drop gl* invocations
+#endif
+  bool use_material = false;
   GLboolean useColorMaterial=GL_FALSE;
-  glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
-
-  glDisable(GL_COLOR_MATERIAL);
+  if(glGetBooleanv) {
+    glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
+    glDisable(GL_COLOR_MATERIAL);
+    use_material = m_useMaterial;
+  }
 
   // now begin at the root node of the imported data and traverse
   // the scenegraph by multiplying subsequent local transforms
@@ -492,7 +497,7 @@ bool modelASSIMP3 :: compile(void)
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
                                   aiQuaterniont<float>(), m_offset);
 
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, m_useMaterial,
+  recursive_render(m_scene, m_scene, m_scene->mRootNode, use_material,
                    m_vertices, m_normals, m_texcoords, m_colors, &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
 
@@ -504,7 +509,7 @@ bool modelASSIMP3 :: compile(void)
   }
 
   fillVBOarray();
-  if(useColorMaterial) {
+  if(GL_FALSE != useColorMaterial) {
     glEnable(GL_COLOR_MATERIAL);
   }
 
