@@ -293,6 +293,7 @@ modelASSIMP3 :: modelASSIMP3(void)
   , m_have_texcoords(false)
   , m_textype("")
   , m_texscale(1., 1.)
+  , m_smooth(175.)
 {
 }
 
@@ -339,9 +340,32 @@ bool modelASSIMP3 :: open(const std::string&name,
                           const gem::Properties&requestprops)
 {
   destroy();
+  int flags = aiProcessPreset_TargetRealtime_Quality;
+  flags &= ~aiProcess_GenNormals;
+  flags &= ~aiProcess_GenSmoothNormals;
+  flags |= aiProcess_FlipUVs;
 
-  m_scene = aiImportFile(name.c_str(),
-                         aiProcessPreset_TargetRealtime_Quality | aiProcess_FlipUVs);
+#if 0
+  if(m_smooth > 90.)
+    flags |= aiProcess_GenSmoothNormals;
+  else
+    flags |= aiProcess_GenNormals;
+
+  m_scene = aiImportFile(name.c_str(), flags);
+#else
+  aiPropertyStore *aiprops = aiCreatePropertyStore();
+  if(aiprops) {
+    flags |= aiProcess_GenSmoothNormals;
+    aiSetImportPropertyFloat(aiprops, AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, m_smooth);
+  } else {
+    if(m_smooth > 90.)
+      flags |= aiProcess_GenSmoothNormals;
+    else
+      flags |= aiProcess_GenNormals;
+  }
+  m_scene = aiImportFileExWithProperties(name.c_str(), flags, 0, aiprops);
+  aiReleasePropertyStore(aiprops);
+#endif
   if(!m_scene) {
     return false;
   }
@@ -396,6 +420,7 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
   writeable.set("_texwidth", 1);
   writeable.set("_texheight", 1);
   writeable.set("rescale", 0);
+  writeable.set("smooth", 0);
   writeable.set("usematerials", 0);
 
   return true;
@@ -475,6 +500,20 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
       }
       continue;
     }
+
+    if("smooth" == key) {
+      if(props.get(key, d)) {
+        if(d<0.) {
+          d=0.;
+        }
+        m_smooth = d*180.;
+        if(m_smooth >= 175.)
+          m_smooth = 175.;
+        m_rebuild=true;
+      }
+      continue;
+    }
+
   }
 
   render();

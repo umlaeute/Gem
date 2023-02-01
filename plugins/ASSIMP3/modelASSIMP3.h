@@ -93,6 +93,7 @@ protected:
   std::string m_textype;
 
   aiVector2D m_texscale;
+  float m_smooth;
 };
 };
 }; // namespace gem::plugins
