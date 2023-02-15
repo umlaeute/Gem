@@ -96,7 +96,6 @@ private:
   //////////
   // static member functions
   static void   dspMessCallback(void* data,t_signal** sp);
-  static void   dimenMessCallback(void *data, t_float w, t_float h);
   static void   csMessCallback(void *data, t_symbol*s);
 };
 

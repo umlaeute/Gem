@@ -216,11 +216,9 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
       reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
       gensym("dsp"), A_CANT, A_NULL);
   class_addmethod(classPtr,
-      reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
-      gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);
-  class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
       gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+  CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, int, int);
 }
 
 
@@ -229,10 +227,6 @@ void pix_sig2pix :: dspMessCallback(void *data,t_signal** sp)
   GetMyClass(data)->dspMess(data, sp);
 }
 
-void pix_sig2pix ::dimenMessCallback(void *data, t_float w, t_float h)
-{
-  GetMyClass(data)->dimenMess((int)w, (int)h);
-}
 void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
 {
   int cs = getPixFormat(s->s_name);
