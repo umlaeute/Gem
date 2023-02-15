@@ -103,6 +103,41 @@ static int m_simd=GemSIMD::getCPU();
 #endif
 
 namespace {
+  size_t type2size(unsigned int type) {
+    switch(type) {
+    default:
+      return 1;
+      break;
+    case GL_FLOAT:
+      return sizeof(GLfloat);
+      break;
+    case GL_DOUBLE:
+      return sizeof(GLdouble);
+      break;
+    }
+    /* this should never happen */
+    return 0;
+  }
+  const char*type2name(unsigned int type) {
+    static PERTHREAD char buf[1024];
+    switch(type) {
+    case GL_BYTE: return "BYTE";
+    case GL_UNSIGNED_BYTE: return "UBYTE";
+    case GL_SHORT: return "SHORT";
+    case GL_UNSIGNED_SHORT: return "USHORT";
+    case GL_INT: return "INT";
+    case GL_UNSIGNED_INT: return "UINT";
+    case GL_FLOAT: return "FLOAT";
+    case GL_2_BYTES: return "2BYTES";
+    case GL_3_BYTES: return "3BYTES";
+    case GL_4_BYTES: return "4BYTES";
+    case GL_DOUBLE: return "DOUBLE";
+    default:
+      break;
+    }
+    sprintf(buf, "<type:%d>", type);
+    return buf;
+  }
   const char*format2name(unsigned int format) {
     static PERTHREAD char buf[1024];
     switch(format) {
@@ -207,7 +242,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
 
 GEM_EXTERN unsigned char* imageStruct::allocate(void)
 {
-  return allocate(xsize*ysize*csize);
+  return allocate(xsize*ysize*csize*type2size(type));
 }
 
 GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
@@ -224,7 +259,7 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
 }
 GEM_EXTERN unsigned char* imageStruct::reallocate(void)
 {
-  return reallocate(xsize*ysize*csize);
+  return reallocate(xsize*ysize*csize*type2size(type));
 }
 
 GEM_EXTERN void imageStruct::clear(void)
@@ -291,7 +326,7 @@ static bool copy_imagestruct2imagestruct(const imageStruct*from,
     return false;
   }
 
-  memcpy(to->data, from->data, from->xsize*from->ysize*from->csize);
+  memcpy(to->data, from->data, from->xsize*from->ysize*from->csize*type2size(from->type));
   return true;
 }
 
@@ -317,13 +352,14 @@ GEM_EXTERN void imageStruct::refreshImage(imageStruct *to) const
   if (to->xsize != xsize ||
       to->ysize != ysize ||
       to->csize != csize ||
+      to->type != type ||
       !to->data) {
     to->clear();
     copy2Image(to);
   } else
     // copy the data over
   {
-    memcpy(to->data, this->data, to->xsize * to->ysize * to->csize);
+    memcpy(to->data, this->data, to->xsize * to->ysize * to->csize * type2size(to->type));
   }
 }
 
@@ -469,6 +505,14 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     pd_error(0, "GEM: Someone sent a bogus pointer to convert");
     return false;
   }
+  switch(from->type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_DOUBLE:
+    pd_error(0, "GEM: Cannot convert from %s image data!", type2name(from->type));
+    return false;
+  }
   xsize=from->xsize;
   ysize=from->ysize;
 
@@ -505,6 +549,14 @@ GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
     if (to) {
       to->data = NULL;
     }
+    return false;
+  }
+  switch(type) {
+  default:
+    break;
+  case GL_FLOAT:
+  case GL_DOUBLE:
+    pd_error(0, "GEM: Cannot convert %s image data!", type2name(type));
     return false;
   }
   to->xsize=xsize;
