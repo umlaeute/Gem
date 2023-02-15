@@ -16,7 +16,7 @@
 
 #define HELPSYMBOL "pix_sig2pix~"
 
-#include "pix_sig2pix.h"
+#include "pix_sig2pix~.h"
 #include "Gem/State.h"
 #include "Utils/Functions.h"
 

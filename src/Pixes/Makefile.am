@@ -164,8 +164,8 @@ libPixes_la_SOURCES=  \
     pix_normalize.h \
     pix_offset.cpp \
     pix_offset.h \
-    pix_pix2sig.cpp \
-    pix_pix2sig.h \
+    pix_pix2sig~.cpp \
+    pix_pix2sig~.h \
     pix_posterize.cpp \
     pix_posterize.h \
     pix_puzzle.cpp \
@@ -194,8 +194,8 @@ libPixes_la_SOURCES=  \
     pix_scanline.h \
     pix_set.cpp \
     pix_set.h \
-    pix_sig2pix.cpp \
-    pix_sig2pix.h \
+    pix_sig2pix~.cpp \
+    pix_sig2pix~.h \
     pix_snap2tex.cpp \
     pix_snap2tex.h \
     pix_snap.cpp \
