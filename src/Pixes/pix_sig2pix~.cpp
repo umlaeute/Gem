@@ -35,6 +35,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   : m_pixsize(0)
   , m_width(0), m_height(0)
   , m_reqFormat(GL_RGBA)
+  , m_reqType(0)
 {
 
   m_pixBlock.image = m_imageStruct;
@@ -84,6 +85,10 @@ void pix_sig2pix :: dimenMess(int width, int height)
   m_pixBlock.image.xsize =(GLint) width;
   m_pixBlock.image.ysize = (GLint) height;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
+  if(m_reqType)
+    m_pixBlock.image.type = m_reqType;
+
+  post("type: %d (%d)", m_pixBlock.image.type, m_reqType);
 
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();
@@ -176,12 +181,23 @@ t_int* pix_sig2pix :: perform(t_int* w)
 {
   pix_sig2pix *x = GetMyClass((void*)w[1]);
   int n = (t_int)(w[6]);
+  t_sample**signals = (t_sample**)w+2;
   unsigned char* data = x->m_pixBlock.image.data;
   if (n > x->m_pixsize) {
     n = x->m_pixsize;
   }
   if (n>0) {
-    perform_sig2pix<unsigned char>((t_sample**)w+2, data, x->m_pixBlock.image.format, n, 255.0);
+    switch(x->m_pixBlock.image.type) {
+    default:
+      perform_sig2pix<unsigned char>(signals, data, x->m_pixBlock.image.format, n, 255.0);
+      break;
+    case GL_FLOAT:
+      perform_sig2pix<GLfloat>(signals, data, x->m_pixBlock.image.format, n, 1.0);
+      break;
+    case GL_DOUBLE:
+      perform_sig2pix<GLdouble>(signals, data, x->m_pixBlock.image.format, n, 1.0);
+      break;
+    }
     x->m_pixBlock.newimage = 1;
   }
   return (w+7);
@@ -199,6 +215,20 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
   m_pixBlock.image.setBlack();
   dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
+}
+
+void pix_sig2pix :: typeMess(std::string type) {
+  if("byte" == type) {
+    m_reqType = 0;
+  } else if ("float" == type) {
+    m_reqType = GL_FLOAT;
+  } else if ("double" == type) {
+    m_reqType = GL_DOUBLE;
+  } else {
+    error("invalid type '%s': must be 'byte', 'float' or 'double'", type.c_str());
+    return;
+  }
+  dimenMess(m_width, m_height);
 }
 
 /////////////////////////////////////////////////////////
@@ -219,6 +249,7 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
       reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
       gensym("colorspace"), A_DEFSYMBOL, A_NULL);
   CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "type", typeMess, std::string);
 }
 
 

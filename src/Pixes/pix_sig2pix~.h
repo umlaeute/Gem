@@ -69,6 +69,8 @@ protected:
   //////////
   // setting dimension and colourspace
   virtual void  dimenMess(int w, int h);
+  virtual void typeMess(std::string);
+
   virtual void  csMess(int cs);
 
   //////////
@@ -90,6 +92,7 @@ protected:
   //////////////
   // which colorspace do we want ? currently only GL_RGBA
   int         m_reqFormat;
+  unsigned int m_reqType;
 
 private:
 
