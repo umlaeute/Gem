@@ -345,15 +345,17 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
 
   case GL_YUV422_GEM:
     format=setformat;
+    type =
 #ifdef __APPLE__
 # ifdef __BIG_ENDIAN__
-    GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+      GL_UNSIGNED_SHORT_8_8_REV_APPLE
 # else
-    GL_UNSIGNED_SHORT_8_8_APPLE;
+      GL_UNSIGNED_SHORT_8_8_APPLE
 # endif
 #else
-    type=GL_UNSIGNED_BYTE;
+      GL_UNSIGNED_BYTE
 #endif
+      ;
     csize=2;
     break;
 
@@ -368,19 +370,21 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
   case GL_BGRA:
   default:
     format=setformat;
+    type =
 #ifdef __APPLE__
 # ifdef __BIG_ENDIAN__
-    type=GL_UNSIGNED_INT_8_8_8_8_REV;
+      GL_UNSIGNED_INT_8_8_8_8_REV
 # else
-    type=GL_UNSIGNED_INT_8_8_8_8;
+      GL_UNSIGNED_INT_8_8_8_8
 # endif
 #else
 # ifdef __BIG_ENDIAN__
-    type=GL_UNSIGNED_INT_8_8_8_8_REV;
+      GL_UNSIGNED_INT_8_8_8_8_REV
 # else
-    type=GL_UNSIGNED_BYTE;
+      GL_UNSIGNED_BYTE
 # endif
 #endif
+      ;
     csize=4;
     break;
   }
