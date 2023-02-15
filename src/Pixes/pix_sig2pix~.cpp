@@ -31,8 +31,10 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_sig2pix :: pix_sig2pix(t_floatarg width,
-                           t_floatarg height) : m_reqFormat(GEM_RGBA)
+pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
+  : m_pixsize(0)
+  , m_width(0), m_height(0)
+  , m_reqFormat(GL_RGBA)
 {
 
   m_pixBlock.image = m_imageStruct;
