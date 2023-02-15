@@ -35,6 +35,7 @@ pix_snap :: pix_snap(int argc, t_atom *argv)
   : m_originalImage(NULL)
   , m_x(0), m_y(0), m_width(0), m_height(0)
   , m_numPbo(0), m_curPbo(0), m_pbo(NULL)
+  , m_reqType(0)
 
 {
   m_pixBlock.image = m_imageStruct;
@@ -120,7 +121,9 @@ void pix_snap :: snapMess(void)
   // release previous data
   if (m_originalImage)  {
     if (m_originalImage->xsize != m_width ||
-        m_originalImage->ysize != m_height) {
+        m_originalImage->ysize != m_height ||
+        m_originalImage->type != m_reqType ||
+        0) {
       m_originalImage->clear();
       delete m_originalImage;
       m_originalImage = NULL;
@@ -134,6 +137,11 @@ void pix_snap :: snapMess(void)
     m_originalImage->xsize = m_width;
     m_originalImage->ysize = m_height;
     m_originalImage->setCsizeByFormat(GEM_RGBA);
+    if(m_reqType)
+      m_originalImage->type = m_reqType;
+    m_reqType = m_originalImage->type;
+    post("type: %d (%d)",  m_originalImage->type, m_reqType);
+
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
@@ -160,6 +168,16 @@ void pix_snap :: snapMess(void)
       glGenBuffersARB(m_numPbo, m_pbo);
       int i=0;
       size_t size = m_originalImage->xsize*m_originalImage->ysize*m_originalImage->csize;
+      switch(m_originalImage->type) {
+      case GL_FLOAT:
+        size *= sizeof(GLfloat);
+        break;
+      case GL_DOUBLE:
+        size *= sizeof(GLdouble);
+        break;
+      default:
+        break;
+      }
       for(i=0; i<m_numPbo; i++) {
         glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[i]);
         glBufferDataARB(GL_PIXEL_PACK_BUFFER_ARB,
@@ -302,6 +320,20 @@ void pix_snap :: pboMess(int num)
   setModified();
 }
 
+void pix_snap :: typeMess(std::string type) {
+  if("byte" == type) {
+    m_reqType = 0;
+  } else if ("float" == type) {
+    m_reqType = GL_FLOAT;
+  } else if ("double" == type) {
+    m_reqType = GL_DOUBLE;
+  } else {
+    error("invalid type '%s': must be 'byte', 'float' or 'double'", type.c_str());
+    return;
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
@@ -315,4 +347,5 @@ void pix_snap :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
 
   CPPEXTERN_MSG1(classPtr, "pbo",  pboMess, int);
+  CPPEXTERN_MSG1(classPtr, "type",  typeMess, std::string);
 }

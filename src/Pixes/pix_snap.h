@@ -87,6 +87,9 @@ public:
   void pboMess(int num_pbos);
   GLint m_numPbo, m_curPbo;
   GLuint *m_pbo;                   // IDs of PBO
+
+  virtual void  typeMess(std::string);
+  GLuint m_reqType;
 };
 
 #endif  // for header file
