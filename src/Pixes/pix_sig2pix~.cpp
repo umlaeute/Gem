@@ -14,14 +14,12 @@
 //
 /////////////////////////////////////////////////////////
 
-#define HELPSYMBOL "pix_sig2pix~"
-
 #include "pix_sig2pix~.h"
 #include "Gem/State.h"
 #include "Utils/Functions.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_sig2pix, t_float,A_DEFFLOAT,t_float,
-                            A_DEFFLOAT);
+CPPEXTERN_NEW_NAMED_WITH_TWO_ARGS(pix_sig2pix, "pix_sig2pix~", t_float,A_DEFFLOAT,t_float,
+    A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -236,9 +234,6 @@ void pix_sig2pix :: typeMess(std::string type) {
 
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_sig2pix),
-      gensym("pix_sig2pix~"), A_GIMME, A_NULL);
-
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),

@@ -13,15 +13,13 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#define HELPSYMBOL "scopeXYZ~"
-
 #include "scopeXYZ~.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-CPPEXTERN_NEW_WITH_ONE_ARG(scopeXYZ, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_NAMED_WITH_ONE_ARG(scopeXYZ, "scopeXYZ~", t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //
@@ -192,9 +190,6 @@ void scopeXYZ :: linewidthMess(float linewidth)
 /////////////////////////////////////////////////////////
 void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_scopeXYZ),
-                   gensym("scopeXYZ~"), A_GIMME, A_NULL);
-
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "linewidth", linewidthMess, float);
   CPPEXTERN_MSG1(classPtr, "length", lengthMess, int);

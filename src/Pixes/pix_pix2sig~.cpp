@@ -14,12 +14,10 @@
 //
 /////////////////////////////////////////////////////////
 
-#define HELPSYMBOL "pix_sig2pix~"
-
 #include "pix_pix2sig~.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW(pix_pix2sig);
+CPPEXTERN_NEW_NAMED(pix_pix2sig, "pix_pix2sig~");
 
 /////////////////////////////////////////////////////////
 //
@@ -174,8 +172,6 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 
 void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
 {
-  class_addcreator(reinterpret_cast<t_newmethod>(create_pix_pix2sig),
-      gensym("pix_pix2sig~"), A_GIMME, A_NULL);
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
       gensym("dsp"), A_CANT, A_NULL);
