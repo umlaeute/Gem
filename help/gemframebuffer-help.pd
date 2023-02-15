@@ -1,27 +1,22 @@
 #N canvas 125 98 896 632 10;
 #X declare -lib Gem;
-#X obj 465 39 cnv 15 420 570 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 472 323 cnv 15 300 60 empty empty empty 20 12 0 14 -191407 -66577
-0;
-#X obj 474 48 cnv 15 400 250 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 465 39 cnv 15 420 570 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 472 323 cnv 15 300 60 empty empty empty 20 12 0 14 #b8b8b8 #404040 0;
+#X obj 474 48 cnv 15 400 250 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 477 71 gemhead 20;
 #X obj 664 336 gemhead;
 #X msg 615 136 dimen 320 240;
 #X obj 477 498 rotateXYZ;
-#X floatatom 794 457 5 0 0 0 - - -;
+#X floatatom 794 457 5 0 0 0 - - - 0;
 #X msg 762 144 color 0 0 1 0;
 #X msg 602 117 dimen 1024 1024;
 #X msg 751 104 color 0 0 0 0;
 #X obj 477 452 t a b;
-#X floatatom 717 499 5 0 0 0 - - -;
+#X floatatom 717 499 5 0 0 0 - - - 0;
 #X msg 549 262 rectangle \$1;
-#X obj 549 244 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 549 244 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X msg 509 131 type FLOAT;
-#X obj 664 304 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 664 304 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X obj 477 412 translateXYZ 0 0 -4;
 #X obj 477 328 gemframebuffer;
 #X obj 664 361 pix_texture;
@@ -35,7 +30,7 @@
 #X msg 680 250 format RGB32;
 #X obj 664 517 square 2;
 #X obj 664 479 rotateXYZ -40 0 200;
-#X floatatom 707 459 5 0 0 0 - - -;
+#X floatatom 707 459 5 0 0 0 - - - 0;
 #X obj 477 517 pqtorusknots;
 #N canvas 0 50 450 300 rotation 0;
 #X obj 33 19 inlet;
@@ -67,7 +62,7 @@
 #X connect 11 0 5 0;
 #X connect 12 0 8 0;
 #X restore 509 473 pd rotation;
-#X floatatom 531 197 5 0 0 0 - - -;
+#X floatatom 531 197 5 0 0 0 - - - 0;
 #N canvas 125 50 450 300 rotation 0;
 #X obj 112 29 inlet;
 #X obj 112 105 % 360;
@@ -86,17 +81,15 @@
 #X obj 585 154 t a;
 #X obj 751 165 t a;
 #X obj 495 160 t a;
-#X floatatom 563 391 5 0 0 0 - - -;
-#X floatatom 607 392 5 0 0 0 - - -;
-#X floatatom 520 391 5 0 0 0 - - -;
+#X floatatom 563 391 5 0 0 0 - - - 0;
+#X floatatom 607 392 5 0 0 0 - - - 0;
+#X floatatom 520 391 5 0 0 0 - - - 0;
 #X obj 495 184 t a;
-#X obj 470 544 cnv 15 410 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 470 544 cnv 15 410 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X msg 757 574 color 0 0 0 0;
 #X msg 746 552 color 0 1 1 0;
 #X msg 637 555 lighting \$1;
-#X obj 615 556 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 615 556 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -120,18 +113,15 @@
 #X connect 7 2 0 0;
 #X connect 8 0 9 0;
 #X restore 473 584 pd gemwin;
-#X msg 473 559 destroy;
+#X msg 473 559 create;
 #X text 471 543 Create window:;
 #X obj 637 582 t a;
 #X text 476 52 Example:;
 #X text 699 10 GEM object;
-#X obj 7 71 cnv 15 450 130 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 7 238 cnv 15 450 370 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 7 71 cnv 15 450 130 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 7 238 cnv 15 450 370 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 10 244 Inlets:;
-#X obj 7 205 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 7 205 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 14 204 Arguments:;
 #X text 28 263 Inlet 1: gemlist;
 #X text 15 553 Outlets:;
@@ -139,12 +129,9 @@
 #X text 60 217 <none>;
 #X text 102 29 Synopsis: [gemframebuffer];
 #X text 122 45 Class: framebuffer object;
-#X text 12 80 Description: Renders a scene in a texture \, for later
-use.;
-#X text 12 98 this example renders a scene (pqtorusknots) into a framebuffer
-\, which is then used as a texture onto a square.;
-#X text 13 128 you need framebuffer support (and its driver) on your
-gfx-card;
+#X text 12 80 Description: Renders a scene in a texture \, for later use.;
+#X text 12 98 this example renders a scene (pqtorusknots) into a framebuffer \, which is then used as a texture onto a square., f 72;
+#X text 13 128 you need framebuffer support (and its driver) on your gfx-card, f 72;
 #X text 28 277 Inlet 1: message: type [BYTE | INT | FLOAT];
 #X text 27 345 Inlet 1: message: dimen <x> <y>;
 #X text 27 379 Inlet 1: message: color <r> <g> <b> <a>;
@@ -155,29 +142,22 @@ gfx-card;
 #X text 102 360 (dimension of the framebuffer texture);
 #X text 106 495 (useful only with shader);
 #X text 106 478 (change texunit of the texture);
-#X text 104 432 (texturing mode \; rectangle (1) or normalized (0))
-;
+#X text 104 432 (texturing mode \; rectangle (1) or normalized (0));
 #X text 100 326 (color format of the framebuffer);
 #X text 102 395 (background color of the framebuffer);
-#X obj 556 71 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X floatatom 493 353 5 0 0 0 - - -;
+#X obj 556 71 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X floatatom 493 353 5 0 0 0 - - - 0;
 #X obj 477 372 scaleXYZ;
-#X floatatom 563 356 5 0 0 0 - - -;
-#X floatatom 528 355 5 0 0 0 - - -;
+#X floatatom 563 356 5 0 0 0 - - - 0;
+#X floatatom 528 355 5 0 0 0 - - - 0;
 #X msg 585 60 perspec -1 1 -1 1 1 20;
 #X msg 593 86 perspec -1 1 -1 1 3 75;
 #X text 98 527 (frustum of the framebuffer);
 #X text 752 59 default;
-#X text 11 160 NOTE: the default view-point of [gemframebuffer] is
-at the origin 0/0/0 \, unlike [gemwin] where it is at 0/0/4. You might
-want to manually insert a [translateXYZ 0 0 -4].;
-#X text 23 512 Inlet 1: message: perspec <left><right><bottom><top><near>
-;
-#X text 428 512 <far>;
-#X text 31 587 Outlet 2: texture info : <id> <width> <height> <type>
-<0.>;
+#X text 11 153 NOTE: the default view-point of [gemframebuffer] is at the origin 0/0/0 \, unlike [gemwin] where it is at 0/0/4. You might want to manually insert a [translateXYZ 0 0 -4]., f 72;
+#X text 31 587 Outlet 2: texture info : <id> <width> <height> <type> <0.>;
 #X obj 778 8 declare -lib Gem;
+#X text 22 512 Inlet 1: message: perspec <left><right><bottom><top><near><far>, f 66;
 #X connect 3 0 18 0;
 #X connect 4 0 19 0;
 #X connect 5 0 38 0;
