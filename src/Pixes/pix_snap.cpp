@@ -344,7 +344,9 @@ void pix_snap :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", snapMess);
 
   CPPEXTERN_MSG2(classPtr, "vert_size", sizeMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "dimen", sizeMess, int, int);
   CPPEXTERN_MSG2(classPtr, "vert_pos",  posMess, int, int);
+  CPPEXTERN_MSG2(classPtr, "offset", posMess, int, int);
 
   CPPEXTERN_MSG1(classPtr, "pbo",  pboMess, int);
   CPPEXTERN_MSG1(classPtr, "type",  typeMess, std::string);
