@@ -201,7 +201,7 @@ void scopeXYZ :: obj_setupCallback(t_class *classPtr)
 
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(&scopeXYZ::dspCallback),
-      gensym("dsp"), A_NULL);
+      gensym("dsp"), A_CANT, A_NULL);
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
 }
 void scopeXYZ ::  dspCallback(void *data,t_signal** sp)

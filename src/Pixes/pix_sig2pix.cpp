@@ -203,7 +203,7 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
-      gensym("dsp"), A_NULL);
+      gensym("dsp"), A_CANT, A_NULL);
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_sig2pix::dimenMessCallback),
       gensym("dimen"), A_DEFFLOAT,A_DEFFLOAT, A_NULL);

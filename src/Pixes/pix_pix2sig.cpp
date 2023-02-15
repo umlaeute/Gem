@@ -169,7 +169,7 @@ void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
       gensym("pix_pix2sig~"), A_GIMME, A_NULL);
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
-      gensym("dsp"), A_NULL);
+      gensym("dsp"), A_CANT, A_NULL);
 }
 
 void pix_pix2sig :: dspMessCallback(void *data,t_signal** sp)
