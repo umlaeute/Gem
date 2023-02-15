@@ -65,6 +65,18 @@ void GemPixObj :: render(GemState *state)
   if (!state || !state->get(GemState::_PIX, image)) {
     return;
   }
+  if(image) {
+    switch (image->image.type) {
+    case GL_FLOAT:
+      error("cannot handle FLOAT images");
+      return;
+    case GL_DOUBLE:
+      error("cannot handle DOUBLE images");
+      return;
+    default:
+      break;
+    }
+  }
   gem::Rectangle*roi=NULL;
   state->get(GemState::getKey("pix.roi.rectangle"),roi);
   if(roi) {
