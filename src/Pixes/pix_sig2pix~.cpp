@@ -128,51 +128,60 @@ void pix_sig2pix :: startRendering()
 //
 /////////////////////////////////////////////////////////
 
+namespace {
+  template<typename T>
+  void perform_sig2pix(t_sample**in, void*data_, unsigned int format, size_t n, t_sample scale) {
+    T*data = static_cast<T*>(data_);
+    t_sample*in_red = in[0];
+    t_sample*in_green = in[1];
+    t_sample*in_blue = in[2];
+    t_sample*in_alpha = in[3];
+
+    switch(format) {
+    case GL_RGBA:
+    default:
+      while(n--) {
+        data[chRed]   = static_cast<T> (scale*(*in_red++));
+        data[chGreen] = static_cast<T> (scale*(*in_green++));
+        data[chBlue]  = static_cast<T> (scale*(*in_blue++));
+        data[chAlpha] = static_cast<T> (scale*(*in_alpha++));
+        data+=4;
+      }
+      break;
+    case GEM_YUV:
+      n/=2;
+      while(n--) {
+        data[chY0] = static_cast<T> (scale*(*in_red++));
+        data[chU ] = static_cast<T> (scale*(*in_green++));
+        in_green++;
+        data[chY1] = static_cast<T> (scale*(*in_red++));
+        data[chV ] = static_cast<T> (scale*(*in_blue++));
+        in_blue++;
+
+        data+=4;
+      }
+      break;
+    case GEM_GRAY:
+      while(n--) {
+        *data++ = static_cast<T> (scale*(*in_red++));
+      }
+      break;
+    }
+  }
+};
+
 t_int* pix_sig2pix :: perform(t_int* w)
 {
   pix_sig2pix *x = GetMyClass((void*)w[1]);
-  t_float* in_red =   (t_float*)(w[2]);
-  t_float* in_green = (t_float*)(w[3]);
-  t_float* in_blue =  (t_float*)(w[4]);
-  t_float* in_alpha = (t_float*)(w[5]);
-  t_int n = (t_int)(w[6]);
-
+  int n = (t_int)(w[6]);
   unsigned char* data = x->m_pixBlock.image.data;
   if (n > x->m_pixsize) {
     n = x->m_pixsize;
   }
-
-  switch(x->m_pixBlock.image.format) {
-  case GL_RGBA:
-  default:
-    while(n--) {
-      data[chRed]   = (unsigned char) (*in_red++  *255.0);
-      data[chGreen] = (unsigned char) (*in_green++*255.0);
-      data[chBlue]  = (unsigned char) (*in_blue++ *255.0);
-      data[chAlpha] = (unsigned char) (*in_alpha++*255.0);
-      data+=4;
-    }
-    break;
-  case GEM_YUV:
-    n/=2;
-    while(n--) {
-      data[chY0] = (unsigned char) (*in_red++  *255.0);
-      data[chU ] = (unsigned char) (*in_green++  *255.0);
-      in_green++;
-      data[chY1] = (unsigned char) (*in_red++  *255.0);
-      data[chV ] = (unsigned char) (*in_blue++  *255.0);
-      in_blue++;
-
-      data+=4;
-    }
-    break;
-  case GEM_GRAY:
-    while(n--) {
-      *data++ = (unsigned char) (*in_red++  *255.0);
-    }
-    break;
+  if (n>0) {
+    perform_sig2pix<unsigned char>((t_sample**)w+2, data, x->m_pixBlock.image.format, n, 255.0);
+    x->m_pixBlock.newimage = 1;
   }
-  x->m_pixBlock.newimage = 1;
   return (w+7);
 }
 
