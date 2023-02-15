@@ -88,8 +88,6 @@ void pix_sig2pix :: dimenMess(int width, int height)
   if(m_reqType)
     m_pixBlock.image.type = m_reqType;
 
-  post("type: %d (%d)", m_pixBlock.image.type, m_reqType);
-
   m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
