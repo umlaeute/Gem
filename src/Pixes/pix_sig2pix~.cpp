@@ -216,14 +216,14 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 }
 
 void pix_sig2pix :: typeMess(std::string type) {
-  if("byte" == type) {
+  if("BYTE" == type) {
     m_reqType = 0;
-  } else if ("float" == type) {
+  } else if ("FLOAT" == type) {
     m_reqType = GL_FLOAT;
-  } else if ("double" == type) {
+  } else if ("DOUBLE" == type) {
     m_reqType = GL_DOUBLE;
   } else {
-    error("invalid type '%s': must be 'byte', 'float' or 'double'", type.c_str());
+    error("invalid type '%s': must be 'BYTE', 'FLOAT' or 'DOUBLE'", type.c_str());
     return;
   }
   dimenMess(m_width, m_height);
