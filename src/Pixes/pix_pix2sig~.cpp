@@ -57,9 +57,15 @@ pix_pix2sig :: ~pix_pix2sig()
 /////////////////////////////////////////////////////////
 // processImage
 /////////////////////////////////////////////////////////
-void pix_pix2sig :: processImage(imageStruct &image)
+void pix_pix2sig :: render(GemState *state)
 {
-  image.copy2ImageStruct(&m_image);
+  pixBlock*img=NULL;
+  if(state) {
+    state->get(GemState::_PIX, img);
+  }
+  if(img) {
+    img->image.copy2ImageStruct(&m_image);
+  }
 }
 
 /////////////////////////////////////////////////////////

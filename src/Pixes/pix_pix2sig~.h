@@ -16,8 +16,8 @@
 #ifndef _INCLUDE__GEM_PIXES_PIX_PIX_SIG_H_
 #define _INCLUDE__GEM_PIXES_PIX_PIX_SIG_H_
 
-#include <string.h>
-#include "Base/GemPixObj.h"
+#include "Base/GemBase.h"
+#include "Gem/Image.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
@@ -34,9 +34,9 @@
   4 outlets with signals : R~, G~, B~, A~
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_pix2sig : public GemPixObj
+class GEM_EXTERN pix_pix2sig : public GemBase
 {
-  CPPEXTERN_HEADER(pix_pix2sig, GemPixObj);
+  CPPEXTERN_HEADER(pix_pix2sig, GemBase);
 
 public:
 
@@ -56,7 +56,7 @@ protected:
 
   //////////
   // processImage
-  virtual void  processImage(imageStruct &image);
+  virtual void  render(GemState*);
 
   //////////
   // DSP-Message
