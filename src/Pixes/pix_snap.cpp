@@ -31,10 +31,10 @@ CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_snap :: pix_snap(int argc, t_atom *argv) :
-  m_originalImage(NULL),
-  m_x(0), m_y(0), m_width(0), m_height(0),
-  m_numPbo(0), m_curPbo(0), m_pbo(NULL)
+pix_snap :: pix_snap(int argc, t_atom *argv)
+  : m_originalImage(NULL)
+  , m_x(0), m_y(0), m_width(0), m_height(0)
+  , m_numPbo(0), m_curPbo(0), m_pbo(NULL)
 
 {
   m_pixBlock.image = m_imageStruct;
@@ -137,8 +137,7 @@ void pix_snap :: snapMess(void)
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
 
-    m_originalImage->allocate(m_originalImage->xsize * m_originalImage->ysize *
-                              m_originalImage->csize);
+    m_originalImage->allocate();
 
     makePbo=true;
   }
@@ -160,10 +159,11 @@ void pix_snap :: snapMess(void)
       m_pbo=new GLuint[m_numPbo];
       glGenBuffersARB(m_numPbo, m_pbo);
       int i=0;
+      size_t size = m_originalImage->xsize*m_originalImage->ysize*m_originalImage->csize;
       for(i=0; i<m_numPbo; i++) {
         glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, m_pbo[i]);
         glBufferDataARB(GL_PIXEL_PACK_BUFFER_ARB,
-                        m_originalImage->xsize*m_originalImage->ysize*m_originalImage->csize,
+                        size,
                         0, GL_STREAM_READ_ARB);
       }
       glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, 0);
