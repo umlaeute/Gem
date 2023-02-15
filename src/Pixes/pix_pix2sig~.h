@@ -67,12 +67,8 @@ protected:
   //-----------------------------------
 
   //////////
-  // The pixBlock with the current image
-  //  pixBlock          m_pixBlock;
-  unsigned char *m_data;
-  long int       m_size;
-  int            m_csize;
-  int            m_format;
+  // the current image
+  imageStruct    m_image;
 
   //////////
   // the outlets~

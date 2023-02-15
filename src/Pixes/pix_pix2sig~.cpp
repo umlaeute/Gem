@@ -17,6 +17,7 @@
 #define HELPSYMBOL "pix_sig2pix~"
 
 #include "pix_pix2sig~.h"
+#include "Gem/State.h"
 
 CPPEXTERN_NEW(pix_pix2sig);
 
@@ -28,11 +29,7 @@ CPPEXTERN_NEW(pix_pix2sig);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_pix2sig :: pix_pix2sig(void) :
-  m_data(NULL),
-  m_size(0),
-  m_csize(4),
-  m_format(GEM_RGBA)
+pix_pix2sig :: pix_pix2sig(void)
 {
   int i=4;
   while(i--) {
@@ -50,8 +47,6 @@ pix_pix2sig :: ~pix_pix2sig()
   while(i--) {
     outlet_free(o_col[i]);
   }
-  m_data = NULL;
-  m_size = 0;
 }
 
 /////////////////////////////////////////////////////////
@@ -64,90 +59,98 @@ pix_pix2sig :: ~pix_pix2sig()
 /////////////////////////////////////////////////////////
 void pix_pix2sig :: processImage(imageStruct &image)
 {
-  m_data = image.data;
-  m_size = image.xsize * image.ysize;
-  m_csize = image.csize;
-  m_format = image.format;
+  image.copy2ImageStruct(&m_image);
 }
 
 /////////////////////////////////////////////////////////
 // signal Performance
-t_int* pix_pix2sig :: perform(t_int* w)
-{
-  pix_pix2sig *x = GetMyClass((void*)w[1]);
-  // hey this is RGBA only !!!
-  t_float* out_red =   (t_float*)(w[2]);
-  t_float* out_green = (t_float*)(w[3]);
-  t_float* out_blue =  (t_float*)(w[4]);
-  t_float* out_alpha = (t_float*)(w[5]);
-  int N = (t_int)(w[6]);
+namespace {
+  template<typename T>
+  void perform_pix2sig(t_sample**out, void*data_, unsigned int format, size_t n, t_sample scale) {
+    T*data = static_cast<T*>(data_);
+    t_sample*out_red   = out[0];
+    t_sample*out_green = out[1];
+    t_sample*out_blue  = out[2];
+    t_sample*out_alpha = out[3];
 
-  unsigned char* data = x->m_data;
-  long int pix_size   = x->m_size;
-  int n = (N<pix_size)?N:pix_size;
-
-  if (x->m_data) {
-    t_float scale0, scale1, scale2, scale3;
-    scale0 = scale1 = scale2 = scale3 = 1./255.;
-    int csize=x->m_csize;
-    switch (csize) {
-    /* coverity[unterminated_default] */
-    default:
-      scale3=1./255.;
-    /* coverity[unterminated_case] */
-    case 3:
-      scale2=1./255.;
-    /* coverity[unterminated_case] */
-    case 2:
-      scale1=1./255.;
-    /* coverity[unterminated_case] */
-    case 1:
-      scale0=1./255.;
-    case 0:
-      break;
-    }
-    switch(x->m_format) {
+    switch(format) {
     case GEM_RGBA:
     default:
       while(n--) {
-        *(out_red  ++) = data[chRed]  *scale0;
-        *(out_green++) = data[chGreen]*scale1;
-        *(out_blue ++) = data[chBlue] *scale2;
-        *(out_alpha++) = data[chAlpha]*scale3;
-        data+=csize;
+        *(out_red  ++) = scale * static_cast<t_sample>(data[chRed]);
+        *(out_green++) = scale * static_cast<t_sample>(data[chGreen]);
+        *(out_blue ++) = scale * static_cast<t_sample>(data[chBlue]);
+        *(out_alpha++) = scale * static_cast<t_sample>(data[chAlpha]);
+        data+=4;
       }
       break;
     case GEM_YUV:
       n/=2;
       while(n--) {
-        *(out_red  ++) = data[chY0]   *scale0;
-        *(out_red  ++) = data[chY1]   *scale0;
-        *(out_green++) = data[chU] *scale1;
-        *(out_green++) = data[chU] *scale1;
-        *(out_blue ++) = data[chV] *scale2;
-        *(out_blue ++) = data[chV] *scale2;
-        *(out_alpha++) = 0;
-        *(out_alpha++) = 0;
+        t_sample y0 = scale * static_cast<t_sample>(data[chY0]);
+        t_sample y1 = scale * static_cast<t_sample>(data[chY1]);
+        t_sample u  = scale * static_cast<t_sample>(data[chU]);
+        t_sample v  = scale * static_cast<t_sample>(data[chV]);
+        *(out_red  ++) = y0;
+        *(out_red  ++) = y1;
+        *(out_green++) = u;
+        *(out_green++) = u;
+        *(out_blue ++) = v;
+        *(out_blue ++) = v;
+        *(out_alpha++) = 1.;
+        *(out_alpha++) = 1.;
         data+=4;
       }
       break;
     case GEM_GRAY:
       while(n--) {
-        *(out_red  ++) = data[chGray]*scale0;
-        *(out_green++) = 0;
-        *(out_blue ++) = 0;
-        *(out_alpha++) = 0;
+        t_sample g = scale * static_cast<t_sample>(data[chGray]);
+        *(out_red  ++) = g;
+        *(out_green++) = g;
+        *(out_blue ++) = g;
+        *(out_alpha++) = 1.;
         data++;
       }
       break;
     }
+  }
+};
+
+
+
+t_int* pix_pix2sig :: perform(t_int* w)
+{
+  pix_pix2sig *x = GetMyClass((void*)w[1]);
+  // hey this is RGBA only !!!
+  t_sample**out = (t_sample**)w+2;
+  int N = (t_int)(w[6]);
+
+  unsigned char* data = x->m_image.data;
+  long int size   = x->m_image.xsize * x->m_image.ysize;
+  int n = (N<size)?N:size;
+
+  if (data && n>0) {
+    switch(x->m_image.type) {
+    default:
+      perform_pix2sig<unsigned char>(out, data, x->m_image.format, n, 1./255.0);
+      break;
+    case GL_FLOAT:
+      perform_pix2sig<GLfloat>(out, data, x->m_image.format, n, 1.0);
+      break;
+    case GL_DOUBLE:
+      perform_pix2sig<GLdouble>(out, data, x->m_image.format, n, 1.0);
+      break;
+    }
   } else {
     n=N;
+    t_sample*out_red   = out[0];
+    t_sample*out_green = out[1];
+    t_sample*out_blue  = out[2];
+    t_sample*out_alpha = out[3];
     while (n--) {
       *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
     }
   }
-
 
   return (w+7);
 }
