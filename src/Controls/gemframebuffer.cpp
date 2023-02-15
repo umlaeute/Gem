@@ -572,8 +572,6 @@ void gemframebuffer :: perspectiveMess(t_symbol*s,int argc, t_atom*argv)
 /* needs to be called with a valid context */
 void gemframebuffer :: fixFormat(GLenum wantFormat)
 {
-  m_type = GL_UNSIGNED_BYTE;
-
   if(wantFormat == GL_RGB_FLOAT32_ATI && !GLEW_ATI_texture_float) {
     wantFormat =  GL_RGB;
   }
