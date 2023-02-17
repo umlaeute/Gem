@@ -411,11 +411,11 @@ static std::string get_keyname(int key, int scancode)
   const char*sid;
 
   sid = glfwGetKeyName(key, scancode);
-  if(sid) {
+  if(sid && *sid) {
     return (sid);
   }
   sid = glfwGetKeyName(GLFW_KEY_UNKNOWN, scancode);
-  if(sid) {
+  if(sid && *sid) {
     return (sid);
   }
 
