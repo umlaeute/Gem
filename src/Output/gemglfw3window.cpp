@@ -982,7 +982,7 @@ void gemglfw3window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG2(classPtr, "glprofile", glprofileMess, int, int);
   CPPEXTERN_MSG1(classPtr, "gles", glesMess, bool);
-  ::verbose(0, "[gemglfw3window]\n\tGLFW build version: %d.%d.%d\n\tGLFW runtime version: %s"
+  ::verbose(0, "[gemglfw3window]\n\tGLFW compile version: %d.%d.%d\n\tGLFW runtime version: %s"
             , GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION
             , glfwGetVersionString()
     );
