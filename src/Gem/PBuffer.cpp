@@ -111,7 +111,7 @@ PBuffer::PBuffer(int width,int height,int flags)
     int count;
     GLXFBConfig *config;
 
-    if(GLXEW_SGIX_fbconfig && GLXEW_SGIX_pbuffer) {
+    if(GLAD_GLX_SGIX_fbconfig && GLAD_GLX_SGIX_pbuffer) {
       debug("using SGIX pbuffers\n");
       pattrib.push_back(0);
 

@@ -28,47 +28,57 @@
 
 #include "Gem/GemGLconfig.h"
 
-#ifdef GEM_MULTICONTEXT
-# define GLEW_MX
+/* ================== openGL ================== */
+#include "glad/gl.h"
+
+/* =================== GLU ==================== */
+#ifdef GEM_HAVE_GLU
+# ifdef __APPLE__
+#  include <Availability.h>
+#  if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+#   undef GEM_HAVE_GLU
+#  endif
+# endif
 #endif
 
-#ifndef GEM_HAVE_GLU
-# define GLEW_NO_GLU
-#else
-#endif
-
-
-#ifdef __EMSCRIPTEN__
-# include <GL/glew.h>
-# include <SDL/SDL_opengl.h>
-# include <GL/gl.h>
-# ifdef GEM_HAVE_GLU
+#ifdef GEM_HAVE_GLU
+/* this is where we can safely include GLU */
+# if defined(__APPLE__) && defined(__MACH__)
+#  include <OpenGL/glu.h>
+# else
 #  include <GL/glu.h>
 # endif
-#else
-# include "Gem/glew.h"
 #endif
 
+
+/* ================= system GL ================ */
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
 #elif defined(__EMSCRIPTEN__)
 #elif defined _WIN32
-# include "Gem/wglew.h"
+# include "glad/wgl.h"
 #elif defined(__linux__) || defined(__FreeBSD_kernel__)
-# include "Gem/glxew.h"
+# include "glad/glx.h"
 #endif /* OS */
 
+
+/* ============= Multicontext ================= */
 #ifdef GEM_MULTICONTEXT
-GEM_EXTERN GLEWContext*glewGetContext(void);
-# ifdef __APPLE__
-# elif defined _WIN32
-GEM_EXTERN WGLEWContext*wglewGetContext(void);
-# elif defined __linux__ || defined HAVE_GL_GLX_H
-GEM_EXTERN GLXEWContext*glxewGetContext(void);
-# endif
+# ifdef __cplusplus
+extern "C" {
+# endif /* c++ */
+  GEM_EXTERN void*gemGetCurrentContext(void);
+# ifdef __cplusplus
+}
+# endif /* c++ */
+
+#define GLCONTEXT static_cast<GladGLContext*>(gemGetCurrentContext())
+#include "glad/gl_mx.h"
 
 #endif /* GEM_MULTICONTEXT */
 
+
+/* ============= common colors ================ */
 #ifndef GL_YUV422_GEM
 # define GL_YCBCR_422_GEM GL_YCBCR_422_APPLE
 # define GL_YUV422_GEM GL_YCBCR_422_GEM
