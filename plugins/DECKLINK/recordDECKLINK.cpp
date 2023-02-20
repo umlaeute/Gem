@@ -323,7 +323,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
         if(props.get(key, s)) {
           vconn = string2connection(s);
           if(-1 == vconn) {
-            vconn == bmdVideoConnectionUnspecified;
+            vconn = bmdVideoConnectionUnspecified;
           }
         }
         post("setting 'connection' to %d '%s'", vconn, s.c_str());
