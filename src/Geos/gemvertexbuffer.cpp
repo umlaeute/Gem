@@ -17,7 +17,6 @@
 
 #include "gemvertexbuffer.h"
 
-#include "Gem/Manager.h"
 #include "Utils/Functions.h"
 
 #ifdef _MSC_VER

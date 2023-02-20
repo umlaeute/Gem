@@ -14,7 +14,6 @@ LOG
 #define _INCLUDE__GEM_MANIPS_CAMERA_H_
 
 #include "Base/GemBase.h"
-#include "Gem/Manager.h"
 #include <stdlib.h>
 #include <math.h>
 

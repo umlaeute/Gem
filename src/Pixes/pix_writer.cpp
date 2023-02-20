@@ -22,7 +22,6 @@
 # define vsnprintf _vsnprintf
 #endif
 
-#include "Gem/Manager.h"
 #include "Gem/ImageIO.h"
 
 #include <stdio.h>

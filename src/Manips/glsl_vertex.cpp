@@ -16,7 +16,6 @@
 /////////////////////////////////////////////////////////
 
 #include "glsl_vertex.h"
-#include "Gem/Manager.h"
 
 #include <string.h>
 #include <stdlib.h>

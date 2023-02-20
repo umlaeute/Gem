@@ -14,7 +14,6 @@
 
 #include "pix_multitexture.h"
 
-#include "Gem/Manager.h"
 #include "Gem/Image.h"
 #include "Gem/Exception.h"
 

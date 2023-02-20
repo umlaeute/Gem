@@ -15,7 +15,6 @@
 #define _INCLUDE__GEM_GEOS_RUBBER_H_
 
 #include "Base/GemShape.h"
-#include "Gem/Manager.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

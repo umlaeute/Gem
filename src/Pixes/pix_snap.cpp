@@ -16,7 +16,6 @@
 
 #include "pix_snap.h"
 
-#include "Gem/Manager.h"
 #include "Gem/Cache.h"
 #include "Gem/State.h"
 #include "Gem/Settings.h"

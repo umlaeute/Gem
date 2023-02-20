@@ -17,7 +17,6 @@
 
 #include "pix_cubemap.h"
 
-#include "Gem/Manager.h"
 #include "Gem/Image.h"
 #include <string.h>
 
