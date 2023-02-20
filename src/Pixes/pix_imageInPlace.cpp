@@ -235,11 +235,7 @@ void pix_imageInPlace :: repeatMess(int type)
   if (type) {
     m_repeat = GL_REPEAT;
   } else {
-    if(getState()!=INIT && GLEW_EXT_texture_edge_clamp) {
       m_repeat = GL_CLAMP_TO_EDGE;
-    } else {
-      m_repeat = GL_CLAMP;
-    }
   }
 
 }

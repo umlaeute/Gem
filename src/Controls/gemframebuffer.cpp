@@ -169,8 +169,6 @@ bool gemframebuffer :: isRunnable()
     m_canRectangle=GL_TEXTURE_2D;
     if(GLEW_ARB_texture_rectangle) {
       m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
-    } else if (GLEW_EXT_texture_rectangle) {
-      m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
     }
 
     return true;
@@ -407,7 +405,7 @@ void gemframebuffer :: initFBO()
   glTexParameteri(m_texTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  GLuint wrapmode = (GLEW_EXT_texture_edge_clamp)?GL_CLAMP_TO_EDGE:GL_CLAMP;
+  GLuint wrapmode = GL_CLAMP_TO_EDGE;
 
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_S, wrapmode);
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_T, wrapmode);
