@@ -293,13 +293,14 @@ pixBlock*videoNDI::getFrame(void)
     case NDIlib_FourCC_video_type_PA16:
       verbose(1, "[GEM:videoNDI] unknown format P...");
       return NULL;
-      break;
     case NDIlib_FourCC_video_type_YV12:
     case NDIlib_FourCC_video_type_I420:
     case NDIlib_FourCC_video_type_NV12:
       verbose(1, "[GEM:videoNDI] unknown format Y...");
       return NULL;
-      break;
+    default:
+      verbose(1, "[GEM:videoNDI] unknown format...");
+      return NULL;
     }
     m_pixBlock.image.setCsizeByFormat();
     m_pixBlock.image.data = m_ndi_frame.p_data;
@@ -316,6 +317,7 @@ pixBlock*videoNDI::getFrame(void)
     verbose(2, "[GEM:videoNDI] got audio frame");
     break;
   case NDIlib_frame_type_none:
+  default:
     //pd_error(0, "[GEM:videoNDI] got no frame");
     break;
   } // switch
