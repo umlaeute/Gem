@@ -18,6 +18,7 @@
 #ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
+#include "Base/GemContext.h"
 #include <stdlib.h>
 #include <string.h>
 #include <map>
@@ -403,6 +404,7 @@ struct gemglxwindow::PIMPL {
       return false;
     }
     screen  = DefaultScreen(dpy);
+    gem::Context::initializeXContext(dpy, screen);
 
     if ( !glXQueryExtension(dpy, NULL, NULL) ) {
       throw(GemException("X server has no OpenGL GLX extension"));

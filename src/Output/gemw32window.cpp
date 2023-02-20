@@ -42,6 +42,7 @@
 
 # include "Gem/Event.h"
 # include "Gem/GemGL.h"
+# include "Base/GemContext.h"
 # include "RTE/MessageCallbacks.h"
 # include "Gem/Exception.h"
 
@@ -221,6 +222,7 @@ private:
     if (!context)  {
       throw(GemException("Unable to create OpenGL context"));
     }
+    gem::Context::initializeXContext(context);
 
     // do we share display lists?
     if (sharedContext) {
