@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+
+import glob
+import os
+import re
+import sys
+import tempfile
+
+import logging
+
+log = logging.getLogger(os.path.basename(__file__))
+logging.basicConfig()
+
+def parseArgs():
+    import argparse
+
+    defaults = {
+        "out_dir": os.path.normpath(os.path.join(os.path.dirname(__file__), "../src/glad")),
+        "api": "gl:compatibility,glx,wgl",
+    }
+    parser = argparse.ArgumentParser()
+    parser.set_defaults(**defaults)
+    parser.add_argument(
+        "--out-dir",
+        help="Where to put the generated files (DEFAULT: {out_dir})".format(**defaults),
+    )
+    parser.add_argument(
+        "--api",
+        help="Which OpenGL-APIs to generate for (DEFAULT: {api})".format(**defaults),
+    )
+
+    args = parser.parse_args()
+    return args
+
+def normalize_sourcedata(data):
+    """normalize the source-code (dropping trailing whitespace, fixing includes,...)"""
+    lines = []
+    for line in data.splitlines():
+        line = line.rstrip()
+        # use local "includes", rather than <includes>
+        line = re.sub(r"^([\s]*#[\s]*include[\s]+)<(KHR/.*)>[\s]*", r'\1"\2"', line)
+        # we are always asking for all extensions, no need to list them
+        line = re.sub("--extensions='[^']*' *", "", line)
+        lines.append(line)
+    return "\n".join(lines)
+
+def copyfile(infilename, outfilename, filter=normalize_sourcedata):
+    """copy <infilename> to <outfilename>, applying the <filter> function.
+    """
+    os.makedirs(os.path.dirname(outfilename), exist_ok=True)
+    with open(infilename) as infile:
+        data = infile.read()
+        if filter:
+            data = filter(data)
+        with open(outfilename, "w") as outfile:
+            print("writing %d chars to %s" % (len(data), outfilename))
+            outfile.write(data)
+
+def make_glad(apis, outdir):
+    try:
+        from glad.__main__ import main as glad_main
+    except ModuleNotFoundError as e:
+        log.exception("Install glad with 'pip install glad2'")
+        raise e
+    oldargs = list(sys.argv)
+    sys.argv = [
+        "glad",
+        "--out-path",
+        outdir,
+        "--api",
+        apis,
+        "c",
+        "--alias",
+        "--loader",
+        "--mx",
+    ]
+    glad_main()
+    sys.args = oldargs
+
+
+def get_struct(file, structname):
+    class Options:
+        def __init__(self):
+            self.symbols=[]
+            self.expressions = []
+            self.verbose = False
+            self.generate_comments = False
+            self.generate_docstrings = False
+            self.generate_locations = False
+            self.generate_includes = False
+            self.preload = []
+            self.dll = []
+            self.kind = "csm"
+            self.modules = []
+            self.target = None
+            self.clang_args = None
+    try:
+        import ctypeslib
+        import ctypes
+    except ModuleNotFoundError as e:
+        log.exception("Install clang2py with 'pip install ctypeslib'")
+        raise e
+    with open(file) as f:
+        data = ctypeslib.translate(f.read())
+    struct = data.get(structname)
+    if not struct:
+        return ([], [])
+    values = [
+        n
+        for n, t in struct._fields_
+        if issubclass(t, ctypes._SimpleCData)
+        and not n == "userptr"
+        and not n.startswith("glad_")
+    ]
+    functions = [n for n, t in struct._fields_ if issubclass(t, ctypes._CFuncPtr)]
+    return (values, functions)
+
+
+def gl_defines(infile, outfile, guard):
+    structname = "GladGLContext"
+    vals, funs = get_struct(infile, structname)
+    valdefines = []
+    for v in vals:
+        v_ = v.lstrip("_")
+        #valdefines.append("#ifdef GL_%s\n# undef GL_%s\n#endif /* GL_%s */" % (v_, v_, v_))
+        #valdefines.append("#define GL_%s GLCONTEXT->%s" % (v_, v))
+        valdefines.append("#define GLEW_%s GLCONTEXT->%s" % (v_, v))
+    if valdefines:
+        valdefines = ["/* compat macros for OpenGL extensions */"] + valdefines
+    fundefines = []
+    for f in funs:
+        fundefines.append("#define gl%s GLCONTEXT->%s" % (f.lstrip("_"), f))
+    if fundefines:
+        fundefines = ["/* compat macros for OpenGL functions */"] + fundefines
+    result = valdefines
+    if result and fundefines:
+        result += ["", ""]
+    result += fundefines
+
+    if result:
+        with open(outfile, "w") as f:
+            f.write("#ifndef %s\n#define %s\n\n" % (guard, guard))
+            f.write("\n".join(result))
+            f.write("\n\n#endif /* %s */" % (guard,))
+        return [infile, outfile]
+
+
+def main(args):
+    tmpdir = tempfile.TemporaryDirectory(prefix="glad.")
+    make_glad(args.api, tmpdir.name)
+    apistruct = {
+        "gl": gl_defines,
+        "glx": None,
+        "wgl": None,
+    }
+    includepath = os.path.join(tmpdir.name, "include", "glad")
+    srcpath = os.path.join(tmpdir.name, "src")
+    files = []
+    for api in apistruct:
+        infile = os.path.join(includepath, "%s.h" % (api,))
+        outfile = os.path.join(includepath, "%s_mx.h" % (api,))
+        if not os.path.exists(infile):
+            continue
+        guard = "_%s_MX_H_" % (api,)
+        fun = apistruct[api]
+        if fun:
+            files += fun(infile, outfile, guard)
+        else:
+            files.append(infile)
+        srcfile = os.path.join(srcpath, "%s.c" % (api,))
+        if os.path.exists(srcfile):
+            files.append(srcfile)
+
+    files = [_ for _ in files if _]
+    if files:
+        os.makedirs(args.out_dir, exist_ok=True)
+        for f in files:
+            copyfile(f, os.path.join(args.out_dir, os.path.basename(f)))
+        khrfiles = glob.glob(os.path.join(tmpdir.name, "include", "KHR", "*.h"))
+        if khrfiles:
+            khrdir = os.path.join(args.out_dir, "KHR")
+            os.makedirs(khrdir, exist_ok=True)
+            for f in khrfiles:
+                copyfile(f, os.path.join(khrdir, os.path.basename(f)))
+
+
+if __name__ == "__main__":
+    args = parseArgs()
+    main(args)
+#
+# tmpdir=$(mktemp -d glad.XXX)
+# echo $tmpdir
+# glad --out-path "${tmpdir}" --api="${APIs}" c --alias --loader --mx
+#
+# for f in gl glx; do
+#    test -e "${tmpdir}/include/glad/${f}.h" || continue
+#    clang2py "${tmpdir}/include/glad/${f}.h"
+#    echo $f
+# done
+#
+
+
+# rm -rf "${tmpdir}"
