@@ -25,11 +25,6 @@
 # warning multicontext rendering currently under development
 #endif /* GEM_MULTICONTEXT */
 
-static GLEWContext*s_glewcontext=NULL;
-#ifdef GemGlewXContext
-static GemGlewXContext*s_glewxcontext=NULL;
-#endif /* GemGlewXContext */
-
 using namespace gem;
 
 class Context::PIMPL
