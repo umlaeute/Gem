@@ -411,11 +411,11 @@ static std::string get_keyname(int key, int scancode)
   const char*sid;
 
   sid = glfwGetKeyName(key, scancode);
-  if(sid && *sid) {
+  if(sid && *sid>32) {
     return (sid);
   }
   sid = glfwGetKeyName(GLFW_KEY_UNKNOWN, scancode);
-  if(sid && *sid) {
+  if(sid && *sid>32) {
     return (sid);
   }
 
@@ -564,6 +564,10 @@ static std::string get_keyname(int key, int scancode)
     return ("Menu");
   default:
     break;
+  }
+
+  if(sid && *sid>32) {
+    return (sid);
   }
   return ("<unknown>");
 }
