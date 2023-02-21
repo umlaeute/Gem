@@ -32,15 +32,47 @@
 
 #define _GL_UNDEFINED -1
 
+namespace {
+static const char* _gemglErrorString(GLenum err) {
+  switch(err) {
+  default: break;
+  case GL_NO_ERROR: return "no error";
+  case GL_INVALID_ENUM: return "invalid enumerant";
+  case GL_INVALID_VALUE: return "invalid value";
+  case GL_INVALID_OPERATION: return "invalid operation";
+  case GL_STACK_OVERFLOW: return "stack overflow";
+  case GL_STACK_UNDERFLOW: return "stack underflow";
+  case GL_OUT_OF_MEMORY: return "out of memory";
+  case GL_TABLE_TOO_LARGE: return "table too large";
+  case GL_INVALID_FRAMEBUFFER_OPERATION: return "invalid framebuffer operation";
+    //case GL_INVALID_FRAMEBUFFER_OPERATION_EXT: return "invalid framebuffer operation";
+
+  case GL_CONTEXT_LOST: return "context lost";
+  case GL_RELATIVE_LINE_TO_NV: return "relative line to nv";
+
+#ifdef GLU_INVALID_ENUM
+    /* GLU */
+  case GLU_INVALID_ENUM: return "invalid enumerant";
+  case GLU_INVALID_VALUE: return "invalid value";
+  case GLU_OUT_OF_MEMORY: return "out of memory";
+  case GLU_INCOMPATIBLE_GL_VERSION: return "incompatible gl version";
+  case GLU_INVALID_OPERATION: return "invalid operation";
+#endif /* GLU */
+  }
+  return "unknown error";
+}
+
+};
+
 // if error dump gl errors to debugger string, return error
 GLenum gem::utils::gl::glReportError (bool verbose)
 {
   GLenum err = glGetError();
   if (verbose && GL_NO_ERROR != err) {
 #ifdef GEM_HAVE_GLU
-    post("GL[%d]: %s", err, (char*)gluErrorString(err));
+    post("GL[0x%X]: %s", err, (char*)gluErrorString(err));
 #else
-    post("GL: %d", err);
+    post("GL[0x%X]: %s", err, _gemglErrorString(err));
 #endif
 
   }
