@@ -167,12 +167,14 @@ bool glsl_vertex :: openMessARB(void)
     free(log);
     return false;
   }
+#ifndef __APPLE__
   if(m_shaderARB) {
     t_atom a;
     m_idmapped=m_idmapper.set(m_shaderARB, m_idmapped);
     SETFLOAT(&a, m_idmapped);
     outlet_list(m_outShaderID, gensym("list"), 1, &a);
   }
+#endif
 
   return true;
 }
@@ -254,10 +256,12 @@ bool glsl_vertex :: isRunnable()
     m_shaderTarget = GL_VERTEX_SHADER;
     m_shaderType = GL2;
     return true;
+#ifndef __APPLE__
   } else if (GLEW_ARB_vertex_shader) {
     m_shaderTarget = GL_VERTEX_SHADER_ARB;
     m_shaderType = ARB;
     return true;
+#endif
   }
 
   error("need OpenGL-2.0 (or at least the vertex-shader ARB-extension) to run GLSL");
