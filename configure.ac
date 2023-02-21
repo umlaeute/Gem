@@ -163,7 +163,6 @@ GEM_CHECK_WERROR
 GEM_CPPFLAGS=""
 GEM_CHECK_EXTERNAL
 
-AC_ARG_WITH([GLU], AC_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
 dnl unlike MMX or SSE
@@ -250,17 +249,10 @@ AS_IF([test "x$with_x" != "xno"], [
 ])
 
 IEM_CHECK_GL
-no_glu=yes
-AS_IF([test "x$with_GLU" != "xno"], [IEM_CHECK_GLU])
-AM_CONDITIONAL([HAVE_GLU], [test "x${no_glu}" != "xyes"])
 IEM_CHECK_GLUT
 IEM_CHECK_GLX
 IEM_CHECK_AGL
 
-
-AS_IF([test "x$no_glu" != "xyes"],
- AC_DEFINE([GEM_HAVE_GLU], [1], [whether we can use libGLU (normally: yes)])
-)
 
 ## use GLAD (shpiped with Gem)
 GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
@@ -835,14 +827,6 @@ Configuration:
 
 AS_IF([test "x$have_pd" = "xno"], [
   AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
-])
-
-AS_IF([test "x$no_gl" = "xyes"], [
- AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
-])
-
-AS_IF([test "x$no_glu" = "xyes" && test "x$no_agl" = "xyes"], [
- AS_IF([test "x$with_GLU" != "xno"],[AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])])
 ])
 
 AC_MSG_RESULT([Now run make ...])

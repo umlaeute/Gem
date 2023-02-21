@@ -31,26 +31,6 @@
 /* ================== openGL ================== */
 #include "glad/gl.h"
 
-/* =================== GLU ==================== */
-#ifdef GEM_HAVE_GLU
-# ifdef __APPLE__
-#  include <Availability.h>
-#  if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
-#   undef GEM_HAVE_GLU
-#  endif
-# endif
-#endif
-
-#ifdef GEM_HAVE_GLU
-/* this is where we can safely include GLU */
-# if defined(__APPLE__) && defined(__MACH__)
-#  include <OpenGL/glu.h>
-# else
-#  include <GL/glu.h>
-# endif
-#endif
-
-
 /* ================= system GL ================ */
 #ifdef __APPLE__
 # include <OpenGL/OpenGL.h>
