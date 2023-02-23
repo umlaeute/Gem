@@ -1,6 +1,10 @@
 #!/bin/sh
 ## simple script to run Gem from the build
 
+# local configuration
+conffile="./devgem.conf"
+if [ -e "${conffile}" ]; then . "${conffile}"; fi
+
 
 ## Pd binary can be overriden by setting the PD environment
 if [ "x${PD}" = "x" ]; then
@@ -12,6 +16,10 @@ fi
 if [ "x${PD}" = "x" ]; then
  PD=pd
 fi
+
+## for running Pd through some external application (e.g. gdb, valgrind, wine,...)
+#  set the LAUNCHER variable.
+: ${LAUNCHER:-}
 
 ## provide replacement for realpath
 which realpath >/dev/null 2>&1 || realpath() { [ "x${1#/}" != "x$1" ] && echo "$1" || echo "$PWD/${1#.}"; }
@@ -39,4 +47,4 @@ if [ "x${gempath}" = "x" ]; then
   gempath=${builddir}
 fi
 
-${PD} -stderr -oss -nosound -path "${gempath}" -lib ${builddir}/Gem "$@"
+${LAUNCHER} ${PD} -stderr -nrt -oss -nosound -path "${gempath}" -lib ${builddir}/Gem "$@"
