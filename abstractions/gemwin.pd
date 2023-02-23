@@ -72,7 +72,7 @@
 #X text 71 589 unused:;
 #X text 112 604 blur;
 #X restore 230 59 pd messages;
-#N canvas 114 61 901 811 window 0;
+#N canvas 0 499 901 811 window 0;
 #X obj 282 340 t a;
 #X obj 282 389 t a;
 #X obj 282 664 outlet;
@@ -240,6 +240,10 @@
 #X obj 460 353 route dimen offset framebuffersize;
 #X obj 650 383 s \$0-framebuffersize;
 #X obj 460 411 route mouse keyboard info;
+#X obj 460 259 route window;
+#X obj 460 282 route closed;
+#X msg 460 305 0;
+#X obj 460 328 s \$0-render;
 #X connect 0 0 29 0;
 #X connect 1 0 31 0;
 #X connect 17 0 23 0;
@@ -253,7 +257,7 @@
 #X connect 31 0 34 0;
 #X connect 31 1 32 0;
 #X connect 32 0 22 0;
-#X connect 32 1 38 0;
+#X connect 32 1 41 0;
 #X connect 33 0 23 0;
 #X connect 34 0 2 0;
 #X connect 34 1 35 0;
@@ -261,6 +265,10 @@
 #X connect 38 1 37 0;
 #X connect 38 2 39 0;
 #X connect 38 3 40 0;
+#X connect 41 0 42 0;
+#X connect 42 0 43 0;
+#X connect 42 1 38 0;
+#X connect 43 0 44 0;
 #X restore 131 285 pd window;
 #X text 55 19 meant as a modular replacement for the internal [gemwin];
 #X text 53 38 TODO: quite everything;
