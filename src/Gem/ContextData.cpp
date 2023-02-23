@@ -14,7 +14,7 @@
 
 
 #include "ContextData.h"
-#include "Base/GemContext.h"
+#include "Context.h"
 
 using namespace gem;
 

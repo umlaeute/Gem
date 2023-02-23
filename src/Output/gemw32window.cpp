@@ -42,7 +42,7 @@
 
 # include "Gem/Event.h"
 # include "Gem/GemGL.h"
-# include "Base/GemContext.h"
+# include "Gem/Context.h"
 # include "RTE/MessageCallbacks.h"
 # include "Gem/Exception.h"
 

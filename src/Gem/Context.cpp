@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "GemContext.h"
+#include "Gem/Context.h"
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 

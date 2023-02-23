@@ -30,6 +30,7 @@ libGem_la_include_HEADERS = \
 	Exception.h \
 	Dylib.h \
 	Files.h \
+	Context.h \
 	ContextData.h \
 	Properties.h \
 	Settings.h \
@@ -58,6 +59,8 @@ libGem_la_SOURCES += \
 	GemGL.h \
 	Cache.cpp \
 	Cache.h \
+	Context.cpp \
+	Context.h \
 	ContextData.cpp \
 	ContextData.h \
 	Dylib.cpp \

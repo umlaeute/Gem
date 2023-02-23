@@ -18,7 +18,7 @@
 #ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
-#include "Base/GemContext.h"
+#include "Gem/Context.h"
 #include <stdlib.h>
 #include <string.h>
 #include <map>

@@ -16,7 +16,7 @@
 #include "RTE/MessageCallbacks.h"
 
 #include "Gem/Settings.h"
-#include "GemContext.h"
+#include "Gem/Context.h"
 #include "Gem/Exception.h"
 #include "GemBase.h"
 
