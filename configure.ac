@@ -79,6 +79,7 @@ AC_CONFIG_FILES([extra/pix_hit/Makefile])
 AC_CONFIG_FILES([tools/Makefile])
 AC_CONFIG_FILES([Gem.pc Gem-meta.pd])
 AC_CONFIG_FILES([devgem.sh], [chmod +x devgem.sh])
+AC_CONFIG_FILES([switch-gemwin.sh], [chmod +x switch-gemwin.sh])
 
 
 ##########################

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+GEM_RTE_EXTENSION=@GEM_RTE_EXTENSION@
+if [ "x${GEM_RTE_EXTENSION#@}" != "x${GEM_RTE_EXTENSION}" ]; then
+	GEM_RTE_EXTENSION="*"
+fi
+: ${EXT:=${GEM_RTE_EXTENSION}}
+
+win=$1
+win=gem${win#gem}
+win=${win%.*}
+win=${win%window}window
+
+if find . -maxdepth 1 "(" -type f -or -type l ")" -name "${win}.${EXT}" | grep -q .; then
+       :
+else
+	echo "cannot find ${win} implementation"
+	exit 1
+fi
+
+sed -e "s|\bgem.*window;|${win};|" -i abstractions/gemdefaultwindow.pd
+
+
