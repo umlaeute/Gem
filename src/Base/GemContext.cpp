@@ -20,6 +20,7 @@
 
 #include <stack>
 #include <set>
+#include <vector>
 
 #ifdef GEM_MULTICONTEXT
 # warning multicontext rendering currently under development
@@ -80,6 +81,21 @@ public:
     }
     maxStackDepth[GemMan::STACKCOLOR]=colorstack;
   }
+  void makeCurrent(void)
+  {
+    GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=
+      maxStackDepth[GemMan::STACKMODELVIEW];
+    GemMan::maxStackDepth[GemMan::STACKCOLOR]=
+      maxStackDepth[GemMan::STACKCOLOR];
+    GemMan::maxStackDepth[GemMan::STACKTEXTURE]=
+      maxStackDepth[GemMan::STACKTEXTURE];
+    GemMan::maxStackDepth[GemMan::STACKPROJECTION]=
+      maxStackDepth[GemMan::STACKPROJECTION];
+
+    s_context=context;
+    s_xcontext=xcontext;
+    s_contextid=contextid;
+  }
 
   GLint maxStackDepth[4];
 
@@ -112,11 +128,14 @@ public:
   static unsigned int s_contextid;
   static GladGLContext*s_context;
   static void*s_xcontext;
+
+  static std::vector<Context*>s_contextstack;
 };
 unsigned int    Context::PIMPL::s_contextid=0;
 GladGLContext*  Context::PIMPL::s_context=NULL;
 void*Context::PIMPL::s_xcontext=NULL;
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
+std::vector<Context*> Context::PIMPL::s_contextstack;
 
 Context::Context(void)
   : m_pimpl(new PIMPL())
@@ -178,23 +197,22 @@ Context::~Context(void)
 
 bool Context::push(void)
 {
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=
-    m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=
-    m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=
-    m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=
-    m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
-
-  m_pimpl->s_context=m_pimpl->context;
-  m_pimpl->s_xcontext=m_pimpl->xcontext;
-  m_pimpl->s_contextid=m_pimpl->contextid;
+  m_pimpl->s_contextstack.push_back(this);
+  m_pimpl->makeCurrent();
   return true;
 }
 
 bool Context::pop(void)
 {
+  m_pimpl->s_contextstack.pop_back();
+  if(m_pimpl->s_contextstack.empty()) {
+    m_pimpl->s_context=0;
+    m_pimpl->s_xcontext=0;
+    m_pimpl->s_contextid=0; /* INVALID_CONTEXT */
+    return true;
+  }
+  Context*last = m_pimpl->s_contextstack.back();
+  last->m_pimpl->makeCurrent();
   return true;
 }
 
