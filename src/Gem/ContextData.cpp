@@ -20,7 +20,7 @@ using namespace gem;
 
 /* LATER, when we have multiple contexts, this should really be "-1" or such
  */
-const int ContextDataBase::INVALID_CONTEXT=0;
+const int ContextDataBase::INVALID_CONTEXT=gem::Context::INVALID_CONTEXT;
 
 int ContextDataBase::getCurContext(void)
 {

@@ -131,7 +131,7 @@ public:
 
   static std::vector<Context*>s_contextstack;
 };
-unsigned int    Context::PIMPL::s_contextid=0;
+unsigned int    Context::PIMPL::s_contextid=Context::INVALID_CONTEXT;
 GladGLContext*  Context::PIMPL::s_context=NULL;
 void*Context::PIMPL::s_xcontext=NULL;
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
@@ -208,7 +208,7 @@ bool Context::pop(void)
   if(m_pimpl->s_contextstack.empty()) {
     m_pimpl->s_context=0;
     m_pimpl->s_xcontext=0;
-    m_pimpl->s_contextid=0; /* INVALID_CONTEXT */
+    m_pimpl->s_contextid=INVALID_CONTEXT;
     return true;
   }
   Context*last = m_pimpl->s_contextstack.back();

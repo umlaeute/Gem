@@ -42,7 +42,8 @@ public:
   static void*getCurrentXContext(void);
 
   static bool initializeXContext(void*display, int screen=0);
-};
 
+  static const int INVALID_CONTEXT = 0;
+};
 }; // namespace
 #endif  // for header file
