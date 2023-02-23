@@ -541,6 +541,11 @@ void GemWindow::       printMess(void)
   }
 }
 
+void GemWindow::sharedcontextMess(bool on)
+{
+  m_context_sharing=on;
+}
+
 void GemWindow:: anyMess(t_symbol*s, int argc, t_atom*argv)
 {
   outlet_anything(m_pimpl->rejectOut, s, argc, argv);
@@ -563,6 +568,7 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "transparent", transparentMess, bool);
+  CPPEXTERN_MSG1(classPtr, "sharedcontext", sharedcontextMess, bool);
 
   CPPEXTERN_MSG0(classPtr, "print", printMess);
 

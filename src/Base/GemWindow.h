@@ -195,6 +195,9 @@ public:
   /* print some info */
   virtual void        printMess(void);
 
+  /* print some info */
+  virtual void        sharedcontextMess(bool);
+
   /* fallback callback */
   virtual void        anyMess(t_symbol*s, int argc, t_atom*argv);
 
@@ -213,6 +216,7 @@ protected:
   bool         m_cursor;
   bool         m_transparent;
   int          m_fsaa;
+  bool         m_context_sharing;
 
   gem::Context*  m_context;
 };

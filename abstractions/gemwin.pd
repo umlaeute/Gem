@@ -216,10 +216,14 @@
 #X msg 59 124 buffer \$1;
 #X msg 203 121 FSAA \$1;
 #X obj 203 99 r \$0-FSAA;
+#X obj 294 97 r \$0-sharedcontext;
+#X msg 294 120 sharedcontext \$1;
 #X connect 0 0 2 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
 #X connect 4 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 1 0;
 #X restore 126 291 pd rendercontext;
 #X obj 282 602 t b b;
 #N canvas 6 61 450 300 gemman 0;
@@ -967,6 +971,15 @@
 #X connect 13 0 14 0;
 #X restore 118 301 pd render;
 #X text 299 352 blur print profile frame fps;
+#N canvas 329 517 450 300 sharedcontext 0;
+#X obj 37 37 inlet;
+#X obj 37 60 route sharedcontext;
+#X obj 37 87 s \$0-sharedcontext;
+#X obj 148 37 outlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 3 0;
+#X restore 118 324 pd sharedcontext;
 #X connect 0 0 2 0;
 #X connect 1 0 3 0;
 #X connect 2 0 4 0;
@@ -977,6 +990,7 @@
 #X connect 7 0 8 0;
 #X connect 8 0 14 0;
 #X connect 14 0 15 0;
+#X connect 15 0 17 0;
 #X restore 126 127 pd callbacks;
 #N canvas 524 589 450 333 resetValues 0;
 #N canvas 252 532 377 366 viewpoint 0;
