@@ -322,11 +322,6 @@ void gemglutwindow :: swapBuffers(void)
   }
 }
 
-void gemglutwindow :: doRender()
-{
-  // FIXME: ?????
-  bang();
-}
 void gemglutwindow :: dispatch()
 {
   if(!m_window) {

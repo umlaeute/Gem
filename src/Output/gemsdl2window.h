@@ -68,8 +68,6 @@ private:
   // Destructor
   virtual ~gemsdl2window(void);
 
-  void doRender(void);
-
   /* rendering */
   void renderMess(void);
 

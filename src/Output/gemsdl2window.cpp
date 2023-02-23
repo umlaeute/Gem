@@ -143,12 +143,6 @@ void gemsdl2window :: swapBuffers(void)
   }
 }
 
-void gemsdl2window :: doRender()
-{
-  // FIXME: ?????
-  bang();
-}
-
 
 static std::map<SDL_Keycode, std::string>s_key2symbol;
 static std::map<SDL_Keycode, std::string>s_worldkey2symbol;

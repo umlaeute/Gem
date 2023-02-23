@@ -78,11 +78,6 @@ void gemglfw2window :: swapBuffers(void)
   }
 }
 
-void gemglfw2window :: doRender()
-{
-  // FIXME: ?????
-  bang();
-}
 void gemglfw2window :: dispatch()
 {
   if(0==s_window) {

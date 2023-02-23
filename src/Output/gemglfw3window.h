@@ -67,8 +67,6 @@ private:
   // Destructor
   virtual ~gemglfw3window(void);
 
-  void doRender(void);
-
   /* rendering */
   void renderMess(void);
 

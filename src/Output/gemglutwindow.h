@@ -67,8 +67,6 @@ private:
   // Destructor
   virtual ~gemglutwindow(void);
 
-  void doRender(void);
-
   /* rendering */
   void renderMess(void);
 
