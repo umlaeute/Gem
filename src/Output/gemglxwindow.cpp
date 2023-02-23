@@ -916,12 +916,8 @@ void gemglxwindow :: dimensionsMess(unsigned int width,
 bool gemglxwindow :: create(void)
 {
   bool success=true;
-  /*
-   * hmm, this crashes when enabled
-   * when disabled, we don't get textures on two screens
-   */
-  //~#warning context-sharing disabled
-  bool context_sharing=false;
+  bool context_sharing = m_context_sharing;
+
   if(!m_context
       && context_sharing) { /* gemglxwindow::PIMPL::s_shared.count(m_display)>0 */
 
