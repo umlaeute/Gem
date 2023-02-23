@@ -86,7 +86,6 @@ private:
   virtual void destroy(void);
 
   virtual void        createMess(const std::string&);
-  virtual void       destroyMess(void);
 
   /* post creation */
   virtual void        cursorMess(bool on);

@@ -291,8 +291,9 @@ CPPEXTERN_NEW(gemglutwindow);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemglutwindow :: gemglutwindow(void) :
-  m_window(0)
+gemglutwindow :: gemglutwindow(void)
+  : GemWindow()
+  , m_window(0)
 { }
 
 /////////////////////////////////////////////////////////
@@ -301,7 +302,7 @@ gemglutwindow :: gemglutwindow(void) :
 /////////////////////////////////////////////////////////
 gemglutwindow :: ~gemglutwindow()
 {
-  destroyMess();
+  destroy();
 }
 
 
@@ -517,7 +518,7 @@ bool gemglutwindow :: create(void)
 
 
   if(!createGemWindow()) {
-    destroyMess();
+    destroy();
     return false;
   }
   titleMess(m_title);
@@ -538,12 +539,6 @@ void gemglutwindow :: createMess(const std::string&)
 /////////////////////////////////////////////////////////
 void gemglutwindow :: destroy(void)
 {
-  destroyGemWindow();
-  m_window=0;
-  info("window", "closed");
-}
-void gemglutwindow :: destroyMess(void)
-{
   if(makeCurrent()) {
     int window=m_window;
     m_window=0; // so that we no longer receive any event
@@ -554,8 +549,10 @@ void gemglutwindow :: destroyMess(void)
 
     /* now that the window is destroyed, remove it from the list of available windows */
     s_windowmap.erase(window);
+    destroyGemWindow();
   }
-  destroy();
+  m_window=0;
+  info("window", "closed");
 }
 
 /////////////////////////////////////////////////////////
