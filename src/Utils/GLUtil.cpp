@@ -50,12 +50,20 @@ static const char* _gemglErrorString(GLenum err) {
   case GL_CONTEXT_LOST: return "context lost";
   case GL_RELATIVE_LINE_TO_NV: return "relative line to nv";
 
-#ifdef GLU_INVALID_ENUM
     /* GLU */
+#ifdef GLU_INVALID_ENUM
   case GLU_INVALID_ENUM: return "invalid enumerant";
+#endif
+#ifdef GLU_INVALID_VALUE
   case GLU_INVALID_VALUE: return "invalid value";
+#endif
+#ifdef GLU_OUT_OF_MEMORY
   case GLU_OUT_OF_MEMORY: return "out of memory";
+#endif
+#ifdef GLU_INCOMPATIBLE_GL_VERSION
   case GLU_INCOMPATIBLE_GL_VERSION: return "incompatible gl version";
+#endif
+#ifdef GLU_INVALID_OPERATION
   case GLU_INVALID_OPERATION: return "invalid operation";
 #endif /* GLU */
   }
