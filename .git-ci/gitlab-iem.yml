@@ -168,6 +168,7 @@ variables:
 Source:
   extends:
     - .artifacts
+    - .run-selected
   stage: build
   before_script:
     # we need 'git' to create a source package
