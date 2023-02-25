@@ -25,18 +25,6 @@ variables:
       - "${ARTIFACTSDIR}"
     when: always
 
-.snapshot:
-  extends:
-    - .artifacts
-  #  except:
-  #  - tags
-  #artifacts:
-  #  expire_in: 1 week
-
-.release:
-  only:
-    - tags
-
 .run-selected:
   rules:
     # run if IEM_CI_JOBS list is empty
@@ -176,7 +164,6 @@ variables:
 Source:
   extends:
     - .artifacts
-    - .snapshot
   stage: build
   before_script:
     # we need 'git' to create a source package
@@ -188,19 +175,19 @@ Source:
 Linux:
   extends:
     - .build:linux
-    - .snapshot
+    - .artifacts
 Darwin:
   extends:
     - .build:macos
-    - .snapshot
+    - .artifacts
 W32:
   extends:
     - .build:w32
-    - .snapshot
+    - .artifacts
 W64:
   extends:
     - .build:w64
-    - .snapshot
+    - .artifacts
 
 distcheck:
   extends:
