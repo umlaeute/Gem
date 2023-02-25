@@ -17,6 +17,9 @@ variables:
   IEM_CI_TMPDIR:
     value: ".git-ci/_tmp/"
     description: ""
+  IEM_CI_JOBS:
+    value: ""
+    description: "list of jobs to run (leave empty for all jobs)"
 
 .artifacts:
   artifacts:
@@ -176,22 +179,27 @@ Linux:
   extends:
     - .build:linux
     - .artifacts
+    - .run-selected
 Darwin:
   extends:
     - .build:macos
     - .artifacts
+    - .run-selected
 W32:
   extends:
     - .build:w32
     - .artifacts
+    - .run-selected
 W64:
   extends:
     - .build:w64
     - .artifacts
+    - .run-selected
 
 distcheck:
   extends:
     - .build:linux
+    - .run-selected
   stage: test
   script:
     - tools/systeminfo.sh || true
@@ -203,6 +211,8 @@ distcheck:
     - make distcheck -j2
 
 deken:
+  extends:
+    - .run-selected
   stage: deploy
   image: registry.git.iem.at/pd/deken:latest
   script:
