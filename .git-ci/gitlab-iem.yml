@@ -1,12 +1,22 @@
 ###################################################
 ### configuration templates (to be used for snapshot and release builds)
 variables:
-  PDVERSION: 0.52-2
-  LANG: C
+  PDVERSION:
+    value: 0.52-2
+    description: "The Pd-version against which to build"
+  LANG:
+    value: "C"
+    description: ""
   # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
-  MACOSX_DEPLOYMENT_TARGET: "10.9"
-  ARTIFACTSDIR: 'artifacts'
-  IEM_CI_TMPDIR: .git-ci/_tmp/
+  MACOSX_DEPLOYMENT_TARGET:
+    value: "10.9"
+    description: "For macOS builds, specify the minimum version where Gem should run on"
+  ARTIFACTSDIR:
+    value: 'artifacts'
+    description: ""
+  IEM_CI_TMPDIR:
+    value: ".git-ci/_tmp/"
+    description: ""
 
 .artifacts:
   artifacts:
