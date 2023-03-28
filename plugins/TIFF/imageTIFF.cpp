@@ -351,12 +351,10 @@ bool imageTIFF::save(const imageStruct&constimage,
   srcLine -= yStride;
 
   for (uint32 row = 0; row < height; row++) {
-    unsigned char *buf = srcLine;
-    if (TIFFWriteScanline(tif, buf, row, 0) < 0) {
+    if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
       verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
               filename.c_str());
       TIFFClose(tif);
-      delete [] buf;
       return(false);
     }
     srcLine -= yStride;
