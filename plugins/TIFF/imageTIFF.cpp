@@ -106,7 +106,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     return(NULL);
   }
 
-  uint32 width, height;
+  uint32_t width, height;
   short bits, samps;
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
@@ -149,7 +149,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     result.reallocate();
     unsigned char *dstLine = result.data;
     int yStride = result.xsize * result.csize;
-    for (uint32 row = 0; row < height; row++) {
+    for (uint32_t row = 0; row < height; row++) {
       unsigned char *pixels = dstLine;
       if (TIFFReadScanline(tif, buf, row, 0) < 0) {
         verbose(1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row,
@@ -159,11 +159,11 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
       }
       unsigned char *inp = buf;
       if (samps == 1) {
-        for (uint32 i = 0; i < width; i++) {
+        for (uint32_t i = 0; i < width; i++) {
           *pixels++ = *inp++;         // Gray8
         }
       } else if (samps == 3)  {
-        for (uint32 i = 0; i < width; i++) {
+        for (uint32_t i = 0; i < width; i++) {
           pixels[chRed]   = inp[0];   // Red
           pixels[chGreen] = inp[1];   // Green
           pixels[chBlue]  = inp[2];   // Blue
@@ -172,7 +172,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
           inp += 3;
         }
       } else {
-        for (uint32 i = 0; i < width; i++) {
+        for (uint32_t i = 0; i < width; i++) {
           pixels[chRed]   = inp[0];   // Red
           pixels[chGreen] = inp[1];   // Green
           pixels[chBlue]  = inp[2];   // Blue
@@ -196,8 +196,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
       return(false);
     }
 
-    uint32*raster = reinterpret_cast<uint32*>(_TIFFmalloc(npixels * sizeof(
-                      uint32)));
+    uint32_t*raster = reinterpret_cast<uint32_t*>(_TIFFmalloc(npixels * sizeof(
+                      uint32_t)));
     if (raster == NULL) {
       pd_error(0, "[GEM:imageTIFF] Unable to allocate memory for image '%s'",
                filename.c_str());
@@ -221,9 +221,9 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     int yStride = result.xsize * result.csize;
     // transfer everything over
     int k = 0;
-    for (uint32 i = 0; i < height; i++) {
+    for (uint32_t i = 0; i < height; i++) {
       unsigned char *pixels = dstLine;
-      for (uint32 j = 0; j < width; j++) {
+      for (uint32_t j = 0; j < width; j++) {
         pixels[chRed]   = static_cast<unsigned char>(TIFFGetR(raster[k])); // Red
         pixels[chGreen] = static_cast<unsigned char>(TIFFGetG(raster[k])); // Green
         pixels[chBlue]  = static_cast<unsigned char>(TIFFGetB(raster[k])); // Blue
@@ -296,7 +296,7 @@ bool imageTIFF::save(const imageStruct&constimage,
   constimage.copy2Image(&image);
   image.fixUpDown();
 
-  uint32 width=image.xsize, height = image.ysize;
+  uint32_t width=image.xsize, height = image.ysize;
   short bits=8, samps=image.csize;
   int npixels = width * height;
   //int planar_conf = PLANARCONFIG_CONTIG;
@@ -349,7 +349,7 @@ bool imageTIFF::save(const imageStruct&constimage,
   int yStride = image.xsize * image.csize;
   unsigned char *srcLine = image.data;
 
-  for (uint32 row = 0; row < height; row++) {
+  for (uint32_t row = 0; row < height; row++) {
     if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
       verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
               filename.c_str());
