@@ -108,6 +108,14 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
     goto cleanup;
   }
 
+  Image*orientedImage = AutoOrientImage(image, image.orientation, exception);
+  if(!showException(exception, "orientation problem")) {
+    if(orientedImage) {
+      DestroyImage(image);
+      image = orientedImage;
+    }
+  }
+
   result.xsize=static_cast<GLint>(image->columns);
   result.ysize=static_cast<GLint>(image->rows);
   result.setCsizeByFormat(GL_RGBA_GEM);

@@ -42,6 +42,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
     // Read a file into image object
     try {
       image.read( filename );
+      image.autoOrient();
     } catch (Magick::Warning&e) {
       verbose(0, "[GEM:imageMAGICK] loading problem: %s", e.what());
     }
