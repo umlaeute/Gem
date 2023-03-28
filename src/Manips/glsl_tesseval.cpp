@@ -54,7 +54,7 @@ bool glsl_tesseval :: isRunnable()
     return true;
   }
 
-  error("need OpenGL-4.0 to run GLSL tesselation");
+  error("need OpenGL-4.0 to run GLSL tessellation");
   return false;
 }
 
@@ -69,7 +69,7 @@ void glsl_tesseval :: printInfo()
     return;
   }
   if(GLEW_VERSION_4_0) {
-    post("tesselation evaluation shader - Hardware Info");
+    post("tessellation evaluation shader - Hardware Info");
     post("=============================================");
 
     GLSL_GETPOSTINT( MAX_TESS_GEN_LEVEL );

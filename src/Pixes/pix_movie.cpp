@@ -87,7 +87,7 @@ void pix_movie :: render(GemState *state)
       // so try to get the newly requested frame:
       if(m_thread_running) {
         /* the grabbing-thread is currently locked
-         * we do the grabbing ourselfes
+         * we do the grabbing ourselves
          */
         m_handle->changeImage(static_cast<int>(m_reqFrame), m_reqTrack);
       }

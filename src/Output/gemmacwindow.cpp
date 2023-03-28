@@ -1309,7 +1309,7 @@ bool gemmacwindow::create(void)
              (displayRect.origin.y))
            );
     DEBUGPOST("");
-    //this winodw has no attributes like a title bar etc
+    //this window has no attributes like a title bar etc
     err = CreateNewWindow ( kDocumentWindowClass,
                             kWindowNoAttributes,
                             &m_info->r,

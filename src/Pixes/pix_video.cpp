@@ -620,7 +620,7 @@ void pix_video :: dialogMess(int argc, t_atom*argv)
 // set properties
 //
 // example: "set width 640, set name foo, set"
-//   will first set the properties "width" to 640 annd "name" to "foo"
+//   will first set the properties "width" to 640 and "name" to "foo"
 //   and then will apply these properties to the currently opened device
 //
 /////////////////////////////////////////////////////////

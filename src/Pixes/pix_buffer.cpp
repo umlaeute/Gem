@@ -480,14 +480,14 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     if((A_FLOAT==argv->a_type) && (A_FLOAT==(argv+1)->a_type)) {
       int i=atom_getint(argv);
       if(i<0) {
-        error("invalid dimenstions: x=%d < 0", i);
+        error("invalid dimensions: x=%d < 0", i);
         return;
       }
       x=(unsigned int)i;
 
       i=atom_getint(argv+1);
       if(i<0) {
-        error("invalid dimenstions: y=%d < 0", i);
+        error("invalid dimensions: y=%d < 0", i);
         return;
       }
       y=(unsigned int)i;
@@ -500,7 +500,7 @@ void pix_buffer :: allocateMess(t_symbol*s, int argc, t_atom*argv)
     if(A_FLOAT==argv->a_type) {
       int i=atom_getint(argv);
       if(i<0) {
-        error("invalid dimenstions: x=%d < 0", i);
+        error("invalid dimensions: x=%d < 0", i);
         return;
       }
       x=(unsigned int)i;
