@@ -277,23 +277,24 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   TIFFClose(tif);
   return true;
 }
+typedef union {
+  uint32_t i;
+  struct channels {
+    unsigned char a, b, c, d;
+  } ch;
+} rgba_t;
 bool imageTIFF::save(const imageStruct&constimage,
                      const std::string&filename, const std::string&mimetype,
                      const gem::Properties&props)
 {
   TIFF *tif = NULL;
-
-  if(GEM_YUV==constimage.format) {
-    verbose(0, "[GEM:imageTIFF] don't know how to write YUV-images");
-    return false;
-  }
+  imageStruct image;
 
   tif=TIFFOpen(filename.c_str(), "w");
   if (tif == NULL) {
     return false;
   }
-  imageStruct image;
-  constimage.copy2Image(&image);
+  image.convertFrom(&constimage, GEM_RGBA);
   image.fixUpDown();
 
   uint32_t width=image.xsize, height = image.ysize;
@@ -348,6 +349,20 @@ bool imageTIFF::save(const imageStruct&constimage,
 
   int yStride = image.xsize * image.csize;
   unsigned char *srcLine = image.data;
+
+#ifdef __APPLE__
+  uint32_t*data32 = (uint32_t*)image.data;
+  for(unsigned int i=0; i<width*height; i++) {
+    rgba_t pixIN, pixOUT;
+    pixIN.i = *data32;
+    pixOUT.ch.a = pixIN.ch.b;
+    pixOUT.ch.b = pixIN.ch.c;
+    pixOUT.ch.c = pixIN.ch.d;
+    pixOUT.ch.d = pixIN.ch.a;
+
+    *data32++ = pixOUT.i;
+  }
+#endif
 
   for (uint32_t row = 0; row < height; row++) {
     if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
