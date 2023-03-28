@@ -172,7 +172,7 @@ bool imageIO::save(const imageStruct&img,
   bool success = false;
 
   float compression = 1.0; // Lossless compression if available.
-  int orientation = 4; // Origin is at bottom, left.
+  int orientation = kCGImagePropertyOrientationDownMirrored; // Origin is at bottom, left.
 
   CFStringRef uti = mime2uti(mimetype);
 
@@ -185,7 +185,8 @@ bool imageIO::save(const imageStruct&img,
   myValues[1] = kCFBooleanTrue;
   myKeys[2] = kCGImageDestinationLossyCompressionQuality;
   myValues[2] = CFNumberCreate(NULL, kCFNumberFloatType, &compression);
-  myOptions = CFDictionaryCreate(NULL, (const void **)myKeys, (const void **)myValues, sizeof(myKeys)/sizeof(*myKeys),
+  myOptions = CFDictionaryCreate(NULL, (const void **)myKeys, (const void **)myValues,
+                                 sizeof(myKeys)/sizeof(*myKeys),
                                  &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
   CGImageRef myImage = NULL;
