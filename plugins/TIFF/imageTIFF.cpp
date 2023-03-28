@@ -347,8 +347,7 @@ bool imageTIFF::save(const imageStruct&constimage,
   }
 
   int yStride = image.xsize * image.csize;
-  unsigned char *srcLine = &(image.data[npixels * image.csize]);
-  srcLine -= yStride;
+  unsigned char *srcLine = image.data;
 
   for (uint32 row = 0; row < height; row++) {
     if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
@@ -357,7 +356,7 @@ bool imageTIFF::save(const imageStruct&constimage,
       TIFFClose(tif);
       return(false);
     }
-    srcLine -= yStride;
+    srcLine += yStride;
   }
   TIFFClose(tif);
 
