@@ -14,6 +14,9 @@
 #define _INCLUDE__GEM_OUTPUT_GEMSDL2WINDOW_H_
 
 #include "Base/GemWindow.h"
+
+/* we don't need intrinsics, and it fails on macOS */
+#define SDL_DISABLE_IMMINTRIN_H 1
 #include <SDL.h>
 
 /*-----------------------------------------------------------------
