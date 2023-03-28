@@ -107,17 +107,19 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   }
 
   uint32_t width, height;
+  uint16_t orientation;
   short bits, samps;
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &height);
   TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bits);
   TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samps);
+  TIFFGetField(tif, TIFFTAG_ORIENTATION, &orientation);
 
   int npixels = width * height;
 
   result.xsize=width;
   result.ysize=height;
-  result.upsidedown=true;
+  result.upsidedown=(ORIENTATION_BOTLEFT != orientation);
 
   bool knownFormat = false;
   // Is it a gray8 image?
@@ -236,6 +238,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     _TIFFfree(raster);
   }
 
+  result.fixUpDown();
 
   double value_d;
   short value_i16;
@@ -275,6 +278,30 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   }
 
   TIFFClose(tif);
+
+  const char*orient=0;
+  switch(orientation) {
+  case ORIENTATION_TOPLEFT:
+  case ORIENTATION_BOTLEFT:
+    break;
+  case ORIENTATION_TOPRIGHT:
+    orient = "top right"; break;
+  case ORIENTATION_BOTRIGHT:
+    orient = "bottom right"; break;
+  case ORIENTATION_LEFTTOP:
+    orient = "left top"; break;
+  case ORIENTATION_RIGHTTOP:
+    orient = "right top"; break;
+  case ORIENTATION_RIGHTBOT:
+    orient = "right bottom"; break;
+  case ORIENTATION_LEFTBOT:
+    orient = "left bottom"; break;
+  default:
+    orient = "unknown"; break;
+  }
+  if(orient) {
+    verbose(0, "[GEM:imageTIFF] unhandled orientation '%s' (%d)", orient, orientation);
+  }
   return true;
 }
 typedef union {
