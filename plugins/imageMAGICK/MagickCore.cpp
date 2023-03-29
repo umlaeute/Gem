@@ -100,7 +100,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
   ImageInfo*image_info=CloneImageInfo((ImageInfo *) NULL);
   CopyMagickString(image_info->filename,filename.c_str(), MaxTextExtent);
 
-  Image*oriented_image = 0;
+  Image*orientedImage = 0;
   Image*image=ReadImage(image_info,exception);
   if(showException(exception, "reading problem")) {
     goto cleanup;
@@ -109,12 +109,17 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
     goto cleanup;
   }
 
-  orientedImage = AutoOrientImage(image, image.orientation, exception);
+  orientedImage = AutoOrientImage(image, image->orientation, exception);
   if(!showException(exception, "orientation problem")) {
     if(orientedImage) {
       DestroyImage(image);
       image = orientedImage;
+      orientedImage = 0;
     }
+  }
+  if (orientedImage) {
+    DestroyImage(orientedImage);
+    orientedImage = image;
   }
 
   result.xsize=static_cast<GLint>(image->columns);
