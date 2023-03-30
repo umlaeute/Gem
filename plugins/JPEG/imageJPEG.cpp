@@ -244,11 +244,6 @@ bool imageJPEG::save(const imageStruct&constimage,
     quality=fquality;
   }
 
-  if(GEM_YUV==constimage.format) {
-    fprintf(stderr, "[GEM:imageJPEG] don't know how to write YUV-images\n");
-    return false;
-  }
-
   /* Now we can initialize the JPEG compression object. */
   jpeg_create_compress(&cinfo);
 
@@ -260,6 +255,7 @@ bool imageJPEG::save(const imageStruct&constimage,
 
   imageStruct image;
   constimage.convertTo(&image, GEM_RGB);
+
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;
 
