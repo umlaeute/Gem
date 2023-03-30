@@ -551,46 +551,7 @@ GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
     }
     return false;
   }
-  switch(type) {
-  default:
-    break;
-  case GL_FLOAT:
-  case GL_DOUBLE:
-    pd_error(0, "GEM: Cannot convert %s image data!", type2name(type));
-    return false;
-  }
-  to->xsize=xsize;
-  to->ysize=ysize;
-  if(fmt>0) {
-    to->setCsizeByFormat(fmt);
-  }
-
-  to->upsidedown=upsidedown;
-
-  switch (format) {
-  default:
-    pd_error(0, "%s: unable to convert %s", __FUNCTION__, format2name(format));
-    break;
-  case GL_RGBA:
-    return to->fromRGBA(data);
-    break;
-  case GL_RGB:
-    return to->fromRGB(data);
-    break;
-  case GL_BGR:
-    return to->fromBGR(data);
-    break;
-  case GL_BGRA: /* "RGBA" on apple */
-    return to->fromBGRA(data);
-    break;
-  case GL_LUMINANCE:
-    return to->fromGray(data);
-    break;
-  case GL_YCBCR_422_GEM: // YUV
-    return to->fromUYVY(data);
-    break;
-  }
-  return false;
+  return to->convertFrom(this, fmt);
 }
 
 GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
