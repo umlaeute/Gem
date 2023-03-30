@@ -103,7 +103,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
 {
   TIFF *tif = TIFFOpen(filename.c_str(), "r");
   if (tif == NULL) {
-    return(NULL);
+    return false;
   }
 
   uint32_t width, height;
@@ -304,12 +304,6 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   }
   return true;
 }
-typedef union {
-  uint32_t i;
-  struct channels {
-    unsigned char a, b, c, d;
-  } ch;
-} rgba_t;
 bool imageTIFF::save(const imageStruct&constimage,
                      const std::string&filename, const std::string&mimetype,
                      const gem::Properties&props)
@@ -378,17 +372,18 @@ bool imageTIFF::save(const imageStruct&constimage,
   unsigned char *srcLine = image.data;
 
 #ifdef __APPLE__
-  uint32_t*data32 = (uint32_t*)image.data;
   for(unsigned int i=0; i<width*height; i++) {
-    rgba_t pixIN, pixOUT;
-    pixIN.i = *data32;
-    pixOUT.ch.a = pixIN.ch.b;
-    pixOUT.ch.b = pixIN.ch.c;
-    pixOUT.ch.c = pixIN.ch.d;
-    pixOUT.ch.d = pixIN.ch.a;
-
-    *data32++ = pixOUT.i;
+    unsigned char r = srcLine[chRed];
+    unsigned char g = srcLine[chGreen];
+    unsigned char b = srcLine[chBlue];
+    unsigned char a = srcLine[chAlpha];
+    srcLine[0] = r;
+    srcLine[1] = g;
+    srcLine[2] = b;
+    srcLine[3] = a;
+    srcLine+=4;
   }
+  srcLine = image.data;
 #endif
 
   for (uint32_t row = 0; row < height; row++) {
