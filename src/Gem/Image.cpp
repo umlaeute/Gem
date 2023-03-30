@@ -925,10 +925,10 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     return false;
   case GL_BGR:
     while(pixelnum--) {
-      *pixels++=*bgradata++;
-      *pixels++=*bgradata++;
-      *pixels++=*bgradata++;
-      bgradata++;
+      *pixels++=bgradata[chRed];
+      *pixels++=bgradata[chGreen];
+      *pixels++=bgradata[chBlue];
+      bgradata+=4;
     }
     break;
   case GL_RGB:
