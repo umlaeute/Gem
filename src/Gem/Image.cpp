@@ -158,6 +158,35 @@ namespace {
     sprintf(buf, "<format:%d>", format);
     return buf;
   }
+
+  const bool needsReverseOrdering(unsigned int type) {
+    const bool isBigEndian =
+#ifdef __BIG_ENDIAN__
+      true
+#else
+      false
+#endif
+      ;
+    switch(type) {
+    default:
+      return false;
+
+    case GL_UNSIGNED_INT_8_8_8_8:
+      /* used on LE for RGBA formats */
+      return !isBigEndian;
+    case GL_UNSIGNED_INT_8_8_8_8_REV:
+      /* used on Darwin/BE for RGBA formats */
+      return isBigEndian;
+    case GL_UNSIGNED_SHORT_8_8_APPLE:
+      /* used on Darwin/LE for YUV formats */
+      return isBigEndian;
+    case GL_UNSIGNED_SHORT_8_8_REV_APPLE:
+      /* used on Darwin/BE for YUV formats */
+      return !isBigEndian;
+    }
+
+    return false;
+  }
 }
 
 pixBlock :: pixBlock(void)
@@ -436,8 +465,9 @@ void pix_addsat(unsigned char *leftPix, unsigned char *rightPix,
                 size_t datasize)
 {
   while(datasize--) {
-    *leftPix = CLAMP_HIGH(static_cast<int>(*leftPix) + static_cast<int>
-                          (*rightPix));
+    *leftPix = CLAMP_HIGH(
+      static_cast<int>(*leftPix) +
+      static_cast<int>(*rightPix));
     leftPix++;
     rightPix++;
   }
@@ -448,8 +478,9 @@ void pix_sub(unsigned char *leftPix, unsigned char *rightPix,
              size_t datasize)
 {
   while(datasize--) {
-    *leftPix = CLAMP_LOW(static_cast<int>(*leftPix) - static_cast<int>
-                         (*rightPix++));
+    *leftPix = CLAMP_LOW(
+      static_cast<int>(*leftPix) -
+      static_cast<int>(*rightPix++));
     leftPix++;
   }
 }
@@ -522,45 +553,23 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
 
   upsidedown=from->upsidedown;
 
+  bool fixOrder = needsReverseOrdering(from->type);
+
   switch (from->format) {
   default:
     pd_error(0, "%s: unable to convert from %s", __FUNCTION__, format2name(from->format));
     break;
   case GL_RGBA:
-    switch(from->type) {
-    case GL_UNSIGNED_BYTE:
-      return fromRGBA(from->data);
-    case GL_UNSIGNED_INT_8_8_8_8:
-#ifdef __BIG_ENDIAN__
-      return fromRGBA(from->data);
-#else
+    if (fixOrder)
       return fromABGR(from->data);
-#endif
-    case GL_UNSIGNED_INT_8_8_8_8_REV:
-#ifdef __BIG_ENDIAN__
-      return fromABGR(from->data);
-#else
+    else
       return fromRGBA(from->data);
-#endif
-    }
     break;
   case GL_BGRA: /* "RGBA" on apple */
-    switch(from->type) {
-    case GL_UNSIGNED_BYTE:
-      return fromBGRA(from->data);
-    case GL_UNSIGNED_INT_8_8_8_8:
-#ifdef __BIG_ENDIAN__
-      return fromBGRA(from->data);
-#else
+    if (fixOrder)
       return fromARGB(from->data);
-#endif
-    case GL_UNSIGNED_INT_8_8_8_8_REV:
-#ifdef __BIG_ENDIAN__
-      return fromARGB(from->data);
-#else
+    else
       return fromBGRA(from->data);
-#endif
-    }
     break;
   case GL_RGB:
     return fromRGB(from->data);
@@ -607,6 +616,7 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     break;
   case GL_RGBA:
     RGBtoRGBA(rgbdata, pixels, pixelnum);
+    break;
   case GL_BGRA:
     RGBtoBGRA(rgbdata, pixels, pixelnum);
     break;
@@ -614,11 +624,7 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     RGBtoY(rgbdata, pixels, pixelnum);
     break;
   case GL_YUV422_GEM:
-#if 0
-    RGB_to_YCbCr_altivec(rgbdata, pixelnum, pixels);
-#else
     RGBtoUYVY(rgbdata, pixels, pixelnum);
-#endif
     break;
   }
   return true;
@@ -635,46 +641,18 @@ GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
-  unsigned short rgb;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGBA:
-    while(pixelnum--) {
-      rgb=*rgbdata++;
-      pixels[0]=((rgb>>8)&0xF8);
-      pixels[1]=((rgb>>3)&0xFC);
-      pixels[2]=((rgb<<3)&0xF8);
-      pixels[3]=255;
-      pixels+=4;
-    }
+    RGB16toRGBA(rgb16data, data, pixelnum);
     break;
   case GL_LUMINANCE:
-    while(pixelnum--) {
-      rgb=*rgbdata++;
-      *pixels++=(((rgb>>8)&0xF8)*RGB2GRAY_RED+((rgb>>3)&0xFC)*RGB2GRAY_GREEN+((
-                   rgb<<3)&0xF8)*RGB2GRAY_BLUE)>>8;
-    }
+    RGB16toY(rgb16data, data, pixelnum);
     break;
   case GL_YUV422_GEM:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      rgb=*rgbdata++;
-      unsigned char r=((rgb>>8)&0xF8);
-      unsigned char g=((rgb>>3)&0xFC);
-      unsigned char b=((rgb<<3)&0xF8);
-      *pixels++=((RGB2YUV_21*r+RGB2YUV_22*g+RGB2YUV_23*b)>>8)+UV_OFFSET; // U
-      *pixels++=((RGB2YUV_11*r+RGB2YUV_12*g+RGB2YUV_13*b)>>8)+ Y_OFFSET;  // Y
-      *pixels++=((RGB2YUV_31*r+RGB2YUV_32*g+RGB2YUV_33*b)>>8)+UV_OFFSET; // V
-
-      rgb=*rgbdata++;
-      r=((rgb>>8)&0xF8);
-      g=((rgb>>3)&0xFC);
-      b=((rgb<<3)&0xF8);
-      *pixels++=((RGB2YUV_11*r+RGB2YUV_12*g+RGB2YUV_13*b)>>8)+ Y_OFFSET;     // Y
-    }
+    RGB16toUYVY(rgb16data, data, pixelnum);
     break;
   }
   return true;
@@ -784,17 +762,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-#ifdef __APPLE__
-    ABGRtoBGR(bgradata, pixels, pixelnum);
-#else
     BGRAtoBGR(bgradata, pixels, pixelnum);
-#endif
-    while(pixelnum--) {
-      *pixels++=bgradata[chRed];
-      *pixels++=bgradata[chGreen];
-      *pixels++=bgradata[chBlue];
-      bgradata+=4;
-    }
     break;
   case GL_RGB:
     BGRAtoBGR(bgradata, pixels, pixelnum);
@@ -806,11 +774,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     BGRAtoRGBA(bgradata, pixels, pixelnum);
     break;
   case GL_LUMINANCE:
-#ifdef __APPLE__
-    ABGRtoY(bgradata, pixels, pixelnum);
-#else
     BGRAtoY(bgradata, pixels, pixelnum);
-#endif
     break;
   case GL_YUV422_GEM:
     START_TIMING;
@@ -822,11 +786,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
 #endif
     case GEM_SIMD_NONE:
     default:
-#ifdef __APPLE__
-      ABGRtoUYVY(bgradata, pixels, pixelnum);
-#else
       BGRAtoUYVY(bgradata, pixels, pixelnum);
-#endif
     }
     STOP_TIMING("BGRA_to_YCbCr");
     break;
@@ -865,22 +825,14 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
     ABGRtoRGBA(abgrdata, pixels, pixelnum);
     break;
   case GL_LUMINANCE:
-#ifdef __APPLE__
-    BARGtoY(abgrdata, pixels, pixelnum);
-#else
     ABGRtoY(abgrdata, pixels, pixelnum);
-#endif
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
     case GEM_SIMD_NONE:
     default:
-#if __APPLE__
-      RBGAtoUYVY(abgrdata, pixels, pixelnum);
-#else
       ABGRtoUYVY(abgrdata, pixels, pixelnum);
-#endif
     }
     STOP_TIMING("ABGR_to_YCbCr");
     break;
@@ -913,29 +865,21 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
     break;
 #endif
   case GL_BGRA:
+    post("%s:%d:: %s", __FILE__, __LINE__, __FUNCTION__);
     ARGBtoBGRA(argbdata, pixels, pixelnum);
     break;
   case GL_RGBA:
     ARGBtoRGBA(argbdata, pixels, pixelnum);
     break;
   case GL_LUMINANCE:
-#ifdef __APPLE__
-    RABGtoY(argbdata, pixels, pixelnum);
-#else
     ARGBtoY(argbdata, pixels, pixelnum);
-#endif
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
     case GEM_SIMD_NONE:
     default:
-#ifdef __APPLE__
-      //R=2,G=3,B=0
-      BARGtoUYVY(argbdata, pixels, pixelnum);
-#else
       ARGBtoUYVY(argbdata, pixels, pixelnum);
-#endif
     }
     STOP_TIMING("ARGB_to_YCbCr");
     break;
@@ -951,8 +895,6 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
-  unsigned char grey=0;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
