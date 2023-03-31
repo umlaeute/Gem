@@ -96,6 +96,7 @@ libGem_la_SOURCES += \
 	ImageLoad.cpp \
 	ImageSave.cpp \
 	ImageIO.h \
+	PixConvert.cpp \
 	PixConvert.h \
 	PixConvertAltivec.cpp \
 	PixConvertSSE2.cpp \

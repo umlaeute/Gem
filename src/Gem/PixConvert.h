@@ -114,6 +114,76 @@ LOG
 # define RGB2GRAY_OFFSET 0
 #endif
 
+
+/* generic conversion functions */
+#if 0
+void FORMATtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+#endif
+
+void YtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void RGBtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void BGRtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void RGBAtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void BGRAtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void ABGRtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void ARGBtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ARGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ARGBtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ARGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ARGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ARGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+void RGB16toY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+
+
+
 /* AltiVec */
 #ifdef __VEC__
 
