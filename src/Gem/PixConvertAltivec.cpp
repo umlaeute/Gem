@@ -19,6 +19,13 @@
 
 #include "PixConvert.h"
 
+#define Altivec_fallback(fallback) \
+  void fallback##_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  { \
+  fallback(indata, outdata, width, height); \
+  }
+
+
+
 void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                           unsigned char *pixels)
 {
@@ -909,4 +916,27 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
   }
 }
 
+
+void RGBtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGB_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void BGRtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  BGR_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void RGBAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGBA_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  BGRA_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  YUV422_to_BGRA_altivec(indata, width*height*2, outdata);
+}
+
+#else /* !__VEC__ */
+Altivec_fallback(RGBtoUYVY);
+Altivec_fallback(BGRtoUYVY);
+Altivec_fallback(RGBAtoUYVY);
+Altivec_fallback(BGRAtoUYVY);
+Altivec_fallback(UYVYtoBGRA);
 #endif /*  __VEC__ */

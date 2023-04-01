@@ -223,43 +223,22 @@ void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t width
 
 
 
+void UYVYtoRGB_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGR_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoRGBA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+
+void RGBtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
 /* AltiVec */
 #ifdef __VEC__
-
-void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
-                          unsigned char *pixels);
-void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
-                           unsigned char *pixels);
-void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
-                          unsigned char *pixels);
-void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
-                           unsigned char *pixels);
-void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
-                            unsigned char *pixels);
-void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
-                            unsigned char *data, int xsize, int ysize);
-# ifndef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
-                            const unsigned char *gem_image, int xsize, int ysize);
-# endif
+void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V, unsigned char *data, int xsize, int ysize);
+void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV, const unsigned char *gem_image, int xsize, int ysize);
 #endif /* AltiVec */
-
-/* SSE2 */
-#ifdef __SSE2__
-void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
-                       size_t size,
-                       unsigned char *yuvdata);
-void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
-                       size_t size,
-                       unsigned char *rgbadata);
-void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
-                      size_t size,
-                      unsigned char *rgbadata);
-#endif /* SSE2 */
-
-/* in case somebody has an old machine... */
-#ifdef __MMX__
-
-#endif /* MMX */
 
 #endif /* _INCLUDE__GEM_GEM_PIXCONVERT_H_ */
