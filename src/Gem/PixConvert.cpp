@@ -90,9 +90,13 @@ namespace {
     const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
     size_t size = width*height;
     if(indata==outdata) {
-      #warning FIXME inplace RGB->RGBA
-      // in place conversion (this is broken; we have to prcess from the end
+      outdata += size*4;
+      indata += size*3;
+      // in place conversion: we have to process from the end
       while(size--) {
+        outdata-=4;
+        indata-=3;
+
         unsigned char R = indata[inR];
         unsigned char G = indata[inG];
         unsigned char B = indata[inB];
@@ -100,9 +104,6 @@ namespace {
         outdata[outG] = G;
         outdata[outB] = B;
         outdata[outA] = 255;
-
-        outdata+=4;
-        indata+=3;
       }
     } else {
       while(size--) {
