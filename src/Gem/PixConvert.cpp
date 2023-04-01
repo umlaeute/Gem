@@ -14,6 +14,7 @@
 /////////////////////////////////////////////////////////
 #include "PixConvert.h"
 #include "Utils/Functions.h"
+#include <cstring>
 /*
   input format:
 
