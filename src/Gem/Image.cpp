@@ -909,54 +909,35 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   return true;
 }
 
-GEM_EXTERN bool imageStruct::fromGray(const short *greydata)
+GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
 {
+  const unsigned char*greydata = (const unsigned char*)greydata_;
   if(!greydata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
-  short grey=0;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
+    YtoRGB(greydata, data, xsize, ysize);
+    break;
   case GL_BGR:
-    while(pixelnum--) {
-      grey=(*greydata++)>>8;
-      *pixels++=grey;
-      *pixels++=grey;
-      *pixels++=grey;
-      greydata++;
-    }
+    YtoBGR(greydata, data, xsize, ysize);
     break;
   case GL_RGBA:
+    YtoRGBA(greydata, data, xsize, ysize);
+    break;
   case GL_BGRA:
-    while(pixelnum--) {
-      grey=(*greydata++)>>8;
-      pixels[chRed]=grey;
-      pixels[chGreen]=grey;
-      pixels[chBlue]=grey;
-      pixels[chAlpha]=255;
-      pixels+=4;
-    }
+    YtoBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    while(pixelnum--) {
-      *pixels++ = (*greydata++)>>8;
-    }
+    memcpy(data, greydata, xsize*ysize);
     break;
   case GL_YUV422_GEM:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      pixels[chY0]=(*greydata++)>>8;
-      pixels[chY1]=(*greydata++)>>8;
-      pixels[chU]=pixels[chV]=128;
-      pixels+=4;
-    }
+    YtoUYVY(greydata, data, xsize, ysize);
     break;
   }
   return true;
@@ -999,152 +980,20 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
-  case GL_BGR: {
-    // of course this is stupid, RGB isn't BGR
-    unsigned char *pixels1=data;
-    unsigned char *pixels2=data+xsize*3;
-
-    const unsigned char*py1=Y;
-    const unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
-    const unsigned char*pv=(format==GL_BGR)?U:V;
-    const unsigned char*pu=(format==GL_RGB)?U:V;
-
-    int row=ysize>>1;
-    int cols=xsize>>1;
-    while(row--) {
-      int col=cols;
-      while(col--) {
-        int uv_r, uv_g, uv_b;
-        int y, u, v;
-        u=*pu++ -UV_OFFSET;
-        v=*pv++ -UV_OFFSET;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st row - 1st pixel
-        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-        *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-
-        // 1st row - 2nd pixel
-        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-        *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-
-        // 2nd row - 1st pixel
-        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-        *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-
-        // 2nd row - 2nd pixel
-        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-        *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-      }
-      pixels1+=xsize*csize;
-      pixels2+=xsize*csize;
-      py1+=xsize*1;
-      py2+=xsize*1;
-    }
-  }
-  break;
+    YUV420PtoRGB(Y, U, V, data, xsize, ysize);
+    break;
+  case GL_BGR:
+    YUV420PtoBGR(Y, U, V, data, xsize, ysize);
+    break;
   case GL_RGBA:
-  case GL_BGRA: {
-    unsigned char *pixels1=data;
-    unsigned char *pixels2=data+xsize*4;
-
-    const unsigned char*py1=Y;//yuvdata;
-    const unsigned char*py2=Y
-                            +xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
-    const unsigned char*pv=(format==GL_BGRA)?V:U;
-    const unsigned char*pu=(format==GL_RGBA)?V:U;
-
-    int row=ysize>>1;
-    int cols=xsize>>1;
-    while(row--) {
-      int col=cols;
-      while(col--) {
-        int y, u, v;
-        int uv_r, uv_g, uv_b;
-        u=*pu++-UV_OFFSET;
-        v=*pv++-UV_OFFSET;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st row - 1st pixel
-        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-        *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-        *pixels1++ = 255; // a
-
-        // 1st row - 2nd pixel
-        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
-        *pixels1++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels1++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels1++ = CLAMP((y + uv_r) >> 8); // r
-        *pixels1++ = 255; // a
-
-        // 2nd row - 1st pixel
-        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-        *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-        *pixels2++ = 255; // a
-
-        // 2nd row - 2nd pixel
-        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
-        *pixels2++ = CLAMP((y + uv_b) >> 8); // b
-        *pixels2++ = CLAMP((y + uv_g) >> 8); // g
-        *pixels2++ = CLAMP((y + uv_r) >> 8); // r
-        *pixels2++ = 255; // a
-      }
-      pixels1+=xsize*csize;
-      pixels2+=xsize*csize;
-      py1+=xsize*1;
-      py2+=xsize*1;
-    }
-  }
-  break;
-  case GL_YUV422_GEM: {
-    unsigned char *pixels1=data;
-    unsigned char *pixels2=data+xsize*csize;
-    const unsigned char*py1=Y;
-    const unsigned char*py2=Y+xsize; // plane_1 is luminance (csize==1)
-    const unsigned char*pu=U;
-    const unsigned char*pv=V;
-    int row=ysize>>1;
-    int cols=xsize>>1;
-    unsigned char u, v;
-    /* this is only re-ordering of the data */
-    while(row--) {
-      int col=cols;
-      while(col--) {
-        // yuv422 is U Y0 V Y1
-        u=*pu++;
-        v=*pv++;
-        *pixels1++=u;
-        *pixels1++=*py1++;
-        *pixels1++=v;
-        *pixels1++=*py1++;
-        *pixels2++=u;
-        *pixels2++=*py2++;
-        *pixels2++=v;
-        *pixels2++=*py2++;
-      }
-      pixels1+=xsize*csize;
-      pixels2+=xsize*csize;
-      py1+=xsize*1;
-      py2+=xsize*1;
-    }
-  }
-  break;
+    YUV420PtoRGBA(Y, U, V, data, xsize, ysize);
+    break;
+  case GL_BGRA:
+    YUV420PtoBGRA(Y, U, V, data, xsize, ysize);
+    break;
+  case GL_YUV422_GEM:
+    YUV420PtoUYVY(Y, U, V, data, xsize, ysize);
+    break;
   }
   return true;
 }

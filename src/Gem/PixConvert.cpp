@@ -13,7 +13,7 @@
 //
 /////////////////////////////////////////////////////////
 #include "PixConvert.h"
-
+#include "Utils/Functions.h"
 /*
   input format:
 
@@ -52,6 +52,8 @@
 #define BGRA 2,1,0,3
 #define ARGB 1,2,3,0
 #define ABGR 3,2,1,0
+
+#define UYVY 0,1,2,3
 
 namespace {
   template <int inR, int inG, int inB,
@@ -256,6 +258,191 @@ void YtoRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, s
 void YtoBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_four<8, BGRA>(indata, outdata, width, height);
 }
+
+/* YUV420planar -> */
+
+void YUV420PtoY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                unsigned char*outdata, size_t width, size_t height) {
+  memcpy(outdata, Y, width*height);
+}
+namespace {
+  template <int outR, int outG, int outB>
+  static void yuv420p_to_three(
+    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    unsigned char*outdata, const size_t width, const size_t height) {
+
+    const unsigned char*py1=Y;
+    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
+    const unsigned char*pu=U;
+    const unsigned char*pv=V;
+    unsigned char*pixels1=outdata;
+    unsigned char*pixels2=outdata+width*3;
+
+    for(int row=0; row<(width>>1); row++) {
+      for(int col=0; col<(height>>1); col++) {
+        int y;
+        int u=*pu++ -UV_OFFSET;
+        int v=*pv++ -UV_OFFSET;
+        int uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        int uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        int uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
+        // 1st row - 1st pixel
+        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+        pixels1[outR] = CLAMP((y + uv_r) >> 8);
+        pixels1[outG] = CLAMP((y + uv_g) >> 8);
+        pixels1[outB] = CLAMP((y + uv_b) >> 8);
+        pixels1+=3;
+
+        // 1st row - 2nd pixel
+        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+        pixels1[outR] = CLAMP((y + uv_r) >> 8);
+        pixels1[outG] = CLAMP((y + uv_g) >> 8);
+        pixels1[outB] = CLAMP((y + uv_b) >> 8);
+        pixels1+=3;
+
+        // 2nd row - 1st pixel
+        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+        pixels2[outR] = CLAMP((y + uv_r) >> 8);
+        pixels2[outG] = CLAMP((y + uv_g) >> 8);
+        pixels2[outB] = CLAMP((y + uv_b) >> 8);
+        pixels2+=3;
+
+        // 2nd row - 2nd pixel
+        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+        pixels2[outR] = CLAMP((y + uv_r) >> 8);
+        pixels2[outG] = CLAMP((y + uv_g) >> 8);
+        pixels2[outB] = CLAMP((y + uv_b) >> 8);
+        pixels2+=3;
+      }
+      /* need to skip 1 row, as we keep track of even and odd rows separately */
+      pixels1+=width*2;
+      pixels2+=width*2;
+      py1+=width*1;
+      py2+=width*1;
+    }
+  }
+}
+namespace {
+  template <int outR, int outG, int outB, int outA>
+  static void yuv420p_to_four(
+    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    unsigned char*outdata, size_t width, size_t height) {
+    const unsigned char*py1=Y;
+    const unsigned char*py2=py1+width; // plane_1 is luminance (csize==1)
+    const unsigned char*pu=U;
+    const unsigned char*pv=V;
+    unsigned char*pixels1=outdata;
+    unsigned char*pixels2=outdata+width*3;
+
+    for(int row=0; row<(width>>1); row++) {
+      for(int col=0; col<(height>>1); col++) {
+        int y;
+        int u=*pu++ -UV_OFFSET;
+        int v=*pv++ -UV_OFFSET;
+        int uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
+        int uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
+        int uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
+
+        // 1st row - 1st pixel
+        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+        pixels1[outR] = CLAMP((y + uv_r) >> 8);
+        pixels1[outG] = CLAMP((y + uv_g) >> 8);
+        pixels1[outB] = CLAMP((y + uv_b) >> 8);
+        pixels1[outA] = 255; // a
+        pixels1+=3;
+
+        // 1st row - 2nd pixel
+        y=YUV2RGB_11*(*py1++ -Y_OFFSET);
+        pixels1[outR] = CLAMP((y + uv_r) >> 8);
+        pixels1[outG] = CLAMP((y + uv_g) >> 8);
+        pixels1[outB] = CLAMP((y + uv_b) >> 8);
+        pixels1[outA] = 255; // a
+        pixels1+=3;
+
+        // 2nd row - 1st pixel
+        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+        pixels2[outR] = CLAMP((y + uv_r) >> 8);
+        pixels2[outG] = CLAMP((y + uv_g) >> 8);
+        pixels2[outB] = CLAMP((y + uv_b) >> 8);
+        pixels2[outA] = 255; // a
+        pixels2+=3;
+
+        // 2nd row - 2nd pixel
+        y=YUV2RGB_11*(*py2++ -Y_OFFSET);
+        pixels2[outR] = CLAMP((y + uv_r) >> 8);
+        pixels2[outG] = CLAMP((y + uv_g) >> 8);
+        pixels2[outB] = CLAMP((y + uv_b) >> 8);
+        pixels2[outA] = 255; // a
+        pixels2+=3;
+      }
+      /* need to skip 1 row, as we keep track of even and odd rows separately */
+      pixels1+=width*2;
+      pixels2+=width*2;
+      py1+=width*1;
+      py2+=width*1;
+    }
+  }
+}
+namespace {
+  template <int outU, int outY0, int outV, int outY1>
+  static void yuv420p_to_yuv4(
+    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    unsigned char*outdata, size_t width, size_t height) {
+    unsigned char *pixels1=outdata;
+    unsigned char *pixels2=pixels1+width*2;
+    const unsigned char*py1=Y;
+    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
+    const unsigned char*pu=U;
+    const unsigned char*pv=V;
+    int row=height>>1;
+    int cols=width>>1;
+    /* this is only re-ordering of the data */
+    while(row--) {
+      int col=cols;
+      while(col--) {
+        unsigned char u=*pu++;
+        unsigned char v=*pv++;
+        // yuv422 is U Y0 V Y1
+        pixels1[outU ]=u;
+        pixels1[outY0]=*py1++;
+        pixels1[outV ]=v;
+        pixels1[outY1]=*py1++;
+        pixels1+=4;
+
+        pixels2[outU ]=u;
+        pixels2[outY0]=*py2++;
+        pixels2[outV ]=v;
+        pixels2[outY1]=*py2++;
+        pixels2+=4;
+      }
+      /* need to skip 1 row, as we keep track of even and odd rows separately */
+      pixels1+=width*2;
+      pixels2+=width*2;
+      py1+=width*1;
+      py2+=width*1;
+    }
+  }
+}
+void YUV420PtoRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height) {
+  yuv420p_to_three<RGB>(Y, U, V, outdata, width, height);
+}
+void YUV420PtoBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height) {
+  yuv420p_to_three<BGR>(Y, U, V, outdata, width, height);
+}
+void YUV420PtoRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height) {
+  yuv420p_to_four<RGBA>(Y, U, V, outdata, width, height);
+}
+void YUV420PtoBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height) {
+  yuv420p_to_four<BGRA>(Y, U, V, outdata, width, height);
+}
+void YUV420PtoUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height) {
+  yuv420p_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
 }
 
 
