@@ -738,9 +738,6 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   }
 }
 
-#ifdef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-# warning disabling AltiVec for older gcc: please fix me
-#else
 void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
                             size_t pixelnum, unsigned char *output)
 {
@@ -911,6 +908,5 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
     BGRA_ptr++;
   }
 }
-#endif /* NO_VECTORINT_TO_VECTORUNSIGNEDINT */
 
 #endif /*  __VEC__ */

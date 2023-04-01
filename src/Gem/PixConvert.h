@@ -226,23 +226,6 @@ void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t width
 /* AltiVec */
 #ifdef __VEC__
 
-/* there are problems on OSX10.3 with older versions of gcc, since the intrinsic code
- * below freely changes between signed and unsigned short vectors
- * newer versions of gcc accept this...
- * LATER: fix the code (GemPixConvertAltivec:750..800)
- */
-# ifdef __GNUC__
-/* according to hcs it does NOT work with gcc-3.3
- * for simplicity, i disable everything below gcc4
- * JMZ: 20061114
- */
-#  if __GNUC__ < 4
-#   warning disabling AltiVec for older gcc: please fix me
-#   define NO_VECTORINT_TO_VECTORUNSIGNEDINT
-#  endif
-# endif /* GNUC */
-
-
 void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                           unsigned char *pixels);
 void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
