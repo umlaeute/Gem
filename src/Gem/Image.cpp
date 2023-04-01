@@ -1245,12 +1245,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     memcpy(data, yuvdata, xsize*ysize*csize);
     break;
   case GL_LUMINANCE:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      *pixels++=yuvdata[1];
-      *pixels++=yuvdata[3];
-      yuvdata+=4;
-    }
+    UYVYtoY(yuvdata, data, xsize, ysize);
     break;
   case GL_RGB:
   case GL_BGR: {
@@ -1264,32 +1259,10 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
 #endif
     case GEM_SIMD_NONE:
     default:
-      pixelnum>>=1;
-
-      while(pixelnum--) {
-        int y, u, v;
-        int uv_r, uv_g, uv_b;
-        u=yuvdata[0]-UV_OFFSET;
-        v=yuvdata[2]-UV_OFFSET;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st pixel
-        y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-        pixels+=3;
-        // 2nd pixel
-        y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-        pixels+=3;
-
-        yuvdata+=4;
-      }
+      if(GL_BGR == format)
+        UYVYtoBGR(yuvdata, pixels, xsize, ysize);
+      else
+        UYVYtoRGB(yuvdata, pixels, xsize, ysize);
     }
     STOP_TIMING("YUV2RGB");
   }
@@ -1310,36 +1283,12 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
 #endif
     case GEM_SIMD_NONE:
     default:
-      unsigned char *pixels=data;
-      pixelnum>>=1;
-      while(pixelnum--) {
-        int y, u, v;
-        int uv_r, uv_g, uv_b;
-        u=yuvdata[0]-UV_OFFSET;
-        v=yuvdata[2]-UV_OFFSET;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st pixel
-        y=YUV2RGB_11*(yuvdata[1] -Y_OFFSET);
-        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-        pixels[chAlpha] = 255;
-        pixels+=4;
-        // 2nd pixel
-        y=YUV2RGB_11*(yuvdata[3] -Y_OFFSET);
-        pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-        pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-        pixels[chAlpha] = 255;
-        pixels+=4;
-
-        yuvdata+=4;
-      }
-      STOP_TIMING("UYVY_to_RGBA/BGRA");
+      if(GL_BGRA == format)
+        UYVYtoBGRA(yuvdata, pixels, xsize, ysize);
+      else
+        UYVYtoRGBA(yuvdata, pixels, xsize, ysize);
     }
+    STOP_TIMING("UYVY_to_RGBA/BGRA");
   }
   break;
   }
@@ -1361,87 +1310,23 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      pixels[0]=yuvdata[1]; // u
-      pixels[1]=yuvdata[0]; // y
-      pixels[2]=yuvdata[3]; // v
-      pixels[3]=yuvdata[2]; // y
-      pixels+=4;
-      yuvdata+=4;
-    }
+    YUYVtoUYVY(yuvdata, pixels, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      *pixels++=yuvdata[0];
-      *pixels++=yuvdata[2];
-      yuvdata+=4;
-    }
+    YUYVtoY(yuvdata, pixels, xsize, ysize);
     break;
   case GL_RGB:
-  case GL_BGR: {
-    unsigned char *pixels=data;
-    pixelnum>>=1;
-
-    while(pixelnum--) {
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
-      u=yuvdata[1]-UV_OFFSET;
-      v=yuvdata[3]-UV_OFFSET;
-      uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-      uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-      uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-      // 1st pixel
-      y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels+=3;
-      // 2nd pixel
-      y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels+=3;
-
-      yuvdata+=4;
-    }
-  }
-  break;
+    YUYVtoRGB(yuvdata, pixels, xsize, ysize);
+    break;
+  case GL_BGR:
+    YUYVtoBGR(yuvdata, pixels, xsize, ysize);
+    break;
   case GL_RGBA:
-  case GL_BGRA: {
-    unsigned char *pixels=data;
-    pixelnum>>=1;
-    while(pixelnum--) {
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
-      u=yuvdata[1]-UV_OFFSET;
-      v=yuvdata[3]-UV_OFFSET;
-      uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-      uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-      uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-      // 1st pixel
-      y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels[chAlpha] = 255;
-      pixels+=4;
-      // 2nd pixel
-      y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels[chAlpha] = 255;
-      pixels+=4;
-
-      yuvdata+=4;
-    }
-  }
-  break;
+    YUYVtoRGBA(yuvdata, pixels, xsize, ysize);
+    break;
+  case GL_BGRA:
+    YUYVtoBGRA(yuvdata, pixels, xsize, ysize);
+    break;
   }
   return true;
 }
@@ -1452,96 +1337,30 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
   if(!yuvdata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      pixels[chU]=yuvdata[1]; // u
-      pixels[chY0]=yuvdata[0]; // y
-      pixels[chV]=yuvdata[3]; // v
-      pixels[chY1]=yuvdata[2]; // y
-      pixels+=4;
-      yuvdata+=4;
-    }
+    YVYUtoUYVY(yuvdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      *pixels++=yuvdata[0];
-      *pixels++=yuvdata[2];
-      yuvdata+=4;
-    }
+    YVYUtoY(yuvdata, data, xsize, ysize);
     break;
   case GL_RGB:
-  case GL_BGR: {
-    unsigned char *pixels=data;
-    pixelnum>>=1;
-
-    while(pixelnum--) {
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
-      u=yuvdata[3]-UV_OFFSET;
-      v=yuvdata[1]-UV_OFFSET;
-      uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-      uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-      uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-      // 1st pixel
-      y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels+=3;
-      // 2nd pixel
-      y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels+=3;
-
-      yuvdata+=4;
-    }
-  }
-  break;
+    YVYUtoRGB(yuvdata, data, xsize, ysize);
+    break;
+  case GL_BGR:
+    YVYUtoBGR(yuvdata, data, xsize, ysize);
+    break;
   case GL_RGBA:
-  case GL_BGRA: {
-    unsigned char *pixels=data;
-    pixelnum>>=1;
-    while(pixelnum--) {
-      int y, u, v;
-      int uv_r, uv_g, uv_b;
-      u=yuvdata[3]-UV_OFFSET;
-      v=yuvdata[1]-UV_OFFSET;
-      uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-      uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-      uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-      // 1st pixel
-      y=YUV2RGB_11*(yuvdata[0] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels[chAlpha] = 255;
-      pixels+=4;
-      // 2nd pixel
-      y=YUV2RGB_11*(yuvdata[2] -Y_OFFSET);
-      pixels[chRed]   = CLAMP((y + uv_r) >> 8); // r
-      pixels[chGreen] = CLAMP((y + uv_g) >> 8); // g
-      pixels[chBlue]  = CLAMP((y + uv_b) >> 8); // b
-      pixels[chAlpha] = 255;
-      pixels+=4;
-
-      yuvdata+=4;
-    }
-  }
-  break;
+    YVYUtoRGBA(yuvdata, data, xsize, ysize);
+    break;
+  case GL_BGRA:
+    YVYUtoBGRA(yuvdata, data, xsize, ysize);
+    break;
   }
   return true;
 }
