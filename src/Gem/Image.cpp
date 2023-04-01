@@ -600,7 +600,6 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
   if(!rgbdata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
@@ -609,22 +608,22 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
-    memcpy(data, rgbdata, pixelnum*csize);
+    memcpy(data, rgbdata, xsize*ysize*csize);
     break;
   case GL_BGR:
-    RGBtoBGR(rgbdata, pixels, pixelnum);
+    RGBtoBGR(rgbdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    RGBtoRGBA(rgbdata, pixels, pixelnum);
+    RGBtoRGBA(rgbdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    RGBtoBGRA(rgbdata, pixels, pixelnum);
+    RGBtoBGRA(rgbdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    RGBtoY(rgbdata, pixels, pixelnum);
+    RGBtoY(rgbdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    RGBtoUYVY(rgbdata, pixels, pixelnum);
+    RGBtoUYVY(rgbdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -638,7 +637,6 @@ GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
     return false;
   }
   const unsigned short*rgbdata=(const unsigned short*)rgb16data;
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   switch (format) {
@@ -646,13 +644,13 @@ GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGBA:
-    RGB16toRGBA(rgb16data, data, pixelnum);
+    RGB16toRGBA(rgb16data, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    RGB16toY(rgb16data, data, pixelnum);
+    RGB16toY(rgb16data, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    RGB16toUYVY(rgb16data, data, pixelnum);
+    RGB16toUYVY(rgb16data, data, xsize, ysize);
     break;
   }
   return true;
@@ -663,7 +661,6 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
   if(!rgbadata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   unsigned char *pixels=data;
@@ -672,39 +669,39 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
-    RGBAtoRGB(rgbadata, pixels, pixelnum);
+    RGBAtoRGB(rgbadata, data, xsize, ysize);
     break;
   case GL_BGR:
-    RGBAtoBGR(rgbadata, pixels, pixelnum);
+    RGBAtoBGR(rgbadata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    memcpy(data, rgbadata, pixelnum*csize);
+    memcpy(data, rgbadata, xsize*ysize*csize);
     break;
   case GL_ABGR_EXT:
-    RGBAtoABGR(rgbadata, pixels, pixelnum);
+    RGBAtoABGR(rgbadata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    RGBAtoBGRA(rgbadata, pixels, pixelnum);
+    RGBAtoBGRA(rgbadata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    RGBAtoY(rgbadata, pixels, pixelnum);
+    RGBAtoY(rgbadata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      BGRA_to_YCbCr_altivec(rgbadata,pixelnum,pixels);
+      BGRA_to_YCbCr_altivec(rgbadata,xsize*ysize,pixels);
       break;
 #endif
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
-      RGBA_to_UYVY_SSE2(rgbadata,pixelnum,pixels);
+      RGBA_to_UYVY_SSE2(rgbadata,xsize*ysize,pixels);
       break;
 #endif
     case GEM_SIMD_NONE:
     default:
-      RGBAtoUYVY(rgbadata, pixels, pixelnum);
+      RGBAtoUYVY(rgbadata, data, xsize, ysize);
     }
     STOP_TIMING("RGBA to UYVY");
     break;
@@ -718,31 +715,29 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
   if(!bgrdata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-    memcpy(data, bgrdata, pixelnum*csize);
+    memcpy(data, bgrdata, xsize*ysize*csize);
     break;
   case GL_RGB:
-    BGRtoRGB(bgrdata, pixels, pixelnum);
+    BGRtoRGB(bgrdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    BGRtoBGRA(bgrdata, pixels, pixelnum);
+    BGRtoBGRA(bgrdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    BGRtoRGBA(bgrdata, pixels, pixelnum);
+    BGRtoRGBA(bgrdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    BGRtoY(bgrdata, pixels, pixelnum);
+    BGRtoY(bgrdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    BGRtoUYVY(bgrdata, pixels, pixelnum);
+    BGRtoUYVY(bgrdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -753,40 +748,38 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
   if(!bgradata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-    BGRAtoBGR(bgradata, pixels, pixelnum);
+    BGRAtoBGR(bgradata, data, xsize, ysize);
     break;
   case GL_RGB:
-    BGRAtoBGR(bgradata, pixels, pixelnum);
+    BGRAtoBGR(bgradata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    memcpy(data, bgradata, pixelnum*csize);
+    memcpy(data, bgradata, xsize*ysize*csize);
     break;
   case GL_RGBA:
-    BGRAtoRGBA(bgradata, pixels, pixelnum);
+    BGRAtoRGBA(bgradata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    BGRAtoY(bgradata, pixels, pixelnum);
+    BGRAtoY(bgradata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      BGRA_to_YCbCr_altivec(bgradata,pixelnum,pixels);
+      BGRA_to_YCbCr_altivec(bgradata,xsize*ysize,pixels);
       break;
 #endif
     case GEM_SIMD_NONE:
     default:
-      BGRAtoUYVY(bgradata, pixels, pixelnum);
+      BGRAtoUYVY(bgradata, data, xsize, ysize);
     }
     STOP_TIMING("BGRA_to_YCbCr");
     break;
@@ -801,38 +794,36 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
   if(!abgrdata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-    ABGRtoBGR(abgrdata, pixels, pixelnum);
+    ABGRtoBGR(abgrdata, data, xsize, ysize);
     break;
   case GL_RGB:
-    ABGRtoRGB(abgrdata, pixels, pixelnum);
+    ABGRtoRGB(abgrdata, data, xsize, ysize);
     break;
   case GL_ABGR_EXT:
-    memcpy(data, abgrdata, pixelnum*csize);
+    memcpy(data, abgrdata, xsize*ysize*csize);
     break;
   case GL_BGRA:
-    ABGRtoBGRA(abgrdata, pixels, pixelnum);
+    ABGRtoBGRA(abgrdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    ABGRtoRGBA(abgrdata, pixels, pixelnum);
+    ABGRtoRGBA(abgrdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    ABGRtoY(abgrdata, pixels, pixelnum);
+    ABGRtoY(abgrdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
     case GEM_SIMD_NONE:
     default:
-      ABGRtoUYVY(abgrdata, pixels, pixelnum);
+      ABGRtoUYVY(abgrdata, data, xsize, ysize);
     }
     STOP_TIMING("ABGR_to_YCbCr");
     break;
@@ -845,41 +836,39 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
   if(!argbdata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
-  unsigned char *pixels=data;
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-    ARGBtoBGR(argbdata, pixels, pixelnum);
+    ARGBtoBGR(argbdata, data, xsize, ysize);
     break;
   case GL_RGB:
-    ARGBtoRGB(argbdata, pixels, pixelnum);
+    ARGBtoRGB(argbdata, data, xsize, ysize);
     break;
 #if 0
   case GL_ARGB_EXT:
-    memcpy(data, argbdata, pixelnum*csize);
+    memcpy(data, argbdata, xsize*ysize*csize);
     break;
 #endif
   case GL_BGRA:
     post("%s:%d:: %s", __FILE__, __LINE__, __FUNCTION__);
-    ARGBtoBGRA(argbdata, pixels, pixelnum);
+    ARGBtoBGRA(argbdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    ARGBtoRGBA(argbdata, pixels, pixelnum);
+    ARGBtoRGBA(argbdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    ARGBtoY(argbdata, pixels, pixelnum);
+    ARGBtoY(argbdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
     switch(m_simd) {
     case GEM_SIMD_NONE:
     default:
-      ARGBtoUYVY(argbdata, pixels, pixelnum);
+      ARGBtoUYVY(argbdata, data, xsize, ysize);
     }
     STOP_TIMING("ARGB_to_YCbCr");
     break;
@@ -892,7 +881,6 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   if(!greydata) {
     return false;
   }
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   switch (format) {
@@ -900,22 +888,22 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
-    YtoRGB(greydata, data, pixelnum);
+    YtoRGB(greydata, data, xsize, ysize);
     break;
   case GL_BGR:
-    YtoBGR(greydata, data, pixelnum);
+    YtoBGR(greydata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YtoRGBA(greydata, data, pixelnum);
+    YtoRGBA(greydata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YtoBGRA(greydata, data, pixelnum);
+    YtoBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    memcpy(data, greydata, pixelnum);
+    memcpy(data, greydata, xsize*ysize);
     break;
   case GL_YUV422_GEM:
-    YtoUYVY(greydata, data, pixelnum);
+    YtoUYVY(greydata, data, xsize, ysize);
     break;
   }
   return true;
@@ -1001,7 +989,6 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     return false;
   }
 
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   switch (format) {
@@ -1009,7 +996,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_LUMINANCE:
-    memcpy(data, Y, pixelnum);
+    memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
   case GL_BGR: {
@@ -1181,7 +1168,6 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     return false;
   }
 
-  size_t pixelnum=xsize*ysize;
   setCsizeByFormat();
   reallocate();
   switch (format) {
@@ -1189,7 +1175,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_LUMINANCE:
-    memcpy(data, Y, pixelnum);
+    memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
   case GL_BGR: {
@@ -1407,7 +1393,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    memcpy(data, yuvdata, pixelnum*csize);
+    memcpy(data, yuvdata, xsize*ysize*csize);
     break;
   case GL_LUMINANCE:
     pixelnum>>=1;
@@ -1424,7 +1410,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     switch(m_simd) {
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
-      UYVY_to_RGB_SSE2(yuvdata, pixelnum, pixels);
+      UYVY_to_RGB_SSE2(yuvdata, xsize*ysize, pixels);
       break;
 #endif
     case GEM_SIMD_NONE:
@@ -1465,12 +1451,12 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     switch(m_simd) {
 #ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      YUV422_to_BGRA_altivec( yuvdata, pixelnum*2, data);
+      YUV422_to_BGRA_altivec( yuvdata, xsize*ysize*2, data);
       break;
 #endif
 #ifdef __SSE2__
     case GEM_SIMD_SSE2:
-      UYVY_to_RGBA_SSE2(yuvdata, pixelnum, data);
+      UYVY_to_RGBA_SSE2(yuvdata, xsize*ysize, data);
       break;
 #endif
     case GEM_SIMD_NONE:

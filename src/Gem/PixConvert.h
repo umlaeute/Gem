@@ -117,70 +117,89 @@ LOG
 
 /* generic conversion functions */
 #if 0
-void FORMATtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void FORMATtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void FORMATtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 #endif
 
-void YtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void YtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void RGBtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YtoUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
 
-void BGRtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void YUV420PtoY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                unsigned char*outdata, size_t width, size_t height);
+void YUV420PtoRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void YUV420PtoBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void YUV420PtoRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void YUV420PtoBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void YUV420PtoUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
 
-void RGBAtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGBAtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void BGRAtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void ABGRtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ABGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ABGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ABGRtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ABGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ABGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void RGBAtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void ARGBtoY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ARGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ARGBtoRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ARGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ARGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void ARGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
+void BGRAtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void RGB16toY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toUYVY(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toRGB(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toBGR(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toRGBA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toBGRA(const unsigned char*indata, unsigned char*outdata, size_t size);
-void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t size);
+void ABGRtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+void ARGBtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+void RGB16toY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
 
 
