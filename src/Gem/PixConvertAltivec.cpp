@@ -1,5 +1,3 @@
-#include "Utils/SIMD.h"
-#ifdef __VEC__
 /////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -17,6 +15,7 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/SIMD.h"
 #include "PixConvert.h"
 
 #define Altivec_fallback(fallback) \
@@ -25,7 +24,7 @@
   }
 
 
-
+#ifdef __VEC__
 void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                           unsigned char *pixels)
 {

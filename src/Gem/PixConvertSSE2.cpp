@@ -1,4 +1,3 @@
-#ifdef __SSE2__
 /////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -14,24 +13,29 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "PixConvert.h"
 /* darned: it seems like i just cannot get SIMD-code right!
  * to my eye, there appear to me WAY too much shuffle's down there
  * if somebody would want to have a look i'd be grateful
  */
 
+#include "Gem/Image.h"
 
+
+#ifdef __SSE2__
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
 # pragma warning( disable : 4309 )
 #endif
 
-#include "PixConvert.h"
-#include "Gem/Image.h"
 
 
 #define RGB2YUV_14 0
 #define RGB2YUV_24 0
 #define RGB2YUV_34 0
+
+#define RGB 0,1,2
+#define BGR 2,1,0
 
 
 /* just some debugging stuff ... */
@@ -436,16 +440,16 @@ static void UYVY_to_rgb3(const unsigned char *yuvdata,
 }
 
 void UYVYtoRGB_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
-  UYVY_to_rgb3<RGB>(indata, outdata, width, height);
+  UYVY_to_rgb3<RGB>(indata, width*height, outdata);
 }
 void UYVYtoBGR_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
-  UYVY_to_rgb3<BGR>(indata, outdata, width, height);
+  UYVY_to_rgb3<BGR>(indata, width*height, outdata);
 }
 void UYVYtoRGBA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
-  UYVY_to_rgb3<RGB>(indata, outdata, width, height);
+  UYVY_to_rgb3<RGB>(indata, width*height, outdata);
 }
 void UYVYtoBGRA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
-  UYVY_to_rgb3<BGR>(indata, outdata, width, height);
+  UYVY_to_rgb3<BGR>(indata, width*height, outdata);
 }
 
 #else
