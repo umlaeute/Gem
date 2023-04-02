@@ -496,9 +496,9 @@ GEM_EXTERN void imageStruct::setBlack(void)
   case GL_YCBCR_422_GEM:
     i/=4;
     while(i--) {
-      *dummy++=128;
+      *dummy++=UV_OFFSET;
       *dummy++=0;
-      *dummy++=128;
+      *dummy++=UV_OFFSET;
       *dummy++=0;
     }
     break;
@@ -518,9 +518,9 @@ GEM_EXTERN void imageStruct::setWhite(void)
   case GL_YCBCR_422_GEM:
     i/=4;
     while(i--) {
-      *dummy++=128;
+      *dummy++=UV_OFFSET;
       *dummy++=255;
-      *dummy++=128;
+      *dummy++=UV_OFFSET;
       *dummy++=255;
     }
     break;
@@ -908,7 +908,7 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
 
 GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
 {
-  const unsigned char*greydata = (const unsigned char*)greydata_;
+  const unsigned short*greydata = (const unsigned short*)greydata_;
   if(!greydata) {
     return false;
   }
@@ -931,7 +931,7 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
     Yu16toBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    memcpy(data, greydata, xsize*ysize);
+    Yu16toY(greydata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     Yu16toUYVY(greydata, data, xsize, ysize);
@@ -1024,202 +1024,31 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
-  case GL_BGR: {
-    // of course this is stupid, RGB isn't BGR
-    unsigned char *pixels1=data;
-    unsigned char *pixels2=data+xsize*csize;
-
-    const short*py1=Y;
-    const short*py2=Y+xsize; // plane_1 is luminance (csize==1)
-    const short*pv=V;//(format==GL_BGR)?V:U;
-    const short*pu=U;//(format==GL_RGB)?V:U;
-
-    int row=ysize>>1;
-    int cols=xsize>>1;
-    while(row--) {
-      int col=cols;
-      while(col--) {
-        int y, u, v;
-        int uv_r, uv_g, uv_b;
-        // these are from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
-        u=(*pu++)>>8;
-        v=(*pv++)>>8;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st row - 1st pixel
-        y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
-#ifndef __APPLE__
-        pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels1+=3;
-
-        // 1st row - 2nd pixel
-        y=YUV2RGB_11*((*py1++)>>7);
-        pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels1+=3;
-
-        // 2nd row - 1st pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels2+=3;
-
-        // 2nd row - 2nd pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels2+=3;
-
-#else
-        pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[1] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[0] = CLAMP((y + uv_b) >> 8); // b
-        pixels1+=3;
-
-        // 1st row - 2nd pixel
-        y=YUV2RGB_11*((*py1++)>>7);
-        pixels1[2 ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[1] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[0] = CLAMP((y + uv_b) >> 8); // b
-        pixels1+=3;
-
-        // 2nd row - 1st pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[1] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[0 ] = CLAMP((y + uv_b) >> 8); // b
-        pixels2+=3;
-
-        // 2nd row - 2nd pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[2 ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[1] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[0] = CLAMP((y + uv_b) >> 8); // b
-        pixels2+=3;
-#endif
-
-      }
-      pixels1+=xsize*csize;
-      pixels2+=xsize*csize;
-      py1+=xsize*1;
-      py2+=xsize*1;
-    }
-  }
-  break;
+    YUV420Ps16toRGB(Y, U, V, data, xsize, ysize);
+    break;
+  case GL_BGR:
+    YUV420Ps16toBGR(Y, U, V, data, xsize, ysize);
+    break;
   case GL_RGBA:
-  case GL_BGRA: {
-    unsigned char *pixels1=data;
-    unsigned char *pixels2=data+xsize*csize;
-
-    const short*py1=Y;//yuvdata;
-    const short*py2=Y+xsize;//yuvdata+xsize; // plane_1 is luminance (csize==1)
-    const short*pv=V;//(format==GL_BGRA)?U:V;
-    const short*pu=U;//(format==GL_RGBA)?U:V;
-
-    int row=ysize>>1;
-    int cols=xsize>>1;
-    while(row--) {
-      int col=cols;
-      while(col--) {
-        int y, u, v;
-        int uv_r, uv_g, uv_b;
-        u=(*pu++)>>8;
-        v=(*pv++)>>8;
-        uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-        uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-        uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-        // 1st row - 1st pixel
-        y=YUV2RGB_11*((*py1++)>>7); // what about the "16"-offset ?
-        pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels1[chAlpha] = 255; // a
-        pixels1+=4;
-
-        // 1st row - 2nd pixel
-        y=YUV2RGB_11*((*py1++)>>7);
-        pixels1[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels1[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels1[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels1[chAlpha] = 255; // a
-        pixels1+=4;
-
-        // 2nd row - 1st pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels2[chAlpha] = 255; // a
-        pixels2+=4;
-
-        // 2nd row - 2nd pixel
-        y=YUV2RGB_11*((*py2++)>>7);
-        pixels2[chRed  ] = CLAMP((y + uv_r) >> 8); // r
-        pixels2[chGreen] = CLAMP((y + uv_g) >> 8); // g
-        pixels2[chBlue ] = CLAMP((y + uv_b) >> 8); // b
-        pixels2[chAlpha] = 255; // a
-        pixels2+=4;
-      }
-      pixels1+=xsize*csize;
-      pixels2+=xsize*csize;
-      py1+=xsize*1;
-      py2+=xsize*1;
-    }
-  }
-
-  break;
+    YUV420Ps16toRGBA(Y, U, V, data, xsize, ysize);
+    break;
+  case GL_BGRA:
+    YUV420Ps16toBGRA(Y, U, V, data, xsize, ysize);
+    break;
   case GL_YUV422_GEM: {
     START_TIMING;
     switch(m_simd) {
-#ifdef __VEC__
     case GEM_SIMD_ALTIVEC:
-      YV12_to_YUV422_altivec(Y, U, V, data, xsize, ysize);
+      YUV420Ps16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
       break;
-#endif
     case GEM_SIMD_NONE:
     default:
-      unsigned char *pixels1=data;
-      unsigned char *pixels2=data+xsize*csize;
-      const short*py1=Y;
-      const short*py2=Y+xsize; // plane_1 is luminance (csize==1)
-      const short*pu=U;
-      const short*pv=V;
-      int row=ysize>>1;
-      int cols=xsize>>1;
-      unsigned char u, v;
-      /* this is only re-ordering of the data */
-      while(row--) {
-        int col=cols;
-        while(col--) {
-          // yuv422 is U Y0 V Y1
-          u=((*pu++)>>8)+128;
-          v=((*pv++)>>8)+128;
-          *pixels1++=u;
-          *pixels1++=(*py1++)>>7;
-          *pixels1++=v;
-          *pixels1++=(*py1++)>>7;
-          *pixels2++=u;
-          *pixels2++=(*py2++)>>7;
-          *pixels2++=v;
-          *pixels2++=(*py2++)>>7;
-        }
-        pixels1+=xsize*csize;
-        pixels2+=xsize*csize;
-        py1+=xsize*1;
-        py2+=xsize*1;
-      }
+      YUV420Ps16toUYVY(Y, U, V, data, xsize, ysize);
+      break;
     }
     STOP_TIMING("YV12_to_YUV422");
   }
-  break;
+    break;
   }
   return true;
 }

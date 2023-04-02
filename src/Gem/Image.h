@@ -206,7 +206,7 @@ struct GEM_EXTERN imageStruct {
   virtual bool fromABGR   (const unsigned char* orgdata);
   virtual bool fromARGB   (const unsigned char* orgdata);
   virtual bool fromGray   (const unsigned char* orgdata);
-  virtual bool fromGray   (const short* orgdata);
+  virtual bool fromGray   (const short*orgdata);
   virtual bool fromUYVY   (const unsigned char* orgdata);
   virtual bool fromYUY2   (const unsigned char* orgdata); // YUYV
   virtual bool fromYVYU   (const unsigned char* orgdata);

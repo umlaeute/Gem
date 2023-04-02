@@ -931,6 +931,9 @@ void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_
 void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
   YUV422_to_BGRA_altivec(indata, width*height*2, outdata);
 }
+void YUV420Ps16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height)  {
+  YV12_to_YUV422_altivec(Y, U, V, outdata, xsize, ysize);
+}
 
 #else /* !__VEC__ */
 Altivec_fallback(RGBtoUYVY);
@@ -938,4 +941,7 @@ Altivec_fallback(BGRtoUYVY);
 Altivec_fallback(RGBAtoUYVY);
 Altivec_fallback(BGRAtoUYVY);
 Altivec_fallback(UYVYtoBGRA);
+void YUV420Ps16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height)  {
+  YUV420Ps16toUYVY(Y, U, V, outdata, width, height);
+}
 #endif /*  __VEC__ */

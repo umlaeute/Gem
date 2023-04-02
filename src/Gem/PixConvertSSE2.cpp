@@ -54,7 +54,7 @@ static void print_int(__m128i m)
 
 
 /* convert RGBA to YUV422 */
-void RGBAtoUYVY_SSE2(const unsigned char *rgbadata,
+void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
                        size_t size,
                        unsigned char *yuvdata)
 {
@@ -448,6 +448,9 @@ void UYVYtoRGBA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t w
 }
 void UYVYtoBGRA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
   UYVY_to_rgb3<BGR>(indata, width*height, outdata);
+}
+void RGBAtoUYVY_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGBA_to_UYVY_SSE2(indata, width*height, outdata);
 }
 
 #else
