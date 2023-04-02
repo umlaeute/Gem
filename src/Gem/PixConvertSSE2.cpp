@@ -13,22 +13,20 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/SIMD.h"
 #include "PixConvert.h"
 /* darned: it seems like i just cannot get SIMD-code right!
  * to my eye, there appear to me WAY too much shuffle's down there
  * if somebody would want to have a look i'd be grateful
  */
 
-#include "Gem/Image.h"
-
 
 #ifdef __SSE2__
+
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
 # pragma warning( disable : 4309 )
 #endif
-
-
 
 #define RGB2YUV_14 0
 #define RGB2YUV_24 0

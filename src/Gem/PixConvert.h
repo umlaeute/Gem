@@ -17,7 +17,8 @@ LOG
 #ifndef _INCLUDE__GEM_GEM_PIXCONVERT_H_
 #define _INCLUDE__GEM_GEM_PIXCONVERT_H_
 
-#include "Utils/SIMD.h"
+/* for size_t */
+#include <stddef.h>
 
 // use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
 /*
