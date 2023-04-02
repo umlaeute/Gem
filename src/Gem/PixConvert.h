@@ -132,11 +132,11 @@ void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, siz
 void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
-void YtoUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
-void YtoRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
-void YtoBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
-void YtoRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
-void YtoBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
 
 void YUV420PtoY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                 unsigned char*outdata, size_t width, size_t height);

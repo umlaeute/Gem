@@ -259,19 +259,19 @@ void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, si
 void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_rgb4<0, BGRA>(indata, outdata, width, height);
 }
-void YtoUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
+void Yu16toUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_yuv4<8, RGBA>(indata, outdata, width, height);
 }
-void YtoRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
+void Yu16toRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_three<8, RGB>(indata, outdata, width, height);
 }
-void YtoBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
+void Yu16toBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_three<8, BGR>(indata, outdata, width, height);
 }
-void YtoRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
+void Yu16toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_rgb4<8, RGBA>(indata, outdata, width, height);
 }
-void YtoBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
+void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
   y_to_rgb4<8, BGRA>(indata, outdata, width, height);
 }
 

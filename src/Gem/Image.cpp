@@ -919,22 +919,22 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
-    YtoRGB(greydata, data, xsize, ysize);
+    Yu16toRGB(greydata, data, xsize, ysize);
     break;
   case GL_BGR:
-    YtoBGR(greydata, data, xsize, ysize);
+    Yu16toBGR(greydata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YtoRGBA(greydata, data, xsize, ysize);
+    Yu16toRGBA(greydata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YtoBGRA(greydata, data, xsize, ysize);
+    Yu16toBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     memcpy(data, greydata, xsize*ysize);
     break;
   case GL_YUV422_GEM:
-    YtoUYVY(greydata, data, xsize, ysize);
+    Yu16toUYVY(greydata, data, xsize, ysize);
     break;
   }
   return true;
