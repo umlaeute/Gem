@@ -124,7 +124,7 @@ void GemPixDualObj :: render(GemState *state)
     found=true; FUN_RGBA; break;                        \
   case GL_LUMINANCE:                                    \
     found=true; FUN_GRAY; break;                        \
-  case GL_YCBCR_422_GEM:                                \
+  case GL_YUV422_GEM:                                \
     found=true; FUN_YUV ; break;                        \
   default:break;}
 
@@ -167,7 +167,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
                        PROCESS_DUALIMAGE(Gray, YUV),
                        PROCESS_DUALIMAGE_SIMD(Gray));
     break;
-  case GL_YCBCR_422_GEM:
+  case GL_YUV422_GEM:
     PROCESS_COLORSPACE(PROCESS_DUALIMAGE(YUV, RGBA),
                        PROCESS_DUALIMAGE_SIMD(YUV),
                        PROCESS_DUALIMAGE(YUV, Gray));
@@ -197,7 +197,7 @@ std::string format2string(GLenum fmt)
   case GL_LUMINANCE:
     result = "Gray";
     break;
-  case GL_YCBCR_422_GEM:
+  case GL_YUV422_GEM:
     result = "YUV";
     break;
   default:

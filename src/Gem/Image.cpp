@@ -203,7 +203,7 @@ imageStruct :: imageStruct(void)
 # else
   , type(GL_UNSIGNED_SHORT_8_8_APPLE)
 # endif /* __BIG_ENDIAN__ */
-  , format(GL_YCBCR_422_GEM)
+  , format(GL_YUV422_GEM)
 #else /* !__APPLE__ */
   , type(GL_UNSIGNED_BYTE), format(GL_RGBA)
 #endif /* __APPLE__ */
@@ -493,7 +493,7 @@ GEM_EXTERN void imageStruct::setBlack(void)
     return;
   }
   switch (format) {
-  case GL_YCBCR_422_GEM:
+  case GL_YUV422_GEM:
     i/=4;
     while(i--) {
       *dummy++=UV_OFFSET;
@@ -515,7 +515,7 @@ GEM_EXTERN void imageStruct::setWhite(void)
     return;
   }
   switch (format) {
-  case GL_YCBCR_422_GEM:
+  case GL_YUV422_GEM:
     i/=4;
     while(i--) {
       *dummy++=UV_OFFSET;
@@ -577,7 +577,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     return fromBGR(from->data);
   case GL_LUMINANCE:
     return fromGray(from->data);
-  case GL_YCBCR_422_GEM: // YUV
+  case GL_YUV422_GEM:
     return fromUYVY(from->data);
   }
   return false;
