@@ -144,30 +144,30 @@ void Yu16toBGR(const unsigned short*indata, unsigned char*outdata, size_t width,
 void Yu16toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
 void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
 
-void YUV420PtoY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                 unsigned char*outdata, size_t width, size_t height);
-void YUV420PtoRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                   unsigned char*outdata, size_t width, size_t height);
-void YUV420PtoBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                   unsigned char*outdata, size_t width, size_t height);
-void YUV420PtoRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height);
-void YUV420PtoBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height);
-void YUV420PtoUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height);
 
-void YUV420Ps16toY(const short*Y, const short*U, const short*V,
+void I420S16toY(const short*Y, const short*U, const short*V,
                 unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toRGB(const short*Y, const short*U, const short*V,
+void I420S16toRGB(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toBGR(const short*Y, const short*U, const short*V,
+void I420S16toBGR(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toRGBA(const short*Y, const short*U, const short*V,
+void I420S16toRGBA(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toBGRA(const short*Y, const short*U, const short*V,
+void I420S16toBGRA(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toUYVY(const short*Y, const short*U, const short*V,
+void I420S16toUYVY(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height);
 
 void UYVYtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
@@ -254,7 +254,7 @@ void BGRtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t
 void RGBAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
-void YUV420Ps16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height);
+void I420S16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height);
 
 /* AltiVec */
 #ifdef __VEC__

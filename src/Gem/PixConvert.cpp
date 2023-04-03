@@ -283,7 +283,7 @@ void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width
 
 /* YUV420planar -> */
 
-void YUV420PtoY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                 unsigned char*outdata, size_t width, size_t height) {
   memcpy(outdata, Y, width*height);
 }
@@ -446,23 +446,23 @@ namespace {
     }
   }
 }
-void YUV420PtoRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                   unsigned char*outdata, size_t width, size_t height) {
   yuv420p_to_three<RGB>(Y, U, V, outdata, width, height);
 }
-void YUV420PtoBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                   unsigned char*outdata, size_t width, size_t height) {
   yuv420p_to_three<BGR>(Y, U, V, outdata, width, height);
 }
-void YUV420PtoRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height) {
   yuv420p_to_four<RGBA>(Y, U, V, outdata, width, height);
 }
-void YUV420PtoBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height) {
   yuv420p_to_four<BGRA>(Y, U, V, outdata, width, height);
 }
-void YUV420PtoUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
                    unsigned char*outdata, size_t width, size_t height) {
   yuv420p_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
 }
@@ -470,7 +470,7 @@ void YUV420PtoUYVY(const unsigned char*Y, const unsigned char*U, const unsigned 
 /* YUV420planar (signed short) -> */
 namespace {
   template <int outR, int outG, int outB>
-  static void yuv420ps16_to_three(
+  static void i420ps16_to_three(
     const short*Y, const short*U, const short*V,
     unsigned char*outdata, const size_t width, const size_t height) {
     unsigned char *pixels1=outdata;
@@ -532,7 +532,7 @@ namespace {
     }
   }
   template <int outR, int outG, int outB, int outA>
-  static void yuv420ps16_to_four(
+  static void i420ps16_to_four(
     const short*Y, const short*U, const short*V,
     unsigned char*outdata, const size_t width, const size_t height) {
     unsigned char *pixels1=outdata;
@@ -595,7 +595,7 @@ namespace {
     }
   }
   template <int outU, int outY0, int outV, int outY1>
-  static void yuv420ps16_to_yuv4(
+  static void i420ps16_to_yuv4(
     const short*Y, const short*U, const short*V,
     unsigned char*outdata, size_t width, size_t height) {
     unsigned char *pixels1=outdata;
@@ -635,32 +635,32 @@ namespace {
 };
 
 
-void YUV420Ps16toY(const short*Y, const short*U, const short*V,
+void I420S16toY(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height) {
   size_t size = width*height;
   while(size--) {
     *outdata++ = (*Y++)>>8 + Y_OFFSET;
   }
 }
-void YUV420Ps16toRGB(const short*Y, const short*U, const short*V,
+void I420S16toRGB(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420ps16_to_three<RGB>(Y, U, V, outdata, width, height);
+  i420ps16_to_three<RGB>(Y, U, V, outdata, width, height);
 }
-void YUV420Ps16toBGR(const short*Y, const short*U, const short*V,
+void I420S16toBGR(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420ps16_to_three<BGR>(Y, U, V, outdata, width, height);
+  i420ps16_to_three<BGR>(Y, U, V, outdata, width, height);
 }
-void YUV420Ps16toRGBA(const short*Y, const short*U, const short*V,
+void I420S16toRGBA(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height) {
-  yuv420ps16_to_four<RGBA>(Y, U, V, outdata, width, height);
+  i420ps16_to_four<RGBA>(Y, U, V, outdata, width, height);
 }
-void YUV420Ps16toBGRA(const short*Y, const short*U, const short*V,
+void I420S16toBGRA(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height) {
-  yuv420ps16_to_four<BGRA>(Y, U, V, outdata, width, height);
+  i420ps16_to_four<BGRA>(Y, U, V, outdata, width, height);
 }
-void YUV420Ps16toUYVY(const short*Y, const short*U, const short*V,
+void I420S16toUYVY(const short*Y, const short*U, const short*V,
                    unsigned char*outdata, size_t width, size_t height) {
-  yuv420ps16_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
+  i420ps16_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
 }
 
 /* UYVY -> */

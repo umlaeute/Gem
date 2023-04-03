@@ -977,19 +977,19 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
-    YUV420PtoRGB(Y, U, V, data, xsize, ysize);
+    I420toRGB(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGR:
-    YUV420PtoBGR(Y, U, V, data, xsize, ysize);
+    I420toBGR(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YUV420PtoRGBA(Y, U, V, data, xsize, ysize);
+    I420toRGBA(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YUV420PtoBGRA(Y, U, V, data, xsize, ysize);
+    I420toBGRA(Y, U, V, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    YUV420PtoUYVY(Y, U, V, data, xsize, ysize);
+    I420toUYVY(Y, U, V, data, xsize, ysize);
     break;
   }
   return true;
@@ -1024,26 +1024,26 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     memcpy(data, Y, xsize*ysize);
     break;
   case GL_RGB:
-    YUV420Ps16toRGB(Y, U, V, data, xsize, ysize);
+    I420S16toRGB(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGR:
-    YUV420Ps16toBGR(Y, U, V, data, xsize, ysize);
+    I420S16toBGR(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YUV420Ps16toRGBA(Y, U, V, data, xsize, ysize);
+    I420S16toRGBA(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YUV420Ps16toBGRA(Y, U, V, data, xsize, ysize);
+    I420S16toBGRA(Y, U, V, data, xsize, ysize);
     break;
   case GL_YUV422_GEM: {
     START_TIMING;
     switch(m_simd) {
     case GEM_SIMD_ALTIVEC:
-      YUV420Ps16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
+      I420S16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
       break;
     case GEM_SIMD_NONE:
     default:
-      YUV420Ps16toUYVY(Y, U, V, data, xsize, ysize);
+      I420S16toUYVY(Y, U, V, data, xsize, ysize);
       break;
     }
     STOP_TIMING("YV12_to_YUV422");
