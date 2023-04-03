@@ -20,6 +20,11 @@ LOG
 /* for size_t */
 #include <stddef.h>
 
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+extern "C" {
+#endif
+
+
 // use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
 /*
  * [Y]    1    [  65.738 129.075  25.064 ]   [R] [ 16]
@@ -255,5 +260,11 @@ void YUV420Ps16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsig
 #ifdef __VEC__
 void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV, const unsigned char *gem_image, int xsize, int ysize);
 #endif /* AltiVec */
+
+
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+} /* extern 'C' */
+#endif
+
 
 #endif /* _INCLUDE__GEM_GEM_PIXCONVERT_H_ */
