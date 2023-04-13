@@ -120,7 +120,6 @@ variables:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
-    - brew update
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - /usr/local/opt/gettext/bin/gettextize
     - date
