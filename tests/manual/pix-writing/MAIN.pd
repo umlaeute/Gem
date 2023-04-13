@@ -1,4 +1,4 @@
-#N canvas 1985 696 1090 443 12;
+#N canvas 168 112 1090 443 12;
 #X declare -path ..;
 #X obj 515 136 gemwin;
 #X obj 406 112 gemhead;
@@ -14,7 +14,7 @@
 #X msg 102 219 png \, jpg \, tif \, bmp \, tga \, sgi;
 #X msg 102 297 save \$2.\$1 0;
 #X msg 211 168 testimg;
-#X obj 128 37 r basename;
+#X obj 128 37 r autotest;
 #X msg 663 135 destroy;
 #X obj 681 217 route gem_state;
 #X obj 681 242 route float;
