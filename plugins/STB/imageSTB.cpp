@@ -20,6 +20,7 @@
 #include <string.h>
 #include "imageSTB.h"
 #include "Gem/RTE.h"
+#include "Gem/GemGL.h"
 #include "plugins/PluginFactory.h"
 
 #ifndef HAVE_LIBSTB
@@ -96,11 +97,7 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
     quality=fquality;
   }
 
-  image.convertTo(&img, GEM_RGBA);
-#ifdef __APPLE__
-  /* OSX postprocessing to get really RGBA */
-  img.fromABGR(img.data);
-#endif /* !APPLE */
+  image.convertTo(&img, GL_RGBA);
 
   if(!img.upsidedown) {
     stbi_flip_vertically_on_write(1);
