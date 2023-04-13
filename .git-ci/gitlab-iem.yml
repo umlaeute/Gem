@@ -21,6 +21,12 @@ variables:
     value: ""
     description: "list of jobs to run (leave empty for all jobs)"
 
+stages:
+  - build
+  - test
+  - sign
+  - deploy
+
 .artifacts:
   artifacts:
     name: ${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_JOB_NAME%_*}
@@ -120,7 +126,6 @@ variables:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
-    - brew update
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
     - /usr/local/opt/gettext/bin/gettextize
     - date
@@ -128,6 +133,8 @@ variables:
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
+    - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - !reference [.script:codesign:macos]
 
 .build:w64:
   extends:
@@ -234,5 +241,7 @@ deken:
       - ./*.dek.*
 
 include:
+  # for the codesign templates
+  - https://git.iem.at/pd/iem-ci/-/raw/main/pd-lib-builder/codesign.yml
   # additionally run some static code analysis
   - template: Security/SAST.gitlab-ci.yml
