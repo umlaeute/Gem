@@ -614,7 +614,7 @@ namespace {
         unsigned char v=CLAMP(((*pv++)>>8) + UV_OFFSET);
         // yuv422 is U Y0 V Y1
         pixels1[outU ]=u;
-        pixels1[outY0]=CLAMP((*py1++)>>7); // ((*py1++)>>8 + Y_OFFSET)??
+        pixels1[outY0]=CLAMP((*py1++)>>7); // (((*py1++)>>8) + Y_OFFSET)??
         pixels1[outV ]=v;
         pixels1[outY1]=CLAMP((*py1++)>>7);
         pixels1+=4;
@@ -639,7 +639,7 @@ void I420S16toY(const short*Y, const short*U, const short*V,
                   unsigned char*outdata, size_t width, size_t height) {
   size_t size = width*height;
   while(size--) {
-    *outdata++ = (*Y++)>>8 + Y_OFFSET;
+    *outdata++ = ((*Y++)>>8) + Y_OFFSET;
   }
 }
 void I420S16toRGB(const short*Y, const short*U, const short*V,
