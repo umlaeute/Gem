@@ -358,6 +358,9 @@ bool imageTIFF::save(const imageStruct&constimage,
   TIFFSetField(tif, TIFFTAG_YRESOLUTION, yresolution); // RATIONAL
   TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, resunit);
 
+  uint16_t extra_samples[1] = { EXTRASAMPLE_UNASSALPHA };
+  TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, 1, extra_samples);
+
   if(!software.empty()) {
     TIFFSetField(tif, TIFFTAG_SOFTWARE, software.c_str());
   }
