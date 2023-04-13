@@ -27,17 +27,26 @@ LOG
 // These should be used to reference the various color channels
 ///////////////////////////////////////////////////////////////////////////////
 
+/* raw types: the channel layout is as indicated by the code*/
+#define GEM_RAW_GRAY 0x1909 /* GL_LUMINANCE */
+#define GEM_RAW_UYVY 0x85B9 /* GL_YCBCR_422_APPLE */
+#define GEM_RAW_RGB 0x1907 /* GL_RGB */
+#define GEM_RAW_BGR 0x80E0 /* GL_BGR_EXT */
+#define GEM_RAW_RGBA 0x1908 /* GL_RGBA */
+#define GEM_RAW_BGRA 0x80E1 /* GL_BGRA_EXT */
+
+
 /* RGBA: on Apple this is really BGRA_EXT */
 #ifndef __APPLE__
-# define GEM_RGB  0x1907 /* GL_RGB */
-# define GEM_RGBA 0x1908 /* GL_RGBA */
+# define GEM_RGB  GEM_RAW_RGB
+# define GEM_RGBA GEM_RAW_RGBA
 const int chRed   = 0;
 const int chGreen = 1;
 const int chBlue  = 2;
 const int chAlpha = 3;
 #else /* APPLE */
-# define GEM_RGB  0x80E0 /* GL_BGR_EXT */
-# define GEM_RGBA 0x80E1 /* GL_BGRA_EXT */
+# define GEM_RGB  GEM_RAW_BGR
+# define GEM_RGBA GEM_RAW_BGRA
 const int chAlpha = 0;
 const int chRed   = 1;
 const int chGreen = 2;
@@ -45,11 +54,11 @@ const int chBlue  = 3;
 #endif
 
 /* Gray */
-#define GEM_GRAY 0x1909
+#define GEM_GRAY GEM_RAW_GRAY
 const int chGray  = 0;
 
 /* YUV422 */
-#define GEM_YUV 0x85B9
+#define GEM_YUV GEM_RAW_UYVY
 const int chU     = 0;
 const int chY0    = 1;
 const int chV     = 2;

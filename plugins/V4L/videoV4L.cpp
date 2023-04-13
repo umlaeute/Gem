@@ -56,7 +56,6 @@ using namespace gem::plugins;
 
 #include "Gem/RTE.h"
 #include "Gem/Files.h"
-#include "Gem/GemGL.h"
 
 #ifndef HAVE_LIBV4L1
 # define v4l1_open ::open
@@ -359,14 +358,14 @@ bool videoV4L :: startTransfer()
 
   for (i = 0; i < V4L_NBUF; i++)    {
     switch(m_reqFormat) {
-    case GL_LUMINANCE:
+    case GEM_RAW_GRAY:
       vmmap[i].format = VIDEO_PALETTE_GREY;
       break;
-    case GL_RGBA:
-    case GL_BGRA:
+    case GEM_RAW_RGBA:
+    case GEM_RAW_BGRA:
       vmmap[i].format = VIDEO_PALETTE_RGB24;
       break;
-    case GL_YCBCR_422_GEM:
+    case GEM_RAW_UYVY:
       /* this is very unfortunate:
        * PALETTE_YUV422 obviously is something different than ours
        * although our yuv422 reads uyvy it is
@@ -375,8 +374,8 @@ bool videoV4L :: startTransfer()
       vmmap[i].format = VIDEO_PALETTE_YUV420P;
       break;
     default:
-    case GL_RGB:
-    case GL_BGR:
+    case GEM_RAW_RGB:
+    case GEM_RAW_BGR:
       vmmap[i].format = VIDEO_PALETTE_RGB24;
     }
 
@@ -406,16 +405,16 @@ bool videoV4L :: startTransfer()
 
   switch((m_gotFormat=vmmap[frame].format)) {
   case VIDEO_PALETTE_GREY  :
-    m_colorConvert=(m_reqFormat!=GL_LUMINANCE);
+    m_colorConvert=(m_reqFormat!=GEM_RAW_GRAY);
     break;
   case VIDEO_PALETTE_RGB24 :
-    m_colorConvert=(m_reqFormat!=GL_BGR);
+    m_colorConvert=(m_reqFormat!=GEM_RAW_BGR);
     break;
   case VIDEO_PALETTE_RGB32 :
-    m_colorConvert=(m_reqFormat!=GL_BGRA);
+    m_colorConvert=(m_reqFormat!=GEM_RAW_BGRA);
     break;
   case VIDEO_PALETTE_YUV422:
-    m_colorConvert=(m_reqFormat!=GL_YCBCR_422_GEM);
+    m_colorConvert=(m_reqFormat!=GEM_RAW_UYVY);
     break;
   default:
     m_colorConvert=true;

@@ -31,22 +31,6 @@
 // utility functions from PeteHelpers.h
 //#include "Utils/PixPete.h"
 
-#if GEM_GRAY != GL_LUMINANCE
-# error Grayscale colortype broken
-#endif
-
-#if GEM_YUV != GL_YUV422_GEM
-# error YUV colortype broken
-#endif
-
-#if GEM_RGBA != GL_RGBA_GEM
-# error RGBA colortype broken
-#endif
-
-#if GEM_RGB != GL_RGB_GEM
-# error RGB colortype broken
-#endif
-
 #ifndef GL_BGRA
 # define GL_BGRA GL_BGRA_EXT
 #endif
@@ -54,6 +38,39 @@
 # define GL_BGR GL_BGR_EXT
 #endif
 
+
+#if GEM_RAW_GRAY != GL_LUMINANCE
+# error GL_RAW_GRAY broken
+#endif
+#if GEM_RAW_UYVY != GL_YCBCR_422_APPLE
+# error GL_RAW_UYVY broken
+#endif
+#if GEM_RAW_RGB != GL_RGB
+# error GL_RAW_RGB broken
+#endif
+#if GEM_RAW_RGBA != GL_RGBA
+# error GL_RAW_RGBA broken
+#endif
+#if GEM_RAW_BGR != GL_BGR
+# error GL_RAW_BGR broken
+#endif
+#if GEM_RAW_BGRA != GL_BGRA
+# error GL_RAW_BGR broken
+#endif
+
+
+#if GEM_GRAY != GL_LUMINANCE
+# error Grayscale colortype broken
+#endif
+#if GEM_YUV != GL_YUV422_GEM
+# error YUV colortype broken
+#endif
+#if GEM_RGBA != GL_RGBA_GEM
+# error RGBA colortype broken
+#endif
+#if GEM_RGB != GL_RGB_GEM
+# error RGB colortype broken
+#endif
 
 #include <string.h>
 #include <ctype.h>

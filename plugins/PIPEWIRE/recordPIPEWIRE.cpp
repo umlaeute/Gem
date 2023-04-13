@@ -154,7 +154,7 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
     m_image.ysize = 480;
   }
   if(!m_image.csize) {
-    m_image.setCsizeByFormat(GL_RGBA);
+    m_image.setCsizeByFormat(GEM_RAW_RGBA);
   }
   m_image.reallocate();
 

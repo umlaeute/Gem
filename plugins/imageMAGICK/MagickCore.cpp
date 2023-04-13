@@ -21,7 +21,6 @@
 
 #include "imageMAGICK.h"
 #include "Gem/RTE.h"
-#include "Gem/GemGL.h"
 
 #ifdef _MSC_VER
 # if !defined(_W64)
@@ -122,9 +121,9 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
     orientedImage = image;
   }
 
-  result.xsize=static_cast<GLint>(image->columns);
-  result.ysize=static_cast<GLint>(image->rows);
-  result.setCsizeByFormat(GL_RGBA_GEM);
+  result.xsize=static_cast<int>(image->columns);
+  result.ysize=static_cast<int>(image->rows);
+  result.setCsizeByFormat(GEM_RGBA);
   result.reallocate();
 
   result.upsidedown=true;
@@ -168,10 +167,10 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
 
   std::string cs;
   switch(img->format) {
-  case GL_LUMINANCE:
+  case GEM_RAW_GRAY:
     cs="K";
     break;
-  case GL_RGBA:
+  case GEM_RAW_RGBA:
 #ifdef __APPLE__
     cs="ABGR";
 #else
@@ -180,11 +179,11 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
     break;
   default:
     pImage=new imageStruct();
-    pImage->convertFrom(img, GL_RGB);
-  case GL_RGB:
+    pImage->convertFrom(img, GEM_RAW_RGB);
+  case GEM_RAW_RGB:
     cs="RGB";
     break;
-  case GL_BGRA_EXT:
+  case GEM_RAW_BGRA:
 #ifdef __APPLE__
     cs="ARGB";
 #else
