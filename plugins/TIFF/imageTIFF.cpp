@@ -315,7 +315,7 @@ bool imageTIFF::save(const imageStruct&constimage,
   if (tif == NULL) {
     return false;
   }
-  image.convertFrom(&constimage, GEM_RGBA);
+  image.convertFrom(&constimage, GEM_RAW_RGBA);
   image.fixUpDown();
 
   uint32_t width=image.xsize, height = image.ysize;
@@ -370,21 +370,6 @@ bool imageTIFF::save(const imageStruct&constimage,
 
   int yStride = image.xsize * image.csize;
   unsigned char *srcLine = image.data;
-
-#ifdef __APPLE__
-  for(unsigned int i=0; i<width*height; i++) {
-    unsigned char r = srcLine[chRed];
-    unsigned char g = srcLine[chGreen];
-    unsigned char b = srcLine[chBlue];
-    unsigned char a = srcLine[chAlpha];
-    srcLine[0] = r;
-    srcLine[1] = g;
-    srcLine[2] = b;
-    srcLine[3] = a;
-    srcLine+=4;
-  }
-  srcLine = image.data;
-#endif
 
   for (uint32_t row = 0; row < height; row++) {
     if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
