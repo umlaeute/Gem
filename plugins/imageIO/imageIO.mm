@@ -149,6 +149,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   result.setCsizeByFormat(GEM_RGBA);
   result.upsidedown = !fixUpDown;
   result.reallocate();
+  result.setBlack();
   CGRect rect = {{0,0},{w,h}};
 
   CGColorSpaceRef colorSpace;
@@ -158,7 +159,6 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   if(!colorSpace) {
     goto done;
   }
-#warning get rid of premultiplied alpha channel
   context = CGBitmapContextCreate(result.data,
                                   result.xsize, result.ysize, 8, result.xsize * result.csize,
                                   colorSpace, kCGImageAlphaPremultipliedFirst);
