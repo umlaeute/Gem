@@ -1,4 +1,4 @@
-#N canvas 493 338 450 395 12;
+#N canvas 493 338 450 483 12;
 #X obj 50 94 inlet gemlist;
 #X obj 296 94 inlet count;
 #X obj 124 196 t b a;
@@ -14,6 +14,7 @@
 #X obj 124 300 gemlist;
 #X obj 170 245 list prepend gem_state;
 #X obj 170 273 list trim;
+#X text 81 400 © 2023 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 5 0;
 #X connect 1 0 3 1;
 #X connect 2 0 3 0;

@@ -133,6 +133,7 @@
 #X text 362 40 1 args: xscale=yscale;
 #X text 366 57 2 args: xscale \, yscale;
 #X obj 144 397 delay 0;
+#X text 101 620 © 2009 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 5 0 6 1;
 #X connect 5 1 7 1;
 #X connect 6 0 12 1;

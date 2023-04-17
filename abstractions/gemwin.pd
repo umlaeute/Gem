@@ -3086,6 +3086,7 @@
 #X connect 13 0 12 0;
 #X restore 741 519 pd print;
 #X obj 390 73 gemargs;
+#X text 621 140 © 2009 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 45 0;
 #X connect 4 0 37 0;
 #X connect 4 1 47 0;

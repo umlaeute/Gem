@@ -81,6 +81,7 @@
 #X obj 103 146 * 256;
 #X obj 136 146 * 256;
 #X obj 170 146 * 256;
+#X text 101 410 © 2006 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 8 0;
 #X connect 1 0 9 0;
 #X connect 2 0 10 0;

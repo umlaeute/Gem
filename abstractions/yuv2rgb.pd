@@ -1,4 +1,4 @@
-#N canvas 574 31 450 414 10;
+#N canvas 574 31 450 495 10;
 #X obj 103 96 unpack 0 0 0;
 #X obj 103 140 - 16;
 #X obj 136 140 - 128;
@@ -53,6 +53,7 @@
 #X obj 173 312 / 65536;
 #X obj 244 312 / 65536;
 #X text 102 26 convert YUV to RGB (everything is 0..1);
+#X text 101 420 © 2006 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 18 0;
 #X connect 0 1 19 0;
 #X connect 0 2 20 0;

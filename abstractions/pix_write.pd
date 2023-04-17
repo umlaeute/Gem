@@ -1,7 +1,8 @@
-#N canvas 1638 263 859 513 10;
+#N canvas 348 249 859 513 10;
 #X obj 81 82 inlet gemlist;
 #X obj 351 471 outlet gemlist;
 #X obj 351 439 pix_writer;
+#A saved init;
 #X obj 351 298 pix_snap;
 #N canvas 0 0 450 300 once 0;
 #X obj 82 68 inlet;
@@ -87,6 +88,7 @@
 #X connect 5 1 6 0;
 #X connect 6 0 4 1;
 #X restore 236 52 pd initbang;
+#X text 561 270 © 2009 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 13 0;
 #X connect 2 0 1 0;
 #X connect 3 0 2 0;

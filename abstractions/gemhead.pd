@@ -150,6 +150,7 @@
 #X obj 130 40 route bang float set context;
 #X msg 253 90 symbol __gem_render\$1;
 #X obj 253 68 list;
+#X text 101 460 © 2009 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 9 0;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;

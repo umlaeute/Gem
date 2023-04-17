@@ -1,6 +1,7 @@
 #N canvas 1416 206 863 652 10;
 #X obj 79 77 inlet;
 #X obj 122 240 gemhead;
+#A saved init;
 #X msg 153 263 open \$1;
 #X obj 122 288 pix_film;
 #X obj 180 382 until;
@@ -59,6 +60,7 @@
 #X obj 3 121 t a;
 #X msg 33 121 set \$1;
 #X obj 122 503 pix_buffer_write;
+#X text 414 478 part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 10 0;
 #X connect 1 0 3 0;
 #X connect 2 0 3 0;

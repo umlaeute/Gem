@@ -7,6 +7,7 @@
 #X obj 138 126 route key;
 #X obj 138 148 unpack 0 0;
 #X obj 138 170 spigot;
+#X text 101 230 © 2014 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 2 0;
 #X connect 1 1 4 0;
 #X connect 2 0 1 0;

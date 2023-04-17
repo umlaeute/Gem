@@ -1,4 +1,4 @@
-#N canvas 2900 341 561 758 12;
+#N canvas 494 187 561 758 12;
 #X obj 123 88 inlet;
 #X obj 123 113 i \$1;
 #X msg 123 188 args \$1;
@@ -28,6 +28,7 @@
 #X text 61 36 get the arguments of the parent patch (with args and init-messages separated by semicolon);
 #X obj 123 138 moses 1;
 #X msg 123 163 1;
+#X text 271 130 © 2023 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 1 0;
 #X connect 1 0 27 0;
 #X connect 2 0 3 0;

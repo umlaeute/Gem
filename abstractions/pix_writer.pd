@@ -113,6 +113,7 @@
 #X connect 5 1 6 0;
 #X connect 6 0 4 1;
 #X restore 28 22 pd initbang;
+#X text 107 460 part of GEM \; see LICENSE.txt for license information;
 #X connect 0 0 37 0;
 #X connect 2 0 32 0;
 #X connect 3 0 10 0;
