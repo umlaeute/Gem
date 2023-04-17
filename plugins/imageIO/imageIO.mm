@@ -118,6 +118,23 @@ bool imageIO :: load(std::string filename, imageStruct&result,
             0,
             NULL);
 
+  // get the orientation
+  int fixUpDown = 0;
+  CFDictionaryRef dict = CGImageSourceCopyPropertiesAtIndex(myImageSource, 0, NULL);
+  if(dict) {
+    //CFShow(dict);
+    NSDictionary*myProps = CFBridgingRelease(dict);
+    int orientation = [[myProps objectForKey:@"Orientation"] integerValue];
+    switch (orientation) {
+      default:
+        fixUpDown = 0;
+        break;
+      case kCGImagePropertyOrientationDownMirrored:
+        fixUpDown = 1;
+        break;
+    }
+  }
+
   CFRelease(myImageSource);
   // Make sure the image exists before continuing
   if (!myImage) {
@@ -130,6 +147,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   result.xsize = w;
   result.ysize = h;
   result.setCsizeByFormat(GEM_RGBA);
+  result.upsidedown = !fixUpDown;
   result.reallocate();
   CGRect rect = {{0,0},{w,h}};
 
@@ -161,6 +179,9 @@ done:
     CGColorSpaceRelease(colorSpace);
   }
   CFRelease(myImage);
+  if (success) {
+    result.fixUpDown();
+  }
   return success;
 }
 bool imageIO::save(const imageStruct&img,
