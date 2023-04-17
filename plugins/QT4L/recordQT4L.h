@@ -60,7 +60,7 @@ public:
 
   /* initialize the recordQT4L plugin
    *
-   * set the default colour-space to format (like GL_RGBA)
+   * set the default colour-space to format (like GEM_RAW_RGBA)
    * if format==0, the default is set by the recordQT4Lloader
    * (for instance: the fastest colour-space)
    */

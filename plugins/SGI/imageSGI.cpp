@@ -134,11 +134,7 @@ bool imageSGI::save(const imageStruct&image, const std::string&filename,
                     const std::string&mimetype, const gem::Properties&props)
 {
   imageStruct img;
-  image.convertTo(&img, GEM_RGBA);
-#ifdef __APPLE__
-  /* OSX postprocessing to get really RGBA */
-  img.fromABGR(img.data);
-#endif /* !APPLE */
+  image.convertTo(&img, GEM_RAW_RGBA);
   unsigned int32*data=(unsigned int32*)img.data;
 
   std::string name="";

@@ -136,7 +136,7 @@ void GemPixObj :: render(GemState *state)
           processGrayImage(image->image);
         }
         break;
-      case GL_YCBCR_422_GEM:
+      case GL_YUV422_GEM:
         switch(m_simd) {
         case(GEM_SIMD_MMX):
           processYUVMMX(image->image);
@@ -184,7 +184,7 @@ void GemPixObj :: processImage(imageStruct &image)
   case GL_LUMINANCE:
     error("cannot handle Grey image");
     break;
-  case GL_YCBCR_422_GEM:
+  case GL_YUV422_GEM:
     error("cannot handle YUV image");
     break;
   default:

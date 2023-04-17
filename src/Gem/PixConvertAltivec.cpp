@@ -1,5 +1,3 @@
-#include "Utils/SIMD.h"
-#ifdef __VEC__
 /////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -17,8 +15,16 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/SIMD.h"
 #include "PixConvert.h"
 
+#define Altivec_fallback(fallback) \
+  void fallback##_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  { \
+  fallback(indata, outdata, width, height); \
+  }
+
+
+#ifdef __VEC__
 void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
                           unsigned char *pixels)
 {
@@ -738,9 +744,6 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
   }
 }
 
-#ifdef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-# warning disabling AltiVec for older gcc: please fix me
-#else
 void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
                             size_t pixelnum, unsigned char *output)
 {
@@ -911,6 +914,34 @@ void YUV422_to_BGRA_altivec(const unsigned char *yuvdata,
     BGRA_ptr++;
   }
 }
-#endif /* NO_VECTORINT_TO_VECTORUNSIGNEDINT */
 
+
+void RGBtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGB_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void BGRtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  BGR_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void RGBAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGBA_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  BGRA_to_YCbCr_altivec(indata, width*height, outdata);
+}
+void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  YUV422_to_BGRA_altivec(indata, width*height*2, outdata);
+}
+void I420S16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height)  {
+  YV12_to_YUV422_altivec(Y, U, V, outdata, xsize, ysize);
+}
+
+#else /* !__VEC__ */
+Altivec_fallback(RGBtoUYVY);
+Altivec_fallback(BGRtoUYVY);
+Altivec_fallback(RGBAtoUYVY);
+Altivec_fallback(BGRAtoUYVY);
+Altivec_fallback(UYVYtoBGRA);
+void I420S16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height)  {
+  I420S16toUYVY(Y, U, V, outdata, width, height);
+}
 #endif /*  __VEC__ */

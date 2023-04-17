@@ -1,4 +1,3 @@
-#ifdef __SSE2__
 /////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
@@ -14,54 +13,33 @@
 //
 /////////////////////////////////////////////////////////
 
+#include "Utils/SIMD.h"
+#include "PixConvert.h"
 /* darned: it seems like i just cannot get SIMD-code right!
  * to my eye, there appear to me WAY too much shuffle's down there
  * if somebody would want to have a look i'd be grateful
  */
 
 
+#ifdef __SSE2__
+
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
 # pragma warning( disable : 4309 )
 #endif
 
-#include "PixConvert.h"
-#include "Gem/Image.h"
-
-
 #define RGB2YUV_14 0
 #define RGB2YUV_24 0
 #define RGB2YUV_34 0
 
+#define RGB 0,1,2
+#define BGR 2,1,0
 
-/* for post() */
-#include <m_pd.h>
 
 /* just some debugging stuff ... */
 
+#include <m_pd.h>
 #define PRINT_MASK "%03d "
-static void print_char(__m128i m)
-{
-  _mm_pause();
-  unsigned char*s=(unsigned char*)&m;
-  int i=0;
-  for(i=0; i<(sizeof(__m128i)/sizeof(unsigned char)); i++) {
-    startpost(PRINT_MASK, *s);
-    s++;
-  }
-  endpost();
-}
-static void print_short(__m128i m)
-{
-  _mm_pause();
-  signed short*s=(signed short*)&m;
-  int i=0;
-  for(i=0; i<(sizeof(__m128i)/sizeof(signed short)); i++) {
-    startpost(PRINT_MASK, *s);
-    s++;
-  }
-  endpost();
-}
 static void print_int(__m128i m)
 {
   _mm_pause();
@@ -85,25 +63,19 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
 
   const __m128i zero = _mm_setzero_si128();
 
-  const __m128i RG2Y=_mm_set_epi16(RGB2YUV_12, RGB2YUV_11, RGB2YUV_12,
-                                   RGB2YUV_11,
+  const __m128i RG2Y=_mm_set_epi16(RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11,
                                    RGB2YUV_12, RGB2YUV_11, RGB2YUV_12, RGB2YUV_11);
-  const __m128i BA2Y=_mm_set_epi16(RGB2YUV_14, RGB2YUV_13, RGB2YUV_14,
-                                   RGB2YUV_13,
+  const __m128i BA2Y=_mm_set_epi16(RGB2YUV_14, RGB2YUV_13, RGB2YUV_14, RGB2YUV_13,
                                    RGB2YUV_14, RGB2YUV_13, RGB2YUV_14, RGB2YUV_13);
 
-  const __m128i RG2U=_mm_set_epi16(RGB2YUV_22, RGB2YUV_21, RGB2YUV_22,
-                                   RGB2YUV_21,
+  const __m128i RG2U=_mm_set_epi16(RGB2YUV_22, RGB2YUV_21, RGB2YUV_22, RGB2YUV_21,
                                    RGB2YUV_22, RGB2YUV_21, RGB2YUV_22, RGB2YUV_21);
-  const __m128i BA2U=_mm_set_epi16(RGB2YUV_24, RGB2YUV_23, RGB2YUV_24,
-                                   RGB2YUV_23,
+  const __m128i BA2U=_mm_set_epi16(RGB2YUV_24, RGB2YUV_23, RGB2YUV_24, RGB2YUV_23,
                                    RGB2YUV_24, RGB2YUV_23, RGB2YUV_24, RGB2YUV_23);
 
-  const __m128i RG2V=_mm_set_epi16(RGB2YUV_32, RGB2YUV_31, RGB2YUV_32,
-                                   RGB2YUV_31,
+  const __m128i RG2V=_mm_set_epi16(RGB2YUV_32, RGB2YUV_31, RGB2YUV_32, RGB2YUV_31,
                                    RGB2YUV_32, RGB2YUV_31, RGB2YUV_32, RGB2YUV_31);
-  const __m128i BA2V=_mm_set_epi16(RGB2YUV_34, RGB2YUV_33, RGB2YUV_34,
-                                   RGB2YUV_33,
+  const __m128i BA2V=_mm_set_epi16(RGB2YUV_34, RGB2YUV_33, RGB2YUV_34, RGB2YUV_33,
                                    RGB2YUV_34, RGB2YUV_33, RGB2YUV_34, RGB2YUV_33);
 
   const __m128i OFFSET=_mm_set_epi16(Y_OFFSET, UV_OFFSET,
@@ -230,7 +202,7 @@ void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
 }
 
 /* convert RGBA to YUV422 */
-void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
+void UYVYtoRGBA_SSE2(const unsigned char *yuvdata,
                        size_t size,
                        unsigned char *rgbadata)
 {
@@ -335,7 +307,8 @@ void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
 
 
 /* convert RGB24 to YUV422 */
-void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
+template<int chR, int chG, int chB>
+static void UYVY_to_rgb3(const unsigned char *yuvdata,
                       size_t size,
                       unsigned char *rgbdata)
 {
@@ -422,45 +395,72 @@ void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
     v0.v= _mm_packus_epi16  (RB0, GA0);
     v1.v= _mm_packus_epi16  (RB1, GA1);
 
-    rgbdata[chRed   ]=v0.c[ 0];
-    rgbdata[chGreen ]=v0.c[ 4];
-    rgbdata[chBlue  ]=v0.c[ 8];
+    rgbdata[chR]=v0.c[ 0];
+    rgbdata[chG]=v0.c[ 4];
+    rgbdata[chB]=v0.c[ 8];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v1.c[ 0];
-    rgbdata[chGreen ]=v1.c[ 4];
-    rgbdata[chBlue  ]=v1.c[ 8];
+    rgbdata[chR]=v1.c[ 0];
+    rgbdata[chG]=v1.c[ 4];
+    rgbdata[chB]=v1.c[ 8];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v0.c[ 2];
-    rgbdata[chGreen ]=v0.c[ 6];
-    rgbdata[chBlue  ]=v0.c[10];
+    rgbdata[chR]=v0.c[ 2];
+    rgbdata[chG]=v0.c[ 6];
+    rgbdata[chB]=v0.c[10];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v1.c[ 2];
-    rgbdata[chGreen ]=v1.c[ 6];
-    rgbdata[chBlue  ]=v1.c[10];
+    rgbdata[chR]=v1.c[ 2];
+    rgbdata[chG]=v1.c[ 6];
+    rgbdata[chB]=v1.c[10];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v0.c[ 1];
-    rgbdata[chGreen ]=v0.c[ 5];
-    rgbdata[chBlue  ]=v0.c[ 9];
+    rgbdata[chR]=v0.c[ 1];
+    rgbdata[chG]=v0.c[ 5];
+    rgbdata[chB]=v0.c[ 9];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v1.c[ 1];
-    rgbdata[chGreen ]=v1.c[ 5];
-    rgbdata[chBlue  ]=v1.c[ 9];
+    rgbdata[chR]=v1.c[ 1];
+    rgbdata[chG]=v1.c[ 5];
+    rgbdata[chB]=v1.c[ 9];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v0.c[ 3];
-    rgbdata[chGreen ]=v0.c[ 7];
-    rgbdata[chBlue  ]=v0.c[11];
+    rgbdata[chR]=v0.c[ 3];
+    rgbdata[chG]=v0.c[ 7];
+    rgbdata[chB]=v0.c[11];
     rgbdata+=3;
 
-    rgbdata[chRed   ]=v1.c[ 3];
-    rgbdata[chGreen ]=v1.c[ 7];
-    rgbdata[chBlue  ]=v1.c[11];
+    rgbdata[chR]=v1.c[ 3];
+    rgbdata[chG]=v1.c[ 7];
+    rgbdata[chB]=v1.c[11];
     rgbdata+=3;
   }
 }
+
+void UYVYtoRGB_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  UYVY_to_rgb3<RGB>(indata, width*height, outdata);
+}
+void UYVYtoBGR_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  UYVY_to_rgb3<BGR>(indata, width*height, outdata);
+}
+void UYVYtoRGBA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  UYVY_to_rgb3<RGB>(indata, width*height, outdata);
+}
+void UYVYtoBGRA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  UYVY_to_rgb3<BGR>(indata, width*height, outdata);
+}
+void RGBAtoUYVY_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  {
+  RGBA_to_UYVY_SSE2(indata, width*height, outdata);
+}
+
+#else
+#define SSE2_fallback(fallback) \
+  void fallback##_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)  { \
+  fallback(indata, outdata, width, height); \
+  }
+
+SSE2_fallback(UYVYtoRGB);
+SSE2_fallback(UYVYtoBGR);
+SSE2_fallback(UYVYtoRGBA);
+SSE2_fallback(RGBAtoUYVY);
 #endif

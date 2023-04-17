@@ -105,6 +105,14 @@ imageJPEG :: ~imageJPEG(void)
 bool imageJPEG :: load(std::string filename, imageStruct&result,
                        gem::Properties&props)
 {
+  /* TODO: get the orientation of the image, and flip the image if needed
+   *
+   * unfortunately, libjpeg does not provide this information...
+   * we could either use another library (like libexif)
+   * or roll our own detection code
+   * (as in https://salsa.debian.org/gnome-team/gdk-pixbuf/-/blob/cf83217de54d6c99ee366a0ab0e87904b2a4dccb/gdk-pixbuf/io-jpeg.c#L486)
+   * none is particularly appealing...
+   */
   // open up the file
   FILE * infile;
   if ((infile = fopen(filename.c_str(), "rb")) == NULL) {
@@ -254,7 +262,7 @@ bool imageJPEG::save(const imageStruct&constimage,
   jpeg_stdio_dest(&cinfo, outfile);
 
   imageStruct image;
-  constimage.convertTo(&image, GEM_RGB);
+  constimage.convertTo(&image, GEM_RAW_RGB);
 
   //  image.fixUpDown();
   JSAMPLE *image_buffer = image.data;

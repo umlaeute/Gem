@@ -43,7 +43,6 @@
 #include "Gem/RTE.h"
 #include "Gem/Properties.h"
 #include "Gem/Exception.h"
-#include "Gem/GemGL.h"
 
 using namespace gem::plugins;
 
@@ -491,14 +490,7 @@ bool filmDS :: open(const std::string&filename,
   // this is a guess at the fast past for pixels on Windows
   m_image.image.xsize   = m_xsize;
   m_image.image.ysize   = m_ysize;
-  m_image.image.csize   = m_csize;
-  if (m_csize == 3) {
-    m_image.image.format        = GL_BGR_EXT;
-  }
-  if (m_csize == 4) {
-    m_image.image.format        = GL_BGRA;
-  }
-  m_image.image.type    = GL_UNSIGNED_BYTE;
+  m_image.image.setCsizeByFormat((m_csize==3)?GEM_RAW_BGR:GEM_RAW_BGRA);
   m_image.image.upsidedown=false;
 
   // Start the video stream

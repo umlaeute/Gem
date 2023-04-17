@@ -96,11 +96,7 @@ bool imageSTB::save(const imageStruct&image, const std::string&filename,
     quality=fquality;
   }
 
-  image.convertTo(&img, GEM_RGBA);
-#ifdef __APPLE__
-  /* OSX postprocessing to get really RGBA */
-  img.fromABGR(img.data);
-#endif /* !APPLE */
+  image.convertTo(&img, GEM_RAW_RGBA);
 
   if(!img.upsidedown) {
     stbi_flip_vertically_on_write(1);

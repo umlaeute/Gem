@@ -22,14 +22,13 @@
 #include "Gem/Properties.h"
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
-#include "Gem/GemGL.h"
 #include "Utils/wstring.h"
 
 using namespace gem::plugins;
 
 REGISTER_FILMFACTORY("QuickTime", filmQT);
 # ifdef __APPLE__
-#  define FILMQT_DEFAULT_PIXELFORMAT GL_YCBCR_422_APPLE
+#  define FILMQT_DEFAULT_PIXELFORMAT GEM_RAW_UYVY
 
 static bool filmQT_initQT(void)
 {
@@ -56,7 +55,7 @@ static bool filmQT_deinitQT(void)
 /* TextUtils.h is from QTdev */
 #  include "TextUtils.h"
 #  define OffsetRect MacOffsetRect
-#  define FILMQT_DEFAULT_PIXELFORMAT GL_RGBA
+#  define FILMQT_DEFAULT_PIXELFORMAT GEM_RAW_RGBA
 
 static bool filmQT_initQT(void)
 {
@@ -260,18 +259,18 @@ bool filmQT :: open(const std::string&filename_,
 
   switch(m_wantedFormat) {
   default: // if no other format is requested, use YUV
-  case GL_YCBCR_422_APPLE:
+  case GEM_RAW_UYVY:
     m_image.image.format = m_wantedFormat;
     hints |= hintsHighQuality | hintsDeinterlaceFields;
     pixelformat=k422YpCbCr8CodecType;
     break;
-  case GL_BGRA_EXT:
-    m_image.image.format = GL_BGRA_EXT;
+  case GEM_RAW_BGRA:
+    m_image.image.format = GEM_RAW_BGRA;
     hints |= hintsHighQuality;
     pixelformat=k32ARGBPixelFormat;
     break;
-  case GL_RGBA:
-    m_image.image.format = GL_RGBA;
+  case GEM_RAW_RGBA:
+    m_image.image.format = GEM_RAW_RGBA;
     hints |= hintsHighQuality;
     pixelformat=k32RGBAPixelFormat;
     break;

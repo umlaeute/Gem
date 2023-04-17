@@ -17,8 +17,13 @@ LOG
 #ifndef _INCLUDE__GEM_GEM_PIXCONVERT_H_
 #define _INCLUDE__GEM_GEM_PIXCONVERT_H_
 
-#include "Gem/Image.h"
-#include "Utils/SIMD.h"
+/* for size_t */
+#include <stddef.h>
+
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+extern "C" {
+#endif
+
 
 // use formulae from http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC30
 /*
@@ -54,30 +59,29 @@ LOG
 
 // YUV2RGB
 // (we skip _21 and _31 as they are equal to _11)
-#if 0
+# if 0
 // poynton-values rounded
-# define YUV2RGB_11 298
-# define YUV2RGB_12   0
-# define YUV2RGB_13 409
-# define YUV2RGB_22 -100
-# define YUV2RGB_23 -208
-# define YUV2RGB_32 516
-# define YUV2RGB_33   0
-#else
+#  define YUV2RGB_11 298
+#  define YUV2RGB_12   0
+#  define YUV2RGB_13 409
+#  define YUV2RGB_22 -100
+#  define YUV2RGB_23 -208
+#  define YUV2RGB_32 516
+#  define YUV2RGB_33   0
+# else
 
 // this is round(256*inv(rgb2yuv/256))
 // so the general error should be smaller
-# define YUV2RGB_11  298
-# define YUV2RGB_12   -1
-# define YUV2RGB_13  409
-# define YUV2RGB_22 -100
-# define YUV2RGB_23 -210
-# define YUV2RGB_32  519
-# define YUV2RGB_33    0
-#endif
+#  define YUV2RGB_11  298
+#  define YUV2RGB_12   -1
+#  define YUV2RGB_13  409
+#  define YUV2RGB_22 -100
+#  define YUV2RGB_23 -210
+#  define YUV2RGB_32  519
+#  define YUV2RGB_33    0
+# endif
 
-#else
-/* the old ones: */
+#else /* !YUV_POYNTON: "the old coefficients" */
 # define Y_OFFSET   0
 # define UV_OFFSET 128
 // RGB2YUV
@@ -114,60 +118,208 @@ LOG
 # define RGB2GRAY_OFFSET 0
 #endif
 
+
+/*
+  generic color conversion functions
+
+  the names are simply SOURCEtoTARGET.
+  with both SOURCE and TARGET being the channel layout, followed by an optional type specifier.
+  the 'channel layout' literally describes the channel order (oblivious of any endianness).
+  e.g. 'RGB' describes 3 channels, where the 'R' channel is followed by the 'G' channel, which
+  in turn is followed by the 'B' channel. the 'Blue' channel can thus be accessed as pixel[2].
+  typical abbreviations include:
+  - R - red
+  - G - green
+  - B - blue
+  - A - alpha
+  - Y - luminance
+  - U - chroma (Cb)
+  - V - chroma (Cr)
+  sometimes (e.g. with planar formats), the literal channel layout does not make much sense,
+  in which case the fourcc-name is used instead. (e.g. I420 for YUV420/Planar)
+
+  the default channel type is 'byte' (unsigned char).
+  Non-default channel types are specified as type/width specifier, such as 'S16' (signed, 16bit)
+  or 'F32' (float, 32bit).
+  a single '16' (without a base-type) indicates that the entire pixel (all channels!) is crammed
+  into 16 bits.
+
+  arguments are always passed in this order:
+  - input data (one const pointer per plane)
+  - output data
+  - dimensions (as width + height)
+
+  data must be allocated by the caller.
+
+  in general, any given SOURCE format should have converters for the following TARGETs:
+  - Y (aka Grayscale)
+  - UYVY
+  - RGB/BGR (both!)
+  - RGBA/BGRA (both!)
+
+  SIMD-accelerated variants bear a "_SUFFIX" naming the instruction set (e.g. "_SSE2").
+  SIMD-accelerated variants are expected to do something reasonable even if compiled
+  without the given instruction set (e.g. call the non-SIMD variant)
+*/
+
+#if 0
+void FORMATtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+#endif
+
+  /* grayscale */
+void YtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+  /* grayscale (16bit) */
+void Yu16toY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* YUV420/planar */
+
+void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                unsigned char*outdata, size_t width, size_t height);
+void I420toRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void I420toBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void I420toRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void I420toBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void I420toUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+                   unsigned char*outdata, size_t width, size_t height);
+
+    /* YUV420/planar (signed 16bit) */
+void I420S16toY(const short*Y, const short*U, const short*V,
+                unsigned char*outdata, size_t width, size_t height);
+void I420S16toRGB(const short*Y, const short*U, const short*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void I420S16toBGR(const short*Y, const short*U, const short*V,
+                  unsigned char*outdata, size_t width, size_t height);
+void I420S16toRGBA(const short*Y, const short*U, const short*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void I420S16toBGRA(const short*Y, const short*U, const short*V,
+                   unsigned char*outdata, size_t width, size_t height);
+void I420S16toUYVY(const short*Y, const short*U, const short*V,
+                   unsigned char*outdata, size_t width, size_t height);
+
+    /* YUV422/packed */
+void UYVYtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* YUV422/packed */
+void YUYVtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YUYVtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YUYVtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YUYVtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YUYVtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YUYVtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* YUV422/packed */
+void YVYUtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YVYUtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YVYUtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YVYUtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YVYUtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void YVYUtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGB/packed */
+void RGBtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGB/packed */
+void BGRtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGB/packed (16bit/pixel) */
+void RGB16toY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGBA/packed */
+void RGBAtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGBA/packed */
+void BGRAtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGBA/packed */
+void ABGRtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ABGRtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+    /* RGBA/packed */
+void ARGBtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void ARGBtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+
+void UYVYtoRGB_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGR_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoRGBA_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
+
+void RGBtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void RGBAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoUYVY_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void UYVYtoBGRA_Altivec(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void I420S16toUYVY_Altivec(const short*Y, const short*U, const short*V, unsigned char*outdata, size_t width, size_t height);
+
 /* AltiVec */
 #ifdef __VEC__
-
-/* there are problems on OSX10.3 with older versions of gcc, since the intrinsic code
- * below freely changes between signed and unsigned short vectors
- * newer versions of gcc accept this...
- * LATER: fix the code (GemPixConvertAltivec:750..800)
- */
-# ifdef __GNUC__
-/* according to hcs it does NOT work with gcc-3.3
- * for simplicity, i disable everything below gcc4
- * JMZ: 20061114
- */
-#  if __GNUC__ < 4
-#   warning disabling AltiVec for older gcc: please fix me
-#   define NO_VECTORINT_TO_VECTORUNSIGNEDINT
-#  endif
-# endif /* GNUC */
-
-
-void RGB_to_YCbCr_altivec(const unsigned char *rgbdata, size_t RGB_size,
-                          unsigned char *pixels);
-void RGBA_to_YCbCr_altivec(const unsigned char *rgbadata, size_t RGBA_size,
-                           unsigned char *pixels);
-void BGR_to_YCbCr_altivec(const unsigned char *bgrdata, size_t BGR_size,
-                          unsigned char *pixels);
-void BGRA_to_YCbCr_altivec(const unsigned char *bgradata, size_t BGRA_size,
-                           unsigned char *pixels);
-void YUV422_to_BGRA_altivec(const unsigned char *yuvdata, size_t pixelnum,
-                            unsigned char *pixels);
-void YV12_to_YUV422_altivec(const short*Y, const short*U, const short*V,
-                            unsigned char *data, int xsize, int ysize);
-# ifndef NO_VECTORINT_TO_VECTORUNSIGNEDINT
-void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV,
-                            const unsigned char *gem_image, int xsize, int ysize);
-# endif
+void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV, const unsigned char *gem_image, int xsize, int ysize);
 #endif /* AltiVec */
 
-/* SSE2 */
-#ifdef __SSE2__
-void RGBA_to_UYVY_SSE2(const unsigned char *rgbadata,
-                       size_t size,
-                       unsigned char *yuvdata);
-void UYVY_to_RGBA_SSE2(const unsigned char *yuvdata,
-                       size_t size,
-                       unsigned char *rgbadata);
-void UYVY_to_RGB_SSE2(const unsigned char *yuvdata,
-                      size_t size,
-                      unsigned char *rgbadata);
-#endif /* SSE2 */
 
-/* in case somebody has an old machine... */
-#ifdef __MMX__
+#if defined(_LANGUAGE_C_PLUS_PLUS) || defined(__cplusplus)
+} /* extern 'C' */
+#endif
 
-#endif /* MMX */
 
 #endif /* _INCLUDE__GEM_GEM_PIXCONVERT_H_ */
