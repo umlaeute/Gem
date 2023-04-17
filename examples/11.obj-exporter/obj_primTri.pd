@@ -8,7 +8,7 @@
 #X obj 400 19 inlet;
 #X obj 23 47 t a a;
 #X obj 23 89 outlet;
-#X obj 23 68 primTri 0 0 0;
+#X obj 23 68 primTri 0;
 #X obj 55 110 spigot 0;
 #X obj 55 173 GEMglPushMatrix;
 #X obj 55 542 GEMglPopMatrix;
