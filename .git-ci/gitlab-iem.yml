@@ -228,10 +228,12 @@ nodist:
   rules:
     # run if IEM_CI_JOBS list is empty
     - if: $IEM_CI_JOBS == ""
-      exists: .git-ci/nodist
+      exists:
+        - ".git-ci/nodist"
     # run if CI_JOB_NAME is in the IEM_CI_JOBS list
     - if: $CI_JOB_NAME =~ $IEM_CI_JOBS
-      exists: .git-ci/nodist
+      exists:
+        - ".git-ci/nodist"
     # otherwise, don't run
     - when: never
   image: debian:stable
