@@ -240,8 +240,8 @@ nodist:
     - when: never
   image: debian:stable
   before_script:
-    - apt-get update
-    - apt-get install puredata-dev build-essential git
+    - apt-get update -y
+    - apt-get install -y puredata-dev build-essential git
   script:
     ## pre-cleanup
     # get rid of gitignores
