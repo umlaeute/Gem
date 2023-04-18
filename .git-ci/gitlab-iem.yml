@@ -246,7 +246,7 @@ nodist:
     ## pre-cleanup
     # get rid of gitignores
     - find . -name .gitignore -delete
-    - git commit -a "Drop .gitignore files"
+    - git commit -a -m "Drop .gitignore files"
     ## create 'make dist' package
     - ./autogen.sh
     - ./configure --without-ALL
