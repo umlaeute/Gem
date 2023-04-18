@@ -18,4 +18,5 @@ doc/notes/keynames.org
 **/*.sln
 **/*.props
 **/*.vsprops
+**/* *
 tests/
