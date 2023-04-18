@@ -219,6 +219,50 @@ distcheck:
     - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} --without-ALL ${PDDIR:+--with-pd=}${PDDIR} || true
     - make distcheck -j2
 
+# check if the 'dist' package includes all relevant files
+# ignored files are read from the .git-ci/nodist file
+nodist:
+  stage: test
+  dependencies: []
+  needs: []
+  rules:
+    # run if IEM_CI_JOBS list is empty
+    - if: $IEM_CI_JOBS == ""
+      exists: .git-ci/nodist
+    # run if CI_JOB_NAME is in the IEM_CI_JOBS list
+    - if: $CI_JOB_NAME =~ $IEM_CI_JOBS
+      exists: .git-ci/nodist
+    # otherwise, don't run
+    - when: never
+  image: debian:stable
+  before_script:
+    - apt-get update
+    - apt-get install puredata-dev build-essential git
+  script:
+    ## pre-cleanup
+    # get rid of gitignores
+    - find . -name .gitignore -delete
+    - git commit -a "Drop .gitignore files"
+    ## create 'make dist' package
+    - ./autogen.sh
+    - ./configure --without-ALL
+    - mkdir -p .git-ci
+    - rm -rf .git-ci/Gem .git-ci/Gem.*gz
+    # create 'make dist' package
+    - make dist distdir=.git-ci/Gem
+    ## restore the source dir from the 'make dist' package
+    - find . -mindepth 1 -maxdepth 1 "(" -not -name ".git" -a -not -name ".git-ci" ")" -exec rm -rf {} +
+    - tar -x -f .git-ci/Gem.*gz --strip-components=2
+    ## ensure that the restored folder contains only the changes we want to see
+    # drop files not tracked by git (e.g. generated autotools helpers)
+    - git clean -fdx
+    # restore files that need not be distributed
+    - git checkout --pathspec-from-file=.git-ci/nodist
+    ## show differences
+    - git status -s
+    - git diff-index --quiet HEAD
+
+
 deken:
   extends:
     - .run-selected
