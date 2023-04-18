@@ -4,6 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src
 include ../convenience-link-extra.mk
 
 EXTRA_DIST =
+EXTRA_DIST+=COPYING.txt
 EXTRA_DIST+=win-vs2003/pix_fiducialtrack.sln win-vs2003/pix_fiducialtrack.vcproj
 EXTRA_DIST+=win-vs2008/pix_fiducialtrack.sln win-vs2008/pix_fiducialtrack.vcproj
 
