@@ -16,6 +16,8 @@ dist_gemabs_DATA = \
 	gemkeyname.pd \
 	gemmouse.pd \
 	gemorb.pd \
+	gemrepeat-help.pd \
+	gemrepeat.pd \
 	gemtablet.pd \
 	gemwin.pd \
 	hsv2rgb-help.pd \
@@ -25,6 +27,7 @@ dist_gemabs_DATA = \
 	pix_buffer_filmopen-help.pd \
 	pix_buffer_filmopen.pd \
 	pix_write.pd \
+	pix_writer.pd \
 	rgb2hsv-help.pd \
 	rgb2hsv.pd \
 	rgb2yuv-help.pd \

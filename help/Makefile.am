@@ -31,6 +31,8 @@ dist_gemhelp_DATA = \
 	gemcubeframebuffer-help.pd \
 	cubemaptosphere.vert \
 	cubemaptosphere.frag \
+	cubemaptocube.vert \
+	cubemaptocube.frag \
 	GEMglBegin-help.pd \
 	gemhead-help.pd \
 	gemkeyboard-help.pd \
@@ -38,6 +40,7 @@ dist_gemhelp_DATA = \
 	gemlist-help.pd \
 	gemlist_info-help.pd \
 	gemlist_matrix-help.pd \
+	gemmanager-help.pd \
 	gemmouse-help.pd \
 	gemorb-help.pd \
 	gemreceive-help.pd \
@@ -52,6 +55,7 @@ dist_gemhelp_DATA = \
 	gemmacoswindow-help.pd \
 	gemmacwindow-help.pd \
 	gemsdlwindow-help.pd \
+	gemsdl2window-help.pd \
 	gemw32window-help.pd \
 	GLdefine-help.pd \
 	glsl_fragment-help.pd \
