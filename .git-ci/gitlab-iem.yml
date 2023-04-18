@@ -210,6 +210,8 @@ distcheck:
     - .build:linux
     - .run-selected
   stage: test
+  dependencies: []
+  needs: []
   script:
     - tools/systeminfo.sh || true
     - date
@@ -285,6 +287,11 @@ deken:
     paths:
       - ./*.dek
       - ./*.dek.*
+
+# out SAST jobs don't have any prerequisites, so run them early...
+sast:
+  dependencies: []
+  needs: []
 
 include:
   # for the codesign templates
