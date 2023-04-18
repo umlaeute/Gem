@@ -40,5 +40,5 @@ include $(srcdir)/../symlink_ltlib.mk
 
 
 ### SOURCES
-gem_videoOptiTrack_la_SOURCES= videoOptiTrack.cpp videoOptiTrack.h DSgrabber.cpp DSgrabber.h
+gem_videoOptiTrack_la_SOURCES= videoOptiTrack.cpp videoOptiTrack.h
 
