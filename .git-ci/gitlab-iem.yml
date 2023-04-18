@@ -242,6 +242,9 @@ nodist:
   before_script:
     - apt-get update -y
     - apt-get install -y puredata-dev build-essential git
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global --list || true
   script:
     ## pre-cleanup
     # get rid of gitignores
