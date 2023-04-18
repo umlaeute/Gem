@@ -241,7 +241,7 @@ nodist:
   image: debian:stable
   before_script:
     - apt-get update -y
-    - apt-get install -y git build-essential autoconf automake libtool puredata-dev
+    - apt-get install -y --no-install-recommends git build-essential autoconf automake libtool pkg-config freeglut3-dev puredata-dev
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global --list || true
@@ -251,7 +251,7 @@ nodist:
     - find . -name .gitignore -delete
     - git commit -a -m "Drop .gitignore files"
     ## create 'make dist' package
-    - ./autogen.sh
+    - autoreconf -fiv || ./autogen.sh
     - ./configure --without-ALL
     - mkdir -p .git-ci
     - rm -rf .git-ci/Gem .git-ci/Gem.*gz
