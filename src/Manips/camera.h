@@ -19,13 +19,6 @@ LOG
 
 #include "Utils/Vector.h"
 
-#define PI      3.1415926535897932384626433832795
-
-#ifndef _WIN32
-using namespace std;
-#endif
-
-
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
@@ -60,13 +53,12 @@ protected:
   // When rendering occurs
   virtual void    render(GemState *state);
 
+  void     resetState();
   //////////
   // Angles changed
-  void            hAngleMess(t_float val);
-  void            vAngleMess(t_float val);
-  void            distanceMess(t_float val);
-
-  void            resetState();
+  void     hAngleMess(t_float val);
+  void     vAngleMess(t_float val);
+  void     distanceMess(t_float val);
 
   void     speedMess(t_float val);
   void     lookXMess(t_float val);
@@ -81,7 +73,7 @@ protected:
   void     modeMess(bool val);
 
   bool    left, right, up, down, forward, reverse, m_mode;
-  float   m_speed;
+  t_float   m_speed;
   t_float hAngle, vAngle, distance;
 
   // This changes the position, view, and up vector of the camera.
@@ -94,14 +86,14 @@ protected:
   void RotateView(float angle, float x, float y, float z);
 
   // This will move the camera forward or backward depending on the speed
-  void MoveCamera( float speed );
-  void SlideCamera( float speed );
-  void calcCameraVals( void );
-  void calcUpVector( void );
-  void incHRot( float val );
-  void decHRot( float val );
-  void incVRot( float val );
-  void decVRot( float val );
+  void MoveCamera(t_float speed );
+  void SlideCamera(t_float speed );
+  void calcCameraVals(void);
+  void calcUpVector(void);
+  void incHRot(t_float val );
+  void decHRot(t_float val );
+  void incVRot(t_float val );
+  void decVRot(t_float val );
 
 
 private:

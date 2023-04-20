@@ -17,6 +17,8 @@
 
 CPPEXTERN_NEW_WITH_GIMME(camera);
 
+#define PI      3.1415926535897932384626433832795
+
 /////////////////////////////////////////////////////////
 //
 // camera
@@ -26,16 +28,15 @@ CPPEXTERN_NEW_WITH_GIMME(camera);
 //
 /////////////////////////////////////////////////////////
 camera :: camera(int argc, t_atom *argv)
-  : left(0), right(0), up(0), down(0), forward(0), reverse(0), m_mode(0),
-    m_speed( 0.03f ),
-    hAngle(90.0f), vAngle(0.0f), distance(4.0f)
+  : left(false), right(false), up(false), down(false), forward(false), reverse(false), m_mode(false)
+  , m_speed(0.03)
+  , hAngle(90.0), vAngle(0.0), distance(4.0)
 {
-  m_vPosition    = CVector3(0.0, 0.0, 0.0);     // Init the position to zero
-  m_vView        = CVector3(0.0, 0.0,
-                            0.0);     // Init the view to a std starting view
-  m_vUpVector    = CVector3(0.0, 1.0, 0.0);     // Init the UpVector
+  m_vPosition    = CVector3(0.0, 0.0, 0.0);  // Init the position to zero
+  m_vView        = CVector3(0.0, 0.0, 0.0);  // Init the view to a std starting view
+  m_vUpVector    = CVector3(0.0, 1.0, 0.0);  // Init the UpVector
   //  Position     View         Up Vector
-  PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 );
+  PositionCamera(0, 0, 4,   0, 0, 0,   0, 1, 0 );
 }
 
 ////////////////////////////////////////////////////////
@@ -257,7 +258,7 @@ void camera :: RotateView(float angle, float x, float y, float z)
 /////
 ///////////////////////////////// MOVE CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void camera :: MoveCamera(float speed)
+void camera :: MoveCamera(t_float speed)
 {
   // Get our view vector (The direction we are facing)
   CVector3 vVector = (m_vView - m_vPosition).normalize();
@@ -282,7 +283,7 @@ void camera :: MoveCamera(float speed)
 /////
 ///////////////////////////////// SLIDE CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void camera :: SlideCamera(float speed)
+void camera :: SlideCamera(t_float speed)
 {
   // Add the slide vector to our position
   m_vPosition.x += m_vSlide.x * speed;
@@ -299,6 +300,8 @@ void camera :: SlideCamera(float speed)
 /////////////////////////////////////////////////////////
 void camera :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG0(classPtr, "reset", resetState);
+
   CPPEXTERN_MSG1(classPtr, "hAngle", hAngleMess, float);
   CPPEXTERN_MSG1(classPtr, "vAngle", vAngleMess, float);
   CPPEXTERN_MSG1(classPtr, "distance", distanceMess, float);
@@ -314,8 +317,6 @@ void camera :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "up", upMess, bool);
   CPPEXTERN_MSG1(classPtr, "down", downMess, bool);
   CPPEXTERN_MSG1(classPtr, "mode", modeMess, bool);
-
-  CPPEXTERN_MSG0(classPtr, "reset", resetState);
 }
 void camera :: speedMess(t_float val)
 {
