@@ -31,6 +31,7 @@ camera :: camera(int argc, t_atom *argv)
   : left(false), right(false), up(false), down(false), forward(false), reverse(false), m_mode(false)
   , m_speed(0.03)
   , hAngle(90.0), vAngle(0.0), distance(4.0)
+  , m_infoOut(gem::RTE::Outlet(this))
 {
   m_vPosition    = CVector3(0.0, 0.0, 0.0);  // Init the position to zero
   m_vView        = CVector3(0.0, 0.0, 0.0);  // Init the view to a std starting view
@@ -50,7 +51,7 @@ camera :: ~camera()
 // render
 //
 /////////////////////////////////////////////////////////
-void camera :: render(GemState *)
+void camera :: bang()
 {
   // Initialize a variable for the cross product result
   //   CVector3 vCross = Cross(m_vView - m_vPosition, m_vUpVector);
@@ -97,15 +98,28 @@ void camera :: render(GemState *)
   }
 
   calcCameraVals();
-  GemMan::m_lookat[0] = m_vPosition.x;
-  GemMan::m_lookat[1] = m_vPosition.y;
-  GemMan::m_lookat[2] = m_vPosition.z;
-  GemMan::m_lookat[3] = m_vView.x;
-  GemMan::m_lookat[4] = m_vView.y;
-  GemMan::m_lookat[5] = m_vView.z;
-  GemMan::m_lookat[6] = m_vUpVector.x;
-  GemMan::m_lookat[7] = m_vUpVector.y;
-  GemMan::m_lookat[8] = m_vUpVector.z;
+
+  std::vector<gem::any>data;
+  gem::any value;
+  data.clear();
+  data.push_back(value=m_vPosition.x);
+  data.push_back(value=m_vPosition.y);
+  data.push_back(value=m_vPosition.z);
+  data.push_back(value=m_vView.x);
+  data.push_back(value=m_vView.y);
+  data.push_back(value=m_vView.z);
+  data.push_back(value=m_vUpVector.x);
+  data.push_back(value=m_vUpVector.y);
+  data.push_back(value=m_vUpVector.z);
+  m_infoOut.send("list", data);
+}
+
+void camera :: render(GemState *)
+{
+  bang();
+  gem::utils::gl::gluLookAt(m_vPosition.x, m_vPosition.y, m_vPosition.z,
+                            m_vView.x, m_vView.y, m_vView.z,
+                            m_vUpVector.x, m_vUpVector.y, m_vUpVector.z);
 }
 
 void camera :: resetState()
@@ -300,6 +314,7 @@ void camera :: SlideCamera(t_float speed)
 /////////////////////////////////////////////////////////
 void camera :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG0(classPtr, "bang", bang);
   CPPEXTERN_MSG0(classPtr, "reset", resetState);
 
   CPPEXTERN_MSG1(classPtr, "hAngle", hAngleMess, float);

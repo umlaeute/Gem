@@ -14,6 +14,7 @@ LOG
 #define _INCLUDE__GEM_MANIPS_CAMERA_H_
 
 #include "Base/GemBase.h"
+#include "RTE/Outlet.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -53,7 +54,9 @@ protected:
   // When rendering occurs
   virtual void    render(GemState *state);
 
+  void     bang(void);
   void     resetState();
+
   //////////
   // Angles changed
   void     hAngleMess(t_float val);
@@ -102,6 +105,7 @@ private:
   CVector3 m_vView;                       // The camera's View
   CVector3 m_vUpVector;                   // The camera's UpVector
   CVector3 m_vSlide;                      // The camera's slide
+  gem::RTE::Outlet       m_infoOut;
 };
 
 #endif  // for header file
