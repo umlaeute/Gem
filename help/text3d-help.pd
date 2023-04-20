@@ -76,7 +76,7 @@
 #X msg 503 352 alias \$1;
 #X obj 562 352 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 30 567 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
-#X text 43 571 Note: changing the fontsize will re-generate the glyphs \, which can be slow. [scale] is much faster;
+#X text 43 571 Note: changing the fontsize will re-generate the glyphs \, which can be slow. [scale] is much faster.;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 36 0;
