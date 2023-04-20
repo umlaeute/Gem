@@ -1,4 +1,4 @@
-#N canvas 108 62 817 649 10;
+#N canvas 108 62 817 669 10;
 #X declare -lib Gem;
 #X text 54 30 Class: geometric object;
 #X obj 465 65 cnv 15 180 510 empty empty empty 20 12 0 14 #dce4fc #404040 0;
@@ -25,14 +25,14 @@
 #X msg 472 453 create;
 #X text 468 432 Create window:;
 #X obj 7 65 cnv 15 450 260 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
-#X obj 8 374 cnv 15 450 180 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 8 374 cnv 15 450 190 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 9 379 Inlets:;
 #X obj 8 335 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 334 Arguments:;
 #X text 453 11 GEM object;
 #X text 27 391 Inlet 1: gemlist;
-#X text 9 523 Outlets:;
-#X text 21 536 Outlet 1: gemlist;
+#X text 9 533 Outlets:;
+#X text 21 546 Outlet 1: gemlist;
 #X text 471 47 Example:;
 #X obj 468 112 cnv 15 170 310 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 471 70 gemhead;
@@ -58,8 +58,8 @@
 #X obj 471 400 text3d;
 #X text 10 94 [text3d] renders one line of a text with the current color \, and all 3D-transformation;
 #X text 33 14 Synopsis: [text3d];
-#X obj 30 571 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
-#X text 43 575 Note: on some systems it might be necessary to turn rendering ON before loading a font.;
+#X obj 30 611 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
+#X text 43 615 Note: on some systems it might be necessary to turn rendering ON before loading a font.;
 #X msg 499 221 string 48 49 32 51 52;
 #X text 27 444 Inlet 1: message: string [<blah>] : render the given text \, given as a list of unicode code points (similar to ASCII);
 #X text 10 123 Any TrueType-font can be rendered. Per default a file "vera.ttf" is searched in the paths. If it is not found you will not see anything unless you load a valid font via the "font"-message. The font-loader uses Pd's search-paths \, so you could specify your path on the command-line and load fonts with just "font times.ttf".;
@@ -67,11 +67,16 @@
 #X text 470 507 see also:;
 #X obj 541 532 textextruded;
 #X obj 541 555 textoutline;
-#X text 27 504 Inlet 2: float: size (in points) (default:20);
+#X text 27 514 Inlet 2: float: size (in points) (default:20);
 #X obj 528 8 declare -lib Gem;
 #X msg 506 273 string 20320 10 22909 10 19990 10 30028, f 17;
 #X msg 503 327 text مرحبا بالعالم;
 #X text 15 204 Note that text is rendered using only the given font. Therefore \, your font must have the glyphs you want to display (or you will only see placeholders);
+#X text 27 502 Inlet 1: message: alias 1|0 : anti-aliasing on/off (default:1), f 66;
+#X msg 503 352 alias \$1;
+#X obj 562 352 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 30 567 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
+#X text 43 571 Note: changing the fontsize will re-generate the glyphs \, which can be slow. [scale] is much faster;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
 #X connect 17 0 36 0;
@@ -88,3 +93,5 @@
 #X connect 42 0 37 0;
 #X connect 51 0 37 0;
 #X connect 52 0 37 0;
+#X connect 55 0 37 0;
+#X connect 56 0 55 0;
