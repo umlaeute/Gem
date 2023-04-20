@@ -143,6 +143,26 @@ inline unsigned char CLAMP_Y(int x)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// wrap function
+//
+///////////////////////////////////////////////////////////////////////////////
+inline int WRAP(int x, int max) {
+  return (max + x % max) % max;
+}
+inline float WRAP(float x, float max)
+{
+    return fmodf(max + fmodf(x, max), max);
+}
+inline double WRAP(double x, double max)
+{
+    return fmod(max + fmod(x, max), max);
+}
+template <class T>
+inline T WRAP(T val, T min, T max) {
+    return min + WRAP(val - min, max - min);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Multiply and interpolation
 //
 ///////////////////////////////////////////////////////////////////////////////
