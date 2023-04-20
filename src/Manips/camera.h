@@ -68,6 +68,18 @@ protected:
 
   void            resetState();
 
+  void     speedMess(t_float val);
+  void     lookXMess(t_float val);
+  void     lookYMess(t_float val);
+  void     lookZMess(t_float val);
+  void     forwardMess(bool val);
+  void     reverseMess(bool val);
+  void     leftMess(bool val);
+  void     rightMess(bool val);
+  void     upMess(bool val);
+  void     downMess(bool val);
+  void     modeMess(bool val);
+
   bool    left, right, up, down, forward, reverse, m_mode;
   float   m_speed;
   t_float hAngle, vAngle, distance;
@@ -98,24 +110,6 @@ private:
   CVector3 m_vView;                       // The camera's View
   CVector3 m_vUpVector;                   // The camera's UpVector
   CVector3 m_vSlide;                      // The camera's slide
-
-  //////////
-  // static member functions
-  static void     hAngleMessCallback(void *data, t_float val);
-  static void     vAngleMessCallback(void *data, t_float val);
-  static void     distanceMessCallback(void *data, t_float val);
-  static void     speedMessCallback(void *data, t_float val);
-  static void     forwardMessCallback(void *data, t_float val);
-  static void     reverseMessCallback(void *data, t_float val);
-  static void     leftMessCallback(void *data, t_float val);
-  static void     rightMessCallback(void *data, t_float val);
-  static void     upMessCallback(void *data, t_float val);
-  static void     downMessCallback(void *data, t_float val);
-  static void     resetMessCallback(void *);
-  static void     modeMessCallback(void *data, t_float val);
-  static void     lookXMessCallback(void *data, t_float val);
-  static void     lookYMessCallback(void *data, t_float val);
-  static void     lookZMessCallback(void *data, t_float val);
 };
 
 #endif  // for header file
