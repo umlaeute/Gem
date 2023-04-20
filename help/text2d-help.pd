@@ -1,10 +1,8 @@
-#N canvas 91 80 658 640 10;
+#N canvas 91 80 658 655 10;
 #X declare -lib Gem;
 #X text 54 30 Class: geometric object;
-#X obj 465 65 cnv 15 170 270 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 465 342 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 465 65 cnv 15 170 370 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 465 452 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -23,82 +21,54 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 470 381 pd gemwin;
-#X msg 470 362 create;
-#X text 466 341 Create window:;
-#X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 8 335 cnv 15 450 180 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X restore 470 491 pd gemwin;
+#X msg 470 472 create;
+#X text 466 451 Create window:;
+#X obj 7 65 cnv 15 450 220 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 8 335 cnv 15 450 180 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 9 340 Inlets:;
-#X obj 8 295 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 295 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 294 Arguments:;
 #X text 462 10 GEM object;
 #X text 27 352 Inlet 1: gemlist;
 #X text 9 480 Outlets:;
 #X text 21 493 Outlet 1: gemlist;
 #X text 471 47 Example:;
-#X obj 468 112 cnv 15 150 220 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 468 172 cnv 15 160 250 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 479 68 gemhead;
-#X floatatom 516 287 5 0 100 1 size - -;
-#X msg 489 152 font \$1;
-#X obj 489 133 openpanel;
-#X obj 489 116 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
-#X msg 497 178 text hello world!;
-#X msg 501 197 1 2 3 4;
-#X msg 505 238 alias \$1;
-#X obj 505 220 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X floatatom 516 377 5 0 100 1 size - - 0;
+#X msg 489 216 font \$1;
+#X obj 489 197 openpanel;
+#X msg 497 238 text hello world!;
+#X msg 501 259 1 2 3 4;
+#X msg 505 328 alias \$1;
 #X text 7 69 Description: Renders a line of text;
 #X text 63 306 initial text (defaults to "gem");
 #X text 7 208 Justification:;
-#X text 32 223 horizontal justification can be one of "left" \, "right"
-\, "center"(default) and "base"(none);
-#X text 32 253 vertical justification can be one of "top" \, "bottom"
-\, "middle"(default) and "base"(none);
-#X msg 506 264 justify left base;
-#X text 10 94 [text2d] renders one line of a text with the current
-color \, but without(!) 3D-transformation;
-#X obj 479 89 translateXYZ;
-#X floatatom 583 72 5 -10 10 0 - - -;
-#X floatatom 542 67 3 -3.5 3.5 0 - #0-X -;
-#X text 27 366 Inlet 1: message: font <.TTF-file> : load a TrueType-font
-;
-#X text 27 380 Inlet 1: message: text [<blah>] : render the given text
-;
-#X text 27 395 Inlet 1: message: list [<blah>] : render the given text
-, f 59;
-#X text 27 410 Inlet 1: message: alias 1|0 : anti-aliasing on/off (default:1)
-, f 66;
-#X obj 479 308 text2d;
-#X obj 30 535 cnv 15 400 40 empty empty empty 20 12 0 14 -261681 -66577
-0;
-#X text 43 539 Note: on some systems it might be necessary to turn
-rendering ON before loading a font.;
+#X text 32 223 horizontal justification can be one of "left" \, "right" \, "center"(default) and "base"(none);
+#X text 32 253 vertical justification can be one of "top" \, "bottom" \, "middle"(default) and "base"(none);
+#X msg 506 354 justify left base;
+#X floatatom 583 72 5 -10 10 0 - \$0-Y - 0;
+#X floatatom 542 67 3 -3.5 3.5 0 - \$0-X - 0;
+#X text 27 366 Inlet 1: message: font <.TTF-file> : load a TrueType-font;
+#X text 27 380 Inlet 1: message: text [<blah>] : render the given text;
+#X text 27 395 Inlet 1: message: list [<blah>] : render the given text, f 59;
+#X text 27 410 Inlet 1: message: alias 1|0 : anti-aliasing on/off (default:1), f 66;
+#X obj 30 535 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
+#X text 43 539 Note: on some systems it might be necessary to turn rendering ON before loading a font.;
 #X text 33 14 Synopsis: [text2d];
-#X text 10 123 Any TrueType-font can be rendered. Per default a file
-"vera.ttf" is searched in the paths. If it is not found you will not
-see anything unless you load a valid font via the "font"-message. The
-font-loader uses Pd's search-paths \, so you could specify your path
-on the command-line and load fonts with just "font times.ttf".;
-#X obj 538 420 text3d;
-#X text 468 419 see also:;
-#X obj 538 443 textextruded;
-#X obj 538 466 textoutline;
-#X obj 30 591 cnv 15 400 40 empty empty empty 20 12 0 14 -260097 -66577
-0;
-#X text 43 595 Note2: The text will disappear completely once the pivot
-point of the text moves out of the window;
-#X obj 459 591 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#N canvas 69 240 450 369 disappearing 0;
+#X text 10 123 Any TrueType-font can be rendered. Per default a file "vera.ttf" is searched in the paths. If it is not found you will not see anything unless you load a valid font via the "font"-message. The font-loader uses Pd's search-paths \, so you could specify your path on the command-line and load fonts with just "font times.ttf".;
+#X obj 538 530 text3d;
+#X text 468 529 see also:;
+#X obj 538 553 textextruded;
+#X obj 538 576 textoutline;
+#X obj 30 591 cnv 15 400 40 empty empty empty 20 12 0 14 #fc8000 #404040 0;
+#X text 43 595 Note2: The text will disappear completely once the pivot point of the text moves out of the window;
+#X obj 459 591 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#N canvas 822 665 450 369 disappearing 0;
 #X obj 43 27 inlet;
-#X obj 43 266 s \$0-X;
-#X obj 43 92 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
-;
+#X obj 43 306 s \$0-X;
+#X obj 43 92 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 43 116 pack 0 1000;
 #X obj 43 238 line;
 #X obj 43 70 metro 1000;
@@ -109,10 +79,15 @@ point of the text moves out of the window;
 #X obj 43 49 t f f;
 #X obj 127 70 select 0;
 #X msg 127 92 0;
+#X obj 87 27 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
+#X floatatom 192 142 5 0 0 0 - - - 0;
+#X obj 43 261 pack 0 0;
+#X obj 43 284 unpack;
+#X obj 93 306 s \$0-Y;
 #X connect 0 0 10 0;
 #X connect 2 0 3 0;
 #X connect 3 0 6 0;
-#X connect 4 0 1 0;
+#X connect 4 0 15 0;
 #X connect 5 0 2 0;
 #X connect 6 0 8 0;
 #X connect 7 0 4 0;
@@ -122,24 +97,50 @@ point of the text moves out of the window;
 #X connect 10 1 11 0;
 #X connect 11 0 12 0;
 #X connect 12 0 7 0;
+#X connect 13 0 5 0;
+#X connect 14 0 8 0;
+#X connect 15 0 16 0;
+#X connect 16 0 1 0;
+#X connect 16 1 17 0;
 #X restore 459 611 pd disappearing text;
 #X text 27 454 Inlet 2: float: size (in points) default:20, f 56;
-#X text 27 425 Inlet 1: message: justify <hor> [<vert>]: horizontal&vertical
-justification;
+#X text 27 425 Inlet 1: message: justify <hor> [<vert>]: horizontal&vertical justification;
 #X obj 528 8 declare -lib Gem;
+#X text 10 94 [text2d] renders a text with the current color \, but without(!) 3D-transformation (like [rotate] or [scale]).;
+#X obj 479 89 translateXYZ;
+#X obj 479 398 text2d;
+#X obj 565 328 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 489 176 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
+#X msg 501 282 text ніколи;
+#X msg 501 304 string 960 940 957 964 945;
+#X obj 470 111 cnv 15 160 50 empty empty empty 20 12 0 14 #c7c6ff #404040 0;
+#X obj 479 115 rotateXYZ;
+#X obj 479 138 scaleXYZ;
+#X floatatom 574 138 5 0 0 0 - - - 0;
+#X obj 540 138 / 10;
+#X floatatom 545 115 5 0 0 0 - - - 0;
+#X floatatom 581 116 5 0 0 0 - - - 0;
 #X connect 3 0 4 0;
 #X connect 4 0 3 0;
-#X connect 17 0 33 0;
-#X connect 18 0 40 1;
-#X connect 19 0 40 0;
+#X connect 17 0 52 0;
+#X connect 18 0 53 1;
+#X connect 19 0 53 0;
 #X connect 20 0 19 0;
-#X connect 21 0 20 0;
-#X connect 22 0 40 0;
-#X connect 23 0 40 0;
-#X connect 24 0 40 0;
-#X connect 25 0 24 0;
-#X connect 31 0 40 0;
-#X connect 33 0 40 0;
-#X connect 34 0 33 3;
-#X connect 35 0 33 1;
-#X connect 51 0 52 0;
+#X connect 21 0 53 0;
+#X connect 22 0 53 0;
+#X connect 22 0 56 0;
+#X connect 23 0 53 0;
+#X connect 29 0 53 0;
+#X connect 30 0 52 3;
+#X connect 31 0 52 1;
+#X connect 46 0 47 0;
+#X connect 52 0 59 0;
+#X connect 54 0 23 0;
+#X connect 55 0 20 0;
+#X connect 56 0 53 0;
+#X connect 57 0 53 0;
+#X connect 59 0 60 0;
+#X connect 60 0 53 0;
+#X connect 61 0 62 0;
+#X connect 62 0 60 1;
+#X connect 63 0 59 2;
