@@ -27,8 +27,8 @@ CPPEXTERN_NEW_WITH_GIMME(camera);
 /////////////////////////////////////////////////////////
 camera :: camera(int argc, t_atom *argv)
   : left(0), right(0), up(0), down(0), forward(0), reverse(0), m_mode(0),
-    lookX(0.0), lookY(0.0), lookZ(0.0), m_speed( 0.03f ),
-    hAngle(90.0f), vAngle(0.0f), distance(4.0f), slideLeft(0), slideRight(0)
+    m_speed( 0.03f ),
+    hAngle(90.0f), vAngle(0.0f), distance(4.0f)
 {
   m_vPosition    = CVector3(0.0, 0.0, 0.0);     // Init the position to zero
   m_vView        = CVector3(0.0, 0.0,
@@ -114,48 +114,15 @@ void camera :: resetState()
   PositionCamera(0, 0.0, 4,   0, 0.0, 0,   0, 1, 0 );
 }
 
-void camera :: leftMess(bool val )
-{
-  if (m_mode) {
-    incHRot(m_speed);
-  } else {
-    decHRot(m_speed);
-  }
-}
-void camera :: rightMess(bool val )
-{
-  if (m_mode) {
-    decHRot(m_speed);
-  } else {
-    incHRot(m_speed);
-  }
-}
-void camera :: upMess(bool val )
-{
-  if (m_mode) {
-    incVRot(m_speed);
-  } else {
-    decVRot(m_speed);
-  }
-}
-void camera :: downMess(bool val )
-{
-  if (m_mode) {
-    decVRot(m_speed);
-  } else {
-    incVRot(m_speed);
-  }
-}
-
-void camera :: vAngleMess(float val)
+void camera :: vAngleMess(t_float val)
 {
   vAngle = val;
 }
-void camera :: hAngleMess(float val)
+void camera :: hAngleMess(t_float val)
 {
   hAngle = val;
 }
-void camera :: distanceMess(float val)
+void camera :: distanceMess(t_float val)
 {
   distance = val;
 }
@@ -409,14 +376,6 @@ void camera :: leftMessCallback(void *data, t_float val)
 void camera :: rightMessCallback(void *data, t_float val)
 {
   GetMyClass(data)->right=static_cast<int>(val);
-}
-void camera :: slideLeftMessCallback(void *data, t_float val)
-{
-  GetMyClass(data)->slideLeft=static_cast<int>(val);
-}
-void camera :: slideRightMessCallback(void *data, t_float val)
-{
-  GetMyClass(data)->slideRight=static_cast<int>(val);
 }
 void camera :: upMessCallback(void *data, t_float val)
 {

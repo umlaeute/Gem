@@ -62,35 +62,15 @@ protected:
 
   //////////
   // Angles changed
-  void            hAngleMess(float val);
-  void            vAngleMess(float val);
-  void            distanceMess(float val);
+  void            hAngleMess(t_float val);
+  void            vAngleMess(t_float val);
+  void            distanceMess(t_float val);
 
-  //////////
-  // roll value changed
-  void            rollMess(float val);
-
-  //////////
-  // value changed
-  void            forwardMess(float val);
-  void            reverseMess(float val);
-
-  //////////
-  // Pitch value changed
-  void            leftMess(bool val);
-  void            rightMess(bool val);
-  void            slideLeftMess(bool val);
-  void            slideRightMess(bool val);
-  //////////
-  // roll value changed
-  void            upMess(bool val);
-  void            downMess( bool val );
   void            resetState();
 
-  int     left, right, up, down, forward, reverse, m_mode;
-  float   lookX, lookY, lookZ, m_speed;
-  float   hAngle, vAngle, distance;
-  int     slideLeft, slideRight;
+  bool    left, right, up, down, forward, reverse, m_mode;
+  float   m_speed;
+  t_float hAngle, vAngle, distance;
 
   // This changes the position, view, and up vector of the camera.
   // (Used for initialization)
@@ -129,8 +109,6 @@ private:
   static void     reverseMessCallback(void *data, t_float val);
   static void     leftMessCallback(void *data, t_float val);
   static void     rightMessCallback(void *data, t_float val);
-  static void     slideLeftMessCallback(void *data, t_float val);
-  static void     slideRightMessCallback(void *data, t_float val);
   static void     upMessCallback(void *data, t_float val);
   static void     downMessCallback(void *data, t_float val);
   static void     resetMessCallback(void *);
