@@ -14,6 +14,7 @@
 
 #include "camera.h"
 #include "Gem/Manager.h"
+#include "Utils/Functions.h"
 
 CPPEXTERN_NEW_WITH_GIMME(camera);
 
@@ -28,7 +29,8 @@ CPPEXTERN_NEW_WITH_GIMME(camera);
 //
 /////////////////////////////////////////////////////////
 camera :: camera(int argc, t_atom *argv)
-  : left(false), right(false), up(false), down(false), forward(false), reverse(false), m_mode(false)
+  : m_left(0), m_right(0), m_up(0), m_down(0), m_forward(0), m_reverse(0)
+  , m_mode(false)
   , m_speed(0.03)
   , hAngle(90.0), vAngle(0.0), distance(4.0)
   , m_infoOut(gem::RTE::Outlet(this))
@@ -58,44 +60,12 @@ void camera :: bang()
 
   // Normalize the strafe vector
   // m_vSlide = Normalize(vCross);
+  distance += (m_speed/100.) * (m_reverse - m_forward);
 
-  if(forward) {
-    //MoveCamera(m_speed);
-    distance = distance - (m_speed/100);
-  }
-
-  if(reverse) {
-    // MoveCamera(-m_speed);
-    distance = distance + (m_speed/100);
-  }
-  if(left) {
-    if (m_mode) {
-      incHRot(m_speed);
-    } else {
-      decHRot(m_speed);
-    }
-  }
-  if(right) {
-    if (m_mode) {
-      decHRot(m_speed);
-    } else {
-      incHRot(m_speed);
-    }
-  }
-  if(up) {
-    if (m_mode) {
-      incVRot(m_speed);
-    } else {
-      decVRot(m_speed);
-    }
-  }
-  if(down) {
-    if (m_mode) {
-      decVRot(m_speed);
-    } else {
-      incVRot(m_speed);
-    }
-  }
+  t_float speedH = m_speed * (m_right - m_left) * (m_mode?-1.:1.);
+  t_float speedV = m_speed * (m_down - m_up) * (m_mode?-1.:1.);
+  hAngle = WRAP(hAngle + speedH, (t_float)360.);
+  vAngle = WRAP(vAngle + speedV, (t_float)360.);
 
   calcCameraVals();
 
@@ -165,46 +135,6 @@ void camera :: calcUpVector()
 
   m_vUpVector.x = temp*(float)cos(hAngle * PI/180);
   m_vUpVector.z = temp*(float)sin(hAngle * PI/180);
-}
-
-/// Increase Horizontal rotation
-void camera :: incHRot(float incVal)
-{
-  hAngle += incVal;
-
-  if (hAngle > 360) {
-    hAngle -= 360;
-  }
-}
-
-/// Decrease Horizontal Rotation
-void camera :: decHRot(float decVal)
-{
-  hAngle -= decVal;
-
-  if (hAngle < 0) {
-    hAngle += 360;
-  }
-}
-
-/// Increase Vertical Rotation
-void camera :: incVRot(float incVal)
-{
-  vAngle += incVal;
-
-  if (vAngle > 360) {
-    vAngle -= 360;
-  }
-}
-
-/// Decrease Vertical Rotation
-void camera :: decVRot(float decVal)
-{
-  vAngle -= decVal;
-
-  if (vAngle < 0) {
-    vAngle += 360;
-  }
 }
 
 ///////////////////////////////// POSITION CAMERA \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
@@ -317,49 +247,49 @@ void camera :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "bang", bang);
   CPPEXTERN_MSG0(classPtr, "reset", resetState);
 
-  CPPEXTERN_MSG1(classPtr, "hAngle", hAngleMess, float);
-  CPPEXTERN_MSG1(classPtr, "vAngle", vAngleMess, float);
-  CPPEXTERN_MSG1(classPtr, "distance", distanceMess, float);
-  CPPEXTERN_MSG1(classPtr, "speed", speedMess, float);
-  CPPEXTERN_MSG1(classPtr, "lookX", lookXMess, float);
-  CPPEXTERN_MSG1(classPtr, "lookY", lookYMess, float);
-  CPPEXTERN_MSG1(classPtr, "lookZ", lookZMess, float);
+  CPPEXTERN_MSG1(classPtr, "hAngle", hAngleMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "vAngle", vAngleMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "distance", distanceMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "speed", speedMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "lookX", lookXMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "lookY", lookYMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "lookZ", lookZMess, t_float);
 
-  CPPEXTERN_MSG1(classPtr, "forward", forwardMess, bool);
-  CPPEXTERN_MSG1(classPtr, "reverse", reverseMess, bool);
-  CPPEXTERN_MSG1(classPtr, "left", leftMess, bool);
-  CPPEXTERN_MSG1(classPtr, "right", rightMess, bool);
-  CPPEXTERN_MSG1(classPtr, "up", upMess, bool);
-  CPPEXTERN_MSG1(classPtr, "down", downMess, bool);
+  CPPEXTERN_MSG1(classPtr, "forward", forwardMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "reverse", reverseMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "left", leftMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "right", rightMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "up", upMess, t_float);
+  CPPEXTERN_MSG1(classPtr, "down", downMess, t_float);
   CPPEXTERN_MSG1(classPtr, "mode", modeMess, bool);
 }
 void camera :: speedMess(t_float val)
 {
   m_speed=val;
 }
-void camera :: forwardMess(bool val)
+void camera :: forwardMess(t_float val)
 {
-  forward=val;
+  m_forward=val;
 }
-void camera :: reverseMess(bool val)
+void camera :: reverseMess(t_float val)
 {
-  reverse=val;
+  m_reverse=val;
 }
-void camera :: leftMess(bool val)
+void camera :: leftMess(t_float val)
 {
-  left=val;
+  m_left=val;
 }
-void camera :: rightMess(bool val)
+void camera :: rightMess(t_float val)
 {
-  right=val;
+  m_right=val;
 }
-void camera :: upMess(bool val)
+void camera :: upMess(t_float val)
 {
-  up=val;
+  m_up=val;
 }
-void camera :: downMess(bool val)
+void camera :: downMess(t_float val)
 {
-  down=val;
+  m_down=val;
 }
 void camera :: modeMess(bool val)
 {

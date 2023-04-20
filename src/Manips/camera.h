@@ -67,16 +67,17 @@ protected:
   void     lookXMess(t_float val);
   void     lookYMess(t_float val);
   void     lookZMess(t_float val);
-  void     forwardMess(bool val);
-  void     reverseMess(bool val);
-  void     leftMess(bool val);
-  void     rightMess(bool val);
-  void     upMess(bool val);
-  void     downMess(bool val);
+  void     forwardMess(t_float val);
+  void     reverseMess(t_float val);
+  void     leftMess(t_float val);
+  void     rightMess(t_float val);
+  void     upMess(t_float val);
+  void     downMess(t_float val);
   void     modeMess(bool val);
 
-  bool    left, right, up, down, forward, reverse, m_mode;
-  t_float   m_speed;
+  t_float m_left, m_right, m_up, m_down, m_forward, m_reverse;
+  bool m_mode;
+  t_float m_speed;
   t_float hAngle, vAngle, distance;
 
   // This changes the position, view, and up vector of the camera.
@@ -93,11 +94,6 @@ protected:
   void SlideCamera(t_float speed );
   void calcCameraVals(void);
   void calcUpVector(void);
-  void incHRot(t_float val );
-  void decHRot(t_float val );
-  void incVRot(t_float val );
-  void decVRot(t_float val );
-
 
 private:
 
