@@ -84,7 +84,6 @@ protected:
   //////////
   // The pixBlock with the current image
   pixBlock      m_pixBlock;
-  imageStruct   m_imageStruct;
   int           m_pixsize;
 
   int           m_width, m_height;

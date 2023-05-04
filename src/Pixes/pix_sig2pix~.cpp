@@ -35,10 +35,6 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   , m_reqFormat(GL_RGBA)
   , m_reqType(0)
 {
-
-  m_pixBlock.image = m_imageStruct;
-  m_pixBlock.image.data=NULL;
-
   dimenMess((int)width, (int)height);   //tigital
 
   int i;
