@@ -74,6 +74,12 @@ protected:
   // the outlets~
   t_outlet *o_col[4];
 
+
+  virtual void filltypeMess(std::string, int);
+  enum  {CLEAR, FILL, LINE, WATERFALL} m_fillType;
+  int m_line;
+  size_t m_offset;
+
 private:
 
   //////////

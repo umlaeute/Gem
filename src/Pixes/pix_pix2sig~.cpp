@@ -28,6 +28,9 @@ CPPEXTERN_NEW_NAMED(pix_pix2sig, "pix_pix2sig~");
 //
 /////////////////////////////////////////////////////////
 pix_pix2sig :: pix_pix2sig(void)
+  : m_fillType(CLEAR)
+  , m_line(0)
+  , m_offset(0)
 {
   int i=4;
   while(i--) {
@@ -65,6 +68,32 @@ void pix_pix2sig :: render(GemState *state)
     img->image.copy2ImageStruct(&m_image);
   }
 }
+void pix_pix2sig :: filltypeMess(std::string type, int line) {
+  if (0) {
+  } else if("clear" == type) {
+    m_fillType = CLEAR;
+  } else if("fill" == type) {
+    m_fillType = FILL;
+  } else if("line" == type) {
+    m_fillType = LINE;
+  } else if("waterfall" == type) {
+    m_fillType = WATERFALL;
+  } else {
+    error("invalid mode '%s'", type.c_str());
+    return;
+  }
+  switch(m_fillType) {
+  case WATERFALL:
+    m_line = line;
+    break;
+  default:
+    if (line)
+      error("ignoring line (%d) for mode '%s'", line, type.c_str());
+  }
+  m_offset = 0;
+}
+
+
 
 /////////////////////////////////////////////////////////
 // signal Performance
@@ -125,30 +154,95 @@ namespace {
 void pix_pix2sig :: perform(t_sample**out, size_t N)
 {
   unsigned char* data = m_image.data;
-  long int size   = m_image.xsize * m_image.ysize;
-  int n = (N<size)?N:size;
+  const size_t width = m_image.xsize;
+  const size_t height = m_image.ysize;
+  const int csize = m_image.csize;
+  const int type = m_image.type;
+  const int format = m_image.format;
+  size_t pixsize = width * height;
+  size_t chansize = 0;
+  switch(type) {
+  default:
+    chansize=sizeof(unsigned char);
+    break;
+  case GL_FLOAT:
+    chansize=sizeof(GLfloat);
+    break;
+  case GL_DOUBLE:
+    chansize=sizeof(GLdouble);
+    break;
+  }
+  if (m_offset >= pixsize)
+    m_offset = 0;
 
-  if (data && n>0) {
+  size_t count = N;
+
+  switch(m_fillType) {
+  case CLEAR:
+    m_offset = 0;
+    break;
+  case FILL: break;
+  case LINE:
+    if (m_offset%width)
+      m_offset = 0;
+    if (count >= width)
+      count = width;
+    else {
+    }
+    break;
+  case WATERFALL:
+    if(m_line>=0) {
+      m_offset = m_line * width;
+    } else {
+      m_offset = (height+m_line) * width;
+    }
+    if (count >= width)
+      count = width;
+    break;
+  }
+
+
+  if (m_offset + count > pixsize)
+    count = pixsize - m_offset;
+
+  ssize_t offset = m_offset * csize;
+
+  //post("data[%p + %d] -> vecsize=%d pixsize=%d", data, m_offset, count, pixsize);
+  if (data && count>0) {
     switch(m_image.type) {
     default:
-      perform_pix2sig<unsigned char>(out, data, m_image.format, n, 1./255.0);
+      perform_pix2sig<unsigned char>(out, data + offset*chansize, m_image.format, count, 1./255.0);
       break;
     case GL_FLOAT:
-      perform_pix2sig<GLfloat>(out, data, m_image.format, n, 1.0);
+      perform_pix2sig<GLfloat>(out, data + offset*chansize, m_image.format, count, 1.0);
       break;
     case GL_DOUBLE:
-      perform_pix2sig<GLdouble>(out, data, m_image.format, n, 1.0);
+      perform_pix2sig<GLdouble>(out, data + offset*chansize, m_image.format, count, 1.0);
       break;
     }
-  } else {
-    n=N;
+    N -= count;
+  }
+
+  if(N) {
     t_sample*out_red   = out[0];
     t_sample*out_green = out[1];
     t_sample*out_blue  = out[2];
     t_sample*out_alpha = out[3];
-    while (n--) {
+    for(count=0; count<N; count++) {
       *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
     }
+  }
+
+  switch(m_fillType) {
+  case CLEAR: default:
+    m_offset = 0;
+    break;
+  case FILL:
+    m_offset += count;
+    break;
+  case LINE:
+    m_offset += width;
+    break;
   }
 
   return;
@@ -182,6 +276,14 @@ void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
   class_addmethod(classPtr,
       reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
       gensym("dsp"), A_CANT, A_NULL);
+
+  struct modeCallbackClass {
+    static void callback(void*data, t_symbol*s, t_float f) {
+      GetMyClass(data)->filltypeMess(s->s_name, (int)f);
+    }
+  };
+  modeCallbackClass modeCB;
+  class_addmethod(classPtr, reinterpret_cast<t_method>(modeCB.callback), gensym("mode"), A_SYMBOL, A_DEFFLOAT, 0);
 }
 
 void pix_pix2sig :: dspMessCallback(void *data,t_signal** sp)
