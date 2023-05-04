@@ -33,6 +33,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   : m_width(0), m_height(0)
   , m_reqFormat(GL_RGBA)
   , m_reqType(0)
+  , m_fillType(CLEAR)
 {
   dimenMess((int)width, (int)height);   //tigital
 
@@ -169,24 +170,87 @@ namespace {
 void pix_sig2pix :: perform(t_sample**signals, int n)
 {
   unsigned char* data = m_pixBlock.image.data;
-  ssize_t pixsize = m_pixBlock.image.width * m_pixBlock.image.height;
-
-  if (n > pixsize) {
-    n = pixsize;
+  const int width = m_pixBlock.image.xsize;
+  const int csize = m_pixBlock.image.csize;
+  const int type = m_pixBlock.image.type;
+  const int format = m_pixBlock.image.format;
+  ssize_t pixsize = width * m_pixBlock.image.ysize;
+  size_t chansize = 0;
+  switch(type) {
+  default:
+    chansize=sizeof(unsigned char);
+    break;
+  case GL_FLOAT:
+    chansize=sizeof(GLfloat);
+    break;
+  case GL_DOUBLE:
+    chansize=sizeof(GLdouble);
+    break;
   }
-  if (n>0) {
-    switch(m_pixBlock.image.type) {
-    default:
-      perform_sig2pix<unsigned char>(signals, data, m_pixBlock.image.format, n, 255.0);
-      break;
-    case GL_FLOAT:
-      perform_sig2pix<GLfloat>(signals, data, m_pixBlock.image.format, n, 1.0);
-      break;
-    case GL_DOUBLE:
-      perform_sig2pix<GLdouble>(signals, data, m_pixBlock.image.format, n, 1.0);
-      break;
+  if (m_offset >= pixsize)
+    m_offset = 0;
+
+  if(n<0) return;
+  size_t count = n;
+
+  switch(m_fillType) {
+  case CLEAR:
+    m_offset = 0;
+    break;
+  case FILL: break;
+  case LINE:
+    if (m_offset%width)
+      m_offset = 0;
+    if (count >= width)
+      count = width;
+    else {
     }
-    m_pixBlock.newimage = 1;
+    break;
+  }
+  if (m_offset + count > pixsize) {
+    count = pixsize - m_offset;
+  }
+
+  ssize_t offset = m_offset * csize;
+
+  switch(m_fillType) {
+  case CLEAR:
+    if(count<pixsize)
+      m_pixBlock.image.setBlack();
+    break;
+  case LINE:
+    if (count < width) {
+      memset(data + offset*chansize, 0, width*csize*chansize);
+    }
+    break;
+  default: break;
+  }
+
+  switch(type) {
+  default:
+    perform_sig2pix<unsigned char>(signals, data + offset * chansize, format, count, 255.0);
+    break;
+  case GL_FLOAT:
+    perform_sig2pix<GLfloat>(signals, data + offset * chansize, format, count, 1.0);
+    break;
+  case GL_DOUBLE:
+    perform_sig2pix<GLdouble>(signals, data + offset * chansize, format, count, 1.0);
+    break;
+  }
+  m_pixBlock.newimage = 1;
+
+  switch(m_fillType) {
+  case CLEAR: default:
+    m_offset = 0;
+    break;
+  case FILL:
+    m_offset += n;
+    break;
+  case LINE:
+    if(count < width) {
+    }
+    m_offset += width;
+    break;
   }
 }
 
@@ -210,7 +274,6 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_width = 0;
     m_height= 0;
   }
-  m_pixBlock.image.setBlack();
   dsp_add(cb.callback, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
@@ -229,6 +292,20 @@ void pix_sig2pix :: typeMess(std::string type) {
   dimenMess(m_width, m_height);
 }
 
+void pix_sig2pix :: filltypeMess(std::string type) {
+  if (0) {
+  } else if("clear" == type) {
+    m_fillType = CLEAR;
+  } else if("fill" == type) {
+    m_fillType = FILL;
+  } else if("line" == type) {
+    m_fillType = LINE;
+  } else {
+    error("invalid mode '%s'", type.c_str());
+  }
+  m_offset = 0;
+}
+
 /////////////////////////////////////////////////////////
 // Callback functions
 //
@@ -245,6 +322,7 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
       gensym("colorspace"), A_DEFSYMBOL, A_NULL);
   CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, int, int);
   CPPEXTERN_MSG1(classPtr, "type", typeMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "mode", filltypeMess, std::string);
 }
 
 

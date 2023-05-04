@@ -92,6 +92,12 @@ protected:
   int         m_reqFormat;
   unsigned int m_reqType;
 
+
+  virtual void filltypeMess(std::string);
+  enum  {CLEAR, FILL, LINE} m_fillType;
+  size_t m_offset;
+
+
 private:
 
   //////////
