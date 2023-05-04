@@ -170,7 +170,8 @@ namespace {
 void pix_sig2pix :: perform(t_sample**signals, int n)
 {
   unsigned char* data = m_pixBlock.image.data;
-  const int width = m_pixBlock.image.xsize;
+  const size_t width = m_pixBlock.image.xsize;
+  const size_t height = m_pixBlock.image.ysize;
   const int csize = m_pixBlock.image.csize;
   const int type = m_pixBlock.image.type;
   const int format = m_pixBlock.image.format;
@@ -191,8 +192,8 @@ void pix_sig2pix :: perform(t_sample**signals, int n)
     m_offset = 0;
 
   if(n<0) return;
-  size_t count = n;
 
+  size_t count = n;
   switch(m_fillType) {
   case CLEAR:
     m_offset = 0;
@@ -206,6 +207,17 @@ void pix_sig2pix :: perform(t_sample**signals, int n)
     else {
     }
     break;
+  case WATERFALL:
+    /* shift the image one line down */
+    for(size_t row=1; row<height; row++) {
+      const size_t rowsize = width*csize*chansize;
+      memcpy(data + rowsize*(height-row), data + rowsize*(height-row-1), rowsize);
+    }
+    /* start from the beginning */
+    m_offset = 0;
+    if (count >= width)
+      count = width;
+    break;
   }
   if (m_offset + count > pixsize) {
     count = pixsize - m_offset;
@@ -218,7 +230,7 @@ void pix_sig2pix :: perform(t_sample**signals, int n)
     if(count<pixsize)
       m_pixBlock.image.setBlack();
     break;
-  case LINE:
+  case LINE: case WATERFALL:
     if (count < width) {
       memset(data + offset*chansize, 0, width*csize*chansize);
     }
@@ -300,6 +312,8 @@ void pix_sig2pix :: filltypeMess(std::string type) {
     m_fillType = FILL;
   } else if("line" == type) {
     m_fillType = LINE;
+  } else if("waterfall" == type) {
+    m_fillType = WATERFALL;
   } else {
     error("invalid mode '%s'", type.c_str());
   }

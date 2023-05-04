@@ -94,7 +94,7 @@ protected:
 
 
   virtual void filltypeMess(std::string);
-  enum  {CLEAR, FILL, LINE} m_fillType;
+  enum  {CLEAR, FILL, LINE, WATERFALL} m_fillType;
   size_t m_offset;
 
 
