@@ -169,34 +169,42 @@ namespace {
   }
 };
 
-t_int* pix_sig2pix :: perform(t_int* w)
+void pix_sig2pix :: perform(t_sample**signals, int n)
 {
-  pix_sig2pix *x = GetMyClass((void*)w[1]);
-  int n = (t_int)(w[6]);
-  t_sample**signals = (t_sample**)w+2;
-  unsigned char* data = x->m_pixBlock.image.data;
-  if (n > x->m_pixsize) {
-    n = x->m_pixsize;
+  unsigned char* data = m_pixBlock.image.data;
+
+  if (n > m_pixsize) {
+    n = m_pixsize;
   }
   if (n>0) {
-    switch(x->m_pixBlock.image.type) {
+    switch(m_pixBlock.image.type) {
     default:
-      perform_sig2pix<unsigned char>(signals, data, x->m_pixBlock.image.format, n, 255.0);
+      perform_sig2pix<unsigned char>(signals, data, m_pixBlock.image.format, n, 255.0);
       break;
     case GL_FLOAT:
-      perform_sig2pix<GLfloat>(signals, data, x->m_pixBlock.image.format, n, 1.0);
+      perform_sig2pix<GLfloat>(signals, data, m_pixBlock.image.format, n, 1.0);
       break;
     case GL_DOUBLE:
-      perform_sig2pix<GLdouble>(signals, data, x->m_pixBlock.image.format, n, 1.0);
+      perform_sig2pix<GLdouble>(signals, data, m_pixBlock.image.format, n, 1.0);
       break;
     }
-    x->m_pixBlock.newimage = 1;
+    m_pixBlock.newimage = 1;
   }
-  return (w+7);
 }
 
 void pix_sig2pix :: dspMess(void *data, t_signal** sp)
 {
+  struct DSPCallbackClass {
+    static t_int* callback(t_int *w) {
+        pix_sig2pix *x = GetMyClass((void*)w[1]);
+        t_sample**signals = (t_sample**)w+2;
+        int n = (int)(w[6]);
+        x->perform(signals, n);
+        return (w+7);
+    }
+  };
+  DSPCallbackClass cb;
+
   if (m_width==0 && m_height==0) {
     int w = powerOfTwo((int)sqrt((double)sp[0]->s_n));
     int h = (w)?(sp[0]->s_n / w):0;
@@ -205,7 +213,7 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_height= 0;
   }
   m_pixBlock.image.setBlack();
-  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+  dsp_add(cb.callback, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
 
