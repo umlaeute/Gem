@@ -30,8 +30,7 @@ CPPEXTERN_NEW_NAMED_WITH_TWO_ARGS(pix_sig2pix, "pix_sig2pix~", t_float,A_DEFFLOA
 //
 /////////////////////////////////////////////////////////
 pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
-  : m_pixsize(0)
-  , m_width(0), m_height(0)
+  : m_width(0), m_height(0)
   , m_reqFormat(GL_RGBA)
   , m_reqType(0)
 {
@@ -82,7 +81,6 @@ void pix_sig2pix :: dimenMess(int width, int height)
   if(m_reqType)
     m_pixBlock.image.type = m_reqType;
 
-  m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
 }
@@ -91,7 +89,6 @@ void pix_sig2pix :: csMess(GLint cs)
 {
   m_reqFormat=cs;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
-  m_pixsize = m_pixBlock.image.xsize*m_pixBlock.image.ysize;
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
 }
@@ -172,9 +169,10 @@ namespace {
 void pix_sig2pix :: perform(t_sample**signals, int n)
 {
   unsigned char* data = m_pixBlock.image.data;
+  ssize_t pixsize = m_pixBlock.image.width * m_pixBlock.image.height;
 
-  if (n > m_pixsize) {
-    n = m_pixsize;
+  if (n > pixsize) {
+    n = pixsize;
   }
   if (n>0) {
     switch(m_pixBlock.image.type) {
