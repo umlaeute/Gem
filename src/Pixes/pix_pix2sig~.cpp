@@ -122,27 +122,22 @@ namespace {
 
 
 
-t_int* pix_pix2sig :: perform(t_int* w)
+void pix_pix2sig :: perform(t_sample**out, size_t N)
 {
-  pix_pix2sig *x = GetMyClass((void*)w[1]);
-  // hey this is RGBA only !!!
-  t_sample**out = (t_sample**)w+2;
-  int N = (t_int)(w[6]);
-
-  unsigned char* data = x->m_image.data;
-  long int size   = x->m_image.xsize * x->m_image.ysize;
+  unsigned char* data = m_image.data;
+  long int size   = m_image.xsize * m_image.ysize;
   int n = (N<size)?N:size;
 
   if (data && n>0) {
-    switch(x->m_image.type) {
+    switch(m_image.type) {
     default:
-      perform_pix2sig<unsigned char>(out, data, x->m_image.format, n, 1./255.0);
+      perform_pix2sig<unsigned char>(out, data, m_image.format, n, 1./255.0);
       break;
     case GL_FLOAT:
-      perform_pix2sig<GLfloat>(out, data, x->m_image.format, n, 1.0);
+      perform_pix2sig<GLfloat>(out, data, m_image.format, n, 1.0);
       break;
     case GL_DOUBLE:
-      perform_pix2sig<GLdouble>(out, data, x->m_image.format, n, 1.0);
+      perform_pix2sig<GLdouble>(out, data, m_image.format, n, 1.0);
       break;
     }
   } else {
@@ -156,12 +151,24 @@ t_int* pix_pix2sig :: perform(t_int* w)
     }
   }
 
-  return (w+7);
+  return;
 }
 
 void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 {
-  dsp_add(perform, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+  struct DSPCallbackClass {
+    static t_int* callback(t_int *w) {
+      pix_pix2sig *x = GetMyClass((void*)w[1]);
+      t_sample**signals = (t_sample**)w+2;
+      int n = (int)(w[6]);
+      if(n>0)
+        x->perform(signals, n);
+      return (w+7);
+    }
+  };
+  DSPCallbackClass cb;
+
+  dsp_add(cb.callback, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
 
