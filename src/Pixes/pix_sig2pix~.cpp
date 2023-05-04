@@ -175,7 +175,7 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
   const int csize = m_pixBlock.image.csize;
   const int type = m_pixBlock.image.type;
   const int format = m_pixBlock.image.format;
-  ssize_t pixsize = width * m_pixBlock.image.ysize;
+  size_t pixsize = width * height;
   size_t chansize = 0;
   switch(type) {
   default:
@@ -257,8 +257,6 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
     m_offset += n;
     break;
   case LINE:
-    if(count < width) {
-    }
     m_offset += width;
     break;
   }
@@ -315,6 +313,7 @@ void pix_sig2pix :: filltypeMess(std::string type) {
     m_fillType = WATERFALL;
   } else {
     error("invalid mode '%s'", type.c_str());
+    return;
   }
   m_offset = 0;
 }
