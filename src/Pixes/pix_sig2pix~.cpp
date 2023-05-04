@@ -53,10 +53,10 @@ pix_sig2pix :: ~pix_sig2pix()
 
 void pix_sig2pix :: dimenMess(int width, int height)
 {
-  if (width>32000) {
+  if (width>0x7FFF) {
     width=8;
   }
-  if (height>32000) {
+  if (height>0x7FFF) {
     height=8;
   }
   if (width  < 0) {
