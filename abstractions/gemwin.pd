@@ -266,8 +266,8 @@
 #X connect 38 2 39 0;
 #X connect 38 3 40 0;
 #X connect 41 0 42 0;
+#X connect 41 1 38 0;
 #X connect 42 0 43 0;
-#X connect 42 1 38 0;
 #X connect 43 0 44 0;
 #X restore 131 285 pd window;
 #X text 55 19 meant as a modular replacement for the internal [gemwin];
