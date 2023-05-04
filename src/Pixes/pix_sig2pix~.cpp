@@ -167,7 +167,7 @@ namespace {
   }
 };
 
-void pix_sig2pix :: perform(t_sample**signals, int n)
+void pix_sig2pix :: perform(t_sample**signals, size_t n)
 {
   unsigned char* data = m_pixBlock.image.data;
   const size_t width = m_pixBlock.image.xsize;
@@ -190,8 +190,6 @@ void pix_sig2pix :: perform(t_sample**signals, int n)
   }
   if (m_offset >= pixsize)
     m_offset = 0;
-
-  if(n<0) return;
 
   size_t count = n;
   switch(m_fillType) {
@@ -273,7 +271,8 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
         pix_sig2pix *x = GetMyClass((void*)w[1]);
         t_sample**signals = (t_sample**)w+2;
         int n = (int)(w[6]);
-        x->perform(signals, n);
+        if(n>0)
+          x->perform(signals, n);
         return (w+7);
     }
   };

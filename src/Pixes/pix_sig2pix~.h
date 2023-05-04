@@ -53,7 +53,7 @@ protected:
   //////////
 
   // DSP perform
-  void perform(t_sample**signals, int count);
+  void perform(t_sample**signals, size_t count);
 
   //////////
   // Do the rendering
