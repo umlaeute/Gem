@@ -336,6 +336,14 @@ void pix_texture :: render(GemState *state)
     }
 
     img->image.copy2ImageStruct(&m_imagebuf);
+    switch(m_imagebuf.type) {
+    case GL_FLOAT:
+    case GL_DOUBLE:
+      internalformat =  GL_RGBA32F;
+      break;
+    default:
+      internalformat = GL_RGBA;
+    }
 
     x_2 = powerOfTwo(m_imagebuf.xsize);
     y_2 = powerOfTwo(m_imagebuf.ysize);
