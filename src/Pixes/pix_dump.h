@@ -80,6 +80,7 @@ protected:
   //////////
   // the buffer
   int           m_xsize,  m_ysize;
+  unsigned int  m_format;
   int           m_csize;
   unsigned int  m_bufsize;
   t_atom       *m_buffer;

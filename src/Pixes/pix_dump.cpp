@@ -40,20 +40,13 @@ CPPEXTERN_NEW(pix_dump);
 /////////////////////////////////////////////////////////
 pix_dump :: pix_dump() :
   m_dataOut(0),
-  m_xsize(0), m_ysize(0), m_csize(3),
+  m_xsize(0), m_ysize(0), m_format(0),
   m_buffer(0),
   m_bufsize(0),
   m_data(0),
   m_bytemode(false),
   m_mode(GEM_RGBA)
 {
-  m_xsize = 0;
-  m_ysize = 0;
-
-  m_bufsize = m_xsize * m_ysize * m_csize;
-
-  m_buffer = new t_atom[m_bufsize];
-
   m_dataOut = outlet_new(this->x_obj, &s_list);
 }
 
@@ -74,17 +67,18 @@ pix_dump :: ~pix_dump()
 /////////////////////////////////////////////////////////
 void pix_dump :: processImage(imageStruct &image)
 {
+  size_t csize = image.csize;
   m_xsize = image.xsize;
   m_ysize = image.ysize;
-  m_csize = image.csize;
+  m_format = image.format;
 
-  if(m_xsize * m_ysize * m_csize > m_bufsize) {
+  if(m_xsize * m_ysize * csize > m_bufsize) {
     // resize the image buffer
     if(m_buffer) {
       delete [] m_buffer;
       m_buffer = 0;
     }
-    m_bufsize = m_xsize * m_ysize * m_csize;
+    m_bufsize = m_xsize * m_ysize * csize;
     m_buffer = new t_atom[m_bufsize];
   }
 
@@ -194,24 +188,6 @@ void pix_dump :: trigger()
   int roi_y2=m_ysize;
 
   t_float scale = m_bytemode?1:(1./255.);
-  int format;
-  switch(m_csize) {
-  case 1:
-    format = GEM_GRAY;
-    break;
-  case 2:
-    format = GEM_YUV;
-    break;
-  case 3:
-    format = GEM_RGB;
-    break;
-  case 4:
-    format = GEM_RGBA;
-    break;
-  default:
-    error("unknown format with csize=%d", m_csize);
-    return;
-  }
 
   if ( m_doROI ) {
     roi_x1=m_roi.x1*(0.5+m_xsize);
@@ -220,7 +196,7 @@ void pix_dump :: trigger()
     roi_y2=m_roi.y2*(0.5+m_ysize);
   }
   size_t count = pix2atoms(m_buffer, m_mode, scale,
-                           m_data, m_xsize, m_ysize, format,
+                           m_data, m_xsize, m_ysize, m_format,
                            roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
   outlet_list(m_dataOut, gensym("list"), count, m_buffer);
 
