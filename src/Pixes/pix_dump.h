@@ -81,17 +81,12 @@ protected:
 
   //////////
   // the buffer
-  int           m_xsize,  m_ysize;
-  unsigned int  m_format, m_type;
+  imageStruct   m_image;
   unsigned int  m_bufsize;
   t_atom       *m_buffer;
   // whether we output byte values (0..255) or normalized values (0..1.f)
   // defaults to FALSE
   bool m_bytemode;
-
-  /////////
-  // pointer to the image data
-  unsigned char*m_data;
 
   ////////
   // dump mode

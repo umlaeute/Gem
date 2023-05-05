@@ -41,13 +41,11 @@ CPPEXTERN_NEW(pix_dump);
 /////////////////////////////////////////////////////////
 pix_dump :: pix_dump() :
   m_dataOut(0),
-  m_xsize(0), m_ysize(0), m_format(0),
-  m_buffer(0),
-  m_bufsize(0),
-  m_data(0),
+  m_buffer(0), m_bufsize(0),
   m_bytemode(false),
   m_mode(GEM_RGBA)
 {
+  m_image.data = 0;
   m_dataOut = outlet_new(this->x_obj, &s_list);
 }
 
@@ -68,23 +66,17 @@ pix_dump :: ~pix_dump()
 /////////////////////////////////////////////////////////
 void pix_dump :: processImage(imageStruct &image)
 {
-  size_t csize = image.csize;
-  m_xsize = image.xsize;
-  m_ysize = image.ysize;
-  m_format = image.format;
-  m_type = image.type;
-
-  if(m_xsize * m_ysize * csize > m_bufsize) {
+  size_t bufsize = image.xsize * image.ysize * image.csize;
+  image.copy2ImageStruct(&m_image);
+  if(bufsize > m_bufsize) {
     // resize the image buffer
     if(m_buffer) {
       delete [] m_buffer;
       m_buffer = 0;
     }
-    m_bufsize = m_xsize * m_ysize * csize;
+    m_bufsize = bufsize;
     m_buffer = new t_atom[m_bufsize];
   }
-
-  m_data = image.data;
 }
 void pix_dump :: processFloat32(imageStruct &image)
 {
@@ -186,7 +178,7 @@ namespace {
 /////////////////////////////////////////////////////////
 void pix_dump :: trigger()
 {
-  if (!m_data) {
+  if (!m_image.data) {
     return;
   }
 
@@ -194,35 +186,35 @@ void pix_dump :: trigger()
   int i = 0, j=0;
 
   int roi_x1=0;
-  int roi_x2=m_xsize;
+  int roi_x2=m_image.xsize;
   int roi_y1=0;
-  int roi_y2=m_ysize;
+  int roi_y2=m_image.ysize;
 
   t_float scale = m_bytemode?1:(1./255.);
 
   if ( m_doROI ) {
-    roi_x1=m_roi.x1*(0.5+m_xsize);
-    roi_x2=m_roi.x2*(0.5+m_xsize);
-    roi_y1=m_roi.y1*(0.5+m_ysize);
-    roi_y2=m_roi.y2*(0.5+m_ysize);
+    roi_x1=m_roi.x1*(0.5+m_image.xsize);
+    roi_x2=m_roi.x2*(0.5+m_image.xsize);
+    roi_y1=m_roi.y1*(0.5+m_image.ysize);
+    roi_y2=m_roi.y2*(0.5+m_image.ysize);
   }
 
   size_t count;
-  switch(m_type) {
+  switch(m_image.type) {
   case GL_FLOAT:
     count = pix2atoms(m_buffer, m_mode, scale,
-                      (GLfloat*)m_data, m_xsize, m_ysize, m_format,
+                      (GLfloat*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     post("got %d atoms for FLOAT", count);
     break;
   case GL_DOUBLE:
     count = pix2atoms(m_buffer, m_mode, scale,
-                      (GLdouble*)m_data, m_xsize, m_ysize, m_format,
+                      (GLdouble*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     break;
   default:
     count = pix2atoms(m_buffer, m_mode, scale,
-                      (unsigned char*)m_data, m_xsize, m_ysize, m_format,
+                      (unsigned char*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
   }
   outlet_list(m_dataOut, gensym("list"), count, m_buffer);
