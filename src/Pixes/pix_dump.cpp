@@ -28,8 +28,7 @@
 
 #include "pix_dump.h"
 
-CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg,
-                            A_DEFFLOAT);
+CPPEXTERN_NEW(pix_dump);
 
 /////////////////////////////////////////////////////////
 //
@@ -39,33 +38,17 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_dump, t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_dump :: pix_dump(t_floatarg fx, t_floatarg fy) :
+pix_dump :: pix_dump() :
   m_dataOut(0),
-  xsize(0), ysize(0),
   m_xsize(0), m_ysize(0), m_csize(3),
   m_buffer(0),
   m_bufsize(0),
-  oldimagex(0), oldimagey(0),
-  m_xstep(1), m_ystep(1),
   m_data(0),
   m_bytemode(false),
   m_mode(GEM_RGBA)
 {
-  xsize = static_cast<int>(fx);
-  ysize = static_cast<int>(fy);
-
-  if (xsize < 0) {
-    xsize = 0;
-  }
-  if (ysize < 0) {
-    ysize = 0;
-  }
-
-  m_xsize = xsize;
-  m_ysize = ysize;
-
-  oldimagex = xsize;
-  oldimagey = ysize;
+  m_xsize = 0;
+  m_ysize = 0;
 
   m_bufsize = m_xsize * m_ysize * m_csize;
 
@@ -91,21 +74,11 @@ pix_dump :: ~pix_dump()
 /////////////////////////////////////////////////////////
 void pix_dump :: processImage(imageStruct &image)
 {
-  int x = m_xsize, y = m_ysize, c = m_csize;
+  m_xsize = image.xsize;
+  m_ysize = image.ysize;
+  m_csize = image.csize;
 
-  if (image.xsize != oldimagex) {
-    oldimagex = image.xsize;
-    m_xsize = ((!xsize) || (xsize > oldimagex))?oldimagex:xsize;
-  }
-  if (image.ysize != oldimagey) {
-    oldimagey = image.ysize;
-    m_ysize = ((!ysize) || (ysize > oldimagey))?oldimagey:ysize;
-  }
-
-  if (image.csize != m_csize) {
-    m_csize = image.csize;
-  }
-  if(m_xsize * m_ysize * m_csize != m_bufsize) {
+  if(m_xsize * m_ysize * m_csize > m_bufsize) {
     // resize the image buffer
     if(m_buffer) {
       delete [] m_buffer;
@@ -115,49 +88,9 @@ void pix_dump :: processImage(imageStruct &image)
     m_buffer = new t_atom[m_bufsize];
   }
 
-  m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>(m_xsize));
-  m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>(m_ysize)) * image.xsize;
-
   m_data = image.data;
 }
 
-/////////////////////////////////////////////////////////
-// processYUVImage
-//
-/////////////////////////////////////////////////////////
-void pix_dump :: processYUVImage(imageStruct &image)
-{
-  int x = m_xsize, y = m_ysize, c = m_csize;
-
-  if (image.xsize != oldimagex) {
-    oldimagex = image.xsize;
-    m_xsize = ((!xsize) || (xsize > oldimagex))?oldimagex:xsize;
-  }
-  if (image.ysize != oldimagey) {
-    oldimagey = image.ysize;
-    m_ysize = ((!ysize) || (ysize > oldimagey))?oldimagey:ysize;
-  }
-
-  if (image.csize != m_csize) {
-    m_csize = image.csize;
-  }
-
-  if(m_xsize * m_ysize * m_csize != m_bufsize) {
-    // resize the image buffer
-    if(m_buffer) {
-      delete [] m_buffer;
-      m_buffer = 0;
-    }
-    m_bufsize = m_xsize * m_ysize * m_csize;
-    m_buffer = new t_atom[m_bufsize];
-  }
-
-  m_xstep = m_csize * (static_cast<float>(image.xsize)/static_cast<float>
-                       (m_xsize));
-  m_ystep = m_csize * (static_cast<float>(image.ysize)/static_cast<float>
-                       (m_ysize)) * image.xsize;
-  m_data = image.data;
-}
 
 namespace {
   template<typename T>

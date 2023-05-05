@@ -50,7 +50,7 @@ public:
 
   //////////
   // Constructor
-  pix_dump(t_floatarg fx, t_floatarg fy);
+  pix_dump();
 
 protected:
 
@@ -61,9 +61,6 @@ protected:
   //////////
   // All we want is the pixel information, so this is a complete override.
   virtual void    processImage(imageStruct &image);
-
-  //////////
-  virtual void    processYUVImage(imageStruct &image);
 
   //////////
   void                    trigger();
@@ -82,7 +79,6 @@ protected:
 
   //////////
   // the buffer
-  int           xsize, ysize;      // proposed x/y-sizes
   int           m_xsize,  m_ysize;
   int           m_csize;
   unsigned int  m_bufsize;
@@ -90,14 +86,6 @@ protected:
   // whether we output byte values (0..255) or normalized values (0..1.f)
   // defaults to FALSE
   bool m_bytemode;
-
-  int           oldimagex;
-  int           oldimagey;
-
-  //////////
-  // navigation
-  float         m_xstep;
-  float         m_ystep;
 
   /////////
   // pointer to the image data
