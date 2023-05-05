@@ -60,6 +60,9 @@ protected:
 
   //////////
   // All we want is the pixel information, so this is a complete override.
+  virtual void processImage(imageStruct &image);
+  virtual void processFloat32(imageStruct &image);
+  virtual void processFloat64(imageStruct &image);
 
   //////////
   void trigger();
@@ -79,8 +82,7 @@ protected:
   //////////
   // the buffer
   int           m_xsize,  m_ysize;
-  unsigned int  m_format;
-  int           m_csize;
+  unsigned int  m_format, m_type;
   unsigned int  m_bufsize;
   t_atom       *m_buffer;
   // whether we output byte values (0..255) or normalized values (0..1.f)

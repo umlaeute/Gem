@@ -27,6 +27,7 @@
 
 
 #include "pix_dump.h"
+#include "Gem/GemGL.h"
 
 CPPEXTERN_NEW(pix_dump);
 
@@ -71,6 +72,7 @@ void pix_dump :: processImage(imageStruct &image)
   m_xsize = image.xsize;
   m_ysize = image.ysize;
   m_format = image.format;
+  m_type = image.type;
 
   if(m_xsize * m_ysize * csize > m_bufsize) {
     // resize the image buffer
@@ -83,6 +85,14 @@ void pix_dump :: processImage(imageStruct &image)
   }
 
   m_data = image.data;
+}
+void pix_dump :: processFloat32(imageStruct &image)
+{
+  processImage(image);
+}
+void pix_dump :: processFloat64(imageStruct &image)
+{
+  processImage(image);
 }
 
 
@@ -159,6 +169,7 @@ namespace {
     case GEM_RGBA:
       for(size_t r=y0; r<rows; r++) {
         const T*data = pixels + (width*r + x0) * 4;
+        post("row#%d @ %p", r, data);
         size_t n = data4_to_atoms(atoms, data, cols, scale, channelsRGBA);
         count += n;
         atoms += n;
@@ -195,9 +206,25 @@ void pix_dump :: trigger()
     roi_y1=m_roi.y1*(0.5+m_ysize);
     roi_y2=m_roi.y2*(0.5+m_ysize);
   }
-  size_t count = pix2atoms(m_buffer, m_mode, scale,
-                           m_data, m_xsize, m_ysize, m_format,
-                           roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+
+  size_t count;
+  switch(m_type) {
+  case GL_FLOAT:
+    count = pix2atoms(m_buffer, m_mode, scale,
+                      (GLfloat*)m_data, m_xsize, m_ysize, m_format,
+                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+    post("got %d atoms for FLOAT", count);
+    break;
+  case GL_DOUBLE:
+    count = pix2atoms(m_buffer, m_mode, scale,
+                      (GLdouble*)m_data, m_xsize, m_ysize, m_format,
+                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+    break;
+  default:
+    count = pix2atoms(m_buffer, m_mode, scale,
+                      (unsigned char*)m_data, m_xsize, m_ysize, m_format,
+                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+  }
   outlet_list(m_dataOut, gensym("list"), count, m_buffer);
 
 }
