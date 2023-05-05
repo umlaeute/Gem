@@ -201,12 +201,12 @@ void pix_dump :: trigger()
   size_t count;
   switch(m_image.type) {
   case GL_FLOAT:
-    count = pix2atoms(m_buffer, m_mode, scale,
+    count = pix2atoms(m_buffer, m_mode, 1.,
                       (GLfloat*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     break;
   case GL_DOUBLE:
-    count = pix2atoms(m_buffer, m_mode, scale,
+    count = pix2atoms(m_buffer, m_mode, 1.,
                       (GLdouble*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     break;
