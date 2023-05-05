@@ -65,18 +65,6 @@ void GemPixObj :: render(GemState *state)
   if (!state || !state->get(GemState::_PIX, image)) {
     return;
   }
-  if(image) {
-    switch (image->image.type) {
-    case GL_FLOAT:
-      error("cannot handle FLOAT images");
-      return;
-    case GL_DOUBLE:
-      error("cannot handle DOUBLE images");
-      return;
-    default:
-      break;
-    }
-  }
   gem::Rectangle*roi=NULL;
   state->get(GemState::getKey("pix.roi.rectangle"),roi);
   if(roi) {
@@ -100,59 +88,68 @@ void GemPixObj :: render(GemState *state)
     image->image.copy2ImageStruct(&cachedPixBlock.image);
     image = &cachedPixBlock;
     if (m_processOnOff) {
-      switch(image->image.format) {
-      case GL_RGBA:
-      case GL_BGRA_EXT:
-        switch(m_simd) {
-        case(GEM_SIMD_MMX):
-          processRGBAMMX(image->image);
-          break;
-        case(GEM_SIMD_SSE2):
-          processRGBASSE2(image->image);
-          break;
-        case(GEM_SIMD_ALTIVEC):
-          processRGBAAltivec(image->image);
-          break;
-        default:
-          processRGBAImage(image->image);
-        }
+      switch (image->image.type) {
+      case GL_FLOAT:
+        processFloat32(image->image);
         break;
-      case GL_RGB:
-      case GL_BGR_EXT:
-        processRGBImage(image->image);
-        break;
-      case GL_LUMINANCE:
-        switch(m_simd) {
-        case(GEM_SIMD_MMX):
-          processGrayMMX(image->image);
-          break;
-        case(GEM_SIMD_SSE2):
-          processGraySSE2(image->image);
-          break;
-        case(GEM_SIMD_ALTIVEC):
-          processGrayAltivec(image->image);
-          break;
-        default:
-          processGrayImage(image->image);
-        }
-        break;
-      case GL_YUV422_GEM:
-        switch(m_simd) {
-        case(GEM_SIMD_MMX):
-          processYUVMMX(image->image);
-          break;
-        case(GEM_SIMD_SSE2):
-          processYUVSSE2(image->image);
-          break;
-        case(GEM_SIMD_ALTIVEC):
-          processYUVAltivec(image->image);
-          break;
-        default:
-          processYUVImage(image->image);
-        }
+      case GL_DOUBLE:
+        processFloat64(image->image);
         break;
       default:
-        processImage(image->image);
+        switch(image->image.format) {
+        case GL_RGBA:
+        case GL_BGRA_EXT:
+          switch(m_simd) {
+          case(GEM_SIMD_MMX):
+            processRGBAMMX(image->image);
+            break;
+          case(GEM_SIMD_SSE2):
+            processRGBASSE2(image->image);
+            break;
+          case(GEM_SIMD_ALTIVEC):
+            processRGBAAltivec(image->image);
+            break;
+          default:
+            processRGBAImage(image->image);
+          }
+          break;
+        case GL_RGB:
+        case GL_BGR_EXT:
+          processRGBImage(image->image);
+          break;
+        case GL_LUMINANCE:
+          switch(m_simd) {
+          case(GEM_SIMD_MMX):
+            processGrayMMX(image->image);
+            break;
+          case(GEM_SIMD_SSE2):
+            processGraySSE2(image->image);
+            break;
+          case(GEM_SIMD_ALTIVEC):
+            processGrayAltivec(image->image);
+            break;
+          default:
+            processGrayImage(image->image);
+          }
+          break;
+        case GL_YUV422_GEM:
+          switch(m_simd) {
+          case(GEM_SIMD_MMX):
+            processYUVMMX(image->image);
+            break;
+          case(GEM_SIMD_SSE2):
+            processYUVSSE2(image->image);
+            break;
+          case(GEM_SIMD_ALTIVEC):
+            processYUVAltivec(image->image);
+            break;
+          default:
+            processYUVImage(image->image);
+          }
+          break;
+        default:
+          processImage(image->image);
+        }
       }
     }
   }
@@ -191,6 +188,50 @@ void GemPixObj :: processImage(imageStruct &image)
     error("cannot handle this format (%x) !", image.format);
   }
 }
+void GemPixObj :: processFloat32(imageStruct &image)
+{
+  switch (image.format) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    error("cannot handle RGBA/float image");
+    break;
+  case GL_RGB:
+  case GL_BGR_EXT:
+    error("cannot handle RGB/float image");
+    break;
+  case GL_LUMINANCE:
+    error("cannot handle Grey/float image");
+    break;
+  case GL_YUV422_GEM:
+    error("cannot handle YUV/float image");
+    break;
+  default:
+    error("cannot handle this format (0x%X/float) !", image.format);
+  }
+}
+
+void GemPixObj :: processFloat64(imageStruct &image)
+{
+  switch (image.format) {
+  case GL_RGBA:
+  case GL_BGRA_EXT:
+    error("cannot handle RGBA/double image");
+    break;
+  case GL_RGB:
+  case GL_BGR_EXT:
+    error("cannot handle RGB/double image");
+    break;
+  case GL_LUMINANCE:
+    error("cannot handle Grey/double image");
+    break;
+  case GL_YUV422_GEM:
+    error("cannot handle YUV/double image");
+    break;
+  default:
+    error("cannot handle this format (0x%X/double) !", image.format);
+  }
+}
+
 
 /////////////////////////////////////////////////////////
 // processImage (typed)

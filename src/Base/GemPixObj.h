@@ -89,6 +89,17 @@ protected:
   virtual void  processYUVSSE2(imageStruct &image);
   virtual void  processYUVAltivec(imageStruct &image);
 
+
+  //////////
+  // The derived class should override this if it provides
+  // processing for GLFloat resp GLdouble images,
+  // independent of the image.format
+  // This is called whenever a new image comes through.
+  // The default is to output an error
+  virtual void  processFloat32(imageStruct &image);
+  virtual void  processFloat64(imageStruct &image);
+
+
   //////////
   // If the derived class needs the image resent.
   //    This sets the dirty bit on the pixBlock.
