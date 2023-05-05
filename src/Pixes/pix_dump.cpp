@@ -161,7 +161,6 @@ namespace {
     case GEM_RGBA:
       for(size_t r=y0; r<rows; r++) {
         const T*data = pixels + (width*r + x0) * 4;
-        post("row#%d @ %p", r, data);
         size_t n = data4_to_atoms(atoms, data, cols, scale, channelsRGBA);
         count += n;
         atoms += n;
@@ -205,7 +204,6 @@ void pix_dump :: trigger()
     count = pix2atoms(m_buffer, m_mode, scale,
                       (GLfloat*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
                       roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
-    post("got %d atoms for FLOAT", count);
     break;
   case GL_DOUBLE:
     count = pix2atoms(m_buffer, m_mode, scale,
