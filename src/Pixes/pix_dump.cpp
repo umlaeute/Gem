@@ -90,6 +90,7 @@ void pix_dump :: processFloat64(imageStruct &image)
 
 namespace {
   template<typename T>
+  static inline
   size_t data4_to_atoms(t_atom*dest, const T*src, size_t n, t_float scale, const int channels[4]) {
     size_t count = 0;
     while(n--) {
@@ -106,6 +107,7 @@ namespace {
     return count;
   }
   template<typename T>
+  static inline
   size_t data_to_atoms(t_atom*dest, const T*src, size_t N, t_float scale) {
     size_t count = 0;
     for(size_t n=0; n<N; n++) {
@@ -116,11 +118,16 @@ namespace {
     return count;
   }
   template<typename T>
+  static inline
   size_t pix2atoms(t_atom*atoms, int mode, t_float scale,
-                 const T*pixels, size_t width, size_t height, unsigned int format,
-                 size_t x0, size_t y0, size_t cols, size_t rows)
+                   const imageStruct&image,
+                   size_t x0, size_t y0, size_t cols, size_t rows)
   {
     size_t count = 0;
+    const T*pixels = static_cast<const T*>(static_cast<const void*>(image.data));
+    size_t width = image.ysize;
+    size_t height = image.xsize;
+
     const int extrachannel = (GEM_RGBA==mode)?1:0;
     const int channelsRGBA[] = {chRed, chGreen, chBlue, extrachannel?chAlpha:-1};
     const int channelsUYVY[] = {chU, chY0, chV, extrachannel?chY1:-1};
@@ -131,7 +138,7 @@ namespace {
     if (y0 + rows > height)
       rows = height - y0;
 
-    switch(format) {
+    switch(image.format) {
     case GEM_GRAY:
       for(size_t r=y0; r<rows; r++) {
         const T*data = pixels + width*r + x0;
@@ -200,19 +207,16 @@ void pix_dump :: trigger()
   size_t count = 0;
   switch(m_image.type) {
   case GL_FLOAT:
-    count = pix2atoms(m_buffer, m_mode, 1.,
-                      (GLfloat*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
-                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+    count = pix2atoms<GLfloat>(m_buffer, m_mode, 1., m_image,
+                               roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     break;
   case GL_DOUBLE:
-    count = pix2atoms(m_buffer, m_mode, 1.,
-                      (GLdouble*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
-                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+    count = pix2atoms<GLdouble>(m_buffer, m_mode, 1., m_image,
+                                roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
     break;
   default:
-    count = pix2atoms(m_buffer, m_mode, scale,
-                      (unsigned char*)m_image.data, m_image.xsize, m_image.ysize, m_image.format,
-                      roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+    count = pix2atoms<unsigned char>(m_buffer, m_mode, scale, m_image,
+                                     roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
   }
   outlet_list(m_dataOut, gensym("list"), count, m_buffer);
 
