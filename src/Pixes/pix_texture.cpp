@@ -334,12 +334,7 @@ void pix_texture :: render(GemState *state)
       m_rebuildList = true;
     }
 
-    m_imagebuf.xsize =img->image.xsize;
-    m_imagebuf.ysize =img->image.ysize;
-    m_imagebuf.csize =img->image.csize;
-    m_imagebuf.format=img->image.format;
-    m_imagebuf.type  =img->image.type;
-    m_imagebuf.data  =img->image.data;
+    img->image.copy2ImageStruct(&m_imagebuf);
 
     x_2 = powerOfTwo(m_imagebuf.xsize);
     y_2 = powerOfTwo(m_imagebuf.ysize);
