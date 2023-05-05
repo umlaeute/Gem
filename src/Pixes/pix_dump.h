@@ -60,22 +60,21 @@ protected:
 
   //////////
   // All we want is the pixel information, so this is a complete override.
-  virtual void    processImage(imageStruct &image);
 
   //////////
-  void                    trigger();
-  void                    bytemodeMess(bool);
+  void trigger();
+  void bytemodeMess(bool);
 
   //////////
   // Set to RGBA-mode
-  void            RGBAMess(void);
+  void RGBAMess(void);
   //////////
   // Set to RGB-mode
-  void            RGBMess(void);
+  void RGBMess(void);
 
   //////////
   // The color outlet
-  t_outlet        *m_dataOut;
+  t_outlet     *m_dataOut;
 
   //////////
   // the buffer
@@ -90,22 +89,11 @@ protected:
 
   /////////
   // pointer to the image data
-  unsigned char *m_data;
+  unsigned char*m_data;
 
   ////////
   // dump mode
-  int            m_mode;
-
-private:
-
-  //////////
-  // Static member callbacks
-  static void             triggerMessCallback(void *dump);
-  static void             bytemodeMessCallback(void *dump, t_float val);
-  static void             GREYMessCallback(void *dump);
-  static void             RGBAMessCallback(void *dump);
-  static void             RGBMessCallback(void *dump);
-
+  int           m_mode;
 };
 
 #endif  // for header file
