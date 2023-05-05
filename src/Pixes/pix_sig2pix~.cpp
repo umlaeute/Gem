@@ -33,6 +33,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   : m_width(0), m_height(0)
   , m_reqFormat(GL_RGBA)
   , m_reqType(0)
+  , m_upsidedown(true)
   , m_fillType(CLEAR)
 {
   dimenMess((int)width, (int)height);   //tigital
@@ -248,6 +249,7 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
     break;
   }
   m_pixBlock.newimage = 1;
+  m_pixBlock.image.upsidedown = m_upsidedown;
 
   switch(m_fillType) {
   case CLEAR: default:
@@ -317,6 +319,9 @@ void pix_sig2pix :: filltypeMess(std::string type) {
   }
   m_offset = 0;
 }
+void pix_sig2pix :: upsidedownMess(bool up) {
+  m_upsidedown = up;
+}
 
 /////////////////////////////////////////////////////////
 // Callback functions
@@ -335,6 +340,7 @@ void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, int, int);
   CPPEXTERN_MSG1(classPtr, "type", typeMess, std::string);
   CPPEXTERN_MSG1(classPtr, "mode", filltypeMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "upsidedown", upsidedownMess, bool);
 }
 
 

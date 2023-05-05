@@ -97,6 +97,9 @@ protected:
   enum  {CLEAR, FILL, LINE, WATERFALL} m_fillType;
   size_t m_offset;
 
+  virtual void upsidedownMess(bool);
+  bool m_upsidedown;
+
 
 private:
 
