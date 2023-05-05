@@ -118,7 +118,7 @@ namespace {
   template<typename T>
   size_t pix2atoms(t_atom*atoms, int mode, t_float scale,
                  const T*pixels, size_t width, size_t height, unsigned int format,
-                 size_t x0, size_t y0, size_t rows, size_t cols)
+                 size_t x0, size_t y0, size_t cols, size_t rows)
   {
     size_t count = 0;
     const int extrachannel = (GEM_RGBA==mode)?1:0;
@@ -126,11 +126,10 @@ namespace {
     const int channelsUYVY[] = {chU, chY0, chV, extrachannel?chY1:-1};
     if(x0 > width || (y0 > height))
       return 0;
-    if (x0 + rows > width)
-      rows = width - x0;
-    if (y0 + cols > height)
-      cols = height - y0;
-
+    if (x0 + cols > width)
+      cols = width - x0;
+    if (y0 + rows > height)
+      rows = height - y0;
 
     switch(format) {
     case GEM_GRAY:
@@ -198,7 +197,7 @@ void pix_dump :: trigger()
     roi_y2=m_roi.y2*(0.5+m_image.ysize);
   }
 
-  size_t count;
+  size_t count = 0;
   switch(m_image.type) {
   case GL_FLOAT:
     count = pix2atoms(m_buffer, m_mode, 1.,
