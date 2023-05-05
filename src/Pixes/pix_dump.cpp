@@ -159,6 +159,89 @@ void pix_dump :: processYUVImage(imageStruct &image)
   m_data = image.data;
 }
 
+namespace {
+  template<typename T>
+  size_t data4_to_atoms(t_atom*dest, const T*src, size_t n, t_float scale, const int channels[4]) {
+    size_t count = 0;
+    while(n--) {
+      for(size_t i=0; i<4; i++) {
+        int ch = channels[i];
+        if(ch<0)continue;
+        t_float v = static_cast<t_float>(src[channels[ch]]) * scale;
+        SETFLOAT(dest, v);
+        dest++;
+        count++;
+      }
+      src+=4;
+    }
+    return count;
+  }
+  template<typename T>
+  size_t data_to_atoms(t_atom*dest, const T*src, size_t N, t_float scale) {
+    size_t count = 0;
+    for(size_t n=0; n<N; n++) {
+      t_float v = static_cast<t_float>(*src++) * scale;
+      SETFLOAT(dest+n, v);
+      count++;
+    }
+    return count;
+  }
+  template<typename T>
+  size_t pix2atoms(t_atom*atoms, int mode, t_float scale,
+                 const T*pixels, size_t width, size_t height, unsigned int format,
+                 size_t x0, size_t y0, size_t rows, size_t cols)
+  {
+    size_t count = 0;
+    const int extrachannel = (GEM_RGBA==mode)?1:0;
+    const int channelsRGBA[] = {chRed, chGreen, chBlue, extrachannel?chAlpha:-1};
+    const int channelsUYVY[] = {chU, chY0, chV, extrachannel?chY1:-1};
+    if(x0 > width || (y0 > height))
+      return 0;
+    if (x0 + rows > width)
+      rows = width - x0;
+    if (y0 + cols > height)
+      cols = height - y0;
+
+
+    switch(format) {
+    case GEM_GRAY:
+      for(size_t r=y0; r<rows; r++) {
+        const T*data = pixels + width*r + x0;
+        size_t n = data_to_atoms(atoms, data, cols, scale);
+        count += n;
+        atoms += n;
+      }
+      break;
+    case GEM_YUV:
+      for(size_t r=y0; r<rows; r++) {
+        const T*data = pixels + (width*r + x0) * 2;
+        size_t n = data4_to_atoms(atoms, data, cols>>1, scale, channelsUYVY);
+        count += n;
+        atoms += n;
+      }
+      break;
+    case GEM_RGB:
+      /* TODO: honor chRed,chGreen/chBlue */
+      for(size_t r=y0; r<rows; r++) {
+        const T*data = pixels + (width*r + x0) * 3;
+        size_t n = data_to_atoms(atoms, data, cols * 3, scale);
+        count += n;
+        atoms += n;
+      }
+      break;
+    case GEM_RGBA:
+      for(size_t r=y0; r<rows; r++) {
+        const T*data = pixels + (width*r + x0) * 4;
+        size_t n = data4_to_atoms(atoms, data, cols, scale, channelsRGBA);
+        count += n;
+        atoms += n;
+      }
+      break;
+    }
+    return count;
+  }
+};
+
 /////////////////////////////////////////////////////////
 // trigger
 //
@@ -177,115 +260,37 @@ void pix_dump :: trigger()
   int roi_y1=0;
   int roi_y2=m_ysize;
 
-  unsigned char *buffer = m_data;
   t_float scale = m_bytemode?1:(1./255.);
+  int format;
+  switch(m_csize) {
+  case 1:
+    format = GEM_GRAY;
+    break;
+  case 2:
+    format = GEM_YUV;
+    break;
+  case 3:
+    format = GEM_RGB;
+    break;
+  case 4:
+    format = GEM_RGBA;
+    break;
+  default:
+    error("unknown format with csize=%d", m_csize);
+    return;
+  }
 
   if ( m_doROI ) {
     roi_x1=m_roi.x1*(0.5+m_xsize);
     roi_x2=m_roi.x2*(0.5+m_xsize);
     roi_y1=m_roi.y1*(0.5+m_ysize);
     roi_y2=m_roi.y2*(0.5+m_ysize);
-
-    buffer = m_data + m_csize*(( i / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
-                               (i % (roi_x2-roi_x1)) + roi_x1);
   }
-  n=roi_x1;
-  m=roi_y1;
+  size_t count = pix2atoms(m_buffer, m_mode, scale,
+                           m_data, m_xsize, m_ysize, format,
+                           roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+  outlet_list(m_dataOut, gensym("list"), count, m_buffer);
 
-  int picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
-
-  unsigned char *data, *line;
-
-  data = line = buffer;
-  switch(m_csize) {
-  case 4:
-    while (picturesize-- > 0) {
-      t_float r, g, b;
-      r = static_cast<t_float>(data[chRed]) * scale;
-      SETFLOAT(&m_buffer[i], r);
-      i++;
-      g = static_cast<t_float>(data[chGreen]) * scale;
-      SETFLOAT(&m_buffer[i], g);
-      i++;
-      b = static_cast<t_float>(data[chBlue]) * scale;
-      SETFLOAT(&m_buffer[i], b);
-      i++;
-      if ( GEM_RGBA == m_mode ) {
-        t_float a = static_cast<t_float>(data[chAlpha]) * scale;
-        SETFLOAT(&m_buffer[i], a);
-        i++;
-      }
-      j++;
-      if ( m_doROI ) {
-        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
-                                 (j % (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        data+=4;
-      }
-    }
-    break;
-  case 2:
-    while (n < m_ysize) {
-      while (m < m_xsize/2) {
-        t_float y,u,v;
-        u = static_cast<t_float>(data[0]) * scale;
-        SETFLOAT(&m_buffer[i], u);
-        i++;
-        y = static_cast<t_float>(data[1]) * scale;
-        SETFLOAT(&m_buffer[i], y);
-        i++;
-        v = static_cast<t_float>(data[2]) * scale;
-        SETFLOAT(&m_buffer[i], v);
-        i++;
-        if ( GEM_RGBA == m_mode ) {
-          y = static_cast<t_float>(data[3]) * scale;
-          SETFLOAT(&m_buffer[i], y);
-          i++;
-        }
-
-        m++;
-        data = line + static_cast<int>(m_xstep * static_cast<float>(m));
-      }
-      m = 0;
-      n++;
-      line = m_data + static_cast<int>(m_ystep*n);
-      data = line;
-    }
-    break;
-  case 1:
-  default:
-    int datasize=m_xsize*m_ysize*m_csize/4;
-    int leftover=m_xsize*m_ysize*m_csize-datasize*4;
-    while (datasize--) {
-      t_float v;
-      v = static_cast<t_float>(data[0]) * scale;
-      SETFLOAT(&m_buffer[i+0], v);
-      v = static_cast<t_float>(data[1]) * scale;
-      SETFLOAT(&m_buffer[i+1], v);
-      v = static_cast<t_float>(data[2]) * scale;
-      SETFLOAT(&m_buffer[i+2], v);
-      i+=3;
-      if ( GEM_RGBA == m_mode ) {
-        v = static_cast<t_float>(data[3]) * scale;
-        SETFLOAT(&m_buffer[i], v);
-        i++;
-      }
-      if ( m_doROI ) {
-        j++;
-        data = m_data + m_csize*(( j / (roi_x2-roi_x1) + roi_y1 ) * m_xsize +
-                                 (j % (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        data+=4;
-      }
-    }
-
-    while (leftover--) {
-      t_float v = static_cast<t_float>(*data++) * scale;
-      SETFLOAT(&m_buffer[i], v);
-      i++;
-    }
-  }
-  outlet_list(m_dataOut, gensym("list"), i, m_buffer);
 }
 
 /////////////////////////////////////////////////////////
