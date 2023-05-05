@@ -348,6 +348,60 @@ void pix_gain :: processYUVAltivec(imageStruct &image)
 }
 #endif /* __VEC__ */
 
+
+void pix_gain :: processFloat32(imageStruct &image)
+{
+  size_t datasize = image.xsize * image.ysize;
+  float *pixels = (float*)image.data;
+  float red = m_gain[chRed], green = m_gain[chGreen], blue = m_gain[chBlue];
+  float alpha = m_gain[chAlpha], gray = m_gain[chGray];
+  float Y = m_gain[1];
+  float U = m_gain[2];
+  float V = m_gain[3];
+
+
+  switch(image.format) {
+  case GEM_RGBA:
+    while(datasize--) {
+      pixels[chRed] *= red;
+      pixels[chGreen] *= green;
+      pixels[chBlue] *= blue;
+      pixels[chAlpha] *= alpha;
+      pixels += 4;
+    }
+    break;
+  case GEM_RGB:
+    while(datasize--) {
+      pixels[chRed] *= red;
+      pixels[chGreen] *= green;
+      pixels[chBlue] *= blue;
+      pixels += 4;
+    }
+    break;
+  case GEM_YUV:
+    datasize>>=1;
+    while(datasize--) {
+      pixels[chU] *= U;
+      pixels[chY0] *= Y;
+      pixels[chV] *= V;
+      pixels[chY1] *= Y;
+      pixels += 4;
+    }
+    break;
+  case GEM_GRAY:
+    while(datasize--) {
+      pixels[chGray] *= gray;
+      pixels += 1;
+    }
+    break;
+  default:
+    error("cannot handle 0x%X/float image", image.format);
+    break;
+  }
+}
+
+
+
 /////////////////////////////////////////////////////////
 // vecGainMess
 //
