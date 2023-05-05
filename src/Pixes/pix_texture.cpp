@@ -293,6 +293,7 @@ void pix_texture :: render(GemState *state)
   int do_rectangle = (m_rectangle)?canRectangle:0;
   int newfilm = 0;
   pixBlock*img=NULL;
+  GLint internalformat = GL_RGBA;
 
   if(m_pbo && (m_numPbo != m_oldNumPbo)) {
     /* the PBO settings have changed, invalidate the old PBO */
@@ -448,10 +449,11 @@ void pix_texture :: render(GemState *state)
 
       }
       //if the texture is a power of two in size then there is no need to subtexture
-      glTexImage2D(m_textureType, 0,
-                   m_imagebuf.csize,
-                   m_imagebuf.xsize,
-                   m_imagebuf.ysize, 0,
+      glTexImage2D(m_textureType, /* target */
+                   0, /* level */
+                   internalformat, /* internalformat */
+                   m_imagebuf.xsize, m_imagebuf.ysize,
+                   0, /* border */
                    m_imagebuf.format,
                    m_imagebuf.type,
                    m_imagebuf.data);
@@ -527,7 +529,7 @@ void pix_texture :: render(GemState *state)
         if ( !do_rectangle ) {
           glTexImage2D( m_textureType, 0,
                         //m_buffer.csize,
-                        GL_RGBA,
+                        internalformat,
                         m_buffer.xsize,
                         m_buffer.ysize, 0,
                         m_buffer.format,
@@ -538,7 +540,7 @@ void pix_texture :: render(GemState *state)
         } else {//this deals with rectangle textures that are h*w
           glTexImage2D(m_textureType, 0,
                        //  m_buffer.csize,
-                       GL_RGBA,
+                       internalformat,
                        m_imagebuf.xsize,
                        m_imagebuf.ysize, 0,
                        m_imagebuf.format,
