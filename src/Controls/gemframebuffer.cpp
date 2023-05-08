@@ -585,37 +585,24 @@ void gemframebuffer :: fixFormat(GLenum wantFormat)
     break;
   case  GL_RGB_FLOAT32_ATI:
     m_internalformat = GL_RGB_FLOAT32_ATI;
-    m_format = GL_RGB;
+    m_format = GL_RGB_GEM;
     break;
   case  GL_RGBA32F:
     m_internalformat = GL_RGBA32F;
-    m_format = GL_RGB;
+    m_format = GL_RGBA;
     break;
   case GL_RGBA:
     m_internalformat = GL_RGBA;
-    m_format = GL_RGBA;
+    m_format = GL_RGBA_GEM;
     break;
   case GL_YUV422_GEM:
     m_format=GL_YUV422_GEM;
     m_internalformat=GL_RGB8;
-    break;
-  }
-
 #ifdef __APPLE__
-  switch(wantFormat) {
-  case  GL_RGB_FLOAT32_ATI:
-    m_format = GL_BGR;
-    break;
-  case GL_RGBA:
-    m_format = GL_BGRA;
-    break;
-  case GL_YUV422_GEM:
     m_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-    break;
-  default:
+#endif
     break;
   }
-#endif
 }
 
 
