@@ -282,7 +282,8 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
     /* fill the remainder of the current line */
     if(1) {
       size_t count = N;
-      size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
+      size_t r = m_offsetY;
+      if (!m_image.upsidedown) r = height-r-1;
       if ((m_offsetX + count) > width) count = (width - m_offsetX);
       p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
       processed += count;
