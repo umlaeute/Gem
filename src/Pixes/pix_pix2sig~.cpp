@@ -68,28 +68,53 @@ void pix_pix2sig :: render(GemState *state)
     img->image.copy2ImageStruct(&m_image);
   }
 }
-void pix_pix2sig :: filltypeMess(std::string type, int line) {
-  if (0) {
-  } else if("clear" == type) {
-    m_fillType = CLEAR;
-  } else if("fill" == type) {
-    m_fillType = FILL;
-  } else if("line" == type) {
-    m_fillType = LINE;
-  } else if("waterfall" == type) {
-    m_fillType = WATERFALL;
-  } else {
-    error("invalid mode '%s'", type.c_str());
+void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
+  if(!argc || A_SYMBOL != argv->a_type) {
+    error("usage: %s <type> [<params>]", s->s_name);
     return;
   }
-  switch(m_fillType) {
-  case WATERFALL:
-    m_line = line;
-    break;
-  default:
-    if (line)
-      error("ignoring line (%d) for mode '%s'", line, type.c_str());
+  std::string type(atom_getsymbol(argv)->s_name);
+  filltype_t filltype = INVALID;
+  if (0) {
+  } else if("clear" == type) {
+    filltype = CLEAR;
+  } else if("fill" == type) {
+    filltype = FILL;
+  } else if("line" == type) {
+    filltype = LINE;
+  } else if("waterfall" == type) {
+    filltype = WATERFALL;
   }
+
+  if (INVALID == filltype) {
+    error("invalid %s '%s' (must be one of 'clear', 'fill', 'line' or 'waterfall')", s->s_name, type.c_str());
+    return;
+  }
+  if(WATERFALL == filltype) {
+    switch(argc) {
+    case 1:
+      m_line = 0;
+      break;
+    case 2:
+      if(A_FLOAT == argv[1].a_type) {
+        m_line = atom_getfloat(argv+1);
+        break;
+      }
+        /* fallthrough */
+    default:
+      error("usage: %s %s [<line>]", s->s_name, type.c_str());
+      return;
+    }
+  } else {
+    switch(argc) {
+    case 1:
+      break;
+    default:
+      error("usage: %s %s (no arguments!)", s->s_name, type.c_str());
+      return;
+    }
+  }
+  m_fillType = filltype;
   m_offset = 0;
 }
 
@@ -99,12 +124,13 @@ void pix_pix2sig :: filltypeMess(std::string type, int line) {
 // signal Performance
 namespace {
   template<typename T>
-  void perform_pix2sig(t_sample**out, void*data_, unsigned int format, size_t n, t_sample scale) {
+  void perform_pix2sig(t_sample**out, void*data_, unsigned int format, size_t N, t_sample scale) {
     T*data = static_cast<T*>(data_);
     t_sample*out_red   = out[0];
     t_sample*out_green = out[1];
     t_sample*out_blue  = out[2];
     t_sample*out_alpha = out[3];
+    size_t n = N;
 
     switch(format) {
     case GEM_RGBA:
@@ -146,6 +172,10 @@ namespace {
       }
       break;
     }
+    out[0] += N;
+    out[1] += N;
+    out[2] += N;
+    out[3] += N;
   }
 };
 
@@ -156,11 +186,16 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   unsigned char* data = m_image.data;
   const size_t width = m_image.xsize;
   const size_t height = m_image.ysize;
-  const int csize = m_image.csize;
+  const size_t csize = (m_image.csize > 0)?m_image.csize:0;
   const int type = m_image.type;
   const int format = m_image.format;
   size_t pixsize = width * height;
   size_t chansize = 0;
+  size_t offset = 0;
+  t_sample*outsignal[] = {
+    out[0], out[1], out[2], out[3]
+  };
+
   switch(type) {
   default:
     chansize=sizeof(unsigned char);
@@ -175,60 +210,65 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   if (m_offset >= pixsize)
     m_offset = 0;
 
+  int line=m_line;
+  if (line<0)
+    line = height+line;
+
   size_t count = N;
 
   switch(m_fillType) {
   case CLEAR:
     m_offset = 0;
     break;
-  case FILL: break;
+  case FILL:
+    break;
   case LINE:
     if (m_offset%width)
       m_offset = 0;
     if (count >= width)
       count = width;
-    else {
-    }
     break;
   case WATERFALL:
-    if(m_line>=0) {
-      m_offset = m_line * width;
-    } else {
-      m_offset = (height+m_line) * width;
-    }
+    if((line > height) || line < 0)
+      goto cleanup;
+    m_offset = line * width;
     if (count >= width)
       count = width;
     break;
   }
 
-
   if (m_offset + count > pixsize)
     count = pixsize - m_offset;
 
-  ssize_t offset = m_offset * csize;
-
-  //post("data[%p + %d] -> vecsize=%d pixsize=%d", data, m_offset, count, pixsize);
+  offset = m_offset * csize;
+#if 0
+  post("data[%p + %d(%d)] -> %dx%d count=%d vecsize=%d pixsize=%d chansize=%d",
+       data, (int)m_offset, (int)offset,
+       (int)width, (int)height,
+       (int)count, (int)N, (int)pixsize, (int)chansize);
+#endif
   if (data && count>0) {
     switch(m_image.type) {
     default:
-      perform_pix2sig<unsigned char>(out, data + offset*chansize, m_image.format, count, 1./255.0);
+      perform_pix2sig<unsigned char>(outsignal, data + offset*chansize, m_image.format, count, 1./255.0);
       break;
     case GL_FLOAT:
-      perform_pix2sig<GLfloat>(out, data + offset*chansize, m_image.format, count, 1.0);
+      perform_pix2sig<GLfloat>(outsignal, data + offset*chansize, m_image.format, count, 1.0);
       break;
     case GL_DOUBLE:
-      perform_pix2sig<GLdouble>(out, data + offset*chansize, m_image.format, count, 1.0);
+      perform_pix2sig<GLdouble>(outsignal, data + offset*chansize, m_image.format, count, 1.0);
       break;
     }
     N -= count;
   }
 
+ cleanup:
   if(N) {
-    t_sample*out_red   = out[0];
-    t_sample*out_green = out[1];
-    t_sample*out_blue  = out[2];
-    t_sample*out_alpha = out[3];
-    for(count=0; count<N; count++) {
+    t_sample*out_red   = outsignal[0];
+    t_sample*out_green = outsignal[1];
+    t_sample*out_blue  = outsignal[2];
+    t_sample*out_alpha = outsignal[3];
+    for(size_t remn=0; remn<N; remn++) {
       *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
     }
   }
@@ -280,4 +320,5 @@ void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
   };
   dspCallbackClass dspCB;
   class_addmethod(classPtr, reinterpret_cast<t_method>(dspCB.callback), gensym("dsp"), A_CANT, 0);
+  CPPEXTERN_MSG (classPtr, "mode", filltypeMess);
 }

@@ -75,8 +75,9 @@ protected:
   t_outlet *o_col[4];
 
 
-  virtual void filltypeMess(std::string, int);
-  enum  {CLEAR, FILL, LINE, WATERFALL} m_fillType;
+  virtual void filltypeMess(t_symbol*, int, t_atom*);
+  typedef enum {CLEAR, FILL, LINE, WATERFALL, INVALID}  filltype_t;
+  filltype_t m_fillType;
   int m_line;
   size_t m_offset;
 };
