@@ -60,7 +60,7 @@ protected:
 
   //////////
   // DSP-Message
-  virtual void  dspMess(void *data, t_signal** sp);
+  virtual void  dspMess(t_signal** sp);
 
   //-----------------------------------
   // GROUP:     Image data
@@ -79,12 +79,6 @@ protected:
   enum  {CLEAR, FILL, LINE, WATERFALL} m_fillType;
   int m_line;
   size_t m_offset;
-
-private:
-
-  //////////
-  // static member functions
-  static void   dspMessCallback(void* data,t_signal** sp);
 };
 
 #endif  // for header file

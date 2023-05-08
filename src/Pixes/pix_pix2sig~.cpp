@@ -248,7 +248,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   return;
 }
 
-void pix_pix2sig :: dspMess(void *data, t_signal** sp)
+void pix_pix2sig :: dspMess(t_signal** sp)
 {
   struct DSPCallbackClass {
     static t_int* callback(t_int *w) {
@@ -262,7 +262,7 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
   };
   DSPCallbackClass cb;
 
-  dsp_add(cb.callback, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+  dsp_add(cb.callback, 6, this, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
 
@@ -273,20 +273,11 @@ void pix_pix2sig :: dspMess(void *data, t_signal** sp)
 
 void pix_pix2sig :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-      reinterpret_cast<t_method>(pix_pix2sig::dspMessCallback),
-      gensym("dsp"), A_CANT, A_NULL);
-
-  struct modeCallbackClass {
-    static void callback(void*data, t_symbol*s, t_float f) {
-      GetMyClass(data)->filltypeMess(s->s_name, (int)f);
+  struct dspCallbackClass {
+    static void callback(void*data, t_signal** sp) {
+      GetMyClass(data)->dspMess(sp);
     }
   };
-  modeCallbackClass modeCB;
-  class_addmethod(classPtr, reinterpret_cast<t_method>(modeCB.callback), gensym("mode"), A_SYMBOL, A_DEFFLOAT, 0);
-}
-
-void pix_pix2sig :: dspMessCallback(void *data,t_signal** sp)
-{
-  GetMyClass(data)->dspMess(data, sp);
+  dspCallbackClass dspCB;
+  class_addmethod(classPtr, reinterpret_cast<t_method>(dspCB.callback), gensym("dsp"), A_CANT, 0);
 }
