@@ -71,11 +71,11 @@ protected:
   virtual void  dimenMess(int w, int h);
   virtual void typeMess(std::string);
 
-  virtual void  csMess(int cs);
+  virtual void  csMess(std::string);
 
   //////////
   // DSP-Message
-  virtual void  dspMess(void *data, t_signal** sp);
+  virtual void  dspMess(t_signal**);
 
   //-----------------------------------
   // GROUP:     Image data
@@ -99,14 +99,6 @@ protected:
 
   virtual void upsidedownMess(bool);
   bool m_upsidedown;
-
-
-private:
-
-  //////////
-  // static member functions
-  static void   dspMessCallback(void* data,t_signal** sp);
-  static void   csMessCallback(void *data, t_symbol*s);
 };
 
 #endif  // for header file

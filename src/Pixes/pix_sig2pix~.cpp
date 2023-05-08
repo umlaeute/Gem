@@ -37,9 +37,7 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   , m_fillType(CLEAR)
 {
   dimenMess((int)width, (int)height);   //tigital
-
-  int i;
-  for (i=0; i<3; i++) {
+  for (int i=0; i<3; i++) {
     inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal,
               &s_signal);  /* channels inlet */
   }
@@ -87,8 +85,13 @@ void pix_sig2pix :: dimenMess(int width, int height)
   m_pixBlock.image.setBlack();
 }
 
-void pix_sig2pix :: csMess(GLint cs)
+void pix_sig2pix :: csMess(std::string s)
 {
+  int cs = getPixFormat(s.c_str());
+  if(cs <= 0) {
+    error("colorspace must be 'Gray', 'YUV' or 'RGBA'");
+    return;
+  }
   m_reqFormat=cs;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
   m_pixBlock.image.reallocate();
@@ -264,7 +267,7 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
   }
 }
 
-void pix_sig2pix :: dspMess(void *data, t_signal** sp)
+void pix_sig2pix :: dspMess(t_signal** sp)
 {
   struct DSPCallbackClass {
     static t_int* callback(t_int *w) {
@@ -285,7 +288,7 @@ void pix_sig2pix :: dspMess(void *data, t_signal** sp)
     m_width = 0;
     m_height= 0;
   }
-  dsp_add(cb.callback, 6, data, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+  dsp_add(cb.callback, 6, this->x_obj, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
 
@@ -330,31 +333,18 @@ void pix_sig2pix :: upsidedownMess(bool up) {
 
 void pix_sig2pix :: obj_setupCallback(t_class *classPtr)
 {
+  struct dspCallbackClass {
+    static void callback(void*data, t_signal** sp) {
+      GetMyClass(data)->dspMess(sp);
+    }
+  };
+  dspCallbackClass dspCB;
   class_addmethod(classPtr, nullfn, gensym("signal"), A_NULL);
-  class_addmethod(classPtr,
-      reinterpret_cast<t_method>(pix_sig2pix::dspMessCallback),
-      gensym("dsp"), A_CANT, A_NULL);
-  class_addmethod(classPtr,
-      reinterpret_cast<t_method>(pix_sig2pix::csMessCallback),
-      gensym("colorspace"), A_DEFSYMBOL, A_NULL);
+  class_addmethod(classPtr, reinterpret_cast<t_method>(dspCB.callback), gensym("dsp"), A_CANT, 0);
+
   CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, int, int);
+  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, std::string);
   CPPEXTERN_MSG1(classPtr, "type", typeMess, std::string);
   CPPEXTERN_MSG1(classPtr, "mode", filltypeMess, std::string);
   CPPEXTERN_MSG1(classPtr, "upsidedown", upsidedownMess, bool);
-}
-
-
-void pix_sig2pix :: dspMessCallback(void *data,t_signal** sp)
-{
-  GetMyClass(data)->dspMess(data, sp);
-}
-
-void pix_sig2pix ::csMessCallback(void *data, t_symbol*s)
-{
-  int cs = getPixFormat(s->s_name);
-  if(cs>0) {
-    GetMyClass(data)->csMess(cs);
-  } else {
-    GetMyClass(data)->error("colorspace must be Grey, YUV or RGBA");
-  }
 }
