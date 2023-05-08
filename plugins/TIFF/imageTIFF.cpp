@@ -70,6 +70,27 @@ static void imageTIFF_warnhandler(const char*module, const char*fmt,
 {
   imageTIFF_verbosehandler(0, module, fmt, ap);
 }
+typedef struct _imageTIFF_handlers {
+  TIFFErrorHandler error, warning;
+} t_imageTIFF_handlers;
+static t_imageTIFF_handlers imageTIFF_sethandlers(t_imageTIFF_handlers&handlers)
+{
+  t_imageTIFF_handlers newhandlers;
+  newhandlers.error = TIFFSetErrorHandler(handlers.error);
+  newhandlers.warning = TIFFSetWarningHandler(handlers.warning);
+  return newhandlers;
+}
+static t_imageTIFF_handlers imageTIFF_sethandlers(void)
+{
+  t_imageTIFF_handlers handlers;
+  handlers.error = TIFFSetErrorHandler(imageTIFF_errorhandler);
+  handlers.warning = TIFFSetWarningHandler(imageTIFF_warnhandler);
+  return handlers;
+}
+#define tiffhandlers_init()   t_imageTIFF_handlers tiffhandler = imageTIFF_sethandlers()
+#define tiffhandlers_cleanup() imageTIFF_sethandlers(tiffhandler)
+
+
 };
 
 /////////////////////////////////////////////////////////
@@ -101,8 +122,10 @@ imageTIFF :: ~imageTIFF(void)
 bool imageTIFF :: load(std::string filename, imageStruct&result,
                        gem::Properties&props)
 {
+  tiffhandlers_init();
   TIFF *tif = TIFFOpen(filename.c_str(), "r");
   if (tif == NULL) {
+    tiffhandlers_cleanup();
     return false;
   }
 
@@ -145,7 +168,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
       pd_error(0, "[GEM:imageTIFF] can't allocate memory for scanline buffer: %s",
                filename.c_str());
       TIFFClose(tif);
-      return(false);
+      tiffhandlers_cleanup();
+      return false;
     }
 
     result.reallocate();
@@ -195,7 +219,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
       verbose(0, "[GEM:imageTIFF] Error reading in image file '%s': %s",
               filename.c_str(), emsg);
       TIFFClose(tif);
-      return(false);
+      tiffhandlers_cleanup();
+      return false;
     }
 
     uint32_t*raster = reinterpret_cast<uint32_t*>(_TIFFmalloc(npixels * sizeof(
@@ -204,7 +229,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
       pd_error(0, "[GEM:imageTIFF] Unable to allocate memory for image '%s'",
                filename.c_str());
       TIFFClose(tif);
-      return(false);
+      tiffhandlers_cleanup();
+      return false;
     }
 
     if (TIFFRGBAImageGet(&img, raster, width, height) == 0) {
@@ -212,7 +238,8 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
               filename.c_str(), emsg);
       _TIFFfree(raster);
       TIFFClose(tif);
-      return(false);
+      tiffhandlers_cleanup();
+      return false;
     }
 
     TIFFRGBAImageEnd(&img);
@@ -308,12 +335,14 @@ bool imageTIFF::save(const imageStruct&constimage,
                      const std::string&filename, const std::string&mimetype,
                      const gem::Properties&props)
 {
+  tiffhandlers_init();
   TIFF *tif = NULL;
   imageStruct image;
 
   tif=TIFFOpen(filename.c_str(), "w");
   if (tif == NULL) {
-    return false;
+      tiffhandlers_cleanup();
+      return false;
   }
   image.convertFrom(&constimage, GEM_RAW_RGBA);
   image.fixUpDown();
@@ -379,12 +408,14 @@ bool imageTIFF::save(const imageStruct&constimage,
       verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
               filename.c_str());
       TIFFClose(tif);
-      return(false);
+      tiffhandlers_cleanup();
+      return false;
     }
     srcLine += yStride;
   }
   TIFFClose(tif);
 
+  tiffhandlers_cleanup();
   return true;
 }
 
