@@ -319,7 +319,10 @@ const std::string getFormatString(int fmt)
     format="BGRA";
     break;
   case GL_RGB_FLOAT32_ATI:
-    format="RGB32";
+    format="RGB32F";
+    break;
+  case GL_RGBA32F:
+    format="RGBA32F";
     break;
   default:
     format="<unknown>";
@@ -619,6 +622,9 @@ void gemframebuffer :: formatMess(std::string format)
     tmp_format =  GL_RGB_FLOAT32_ATI;
   } else if ("RGBA32F"==format) {
     tmp_format =  GL_RGBA32F;
+  } else {
+    error("unknown format '%s'", format.c_str());
+    return;
   }
 
   if(tmp_format) {
@@ -635,7 +641,10 @@ void gemframebuffer :: typeMess(std::string type)
     m_type = GL_INT;
   } else if("UINT"==type) {
     m_type = GL_UNSIGNED_INT;
+  } else if("BYTE"==type) {
+    m_type = GL_UNSIGNED_BYTE;
   } else {
+    error("unknown type '%s', fall back to 'BYTE'", type.c_str());
     type="BYTE";
     m_type=GL_UNSIGNED_BYTE;
   }
