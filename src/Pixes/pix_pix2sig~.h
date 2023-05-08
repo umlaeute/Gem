@@ -76,10 +76,10 @@ protected:
 
 
   virtual void filltypeMess(t_symbol*, int, t_atom*);
+  size_t m_offsetX, m_offsetY;
   typedef enum {CLEAR, FILL, LINE, WATERFALL, INVALID}  filltype_t;
   filltype_t m_fillType;
   int m_line;
-  size_t m_offset;
 };
 
 #endif  // for header file

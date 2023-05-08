@@ -29,8 +29,8 @@ CPPEXTERN_NEW_NAMED(pix_pix2sig, "pix_pix2sig~");
 /////////////////////////////////////////////////////////
 pix_pix2sig :: pix_pix2sig(void)
   : m_fillType(CLEAR)
+  , m_offsetX(0), m_offsetY(0)
   , m_line(0)
-  , m_offset(0)
 {
   int i=4;
   while(i--) {
@@ -86,11 +86,11 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
     filltype = WATERFALL;
   }
 
-  if (INVALID == filltype) {
+  switch(filltype) {
+  case INVALID:
     error("invalid %s '%s' (must be one of 'clear', 'fill', 'line' or 'waterfall')", s->s_name, type.c_str());
     return;
-  }
-  if(WATERFALL == filltype) {
+  case WATERFALL:
     switch(argc) {
     case 1:
       m_line = 0;
@@ -100,12 +100,13 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
         m_line = atom_getfloat(argv+1);
         break;
       }
-        /* fallthrough */
+      /* fallthrough */
     default:
       error("usage: %s %s [<line>]", s->s_name, type.c_str());
       return;
     }
-  } else {
+    break;
+  default:
     switch(argc) {
     case 1:
       break;
@@ -113,9 +114,11 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
       error("usage: %s %s (no arguments!)", s->s_name, type.c_str());
       return;
     }
+    break;
   }
+
+  m_offsetX = m_offsetY = 0;
   m_fillType = filltype;
-  m_offset = 0;
 }
 
 
@@ -124,7 +127,7 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
 // signal Performance
 namespace {
   template<typename T>
-  void perform_pix2sig(t_sample**out, void*data_, unsigned int format, size_t N, t_sample scale) {
+  void perform_pix2sig(t_sample**out, void*data_, size_t N, unsigned int format, t_sample scale) {
     T*data = static_cast<T*>(data_);
     t_sample*out_red   = out[0];
     t_sample*out_green = out[1];
@@ -186,21 +189,32 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   unsigned char* data = m_image.data;
   const size_t width = m_image.xsize;
   const size_t height = m_image.ysize;
-  const size_t csize = (m_image.csize > 0)?m_image.csize:0;
-  const int type = m_image.type;
-  const int format = m_image.format;
-  size_t pixsize = width * height;
-  size_t offset = 0;
+  const size_t pixsize = width * height;
   t_sample*outsignal[] = {
     out[0], out[1], out[2], out[3]
   };
 
-  typedef void (*performer_t)(t_sample**out, void*data_, unsigned int format, size_t N, t_sample scale);
+  /* metadata for the actual converters */
+  typedef void (*performer_t)(t_sample**out, void*data_, size_t N, unsigned int format, t_sample scale);
   performer_t p2s_perform;
   size_t chansize = 0;
   t_sample scale = 1.;
 
-  switch(type) {
+  size_t processed = 0; /* number of converted pixels */
+  int line; /* linenumber in waterfall mode */
+
+  if(!pixsize || !data)
+    goto cleanup;
+
+  line = m_line;
+  if(line>0 && line>height)
+    goto cleanup;
+  if(line<0 && line<-height)
+    goto cleanup;
+  if(line<0)
+    line = height + line;
+
+  switch(m_image.type) {
   default:
     p2s_perform = perform_pix2sig<unsigned char>;
     chansize=sizeof(unsigned char);
@@ -217,79 +231,78 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
     scale = 1.;
     break;
   }
-  if (m_offset >= pixsize)
-    m_offset = 0;
+  chansize *= m_image.csize;
 
-  int line=m_line;
-  if (line<0)
-    line = height+line;
-
-  size_t count = N;
+  m_offsetX%=width;
+  m_offsetY%=height;
 
   switch(m_fillType) {
-  case CLEAR:
-    m_offset = 0;
+  case CLEAR: /* flat (always from the beginning) */
+    m_offsetX = m_offsetY = 0;
+    /* fallthrough */
+  case FILL:  /* flat (start where we left */
+    if(m_offsetX) {
+      /* fill the remainder of the current line */
+      size_t count = N-processed;
+      m_offsetX %= width;
+      m_offsetY %= height;
+      size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
+      if ((m_offsetX + count) > width) count = (width - m_offsetX);
+      p2s_perform(outsignal, data + (r*width+m_offsetX)*chansize, count, m_image.format, scale);
+      processed += count;
+      m_offsetX = 0;
+      m_offsetY = (m_offsetY+1)%height;
+    }
+    while ((processed < N) && (processed+width < pixsize)) {
+      /* fill the lines */
+      size_t r = m_offsetY;
+      if(!m_image.upsidedown) r = height-r-1;
+      size_t count = N-processed;
+      if (count>width) count = width;
+      p2s_perform(outsignal, data + (r*width)*chansize, count, m_image.format, scale);
+      processed += count;
+      m_offsetY = (m_offsetY+1)%height;
+    }
+    /* fill the final (possibly truncated) line */
+    if((processed < N) && processed < pixsize) {
+        size_t r = m_offsetY;
+        if(!m_image.upsidedown) r = height-r-1;
+        size_t count = N-processed;
+        if (count>width) count = width;
+        p2s_perform(outsignal, data + (r*width + m_offsetX)*chansize, count, m_image.format, scale);
+        processed += count;
+        m_offsetX = (count % width);
+        m_offsetY += !m_offsetX;
+      }
     break;
-  case FILL:
-    break;
-  case LINE:
-    if (m_offset%width)
-      m_offset = 0;
-    if (count >= width)
-      count = width;
-    break;
-  case WATERFALL:
-    if((line > height) || line < 0)
-      goto cleanup;
-    m_offset = line * width;
-    if (count >= width)
-      count = width;
-    break;
-  }
-
-  if (m_offset + count > pixsize)
-    count = pixsize - m_offset;
-
-  offset = m_offset * csize;
-#if 0
-  post("data[%p + %d(%d)] -> %dx%d count=%d vecsize=%d pixsize=%d chansize=%d",
-       data, (int)m_offset, (int)offset,
-       (int)width, (int)height,
-       (int)count, (int)N, (int)pixsize, (int)chansize);
-#endif
-  if (data && count>0) {
-    /* TODO: upside down images
-     * call perform_pix2sig() for each row to be processed
-     */
-    p2s_perform(outsignal, data + offset*chansize, m_image.format, count, scale);
-
-    N -= count;
+  case WATERFALL: /* linewise (always the same line) */
+    m_offsetY = line;
+    /* fallthrough */
+  case LINE: /* linewise (start where we left) */
+    m_offsetX = 0;
+    m_offsetY %= height;
+    /* fill the remainder of the current line */
+    if(1) {
+      size_t count = N;
+      size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
+      if ((m_offsetX + count) > width) count = (width - m_offsetX);
+      p2s_perform(outsignal, data + (r*width+m_offsetX)*chansize, count, m_image.format, scale);
+      processed += count;
+      m_offsetX = 0;
+      m_offsetY = (m_offsetY+1)%height;
+    }
   }
 
  cleanup:
-  if(N) {
+  if(processed < N) {
     t_sample*out_red   = outsignal[0];
     t_sample*out_green = outsignal[1];
     t_sample*out_blue  = outsignal[2];
     t_sample*out_alpha = outsignal[3];
-    for(size_t remn=0; remn<N; remn++) {
+    for(size_t remn=processed; remn<N; remn++) {
       *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
     }
   }
-
-  switch(m_fillType) {
-  case CLEAR: default:
-    m_offset = 0;
-    break;
-  case FILL:
-    m_offset += count;
-    break;
-  case LINE:
-    m_offset += width;
-    break;
-  }
-
-  return;
 }
 
 void pix_pix2sig :: dspMess(t_signal** sp)
