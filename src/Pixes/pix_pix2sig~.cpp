@@ -190,21 +190,31 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   const int type = m_image.type;
   const int format = m_image.format;
   size_t pixsize = width * height;
-  size_t chansize = 0;
   size_t offset = 0;
   t_sample*outsignal[] = {
     out[0], out[1], out[2], out[3]
   };
 
+  typedef void (*performer_t)(t_sample**out, void*data_, unsigned int format, size_t N, t_sample scale);
+  performer_t p2s_perform;
+  size_t chansize = 0;
+  t_sample scale = 1.;
+
   switch(type) {
   default:
+    p2s_perform = perform_pix2sig<unsigned char>;
     chansize=sizeof(unsigned char);
+    scale = 1./255.;
     break;
   case GL_FLOAT:
+    p2s_perform = perform_pix2sig<GLfloat>;
     chansize=sizeof(GLfloat);
+    scale = 1.;
     break;
   case GL_DOUBLE:
+    p2s_perform = perform_pix2sig<GLdouble>;
     chansize=sizeof(GLdouble);
+    scale = 1.;
     break;
   }
   if (m_offset >= pixsize)
@@ -248,17 +258,11 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
        (int)count, (int)N, (int)pixsize, (int)chansize);
 #endif
   if (data && count>0) {
-    switch(m_image.type) {
-    default:
-      perform_pix2sig<unsigned char>(outsignal, data + offset*chansize, m_image.format, count, 1./255.0);
-      break;
-    case GL_FLOAT:
-      perform_pix2sig<GLfloat>(outsignal, data + offset*chansize, m_image.format, count, 1.0);
-      break;
-    case GL_DOUBLE:
-      perform_pix2sig<GLdouble>(outsignal, data + offset*chansize, m_image.format, count, 1.0);
-      break;
-    }
+    /* TODO: upside down images
+     * call perform_pix2sig() for each row to be processed
+     */
+    p2s_perform(outsignal, data + offset*chansize, m_image.format, count, scale);
+
     N -= count;
   }
 
