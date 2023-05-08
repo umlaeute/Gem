@@ -127,7 +127,7 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
 // signal Performance
 namespace {
   template<typename T>
-  void perform_pix2sig(t_sample**out, void*data_, size_t N, unsigned int format, t_sample scale) {
+  void perform_pix2sig(t_sample**out, size_t N, void*data_, size_t dataoffset, unsigned int format, t_sample scale) {
     T*data = static_cast<T*>(data_);
     t_sample*out_red   = out[0];
     t_sample*out_green = out[1];
@@ -138,6 +138,7 @@ namespace {
     switch(format) {
     case GEM_RGBA:
     default:
+      data += dataoffset*4;
       while(n--) {
         *(out_red  ++) = scale * static_cast<t_sample>(data[chRed]);
         *(out_green++) = scale * static_cast<t_sample>(data[chGreen]);
@@ -147,6 +148,7 @@ namespace {
       }
       break;
     case GEM_YUV:
+      data += dataoffset*2;
       n/=2;
       while(n--) {
         t_sample y0 = scale * static_cast<t_sample>(data[chY0]);
@@ -165,6 +167,7 @@ namespace {
       }
       break;
     case GEM_GRAY:
+      data += dataoffset*1;
       while(n--) {
         t_sample g = scale * static_cast<t_sample>(data[chGray]);
         *(out_red  ++) = g;
@@ -195,9 +198,8 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   };
 
   /* metadata for the actual converters */
-  typedef void (*performer_t)(t_sample**out, void*data_, size_t N, unsigned int format, t_sample scale);
+  typedef void (*performer_t)(t_sample**out, size_t N, void*data, size_t offset, unsigned int format, t_sample scale);
   performer_t p2s_perform;
-  size_t chansize = 0;
   t_sample scale = 1.;
 
   size_t processed = 0; /* number of converted pixels */
@@ -217,21 +219,17 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   switch(m_image.type) {
   default:
     p2s_perform = perform_pix2sig<unsigned char>;
-    chansize=sizeof(unsigned char);
     scale = 1./255.;
     break;
   case GL_FLOAT:
     p2s_perform = perform_pix2sig<GLfloat>;
-    chansize=sizeof(GLfloat);
     scale = 1.;
     break;
   case GL_DOUBLE:
     p2s_perform = perform_pix2sig<GLdouble>;
-    chansize=sizeof(GLdouble);
     scale = 1.;
     break;
   }
-  chansize *= m_image.csize;
 
   m_offsetX%=width;
   m_offsetY%=height;
@@ -248,7 +246,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       m_offsetY %= height;
       size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
       if ((m_offsetX + count) > width) count = (width - m_offsetX);
-      p2s_perform(outsignal, data + (r*width+m_offsetX)*chansize, count, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
       processed += count;
       m_offsetX = 0;
       m_offsetY = (m_offsetY+1)%height;
@@ -259,7 +257,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       if(!m_image.upsidedown) r = height-r-1;
       size_t count = N-processed;
       if (count>width) count = width;
-      p2s_perform(outsignal, data + (r*width)*chansize, count, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width, m_image.format, scale);
       processed += count;
       m_offsetY = (m_offsetY+1)%height;
     }
@@ -269,7 +267,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
         if(!m_image.upsidedown) r = height-r-1;
         size_t count = N-processed;
         if (count>width) count = width;
-        p2s_perform(outsignal, data + (r*width + m_offsetX)*chansize, count, m_image.format, scale);
+        p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
         processed += count;
         m_offsetX = (count % width);
         m_offsetY += !m_offsetX;
@@ -286,7 +284,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       size_t count = N;
       size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
       if ((m_offsetX + count) > width) count = (width - m_offsetX);
-      p2s_perform(outsignal, data + (r*width+m_offsetX)*chansize, count, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
       processed += count;
       m_offsetX = 0;
       m_offsetY = (m_offsetY+1)%height;
