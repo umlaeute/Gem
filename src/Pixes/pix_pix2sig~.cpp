@@ -262,7 +262,7 @@ void pix_pix2sig :: dspMess(t_signal** sp)
   };
   DSPCallbackClass cb;
 
-  dsp_add(cb.callback, 6, this, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
+  dsp_add(cb.callback, 6, this->x_obj, sp[0]->s_vec, sp[1]->s_vec, sp[2]->s_vec,
           sp[3]->s_vec, sp[0]->s_n);
 }
 
