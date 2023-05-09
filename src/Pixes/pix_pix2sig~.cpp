@@ -81,7 +81,7 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
   } else if("fill" == type) {
     filltype = FILL;
   } else if("line" == type) {
-    filltype = (2 == argc && A_FLOAT == argv[1].a_type)?WATERFALL:FILL;
+    filltype = (2 == argc && A_FLOAT == argv[1].a_type)?WATERFALL:LINE;
   } else if("waterfall" == type) {
     filltype = WATERFALL;
   }
