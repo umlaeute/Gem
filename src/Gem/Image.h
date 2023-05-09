@@ -115,8 +115,8 @@ struct GEM_EXTERN imageStruct {
   unsigned int format;
 
   /////////
-  // is this owned by us (? what about underscores ?)
-  int notowned;
+  // is this owned by us?
+  int not_owned;
 
   //////////
   // gets a pixel
@@ -246,7 +246,7 @@ struct GEM_EXTERN imageStruct {
 
   // "data" points to the image.
   // the memory could(!) be reserved by this class or someone else
-  // "notowned" should be set to "1", if "data" points to foreign memory
+  // "not_owned" should be set to "1", if "data" points to foreign memory
   // "data" is not freed directly, when the destructor is called
   unsigned char *data;    // the pointer to the data
 private:

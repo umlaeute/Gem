@@ -224,14 +224,14 @@ imageStruct :: imageStruct(void)
 #else /* !__APPLE__ */
   , type(GL_UNSIGNED_BYTE), format(GL_RGBA)
 #endif /* __APPLE__ */
-  , notowned(false), data(NULL), pdata(NULL), datasize(0)
+  , not_owned(false), data(NULL), pdata(NULL), datasize(0)
   , upsidedown(true)
 {}
 
 imageStruct :: imageStruct(const imageStruct&org)
   : xsize(0), ysize(0), csize(0)
   , type(GL_UNSIGNED_BYTE), format(GL_RGBA)
-  , notowned(false), data(NULL), pdata(NULL), datasize(0)
+  , not_owned(false), data(NULL), pdata(NULL), datasize(0)
   , upsidedown(true)
 {
   org.copy2Image(this);
@@ -281,7 +281,7 @@ GEM_EXTERN unsigned char* imageStruct::allocate(size_t size)
   data = pdata+offset;
   datasize=array_size-offset;
 #endif
-  notowned=false;
+  not_owned=false;
   //post("created data [%d] @ %x: [%d]@%x", array_size, pdata, datasize, data);
   return data;
 }
@@ -299,7 +299,7 @@ GEM_EXTERN unsigned char* imageStruct::reallocate(size_t size)
   size_t alignment = (reinterpret_cast<size_t>(pdata))&
                      (GEM_VECTORALIGNMENT/8-1);
   size_t offset    = (alignment == 0?0:(GEM_VECTORALIGNMENT/8-alignment));
-  notowned=false;
+  not_owned=false;
   data=pdata+offset;
   return data;
 }
@@ -341,14 +341,14 @@ GEM_EXTERN void imageStruct::copy2ImageStruct(imageStruct *to) const
    */
   //to->datasize= datasize;
   to->upsidedown=upsidedown;
-  to->notowned= true; /* but pdata is always owned by us */
+  to->not_owned= true; /* but pdata is always owned by us */
 }
 GEM_EXTERN void imageStruct::info(void)
 {
   post("imageStruct\t:%dx%dx%d\n\t\t%X\t(%x) %d\n\t\t%x\t%x\t%d",
        xsize, ysize, csize,
        data, pdata, datasize,
-       format, type, notowned);
+       format, type, not_owned);
 }
 
 static bool copy_imagestruct2imagestruct(const imageStruct*from,
