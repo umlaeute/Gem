@@ -145,7 +145,6 @@ struct GEM_EXTERN imageStruct {
     data[Y * xsize * csize + X * csize + C] = VAL;
   }
 
-
   /////////
   // gets the color of a pixel
   virtual bool getRGB(int X, int Y, unsigned char*r, unsigned char*g,
@@ -286,26 +285,19 @@ struct GEM_EXTERN pixBlock {
 
   //////////
   // is this a newimage since last time?
-  //  ie, has it been refreshed
+  // (ie, has it been refreshed?)
   bool newimage;
 
   //////////
   // keeps track of when new films are loaded
-  //  useful for rectangle_textures on OSX
+  // (useful for rectangle_textures on macOS)
   bool newfilm;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// imageStruct utility functions
+// image utility functions
 //
 ///////////////////////////////////////////////////////////////////////////////
-//////////
-// copies all of the data over and mallocs memory
-GEM_EXTERN extern void copy2Image(imageStruct *to, const imageStruct *from);
-
-//////////
-// assumes that it only has to refresh the data
-GEM_EXTERN extern void refreshImage(imageStruct *to, const imageStruct *from);
 
 GEM_EXTERN extern int getPixFormat(const char*);
 #endif // GEMPIXUTIL_H_
