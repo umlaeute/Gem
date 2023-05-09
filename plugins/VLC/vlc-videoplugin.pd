@@ -1,30 +1,35 @@
-#N canvas 94 121 763 563 10;
-#X obj 142 223 s \$1-ctl;
-#X text 63 27 With VLC backend you can open whatever VLC can as far
-as its a video : a file \, a stream;
+#N canvas 133 147 763 563 10;
+#X obj 142 253 s \$1-ctl;
 #X msg 44 89 driver vlc;
 #X text 19 72 1- select the backend;
 #X text 194 73 2- open what you want;
 #X msg 180 90 device file:///home/me/video.avi;
-#X text 196 109 note the path should be the same you enter in VLC in
-"Open network stream" window;
-#X text 54 372 VLC doesn't know the resolution of the video \, so please
-set it yourself :;
-#X obj 148 457 s \$1-ctl;
-#X msg 104 416 dimen 640 480;
-#X msg 216 418 dimen 1920 1080;
-#X text 61 473 you can easily over- or undersample your video with
-this (if don't care about the interpolation quality...);
-#X msg 169 160 set screen-fps 50 \, set screen-top 100 \, set screen-left
-0 \, set screen-width 500 \, set screen-height 500 \, device screen://
-;
+#X text 196 109 note the path should be the same you enter in VLC in "Open network stream" window;
+#X obj 148 477 s \$1-ctl;
+#X msg 144 436 dimen 640 480;
+#X msg 245 436 dimen 1920 1080;
 #X text 537 174 screen capturing;
-#X text 53 275 The available properties are the VLC cmdline options.
-See the VLC documentation for a list (you could also check https://wiki.videolan.org/VLC_command-line_help/).
-You need to remove the leading dashes ("--") from the cmdline options.
-;
-#X connect 2 0 0 0;
-#X connect 5 0 0 0;
-#X connect 9 0 8 0;
-#X connect 10 0 8 0;
-#X connect 12 0 0 0;
+#X text 53 275 The available properties are the VLC cmdline options. See the VLC documentation for a list (you could also check https://wiki.videolan.org/VLC_command-line_help/). You need to remove the leading dashes ("--") from the cmdline options.;
+#X text 63 27 With VLC backend you can open whatever VLC can as long as it's a video : a file \, a stream;
+#X text 54 392 VLC doesn't report the resolution of the video \, so please set it yourself :;
+#X text 61 493 you can easily over- or undersample your video with this (if you don't care about the interpolation quality...);
+#X msg 457 289 goto WIKI;
+#N canvas 735 459 450 300 web 0;
+#X obj 37 37 inlet;
+#X msg 37 60 browse https://wiki.videolan.org/VLC_command-line_help/;
+#X obj 37 83 pdcontrol;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X restore 457 312 pd web;
+#X msg 173 223 device v4l2://;
+#X text 274 223 V4L2-devices;
+#X msg 169 160 set screen-fps 50 \, set screen-top 100 \, set screen-left 0 \, set screen-width 500 \, set screen-height 500 \, set contrast 3 \, device screen://;
+#X msg 44 436 dimen 64 64;
+#X connect 1 0 0 0;
+#X connect 4 0 0 0;
+#X connect 7 0 6 0;
+#X connect 8 0 6 0;
+#X connect 14 0 15 0;
+#X connect 16 0 0 0;
+#X connect 18 0 0 0;
+#X connect 19 0 6 0;
