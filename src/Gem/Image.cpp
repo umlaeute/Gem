@@ -550,7 +550,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     unsigned int to_format)
 {
   if (!from || !from->data) {
-    pd_error(0, "GEM: Someone sent a bogus pointer to convert");
+    pd_error(0, "GEM: Someone sent a bogus pointer to convert from");
     return false;
   }
   switch(from->type) {
@@ -603,7 +603,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
 GEM_EXTERN bool imageStruct::convertTo(imageStruct *to, unsigned int fmt) const
 {
   if (!to || !data) {
-    pd_error(0, "GEM: Someone sent a bogus pointer to convert");
+    pd_error(0, "GEM: Someone sent a bogus pointer to convert to");
     if (to) {
       to->data = NULL;
     }
