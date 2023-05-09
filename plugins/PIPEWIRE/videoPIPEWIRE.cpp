@@ -311,6 +311,7 @@ bool videoPIPEWIRE::enumProperties(gem::Properties&readable,
   RWSET("MediaRole", std::string("Camera"));
   RWSET("AppName", std::string("Pd"));
   RWSET("NodeName", std::string("Gem"));
+  //writeable.set("PortName", std::string("port")); // what is the effect of the PortName?
   writeable.set("autoconnect", 0);
   readable.set("NodeID", 0);
 
