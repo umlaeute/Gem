@@ -81,7 +81,7 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
   } else if("fill" == type) {
     filltype = FILL;
   } else if("line" == type) {
-    filltype = LINE;
+    filltype = (2 == argc && A_FLOAT == argv[1].a_type)?WATERFALL:FILL;
   } else if("waterfall" == type) {
     filltype = WATERFALL;
   }
@@ -96,24 +96,14 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
       m_line = 0;
       break;
     case 2:
-      if(A_FLOAT == argv[1].a_type) {
-        m_line = atom_getfloat(argv+1);
-        break;
-      }
-      /* fallthrough */
+      m_line = atom_getfloat(argv+1);
+      break;
     default:
       error("usage: %s %s [<line>]", s->s_name, type.c_str());
       return;
     }
     break;
   default:
-    switch(argc) {
-    case 1:
-      break;
-    default:
-      error("usage: %s %s (no arguments!)", s->s_name, type.c_str());
-      return;
-    }
     break;
   }
 

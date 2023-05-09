@@ -74,12 +74,13 @@ protected:
   // the outlets~
   t_outlet *o_col[4];
 
+  /* current read position within the image (internal state) */
+  size_t m_offsetX, m_offsetY;
 
   virtual void filltypeMess(t_symbol*, int, t_atom*);
-  size_t m_offsetX, m_offsetY;
   typedef enum {CLEAR, FILL, LINE, WATERFALL, INVALID}  filltype_t;
   filltype_t m_fillType;
-  int m_line;
+  int m_line; /* desired line (for waterfall mode) */
 };
 
 #endif  // for header file
