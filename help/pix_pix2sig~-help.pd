@@ -1,20 +1,15 @@
-#N canvas 330 61 689 418 10;
+#N canvas 420 190 689 457 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 8 245 cnv 15 430 150 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X text 39 248 Inlets:;
-#X text 38 284 Outlets:;
-#X obj 8 206 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#X text 17 205 Arguments:;
-#X obj 7 76 cnv 15 430 125 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 77 cnv 15 200 290 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X text 453 60 Example:;
-#X obj 514 244 cnv 15 100 100 empty empty empty 20 12 0 14 -195568
--66577 0;
+#X obj 8 295 cnv 15 430 150 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X text 39 298 Inlets:;
+#X text 38 344 Outlets:;
+#X obj 8 256 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#X text 17 255 Arguments:;
+#X obj 7 76 cnv 15 430 175 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 85 cnv 15 200 360 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X text 453 68 Example:;
+#X obj 534 342 cnv 15 100 100 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -33,15 +28,13 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 519 283 pd gemwin;
-#X msg 519 264 create;
-#X text 515 243 Create window:;
-#X obj 450 135 cnv 15 180 90 empty empty empty 20 12 0 14 -24198 -66577
-0;
-#X obj 451 84 gemhead;
+#X restore 539 381 pd gemwin;
+#X msg 539 362 create;
+#X text 535 341 Create window:;
+#X obj 450 242 cnv 15 180 90 empty empty empty 20 12 0 14 #14e814 #404040 0;
+#X obj 451 92 gemhead;
 #X text 71 31 Class: pix object;
-#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
--1 -1;
+#X obj 510 118 bng 15 250 50 0 empty empty pix_load 20 8 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -54,52 +47,77 @@
 #X connect 3 0 5 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X restore 451 113 pd image;
-#X text 63 216 <none>;
-#X text 56 297 Outlet 1: gemlist;
-#X text 63 262 Inlet 1: gemlist;
-#X obj 451 253 pix_draw;
-#X text 516 105 open an image;
-#X text 509 118 (JPEG \, TIFF \, ..);
-#X text 23 92 [pix_sig2pix~] will write the data it gets from images
-as signals for each color-channel.;
-#X text 22 118 [pix_sig2pix~] will try to put all the image-data into
-one audio-block. it will not spread the data of one image over more
-than one audio-block. therefore you will have to set the audio-blocksize
-with [block~ <n>].;
-#X text 21 170 Depending on the size of the images you are converting
-\, you will want to put a huge [block~ 65536 32] into your patch.;
-#X text 56 313 Outlet 2: signal~ : red-channel (or Yuv- \, or grey-)
-;
-#X text 56 343 Outlet 3: signal~ : blue-channel (or yuV- \, or 0);
-#X text 56 328 Outlet 2: signal~ : green-channel (or yUv- \, or 0)
-;
-#X text 56 358 Outlet 4: signal~ : alpha-channel (or 0);
-#X text 29 76 Description: convert images to signals;
+#X restore 451 141 pd image;
+#X text 63 266 <none>;
+#X text 56 357 Outlet 1: gemlist;
+#X text 63 312 Inlet 1: gemlist;
+#X text 516 133 open an image;
+#X text 509 146 (JPEG \, TIFF \, ..);
+#X text 23 92 [pix_sig2pix~] will write the data it gets from images as signals for each color-channel.;
+#X text 56 373 Outlet 2: signal~ : red-channel (or Yuv- \, or grey-);
+#X text 56 403 Outlet 3: signal~ : blue-channel (or yuV- \, or 0);
+#X text 56 388 Outlet 2: signal~ : green-channel (or yUv- \, or 0);
+#X text 56 418 Outlet 4: signal~ : alpha-channel (or 0);
+#X text 24 75 Description: convert images to signals;
 #X text 50 12 Synopsis: [pix_pix2sig~];
-#X obj 451 142 pix_pix2sig~;
-#X floatatom 564 194 3 0 0 3 a - -;
-#X floatatom 533 195 3 0 0 3 b - -;
-#X floatatom 502 195 3 0 0 3 g - -;
-#X floatatom 471 194 3 0 0 3 r - -;
-#X msg 527 310 \; pd dsp 1;
-#X obj 466 385 block~ 65536 32;
-#X obj 471 171 env~ 65536;
-#X obj 564 171 env~ 65536;
-#X obj 533 171 env~ 65536;
-#X obj 502 171 env~ 65536;
+#X obj 451 249 pix_pix2sig~;
+#X floatatom 564 301 3 0 0 3 a - - 0;
+#X floatatom 533 301 3 0 0 3 b - - 0;
+#X floatatom 502 301 3 0 0 3 g - - 0;
+#X floatatom 471 301 3 0 0 3 r - - 0;
+#X msg 547 408 \; pd dsp 1;
+#X obj 471 278 env~ 65536;
+#X obj 564 278 env~ 65536;
+#X obj 533 278 env~ 65536;
+#X obj 502 278 env~ 65536;
 #X obj 528 8 declare -lib Gem;
+#X text 25 124 In 'clear' mode (the default) \, each audio block will start reading at the beginning of the current image (so if you want to read the entire image \, you need large blocksizes). In 'fill' mode \, the object will remember where we stopped reading \, and continue there (so you can incrementally read the image). In 'line' mode only a single line is read (consecutively \, so the entire image is scanned) \, with zero-padding or data truncating as required. The similar 'waterfall' mode \, reads the same line for each signal block.;
+#X obj 451 351 pix_texture;
+#X obj 451 374 square 3;
+#X obj 576 92 block~ 4096;
+#N canvas 265 521 450 300 scope 0;
+#N canvas 0 50 450 250 (subpatch) 0;
+#X array \$0.scope 1024 float 2;
+#X coords 0 1 1024 -1 200 140 1;
+#X restore 88 138 graph;
+#X obj 185 33 inlet~;
+#X obj 185 56 tabwrite~ \$0.scope;
+#X obj 55 33 loadbang;
+#X msg 115 33 1;
+#X obj 115 56 metro 200;
+#X connect 1 0 2 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 2 0;
+#X restore 558 250 pd scope;
+#X msg 467 167 mode clear;
+#X msg 537 167 mode fill;
+#X msg 467 189 mode line;
+#X msg 537 189 mode waterfall;
+#X obj 466 217 t a;
+#X msg 494 216 mode waterfall \$1;
+#X floatatom 606 217 5 -256 256 0 - - - 0;
+#X text 63 325 Inlet 1: mode clear|fill|line|waterfall [<line#>];
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 17 0;
 #X connect 16 0 17 1;
-#X connect 17 0 33 0;
-#X connect 33 0 21 0;
-#X connect 33 1 40 0;
-#X connect 33 2 43 0;
-#X connect 33 3 42 0;
-#X connect 33 4 41 0;
-#X connect 40 0 37 0;
-#X connect 41 0 34 0;
-#X connect 42 0 35 0;
-#X connect 43 0 36 0;
+#X connect 17 0 30 0;
+#X connect 30 0 42 0;
+#X connect 30 1 36 0;
+#X connect 30 1 45 0;
+#X connect 30 2 39 0;
+#X connect 30 3 38 0;
+#X connect 30 4 37 0;
+#X connect 36 0 34 0;
+#X connect 37 0 31 0;
+#X connect 38 0 32 0;
+#X connect 39 0 33 0;
+#X connect 42 0 43 0;
+#X connect 46 0 50 0;
+#X connect 47 0 50 0;
+#X connect 48 0 50 0;
+#X connect 49 0 50 0;
+#X connect 50 0 30 0;
+#X connect 51 0 50 0;
+#X connect 52 0 51 0;
