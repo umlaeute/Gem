@@ -526,7 +526,7 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
   if(GL_UNSIGNED_INT_8_8_8_8 == image.type) {
     swapBytes(image);
   }
-  image.notowned = true;
+  image.not_owned = true;
   image.setCsizeByFormat(m_image.format);
 }
 

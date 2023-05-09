@@ -360,7 +360,7 @@ pixBlock *videoV4L2 :: getFrame()
   } else {
     unsigned char*data=(unsigned char*)m_currentBuffer;
     if (m_colorConvert) {
-      m_image.image.notowned = false;
+      m_image.image.not_owned = false;
       switch(m_gotFormat) {
 #if 1
 # define CONVERT(type) m_image.image.from##type (data)
@@ -392,11 +392,11 @@ pixBlock *videoV4L2 :: getFrame()
 
       default: // ? what should we do ?
         m_image.image.data=data;
-        m_image.image.notowned = true;
+        m_image.image.not_owned = true;
       }
     } else {
       m_image.image.data=data;
-      m_image.image.notowned = true;
+      m_image.image.not_owned = true;
     }
     m_image.image.upsidedown=true;
 

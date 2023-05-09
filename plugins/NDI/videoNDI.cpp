@@ -304,7 +304,7 @@ pixBlock*videoNDI::getFrame(void)
     }
     m_pixBlock.image.setCsizeByFormat();
     m_pixBlock.image.data = m_ndi_frame.p_data;
-    m_pixBlock.image.notowned = 1;
+    m_pixBlock.image.not_owned = 1;
     m_pixBlock.newimage = 1;
 
     m_gotone = true;

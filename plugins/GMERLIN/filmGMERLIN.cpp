@@ -295,7 +295,7 @@ bool filmGMERLIN :: open(const std::string&sfilename,
 #else
   m_image.image.setCsizeByFormat(GEM_RGBA);
 #endif
-  m_image.image.notowned=true;
+  m_image.image.not_owned=true;
   m_image.image.upsidedown=true;
   m_image.newfilm=true;
 

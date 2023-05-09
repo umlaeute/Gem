@@ -420,7 +420,7 @@ void videoPIPEWIRE::on_process(void)
   }
 
   m_mutex.lock();
-  m_pixBlock.image.notowned = false;
+  m_pixBlock.image.not_owned = false;
   switch(m_format) {
   case SPA_VIDEO_FORMAT_RGB:
     m_pixBlock.image.fromRGB((unsigned char*)buf->datas[0].data);
@@ -448,7 +448,7 @@ void videoPIPEWIRE::on_process(void)
     break;
   default:
     m_pixBlock.image.data = (unsigned char*)buf->datas[0].data;
-    m_pixBlock.image.notowned = true;
+    m_pixBlock.image.not_owned = true;
   }
 
   m_pixBlock.newimage = true;

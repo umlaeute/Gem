@@ -96,7 +96,7 @@ void pix_info :: render(GemState *state)
   outlet_list(m_pixblock, gensym("list"), 2, abuf);
   SETFLOAT  (&abuf[0], (t_float)img->image.type);
   SETFLOAT  (&abuf[1], (t_float)img->image.upsidedown);
-  SETFLOAT  (&abuf[2], (t_float)img->image.notowned);
+  SETFLOAT  (&abuf[2], (t_float)img->image.not_owned);
   outlet_list(m_misc, gensym("list"), 3, abuf);
   // send out the colorspace (as integer!)
   outlet_float(m_format, (t_float)img->image.format);

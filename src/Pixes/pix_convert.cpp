@@ -65,7 +65,7 @@ void pix_convert :: processImage(imageStruct &image)
     return;
   }
   image.data = m_image.data;
-  image.notowned = true;
+  image.not_owned = true;
   image.setCsizeByFormat(m_image.format);
 
 }
