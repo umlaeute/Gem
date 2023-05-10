@@ -23,11 +23,28 @@ LOG
 #include <string>
 
 class CPPExtern;
+class Obj_header;
 
-/* forward declaration of a generic exception handler for GemExceptions */
 namespace gem
 {
+/* forward declaration of a generic exception handler for GemExceptions */
 GEM_EXTERN void catchGemException(const char*objname, const t_object*obj);
+
+class GEM_EXTERN CPPExtern_proxy {
+private:
+  class PIMPL;
+  PIMPL*pimpl;
+public:
+  CPPExtern_proxy(t_class*cls, const char*name,
+                  t_symbol*s, int argc, t_atom*argv,
+                  size_t numtypes, const int*types,
+                  bool wantInitmsgs);
+  ~CPPExtern_proxy(void);
+  int getNumArgs(void);
+  void setObject(CPPExtern*);
+  Obj_header*initialize(void);
+};
+
 };
 
 /*-----------------------------------------------------------------
@@ -192,7 +209,7 @@ static void obj_setupCallback(t_class *classPtr);
   const int typespecs[] = {};                                           \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
   REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS();                                          \
+  REAL_NEW__SETOBJ(new NEW_CLASS());                                    \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW(NEW_CLASS)                \
@@ -203,8 +220,10 @@ static void obj_setupCallback(t_class *classPtr);
 /////////////////////////////////////////////////
 #define CPPEXTERN_NEW_NAMED_WITH_GIMME(NEW_CLASS, CLASSNAME)            \
   REAL_NEW__CLASS(NEW_CLASS);                                           \
+  const int typespecs[] = {};                                           \
+  REAL_NEW__CREATE0(NEW_CLASS, typespecs);                               \
   REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS(argc,argv);                                 \
+  REAL_NEW__SETOBJ(new NEW_CLASS(argc,argv));                           \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS) \
@@ -217,9 +236,9 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                   \
   const int typespecs[] = {PD_TYPE1};                           \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                      \
-  REAL_NEW__MAKEVAR(1, TYPE1);                                  \
   REAL_NEW__CREATE1(NEW_CLASS);                                 \
-  obj->data = new NEW_CLASS(arg1);                              \
+  REAL_NEW__MAKEVAR(1, TYPE1);                                  \
+  REAL_NEW__SETOBJ(new NEW_CLASS(arg1));                        \
   REAL_NEW__CREATE2(NEW_CLASS);                                 \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_ONE_ARG(NEW_CLASS, TYPE1, PD_TYPE1)  \
@@ -232,10 +251,10 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                           \
   const int typespecs[] = {PD_TYPE1, PD_TYPE2};                         \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS(arg1, arg2);                                \
+  REAL_NEW__SETOBJ(new NEW_CLASS(arg1, arg2));                          \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_TWO_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2) \
@@ -247,11 +266,11 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                           \
   const int typespecs[] = {PD_TYPE1, PD_TYPE2, PD_TYPE3};               \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS(arg1, arg2, arg3);                          \
+  REAL_NEW__SETOBJ(new NEW_CLASS(arg1, arg2, arg3));                    \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_THREE_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3) \
@@ -263,12 +282,12 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                           \
   const int typespecs[] = {PD_TYPE1, PD_TYPE2, PD_TYPE3, PD_TYPE4};     \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
   REAL_NEW__MAKEVAR(4, TYPE4);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS(arg1, arg2, arg3, arg4);                    \
+  REAL_NEW__SETOBJ(new NEW_CLASS(arg1, arg2, arg3, arg4));              \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_FOUR_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3, TYPE4, PD_TYPE4) \
@@ -281,13 +300,13 @@ static void obj_setupCallback(t_class *classPtr);
   REAL_NEW__CLASS(NEW_CLASS);                                           \
   const int typespecs[] = {PD_TYPE1, PD_TYPE2, PD_TYPE3, PD_TYPE4, PD_TYPE5}; \
   REAL_NEW__CREATE0(NEW_CLASS, typespecs);                              \
+  REAL_NEW__CREATE1(NEW_CLASS);                                         \
   REAL_NEW__MAKEVAR(1, TYPE1);                                          \
   REAL_NEW__MAKEVAR(2, TYPE2);                                          \
   REAL_NEW__MAKEVAR(3, TYPE3);                                          \
   REAL_NEW__MAKEVAR(4, TYPE4);                                          \
   REAL_NEW__MAKEVAR(5, TYPE5);                                          \
-  REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  obj->data = new NEW_CLASS(arg1, arg2, arg3, arg4, arg5);              \
+  REAL_NEW__SETOBJ(new NEW_CLASS(arg1, arg2, arg3, arg4, arg5));        \
   REAL_NEW__CREATE2(NEW_CLASS);                                         \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_FIVE_ARGS(NEW_CLASS, TYPE1, PD_TYPE1, TYPE2, PD_TYPE2, TYPE3, PD_TYPE3, TYPE4, PD_TYPE4, TYPE5, PD_TYPE5) \
@@ -302,57 +321,18 @@ static void obj_setupCallback(t_class *classPtr);
 
 #define REAL_NEW__CLASS(NEW_CLASS)                                      \
   STATIC_CLASS t_class * NEW_CLASS ## _class;                           \
-  static void* create_ ## NEW_CLASS (t_symbol*s, int realargc, t_atom*argv) { \
-  (void)s;                                                              \
-  int argc = realargc;                                                  \
-  t_symbol*my_semi = gensym(";");                                       \
-  if (GEM_ARGMESSAGES)                                                  \
-  for(int i=0; i<realargc; i++) {                                       \
-    if ((A_SYMBOL == argv[i].a_type) && (my_semi == argv[i].a_w.w_symbol)) { \
-      argc=i;                                                           \
-      break;                                                            \
-    }                                                                   \
-  }                                                                     \
-  class NEW_CLASS ## _initmsgclass { public:                            \
-  void forwardmsg(t_pd*x, int argc, t_atom*argv) {                      \
-    if(argc>0) {                                                        \
-      if (A_SYMBOL == argv->a_type)                                     \
-        pd_typedmess(x, argv->a_w.w_symbol, argc-1, argv+1);            \
-      else                                                              \
-        pd_typedmess(x, gensym("list"), argc, argv);                    \
-    }                                                                   \
-  }                                                                     \
-  NEW_CLASS ## _initmsgclass(t_pd*x, int argc, t_atom*argv) {           \
-    if(argc < 0)return;                                                 \
-    int i, start=0;                                                     \
-    t_symbol* semi = gensym(";");                                       \
-    for(i=start; i<argc; i++) {                                         \
-      if ((A_SYMBOL != argv[i].a_type) || (semi != argv[i].a_w.w_symbol)) \
-        continue;                                                       \
-      forwardmsg(x, i-start, argv+start);                               \
-      start = i = i + 1;                                                \
-    }                                                                   \
-    if(i>argc)i=argc;                                                   \
-    if(i>start)forwardmsg(x, i-start, argv+start);                      \
-  } }
-
+  static void* create_ ## NEW_CLASS (t_symbol*s, int argc, t_atom*argv) { \
 
 #define REAL_NEW__CREATE0(NEW_CLASS, types)                             \
   const unsigned int num##types = sizeof(types)/sizeof(*types);         \
-  if (!gem::RTE::Atom::checkSignature(argc, argv, num##types, types, #NEW_CLASS)) \
-    return NULL
+  try {                                                                 \
+    gem::CPPExtern_proxy proxy(NEW_CLASS ## _class, #NEW_CLASS, s, argc, argv, num##types, types, GEM_ARGMESSAGES)
 
 #define REAL_NEW__CREATE1(NEW_CLASS)                                    \
-  try {                                                                 \
-    Obj_header *obj = new (pd_new(NEW_CLASS ## _class),(void *)NULL) Obj_header; \
-    CPPExtern::m_holder = &obj->pd_obj;                                 \
-    CPPExtern::m_holdname=(char*)#NEW_CLASS
+    argc = proxy.getNumArgs()
 
 #define REAL_NEW__CREATE2(NEW_CLASS)                                    \
-    if(obj) { NEW_CLASS ## _initmsgclass initmsg((t_pd*)obj, realargc-argc-1, argv+argc+1); } \
-    CPPExtern::m_holder = NULL;                                         \
-    CPPExtern::m_holdname=NULL;                                         \
-    return(obj);                                                        \
+  return proxy.initialize();                                            \
   } catch (...) {gem::catchGemException(CPPExtern::m_holdname, CPPExtern::m_holder); return NULL;} \
   }
 
@@ -373,6 +353,11 @@ static void obj_setupCallback(t_class *classPtr);
    }                                                                    \
   AUTO_REGISTER_CLASS(NEW_CLASS)
 
+#define REAL_NEW__MAKEVAR(num, type)                                    \
+  type arg##num = (num>argc)?gem::RTE::Atom():gem::RTE::Atom(argv+num-1)
+
+#define REAL_NEW__SETOBJ(obj)                   \
+  proxy.setObject(obj)
 
 ///////////////////////////////////////////////////////////////////////////////
 // static class:
@@ -430,9 +415,6 @@ extern "C" {
 #else
 # define SET_HELPSYMBOL(NEW_CLASS, CLASSNAME)
 #endif /* HELPSYMBOL */
-
-#define REAL_NEW__MAKEVAR(num, type)     \
-  type arg##num = (num>argc)?gem::RTE::Atom():gem::RTE::Atom(argv+num-1)
 
 ///////////////////////////////////////////////////////////////////////////////
 // setting the class-flags

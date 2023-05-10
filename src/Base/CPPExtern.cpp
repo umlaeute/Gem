@@ -221,3 +221,104 @@ void CPPExtern::beforeDeletion(void)
   //post("CPPExtern to be deleted");
 }
 
+
+/////////////////////////////////
+// CPPExtern_proxy
+//
+// helper class for creating and initializing CPPExtern
+/////////////////////////////////
+#include "Gem/Exception.h"
+
+struct gem::CPPExtern_proxy::PIMPL {
+  Obj_header*obj;
+  int argc, realargc;
+  t_atom*argv;
+
+  void forwardmsg(int argc, t_atom*argv) {
+    t_pd*x = (t_pd*)obj;
+    if(x && argc>0) {
+      if (A_SYMBOL == argv->a_type)
+        pd_typedmess(x, argv->a_w.w_symbol, argc - 1, argv + 1);
+      else
+        pd_typedmess(x, gensym("list"), argc, argv);
+    }
+  }
+};
+
+gem::CPPExtern_proxy::CPPExtern_proxy(
+        t_class*cls, const char*name,
+        t_symbol*s, int realargc, t_atom*argv,
+        size_t numtypes, const int*types,
+        bool wantInitmsgs)
+  : pimpl(new PIMPL())
+{
+  int argc = realargc;
+  if(!name && s)
+    name=s->s_name;
+  CPPExtern::m_holder = 0;
+  CPPExtern::m_holdname = name;
+
+  /* if we want init-messages, check if we have a semi-colon
+   * (that marks the beginning of the init-messages),
+   * and remember it's position (so we know how many
+   * usable objectargs there are */
+  if(wantInitmsgs && argc) {
+    t_symbol*semi = gensym(";");
+    for(int i = 0; i < realargc; i++) {
+      if ((A_SYMBOL == argv[i].a_type) && (semi == argv[i].a_w.w_symbol)) {
+        argc = i;
+        break;
+      }
+    }
+  }
+  if(!gem::RTE::Atom::checkSignature(argc, argv, numtypes, types, name)) {
+    throw(GemException());
+  }
+  Obj_header*obj = new (pd_new(cls), (void *)NULL) Obj_header;
+  if(!obj) {
+    throw(GemException("unknown class"));
+  }
+
+  CPPExtern::m_holder = &obj->pd_obj;
+
+  pimpl->obj = obj;
+  pimpl->realargc = realargc;
+  pimpl->argc = argc;
+  pimpl->argv = argv;
+}
+
+
+gem::CPPExtern_proxy::~CPPExtern_proxy()
+{
+  delete pimpl;
+  CPPExtern::m_holder = 0;
+  CPPExtern::m_holdname = 0;
+}
+void gem::CPPExtern_proxy::setObject(CPPExtern*obj)
+{
+  pimpl->obj->data = obj;
+}
+int gem::CPPExtern_proxy::getNumArgs()
+{
+  return pimpl->argc;
+}
+Obj_header*gem::CPPExtern_proxy::initialize()
+{
+  if(pimpl->realargc > pimpl->argc) {
+    int argc = pimpl->realargc - pimpl->argc - 1;
+    t_atom *argv = pimpl->argv + pimpl->argc + 1;
+    t_symbol*semi = gensym(";");
+    int i, start = 0;
+    for(i = start; i < argc; i++) {
+      if ((A_SYMBOL != argv[i].a_type) || (semi != argv[i].a_w.w_symbol))
+        continue;
+      pimpl->forwardmsg(i - start, argv + start);
+      start = i = i + 1;
+    }
+    if (i > argc)
+      i = argc;
+    if (i > start)
+      pimpl->forwardmsg(i - start, argv + start);
+  }
+  return pimpl->obj;
+}
