@@ -1073,15 +1073,14 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
   ::verbose(2, "freeframe_loader: %s",s->s_name);
   try {
     \
-    Obj_header *obj = new (pd_new(pix_freeframe_class),
-                           (void *)NULL) Obj_header;
     const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
-    CPPExtern::m_holder = &obj->pd_obj;
-    CPPExtern::m_holdname=s->s_name;
-    obj->data = new pix_freeframe(gensym(realname));
-    CPPExtern::m_holder = NULL;
-    CPPExtern::m_holdname=NULL;
-    return(obj);
+    const int typespecs[] = {};
+    const unsigned int numtypespecs = sizeof(typespecs) / sizeof(*typespecs);
+    gem::CPPExtern_proxy proxy(pix_freeframe_class, s->s_name, s, argc, argv,
+                               numtypespecs, typespecs, 1);
+    argc = proxy.getNumArgs();
+    proxy.setObject(new pix_freeframe(gensym(realname)));
+    return proxy.initialize();
   } catch (GemException&e) {
     ::verbose(2, "freeframe_loader: failed! (%s)", e.what());
     return 0;
