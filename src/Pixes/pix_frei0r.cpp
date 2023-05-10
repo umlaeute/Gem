@@ -163,6 +163,13 @@ public:
       ::post("parm%02d[%s]: %s", i+1, pinfo.name, pinfo.explanation);
     }
 
+    switch(m_color) {
+    case F0R_COLOR_MODEL_RGBA8888:
+      break;
+    default:
+      ::post("pix_frei0r: currently only plugins using the RGBA colorspace are properly supported");
+    }
+
     return true;
   }
   void deinit(void)
