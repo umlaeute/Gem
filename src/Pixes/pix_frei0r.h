@@ -75,7 +75,6 @@ protected:
 
 private:
   static void parmCallback(void *data, t_symbol*s, int argc, t_atom*argv);
-  static void openCallback(void *data, t_symbol*s);
 
 public:
   static bool loader(const t_canvas *canvas, const std::string&classname,

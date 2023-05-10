@@ -634,14 +634,14 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
   }
   ::verbose(2, "frei0r_loader: %s",s->s_name);
   try {
-    Obj_header *obj = new (pd_new(pix_frei0r_class),(void *)NULL) Obj_header;
     const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
-    CPPExtern::m_holder = &obj->pd_obj;
-    CPPExtern::m_holdname=s->s_name;
-    obj->data = new pix_frei0r(gensym(realname));
-    CPPExtern::m_holder = NULL;
-    CPPExtern::m_holdname=NULL;
-    return(obj);
+    const int typespecs[] = {};
+    const unsigned int numtypespecs = sizeof(typespecs) / sizeof(*typespecs);
+    gem::CPPExtern_proxy proxy(pix_frei0r_class, s->s_name, s, argc, argv,
+                               numtypespecs, typespecs, 1);
+    argc = proxy.getNumArgs();
+    proxy.setObject(new pix_frei0r(gensym(realname)));
+    return proxy.initialize();
   } catch (GemException&e) {
     ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
     return 0;
@@ -701,9 +701,7 @@ void pix_frei0r :: obj_setupCallback(t_class *classPtr)
 {
   class_addanything(classPtr,
                     reinterpret_cast<t_method>(&pix_frei0r::parmCallback));
-  class_addmethod  (classPtr,
-                    reinterpret_cast<t_method>(&pix_frei0r::openCallback), gensym("load"),
-                    A_SYMBOL, A_NULL);
+  CPPEXTERN_MSG1(classPtr, "load", openMess, t_symbol*);
   gem_register_loader(frei0r_loader);
 }
 
@@ -716,9 +714,4 @@ void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc,
   } else {
     GetMyClass(data)->parmMess(std::string(s->s_name), argc, argv);
   }
-}
-
-void pix_frei0r :: openCallback(void *data, t_symbol*name)
-{
-  GetMyClass(data)->openMess(name);
 }
