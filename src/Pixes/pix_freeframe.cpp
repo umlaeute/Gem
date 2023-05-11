@@ -404,68 +404,71 @@ private:
     }
 
 #ifdef DL_OPEN
-    if(loud) {
-      ::post("dlopen %s", libname.c_str());
-    }
-    m_dlhandle=dlopen(libname.c_str(), RTLD_NOW);
-    if(!m_dlhandle) {
+    if(!plugmain) {
       if(loud) {
-        ::pd_error(0, "pix_freeframe[%s]: %s", libname.c_str(), dlerror());
+        ::post("dlopen %s", libname.c_str());
       }
-      return NULL;
-    }
-    dlerror();
-
-    plugmain = reinterpret_cast<FF_Main_FuncPtr>(dlsym(m_dlhandle, hookname));
-
-#elif defined __APPLE__
-    CFURLRef bundleURL = NULL;
-    CFBundleRef theBundle = NULL;
-    CFStringRef plugin = CFStringCreateWithCString(NULL,
-                         libname.c_str(), kCFStringEncodingMacRoman);
-
-    bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
-                plugin,
-                kCFURLPOSIXPathStyle,
-                true );
-    theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
-
-    // Get a pointer to the function.
-    if (theBundle) {
-      plugmain = reinterpret_cast<FF_Main_FuncPtr>
-                 (CFBundleGetFunctionPointerForName(
-                    theBundle, CFSTR("plugMain") )
-                 );
-    } else {
-      if(loud) {
-        ::post("%s: couldn't load", libname.c_str());
+      m_dlhandle=dlopen(libname.c_str(), RTLD_NOW);
+      if(!m_dlhandle) {
+        if(loud) {
+          ::pd_error(0, "pix_freeframe[%s]: %s", libname.c_str(), dlerror());
+        }
+      } else {
+        dlerror();
+        plugmain = reinterpret_cast<FF_Main_FuncPtr>(dlsym(m_dlhandle, hookname));
       }
-      return 0;
     }
-    if(bundleURL != NULL) {
-      CFRelease( bundleURL );
-    }
-    if(theBundle != NULL) {
-      CFRelease( theBundle );
-    }
-    if(plugin != NULL) {
-      CFRelease( plugin );
-    }
-#elif defined _WIN32
-    char buffer[MAXPDSTRING];
-    sys_bashfilename(libname.c_str(), buffer);
-    libname=buffer;
-    m_w32handle = LoadLibrary(libname.c_str());
-    if (!m_w32handle) {
-      if(loud) {
-        ::post("%s: couldn't load", libname.c_str());
+#endif
+#if defined __APPLE__
+    if(!plugmain) {
+      CFURLRef bundleURL = NULL;
+      CFBundleRef theBundle = NULL;
+      CFStringRef plugin = CFStringCreateWithCString(NULL,
+                                                     libname.c_str(), kCFStringEncodingMacRoman);
+
+      bundleURL = CFURLCreateWithFileSystemPath( kCFAllocatorSystemDefault,
+                                                 plugin,
+                                                 kCFURLPOSIXPathStyle,
+                                                 true );
+      theBundle = CFBundleCreate( kCFAllocatorSystemDefault, bundleURL );
+
+      // Get a pointer to the function.
+      if (theBundle) {
+        plugmain = reinterpret_cast<FF_Main_FuncPtr>
+          (CFBundleGetFunctionPointerForName(
+                                             theBundle, CFSTR("plugMain") )
+           );
+      } else {
+        if(loud) {
+          ::post("%s: couldn't load", libname.c_str());
+        }
       }
-      return false;
+      if(bundleURL != NULL) {
+        CFRelease( bundleURL );
+      }
+      if(theBundle != NULL) {
+        CFRelease( theBundle );
+      }
+      if(plugin != NULL) {
+        CFRelease( plugin );
+      }
     }
-    plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle,
-               hookname));
-#else
-# error no way to load dynamic linked libraries on this OS
+#endif
+#if defined _WIN32
+    if(!plugmain) {
+      char buffer[MAXPDSTRING];
+      sys_bashfilename(libname.c_str(), buffer);
+      libname=buffer;
+      m_w32handle = LoadLibrary(libname.c_str());
+      if (!m_w32handle) {
+        if(loud) {
+          ::post("%s: couldn't load", libname.c_str());
+        }
+      } else {
+        plugmain = reinterpret_cast<FF_Main_FuncPtr>(GetProcAddress(m_w32handle,
+                   hookname));
+      }
+    }
 #endif
 
     m_plugin=plugmain;
