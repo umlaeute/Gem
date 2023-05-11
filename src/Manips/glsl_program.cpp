@@ -379,7 +379,7 @@ glsl_program :: glsl_program()
   , m_programmapped(0.)
   , m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP)
   , m_geoOutVertices(-1)
-  , m_keepParameters(true)
+  , m_keepUniforms(true)
 {
   int i=0;
   for(i=0; i<MAX_NUM_SHADERS; i++) {
@@ -530,8 +530,8 @@ void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
     error("no method for '%s' (it's not a uniform variable)", s->s_name);
   }
 }
-void glsl_program :: keepParamMess(bool keep) {
-  m_keepParameters = keep;
+void glsl_program :: keepUniformsMess(bool keep) {
+  m_keepUniforms = keep;
 }
 
 
@@ -869,7 +869,7 @@ void glsl_program :: getVariables()
       arraysize = 1;
     }
     std::map<std::string, t_uniform>::const_iterator it = olduniforms.find(name);
-    if (olduniforms.end() == it || !m_keepParameters) {
+    if (olduniforms.end() == it || !m_keepUniforms) {
       m_uniforms[name] = t_uniform(this, loc, type, arraysize);
     } else {
       // we already have this uniform cached.
@@ -1026,7 +1026,7 @@ void glsl_program :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG (classPtr, "shader", shaderMess);
   CPPEXTERN_MSG (classPtr, "link", linkMess);
   CPPEXTERN_MSG0(classPtr, "print", printInfo);
-  CPPEXTERN_MSG1(classPtr, "parametercache", keepParamMess, bool);
+  CPPEXTERN_MSG1(classPtr, "keepuniforms", keepUniformsMess, bool);
 
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&glsl_program::intypeMessCallback),

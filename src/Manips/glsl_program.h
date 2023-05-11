@@ -132,8 +132,8 @@ protected:
 
   std::map<std::string, std::vector<t_atom>>m_cachedParameters;
 
-  virtual void keepParamMess(bool);
-  bool m_keepParameters; /* should we keep parameters across reloading of shaders?)*/
+  virtual void keepUniformsMess(bool);
+  bool m_keepUniforms; /* should we keep uniforms across reloading of shaders?)*/
 
 
 private:
