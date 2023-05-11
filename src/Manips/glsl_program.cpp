@@ -848,7 +848,7 @@ void glsl_program :: getVariables()
   //
   GLchar *nameGL=new GLchar[maxLength];
   GLcharARB *nameARB=new GLcharARB[maxLength];
-  char*name = (char*)nameGL;
+  std::string name;
   GLsizei    length=0;
   for (GLuint i = 0; i < uniformcount; i++) {
     GLint loc, size, arraysize=1;
@@ -870,7 +870,7 @@ void glsl_program :: getVariables()
     }
     m_uniforms[name] = t_uniform(this, loc, type, arraysize);
   }
-  delete[]name;
+  delete[]nameGL;
   delete[]nameARB;
 }
 
