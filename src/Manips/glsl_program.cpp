@@ -488,9 +488,15 @@ void glsl_program :: postrender(GemState *state)
 // paramMess
 //
 /////////////////////////////////////////////////////////
-void glsl_program :: paramMess(t_symbol*s,int argc, t_atom *argv)
+void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
 {
   if (!(m_program || m_programARB)) {
+    /* cache the message */
+    std::vector<t_atom>vec;
+    for(int i=0; i<argc; i++) {
+      vec.push_back(argv[i]);
+    }
+    m_cachedParameters[s->s_name] = vec;
     return;
   }
 
@@ -770,6 +776,16 @@ void glsl_program :: LinkProgram()
 
   //post("getting variables");
   getVariables();
+
+  if(m_program || m_programARB) {
+    std::map<std::string, std::vector<t_atom>>parms = m_cachedParameters;
+    for (std::map<std::string, std::vector<t_atom>>::const_iterator it = parms.begin(); it != parms.end(); it++)
+      {
+        t_symbol*s = gensym(it->first.c_str());
+        paramMess(s, it->second.size(), it->second.data());
+      }
+    m_cachedParameters.clear();
+  }
 
 
 #ifdef __APPLE__

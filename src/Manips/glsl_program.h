@@ -20,6 +20,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "Base/GemBase.h"
 #include "Utils/GLUtil.h"
+#include <map>
 
 #define MAX_NUM_SHADERS 32
 
@@ -72,7 +73,7 @@ protected:
 
   //////////
   // parameters to the glsl-program
-  virtual void  paramMess(t_symbol*s, int argc, t_atom*argv);
+  virtual void  paramMess(t_symbol*s, int argc, const t_atom*argv);
 
   //////////
   // shader message
@@ -143,6 +144,8 @@ protected:
   GLuint m_geoOutType;
   virtual void outverticesMess(GLint);
   GLint  m_geoOutVertices;
+
+  std::map<std::string, std::vector<t_atom>>m_cachedParameters;
 
 
 private:
