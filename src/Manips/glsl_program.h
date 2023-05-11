@@ -111,20 +111,8 @@ protected:
 
   //////////
   // Variables for the, uh, variables
+  struct t_uniform;
   GLint m_uniformCount;
-  struct t_uniform {
-    t_symbol*name;
-    GLint size;
-    GLenum type;
-    GLint loc;
-    union {
-      GLfloat*f;
-      GLint*i;
-    } param;
-    GLint paramsize; /* how many elements does single parameter hold (e.g. vec2 => 2) */
-    GLint arraysize; /* array size (or 1) */
-    bool changed;
-  };
   t_uniform*m_uniform;
 
   gem::ContextData<GLint>m_linked;

@@ -18,6 +18,7 @@ using namespace gem::utils::gl;
 
 CPPEXTERN_NEW(glsl_program);
 
+
 namespace
 {
 GLenum uniform2type(CPPExtern*obj, GLenum type)
@@ -164,10 +165,185 @@ GLint uniform2numelements(CPPExtern*obj, GLenum type)
     return 1;
   }
 
-  obj->error("[glsl_program] unknown base size for uniform type %d, assuming 1", type);
+  obj->error("unknown base size for uniform type %d, assuming 1", type);
   return 1;
 }
 };
+
+/////////////////////////////////////////////////////////
+//
+// glsl_program::t_uniform
+//
+/////////////////////////////////////////////////////////
+
+struct glsl_program::t_uniform {
+  t_symbol*name;
+  GLint size;
+  GLenum type;
+  GLint loc;
+  union {
+    GLfloat*f;
+    GLint*i;
+  } param;
+  GLint paramsize; /* how many elements does single parameter hold (e.g. vec2 => 2) */
+  GLint arraysize; /* array size (or 1) */
+  bool changed;
+
+  t_uniform(void)
+    : paramsize(1)
+  {  }
+  void applyGL2(void) {
+    if(!changed)return;
+    // remove flag because the value is going to be in the GL's state soon...
+    changed = false;
+    switch (type) {
+      /* float vectors */
+    case GL_FLOAT:
+      glUniform1fv( loc, arraysize, param.f );
+      break;
+    case GL_FLOAT_VEC2:
+      glUniform2fv( loc, arraysize, param.f );
+      break;
+    case GL_FLOAT_VEC3:
+      glUniform3fv( loc, arraysize, param.f );
+      break;
+    case GL_FLOAT_VEC4:
+      glUniform4fv( loc, arraysize, param.f );
+      break;
+
+      /* int vectors */
+    case GL_INT:
+      glUniform1iv( loc, arraysize, param.i );
+      break;
+    case GL_INT_VEC2:
+      glUniform2iv( loc, arraysize, param.i );
+      break;
+    case GL_INT_VEC3:
+      glUniform3iv( loc, arraysize, param.i );
+      break;
+    case GL_INT_VEC4:
+      glUniform4iv( loc, arraysize, param.i );
+      break;
+
+      /* bool vectors */
+    case GL_BOOL:
+      glUniform1iv( loc, arraysize, param.i );
+      break;
+    case GL_BOOL_VEC2:
+      glUniform2iv( loc, arraysize, param.i );
+      break;
+    case GL_BOOL_VEC3:
+      glUniform3iv( loc, arraysize, param.i );
+      break;
+    case GL_BOOL_VEC4:
+      glUniform4iv( loc, arraysize, param.i );
+      break;
+
+      /* float matrices */
+    case GL_FLOAT_MAT2:
+      // GL_TRUE = row major order, GL_FALSE = column major
+      glUniformMatrix2fv( loc, arraysize, GL_FALSE, param.f );
+      break;
+    case GL_FLOAT_MAT3:
+      glUniformMatrix3fv( loc, arraysize, GL_FALSE, param.f );
+      break;
+    case GL_FLOAT_MAT4:
+      glUniformMatrix4fv( loc, arraysize, GL_FALSE, param.f );
+      break;
+
+      /* textures */
+    case GL_SAMPLER_1D:
+    case GL_SAMPLER_2D:
+    case GL_SAMPLER_3D:
+    case GL_SAMPLER_CUBE:
+    case GL_SAMPLER_1D_SHADOW:
+    case GL_SAMPLER_2D_SHADOW:
+    case GL_SAMPLER_2D_RECT_ARB:
+      glUniform1iv(loc, arraysize, param.i);
+      break;
+
+    default:
+      break;
+    }
+  }
+
+  void applyARB(void) {
+    if(!changed)
+      return;
+    // remove flag because the value is going to be in the GL's state soon...
+    changed = false;
+
+    switch (type) {
+      /* float vectors */
+    case GL_FLOAT:
+      glUniform1fARB( loc, param.f[0] );
+      break;
+    case GL_FLOAT_VEC2_ARB:
+      glUniform2fARB( loc, param.f[0], param.f[1] );
+      break;
+    case GL_FLOAT_VEC3_ARB:
+      glUniform3fARB( loc, param.f[0], param.f[1], param.f[2] );
+      break;
+    case GL_FLOAT_VEC4_ARB:
+      glUniform4fARB( loc, param.f[0], param.f[1], param.f[2], param.f[3] );
+      break;
+
+      /* int vectors */
+    case GL_INT:
+      glUniform1iARB( loc, param.i[0] );
+      break;
+    case GL_INT_VEC2_ARB:
+      glUniform2iARB( loc, param.i[0], param.i[1] );
+      break;
+    case GL_INT_VEC3_ARB:
+      glUniform3iARB( loc, param.i[0], param.i[1], param.i[2] );
+      break;
+    case GL_INT_VEC4_ARB:
+      glUniform4iARB( loc, param.i[0], param.i[1], param.i[2], param.i[3] );
+      break;
+
+      /* bool vectors */
+    case GL_BOOL_ARB:
+      glUniform1fARB( loc, param.f[0] );
+      break;
+    case GL_BOOL_VEC2_ARB:
+      glUniform2fARB( loc, param.f[0], param.f[1] );
+      break;
+    case GL_BOOL_VEC3_ARB:
+      glUniform3fARB( loc, param.f[0], param.f[1], param.f[2] );
+      break;
+    case GL_BOOL_VEC4_ARB:
+      glUniform4fARB( loc, param.f[0], param.f[1], param.f[2], param.f[3] );
+      break;
+
+      /* float matrices */
+    case GL_FLOAT_MAT2_ARB:
+      // GL_TRUE = row major order, GL_FALSE = column major
+      glUniformMatrix2fvARB( loc, 1, GL_FALSE, param.f );
+      break;
+    case GL_FLOAT_MAT3_ARB:
+      glUniformMatrix3fvARB( loc, 1, GL_FALSE, param.f );
+      break;
+    case GL_FLOAT_MAT4_ARB:
+      glUniformMatrix4fvARB( loc, 1, GL_FALSE, param.f );
+      break;
+
+      /* textures */
+    case GL_SAMPLER_1D_ARB:
+    case GL_SAMPLER_2D_ARB:
+    case GL_SAMPLER_3D_ARB:
+    case GL_SAMPLER_CUBE_ARB:
+    case GL_SAMPLER_1D_SHADOW_ARB:
+    case GL_SAMPLER_2D_SHADOW_ARB:
+    case GL_SAMPLER_2D_RECT_ARB:
+      glUniform1iARB(loc, param.f[0]);
+      break;
+    default:
+      break;
+    }
+  }
+};
+
 
 /////////////////////////////////////////////////////////
 //
@@ -199,6 +375,7 @@ glsl_program :: glsl_program()  :
   // create an outlet to send texture ID
   m_outProgramID = outlet_new(this->x_obj, &s_float);
 }
+
 
 ////////////////////////////////////////////////////////
 // Destructor
@@ -282,83 +459,8 @@ void glsl_program :: renderGL2()
   if (m_linked) {
     glUseProgram( m_program );
     for(int i=0; i<m_uniformCount; i++) {
-      t_uniform&uni = m_uniform[i];
-      if(uni.changed) {
-        switch (uni.type) {
-        /* float vectors */
-        case GL_FLOAT:
-          glUniform1fv( uni.loc, uni.arraysize, uni.param.f );
-          break;
-        case GL_FLOAT_VEC2:
-          glUniform2fv( uni.loc, uni.arraysize, uni.param.f );
-          break;
-        case GL_FLOAT_VEC3:
-          glUniform3fv( uni.loc, uni.arraysize, uni.param.f );
-          break;
-        case GL_FLOAT_VEC4:
-          glUniform4fv( uni.loc, uni.arraysize, uni.param.f );
-          break;
-
-        /* int vectors */
-        case GL_INT:
-          glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_INT_VEC2:
-          glUniform2iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_INT_VEC3:
-          glUniform3iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_INT_VEC4:
-          glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-
-        /* bool vectors */
-        case GL_BOOL:
-          glUniform1iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_BOOL_VEC2:
-          glUniform2iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_BOOL_VEC3:
-          glUniform3iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-        case GL_BOOL_VEC4:
-          glUniform4iv( uni.loc, uni.arraysize, uni.param.i );
-          break;
-
-        /* float matrices */
-        case GL_FLOAT_MAT2:
-          // GL_TRUE = row major order, GL_FALSE = column major
-          glUniformMatrix2fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
-          break;
-        case GL_FLOAT_MAT3:
-          glUniformMatrix3fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
-          break;
-        case GL_FLOAT_MAT4:
-          glUniformMatrix4fv( uni.loc, uni.arraysize, GL_FALSE, uni.param.f );
-          break;
-
-        /* textures */
-        case GL_SAMPLER_1D:
-        case GL_SAMPLER_2D:
-        case GL_SAMPLER_3D:
-        case GL_SAMPLER_CUBE:
-        case GL_SAMPLER_1D_SHADOW:
-        case GL_SAMPLER_2D_SHADOW:
-        case GL_SAMPLER_2D_RECT_ARB:
-          glUniform1iv(uni.loc, uni.arraysize, uni.param.i);
-          break;
-
-        default:
-          break;
-        }
-        // remove flag because the value is in GL's state now...
-        uni.changed = false;
-
-      }
+      m_uniform[i].applyGL2();
     }
-    // glUniform1i(glGetUniformLocation(m_program, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
@@ -370,85 +472,8 @@ void glsl_program :: renderARB()
   if (m_linked) {
     glUseProgramObjectARB( m_programARB );
     for(int i=0; i<m_uniformCount; i++) {
-      t_uniform&uni = m_uniform[i];
-      if(uni.changed) {
-        switch (uni.type) {
-        /* float vectors */
-        case GL_FLOAT:
-          glUniform1fARB( uni.loc, uni.param.f[0] );
-          break;
-        case GL_FLOAT_VEC2_ARB:
-          glUniform2fARB( uni.loc,
-                          uni.param.f[0], uni.param.f[1] );
-          break;
-        case GL_FLOAT_VEC3_ARB:
-          glUniform3fARB( uni.loc,
-                          uni.param.f[0], uni.param.f[1], uni.param.f[2] );
-          break;
-        case GL_FLOAT_VEC4_ARB:
-          glUniform4fARB( uni.loc,
-                          uni.param.f[0], uni.param.f[1], uni.param.f[2], uni.param.f[3] );
-          break;
-
-        /* int vectors */
-        case GL_INT:
-          glUniform1iARB( uni.loc, uni.param.i[0] );
-          break;
-        case GL_INT_VEC2_ARB:
-          glUniform2iARB( uni.loc, uni.param.i[0], uni.param.i[1] );
-          break;
-        case GL_INT_VEC3_ARB:
-          glUniform3iARB( uni.loc,
-                          uni.param.i[0], uni.param.i[1], uni.param.i[2] );
-          break;
-        case GL_INT_VEC4_ARB:
-          glUniform4iARB( uni.loc, uni.param.i[0], uni.param.i[1], uni.param.i[2], uni.param.i[3] );
-          break;
-
-        /* bool vectors */
-        case GL_BOOL_ARB:
-          glUniform1fARB( uni.loc, uni.param.f[0] );
-          break;
-        case GL_BOOL_VEC2_ARB:
-          glUniform2fARB( uni.loc, uni.param.f[0], uni.param.f[1] );
-          break;
-        case GL_BOOL_VEC3_ARB:
-          glUniform3fARB( uni.loc, uni.param.f[0], uni.param.f[1], uni.param.f[2] );
-          break;
-        case GL_BOOL_VEC4_ARB:
-          glUniform4fARB( uni.loc, uni.param.f[0], uni.param.f[1], uni.param.f[2], uni.param.f[3] );
-          break;
-
-        /* float matrices */
-        case GL_FLOAT_MAT2_ARB:
-          // GL_TRUE = row major order, GL_FALSE = column major
-          glUniformMatrix2fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
-          break;
-        case GL_FLOAT_MAT3_ARB:
-          glUniformMatrix3fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
-          break;
-        case GL_FLOAT_MAT4_ARB:
-          glUniformMatrix4fvARB( uni.loc, 1, GL_FALSE, uni.param.f );
-          break;
-
-        /* textures */
-        case GL_SAMPLER_1D_ARB:
-        case GL_SAMPLER_2D_ARB:
-        case GL_SAMPLER_3D_ARB:
-        case GL_SAMPLER_CUBE_ARB:
-        case GL_SAMPLER_1D_SHADOW_ARB:
-        case GL_SAMPLER_2D_SHADOW_ARB:
-        case GL_SAMPLER_2D_RECT_ARB:
-          glUniform1iARB(uni.loc, uni.param.f[0]);
-          break;
-        default:
-          break;
-        }
-        // remove flag because the value is in GL's state now...
-        uni.changed = false;
-      }
+      m_uniform[i].applyARB();
     }
-    //  glUniform1iARB(glGetUniformLocationARB(program_object, "MyTex1"), 1);
   } else {
     /* JMZ: this is really annoying... */
     //error("no program linked");
