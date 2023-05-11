@@ -369,16 +369,16 @@ struct glsl_program::t_uniform {
 // Constructor
 //
 /////////////////////////////////////////////////////////
-glsl_program :: glsl_program()  :
-  m_program(0),
-  m_programARB(0),
-  m_linked(0),
-  m_numShaders(0),
-  m_outProgramID(0),
-  m_shadermapper("glsl.shader"), m_programmapper("glsl.program"),
-  m_programmapped(0.),
-  m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP),
-  m_geoOutVertices(-1)
+glsl_program :: glsl_program()
+  : m_program(0)
+  , m_programARB(0)
+  , m_linked(0)
+  , m_numShaders(0)
+  , m_outProgramID(0)
+  , m_shadermapper("glsl.shader"), m_programmapper("glsl.program")
+  , m_programmapped(0.)
+  , m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP)
+  , m_geoOutVertices(-1)
 {
   int i=0;
   for(i=0; i<MAX_NUM_SHADERS; i++) {
@@ -428,27 +428,23 @@ bool glsl_program :: isRunnable()
 /////////////////////////////////////////////////////////
 void glsl_program :: renderGL2()
 {
-  if (m_linked) {
-    glUseProgram( m_program );
-    for(std::map<std::string, t_uniform>::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++) {
-      it->second.applyGL2();
-    }
-  } else {
-    /* JMZ: this is really annoying... */
-    //error("no program linked");
+  if(!m_linked)
+    return;
+
+  glUseProgram( m_program );
+  for(std::map<std::string, t_uniform>::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++) {
+    it->second.applyGL2();
   }
 }
 
 void glsl_program :: renderARB()
 {
-  if (m_linked) {
-    glUseProgramObjectARB( m_programARB );
-    for(std::map<std::string, t_uniform>::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++) {
-      it->second.applyARB();
-    }
-  } else {
-    /* JMZ: this is really annoying... */
-    //error("no program linked");
+  if(!m_linked)
+    return;
+
+  glUseProgramObjectARB( m_programARB );
+  for(std::map<std::string, t_uniform>::iterator it = m_uniforms.begin(); it != m_uniforms.end(); it++) {
+    it->second.applyARB();
   }
 }
 
@@ -487,17 +483,17 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
 {
+  std::string name = std::string(s->s_name);
   if (!(m_program || m_programARB)) {
     /* cache the message */
     std::vector<t_atom>vec;
     for(int i=0; i<argc; i++) {
       vec.push_back(argv[i]);
     }
-    m_cachedParameters[s->s_name] = vec;
+    m_cachedParameters[name] = vec;
     return;
   }
 
-  std::string name = std::string(s->s_name);
   try {
     t_uniform&uni = m_uniforms.at(name);
 
@@ -772,8 +768,9 @@ void glsl_program :: LinkProgram()
   getVariables();
 
   if(m_program || m_programARB) {
-    std::map<std::string, std::vector<t_atom>>parms = m_cachedParameters;
-    for (std::map<std::string, std::vector<t_atom>>::const_iterator it = parms.begin(); it != parms.end(); it++)
+    for (std::map<std::string, std::vector<t_atom>>::const_iterator it = m_cachedParameters.begin();
+         it != m_cachedParameters.end();
+         it++)
       {
         t_symbol*s = gensym(it->first.c_str());
         paramMess(s, it->second.size(), it->second.data());
