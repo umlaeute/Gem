@@ -1094,6 +1094,8 @@ bool pix_freeframe :: loader(const t_canvas*canvas,
     return false;
   }
   std::string pluginname = classname.substr(offset_pix_);
+  if(!path.empty())
+    pluginname = path + "/" + pluginname;
 
   pix_freeframe::FFPlugin*plugin=NULL;
   try {
