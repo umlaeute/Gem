@@ -173,9 +173,6 @@ public:
       return false;
     }
 
-#ifdef __GNUC__
-# warning check color type
-#endif
     m_color = info.color_model;
 #ifdef __GNUC__
 # warning check compatibility
