@@ -379,7 +379,7 @@ glsl_program :: glsl_program()
   , m_programmapped(0.)
   , m_geoInType(GL_TRIANGLES), m_geoOutType(GL_TRIANGLE_STRIP)
   , m_geoOutVertices(-1)
-  , m_keepParameters(false)
+  , m_keepParameters(true)
 {
   int i=0;
   for(i=0; i<MAX_NUM_SHADERS; i++) {
@@ -485,7 +485,7 @@ void glsl_program :: postrender(GemState *state)
 void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
 {
   std::string name = std::string(s->s_name);
-  if (!(m_program || m_programARB) || m_keepParameters) {
+  if (!(m_program || m_programARB)) {
     /* cache the message */
     std::vector<t_atom>vec;
     for(int i=0; i<argc; i++) {
@@ -532,8 +532,6 @@ void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
 }
 void glsl_program :: keepParamMess(bool keep) {
   m_keepParameters = keep;
-  if(!m_keepParameters)
-    m_cachedParameters.clear();
 }
 
 
@@ -784,8 +782,7 @@ void glsl_program :: LinkProgram()
         t_symbol*s = gensym(it->first.c_str());
         paramMess(s, it->second.size(), it->second.data());
       }
-    if(!m_keepParameters)
-      m_cachedParameters.clear();
+    m_cachedParameters.clear();
   }
 
 
@@ -850,6 +847,9 @@ void glsl_program :: getVariables()
   GLcharARB *nameARB=new GLcharARB[maxLength];
   std::string name;
   GLsizei    length=0;
+  std::map<std::string, t_uniform>olduniforms(m_uniforms);
+  m_uniforms.clear();
+
   for (GLuint i = 0; i < uniformcount; i++) {
     GLint loc, size, arraysize=1;
     GLenum type;
@@ -868,7 +868,22 @@ void glsl_program :: getVariables()
       name=(char*)nameARB;
       arraysize = 1;
     }
-    m_uniforms[name] = t_uniform(this, loc, type, arraysize);
+    std::map<std::string, t_uniform>::const_iterator it = olduniforms.find(name);
+    if (olduniforms.end() == it || !m_keepParameters) {
+      m_uniforms[name] = t_uniform(this, loc, type, arraysize);
+    } else {
+      // we already have this uniform cached.
+      // check if it is compatible, and if so, use the old one
+      const t_uniform &old = it->second;
+      if ((old.type == type) && (old.arraysize == arraysize)) {
+        m_uniforms[name] = old;
+        t_uniform &uni = m_uniforms[name];
+        uni.loc = loc; /* the location might have changed, so update it */
+        uni.changed = true; /* make sure to apply the value on next render */
+      } else {
+        m_uniforms[name] = t_uniform(this, loc, type, arraysize);
+      }
+    }
   }
   delete[]nameGL;
   delete[]nameARB;
