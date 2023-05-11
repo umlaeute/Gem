@@ -163,12 +163,23 @@ public:
       ::post("parm%02d[%s]: %s", i+1, pinfo.name, pinfo.explanation);
     }
 
+    /* check color-space */
+    bool compat_color = true;
     switch(m_color) {
+    case F0R_COLOR_MODEL_PACKED32:
+      break;
     case F0R_COLOR_MODEL_RGBA8888:
+      compat_color = (GEM_RGBA == GEM_RAW_RGBA);
+      break;
+    case F0R_COLOR_MODEL_BGRA8888:
+      compat_color = (GEM_RGBA == GEM_RAW_BGRA);
       break;
     default:
-      ::post("pix_frei0r: currently only plugins using the RGBA colorspace are properly supported");
+      compat_color = false;
+      break;
     }
+    if(!compat_color)
+      ::post("pix_frei0r: currently only plugins using the RGBA colorspace are properly supported");
 
     return true;
   }
