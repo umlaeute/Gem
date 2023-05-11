@@ -1,19 +1,14 @@
 #N canvas 477 282 648 436 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 9 326 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 9 326 cnv 15 430 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 328 Inlets:;
-#X obj 8 286 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 286 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 285 Arguments:;
-#X obj 7 56 cnv 15 430 220 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 459 77 cnv 15 170 250 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 7 56 cnv 15 430 220 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 459 77 cnv 15 170 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 463 60 Example:;
-#X obj 524 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 524 254 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 1 98 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -33,9 +28,8 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 529 293 pd gemwin;
-#X msg 529 274 destroy;
-#X obj 460 114 cnv 15 170 100 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X msg 529 274 create;
+#X obj 460 114 cnv 15 170 100 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X text 71 31 Class: pix object;
 #X text 53 342 Inlet 1: gemlist;
 #X text 50 12 Synopsis: [pix_roi];
@@ -49,14 +43,10 @@
 #X obj 461 186 pix_roi 0.25 0.25 0.75 0.75;
 #X msg 476 151 roi 0 0 0.5 0.5;
 #X text 29 56 Description: set the region-of-interest of an image;
-#X text 22 109 The arguments set the lower left and upper right corners
-of the roi.Coordinates must be normalized.;
-#X text 21 79 [pix_roi] will allow you to set the region of interest
-of the current image-data.;
-#X text 22 139 other pix-objects should then apply whatever they are
-doing on the so-specified sub-image.;
-#X text 22 170 (currently only [pix_set] supports ROI \, more will
-hopefully follow);
+#X text 22 109 The arguments set the lower left and upper right corners of the roi.Coordinates must be normalized.;
+#X text 21 79 [pix_roi] will allow you to set the region of interest of the current image-data.;
+#X text 22 139 other pix-objects should then apply whatever they are doing on the so-specified sub-image.;
+#X text 22 170 (currently only [pix_set] supports ROI \, more will hopefully follow);
 #X obj 528 8 declare -lib Gem;
 #X text 442 358 see example/04.pix/27.bitmap_font.pd, f 32;
 #X connect 9 0 10 0;

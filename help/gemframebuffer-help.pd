@@ -1,7 +1,7 @@
 #N canvas 125 98 896 632 10;
 #X declare -lib Gem;
 #X obj 465 39 cnv 15 420 570 empty empty empty 20 12 0 14 #dce4fc #404040 0;
-#X obj 472 323 cnv 15 300 60 empty empty empty 20 12 0 14 #b8b8b8 #404040 0;
+#X obj 472 321 cnv 15 100 30 empty empty empty 20 12 0 14 #b8b8b8 #404040 0;
 #X obj 474 48 cnv 15 400 250 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 477 71 gemhead 20;
 #X obj 664 336 gemhead;
@@ -136,7 +136,6 @@
 #X text 27 345 Inlet 1: message: dimen <x> <y>;
 #X text 27 379 Inlet 1: message: color <r> <g> <b> <a>;
 #X text 26 460 Inlet 1: message: texunit <f>;
-#X text 27 310 Inlet 1: message: format [RGB|RGBA|RGB32|YUV];
 #X text 26 415 Inlet 1: message: rectangle [0|1];
 #X text 103 292 (type of the framebuffer data);
 #X text 102 360 (dimension of the framebuffer texture);
@@ -158,6 +157,8 @@
 #X text 31 587 Outlet 2: texture info : <id> <width> <height> <type> <0.>;
 #X obj 778 8 declare -lib Gem;
 #X text 22 512 Inlet 1: message: perspec <left><right><bottom><top><near><far>, f 66;
+#X msg 685 270 format RGBA32F;
+#X text 27 310 Inlet 1: message: format [RGB|RGBA|RGB32|RGBA32F|YUV];
 #X connect 3 0 18 0;
 #X connect 4 0 19 0;
 #X connect 5 0 38 0;
@@ -174,7 +175,7 @@
 #X connect 15 0 40 0;
 #X connect 16 0 4 0;
 #X connect 17 0 36 0;
-#X connect 18 0 85 0;
+#X connect 18 0 84 0;
 #X connect 18 1 19 1;
 #X connect 19 0 20 0;
 #X connect 20 0 29 0;
@@ -210,10 +211,11 @@
 #X connect 50 0 51 0;
 #X connect 51 0 50 0;
 #X connect 53 0 50 0;
-#X connect 83 0 3 0;
-#X connect 84 0 85 1;
-#X connect 85 0 17 0;
-#X connect 86 0 85 3;
-#X connect 87 0 85 2;
+#X connect 82 0 3 0;
+#X connect 83 0 84 1;
+#X connect 84 0 17 0;
+#X connect 85 0 84 3;
+#X connect 86 0 84 2;
+#X connect 87 0 38 0;
 #X connect 88 0 38 0;
-#X connect 89 0 38 0;
+#X connect 95 0 37 0;

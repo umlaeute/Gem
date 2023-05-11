@@ -1,20 +1,15 @@
 #N canvas 207 93 659 563 10;
 #X declare -lib Gem;
 #X text 442 8 GEM object;
-#X obj 8 328 cnv 15 430 210 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 328 cnv 15 430 210 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 328 Inlets:;
 #X text 42 502 Outlets:;
-#X obj 8 292 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 292 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 291 Arguments:;
-#X obj 8 56 cnv 15 430 230 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 77 cnv 15 195 345 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 56 cnv 15 430 230 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 77 cnv 15 195 345 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 60 Example:;
-#X obj 518 430 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 518 430 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -34,52 +29,34 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 523 469 pd gemwin;
-#X msg 523 450 destroy;
+#X msg 523 450 create;
 #X text 515 429 Create window:;
-#X obj 451 185 cnv 15 160 175 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 451 185 cnv 15 160 175 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 119 gemhead;
-#X obj 496 101 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
--1 -1;
+#X obj 496 101 bng 15 250 50 0 empty empty pix_load 20 8 0 8 #fcfcfc #000000 #000000;
 #X obj 451 370 pix_texture;
 #X text 63 302 <none>;
 #X text 18 516 Outlet 1: gemlist;
 #X text 15 342 Inlet 1: gemlist;
 #X obj 451 398 square 3;
 #X obj 580 120 gemhead;
-#X obj 625 102 bng 15 250 50 0 empty empty empty 20 8 0 8 -262144 -1
--1;
+#X obj 625 102 bng 15 250 50 0 empty empty empty 20 8 0 8 #fcfcfc #000000 #000000;
 #X text 16 483 Inlet 2: gemlist;
 #X text 71 31 Class: pix mix object;
 #X text 50 12 Synopsis: [pix_chroma_key];
 #X text 29 57 Description: mix 2 images based on their color;
 #X obj 451 338 pix_chroma_key;
 #X msg 486 315 direction \$1;
-#X obj 486 295 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
-#X text 16 441 Inlet 1: direction 0|1 : which stream is the key-source
-(0=left stream \; 1 = right stream);
-#X floatatom 465 203 5 0 255 0 - - -;
-#X floatatom 475 255 5 0 255 0 - - -;
+#X obj 486 295 tgl 15 1 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
+#X text 16 441 Inlet 1: direction 0|1 : which stream is the key-source (0=left stream \; 1 = right stream);
+#X floatatom 465 203 5 0 255 0 - - - 0;
+#X floatatom 475 255 5 0 255 0 - - - 0;
 #X text 15 197 The 2 images have to be of the same size.;
-#X text 14 76 [pix_chroma_key] does compositing using pixel by pixel
-comparisons on two video streams. the comparison is based on user a
-user supplied RGB or YUV pixel value and +/- range. if the pixel in
-the key source lies within the range \, then it is replaced by the
-corresponding pixel im the other stream. typically this is most effective
-on a static background like a green/blue screen \, but can be effective
-when used with other GEM objects like pix_background for live video
-processing.;
-#X text 15 357 Inlet 1: value <list> : list of 3 floats of the pixel-value
-to key out: values are either Red/Green/Blue (in RGBA-Space) or Y(luma)/U(Cb)/V(Cr)
-in YUV-Space;
-#X text 16 397 Inlet 1: range <list> : list of 3 floats defining the
-+/-range of the key: values are either Red/Green/Blue (in RGBA-Space)
-or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
-#X obj 478 241 hsl 128 12 0 1 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 0 1;
-#X obj 468 188 hsl 128 12 0 1 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 0 1;
+#X text 14 76 [pix_chroma_key] does compositing using pixel by pixel comparisons on two video streams. the comparison is based on user a user supplied RGB or YUV pixel value and +/- range. if the pixel in the key source lies within the range \, then it is replaced by the corresponding pixel im the other stream. typically this is most effective on a static background like a green/blue screen \, but can be effective when used with other GEM objects like pix_background for live video processing.;
+#X text 15 357 Inlet 1: value <list> : list of 3 floats of the pixel-value to key out: values are either Red/Green/Blue (in RGBA-Space) or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
+#X text 16 397 Inlet 1: range <list> : list of 3 floats defining the +/-range of the key: values are either Red/Green/Blue (in RGBA-Space) or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
+#X obj 478 241 hsl 128 12 0 1 0 0 empty empty empty -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 468 188 hsl 128 12 0 1 0 0 empty empty empty -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 465 220 value \$1 \$1 \$1;
 #X msg 475 273 range \$1 \$1 \$1;
 #N canvas 0 22 587 366 image 0;
@@ -108,9 +85,7 @@ or Y(luma)/U(Cb)/V(Cr) in YUV-Space;
 #X obj 77 301 pix_buf;
 #X msg 103 277 auto 1;
 #X obj 103 256 loadbang;
-#X text 166 263 [pix_buf] with auto 1 is important if we want to recalculate
-our pix-effect each frame but don't want to reload the image all the
-time.;
+#X text 166 263 [pix_buf] with auto 1 is important if we want to recalculate our pix-effect each frame but don't want to reload the image all the time.;
 #X obj 77 230 pix_yuv;
 #X obj 77 185 pix_image examples/data/fractal.JPG;
 #X connect 0 0 10 0;
@@ -127,11 +102,7 @@ time.;
 #X obj 451 161 pix_rgba;
 #X obj 580 162 pix_rgba;
 #X text 511 155 or [pix_yuv], f 9;
-#X text 15 215 RGB values are 0-1 \, YUV values are 16/255-239/255.
-It is strongly advised to convert explicitly to your preferred colorspace
-before [pix_chroma_key] because the default colorspace is not guaranteed
-to be the same across operating systems (see [pix_rgba] or [pix_yuv]).
-;
+#X text 15 215 RGB values are 0-1 \, YUV values are 16/255-239/255. It is strongly advised to convert explicitly to your preferred colorspace before [pix_chroma_key] because the default colorspace is not guaranteed to be the same across operating systems (see [pix_rgba] or [pix_yuv]).;
 #X connect 10 0 11 0;
 #X connect 11 0 10 0;
 #X connect 14 0 41 0;

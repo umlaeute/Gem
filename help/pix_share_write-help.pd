@@ -1,20 +1,15 @@
 #N canvas 547 473 901 407 10;
 #X declare -lib Gem;
 #X text 701 8 GEM object;
-#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 271 Inlets:;
 #X text 34 309 Outlets:;
-#X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 230 Arguments:;
-#X obj 7 56 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 77 cnv 15 440 200 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 7 56 cnv 15 430 170 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 77 cnv 15 440 200 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 60 Example:;
-#X obj 484 204 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 484 204 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 50 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -34,14 +29,12 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X restore 489 243 pd gemwin;
-#X msg 489 224 destroy;
+#X msg 489 224 create;
 #X text 485 203 Create window:;
-#X obj 450 140 cnv 15 370 60 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 450 140 cnv 15 370 60 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
-#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
--1 -1;
+#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 50 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -67,16 +60,9 @@
 #X text 29 56 Description: write pixels to a shared memory region;
 #X text 63 241 <i:ID> <i:width> <i:height> <colorspace>;
 #X text 446 284 see also:;
-#X text 15 181 [pix_share_write] needs to know the image-dimensions
-(and color-space) in advance. The color-space can be given as a symbol
-("RGBA" \, "YUV" \, "Grey") or as pixel-width (4 \, 2 \, 1);
-#X text 18 72 [pix_share_write] will create (if needed) a portion of
-shared memory - identified by a given ID - where it can write pix-data
-into. This data can then be read via one or more [pix_share_read] objects
-(referencing to the same ID).;
-#X text 18 127 [pix_share_write] and [pix_share_read] need not be in
-the same instance of Pd. However all objects need to have access to
-the same memory (they probably need to run on the same computer);
+#X text 15 181 [pix_share_write] needs to know the image-dimensions (and color-space) in advance. The color-space can be given as a symbol ("RGBA" \, "YUV" \, "Grey") or as pixel-width (4 \, 2 \, 1);
+#X text 18 72 [pix_share_write] will create (if needed) a portion of shared memory - identified by a given ID - where it can write pix-data into. This data can then be read via one or more [pix_share_read] objects (referencing to the same ID).;
+#X text 18 127 [pix_share_write] and [pix_share_read] need not be in the same instance of Pd. However all objects need to have access to the same memory (they probably need to run on the same computer);
 #X text 446 347 in a different Pd instance on your;
 #X text 447 361 machine to see the effect.;
 #X text 446 333 Run the [pix_share_read] help-patch;

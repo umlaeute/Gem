@@ -1,26 +1,20 @@
 #N canvas 126 111 676 689 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 7 193 cnv 15 430 480 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 7 149 cnv 15 430 40 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 7 193 cnv 15 430 480 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 7 149 cnv 15 430 40 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 16 153 Arguments:;
-#X obj 7 43 cnv 15 430 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 54 cnv 15 210 350 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 7 43 cnv 15 430 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 54 cnv 15 210 350 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 451 28 Example:;
-#X obj 454 286 cnv 15 160 60 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 454 286 cnv 15 160 60 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X text 50 2 Synopsis: [gemwin];
 #X text 17 46 Description: access to the window manager;
 #X obj 458 320 gemwin;
 #X msg 458 103 reset \, dimen 640 480 \, create \, 1;
 #X msg 486 195 0 \, destroy;
 #X text 16 196 Inlet 1:;
-#X text 30 225 reset : reset the graphics manager to the default values
-;
+#X text 30 225 reset : reset the graphics manager to the default values;
 #X text 29 432 create : create the graphics window;
 #X text 29 446 destroy : destroy the graphics window;
 #X text 30 479 float (1/0) : turn on/off rendering;
@@ -31,25 +25,16 @@
 #X msg 79 222 2;
 #X msg 108 222 4;
 #X text 54 129 2 - double resolution (4 times the pixel data);
-#X text 43 324 Full-scene anti-aliasing by supersampling usually means
-that each full frame is rendered at double (2x) or quadruple (4x) the
-display resolution \, and then down-sampled to match the display resolution.
-So a 4x FSAA would render 16 supersampled pixels for each single pixel
-of each frame.;
-#X text 54 189 8 - eight-times resolution (64 times the pixel data)
-;
+#X text 43 324 Full-scene anti-aliasing by supersampling usually means that each full frame is rendered at double (2x) or quadruple (4x) the display resolution \, and then down-sampled to match the display resolution. So a 4x FSAA would render 16 supersampled pixels for each single pixel of each frame.;
+#X text 54 189 8 - eight-times resolution (64 times the pixel data);
 #X text 54 149 4 - quadruple resolution (16 times the pixel data);
 #X text 54 109 0 - turn off super sampling for anti-aliasing;
-#X text 43 405 http://en.wikipedia.org/wiki/Anti-aliasing#Full-scene_anti-aliasing
-;
+#X text 43 405 http://en.wikipedia.org/wiki/Anti-aliasing#Full-scene_anti-aliasing;
 #X text 200 220 <-- destroy gemwin between clicking these;
 #X obj 90 299 s \$0-gemwin-in;
 #X text 54 168 5 - quadruple resolution (16 times the pixel data);
-#X text 33 6 Gem provides Full Scene Anti-Aliasing for smoothing out
-the edges of all things drawn in the OpenGL scene. To enable it \,
-send the "FSAA" message to the [gemwin] before creating it.;
-#X text 33 61 FSAA might or might not work depending on your graphic
-card \, the value of the parameter may also vary.;
+#X text 33 6 Gem provides Full Scene Anti-Aliasing for smoothing out the edges of all things drawn in the OpenGL scene. To enable it \, send the "FSAA" message to the [gemwin] before creating it.;
+#X text 33 61 FSAA might or might not work depending on your graphic card \, the value of the parameter may also vary.;
 #X msg 169 222 8;
 #X msg 139 222 5;
 #X msg 90 272 destroy \, FSAA \$1 \, create \, 1;
@@ -62,26 +47,19 @@ card \, the value of the parameter may also vary.;
 #X restore 356 269 pd FSAA;
 #X obj 471 294 r \$0-gemwin-in;
 #X text 29 285 fullscreen 0|1 : make fullscreen-window;
-#X text 57 302 (if possible with the dimensions passed via "dimen")
-;
-#N canvas 430 50 405 382 fullscreen 0;
-#X text -88 -108 fullscreen 0/1: make fullscreen-window (if possible
-with the dimensions passed via "dimen");
-#X text -88 -64 on platform's that support it (currently: Mac OS X)
-you can specify on which screen you want to go fullscreen (if you have
-several screens): e.g. "fullscreen 2" will make a fullscreen-window
-on Screen2;
-#X text -86 -130 FULLSCREEN SUPPORT;
-#X obj -85 -1 vradio 15 1 0 3 empty empty empty 0 -8 0 10 -262144 -1
--1 0;
-#X floatatom -85 50 5 0 0 0 - - -;
-#X msg -85 71 reset \, fullscreen \$1 \, create \, 1;
-#X text -63 -4 deactivate fullscreen;
-#X text -64 13 fullscreen on screen 1;
-#X text -64 29 fullscreen on screen 2;
-#X msg -72 126 0 \, destroy;
-#X text -89 182 BE CAREFUL : when you are in fullscreen mode \, you
-have no more access to the other windows of your system.;
+#X text 57 302 (if possible with the dimensions passed via "dimen");
+#N canvas 430 50 593 422 fullscreen 0;
+#X text 52 52 fullscreen 0/1: make fullscreen-window (if possible with the dimensions passed via "dimen");
+#X text 52 96 on platform's that support it (currently: Mac OS X) you can specify on which screen you want to go fullscreen (if you have several screens): e.g. "fullscreen 2" will make a fullscreen-window on Screen2;
+#X text 54 30 FULLSCREEN SUPPORT;
+#X obj 55 159 vradio 15 1 0 3 empty empty empty 0 -8 0 10 #fcfcfc #000000 #000000 0;
+#X floatatom 55 210 5 0 0 0 - - - 0;
+#X msg 55 231 reset \, fullscreen \$1 \, create \, 1;
+#X text 77 156 deactivate fullscreen;
+#X text 76 173 fullscreen on screen 1;
+#X text 76 189 fullscreen on screen 2;
+#X msg 68 286 0 \, destroy;
+#X text 51 342 BE CAREFUL : when you are in fullscreen mode \, you have no more access to the other windows of your system.;
 #N canvas 107 50 450 300 esc 0;
 #X obj 65 20 gemkeyboard;
 #X obj 65 167 outlet;
@@ -96,64 +74,48 @@ have no more access to the other windows of your system.;
 #X connect 4 0 1 0;
 #X connect 5 0 1 0;
 #X connect 6 1 5 0;
-#X restore -72 104 pd esc;
-#X obj -85 155 s \$0-gemwin-in;
-#X text 111 11 press ESC to quit;
+#X restore 68 264 pd esc;
+#X obj 55 315 s \$0-gemwin-in;
+#X text 251 171 press ESC to quit;
 #X connect 3 0 4 0;
 #X connect 4 0 5 0;
 #X connect 5 0 12 0;
 #X connect 9 0 12 0;
 #X connect 11 0 9 0;
 #X restore 356 288 pd fullscreen;
-#X text 57 253 the x and y dimensions of the window. (default: 500
-500);
-#X text 29 508 frame <number> : number of frames per second (default
-20);
+#X text 57 253 the x and y dimensions of the window. (default: 500 500);
+#X text 29 508 frame <number> : number of frames per second (default 20);
 #X text 30 268 FSAA <number> : anti aliasing (default:0);
-#X text 30 318 border 1|0 : create a window with/out borders (default
-1);
+#X text 30 318 border 1|0 : create a window with/out borders (default 1);
 #X text 57 350 the x and y offset of the window. (default: 0 0);
 #N canvas 641 438 406 148 offset 0;
 #X text 53 8 OFFSET SUPPORT;
-#X text 21 28 offset might not work on some window managers if the
-borders are on;
-#X text 20 55 under OSX you must take into account the number of pixel
-of the menubar \, title and eventually of your dock.;
-#X text 19 82 [offset 0 -60( with [menubar 0( is working in 10.6 to
-set the window in the top left of the screen;
+#X text 21 28 offset might not work on some window managers if the borders are on;
+#X text 20 55 under OSX you must take into account the number of pixel of the menubar \, title and eventually of your dock.;
+#X text 19 82 [offset 0 -60( with [menubar 0( is working in 10.6 to set the window in the top left of the screen;
 #X restore 356 334 pd offset;
 #N canvas 230 93 618 505 more 0;
-#X text 230 327 title <title_symbol>: set the title for the window
-;
+#X text 230 327 title <title_symbol>: set the title for the window;
 #X msg 121 327 title my_window;
-#X obj 94 187 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
-1;
+#X obj 94 187 tgl 15 0 empty empty empty 0 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 94 205 menubar \$1;
 #X msg 117 187 -1;
-#X text 188 190 menubar -1/0/1: hide or show the Mac OS X menubar \,
-1 shows \, 0 hides \, and -1 hides by default and shows on mouseover
-;
+#X text 188 190 menubar -1/0/1: hide or show the Mac OS X menubar \, 1 shows \, 0 hides \, and -1 hides by default and shows on mouseover;
 #X msg 44 60 cursor \$1;
-#X obj 44 41 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0 1
-;
+#X obj 44 41 tgl 15 0 empty empty empty 0 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 139 59 cursor 0/1: turn the cursor on/off;
-#X obj 109 247 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
-1;
+#X obj 109 247 tgl 15 0 empty empty empty 0 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 109 266 topmost \$1;
-#X text 204 255 topmost 0/1: make the gemwin the top most window \,
-on top of everything else (Windows only?);
+#X text 204 255 topmost 0/1: make the gemwin the top most window \, on top of everything else (Windows only?);
 #X msg 126 376 create remotehost:8.0;
-#X text 283 369 when using X-windows \, you can also create a window
-on a remote display!;
+#X text 283 369 when using X-windows \, you can also create a window on a remote display!;
 #X obj 44 465 s \$0-gemwin-in;
 #X text 41 14 Other messages to [gemwin] regarding the window;
 #X msg 55 139 0 \, destroy;
 #X msg 110 438 create \, 1;
 #X text 188 437 ...and create it after;
-#X text 133 140 destroy window before setting window properties...
-;
-#X text 81 104 All of these messages must be sent to [gemwin] before
-the window is created in order to take effect:;
+#X text 133 140 destroy window before setting window properties...;
+#X text 81 104 All of these messages must be sent to [gemwin] before the window is created in order to take effect:;
 #X connect 1 0 14 0;
 #X connect 2 0 3 0;
 #X connect 3 0 14 0;
@@ -172,21 +134,16 @@ the window is created in order to take effect:;
 #X text 263 186 ambient R G B : the ambient lighting color;
 #X text 269 240 specular R G B : the specular lighting color;
 #X text 197 277 shininess num : the shininess value;
-#X text 132 326 fogmode 0/1/2/3 : set the fog mode (OFF/LINEAR/EXP/EXP^2)
-;
+#X text 132 326 fogmode 0/1/2/3 : set the fog mode (OFF/LINEAR/EXP/EXP^2);
 #X text 298 447 fogcolor R G B : the color of the fog;
 #X text 219 367 fog num : the fog density;
 #X text 24 11 messages to the [gemwin] regarding lighting effects;
-#X obj 24 116 tgl 15 0 empty empty empty 0 -6 0 10 -262144 -1 -1 0
-1;
+#X obj 24 116 tgl 15 0 empty empty empty 0 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 24 134 lighting \$1;
 #N canvas 714 134 566 458 color 0;
-#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
-#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
-#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 #fce0e0 #000000 #000000 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 #d8fcd8 #000000 #000000 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 #dce4fc #000000 #000000 0 1;
 #X obj 100 329 outlet;
 #X obj 132 253 list;
 #X msg 132 273 set ambient \$1 \$2 \$3;
@@ -210,12 +167,9 @@ the window is created in order to take effect:;
 #X restore 35 165 pd color sliders;
 #X msg 35 187 ambient 0 0 0;
 #N canvas 714 134 566 366 color 0;
-#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
-#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
-#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 #fce0e0 #000000 #000000 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 #d8fcd8 #000000 #000000 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 #dce4fc #000000 #000000 0 1;
 #X obj 100 299 outlet;
 #X obj 132 223 list;
 #X msg 132 242 set specular \$1 \$2 \$3;
@@ -239,12 +193,9 @@ the window is created in order to take effect:;
 #X restore 42 219 pd color sliders;
 #X msg 42 241 specular 0 0 0;
 #N canvas 710 134 570 462 color 0;
-#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 -261689 -1
--1 0 1;
-#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 -225271 -1
--1 0 1;
-#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 -228992 -1
--1 0 1;
+#X obj 103 100 hsl 128 15 0 1 0 0 empty empty R 12 8 1 12 #fce0e0 #000000 #000000 0 1;
+#X obj 236 100 hsl 128 15 0 1 0 0 empty empty G 12 8 1 12 #d8fcd8 #000000 #000000 0 1;
+#X obj 370 100 hsl 128 15 0 1 0 0 empty empty B 12 8 1 12 #dce4fc #000000 #000000 0 1;
 #X obj 100 299 outlet;
 #X obj 132 223 list;
 #X msg 132 242 set fogcolor \$1 \$2 \$3;
@@ -270,8 +221,7 @@ the window is created in order to take effect:;
 #X msg 59 338 fogmode 0;
 #N canvas 889 134 348 479 fog 0;
 #X obj 84 239 outlet;
-#X obj 100 101 hradio 15 1 0 4 empty empty empty 0 -6 0 10 -262144
--1 -1 0;
+#X obj 100 101 hradio 15 1 0 4 empty empty empty 0 -6 0 10 #fcfcfc #000000 #000000 0;
 #X msg 207 182 set fogmode \$1;
 #X obj 84 140 trigger bang float;
 #X connect 1 0 3 0;
@@ -285,8 +235,7 @@ the window is created in order to take effect:;
 #X obj 84 239 outlet;
 #X obj 84 140 trigger bang float;
 #X msg 207 182 set shininess \$1;
-#X obj 103 101 hsl 128 15 0 1 0 0 empty empty empty -2 -6 0 10 -262144
--1 -1 0 1;
+#X obj 103 101 hsl 128 15 0 1 0 0 empty empty empty -2 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X connect 1 0 0 0;
 #X connect 1 1 2 0;
 #X connect 2 0 0 0;
@@ -297,8 +246,7 @@ the window is created in order to take effect:;
 #N canvas 889 134 364 495 fog 0;
 #X obj 84 239 outlet;
 #X obj 84 140 trigger bang float;
-#X obj 103 101 hsl 128 15 0 1 0 0 empty empty empty -2 -6 0 10 -262144
--1 -1 0 1;
+#X obj 103 101 hsl 128 15 0 1 0 0 empty empty empty -2 -6 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 207 182 set fog \$1;
 #X connect 1 0 0 0;
 #X connect 1 1 3 0;
@@ -309,8 +257,7 @@ the window is created in order to take effect:;
 #X obj 24 68 gemhead;
 #X obj 24 90 world_light;
 #X obj 24 475 s \$0-gemwin-in;
-#X text 23 34 Be careful: when you activate lighting \, you must have
-some lights to see something \, such as:;
+#X text 23 34 Be careful: when you activate lighting \, you must have some lights to see something \, such as:;
 #X connect 8 0 9 0;
 #X connect 9 0 24 0;
 #X connect 10 0 11 0;
@@ -327,10 +274,8 @@ some lights to see something \, such as:;
 #X connect 21 0 20 0;
 #X connect 22 0 23 0;
 #X restore 30 575 pd more lighting;
-#X obj 490 242 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 29 635 stereo 0|1|2|3 : set 3D stereo-mode to off(0) \, 2-screen-mode(1)
-\, Red/Green-mode(2);
+#X obj 490 242 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X text 29 635 stereo 0|1|2|3 : set 3D stereo-mode to off(0) \, 2-screen-mode(1) \, Red/Green-mode(2);
 #N canvas 680 259 468 458 draw_geos 0;
 #X obj 64 53 gemhead;
 #X obj 244 55 gemhead;
@@ -386,21 +331,18 @@ some lights to see something \, such as:;
 #X msg 111 244 bang;
 #X text 152 254 swap the buffers (double buffer mode);
 #X text 151 235 clear the buffer (single buffer mode);
-#X text 30 16 messages to [gemwin] concerning the buffer rendering
-mode;
+#X text 30 16 messages to [gemwin] concerning the buffer rendering mode;
 #X msg 17 83 0 \, destroy;
 #X msg 117 198 create \, 1;
 #X text 195 197 ...and create it after;
 #X obj 33 283 s \$0-gemwin-in;
 #X text 95 84 destroy window before to set buffer mode...;
-#X text 30 323 When you are in single buffer mode \, you must bang
-the gemhead each time you want to draw. like:;
+#X text 30 323 When you are in single buffer mode \, you must bang the gemhead each time you want to draw. like:;
 #X obj 33 383 loadbang;
 #X msg 33 407 0;
 #X obj 33 436 gemhead;
 #X obj 149 383 metro 50;
-#X obj 149 364 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 149 364 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 33 519 rotateXYZ;
 #X obj 176 426 f;
 #X obj 176 472 % 360;
@@ -409,15 +351,12 @@ the gemhead each time you want to draw. like:;
 #X text 172 363 toggle to draw;
 #X obj 176 448 + 1;
 #X obj 33 472 color 0.8 0.8 0.8;
-#X text 29 33 Changing the rendering mode must be done before the window
-is created in order to take effect.;
+#X text 29 33 Changing the rendering mode must be done before the window is created in order to take effect.;
 #X obj 176 494 t f f;
 #X obj 149 405 t b b;
 #X msg 279 142 transparent \$1;
-#X obj 279 123 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 299 108 use RGBA buffer to have an alpha channel and a transparent
-window, f 32;
+#X obj 279 123 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X text 299 108 use RGBA buffer to have an alpha channel and a transparent window, f 32;
 #X connect 0 0 11 0;
 #X connect 1 0 11 0;
 #X connect 4 0 11 0;
@@ -442,26 +381,22 @@ window, f 32;
 #X connect 31 0 30 0;
 #X restore 355 405 pd buffering;
 #N canvas 556 191 548 430 stereo-3D 0;
-#X text 32 18 messages to [gemwin] regarding stereoscopic appearance:
-;
+#X text 32 18 messages to [gemwin] regarding stereoscopic appearance:;
 #X msg 31 158 stereo \$1;
 #X obj 31 398 s \$0-gemwin-in;
-#X obj 31 60 vradio 15 1 0 4 empty empty empty 0 -8 0 10 -262144 -1
--1 0;
+#X obj 31 60 vradio 15 1 0 4 empty empty empty 0 -8 0 10 #fcfcfc #000000 #000000 0;
 #X text 54 77 2 screen mode;
 #X text 53 91 Red / Green mode;
 #X text 105 158 set stereo-mode;
 #X text 54 61 off;
 #X msg 48 210 stereoSep \$1;
-#X floatatom 48 188 5 0 0 0 - - -;
+#X floatatom 48 188 5 0 0 0 - - - 0;
 #X text 137 209 set the stereo-separation (default:-15);
 #X msg 66 258 stereoFoc \$1;
 #X text 150 259 set the stereo-focal;
-#X floatatom 66 234 5 0 0 0 - - -;
-#X obj 80 283 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X text 174 297 turn the separation-line between the 2 screens in stereo-mode
-1 on/off;
+#X floatatom 66 234 5 0 0 0 - - - 0;
+#X obj 80 283 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X text 174 297 turn the separation-line between the 2 screens in stereo-mode 1 on/off;
 #X msg 79 344 0 \, destroy;
 #X msg 79 369 create \, 1;
 #X text 157 345 destroy window before to set stereo...;
@@ -481,36 +416,24 @@ window, f 32;
 #X restore 354 641 pd stereo-3D;
 #X text 464 132 basic create and start rendering;
 #X text 513 241 change background color;
-#X text 56 538 set the background color of the window (default: 0 0
-0);
+#X text 56 538 set the background color of the window (default: 0 0 0);
 #X text 30 238 dimen <x> <y>:;
 #X text 30 333 offset <x> <y>:;
-#X text 29 593 view <x> <y> <z> : translate the camera (default: 0
-0 4);
+#X text 29 593 view <x> <y> <z> : translate the camera (default: 0 0 4);
 #N canvas 124 233 762 647 more 0;
-#X text 43 11 messages to [gemwin] regarding the view-point ("camera")
-;
-#X text 312 389 perspec <left> <right> <bottom> <top> <front> <back>::
-;
-#X text 311 407 set the clipping planes of the view-point. this might
-be what you need \, if all the objects that re further away than 20
-units suddenly disappear;
+#X text 43 11 messages to [gemwin] regarding the view-point ("camera");
+#X text 312 389 perspec <left> <right> <bottom> <top> <front> <back>::;
+#X text 311 407 set the clipping planes of the view-point. this might be what you need \, if all the objects that re further away than 20 units suddenly disappear;
 #X text 311 449 default: -1 1 -1 1 1 20;
 #X text 208 51 view <x> <y> <z>::;
-#X text 208 70 translate the camera / set the viewpoint:: the viewing-direction
-will not be changed.;
+#X text 208 70 translate the camera / set the viewpoint:: the viewing-direction will not be changed.;
 #X text 80 119 default: 0 0 4;
-#X text 208 98 the viewing direction defaults to "0 0 1" \, with y-axis
-as "up";
+#X text 208 98 the viewing direction defaults to "0 0 1" \, with y-axis as "up";
 #X text 303 167 view <x> <y> <z> <azimuth>::;
 #X text 303 184 view <x> <y> <z> <azimuth> <elevation>::;
-#X text 303 201 translate/rotate camera/viewpoint \; the "up" direction
-will still be the y-axis;
-#X text 389 284 view <view_x> <view_y> <view_z> <target_x> <target_y>
-<target_z> <up_x> <up_y> <up_z>::;
-#X text 389 314 set viewpoint (view_X view_Y view_Z). the camera will
-look at the target-point (target_X \, target_Y \, target_Z). "up" is
-defined via the vector (up_X \, up_Y \, up_Z);
+#X text 303 201 translate/rotate camera/viewpoint \; the "up" direction will still be the y-axis;
+#X text 389 284 view <view_x> <view_y> <view_z> <target_x> <target_y> <target_z> <up_x> <up_y> <up_z>::;
+#X text 389 314 set viewpoint (view_X view_Y view_Z). the camera will look at the target-point (target_X \, target_Y \, target_Z). "up" is defined via the vector (up_X \, up_Y \, up_Z);
 #X text 301 251 default: 0 0 4 0 0;
 #X text 389 355 default: 0 0 4 0 0 0 0 1 0;
 #X obj 25 588 s \$0-gemwin-in;
@@ -529,11 +452,10 @@ defined via the vector (up_X \, up_Y \, up_Z);
 #X obj 90 293 * -1;
 #X obj 90 367 pack -1 1 -1 1 1 20;
 #X msg 90 389 set perspec \$1 \$2 \$3 \$4 \$5 \$6 \, bang;
-#X msg 172 453 set perspec \, adddollar 1 \, adddollar 2 \, adddollar
-3 \, adddollar 4 \, adddollar 5 \, adddollar 6;
-#X floatatom 103 117 5 0.1 5 1 x_wideness - -;
-#X floatatom 103 134 5 0.1 5 1 y_wideness - -;
-#X floatatom 103 151 5 0 0 1 z_depth - -;
+#X msg 172 453 set perspec \, adddollar 1 \, adddollar 2 \, adddollar 3 \, adddollar 4 \, adddollar 5 \, adddollar 6;
+#X floatatom 103 116 5 0.1 5 1 x_wideness - - 0;
+#X floatatom 103 133 5 0.1 5 1 y_wideness - - 0;
+#X floatatom 103 150 5 0 0 1 z_depth - - 0;
 #X obj 360 196 select 1;
 #X obj 405 219 t b f f;
 #X obj 249 226 t b f f;
@@ -589,20 +511,18 @@ defined via the vector (up_X \, up_Y \, up_Z);
 #X connect 25 2 15 0;
 #X coords 0 -1 1 1 100 67 1 100 100;
 #X restore 101 380 pd perspec;
-#X text 292 554 the default camera has a very wide angle. this message
-allows to narrow it.;
+#X text 292 554 the default camera has a very wide angle. this message allows to narrow it.;
 #N canvas 506 305 612 484 view 0;
-#X floatatom 112 114 5 0 0 0 x - -;
-#X floatatom 158 114 5 0 0 0 y - -;
-#X floatatom 201 114 5 0 0 0 z - -;
-#X floatatom 236 114 5 0 0 2 azimuth - -;
+#X floatatom 112 113 5 0 0 0 x - - 0;
+#X floatatom 158 113 5 0 0 0 y - - 0;
+#X floatatom 201 113 5 0 0 0 z - - 0;
+#X floatatom 236 113 5 0 0 2 azimuth - - 0;
 #X obj 369 109 loadbang;
 #X obj 140 335 outlet;
 #X obj 201 226 t b f;
 #X obj 150 227 t b f;
 #X obj 369 131 t b b;
-#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar
-3 \, adddollar 4;
+#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar 3 \, adddollar 4;
 #X obj 140 274 pack 0 0 4 0;
 #X obj 251 226 t b f;
 #X msg 398 196 set 4;
@@ -627,10 +547,10 @@ allows to narrow it.;
 #X coords 0 -1 1 1 180 30 1 100 100;
 #X restore 42 156 pd view;
 #N canvas 508 299 612 484 view 0;
-#X floatatom 112 114 5 0 0 0 x - -;
-#X floatatom 158 114 5 0 0 0 y - -;
-#X floatatom 201 114 5 0 0 0 z - -;
-#X floatatom 236 114 5 0 0 2 azimuth - -;
+#X floatatom 112 113 5 0 0 0 x - - 0;
+#X floatatom 158 113 5 0 0 0 y - - 0;
+#X floatatom 201 113 5 0 0 0 z - - 0;
+#X floatatom 236 113 5 0 0 2 azimuth - - 0;
 #X obj 369 109 loadbang;
 #X obj 140 335 outlet;
 #X obj 201 226 t b f;
@@ -640,10 +560,9 @@ allows to narrow it.;
 #X msg 398 196 set 4;
 #X msg 140 296 set view \$1 \$2 \$3 \$4 \$5 \, bang;
 #X obj 140 274 pack 0 0 4 0 0;
-#X floatatom 286 114 5 0 0 2 elevate - -;
+#X floatatom 286 113 5 0 0 2 elevate - - 0;
 #X obj 291 226 t b f;
-#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar
-3 \, adddollar 4 \, adddollar 5;
+#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar 3 \, adddollar 4 \, adddollar 5;
 #X connect 0 0 12 0;
 #X connect 1 0 7 0;
 #X connect 2 0 6 0;
@@ -667,9 +586,9 @@ allows to narrow it.;
 #X coords 0 -1 1 1 230 30 1 100 100;
 #X restore 49 216 pd view;
 #N canvas 509 296 612 484 view 0;
-#X floatatom 112 114 5 0 0 0 x - -;
-#X floatatom 158 114 5 0 0 0 y - -;
-#X floatatom 201 114 5 0 0 0 z - -;
+#X floatatom 112 113 5 0 0 0 x - - 0;
+#X floatatom 158 113 5 0 0 0 y - - 0;
+#X floatatom 201 113 5 0 0 0 z - - 0;
 #X obj 369 109 loadbang;
 #X obj 140 335 outlet;
 #X obj 201 226 t b f;
@@ -678,8 +597,7 @@ allows to narrow it.;
 #X msg 398 196 set 4;
 #X obj 140 274 pack 0 0 4;
 #X msg 140 296 set view \$1 \$2 \$3 \, bang;
-#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar
-3;
+#X msg 213 342 set view \, adddollar 1 \, adddollar 2 \, adddollar 3;
 #X connect 0 0 9 0;
 #X connect 1 0 6 0;
 #X connect 2 0 5 0;
@@ -697,34 +615,31 @@ allows to narrow it.;
 #X coords 0 -1 1 1 140 30 1 100 100;
 #X restore 25 65 pd view;
 #N canvas 380 50 612 484 view 0;
-#X floatatom 214 114 5 0 0 2 X - -;
+#X floatatom 214 113 5 0 0 2 X - - 0;
 #X obj 166 22 loadbang;
 #X obj 139 335 outlet;
 #X obj 174 177 t b f;
 #X obj 139 177 t b f;
 #X obj 214 177 t b f;
 #X msg 174 79 set 4;
-#X floatatom 249 114 5 0 0 2 Y - -;
+#X floatatom 249 113 5 0 0 2 Y - - 0;
 #X obj 249 177 t b f;
 #X obj 139 274 pack 0 0 4 0 0 0 0 1 0;
-#X floatatom 284 114 5 0 0 2 Z - -;
-#X floatatom 104 114 5 0 0 2 x - -;
-#X floatatom 139 114 5 0 0 2 y - -;
-#X floatatom 174 114 5 0 0 2 z - -;
-#X floatatom 324 114 5 0 0 2 upX - -;
-#X floatatom 359 114 5 0 0 2 upY - -;
-#X floatatom 394 114 5 0 0 2 upZ - -;
+#X floatatom 284 113 5 0 0 2 Z - - 0;
+#X floatatom 104 113 5 0 0 2 x - - 0;
+#X floatatom 139 113 5 0 0 2 y - - 0;
+#X floatatom 174 113 5 0 0 2 z - - 0;
+#X floatatom 324 113 5 0 0 2 upX - - 0;
+#X floatatom 359 113 5 0 0 2 upY - - 0;
+#X floatatom 394 113 5 0 0 2 upZ - - 0;
 #X obj 284 177 t b f;
 #X obj 324 177 t b f;
 #X obj 359 177 t b f;
 #X obj 394 177 t b f;
 #X obj 324 199 t b;
 #X obj 214 199 t b;
-#X msg 139 296 set view \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \, bang
-;
-#X msg 251 22 set view \, adddollar 1 \, adddollar 2 \, adddollar 3
-\, adddollar 4 \, adddollar 5 \, adddollar 6 \, adddollar 7 \, adddollar
-8 \, adddollar 9;
+#X msg 139 296 set view \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \, bang;
+#X msg 251 22 set view \, adddollar 1 \, adddollar 2 \, adddollar 3 \, adddollar 4 \, adddollar 5 \, adddollar 6 \, adddollar 7 \, adddollar 8 \, adddollar 9;
 #X obj 166 44 t b b b;
 #X msg 359 79 set 1;
 #X connect 0 0 5 0;
@@ -780,24 +695,18 @@ allows to narrow it.;
 #X restore 30 612 pd more viewing;
 #X text 17 211 message to send before creation :;
 #X text 17 462 message to send after creation :;
-#X text 29 387 buffer 2|1 : set buffer-rendering mode to double (default)
-or single (not clearing buffer);
+#X text 29 387 buffer 2|1 : set buffer-rendering mode to double (default) or single (not clearing buffer);
 #X text 456 60 reset settings and;
 #X text 18 417 message regarding creation :;
-#X obj 455 356 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 455 356 tgl 15 1 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 474 357 rotate objects;
 #X text 554 196 destroy window;
 #X text 484 177 (stop rendering and);
 #X text 457 83 and start rendering;
 #X text 456 72 create window with specific size;
 #X text 29 522 color <r> <g> <b> :;
-#X text 30 166 1st argument : number of frames per second (default
-20);
-#X text 28 69 [gemwin] allows you to interact with Gem's output window.
-It passes various messages to the window manager \, controlling the
-attributes of the window and controls the render-cycle. Multiple instances
-of this object can interact with separate windows.;
+#X text 30 166 1st argument : number of frames per second (default 20);
+#X text 28 69 [gemwin] allows you to interact with Gem's output window. It passes various messages to the window manager \, controlling the attributes of the window and controls the render-cycle. Multiple instances of this object can interact with separate windows.;
 #X text 30 177 2d argument : context name;
 #X text 443 457 see also examples/14.multiple_windows;
 #X msg 490 260 color \$1 \$1 \$1 \$1;
