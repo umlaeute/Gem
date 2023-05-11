@@ -107,13 +107,10 @@ protected:
   gem::ContextData<GLhandleARB>m_programARB;
   GLhandleARB           m_shaderObjARB[MAX_NUM_SHADERS];
 
-  gem::ContextData<GLint>m_maxLength;
-
   //////////
   // Variables for the, uh, variables
   struct t_uniform;
-  GLint m_uniformCount;
-  t_uniform*m_uniform;
+  std::map<std::string, t_uniform>m_uniforms;
 
   gem::ContextData<GLint>m_linked;
   int m_numShaders;
