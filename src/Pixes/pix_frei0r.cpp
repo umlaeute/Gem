@@ -32,11 +32,6 @@
 # define snprintf _snprintf
 # define close _close
 
-/*
- * Apple used to use CFBundle's to load FF plugins
- * currently this only crashes (on OSX-10.4 and OSX-10.5)
- * we therefore use dlopen() on OSX as well
- */
 #elif defined __APPLE__ && 0
 # include <mach-o/dyld.h>
 # include <unistd.h>
@@ -66,6 +61,61 @@ static size_t f0r_strnlen(const char* str, size_t maxlen)
   return len;
 }
 #endif
+
+namespace {
+  static std::vector<std::string>s_frei0r_paths;
+  void frei0r_paths_initialize(void) {
+    std::vector<std::string>paths;
+    const char*f0path = getenv("FREI0R_PATH");
+    if (f0path) {
+      std::string frei0r_path = f0path;
+
+#ifdef _WIN32
+      const char *separator = ";";
+#else
+      const char *separator = ":";
+#endif
+      size_t start;
+      size_t end = 0;
+      while ((start = frei0r_path.find_first_not_of(separator, end)) != std::string::npos) {
+        end = frei0r_path.find(separator, start);
+        paths.push_back(frei0r_path.substr(start, end - start));
+      }
+    } else {
+      /* no FREI0R_PATH...fall back to the defaults */
+      static const char* const frei0r_pathlist[] = {
+        "/usr/local/lib/frei0r-1/",
+        "/usr/lib/frei0r-1/",
+        /* hmm, i guess these are only valid for 64bit archs, but how do we catch them? */
+        "/usr/local/lib64/frei0r-1/",
+        "/usr/lib64/frei0r-1/",
+#define MULTIARCH_TRIPLET "x86_64-linux-gnu"
+#ifdef MULTIARCH_TRIPLET
+        /* Debian's multiarch */
+        "/usr/local/lib/" MULTIARCH_TRIPLET "/frei0r-1/",
+        "/usr/lib/" MULTIARCH_TRIPLET "/frei0r-1/",
+#endif
+        0
+      };
+
+      f0path = getenv("HOME");
+      if(f0path) {
+        std::string p(f0path);
+        paths.push_back(p + "/.frei0r-1/lib/");
+        paths.push_back(p + "/.local/lib/frei0r-1/");
+#ifdef MULTIARCH_TRIPLET
+        /* Debian's multiarch */
+        paths.push_back(p + "/.local/lib/" MULTIARCH_TRIPLET "/frei0r-1/");
+#endif
+      }
+      for(int i=0; frei0r_pathlist[i]; i++) {
+        paths.push_back(frei0r_pathlist[i]);
+      }
+    }
+
+    s_frei0r_paths = paths;
+  }
+};
 
 
 class pix_frei0r::F0RPlugin
@@ -667,7 +717,8 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
   return 0;
 }
 bool pix_frei0r :: loader(const t_canvas*canvas,
-                          const std::string&classname, const std::string&path)
+                          const std::string&classname, const std::string&path,
+                          bool legacy)
 {
   if(strncmp("pix_", classname.c_str(), offset_pix_)) {
     return false;
@@ -676,12 +727,21 @@ bool pix_frei0r :: loader(const t_canvas*canvas,
   std::string filename = pluginname;
   gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
   if(rte) {
-    if (path.empty()) {
+    if (legacy) {
       filename=rte->findFile(pluginname, GemDylib::getDefaultExtension(),
                              canvas);
     } else {
-      filename=rte->findFile(path+"/"+pluginname,
-                             GemDylib::getDefaultExtension(), canvas);
+      if (path.empty()) {
+        for(size_t i=0; i<s_frei0r_paths.size(); i++) {
+          if (!s_frei0r_paths[i].empty())
+            if (loader(canvas, classname, s_frei0r_paths[i], legacy))
+              return true;
+        }
+        return false;
+      } else {
+        filename=rte->findFile(path+"/"+pluginname,
+                               GemDylib::getDefaultExtension(), canvas);
+      }
     }
   }
   pix_frei0r::F0RPlugin*plugin=NULL;
@@ -707,7 +767,7 @@ bool pix_frei0r :: loader(const t_canvas*canvas,
 static int frei0r_loader(const t_canvas *canvas, const char *classname,
                          const char *path, bool legacy)
 {
-  return pix_frei0r::loader(canvas, classname, path?path:"");
+  return pix_frei0r::loader(canvas, classname, path?path:"", legacy);
 }
 
 /////////////////////////////////////////////////////////
@@ -721,6 +781,8 @@ void pix_frei0r :: obj_setupCallback(t_class *classPtr)
                     reinterpret_cast<t_method>(&pix_frei0r::parmCallback));
   CPPEXTERN_MSG1(classPtr, "load", openMess, t_symbol*);
   gem_register_loader(frei0r_loader);
+  gem_register_loader_nopath(frei0r_loader);
+  frei0r_paths_initialize();
 }
 
 void pix_frei0r :: parmCallback(void *data, t_symbol*s, int argc,

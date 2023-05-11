@@ -78,7 +78,7 @@ private:
 
 public:
   static bool loader(const t_canvas *canvas, const std::string&classname,
-                     const std::string&path);
+                     const std::string&path, bool legacy);
 };
 
 #endif  // for header file
