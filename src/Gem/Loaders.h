@@ -20,9 +20,11 @@ LOG
 extern "C" {
   /* search for a class <classname> in <path>
    * if <path> is NULL, search all paths yourself
-   * Only on Pd>=0.47 will <path> have a value */
+   * Only on Pd>=0.47 will <path> have a value
+   * legacy is 'true' for Pd<0.47, otherwise it is 'false'
+   */
   typedef int (*gem_loader_t)(const t_canvas *canvas, const char *classname,
-                              const char *path);
+                              const char *path, bool legacy);
   /* register a loader that respects the path (any file-based loader)
    * In Pd<0.47 this loader will be called with a path==NULL, and the loader needs to iterate
    * over the paths on its own (e.g. using canvas_open())

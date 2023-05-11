@@ -705,7 +705,7 @@ bool pix_frei0r :: loader(const t_canvas*canvas,
 }
 
 static int frei0r_loader(const t_canvas *canvas, const char *classname,
-                         const char *path)
+                         const char *path, bool legacy)
 {
   return pix_frei0r::loader(canvas, classname, path?path:"");
 }
