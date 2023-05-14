@@ -29,7 +29,10 @@ CPPEXTERN_NEW(gemsdlwindow);
 
 namespace
 {
-static unsigned int sdl_count = 0;
+  static unsigned int sdl_count = 0;
+  /* the SDL surface */
+  static SDL_Surface*s_surface = 0;
+  static gem::Context*s_context = 0;
 };
 
 
@@ -71,10 +74,9 @@ void pre_init() {;}
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemsdlwindow :: gemsdlwindow(void) :
-  m_surface(NULL),
-  m_videoFlags(0),
-  m_bpp(0)
+gemsdlwindow :: gemsdlwindow(void)
+  : m_videoFlags(0)
+  , m_bpp(0)
 {
   if(!sdl_count) {
     pre_init();
@@ -103,7 +105,7 @@ gemsdlwindow :: ~gemsdlwindow()
 
 bool gemsdlwindow :: makeCurrent(void)
 {
-  if(!m_surface) {
+  if(!s_surface) {
     return false;
   }
   // ????
@@ -376,7 +378,7 @@ static std::string key2symbol(SDLKey k, Uint16 unicode)
 
 void gemsdlwindow :: dispatch()
 {
-  if(!m_surface) {
+  if(!s_surface) {
     return;
   }
 
@@ -388,7 +390,7 @@ void gemsdlwindow :: dispatch()
   while (SDL_PollEvent(&event)) {
     switch(event.type) {
     default:
-      post("event: %d", event.type);
+      //post("event: %d", event.type);
       break;
     case SDL_ACTIVEEVENT: {
       state=event.active.gain;
@@ -447,7 +449,7 @@ void gemsdlwindow :: bufferMess(int buf)
   case 1:
   case 2:
     m_buffer=buf;
-    if(m_surface) {
+    if(s_surface) {
       post("changing buffer type will only effect newly created windows");
     }
     break;
@@ -464,7 +466,7 @@ void gemsdlwindow :: bufferMess(int buf)
 void gemsdlwindow :: titleMess(const std::string&s)
 {
   m_title = s;
-  if(m_surface) {
+  if(s_surface) {
     SDL_WM_SetCaption(m_title.c_str(), m_title.c_str());
   }
 }
@@ -487,7 +489,7 @@ void gemsdlwindow :: dimensionsMess(unsigned int width,
   m_width = width;
   m_height = height;
   if(makeCurrent()) {
-    m_surface = SDL_SetVideoMode( m_width,
+    s_surface = SDL_SetVideoMode( m_width,
                                   m_height,
                                   m_bpp,
                                   m_videoFlags );
@@ -503,14 +505,14 @@ void gemsdlwindow :: fullscreenMess(int on)
 {
   bool toggle=false;
   m_fullscreen = on;
-  if(m_surface) {
-    if(( m_fullscreen && !(m_surface->flags & SDL_FULLSCREEN)) ||
-        (!m_fullscreen &&  (m_surface->flags & SDL_FULLSCREEN))) {
+  if(s_surface) {
+    if(( m_fullscreen && !(s_surface->flags & SDL_FULLSCREEN)) ||
+        (!m_fullscreen &&  (s_surface->flags & SDL_FULLSCREEN))) {
       toggle=true;
     }
   }
   if(toggle && makeCurrent()) {
-    SDL_WM_ToggleFullScreen( m_surface );
+    SDL_WM_ToggleFullScreen( s_surface );
   }
 }
 
@@ -521,9 +523,10 @@ void gemsdlwindow :: fullscreenMess(int on)
 /////////////////////////////////////////////////////////
 bool gemsdlwindow :: create(void)
 {
-  if(m_surface) {
+  if(s_surface) {
     error("window already made!");
-    return false;
+    m_context = s_context;
+    return true;
   }
 
   if ( SDL_InitSubSystem( SDL_INIT_VIDEO ) < 0 ) {
@@ -563,11 +566,11 @@ bool gemsdlwindow :: create(void)
   }
 
   /* get a SDL surface */
-  m_surface = SDL_SetVideoMode( m_width, m_height,
+  s_surface = SDL_SetVideoMode( m_width, m_height,
                                 m_bpp,
                                 m_videoFlags );
 
-  if(!m_surface) {
+  if(!s_surface) {
     return false;
   }
 
@@ -576,6 +579,7 @@ bool gemsdlwindow :: create(void)
     destroyMess();
     return false;
   }
+  s_context = m_context;
   titleMess(m_title);
   fullscreenMess(m_fullscreen);
 
@@ -595,7 +599,7 @@ void gemsdlwindow :: createMess(const std::string&)
 void gemsdlwindow :: destroy(void)
 {
   destroyGemWindow();
-  m_surface=NULL;
+  s_surface=NULL;
   info("window", "closed");
 }
 void gemsdlwindow :: destroyMess(void)

@@ -2,7 +2,7 @@
   LOG
   GEM - Graphics Environment for Multimedia
 
-  Interface for the window manager
+  Interface for the window manager: SDL1
 
   Copyright (c) 2009-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
   For information on usage and redistribution, and for a DISCLAIMER OF ALL
@@ -101,9 +101,6 @@ private:
   virtual void dispatch(void);
 
 private:
-
-  /* the SDL surface */
-  SDL_Surface*m_surface;
 
   /* hints how to create the window */
   int m_videoFlags;
