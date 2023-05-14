@@ -491,6 +491,8 @@ void gemsdlwindow :: dimensionsMess(unsigned int width,
                                   m_height,
                                   m_bpp,
                                   m_videoFlags );
+    dimension(s_surface->w, s_surface->h);
+    framebuffersize(s_surface->w, s_surface->h);
   }
 }
 /////////////////////////////////////////////////////////
