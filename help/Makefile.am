@@ -5,6 +5,8 @@ AUTOMAKE_OPTIONS = foreign
 gemhelpdir=$(pkglibdir)
 
 dist_gemhelp_DATA = \
+	Gem-help.pd
+dist_gemhelp_DATA += \
 	accumrotate-help.pd \
 	alpha-help.pd \
 	ambient-help.pd \
