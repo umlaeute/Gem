@@ -33,20 +33,24 @@
 # include <windows.h>
 # define snprintf _snprintf
 # define close _close
+#else /* !_WIN32 */
+# define DL_OPEN 1
+#endif /* _WIN32 */
 
 /*
  * Apple used to use CFBundle's to load FF plugins
  * currently this only crashes (on OSX-10.4 and OSX-10.5)
  * we therefore use dlopen() on OSX as well
  */
-#elif defined __APPLE__ && 0
-# include <mach-o/dyld.h>
-# include <unistd.h>
-#else
-# define DL_OPEN
+#if defined __APPLE__ && 0
+# define FREEFRAME_USE_BUNDLELOADER
+# include <CoreFoundation/CoreFoundation.h>
+#endif /* __APPLE__ */
+
+#ifdef DL_OPEN
 # include <dlfcn.h>
 # include <unistd.h>
-#endif /* __APPLE__ */
+#endif /* DL_OPEN */
 
 #include <string.h>
 
@@ -65,8 +69,6 @@ static size_t ff_strnlen(const char* str, size_t maxlen)
 
   return len;
 }
-
-
 #endif
 
 
@@ -325,8 +327,6 @@ private:
     }
     m_dlhandle=NULL;
 #endif
-#ifdef __APPLE__
-#endif
 #ifdef _WIN32
     if(m_w32handle) {
       FreeLibrary(m_w32handle);
@@ -379,7 +379,7 @@ private:
     if ((fd=canvas_open(const_cast<t_canvas*>(canvas), name.c_str(), extension,
                         buf2, &bufptr, MAXPDSTRING, 1))>=0) {
       ::close(fd);
-#if defined __APPLE__ && 0
+#if defined FREEFRAME_USE_BUNDLELOADER && 0
       snprintf(buf, MAXPDSTRING, "%s", buf2);
 #else
       snprintf(buf, MAXPDSTRING, "%s/%s", buf2, bufptr);
@@ -419,7 +419,7 @@ private:
       }
     }
 #endif
-#if defined __APPLE__
+#if defined FREEFRAME_USE_BUNDLELOADER
     if(!plugmain) {
       CFURLRef bundleURL = NULL;
       CFBundleRef theBundle = NULL;
