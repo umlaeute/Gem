@@ -425,8 +425,11 @@ void gemsdlwindow :: dispatch()
              event.button.state==SDL_PRESSED);
       break;
     case SDL_VIDEORESIZE:
-      dimension(event.resize.w, event.resize.h);
-      framebuffersize(event.resize.w, event.resize.h);
+      s_surface = SDL_SetVideoMode( event.resize.w, event.resize.h,
+                                    m_bpp,
+                                    m_videoFlags );
+      dimension(s_surface->w, s_surface->h);
+      framebuffersize(s_surface->w, s_surface->h);
       break;
     case SDL_VIDEOEXPOSE:
       info("window", "exposed");
@@ -489,8 +492,7 @@ void gemsdlwindow :: dimensionsMess(unsigned int width,
   m_width = width;
   m_height = height;
   if(makeCurrent()) {
-    s_surface = SDL_SetVideoMode( m_width,
-                                  m_height,
+    s_surface = SDL_SetVideoMode( m_width, m_height,
                                   m_bpp,
                                   m_videoFlags );
     dimension(s_surface->w, s_surface->h);
