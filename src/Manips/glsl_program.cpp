@@ -775,7 +775,7 @@ void glsl_program :: LinkProgram()
   getVariables();
 
   if(m_program || m_programARB) {
-    for (std::map<std::string, std::vector<t_atom>>::const_iterator it = m_cachedParameters.begin();
+    for (std::map<std::string, std::vector<t_atom> >::const_iterator it = m_cachedParameters.begin();
          it != m_cachedParameters.end();
          it++)
       {

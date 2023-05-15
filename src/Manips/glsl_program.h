@@ -130,7 +130,7 @@ protected:
   virtual void outverticesMess(GLint);
   GLint  m_geoOutVertices;
 
-  std::map<std::string, std::vector<t_atom>>m_cachedParameters;
+  std::map<std::string, std::vector<t_atom> >m_cachedParameters;
 
   virtual void keepUniformsMess(bool);
   bool m_keepUniforms; /* should we keep uniforms across reloading of shaders?)*/
