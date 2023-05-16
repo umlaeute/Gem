@@ -205,11 +205,10 @@ private:
 
   };
 
-
+  std::string m_name;
   FF_Main_FuncPtr m_plugin;
   FFInstance     *m_instance;
 
-  std::string m_name;
   std::string m_id;
 
   std::string m_description;
@@ -497,9 +496,6 @@ private:
     }
     PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>
                          (result.PointerValue);
-#ifdef __GNUC__
-# warning check whether the API is supported by us
-#endif
     m_name = nchar2str(pis->PluginName, 16);
     m_id = nchar2str(pis->PluginUniqueID, 4);
     m_type = pis->PluginType;
@@ -699,6 +695,7 @@ private:
   bool init_(void)
   {
     if(!initialize_()) {
+      ::pd_error(0, "pix_freeframe[%s]: does not look like a FreeFrame plugin", m_name.c_str());
       return false;
     }
 
@@ -707,6 +704,7 @@ private:
     if(rgb || rgba) {
       m_rgba=rgba;
     } else {
+      ::pd_error(0, "pix_freeframe[%s]: unsupported plugin type", m_name.c_str());
       return false;
     }
     m_cancopy =  (FF_SUPPORTED==getPluginCaps_( FF_CAP_PROCESSFRAMECOPY ));
@@ -721,7 +719,8 @@ private:
 
 public:
   FFPlugin(const std::string&name, const t_canvas*canvas=NULL)
-    : m_plugin(NULL)
+    : m_name(name)
+    , m_plugin(NULL)
     , m_instance(NULL)
     , m_rgba(false)
     , m_type(FF_EFFECT)
