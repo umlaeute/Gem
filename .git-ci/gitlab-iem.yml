@@ -65,6 +65,10 @@ stages:
       "${base_dir_ci}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
     - du -sh
     - cd "${base_dir_ci}"
+    - [ "${result}" != "skip" ] || exit 77
+  allow_failure:
+    exit_codes:
+      - 77
 
 .build:linux:
   extends:
@@ -156,7 +160,11 @@ stages:
     - rm -f "${downloadfile}"
     - rm -f "${PDDIR}"/bin/msvcr*.dll
     - export PD="${PDDIR}/bin/pd.com"
-    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
+    - result=0
+    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || result=$?
+    # if pacman failed, try to continue (but do not mark the run as 'success')
+    - echo "pacman returned ${result}"
+    - [ "${result}" = "0" ] || result="skip"
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec .git-ci/localdeps.win.sh {} +
