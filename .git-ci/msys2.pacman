@@ -4,7 +4,7 @@
 autoconf
 automake
 make
-@MINGW@pkg-config
+@MINGW@pkgconf
 @MINGW@ntldd
 
 # model loading
