@@ -156,8 +156,6 @@ stages:
     - rm -f "${downloadfile}"
     - rm -f "${PDDIR}"/bin/msvcr*.dll
     - export PD="${PDDIR}/bin/pd.com"
-    - pacman --noconfirm -Sy msys2-keyring || true
-    - pacman-key --keyserver keyserver.ubuntu.com --refresh-keys || true
     - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|")
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
