@@ -492,7 +492,7 @@ private:
   {
     FFMixed result=callGlobal(FF_GETINFO);
     if(FF_FAIL==result.UIntValue) {
-      std::cout << "getInfo failed" << std::endl;
+      std::cerr << "getInfo failed" << std::endl;
       return false;
     }
     PluginInfoStruct*pis=reinterpret_cast<PluginInfoStruct*>
@@ -504,7 +504,7 @@ private:
     m_id = nchar2str(pis->PluginUniqueID, 4);
     m_type = pis->PluginType;
 
-    std::cout <<
+    std::cerr <<
               "FF-API: "<<pis->APIMajorVersion<<"."<<pis->APIMinorVersion<<std::endl;
 
     return true;
@@ -689,7 +689,7 @@ private:
       default:
         val = def.FloatValue;
       }
-      std::cout << "param#"<<i<<": "<<name<<std::endl;
+      std::cerr << "param#"<<i<<": "<<name<<std::endl;
       m_parameterNames.push_back(name);
       m_parameter.set(name, val);
     }
