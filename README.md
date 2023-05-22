@@ -163,7 +163,7 @@ To install GEM on W32/W64 from pre-built binaries you have two options:
     libraries, you can safely remove these plugins.
 	if you have no clue what this is about, these plugins are most
 	likely not for you (so remove them)
-    
+
 ### Apple macOS-X
 
 Use the `deken` package.
