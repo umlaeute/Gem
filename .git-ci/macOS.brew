@@ -11,7 +11,8 @@ brew "sdl"
 brew "glfw"
 
 # font rendering
-brew "iem/fatbrew/ftgl"
+#brew "iem/fatbrew/ftgl"
+brew "ftgl"
 
 # image reading
 brew "jpeg"
