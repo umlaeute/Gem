@@ -1,3 +1,5 @@
+tap "iem/fatbrew", "https://git.iem.at/dependencies/fatbrew"
+
 # build-system
 brew "pkg-config"
 brew "automake"
@@ -9,7 +11,7 @@ brew "sdl"
 brew "glfw"
 
 # font rendering
-brew "ftgl"
+brew "iem/fatbrew/ftgl"
 
 # image reading
 brew "jpeg"
