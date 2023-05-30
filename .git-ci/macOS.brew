@@ -1,32 +1,36 @@
 tap "iem/fatbrew", "https://git.iem.at/dependencies/fatbrew"
 
-# build-system
+## build-system
 brew "pkg-config"
 brew "automake"
 brew "libtool"
 brew "gettext"
 
-# additional window providers
-brew "sdl"
-brew "glfw"
+## font rendering
+brew "iem/fatbrew/ftgl"
+#brew "ftgl"
 
-# font rendering
-#brew "iem/fatbrew/ftgl"
-brew "ftgl"
+## additional window providers
+#brew "sdl"
+brew "iem/fatbrew/glfw"
+#brew "glfw"
 
-# image reading
-brew "jpeg"
-brew "libtiff"
+## image reading
+#brew "jpeg"
+#brew "libtiff"
+brew "iem/fatbrew/jpeg"
+brew "iem/fatbrew/libtiff"
 #brew "imagemagick"
 ## IIRC, these are sub-dependencies of 'imagemagick'
 #brew "llvm"
 #brew "libomp"
 
-# additional video support
-brew "libquicktime"
+## additional video support
+#brew "libquicktime"
 #brew "ffmpeg"
 #brew "x11vnc"
 
-# model loading
-brew "assimp"
+## model loading
+#brew "assimp"
+brew "iem/fatbrew/assimp"
 

@@ -130,8 +130,9 @@ stages:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
+    - brew unlink libpng || true
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew
-    - /usr/local/opt/gettext/bin/gettextize
+    - /usr/local/opt/gettext/bin/gettextize || true
     - date
     - echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
   after_script:
