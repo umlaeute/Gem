@@ -781,10 +781,10 @@ bool gemglfw3window :: create(void)
   if(m_fullscreen) {
     int count;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
-    if(m_fullscreen<0 || m_fullscreen >= count) {
+    if(m_fullscreen<0 || m_fullscreen > count) {
       monitor=glfwGetPrimaryMonitor();
     } else {
-      monitor=monitors[m_fullscreen];
+      monitor=monitors[m_fullscreen-1];
     }
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     if(!width)width = mode->width;
