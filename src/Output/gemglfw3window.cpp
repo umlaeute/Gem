@@ -697,6 +697,29 @@ void gemglfw3window :: fullscreenMess(int on)
 {
   m_fullscreen=on;
   // FIXXME: on the fly switching
+  if(makeCurrent()) {
+    GLFWmonitor *monitor = NULL;
+    int count;
+    GLFWmonitor** monitors = glfwGetMonitors(&count);
+    unsigned int width = m_width, height = m_height;
+    if(on) {
+      if (on<0 || on>count) {
+        monitor = glfwGetPrimaryMonitor();
+        verbose(0, "switching to fullscreen on primary monitor: %s", glfwGetMonitorName(monitor));
+      } else {
+        monitor = monitors[on-1];
+        verbose(0, "switching to fullscreen on monitor #%d: %s", on, glfwGetMonitorName(monitor));
+      }
+    }
+    if(monitor) {
+      const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+      width = mode->width;
+      height = mode->height;
+    }
+    if(!width) width = 500;
+    if(!height) height = 500;
+    glfwSetWindowMonitor(m_window, monitor, m_xoffset, m_yoffset, width, height, GLFW_DONT_CARE);
+  }
 }
 
 /////////////////////////////////////////////////////////
