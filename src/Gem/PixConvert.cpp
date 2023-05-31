@@ -952,6 +952,9 @@ void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width,
 void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
   four_to_four<BGRA, ABGR>(indata, outdata, width, height);
 }
+void BGRAtoARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  four_to_four<BGRA, ARGB>(indata, outdata, width, height);
+}
 
 
 /* ABGR -> */

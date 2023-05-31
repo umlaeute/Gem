@@ -280,6 +280,7 @@ void BGRAtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, 
 void BGRAtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void BGRAtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void BGRAtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void BGRAtoARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
     /* RGBA/packed */
 void ABGRtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
