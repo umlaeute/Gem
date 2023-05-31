@@ -178,7 +178,7 @@ GemWindow :: GemWindow()
     m_width(500), m_height(500),
     /* in order to not hide the window-title, offset is >0 */
     m_xoffset(50), m_yoffset(50),
-    m_border(true), m_fullscreen(false),
+    m_border(true), m_fullscreen(0),
     m_buffer(2),
     m_title("Gem"),
     m_cursor(true),
