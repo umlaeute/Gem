@@ -287,6 +287,15 @@ deken:
     - .run-selected
   stage: deploy
   image: registry.git.iem.at/pd/deken:latest
+  before_script:
+    - apt-get update -y
+    - apt-get install -y --no-install-recommends git
+    # per default, use the tag as the version
+    - version="${CI_COMMIT_TAG}"
+    # if there is not tag (but we are on the default branch), publish a snapshot
+    - test -n "${version}" || test "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" || version="$(git describe --abbrev=0)-snapshot"
+    - version="${version#v}"
+    - echo "${version}"
   script:
     - chmod -R go-w ${ARTIFACTSDIR}/
 # remove ltlib leftovers
@@ -294,9 +303,9 @@ deken:
 # remove debug information
     - find ${ARTIFACTSDIR}/ -name "*.debug" -delete
 # create deken packages
-    - for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do deken package --version="${CI_COMMIT_TAG#v}" "${d}"; done
+    - for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do deken package --version="${version}" "${d}"; done
 # upload deken packages
-    - test -z "${CI_COMMIT_TAG}" || test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek
+    - test -z "${version}" || test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek
   artifacts:
     name: deken-package
     paths:
