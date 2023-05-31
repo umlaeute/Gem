@@ -23,6 +23,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #import <Accelerate/Accelerate.h>
 
 #include "Gem/RTE.h"
+#include "Gem/PixConvert.h"
 
 #include <iostream>
 
@@ -76,9 +77,13 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
   NSArray * devices = [AVCaptureDevice devicesWithMediaType:
                                        AVMediaTypeVideo];
   switch(fmt) {
-  case GEM_RGBA:
+/* for whatever reasons, kCVPixelFormatType_32(ABGR,RGBA) give us no images */
+/* kCVPixelFormatType_32ARGB gives us a black image (premultiplied alpha?) */
+  case GEM_RAW_RGBA:
+  case GEM_RAW_BGRA:
     glformat=fmt;
     capformat=kCVPixelFormatType_32BGRA;
+    break;
   default:
     glformat=fmt;
     capformat=kCVPixelFormatType_422YpCbCr8;
@@ -357,7 +362,17 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
     switch(capformat)
     {
     case kCVPixelFormatType_32BGRA:
-      pixes.image.fromRGBA(isrc4);
+      switch(pixes.image.format) {
+      case GEM_RAW_BGRA:
+         BGRAtoARGB(isrc4, pixes.image.data, width, height); // GEM_RAW_BGRA
+         break;
+      case GEM_RAW_RGBA:
+         BGRAtoABGR(isrc4, pixes.image.data, width, height); // GEM_RAW_RGBA
+         break;
+      default:
+         pixes.image.setBlack();
+         break;
+      }
       break;
     case kCVPixelFormatType_422YpCbCr8:
       pixes.image.fromYUV422(isrc4);
