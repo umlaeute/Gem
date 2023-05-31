@@ -20,6 +20,10 @@ variables:
   IEM_CI_JOBS:
     value: ""
     description: "list of jobs to run (leave empty for all jobs)"
+  gem_defaultwindow:
+    value: "gemglfw3window"
+    description: "default window backend"
+
 
 stages:
   - build
@@ -95,7 +99,6 @@ stages:
       - runner_system_failure
   variables:
     CXXFLAGS: "-std=c++11 -g -O2"
-    gem_defaultwindow: "gemglfw3window"
     fat_binary: "x86_64,arm64"
     HOMEBREW_NO_ANALYTICS: 1
     HOMEBREW_NO_INSTALL_UPGRADE: 1
