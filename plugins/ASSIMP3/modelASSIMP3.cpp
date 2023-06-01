@@ -390,7 +390,8 @@ bool modelASSIMP3 :: open(const std::string&name,
   gem::Properties props=requestprops;
   setProperties(props);
 
-  compile();
+  /* setProperties() already calls render() which compile()s, as m_rebuild=True */
+  //compile();
   return true;
 }
 
