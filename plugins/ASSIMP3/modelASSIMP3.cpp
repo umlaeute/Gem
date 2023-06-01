@@ -234,22 +234,6 @@ static void recursive_render(
 #endif
     for (t = 0; t < mesh->mNumFaces; ++t) {
       const struct aiFace* face = &mesh->mFaces[t];
-      GLenum face_mode;
-
-      switch(face->mNumIndices) {
-      case 1:
-        face_mode = GL_POINTS;
-        break;
-      case 2:
-        face_mode = GL_LINES;
-        break;
-      case 3:
-        face_mode = GL_TRIANGLES;
-        break;
-      default:
-        face_mode = GL_POLYGON;
-        break;
-      }
 
       float* pt;
       std::vector<float> vec;
