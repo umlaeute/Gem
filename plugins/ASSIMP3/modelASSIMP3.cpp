@@ -178,27 +178,40 @@ static void apply_material(const struct aiMaterial *mtl)
   }
 }
 
+
+static bool hasMeshes(const struct aiNode* nd) {
+  if (nd->mNumMeshes>0)
+    return true;
+  for (int n = 0; n < nd->mNumChildren; ++n) {
+    if (hasMeshes(nd->mChildren[n]))
+      return true;
+  }
+  return false;
+}
+
 // ----------------------------------------------------------------------------
-static void recursive_render (const struct aiScene*scene,
-                              const struct aiScene *sc, const struct aiNode* nd,
-                              const bool use_material,
-                              const aiVector2D&tex_scale,
-                              std::vector<std::vector<float> >& vertices,
-                              std::vector<std::vector<float> >& normals,
-                              std::vector<std::vector<float> >& texcoords,
-                              std::vector<std::vector<float> >& colors,
-                              aiMatrix4x4* trafo
-                              )
+static void recursive_render(
+  const struct aiScene*scene
+  , const struct aiScene *sc, const struct aiNode* nd
+  , const bool use_material
+  , const aiVector2D&tex_scale
+  , std::vector<std::vector<float> >& vertices
+  , std::vector<std::vector<float> >& normals
+  , std::vector<std::vector<float> >& texcoords
+  , std::vector<std::vector<float> >& colors
+  , aiMatrix4x4* trafo
+  , const int group
+  )
 {
   int i;
-  unsigned int n = 0, t;
+  unsigned int t;
   aiMatrix4x4 prev = *trafo;
 
   // update transform
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
   // draw all meshes assigned to this node
-  for (; n < nd->mNumMeshes; ++n) {
+  for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
     if(use_material) {
       apply_material(sc->mMaterials[mesh->mMaterialIndex]);
@@ -274,9 +287,18 @@ static void recursive_render (const struct aiScene*scene,
   }
 
   // draw all children
-  for (n = 0; n < nd->mNumChildren; ++n) {
-    recursive_render(scene, sc, nd->mChildren[n], use_material, tex_scale,
-                     vertices, normals, texcoords, colors, trafo);
+  int current_group=0;
+  for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
+    bool doit = true;
+    if(group>=0) {
+      if (hasMeshes(nd->mChildren[n])) {
+        doit = (group == current_group);
+        current_group++;
+      }
+    }
+    if (doit)
+      recursive_render(scene, sc, nd->mChildren[n], use_material, tex_scale,
+                       vertices, normals, texcoords, colors, trafo, -1);
   }
 
   *trafo = prev;
@@ -294,6 +316,7 @@ modelASSIMP3 :: modelASSIMP3(void)
   , m_textype("")
   , m_texscale(1., 1.)
   , m_smooth(175.)
+  , m_group(0)
 {
 }
 
@@ -502,6 +525,14 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
       continue;
     }
 
+    if("group" == key) {
+      if(props.get(key, d)) {
+        m_group=d;
+        m_rebuild=true;
+      }
+      continue;
+    }
+
     if("smooth" == key) {
       if(props.get(key, d)) {
         if(d<0.) {
@@ -587,7 +618,7 @@ bool modelASSIMP3 :: compile(void)
                                   aiQuaterniont<float>(), m_offset);
 
   recursive_render(m_scene, m_scene, m_scene->mRootNode, use_material, m_texscale,
-                   m_vertices, m_normals, m_texcoords, m_colors, &trafo);
+                   m_vertices, m_normals, m_texcoords, m_colors, &trafo, m_group-1);
   m_have_texcoords = (m_texcoords.size() > 0);
 
   float texscale[2];

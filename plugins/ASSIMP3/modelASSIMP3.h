@@ -94,6 +94,8 @@ protected:
 
   aiVector2D m_texscale;
   float m_smooth;
+
+  int m_group;
 };
 };
 }; // namespace gem::plugins
