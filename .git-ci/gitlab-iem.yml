@@ -299,7 +299,7 @@ deken:
     - echo "${version}"
     - test -n "${CI_COMMIT_TAG}" || test ! -e .git-ci/README.snapshot.pd.in || sed -e "s|@build-date@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@version@|${gitversion}|g" .git-ci/README.snapshot.pd.in > README.deken.pd
   script:
-    - chmod -R go-w ${ARTIFACTSDIR}/
+    - chmod -R u+rw,go-w ${ARTIFACTSDIR}/
 # remove ltlib leftovers
     - find ${ARTIFACTSDIR}/ "(" -name "*.la" -or -name "*.a" ")" -delete
 # remove debug information
