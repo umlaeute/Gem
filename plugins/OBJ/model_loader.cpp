@@ -2095,40 +2095,9 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   return 0;//?
 }
 
-/* glmDraw: Renders the model to the current OpenGL context using the
- * mode specified.
- *
- * model - initialized GLMmodel structure
- * mode  - a bitwise OR of values describing what is to be rendered.
- *             GLM_NONE     -  render with only vertices
- *             GLM_FLAT     -  render with facet normals
- *             GLM_SMOOTH   -  render with vertex normals
- *             GLM_TEXTURE  -  render with texture coords
- *             GLM_COLOR    -  render with colors (color material)
- *             GLM_MATERIAL -  render with materials
- *             GLM_COLOR and GLM_MATERIAL should not both be specified.
- *             GLM_FLAT and GLM_SMOOTH should not both be specified.
- */
-GLvoid
-glmDraw(const GLMmodel* model, GLuint mode,
-        std::vector<std::vector<float> >& vertices,
-        std::vector<std::vector<float> >& normals,
-        std::vector<std::vector<float> >& texcoords,
-        std::vector<std::vector<float> >& colors)
+
+static GLuint checkMode(const GLMmodel* model, GLuint mode)
 {
-  static GLuint i;
-  static GLMgroup* group=0;
-  static GLMtriangle* triangle=0;
-  static GLMmaterial* material=0;
-
-  if (!(model)) {
-    return;
-  }
-  if (!(model->vertices)) {
-    return;
-  }
-
-  /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
     verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "with no facet normals defined.");
@@ -2168,6 +2137,44 @@ glmDraw(const GLMmodel* model, GLuint mode,
             "using only material mode.");
     mode &= ~GLM_COLOR;
   }
+  return mode;
+}
+
+/* glmDraw: Renders the model to the current OpenGL context using the
+ * mode specified.
+ *
+ * model - initialized GLMmodel structure
+ * mode  - a bitwise OR of values describing what is to be rendered.
+ *             GLM_NONE     -  render with only vertices
+ *             GLM_FLAT     -  render with facet normals
+ *             GLM_SMOOTH   -  render with vertex normals
+ *             GLM_TEXTURE  -  render with texture coords
+ *             GLM_COLOR    -  render with colors (color material)
+ *             GLM_MATERIAL -  render with materials
+ *             GLM_COLOR and GLM_MATERIAL should not both be specified.
+ *             GLM_FLAT and GLM_SMOOTH should not both be specified.
+ */
+GLvoid
+glmDraw(const GLMmodel* model, GLuint mode,
+        std::vector<std::vector<float> >& vertices,
+        std::vector<std::vector<float> >& normals,
+        std::vector<std::vector<float> >& texcoords,
+        std::vector<std::vector<float> >& colors)
+{
+  static GLuint i;
+  static GLMgroup* group=0;
+  static GLMtriangle* triangle=0;
+  static GLMmaterial* material=0;
+
+  if (!(model)) {
+    return;
+  }
+  if (!(model->vertices)) {
+    return;
+  }
+
+  /* do a bit of warning */
+  mode = checkMode(model, mode);
   if (mode & GLM_COLOR) {
     glEnable(GL_COLOR_MATERIAL);
   } else if (mode & GLM_MATERIAL) {
@@ -2338,45 +2345,7 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,
   }
 
   /* do a bit of warning */
-  if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
-            "with no facet normals defined.");
-    mode &= ~GLM_FLAT;
-  }
-  if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,
-            "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
-            "with no normals defined.");
-    mode &= ~GLM_SMOOTH;
-  }
-  if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,
-            "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
-            "with no texture coordinates defined.");
-    mode &= ~GLM_TEXTURE;
-  }
-  if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
-            "and smooth render mode requested (using smooth).");
-    mode &= ~GLM_FLAT;
-  }
-  if (mode & GLM_COLOR && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color render mode requested "
-            "with no materials defined.");
-    mode &= ~GLM_COLOR;
-  }
-  if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,
-            "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
-            "with no materials defined.");
-    mode &= ~GLM_MATERIAL;
-  }
-  if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,
-            "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
-            "using only material mode.");
-    mode &= ~GLM_COLOR;
-  }
+  mode = checkMode(model, mode);
   if (mode & GLM_COLOR) {
     glEnable(GL_COLOR_MATERIAL);
   } else if (mode & GLM_MATERIAL) {
@@ -2399,7 +2368,7 @@ glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,
   if ( (!(groupNumber > numgroup)) && (groupNumber > 0)) {
     int count = 1;
     verbose(1,
-            "[GEM:modelOBJ] model group requested is %d number of groups: %d",
+            "[GEM:modelOBJ] model group requested %d/%d",
             groupNumber,numgroup);
 
 
