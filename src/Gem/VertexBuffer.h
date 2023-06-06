@@ -53,10 +53,6 @@ public:
               GEM_VBO_NORMALS,
               GEM_VBO_TEXCOORDS,
               GEM_VBO_COLORS,
-              GEM_VBO_AMBIENT,
-              GEM_VBO_DIFFUSE,
-              GEM_VBO_SPECULAR,
-              GEM_VBO_SHININESS
             };
   Type type;
 };
