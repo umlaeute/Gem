@@ -118,6 +118,59 @@ public:
    */
   virtual void getProperties(gem::Properties&props) = 0;
 
+  /*
+   * a mesh
+   *
+   * vertex data:
+   * a set of vertices³, normals³, colors⁴ and texcoords²
+   * any of the pointers may be nullptr (in which case they are invalid)
+   * the pointers point to float-arrays of <size>*<dimen> length.
+   *
+   * material data:
+   * the various material colors (should be set to some sane default if missing)
+   */
+  struct color {
+    float r, g, b, a;
+  };
+  struct material {
+    struct color diffuse;
+    struct color specular;
+    struct color ambient;
+    struct color emissive;
+
+    float shininess;
+  };
+  struct mesh {
+    /* vertex data */
+    size_t size;
+    float*vertices; /* 3d */
+    float*normals; /* 3d */
+    float*colors; /* 4d */
+    float*texcoords; /* 2d */
+
+    /* material data */
+    struct material material;
+  };
+
+#warning getMesh/getNumMeshes/updateMeshes should be pure virtual methods
+  /**
+   * get the named mesh
+   * if meshNum exceeds the available meshes, NULL is returned
+   */
+  virtual struct mesh*getMesh(size_t meshNum) {return nullptr;};
+  virtual size_t getNumMeshes(void) {return 0;};
+
+  /**
+   * update the mesh data (for all meshes)
+   * the data pointers in previously obtained t_mesh'es stay valid
+   * (but the data they point to might change)
+   * returns TRUE if there was a change, FALSE otherwise
+   */
+  virtual bool updateMeshes(void) {return false;};
+
+
+
+
   /**
    * data array (e.g. vertices)
    * TODO: rename to ArrayData (or similar)
