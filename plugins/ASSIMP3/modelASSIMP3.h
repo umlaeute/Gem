@@ -40,6 +40,13 @@ namespace plugins
 class GEM_EXPORT modelASSIMP3 : public gem::plugins::modelloader
 {
 public:
+  struct meshdata {
+    gem::plugins::modelloader::mesh mesh;
+    std::vector<float> vertices, normals, texcoords, colors;
+  meshdata(void) : mesh({0}) { };
+  };
+
+
   /////////
   // ctor/dtor
   modelASSIMP3(void);
@@ -54,6 +61,24 @@ public:
   // open/close an asset
   virtual bool open(const std::string&, const gem::Properties&);
   virtual void close(void);
+
+
+  /**
+   * get the named mesh
+   * if meshNum exceeds the available meshes, NULL is returned
+   */
+  virtual struct mesh*getMesh(size_t meshNum);
+  virtual size_t getNumMeshes(void);
+
+  /**
+   * update the mesh data (for all meshes)
+   * the data pointers in previously obtained t_mesh'es stay valid
+   * (but the data they point to might change)
+   * returns TRUE if there was a change, FALSE otherwise
+   */
+  virtual bool updateMeshes(void);
+
+  ///////////////////////////////////////////
 
   //////////
   // render the asset
@@ -84,8 +109,7 @@ protected:
 
   bool m_useMaterial;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords,
-      m_colors;
+  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 
@@ -96,6 +120,9 @@ protected:
   float m_smooth;
 
   int m_group;
+
+  std::vector<struct meshdata>m_meshes;
+
 };
 };
 }; // namespace gem::plugins

@@ -32,6 +32,16 @@ namespace
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
 
+static void post_meshdata(gem::plugins::modelASSIMP3::meshdata&meshdata) {
+  gem::plugins::modelloader::mesh&mesh = meshdata.mesh;
+  post("MESHDATA @%p", &meshdata);
+  post("    MESH @%p [%d]", &mesh, mesh.size);
+  post("          vertices=%p", mesh.vertices);
+  post("           normals=%p", mesh.normals);
+  post("            colors=%p", mesh.colors);
+  post("         texcoords=%p", mesh.texcoords);
+}
+
 // ----------------------------------------------------------------------------
 static void get_bounding_box_for_node (const struct aiScene*scene,
                                        const struct aiNode* nd,
@@ -103,7 +113,8 @@ static void set_float4(float f[4], float a, float b, float c, float d)
 }
 
 // ----------------------------------------------------------------------------
-static void apply_material(const struct aiMaterial *mtl)
+  static void apply_material(gem::plugins::modelloader::material&material
+                             , const struct aiMaterial *mtl)
 {
   float c[4];
 
@@ -123,28 +134,28 @@ static void apply_material(const struct aiMaterial *mtl)
                                       &diffuse)) {
     color4_to_float4(&diffuse, c);
   }
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, c);
+  material.diffuse = {c[0], c[1], c[2], c[3]};
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR,
                                       &specular)) {
     color4_to_float4(&specular, c);
   }
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
+  material.specular = {c[0], c[1], c[2], c[3]};
 
   set_float4(c, 0.2f, 0.2f, 0.2f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_AMBIENT,
                                       &ambient)) {
     color4_to_float4(&ambient, c);
   }
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, c);
+  material.ambient = {c[0], c[1], c[2], c[3]};
 
   set_float4(c, 0.0f, 0.0f, 0.0f, 1.0f);
   if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE,
                                       &emission)) {
     color4_to_float4(&emission, c);
   }
-  glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, c);
+  material.emissive = {c[0], c[1], c[2], c[3]};
 
   max = 1;
   ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
@@ -152,14 +163,14 @@ static void apply_material(const struct aiMaterial *mtl)
   ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH,
                                  &strength, &max);
   if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess * strength);
+    material.shininess = shininess * strength;
   } else {
     /* JMZ: in modelOBJ the default shininess is 65 */
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 0.0f);
-    set_float4(c, 0.0f, 0.0f, 0.0f, 0.0f);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, c);
+    material.shininess = 0.;
+    material.specular = {0., 0., 0., 0.};
   }
 
+#if 0
   max = 1;
   if(AI_SUCCESS == aiGetMaterialIntegerArray(mtl, AI_MATKEY_ENABLE_WIREFRAME,
       &wireframe, &max)) {
@@ -176,6 +187,7 @@ static void apply_material(const struct aiMaterial *mtl)
   } else {
     glDisable(GL_CULL_FACE);
   }
+#endif
 }
 
 
@@ -191,98 +203,79 @@ static bool hasMeshes(const struct aiNode* nd) {
 
 // ----------------------------------------------------------------------------
 static void recursive_render(
-  const struct aiScene*scene
+  std::vector<struct gem::plugins::modelASSIMP3::meshdata>& meshes
+  , const struct aiScene*scene
   , const struct aiScene *sc, const struct aiNode* nd
-  , const bool use_material
   , const aiVector2D&tex_scale
-  , std::vector<std::vector<float> >& vertices
-  , std::vector<std::vector<float> >& normals
-  , std::vector<std::vector<float> >& texcoords
-  , std::vector<std::vector<float> >& colors
   , aiMatrix4x4* trafo
-  , const int group
+  , unsigned int recursion_depth
   )
 {
   int i;
   unsigned int t;
   aiMatrix4x4 prev = *trafo;
-
+  post("%*d: %s(meshes=%d, children=%d)", recursion_depth+1, recursion_depth, __FUNCTION__, nd->mNumMeshes, nd->mNumChildren);
   // update transform
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
   // draw all meshes assigned to this node
   for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
+    struct gem::plugins::modelASSIMP3::meshdata newmesh;
+    meshes.push_back(std::move(newmesh));
+    struct gem::plugins::modelASSIMP3::meshdata&outmesh = meshes.back();
+    std::vector<float>&vertices = outmesh.vertices;
+    std::vector<float>&normals = outmesh.normals;
+    std::vector<float>&texcoords = outmesh.texcoords;
+    std::vector<float>&colors = outmesh.colors;
+    size_t numVertices = 0;
+
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
-    if(use_material) {
-      apply_material(sc->mMaterials[mesh->mMaterialIndex]);
-    }
+    post("   %*d: mesh#%d: faces=%d", recursion_depth+1, recursion_depth, n, mesh->mNumFaces);
 
-#if 0 /* handled globally */
-    if(mesh->mNormals == NULL) {
-      glDisable(GL_LIGHTING);
-    } else {
-      glEnable(GL_LIGHTING);
-    }
-#endif
+    apply_material(outmesh.mesh.material, sc->mMaterials[mesh->mMaterialIndex]);
 
-#if 0
-    if(mesh->mColors[0] != NULL) {
-      glEnable(GL_COLOR_MATERIAL);
-    } else {
-      glDisable(GL_COLOR_MATERIAL);
-    }
-#endif
     for (t = 0; t < mesh->mNumFaces; ++t) {
       const struct aiFace* face = &mesh->mFaces[t];
 
-      float* pt;
-      std::vector<float> vec;
-
       for(i = 0; i < face->mNumIndices; i++) {
         int index = face->mIndices[i];
+        numVertices++;
 
-        if(use_material && mesh->mColors[0] != NULL) {
-          pt = (float*) &mesh->mColors[0][index];
-          vec = std::vector<float>(pt,pt+4);
-          colors.push_back(vec);
+        if(mesh->mColors[0] != NULL) {
+          float *pt = (float*) &mesh->mColors[0][index];
+          colors.insert( colors.end(), pt, pt+4);
         }
 
         if(mesh->mNormals != NULL) {
-          pt = &mesh->mNormals[index].x;
-          vec = std::vector<float>(pt,pt+3);
-          normals.push_back(vec);
+          float *pt = &mesh->mNormals[index].x;
+          normals.insert( normals.end(), pt, pt+3);
         }
 
         if(mesh->HasTextureCoords(0)) {
-          vec.clear();
-          vec.push_back(mesh->mTextureCoords[0][index].x * tex_scale.x);
-          vec.push_back(mesh->mTextureCoords[0][index].y * tex_scale.y);
-          texcoords.push_back(vec);
+          texcoords.push_back(mesh->mTextureCoords[0][index].x * tex_scale.x);
+          texcoords.push_back(mesh->mTextureCoords[0][index].y * tex_scale.y);
         }
 
         aiVector3D tmp = mesh->mVertices[index];
         aiTransformVecByMatrix4(&tmp,trafo);
 
-        pt = &tmp.x;
-        vec = std::vector<float>(pt,pt+3);
-        vertices.push_back(vec);
+        float *pt = &tmp.x;
+        vertices.insert (vertices.end(), pt, pt+3);
       }
     }
+#define SET_OUTMESH(name) outmesh.mesh.name = (name.size()>0) ? name.data() : 0
+    SET_OUTMESH(vertices);
+    SET_OUTMESH(normals);
+    SET_OUTMESH(colors);
+    SET_OUTMESH(texcoords);
+    outmesh.mesh.size = numVertices;
   }
 
   // draw all children
   int current_group=0;
   for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
-    bool doit = true;
-    if(group>=0) {
-      if (hasMeshes(nd->mChildren[n])) {
-        doit = (group == current_group);
-        current_group++;
-      }
-    }
-    if (doit)
-      recursive_render(scene, sc, nd->mChildren[n], use_material, tex_scale,
-                       vertices, normals, texcoords, colors, trafo, -1);
+    recursive_render(meshes, scene, sc, nd->mChildren[n], tex_scale,
+                     trafo, recursion_depth+1);
   }
 
   *trafo = prev;
@@ -397,6 +390,7 @@ bool modelASSIMP3 :: open(const std::string&name,
   gem::Properties props=requestprops;
   setProperties(props);
 
+  post("%s::%s", __FILE__, __FUNCTION__);
   /* setProperties() already calls render() which compile()s, as m_rebuild=True */
   //compile();
   return true;
@@ -576,33 +570,29 @@ void modelASSIMP3 :: fillVBOarray()
 
 bool modelASSIMP3 :: compile(void)
 {
+  post("%s::%s", __FILE__, __FUNCTION__);
   if(!m_scene) {
     return false;
   }
-#ifdef __GNUC__
-# warning drop gl* invocations
-#endif
-  bool use_material = false;
   GLboolean useColorMaterial=GL_FALSE;
-  if(glGetBooleanv) {
-    glGetBooleanv(GL_COLOR_MATERIAL, &useColorMaterial);
-    glDisable(GL_COLOR_MATERIAL);
-    use_material = m_useMaterial;
-  }
 
   // now begin at the root node of the imported data and traverse
   // the scenegraph by multiplying subsequent local transforms
   // together on GL's matrix stack.
-  m_vertices.clear();
-  m_normals.clear();
-  m_texcoords.clear();
-  m_colors.clear();
+  m_meshes.clear();
 
   aiMatrix4x4 trafo = aiMatrix4x4(aiVector3t<float>(m_scale),
                                   aiQuaterniont<float>(), m_offset);
 
-  recursive_render(m_scene, m_scene, m_scene->mRootNode, use_material, m_texscale,
-                   m_vertices, m_normals, m_texcoords, m_colors, &trafo, m_group-1);
+  recursive_render(m_meshes,
+                   m_scene, m_scene, m_scene->mRootNode, m_texscale,
+                   &trafo, 0);
+  post("%d vertices, %d normals, %d texcoords %d colors"
+       , m_vertices.size()
+       , m_normals.size()
+       , m_texcoords.size()
+       , m_colors.size()
+    );
   m_have_texcoords = (m_texcoords.size() > 0);
 
   float texscale[2];
@@ -617,9 +607,6 @@ bool modelASSIMP3 :: compile(void)
   }
 
   fillVBOarray();
-  if(GL_FALSE != useColorMaterial) {
-    glEnable(GL_COLOR_MATERIAL);
-  }
 
   bool res = !(m_vertices.empty() && m_normals.empty()
                && m_texcoords.empty() && m_colors.empty());
@@ -635,4 +622,25 @@ void modelASSIMP3 :: destroy(void)
     aiReleaseImport(m_scene);
   }
   m_scene=NULL;
+}
+
+struct gem::plugins::modelloader::mesh* modelASSIMP3 :: getMesh(size_t meshNum) {
+  if (meshNum>=m_meshes.size())
+    return nullptr;
+  struct meshdata& mesh = m_meshes[meshNum];
+  post("got Mesh[%d] @ %p [%d]", meshNum, &(mesh.mesh), mesh.mesh.size);
+  return &mesh.mesh;
+}
+size_t modelASSIMP3 :: getNumMeshes(void) {
+  return m_meshes.size();
+}
+
+  /**
+   * update the mesh data (for all meshes)
+   * the data pointers in previously obtained t_mesh'es stay valid
+   * (but the data they point to might change)
+   * returns TRUE if there was a change, FALSE otherwise
+   */
+bool modelASSIMP3 :: updateMeshes(void) {
+  return false;
 }
