@@ -179,6 +179,25 @@ public:
     return (NULL!=m_handle);
   }
 
+  virtual struct mesh*getMesh(size_t meshNum) {
+    if (m_handle) {
+      return m_handle->getMesh(meshNum);
+    }
+    return nullptr;
+  }
+  virtual size_t getNumMeshes(void) {
+    if (m_handle) {
+      return m_handle->getNumMeshes();
+    }
+    return 0;
+  }
+  virtual bool updateMeshes(void) {
+    if (m_handle) {
+      return m_handle->updateMeshes();
+    }
+    return false;
+  }
+
   std::vector<std::vector<float> > getVector(std::string vectorName)
   {
     if (m_handle) {
