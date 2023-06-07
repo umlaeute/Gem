@@ -55,7 +55,6 @@ public:
     GEM_VBO_COLORS,
     GEM_VBO_TEXCOORDS,
   };
-  Type type;
 };
 }; /* namespace: gem */
 #endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
