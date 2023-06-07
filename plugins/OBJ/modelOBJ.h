@@ -72,10 +72,6 @@ public:
   virtual bool enumProperties(gem::Properties&, gem::Properties&);
   virtual void setProperties(gem::Properties&);
   virtual void getProperties(gem::Properties&);
-  std::vector<std::vector<float> > getVector(std::string vectorName);
-  std::vector<VBOarray> getVBOarray();
-  void unsetRefresh();
-  bool needRefresh();
 
 protected:
   virtual void destroy(void);
@@ -89,7 +85,6 @@ protected:
   glmtexture_t m_textype;
   bool      m_reverse;
 
-  std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 
 

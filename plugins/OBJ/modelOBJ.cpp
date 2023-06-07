@@ -106,15 +106,6 @@ void modelOBJ :: close(void)
   destroy();
 }
 
-void modelOBJ :: unsetRefresh()
-{
-  m_refresh = false;
-}
-bool modelOBJ :: needRefresh()
-{
-  return m_refresh;
-}
-
 bool modelOBJ :: enumProperties(gem::Properties&readable,
                                 gem::Properties&writeable)
 {
@@ -305,21 +296,4 @@ bool modelOBJ :: updateMeshes(void) {
   bool ret = m_refresh || m_rebuild;
   m_refresh = false;
   return ret;
-}
-
-
-
-
-
-
-
-std::vector<std::vector<float> > modelOBJ :: getVector(
-  std::string vectorName)
-{
-  return std::vector<std::vector<float> >();
-}
-
-std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray()
-{
-  return m_VBOarray;
 }

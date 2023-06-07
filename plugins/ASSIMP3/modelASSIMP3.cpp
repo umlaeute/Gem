@@ -249,6 +249,7 @@ static void recursive_render(
         vertices.insert (vertices.end(), pt, pt+3);
       }
     }
+
 #define SET_OUTMESH(name) outmesh.mesh.name = (name.size()>0) ? name.data() : 0
     SET_OUTMESH(vertices);
     SET_OUTMESH(normals);
@@ -554,27 +555,4 @@ bool modelASSIMP3 :: updateMeshes(void) {
   bool ret = m_refresh || m_rebuild;
   m_refresh = false;
   return ret;
-}
-
-
-
-
-std::vector<std::vector<float> > modelASSIMP3 :: getVector(
-  std::string vectorName)
-{
-  return std::vector<std::vector<float> >();
-}
-
-std::vector<modelloader::VBOarray> modelASSIMP3 :: getVBOarray()
-{
-  return m_VBOarray;
-}
-
-void modelASSIMP3 :: unsetRefresh()
-{
-  m_refresh = false;
-}
-bool modelASSIMP3 :: needRefresh()
-{
-  return m_refresh;
 }
