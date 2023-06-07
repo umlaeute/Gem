@@ -258,6 +258,8 @@ static void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
     tex.push_back(vec);
   }
 }
+  /* perform some openGL calls so that the given material takes effect */
+  void render_material(gem::plugins::modelloader::material&material);
 }; // namespace ..::modelutils
 
 };
