@@ -35,6 +35,11 @@ namespace plugins
 class GEM_EXPORT modelOBJ : public gem::plugins::modelloader
 {
 public:
+  struct meshdata {
+    gem::plugins::modelloader::mesh mesh;
+    std::vector<float> vertices, normals, texcoords, colors;
+  meshdata(void) : mesh({0}) { };
+  };
   /////////
   // ctor/dtor
   modelOBJ(void);
@@ -49,6 +54,13 @@ public:
   // open/close an asset
   virtual bool open(const std::string&, const gem::Properties&);
   virtual void close(void);
+
+  /**
+   * get the mesh data
+   */
+  virtual size_t getNumMeshes(void);
+  virtual struct mesh*getMesh(size_t meshNum);
+  virtual bool updateMeshes(void);
 
   //////////
   // render the asset
@@ -82,6 +94,9 @@ protected:
       m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
+
+
+  std::vector<struct meshdata>m_meshes;
 };
 };
 }; // namespace gem::plugins

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
+#include <string>
 #include <assert.h>
 
 #ifdef __ppc__
@@ -55,6 +56,18 @@ typedef enum {
 }  glmtexture_t;
 
 typedef struct _GLMmodel GLMmodel;
+
+/* GLMmaterial: Structure that defines a material in a model.
+ */
+typedef struct _GLMmaterial {
+  std::string name;                   /* name of material */
+  GLfloat diffuse[4];           /* diffuse component */
+  GLfloat ambient[4];           /* ambient component */
+  GLfloat specular[4];          /* specular component */
+  // GLfloat emmissive[4];         /* emmissive component */
+  GLfloat shininess;            /* specular exponent */
+} GLMmaterial;
+
 
 /* glmUnitize: "unitize" a model by translating it to the origin and
  * scaling it to fit in a unit cube around the origin.  Returns the
@@ -212,78 +225,37 @@ glmReadOBJ(const char* filename);
 GLint
 glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode);
 
-/* glmDraw: Renders the model to the current OpenGL context using the
- * mode specified.
+/* glmDraw: "Renders" the model to a generic mesh structure
+ * using the mode specified.
  *
  * model    - initialized GLMmodel structure
+ * group    - which group to render
  * mode     - a bitwise OR of values describing what is to be rendered.
  *            GLM_NONE    -  render with only vertices
  *            GLM_FLAT    -  render with facet normals
  *            GLM_SMOOTH  -  render with vertex normals
  *            GLM_TEXTURE -  render with texture coords
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.
- */
-GLvoid
-glmDraw(const GLMmodel* model, GLuint mode,
-        std::vector<std::vector<float> >& vertices,
-        std::vector<std::vector<float> >& normals,
-        std::vector<std::vector<float> >& texcoords,
-        std::vector<std::vector<float> >& facetnorms);
-
-
-/* glmDrawGroup: Renders a single group of model to the current OpenGL context using the
- * mode specified.
+ * vertices: will hold 3D-vectors (x,y,z,x,y,z,...)
+ * normals : will hold 3D-vectors (x,y,z,x,y,z,...)
+ * texcoords: will hold "d coords (u,v,u,v,...)
+ * colors: will hold 4D coords (r,g,b,a,r,g,b,a,...)
  *
- * model    - initialized GLMmodel structure
- * mode     - a bitwise OR of values describing what is to be rendered.
- *            GLM_NONE    -  render with only vertices
- *            GLM_FLAT    -  render with facet normals
- *            GLM_SMOOTH  -  render with vertex normals
- *            GLM_TEXTURE -  render with texture coords
- *            GLM_FLAT and GLM_SMOOTH should not both be specified.
+ * material: will hold a pointer to the group's material (or NULL)
  */
-GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode,int groupNumber,
-             std::vector<std::vector<float> >& vertices,
-             std::vector<std::vector<float> >& normals,
-             std::vector<std::vector<float> >& texcoords,
-             std::vector<std::vector<float> >& facetnorms);
+bool
+glmGroupData(const GLMmodel* model, struct _GLMgroup*group, GLuint mode,
+        std::vector<float>& vertices,
+        std::vector<float>& normals,
+        std::vector<float>& texcoords,
+        GLMmaterial**material);
 
-/* glmList: Generates and returns a display list for the model using
- * the mode specified.
- *
- * model    - initialized GLMmodel structure
- * mode     - a bitwise OR of values describing what is to be rendered.
- *            GLM_NONE    -  render with only vertices
- *            GLM_FLAT    -  render with facet normals
- *            GLM_SMOOTH  -  render with vertex normals
- *            GLM_TEXTURE -  render with texture coords
- *            GLM_FLAT and GLM_SMOOTH should not both be specified.
- */
-GLuint
-glmList(const GLMmodel* model, GLuint mode,
-        std::vector<std::vector<float> >& vertices,
-        std::vector<std::vector<float> >& normals,
-        std::vector<std::vector<float> >& texcoords,
-        std::vector<std::vector<float> >& facetnorms);
+  /* glmGetGroup: get a reference to the numbered group
+   * if <group> is out of range, return nullptr
+   */
+struct _GLMgroup*
+glmGetGroup(const GLMmodel* model, GLuint group);
 
-/* glmListGroup: Generates and returns a display list for the model group using
- * the mode specified.
- *
- * model    - initialized GLMmodel structure
- * mode     - a bitwise OR of values describing what is to be rendered.
- *            GLM_NONE    -  render with only vertices
- *            GLM_FLAT    -  render with facet normals
- *            GLM_SMOOTH  -  render with vertex normals
- *            GLM_TEXTURE -  render with texture coords
- *            GLM_FLAT and GLM_SMOOTH should not both be specified.
- */
-GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber,
-             std::vector<std::vector<float> >& vertices,
-             std::vector<std::vector<float> >& normals,
-             std::vector<std::vector<float> >& texcoords,
-             std::vector<std::vector<float> >& facetnorms);
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.

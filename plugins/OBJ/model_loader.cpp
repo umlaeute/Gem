@@ -28,17 +28,6 @@
 # define FLIPTEX(x) (1-(x))
 #endif
 
-/* GLMmaterial: Structure that defines a material in a model.
- */
-typedef struct _GLMmaterial {
-  std::string name;                   /* name of material */
-  GLfloat diffuse[4];           /* diffuse component */
-  GLfloat ambient[4];           /* ambient component */
-  GLfloat specular[4];          /* specular component */
-  // GLfloat emmissive[4];         /* emmissive component */
-  GLfloat shininess;            /* specular exponent */
-} GLMmaterial;
-
 /* GLMtriangle: Structure that defines a triangle in a model.
  */
 typedef struct _GLMtriangle {
@@ -138,12 +127,12 @@ typedef struct _GLMnode {
 } GLMnode;
 
 /* fill the vector with model data */
+static
 void fillVector(const GLMmodel* model, GLMgroup* group,
-                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
-                std::vector<std::vector<float> >& vertices,
-                std::vector<std::vector<float> >& normals,
-                std::vector<std::vector<float> >& texcoords,
-                std::vector<std::vector<float> >& colors);
+                GLuint mode,
+                std::vector<float>& vertices,
+                std::vector<float>& normals,
+                std::vector<float>& texcoords);
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
@@ -2140,10 +2129,11 @@ static GLuint checkMode(const GLMmodel* model, GLuint mode)
   return mode;
 }
 
-/* glmDraw: Renders the model to the current OpenGL context using the
- * mode specified.
+/* glmGroupData: "Renders" the model to a generic mesh structure
+ * using mode specified.
  *
  * model - initialized GLMmodel structure
+ * goup  - which group to render
  * mode  - a bitwise OR of values describing what is to be rendered.
  *             GLM_NONE     -  render with only vertices
  *             GLM_FLAT     -  render with facet normals
@@ -2154,250 +2144,96 @@ static GLuint checkMode(const GLMmodel* model, GLuint mode)
  *             GLM_COLOR and GLM_MATERIAL should not both be specified.
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.
  */
-GLvoid
-glmDraw(const GLMmodel* model, GLuint mode,
-        std::vector<std::vector<float> >& vertices,
-        std::vector<std::vector<float> >& normals,
-        std::vector<std::vector<float> >& texcoords,
-        std::vector<std::vector<float> >& colors)
+bool
+glmGroupData(const GLMmodel* model, GLMgroup*group, GLuint mode
+        , std::vector<float>& vertices
+        , std::vector<float>& normals
+        , std::vector<float>& texcoords
+        , struct _GLMmaterial**material
+  )
 {
-  static GLuint i;
-  static GLMgroup* group=0;
+  static GLuint gid = 0;
   static GLMtriangle* triangle=0;
-  static GLMmaterial* material=0;
 
-  if (!(model)) {
-    return;
-  }
-  if (!(model->vertices)) {
-    return;
+  if (!model || !group || !(model->vertices)) {
+    return false;
   }
 
   /* do a bit of warning */
   mode = checkMode(model, mode);
-  if (mode & GLM_COLOR) {
-    glEnable(GL_COLOR_MATERIAL);
-  } else if (mode & GLM_MATERIAL) {
-    glDisable(GL_COLOR_MATERIAL);
+
+  fillVector(model, group, mode, vertices, normals, texcoords);
+  if(material)
+    *material = &model->materials[group->material];
+  return true;
+}
+
+struct _GLMgroup*glmGetGroup(const GLMmodel* model, GLuint gid)
+{
+  if (!model) {
+    return nullptr;
+  }
+  GLMgroup*group = model->groups;
+  GLuint cur = 0;
+  for(group = model->groups; group; group=group->next, cur++) {
+    if (cur == gid) {
+      if ((group->numtriangles)>0)
+        return group;
+      else
+        return nullptr;
+    }
+  }
+  return nullptr;
+
+}
+
+void appendTriangleData(const GLMmodel*model, const GLMtriangle*triangle, GLuint index,
+                          bool smooth,
+                          std::vector<float>& vertices,
+                          std::vector<float>& normals,
+                          std::vector<float>& texcoords)
+{
+#define APPEND(vec, data, size)  vec.insert(vec.end(), data, data+size)
+  float* pt;
+  if(smooth) {
+    pt = &model->normals[3 * triangle->nindices[index]];
+    APPEND(normals, pt, 3);
+  } else {
+    pt = &model->facetnorms[3 * triangle->findex];
+    APPEND(normals, pt, 3);
   }
 
-  /* perhaps this loop should be unrolled into material, color, flat,
-     smooth, etc. loops?  since most cpu's have good branch prediction
-     schemes (and these branches will always go one way), probably
-     wouldn't gain too much?  */
+  pt =   &model->texcoords[2 * triangle->tindices[index]];
+  APPEND(texcoords, pt, 2);
 
-  group = model->groups;
-  while (group) {
-    fillVector(model, group, triangle, material, mode, vertices, normals,
-               texcoords, colors);
-    group = group->next;
-  }
+  pt = &model->vertices[3 * triangle->vindices[index]];
+  APPEND(vertices, pt, 3);
 }
 
 void fillVector(const GLMmodel* model, GLMgroup* group,
-                GLMtriangle* triangle, GLMmaterial* material, GLuint mode,
-                std::vector<std::vector<float> >& vertices,
-                std::vector<std::vector<float> >& normals,
-                std::vector<std::vector<float> >& texcoords,
-                std::vector<std::vector<float> >& colors)
+                GLuint mode,
+                std::vector<float>& vertices,
+                std::vector<float>& normals,
+                std::vector<float>& texcoords)
 {
-
-  if (mode & GLM_MATERIAL) {
-    material = &model->materials[group->material];
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
-  }
-
-  std::vector<float> vec, color;
   float* pt=0;
   int i;
-  if (mode & GLM_COLOR) {
-    color.insert(color.end(),material->diffuse,material->diffuse + 3);
-    color.push_back(1.);
-  }
+  bool smooth = (mode & GLM_SMOOTH);
+
+  /* .OBJ files don't have any color, but the old code faked one
+   * by pushing the material->diffuse color into the color vector
+   *
+   * we stop doing that
+   */
 
   for (i = 0; i < group->numtriangles; i++) {
-    triangle = &T(group->triangles[i]);
-    if (mode & GLM_FLAT) {
-      pt = &model->facetnorms[3 * triangle->findex];
-      vec = std::vector<float>(pt, pt + 3);
-      for ( int j=0; j<3 ; j++) {
-        normals.push_back(vec);
-      }
-    }
-
-    if (mode & GLM_SMOOTH) {
-      //~glNormal3fv(&model->normals[3 * triangle->nindices[0]]);
-      pt = &model->normals[3 * triangle->nindices[0]];
-      vec = std::vector<float>(pt, pt + 3);
-      normals.push_back(vec);
-    }
-    if (mode & GLM_TEXTURE) {
-      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[0]]);
-      pt =   &model->texcoords[2 * triangle->tindices[0]];
-      vec = std::vector<float>(pt, pt + 2);
-      texcoords.push_back(vec);
-    }
-    //~glVertex3fv(&model->vertices[3 * triangle->vindices[0]]);
-    pt = &model->vertices[3 * triangle->vindices[0]];
-    vec = std::vector<float>(pt, pt + 3);
-    vertices.push_back(vec);
-    if(!color.empty()) {
-      colors.push_back(color);
-    }
-
-    if (mode & GLM_SMOOTH) {
-      //~glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
-      pt = &model->normals[3 * triangle->nindices[1]];
-      vec = std::vector<float>(pt, pt + 3);
-      normals.push_back(vec);
-    }
-    if (mode & GLM_TEXTURE) {
-      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-      pt =   &model->texcoords[2 * triangle->tindices[1]];
-      vec = std::vector<float>(pt, pt + 2);
-      texcoords.push_back(vec);
-    }
-    //~glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
-    pt = &model->vertices[3 * triangle->vindices[1]];
-    vec = std::vector<float>(pt, pt + 3);
-    vertices.push_back(vec);
-    if(!color.empty()) {
-      colors.push_back(color);
-    }
-
-    if (mode & GLM_SMOOTH) {
-      //~glNormal3fv(&model->normals[3 * triangle->nindices[2]]);
-      pt = &model->normals[3 * triangle->nindices[2]];
-      vec = std::vector<float>(pt, pt + 3);
-      normals.push_back(vec);
-    }
-    if (mode & GLM_TEXTURE) {
-      //~glTexCoord2fv(&model->texcoords[2 * triangle->tindices[2]]);
-      pt =   &model->texcoords[2 * triangle->tindices[2]];
-      vec = std::vector<float>(pt, pt + 2);
-      texcoords.push_back(vec);
-    }
-    //~glVertex3fv(&model->vertices[3 * triangle->vindices[2]]);
-    pt = &model->vertices[3 * triangle->vindices[2]];
-    vec = std::vector<float>(pt, pt + 3);
-    vertices.push_back(vec);
-    if(!color.empty()) {
-      colors.push_back(color);
-    }
+    GLMtriangle*triangle = &T(group->triangles[i]);
+    appendTriangleData(model, triangle, 0, smooth, vertices, normals, texcoords);
+    appendTriangleData(model, triangle, 1, smooth, vertices, normals, texcoords);
+    appendTriangleData(model, triangle, 2, smooth, vertices, normals, texcoords);
   }
 }
 
-/* glmList: Generates and returns a display list for the model using
- * the mode specified.
- *
- * model - initialized GLMmodel structure
- * mode  - a bitwise OR of values describing what is to be rendered.
- *             GLM_NONE     -  render with only vertices
- *             GLM_FLAT     -  render with facet normals
- *             GLM_SMOOTH   -  render with vertex normals
- *             GLM_TEXTURE  -  render with texture coords
- *             GLM_COLOR    -  render with colors (color material)
- *             GLM_MATERIAL -  render with materials
- *             GLM_COLOR and GLM_MATERIAL should not both be specified.
- * GLM_FLAT and GLM_SMOOTH should not both be specified.
- */
-GLuint
-glmList(const GLMmodel* model, GLuint mode,
-        std::vector<std::vector<float> >& vertices,
-        std::vector<std::vector<float> >& normals,
-        std::vector<std::vector<float> >& texcoords,
-        std::vector<std::vector<float> >& colors)
-{
-  GLuint modList;
-
-  modList = glGenLists(1);
-  glNewList(modList, GL_COMPILE);
-  glmDraw(model, mode, vertices, normals, texcoords, colors);
-  glEndList();
-
-  return modList;
-}
-/***********
- * this draws only a single group instead of the entire model
- * added for Leif and Annette
- */
-
-GLvoid
-glmDrawGroup(const GLMmodel* model, GLuint mode, int groupNumber,
-             std::vector<std::vector<float> >& vertices,
-             std::vector<std::vector<float> >& normals,
-             std::vector<std::vector<float> >& texcoords,
-             std::vector<std::vector<float> >& colors)
-{
-  static GLuint i;
-  static GLMgroup* group=0;
-  static GLMtriangle* triangle=0;
-  static GLMmaterial* material=0;
-
-  if (!(model)) {
-    return;
-  }
-  if (!(model->vertices)) {
-    return;
-  }
-
-  /* do a bit of warning */
-  mode = checkMode(model, mode);
-  if (mode & GLM_COLOR) {
-    glEnable(GL_COLOR_MATERIAL);
-  } else if (mode & GLM_MATERIAL) {
-    glDisable(GL_COLOR_MATERIAL);
-  }
-
-  /* perhaps this loop should be unrolled into material, color, flat,
-     smooth, etc. loops?  since most cpu's have good branch prediction
-     schemes (and these branches will always go one way), probably
-     wouldn't gain too much?  */
-
-  group = model->groups;
-
-  int numgroup;
-
-  numgroup = model->numgroups-1;
-
-  verbose(1, "[GEM:modelOBJ] number of groups: %d",numgroup);
-  //groupNumber-=1;
-  if ( (!(groupNumber > numgroup)) && (groupNumber > 0)) {
-    int count = 1;
-    verbose(1,
-            "[GEM:modelOBJ] model group requested %d/%d",
-            groupNumber,numgroup);
-
-
-    while (count < groupNumber) {
-      group = group->next;
-      count++;
-    }
-    fillVector(model, group, triangle, material, mode, vertices, normals,
-               texcoords, colors);
-  }
-}
-
-GLuint
-glmListGroup(const GLMmodel* model, GLuint mode, int groupNumber,
-             std::vector<std::vector<float> >& vertices,
-             std::vector<std::vector<float> >& normals,
-             std::vector<std::vector<float> >& texcoords,
-             std::vector<std::vector<float> >& colors)
-{
-  GLuint modList;
-
-  modList = glGenLists(1);
-  glNewList(modList, GL_COMPILE);
-  glmDrawGroup(model, mode, groupNumber, vertices, normals, texcoords,
-               colors);
-  glEndList();
-
-  return modList;
-}
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.

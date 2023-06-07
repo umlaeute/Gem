@@ -24,10 +24,22 @@ using namespace gem::plugins;
 
 REGISTER_MODELLOADERFACTORY("OBJ", modelOBJ);
 
+
+namespace {
+  gem::plugins::modelloader::color float4_to_color(GLfloat col[4]) {
+    gem::plugins::modelloader::color c;
+    c.r = col[0];
+    c.g = col[1];
+    c.b = col[2];
+    c.a = col[3];
+    return c;
+  }
+};
+
 modelOBJ :: modelOBJ(void) :
   m_model(NULL),
   m_material(0),
-  m_flags(GLM_SMOOTH | GLM_TEXTURE),
+  m_flags(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL),
   m_group(0),
   m_rebuild(false),
   m_currentH(1.f), m_currentW(1.f),
@@ -80,31 +92,6 @@ bool modelOBJ :: open(const std::string&name,
   return true;
 }
 
-std::vector<std::vector<float> > modelOBJ :: getVector(
-  std::string vectorName)
-{
-  if ( vectorName == "vertices" ) {
-    return m_vertices;
-  }
-  if ( vectorName == "normals" ) {
-    return m_normals;
-  }
-  if ( vectorName == "texcoords" ) {
-    return m_texcoords;
-  }
-  if ( vectorName == "colors" ) {
-    return m_colors;
-  }
-  verbose(0, "[GEM:modelOBJ] there is no \"%s\" vector !",
-          vectorName.c_str());
-  return std::vector<std::vector<float> >();
-}
-
-std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray()
-{
-  return m_VBOarray;
-}
-
 bool modelOBJ :: render(void)
 {
   bool res = true;
@@ -112,6 +99,7 @@ bool modelOBJ :: render(void)
     glmTexture(m_model, m_textype, m_currentW, m_currentH);
     res = compile();
   }
+  m_rebuild = false;
   return res;
 }
 void modelOBJ :: close(void)
@@ -207,21 +195,6 @@ void modelOBJ :: setProperties(gem::Properties&props)
       continue;
     }
 
-    if("usematerials" == key) {
-      if(props.get(key, d)) {
-        int flags=GLM_SMOOTH | GLM_TEXTURE;
-        if(d) {
-          flags |= GLM_MATERIAL;
-        }
-
-        if(flags!=m_flags) {
-          m_rebuild=true;
-        }
-        m_flags=flags;
-      }
-      continue;
-    }
-
     if("group" == key) {
       if(props.get(key, d)) {
         m_group=d;
@@ -269,18 +242,48 @@ void modelOBJ :: getProperties(gem::Properties&props)
 
 bool modelOBJ :: compile(void)
 {
-  m_vertices.clear();
-  m_normals.clear();
-  m_texcoords.clear();
-  m_colors.clear();
-  if (!m_group) {
-    glmDraw(m_model, m_flags, m_vertices, m_normals, m_texcoords, m_colors);
-  } else {
-    glmDrawGroup(m_model, m_flags, m_group, m_vertices, m_normals, m_texcoords,
-                 m_colors);
+  GLuint groups = glmGetNumGroups(m_model);
+  GLuint validgroups = 0;
+  for(GLuint gid=0; gid < groups; gid++) {
+    if (glmGetGroup(m_model, gid))
+      validgroups++;
   }
-  bool res = !(m_vertices.empty() && m_normals.empty()
-               && m_texcoords.empty() && m_colors.empty());
+
+  if(validgroups != m_meshes.size()) {
+    m_meshes.clear();
+    for(GLuint gid=0; gid < validgroups; gid++) {
+      struct meshdata mesh;
+      m_meshes.push_back(std::move(mesh));
+    }
+  }
+
+  for(GLuint gid = 0; gid < groups; gid++) {
+    auto&m = m_meshes[gid];
+    GLMmaterial*mat = 0;
+    struct _GLMgroup*g = glmGetGroup(m_model, gid);
+    if(!g)
+      continue;
+    m.vertices.clear();
+    m.normals.clear();
+    m.colors.clear();
+    m.texcoords.clear();
+    if(glmGroupData(m_model, g, m_flags, m.vertices, m.normals, m.texcoords, &mat)) {
+      if(mat) {
+        struct material&material=m.mesh.material;
+        material.diffuse = float4_to_color(mat->diffuse);
+        material.specular = float4_to_color(mat->specular);
+        material.ambient = float4_to_color(mat->ambient);
+        //material.emissive
+        material.shininess = mat->shininess;
+      }
+    }
+    m.mesh.size = m.vertices.size() / 3;
+    m.mesh.vertices = m.vertices.data();
+    m.mesh.normals = m.normals.data();
+    m.mesh.colors = 0;
+    m.mesh.texcoords = m.texcoords.data();
+  }
+  bool res = !(m_vertices.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;
@@ -294,4 +297,37 @@ void modelOBJ :: destroy(void)
     glmDelete(m_model);
     m_model=NULL;
   }
+}
+
+struct gem::plugins::modelloader::mesh* modelOBJ :: getMesh(size_t meshNum) {
+  if (meshNum>=m_meshes.size())
+    return nullptr;
+  struct meshdata& mesh = m_meshes[meshNum];
+  return &mesh.mesh;
+}
+size_t modelOBJ :: getNumMeshes(void) {
+  post("%d meshes", m_meshes.size());
+  return m_meshes.size();
+}
+bool modelOBJ :: updateMeshes(void) {
+  bool ret = m_refresh || m_rebuild;
+  m_refresh = false;
+  return ret;
+}
+
+
+
+
+
+
+
+std::vector<std::vector<float> > modelOBJ :: getVector(
+  std::string vectorName)
+{
+  return std::vector<std::vector<float> >();
+}
+
+std::vector<gem::plugins::modelloader::VBOarray> modelOBJ :: getVBOarray()
+{
+  return m_VBOarray;
 }
