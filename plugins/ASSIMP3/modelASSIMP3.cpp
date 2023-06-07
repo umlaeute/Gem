@@ -302,40 +302,6 @@ modelASSIMP3 ::~modelASSIMP3(void)
   destroy();
 }
 
-std::vector<std::vector<float> > modelASSIMP3 :: getVector(
-  std::string vectorName)
-{
-  if ( vectorName == "vertices" ) {
-    return m_vertices;
-  }
-  if ( vectorName == "normals" ) {
-    return m_normals;
-  }
-  if ( vectorName == "texcoords" ) {
-    return m_texcoords;
-  }
-  if ( vectorName == "colors" ) {
-    return m_colors;
-  }
-  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",
-          vectorName.c_str());
-  return std::vector<std::vector<float> >();
-}
-
-std::vector<modelloader::VBOarray> modelASSIMP3 :: getVBOarray()
-{
-  return m_VBOarray;
-}
-
-void modelASSIMP3 :: unsetRefresh()
-{
-  m_refresh = false;
-}
-bool modelASSIMP3 :: needRefresh()
-{
-  return m_refresh;
-}
-
 bool modelASSIMP3 :: open(const std::string&name,
                           const gem::Properties&requestprops)
 {
@@ -643,4 +609,37 @@ size_t modelASSIMP3 :: getNumMeshes(void) {
    */
 bool modelASSIMP3 :: updateMeshes(void) {
   return false;
+
+std::vector<std::vector<float> > modelASSIMP3 :: getVector(
+  std::string vectorName)
+{
+  if ( vectorName == "vertices" ) {
+    return m_vertices;
+  }
+  if ( vectorName == "normals" ) {
+    return m_normals;
+  }
+  if ( vectorName == "texcoords" ) {
+    return m_texcoords;
+  }
+  if ( vectorName == "colors" ) {
+    return m_colors;
+  }
+  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",
+          vectorName.c_str());
+  return std::vector<std::vector<float> >();
+}
+
+std::vector<modelloader::VBOarray> modelASSIMP3 :: getVBOarray()
+{
+  return m_VBOarray;
+}
+
+void modelASSIMP3 :: unsetRefresh()
+{
+  m_refresh = false;
+}
+bool modelASSIMP3 :: needRefresh()
+{
+  return m_refresh;
 }
