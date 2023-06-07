@@ -368,6 +368,7 @@ bool modelASSIMP3 :: render(void)
   if(m_rebuild) {
     res = compile();
   }
+  m_rebuild = false;
   return res;
 }
 void modelASSIMP3 :: close(void)
