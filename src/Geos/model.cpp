@@ -361,13 +361,11 @@ void model :: clearPropertiesMess()
 /////////////////////////////////////////////////////////
 void model :: materialMess(int material)
 {
-  gem::any value=material;
-  m_writeprops.set("usematerials", value);
-  applyProperties();
+  m_useMaterial = material;
 }
 
 /////////////////////////////////////////////////////////
-// materialMess
+// textureMess
 //
 /////////////////////////////////////////////////////////
 void model :: textureMess(int state)
@@ -663,6 +661,9 @@ void model :: render(GemState *state)
       const float*colors = size?m.mesh->colors:0;
       const float*normals = size?m.mesh->normals:0;
 
+      if(m_useMaterial) {
+        gem::plugins::modelutils::render_material(m.mesh->material);
+      }
 
       glBegin(m_drawType);
       for (unsigned int i=0; i<size; i++) {
@@ -688,13 +689,20 @@ void model :: render(GemState *state)
   } else { /* openGL-2+ */
     if(m_group.empty()) {
       for (const auto&m: m_mesh) {
+        if(m_useMaterial) {
+          gem::plugins::modelutils::render_material(m.mesh->material);
+        }
         m.render(m_drawType);
       }
     } else {
       const auto numGroups = m_mesh.size();
       for(auto n: m_group) {
         if (n >= numGroups) continue;
-        m_mesh[n].render(m_drawType);
+        const auto&m = m_mesh[n];
+        if(m_useMaterial) {
+          gem::plugins::modelutils::render_material(m.mesh->material);
+        }
+        m.render(m_drawType);
       }
     }
   }
@@ -710,7 +718,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "rescale", rescaleMess, bool);
   CPPEXTERN_MSG1(classPtr, "smooth", smoothMess, float);
   CPPEXTERN_MSG1(classPtr, "revert", reverseMess, bool);
-  CPPEXTERN_MSG1(classPtr, "material", materialMess, int);
+  CPPEXTERN_MSG1(classPtr, "material", materialMess, bool);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);

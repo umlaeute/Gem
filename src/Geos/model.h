@@ -115,6 +115,7 @@ protected:
   GLfloat m_texscale[2];
 
   std::vector<unsigned int> m_group;
+  bool m_useMaterial;
 
   /* ============================== */
   struct modelmesh {
