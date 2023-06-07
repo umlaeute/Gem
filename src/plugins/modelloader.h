@@ -206,33 +206,28 @@ public:
 
 namespace modelutils
 {
-static void genTexture_Linear(std::vector<std::vector<float> >& tex,
-                              const std::vector<std::vector<float> >& pos,
+static void genTexture_Linear(std::vector<float>& tex,
+                              const std::vector<float>& pos,
                               const float scale[2])
 {
   tex.clear();
-  std::vector<float>vec;
-  unsigned int i;
-  for (i=0; i<pos.size(); i++) {
-    vec.clear();
-    vec.push_back(scale[0] * (pos[i][0] + 1.0) / 2.0);
-    vec.push_back(scale[1] * (pos[i][2] + 1.0) / 2.0);
-    tex.push_back(vec);
+  const unsigned int size = pos.size()/3;
+  for (unsigned int i=0; i<size; i++) {
+    tex.push_back(scale[0] * (pos[3*i+0] + 1.0) / 2.0);
+    tex.push_back(scale[1] * (pos[3*i+2] + 1.0) / 2.0);
   }
 }
-static void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
-                                 const std::vector<std::vector<float> >& norm,
+static void genTexture_Spheremap(std::vector<float>& tex,
+                                 const std::vector<float>& norm,
                                  const float scale[2])
 
 {
   tex.clear();
-  std::vector<float>vec;
-  unsigned int i;
-  for (i=0; i<norm.size(); i++) {
-    vec.clear();
-    float z = norm[i][0];  /* re-arrange for pole distortion */
-    float y = norm[i][1];
-    float x = norm[i][2];
+  const unsigned int size = norm.size()/3;
+  for (unsigned int i=0; i<size; i++) {
+    float z = norm[3*i+0];  /* re-arrange for pole distortion */
+    float y = norm[3*i+1];
+    float x = norm[3*i+2];
     float r = (float)sqrt((x * x) + (y * y));
     float rho = (float)sqrt((r * r) + (z * z));
     float theta = 0.f, phi = 0.f;
@@ -253,9 +248,8 @@ static void genTexture_Spheremap(std::vector<std::vector<float> >& tex,
         theta = (float)asin(y / r) + (M_PI / 2.0f);
       }
     }
-    vec.push_back(scale[0] * theta / M_PI);
-    vec.push_back(scale[1] * phi   / M_PI);
-    tex.push_back(vec);
+    tex.push_back(scale[0] * theta / M_PI);
+    tex.push_back(scale[1] * phi   / M_PI);
   }
 }
   /* perform some openGL calls so that the given material takes effect */

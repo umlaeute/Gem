@@ -508,10 +508,12 @@ bool modelASSIMP3 :: compile(void)
     /* use built-in texcoords */
   } else if("spheremap" == m_textype) {
     for(auto&m: m_meshes) {
+      modelutils::genTexture_Spheremap(m.texcoords, m.normals, texscale);
     }
   } else {
     /* fallback to linear texcoords */
     for(auto&m: m_meshes) {
+      modelutils::genTexture_Linear(m.texcoords, m.vertices, texscale);
     }
   }
 
