@@ -198,22 +198,6 @@ public:
     return false;
   }
 
-  std::vector<std::vector<float> > getVector(std::string vectorName)
-  {
-    if (m_handle) {
-      return m_handle->getVector(vectorName);
-    }
-    return std::vector<std::vector<float> >();
-  }
-
-  std::vector<VBOarray> getVBOarray()
-  {
-    if (m_handle) {
-      return m_handle->getVBOarray();
-    }
-    return std::vector<VBOarray>();
-  }
-
   virtual void close(void)
   {
     if(m_handle) {
@@ -229,21 +213,6 @@ public:
     }
 
     return m_canThread;
-  }
-
-  bool needRefresh()
-  {
-    if (m_handle) {
-      return m_handle->needRefresh();
-    }
-    return false;
-  }
-
-  void unsetRefresh()
-  {
-    if (m_handle) {
-      m_handle->unsetRefresh();
-    }
   }
 
   virtual bool enumProperties(gem::Properties&readable,

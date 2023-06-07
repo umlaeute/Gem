@@ -152,13 +152,12 @@ public:
     struct material material;
   };
 
-#warning getMesh/getNumMeshes/updateMeshes should be pure virtual methods
   /**
    * get the named mesh
    * if meshNum exceeds the available meshes, NULL is returned
    */
-  virtual struct mesh*getMesh(size_t meshNum) {return nullptr;};
-  virtual size_t getNumMeshes(void) {return 0;};
+  virtual struct mesh*getMesh(size_t meshNum) = 0;
+  virtual size_t getNumMeshes(void) = 0;
 
   /**
    * update the mesh data (for all meshes)
@@ -166,42 +165,7 @@ public:
    * (but the data they point to might change)
    * returns TRUE if there was a change, FALSE otherwise
    */
-  virtual bool updateMeshes(void) {return false;};
-
-
-
-
-  /**
-   * data array (e.g. vertices)
-   * TODO: rename to ArrayData (or similar)
-   */
-  class VBOarray
-  {
-  public:
-    std::vector<std::vector<float> >* data;
-    VertexBuffer::Type type;
-  };
-
-  /**
-   * get a named vector (e.g. to pass it to VBO)
-   * TODO: return VBOarray
-   */
-  virtual std::vector<std::vector<float> > getVector(std::string vectorName)
-    = 0;
-
-  /**
-   * get all vectors
-   * TODO: rename to getVectors()
-   */
-  virtual std::vector<VBOarray> getVBOarray() = 0;
-
-  /* returns TRUE if the array data has changed (and the VBO needs refresh) */
-  virtual bool needRefresh() = 0;
-  /* signal the loader that we have updated our local copy of the data (clear the needRefresh() flag)
-     TODO: shouldn't this be automatically called when getVBOarray() got called?
-   */
-  virtual void unsetRefresh() = 0;
-
+  virtual bool updateMeshes(void) = 0;
 };
 
 namespace modelutils
