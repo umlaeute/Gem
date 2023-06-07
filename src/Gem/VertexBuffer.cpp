@@ -19,49 +19,44 @@
 /* for post(), error(),... */
 #include <m_pd.h>
 
-gem::VertexBuffer:: VertexBuffer() :
-  size(0),
-  dimen(0),
-  vbo(0),
-  array(NULL),
-  dirty(false),
-  enabled(false),
-  attrib_index(0),
-  attrib_name(""),
-  attrib_array(""),
-  offset(0),
-  type(GEM_VBO_VERTICES)
-{
-}
+gem::VertexBuffer:: VertexBuffer()
+  : size(0) /* gemvertexbuffer, model, multimodel */
+  , dimen(0) /* gemvertexbuffer, model, multimodel, scopeXYZ~ */
+  , vbo(0) /* gemvertexbuffer, model, multimodel, scopeXYZ~ */
+  , array(NULL) /* gemvertexbuffer, model, multimodel, scopeXYZ~ */
+  , dirty(false) /* gemvertexbuffer, model, multimodel */
+  , enabled(false) /* gemvertexbuffer, model, multimodel, scopeXYZ~ */
+  , attrib_index(0) /* gemvertexbuffer */
+  , attrib_name("") /* gemvertexbuffer */
+  , attrib_array("") /* gemvertexbuffer */
+  , offset(0) /* gemvertexbuffer */
+{ }
 gem::VertexBuffer:: VertexBuffer (unsigned int size_,
-                                  unsigned int dimen_) :
-  size(0),
-  dimen(dimen_),
-  vbo(0),
-  array(NULL),
-  dirty(false),
-  enabled(false),
-  attrib_index(0),
-  attrib_name(""),
-  attrib_array(""),
-  offset(0),
-  type(GEM_VBO_VERTICES)
+                                  unsigned int dimen_)
+  : size(0)
+  , dimen(dimen_)
+  , vbo(0)
+  , array(NULL)
+  , dirty(false)
+  , enabled(false)
+  , attrib_index(0)
+  , attrib_name("")
+  , attrib_array("")
+  , offset(0)
 {
   resize(size_);
 }
 gem::VertexBuffer:: VertexBuffer (const gem::VertexBuffer&vb)
-  :size(0)
-  ,dimen(vb.dimen)
-  ,vbo(vb.vbo)
-  ,array(NULL)
-  ,dirty(false)
-  ,enabled(vb.enabled)
-  ,attrib_index(vb.attrib_index)
-  ,attrib_name(vb.attrib_name)
-  ,attrib_array(vb.attrib_array)
-  ,offset(vb.offset)
-  ,type(GEM_VBO_VERTICES)
-
+  : size(0)
+  , dimen(vb.dimen)
+  , vbo(vb.vbo)
+  , array(NULL)
+  , dirty(false)
+  , enabled(vb.enabled)
+  , attrib_index(vb.attrib_index)
+  , attrib_name(vb.attrib_name)
+  , attrib_array(vb.attrib_array)
+  , offset(vb.offset)
 {
   resize(vb.size);
   // TODO: shouldn't we copy the data from vb?
@@ -100,6 +95,7 @@ void gem::VertexBuffer:: resize (unsigned int size_)
   dirty=true;
 }
 
+/* gemvertexbuffer, model, multimodel */
 bool gem::VertexBuffer:: create (void)
 {
   if(!(glGenBuffers && glBufferData && glBindBuffer)) {
