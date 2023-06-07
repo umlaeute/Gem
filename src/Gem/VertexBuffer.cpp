@@ -161,15 +161,12 @@ gem::VBO::VBO(GLenum type, unsigned char dimen)
     }
   }
 }
-int gem::VBO::render(void)
+int gem::VBO::render(void) const
 {
-  if(!(glBufferData && glBindBuffer)) {
-    post("VBO no valid openGL");
-    return -1;
-  }
   if(!m_valid || !m_vbo)
     return 0;
   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+
   switch(m_type) {
   case GL_VERTEX_ARRAY:
     glVertexPointer(m_dimen, GL_FLOAT, 0, 0);
@@ -184,7 +181,6 @@ int gem::VBO::render(void)
     glTexCoordPointer(m_dimen, GL_FLOAT, 0, 0);
     break;
   default:
-    post("VBO: no valid type");
     return -1;
   }
   glEnableClientState(m_type);
@@ -195,8 +191,9 @@ bool gem::VBO::update(size_t argc, const float* argv)
 {
   m_valid = false;
 
-  if(!argc || !argv)
+  if(!argc || !argv) {
     return false;
+  }
 
   if(!(glGenBuffers && glBindBuffer && glBufferData)) {
     return false;
@@ -205,8 +202,9 @@ bool gem::VBO::update(size_t argc, const float* argv)
     glGenBuffers(1, &m_vbo);
     m_size = 0;
   }
-  if(!m_vbo)
+  if(!m_vbo) {
     return false;
+  }
 
   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
   if(argc>m_size || !glBufferSubData) {

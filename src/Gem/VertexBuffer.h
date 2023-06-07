@@ -68,7 +68,7 @@ public:
   VBO(GLenum type, unsigned char dimen=0);
 
   /* all these functions must be called with a valid openGL context */
-  int render(void);
+  int render(void) const;
   bool update(size_t, const float*);
   void destroy(void);
 
