@@ -30,6 +30,140 @@ static char mytolower(char in)
 }
 };
 
+namespace gem {
+  gem :: modelGL :: modelmesh :: modelmesh(gem::plugins::modelloader::mesh*m)
+    : mesh(m)
+    , vertices(GL_VERTEX_ARRAY)
+    , normals(GL_NORMAL_ARRAY)
+    , colors(GL_COLOR_ARRAY)
+    , texcoords(GL_TEXTURE_COORD_ARRAY)
+  {  }
+  void gem :: modelGL :: modelmesh :: update(void)
+  {
+    vertices.update(mesh->size, mesh->vertices);
+    normals.update(mesh->size, mesh->normals);
+    colors.update(mesh->size, mesh->colors);
+    texcoords.update(mesh->size, mesh->texcoords);
+  }
+  void gem :: modelGL :: modelmesh :: render(GLenum drawType) const
+  {
+    std::vector<size_t>sizes;
+    size_t sizeV=0, sizeN=0, sizeC=0, sizeT=0;
+    sizeV = vertices.render();
+    if(sizeV>0)sizes.push_back(sizeV);
+    sizeN = normals.render();
+    if(sizeN>0)sizes.push_back(sizeN);
+    sizeC = colors.render();
+    if(sizeC>0)sizes.push_back(sizeC);
+    sizeT = texcoords.render();
+    if(sizeT>0)sizes.push_back(sizeT);
+
+    if ( sizes.size() > 0 ) {
+      unsigned int npoints = *std::min_element(sizes.begin(),sizes.end());
+      glDrawArrays(drawType, 0, npoints);
+    }
+
+    if(sizeV)glDisableClientState(GL_VERTEX_ARRAY);
+    if(sizeN)glDisableClientState(GL_NORMAL_ARRAY);
+    if(sizeC)glDisableClientState(GL_COLOR_ARRAY);
+    if(sizeT)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+
+
+  modelGL::modelGL(gem::plugins::modelloader*loader)
+    : m_loader(loader)
+  {
+    const size_t nummeshes = m_loader->getNumMeshes();
+    for(size_t n=0; n < nummeshes; n++) {
+      gem::plugins::modelloader::mesh*mesh = m_loader->getMesh(n);
+      if(mesh) {
+        m_mesh.push_back(modelmesh(mesh));
+      }
+    }
+  }
+  bool modelGL::update(void) {
+    if(m_loader->updateMeshes()) {
+      if(GLEW_VERSION_1_5) {
+        /* update the VBOs */
+        for (auto&m: m_mesh) {
+          m.update();
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+  void modelGL::render(void) {
+    const unsigned int count = m_loader->getNumMeshes();
+    std::vector<unsigned int>groups;
+    for (unsigned int g=0; g<count; g++) {
+      groups.push_back(g);
+    }
+    render(groups);
+  }
+  void modelGL::render(std::vector<unsigned int>&meshes) {
+    const unsigned int numMeshes = m_mesh.size();
+    if(!GLEW_VERSION_1_5) {
+      for(auto n: meshes) {
+        if(n >= numMeshes)
+          continue;
+        const auto &m = m_mesh[n];
+        size_t size = m.mesh->size;
+        float*positions = size?m.mesh->vertices:0;
+        const float*textures = size?m.mesh->texcoords:0;
+        const float*colors = size?m.mesh->colors:0;
+        const float*normals = size?m.mesh->normals:0;
+
+        if(m_useMaterial) {
+          gem::plugins::modelutils::render_material(m.mesh->material);
+        }
+
+        glBegin(m_drawType);
+        for (unsigned int i=0; i<size; i++) {
+          if(normals) {
+            glNormal3fv(normals);
+            normals += 3;
+          }
+          if(textures) {
+            glTexCoord2fv(textures);
+            textures += 2;
+          }
+          if(colors) {
+            glColor4fv(colors);
+            colors += 4;
+          }
+          if(positions) {
+            glVertex3fv(positions);
+            positions += 3;
+          }
+        }
+        glEnd();
+      }
+    } else { /* openGL-2+ */
+      for(auto n: meshes) {
+        if (n >= numMeshes) continue;
+        const auto&m = m_mesh[n];
+        if(m_useMaterial) {
+          gem::plugins::modelutils::render_material(m.mesh->material);
+        }
+        m.render(m_drawType);
+      }
+    }
+  }
+
+  void modelGL :: setDrawType(GLenum drawtype) {
+    m_drawType = drawtype;
+  }
+  void modelGL :: useMaterial(bool use) {
+    m_useMaterial = use;
+  }
+  void modelGL :: setTexture(float w, float h) {
+    m_texscale[0] = w;
+    m_texscale[1] = h;
+  }
+
+};
+
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol*, A_DEFSYMBOL);
 
 model :: modelmesh :: modelmesh(gem::plugins::modelloader::mesh*m)
@@ -81,7 +215,7 @@ void model :: modelmesh :: render(GLenum drawType) const
 /////////////////////////////////////////////////////////
 model :: model(t_symbol* filename)
   : m_loader(gem::plugins::modelloader::getInstance())
-  , m_loaded(false)
+  , m_loaded(nullptr)
   , m_infoOut(gem::RTE::Outlet(this))
   , m_drawType(GL_TRIANGLES)
   , m_blend(false)
@@ -110,6 +244,7 @@ model :: ~model(void)
 {
   if(m_loaded) {
     m_loader->close();
+    delete m_loaded;
   }
   if(m_loader) {
     delete m_loader;
@@ -540,8 +675,9 @@ void model :: openMess(const std::string&filename)
     return;
   }
   m_loader->close();
-  m_meshes.clear();
-  m_loaded=false;
+  m_mesh.clear();
+  if (m_loaded)
+    delete m_loaded;
 
   if(!m_backends.empty()) {
     wantProps.set("backends", m_backends);
@@ -555,22 +691,13 @@ void model :: openMess(const std::string&filename)
     return;
   }
 
-  m_loaded=true;
-
-  const size_t nummeshes = m_loader->getNumMeshes();
-  for(size_t n=0; n < nummeshes; n++) {
-    gem::plugins::modelloader::mesh*mesh = m_loader->getMesh(n);
-    if(mesh) {
-      m_mesh.push_back(modelmesh(mesh));
-    }
-  }
+  m_loaded=new gem::modelGL(m_loader);
 }
 
 void model :: startRendering()
 {
-  for(auto&m: m_mesh) {
-    m.update();
-  }
+  if(m_loaded)
+    m_loaded->update();
 }
 /////////////////////////////////////////////////////////
 // render
@@ -619,14 +746,10 @@ void model :: render(GemState *state)
     break;
   }
 
-  if(m_loader->updateMeshes()) {
-    if(GLEW_VERSION_1_5) {
-      /* update the VBOs */
-      for (auto&m: m_mesh) {
-        m.update();
-      }
-    }
-  }
+  m_loaded->setDrawType(m_drawType);
+  m_loaded->useMaterial(m_useMaterial);
+  m_loaded->setTexture(m_texscale[0], m_texscale[1]);
+  m_loaded->update();
 
   if(setwidth) {
     glLineWidth(m_linewidth);
@@ -637,70 +760,11 @@ void model :: render(GemState *state)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
-  if(!GLEW_VERSION_1_5) {
-    std::vector<unsigned int>groups;
-    const unsigned int numMeshes = m_mesh.size();
-    if(m_group.empty()) {
-      for(unsigned int n=0; n<numMeshes; n++)
-        groups.push_back(n);
-    } else {
-      groups = m_group;
-    }
-    for (auto n: groups) {
-      if(n >= numMeshes)
-        continue;
-      const auto&m = m_mesh[n];
-      size_t size = m.mesh->size;
-      float*positions = size?m.mesh->vertices:0;
-      const float*textures = size?m.mesh->texcoords:0;
-      const float*colors = size?m.mesh->colors:0;
-      const float*normals = size?m.mesh->normals:0;
 
-      if(m_useMaterial) {
-        gem::plugins::modelutils::render_material(m.mesh->material);
-      }
-
-      glBegin(m_drawType);
-      for (unsigned int i=0; i<size; i++) {
-        if(normals) {
-          glNormal3fv(normals);
-          normals += 3;
-        }
-        if(textures) {
-          glTexCoord2fv(textures);
-          textures += 2;
-        }
-        if(colors) {
-          glColor4fv(colors);
-          colors += 4;
-        }
-        if(positions) {
-          glVertex3fv(positions);
-          positions += 3;
-        }
-      }
-      glEnd();
-    }
-  } else { /* openGL-2+ */
-    if(m_group.empty()) {
-      for (const auto&m: m_mesh) {
-        if(m_useMaterial) {
-          gem::plugins::modelutils::render_material(m.mesh->material);
-        }
-        m.render(m_drawType);
-      }
-    } else {
-      const auto numGroups = m_mesh.size();
-      for(auto n: m_group) {
-        if (n >= numGroups) continue;
-        const auto&m = m_mesh[n];
-        if(m_useMaterial) {
-          gem::plugins::modelutils::render_material(m.mesh->material);
-        }
-        m.render(m_drawType);
-      }
-    }
-  }
+  if (m_group.empty())
+    m_loaded->render();
+  else
+    m_loaded->render(m_group);
 }
 
 /////////////////////////////////////////////////////////

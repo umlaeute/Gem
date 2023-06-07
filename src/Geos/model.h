@@ -43,6 +43,42 @@ namespace plugins
 {
 class modelloader;
 };
+
+  /* holds a model and renders it */
+  class modelGL {
+  public:
+  struct modelmesh {
+    gem::plugins::modelloader::mesh* mesh;
+    gem::VBO vertices, normals, colors, texcoords;
+    modelmesh(gem::plugins::modelloader::mesh*m);
+    void update(void);
+    void render(GLenum drawtype) const;
+  };
+    /* ctor
+     * initialize the model
+     */
+    modelGL(gem::plugins::modelloader*loader);
+    /* update data from the loader */
+    bool update(void);
+    /* render the model in the currrent openGL context */
+    void render(void);
+    /* render specified meshes of the model in the currrent openGL context */
+    void render(std::vector<unsigned int>&meshes);
+
+    /* influence the rendering */
+    void setDrawType(GLenum);
+    void useMaterial(bool);
+    void setTexture(float w, float h);
+
+  private:
+    gem::plugins::modelloader*m_loader;
+
+    std::vector<struct modelmesh>m_mesh;
+
+    GLenum m_drawType;
+    bool m_useMaterial;
+    GLfloat m_texscale[2];
+  };
 };
 
 class GEM_EXTERN model : public GemBase
@@ -99,7 +135,7 @@ protected:
   virtual void  startRendering();
 
   gem::plugins::modelloader*m_loader;
-  bool m_loaded;
+  gem::modelGL*m_loaded;
 
   gem::Properties m_readprops, m_writeprops;
 
@@ -114,16 +150,6 @@ protected:
 
   std::vector<unsigned int> m_group;
   bool m_useMaterial;
-
-  /* ============================== */
-  struct modelmesh {
-    gem::plugins::modelloader::mesh* mesh;
-    gem::VBO vertices, normals, colors, texcoords;
-    modelmesh(gem::plugins::modelloader::mesh*m);
-    void update(void);
-    void render(GLenum) const;
-  };
-  std::vector<struct modelmesh>m_mesh;
 };
 
 #endif  // for header file
