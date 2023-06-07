@@ -273,7 +273,7 @@ bool modelOBJ :: compile(void)
         material.diffuse = float4_to_color(mat->diffuse);
         material.specular = float4_to_color(mat->specular);
         material.ambient = float4_to_color(mat->ambient);
-        //material.emissive
+        material.emissive = {.r=0, .g=0, .b=0, .a=1};
         material.shininess = mat->shininess;
       }
     }
