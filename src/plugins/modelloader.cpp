@@ -322,6 +322,7 @@ void gem::plugins::modelutils::render_material(gem::plugins::modelloader::materi
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, COLOR2FLOAT4(m.emissive));
   glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, m.shininess);
 #if 0
+  post("============== material ================");
   post("diffuse  = %f/%f/%f/%f", m.diffuse.r, m.diffuse.g, m.diffuse.b, m.diffuse.a);
   post("specular = %f/%f/%f/%f", m.specular.r, m.specular.g, m.specular.b, m.specular.a);
   post("ambient  = %f/%f/%f/%f", m.ambient.r, m.ambient.g, m.ambient.b, m.ambient.a);
