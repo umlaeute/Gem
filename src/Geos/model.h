@@ -99,7 +99,7 @@ protected:
   virtual void  startRendering();
 
   gem::plugins::modelloader*m_loader;
-  bool m_loaded, m_size_change_flag;
+  bool m_loaded;
 
   gem::Properties m_readprops, m_writeprops;
 

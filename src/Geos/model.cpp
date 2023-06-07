@@ -82,7 +82,6 @@ void model :: modelmesh :: render(GLenum drawType) const
 model :: model(t_symbol* filename)
   : m_loader(gem::plugins::modelloader::getInstance())
   , m_loaded(false)
-  , m_size_change_flag(false)
   , m_infoOut(gem::RTE::Outlet(this))
   , m_drawType(GL_TRIANGLES)
   , m_blend(false)
