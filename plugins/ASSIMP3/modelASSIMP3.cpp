@@ -109,7 +109,6 @@ static void set_float4(float f[4], float a, float b, float c, float d)
   float c[4];
 
   GLenum fill_mode;
-  int ret1, ret2;
   aiColor4D diffuse;
   aiColor4D specular;
   aiColor4D ambient;
@@ -148,12 +147,12 @@ static void set_float4(float f[4], float a, float b, float c, float d)
   material.emissive = {c[0], c[1], c[2], c[3]};
 
   max = 1;
-  ret1 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max);
-  max = 1;
-  ret2 = aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH,
-                                 &strength, &max);
-  if((ret1 == AI_SUCCESS) && (ret2 == AI_SUCCESS)) {
-    material.shininess = shininess * strength;
+  if (AI_SUCCESS == aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &shininess, &max)) {
+    max = 1;
+    if( AI_SUCCESS == aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS_STRENGTH,
+                                              &strength, &max) )
+      shininess *= strength;
+    material.shininess = shininess;
   } else {
     /* JMZ: in modelOBJ the default shininess is 65 */
     material.shininess = 0.;
