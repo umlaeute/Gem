@@ -547,9 +547,10 @@ void modelASSIMP3 :: destroy(void)
 }
 
 struct gem::plugins::modelloader::mesh* modelASSIMP3 :: getMesh(size_t meshNum) {
-  if (meshNum>=m_meshes.size())
+  size_t numMeshes = m_meshes.size();
+  if (meshNum>=numMeshes)
     return nullptr;
-  struct meshdata& mesh = m_meshes[meshNum];
+  struct meshdata& mesh = m_meshes[numMeshes-meshNum-1];
   return &mesh.mesh;
 }
 size_t modelASSIMP3 :: getNumMeshes(void) {
