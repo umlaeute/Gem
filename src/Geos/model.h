@@ -103,8 +103,6 @@ protected:
 
   gem::Properties m_readprops, m_writeprops;
 
-  gem::VertexBuffer m_position, m_texture, m_color, m_normal;
-
   gem::RTE::Outlet m_infoOut;
   std::vector<std::string> m_backends;
 

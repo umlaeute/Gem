@@ -83,10 +83,6 @@ model :: model(t_symbol* filename)
   : m_loader(gem::plugins::modelloader::getInstance())
   , m_loaded(false)
   , m_size_change_flag(false)
-  , m_position(0,3)
-  , m_texture (0,2)
-  , m_color   (0,4)
-  , m_normal  (0,3)
   , m_infoOut(gem::RTE::Outlet(this))
   , m_drawType(GL_TRIANGLES)
   , m_blend(false)
@@ -669,19 +665,19 @@ void model :: render(GemState *state)
       for (unsigned int i=0; i<size; i++) {
         if(normals) {
           glNormal3fv(normals);
-          normals += m_normal.dimen;
+          normals += 3;
         }
         if(textures) {
           glTexCoord2fv(textures);
-          textures += m_texture.dimen;
+          textures += 2;
         }
         if(colors) {
           glColor4fv(colors);
-          colors += m_color.dimen;
+          colors += 4;
         }
         if(positions) {
           glVertex3fv(positions);
-          positions += m_position.dimen;
+          positions += 3;
         }
       }
       glEnd();
