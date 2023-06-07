@@ -541,6 +541,7 @@ void model :: openMess(const std::string&filename)
     return;
   }
   m_loader->close();
+  m_meshes.clear();
   m_loaded=false;
 
   if(!m_backends.empty()) {
@@ -557,7 +558,6 @@ void model :: openMess(const std::string&filename)
 
   m_loaded=true;
 
-  m_mesh.clear();
   const size_t nummeshes = m_loader->getNumMeshes();
   for(size_t n=0; n < nummeshes; n++) {
     gem::plugins::modelloader::mesh*mesh = m_loader->getMesh(n);
