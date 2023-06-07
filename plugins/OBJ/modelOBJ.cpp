@@ -297,6 +297,7 @@ void modelOBJ :: destroy(void)
     glmDelete(m_model);
     m_model=NULL;
   }
+  m_meshes.clear();
 }
 
 struct gem::plugins::modelloader::mesh* modelOBJ :: getMesh(size_t meshNum) {

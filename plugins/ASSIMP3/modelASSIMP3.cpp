@@ -543,6 +543,7 @@ void modelASSIMP3 :: destroy(void)
   if(m_scene) {
     aiReleaseImport(m_scene);
   }
+  m_meshes.clear();
   m_scene=NULL;
 }
 
