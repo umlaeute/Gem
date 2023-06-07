@@ -570,12 +570,11 @@ void model :: openMess(const std::string&filename)
       m_mesh.push_back(modelmesh(mesh));
     }
   }
-
 }
 
 void model :: startRendering()
 {
-  for(auto m : m_mesh) {
+  for(auto&m: m_mesh) {
     m.update();
   }
 }
@@ -585,12 +584,10 @@ void model :: startRendering()
 /////////////////////////////////////////////////////////
 void model :: render(GemState *state)
 {
+  if(!m_loaded) return;
+
   bool blend = m_blend;
   bool setwidth = false;
-
-  if(!m_loaded) {
-    return;
-  }
 
   int texType = 0;
   state->get(GemState::_GL_TEX_TYPE, texType);
@@ -628,16 +625,14 @@ void model :: render(GemState *state)
     break;
   }
 
-#if 0
   if(m_loader->updateMeshes()) {
     if(GLEW_VERSION_1_5) {
       /* update the VBOs */
-      for (auto m: m_mesh) {
+      for (auto&m: m_mesh) {
         m.update();
       }
     }
   }
-#endif
 
   if(setwidth) {
     glLineWidth(m_linewidth);
@@ -649,12 +644,12 @@ void model :: render(GemState *state)
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
   if(!GLEW_VERSION_1_5) {
-    for (auto m : m_mesh) {
+    for (const auto&m: m_mesh) {
       size_t size = m.mesh->size;
       float*positions = size?m.mesh->vertices:0;
-      float*textures = size?m.mesh->texcoords:0;
-      float*colors = size?m.mesh->colors:0;
-      float*normals = size?m.mesh->normals:0;
+      const float*textures = size?m.mesh->texcoords:0;
+      const float*colors = size?m.mesh->colors:0;
+      const float*normals = size?m.mesh->normals:0;
 
 
       glBegin(m_drawType);
@@ -679,8 +674,7 @@ void model :: render(GemState *state)
       glEnd();
     }
   } else { /* openGL-2+ */
-    for (auto m: m_mesh) {
-      m.update();
+    for (const auto&m: m_mesh) {
       m.render(m_drawType);
     }
   }
