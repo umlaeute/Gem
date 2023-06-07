@@ -85,13 +85,10 @@ protected:
 
   int       m_material;
   int       m_flags;
-  int       m_group;
   float     m_currentH, m_currentW;
   glmtexture_t m_textype;
   bool      m_reverse;
 
-  std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords,
-      m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
 

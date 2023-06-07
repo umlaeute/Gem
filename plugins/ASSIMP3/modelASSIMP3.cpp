@@ -273,7 +273,6 @@ modelASSIMP3 :: modelASSIMP3(void)
   , m_scene(NULL)
   , m_scale(1.f)
   , m_refresh(false)
-  , m_have_texcoords(false)
   , m_textype("")
   , m_texscale(1., 1.)
   , m_smooth(175.)
@@ -392,7 +391,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
         // if there are NO texcoords, we only accept 'linear' and 'spheremap'
         // else, we also allow 'UV'
         // not-accepted textype, simply use the last one
-        if(m_have_texcoords && "UV" == s) {
+        if("UV" == s) {
           m_textype = "";
         } else if(("linear" == s) || ("spheremap" == s)) {
           m_textype = s;
@@ -475,28 +474,6 @@ void modelASSIMP3 :: getProperties(gem::Properties&props)
   }
 }
 
-void modelASSIMP3 :: fillVBOarray()
-{
-  m_VBOarray.clear();
-  VBOarray vboarray;
-
-  vboarray.data = &m_vertices;
-  vboarray.type = VertexBuffer::GEM_VBO_VERTICES;
-  m_VBOarray.push_back(vboarray);
-
-  vboarray.data = &m_normals;
-  vboarray.type = VertexBuffer::GEM_VBO_NORMALS;
-  m_VBOarray.push_back(vboarray);
-
-  vboarray.data = &m_texcoords;
-  vboarray.type = VertexBuffer::GEM_VBO_TEXCOORDS;
-  m_VBOarray.push_back(vboarray);
-
-  vboarray.data = &m_colors;
-  vboarray.type = VertexBuffer::GEM_VBO_COLORS;
-  m_VBOarray.push_back(vboarray);
-}
-
 bool modelASSIMP3 :: compile(void)
 {
   if(!m_scene) {
@@ -515,23 +492,30 @@ bool modelASSIMP3 :: compile(void)
   recursive_render(m_meshes,
                    m_scene, m_scene, m_scene->mRootNode, m_texscale,
                    &trafo);
-  m_have_texcoords = (m_texcoords.size() > 0);
+  bool haveTexcoords = false;
+  for(const auto&m: m_meshes) {
+    if(m.texcoords.size()>0) {
+      haveTexcoords = true;
+      break;
+    }
+  }
 
   float texscale[2];
   texscale[0] = m_texscale.x;
   texscale[1] = m_texscale.y;
 
-  if (m_textype.empty() && m_have_texcoords) {;}
-  else if("spheremap" == m_textype) {
-    modelutils::genTexture_Spheremap(m_texcoords, m_normals, texscale);
+  if (m_textype.empty() && haveTexcoords) {
+    /* use built-in texcoords */
+  } else if("spheremap" == m_textype) {
+    for(auto&m: m_meshes) {
+    }
   } else {
-    modelutils::genTexture_Linear(m_texcoords, m_vertices, texscale);
+    /* fallback to linear texcoords */
+    for(auto&m: m_meshes) {
+    }
   }
 
-  fillVBOarray();
-
-  bool res = !(m_vertices.empty() && m_normals.empty()
-               && m_texcoords.empty() && m_colors.empty());
+  bool res = !(m_meshes.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;
@@ -576,20 +560,6 @@ bool modelASSIMP3 :: updateMeshes(void) {
 std::vector<std::vector<float> > modelASSIMP3 :: getVector(
   std::string vectorName)
 {
-  if ( vectorName == "vertices" ) {
-    return m_vertices;
-  }
-  if ( vectorName == "normals" ) {
-    return m_normals;
-  }
-  if ( vectorName == "texcoords" ) {
-    return m_texcoords;
-  }
-  if ( vectorName == "colors" ) {
-    return m_colors;
-  }
-  verbose(0, "[GEM:modelASSIMP3] there is no \"%s\" vector !",
-          vectorName.c_str());
   return std::vector<std::vector<float> >();
 }
 

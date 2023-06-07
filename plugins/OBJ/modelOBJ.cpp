@@ -40,7 +40,6 @@ modelOBJ :: modelOBJ(void) :
   m_model(NULL),
   m_material(0),
   m_flags(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL),
-  m_group(0),
   m_rebuild(false),
   m_currentH(1.f), m_currentW(1.f),
   m_textype(GLM_TEX_DEFAULT),
@@ -195,14 +194,6 @@ void modelOBJ :: setProperties(gem::Properties&props)
       continue;
     }
 
-    if("group" == key) {
-      if(props.get(key, d)) {
-        m_group=d;
-        m_rebuild=true;
-      }
-      continue;
-    }
-
     if("reverse" == key) {
       if(props.get(key, d)) {
         // LATER:move this to compile()
@@ -283,7 +274,7 @@ bool modelOBJ :: compile(void)
     m.mesh.colors = 0;
     m.mesh.texcoords = m.texcoords.data();
   }
-  bool res = !(m_vertices.empty());
+  bool res = !(m_meshes.empty());
   if(res) {
     m_rebuild=false;
     m_refresh=true;
