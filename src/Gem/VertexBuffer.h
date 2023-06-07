@@ -56,5 +56,22 @@ public:
     GEM_VBO_TEXCOORDS,
   };
 };
+class VBO
+{
+private:
+  GLuint m_vbo;
+  size_t m_size;
+  unsigned char m_dimen;
+  GLenum m_type;
+  bool m_valid;
+public:
+  VBO(GLenum type, unsigned char dimen=0);
+
+  /* all these functions must be called with a valid openGL context */
+  int render(void);
+  bool update(size_t, const float*);
+  void destroy(void);
+
+};
 }; /* namespace: gem */
 #endif // _INCLUDE__GEM_GEM_VERTEXBUFFER_H_

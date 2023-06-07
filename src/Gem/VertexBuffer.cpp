@@ -137,3 +137,94 @@ void gem::VertexBuffer:: destroy (void)
   }
   vbo=0;
 }
+
+
+gem::VBO::VBO(GLenum type, unsigned char dimen)
+  : m_vbo(0)
+  , m_size(0)
+  , m_dimen(dimen)
+  , m_type(type)
+  , m_valid(false)
+{
+  if(!m_dimen) {
+    switch(m_type) {
+    case GL_VERTEX_ARRAY:
+    case GL_NORMAL_ARRAY:
+      m_dimen = 3;
+      break;
+    case GL_COLOR_ARRAY:
+      m_dimen = 4;
+      break;
+    case GL_TEXTURE_COORD_ARRAY:
+      m_dimen = 2;
+      break;
+    }
+  }
+}
+int gem::VBO::render(void)
+{
+  if(!(glBufferData && glBindBuffer)) {
+    post("VBO no valid openGL");
+    return -1;
+  }
+  if(!m_valid || !m_vbo)
+    return 0;
+  glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+  switch(m_type) {
+  case GL_VERTEX_ARRAY:
+    glVertexPointer(m_dimen, GL_FLOAT, 0, 0);
+    break;
+  case GL_NORMAL_ARRAY:
+    glNormalPointer(GL_FLOAT, 0, 0);
+    break;
+  case GL_COLOR_ARRAY:
+    glColorPointer(m_dimen, GL_FLOAT, 0, 0);
+    break;
+  case GL_TEXTURE_COORD_ARRAY:
+    glTexCoordPointer(m_dimen, GL_FLOAT, 0, 0);
+    break;
+  default:
+    post("VBO: no valid type");
+    return -1;
+  }
+  glEnableClientState(m_type);
+  return m_size;
+}
+
+bool gem::VBO::update(size_t argc, const float* argv)
+{
+  m_valid = false;
+
+  if(!argc || !argv)
+    return false;
+
+  if(!(glGenBuffers && glBindBuffer && glBufferData)) {
+    return false;
+  }
+  if(!m_vbo) {
+    glGenBuffers(1, &m_vbo);
+    m_size = 0;
+  }
+  if(!m_vbo)
+    return false;
+
+  glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+  if(argc>m_size || !glBufferSubData) {
+    glBufferData(GL_ARRAY_BUFFER, argc * m_dimen * sizeof(float), argv, GL_DYNAMIC_DRAW);
+    m_size = argc;
+  } else {
+    glBufferSubData(GL_ARRAY_BUFFER, 0, argc * m_dimen * sizeof(float), argv);
+  }
+  m_valid = true;
+  return m_valid;
+}
+void gem::VBO::destroy(void)
+{
+  if(m_vbo) {
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glDeleteBuffers(1, &m_vbo);
+  }
+  m_vbo = 0;
+  m_size = 0;
+  m_valid = false;
+}
