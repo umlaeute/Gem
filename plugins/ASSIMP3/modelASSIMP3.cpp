@@ -32,16 +32,6 @@ namespace
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
 
-static void post_meshdata(gem::plugins::modelASSIMP3::meshdata&meshdata) {
-  gem::plugins::modelloader::mesh&mesh = meshdata.mesh;
-  post("MESHDATA @%p", &meshdata);
-  post("    MESH @%p [%d]", &mesh, mesh.size);
-  post("          vertices=%p", mesh.vertices);
-  post("           normals=%p", mesh.normals);
-  post("            colors=%p", mesh.colors);
-  post("         texcoords=%p", mesh.texcoords);
-}
-
 // ----------------------------------------------------------------------------
 static void get_bounding_box_for_node (const struct aiScene*scene,
                                        const struct aiNode* nd,
@@ -214,7 +204,6 @@ static void recursive_render(
   int i;
   unsigned int t;
   aiMatrix4x4 prev = *trafo;
-  post("%*d: %s(meshes=%d, children=%d)", recursion_depth+1, recursion_depth, __FUNCTION__, nd->mNumMeshes, nd->mNumChildren);
   // update transform
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
@@ -230,7 +219,6 @@ static void recursive_render(
     size_t numVertices = 0;
 
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
-    post("   %*d: mesh#%d: faces=%d", recursion_depth+1, recursion_depth, n, mesh->mNumFaces);
 
     apply_material(outmesh.mesh.material, sc->mMaterials[mesh->mMaterialIndex]);
 
@@ -356,8 +344,7 @@ bool modelASSIMP3 :: open(const std::string&name,
   gem::Properties props=requestprops;
   setProperties(props);
 
-  post("%s::%s", __FILE__, __FUNCTION__);
-  /* setProperties() already calls render() which compile()s, as m_rebuild=True */
+  /* setProperties() already calls render() which compile()s, as m_rebuild=True, so skip compile() */
   //compile();
   return true;
 }
@@ -537,7 +524,6 @@ void modelASSIMP3 :: fillVBOarray()
 
 bool modelASSIMP3 :: compile(void)
 {
-  post("%s::%s", __FILE__, __FUNCTION__);
   if(!m_scene) {
     return false;
   }
@@ -554,12 +540,6 @@ bool modelASSIMP3 :: compile(void)
   recursive_render(m_meshes,
                    m_scene, m_scene, m_scene->mRootNode, m_texscale,
                    &trafo, 0);
-  post("%d vertices, %d normals, %d texcoords %d colors"
-       , m_vertices.size()
-       , m_normals.size()
-       , m_texcoords.size()
-       , m_colors.size()
-    );
   m_have_texcoords = (m_texcoords.size() > 0);
 
   float texscale[2];
@@ -595,7 +575,6 @@ struct gem::plugins::modelloader::mesh* modelASSIMP3 :: getMesh(size_t meshNum) 
   if (meshNum>=m_meshes.size())
     return nullptr;
   struct meshdata& mesh = m_meshes[meshNum];
-  post("got Mesh[%d] @ %p [%d]", meshNum, &(mesh.mesh), mesh.mesh.size);
   return &mesh.mesh;
 }
 size_t modelASSIMP3 :: getNumMeshes(void) {
