@@ -608,7 +608,13 @@ size_t modelASSIMP3 :: getNumMeshes(void) {
    * returns TRUE if there was a change, FALSE otherwise
    */
 bool modelASSIMP3 :: updateMeshes(void) {
-  return false;
+  bool ret = m_refresh || m_rebuild;
+  m_refresh = false;
+  return ret;
+}
+
+
+
 
 std::vector<std::vector<float> > modelASSIMP3 :: getVector(
   std::string vectorName)
