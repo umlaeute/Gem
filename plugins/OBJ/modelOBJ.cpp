@@ -289,7 +289,6 @@ struct gem::plugins::modelloader::mesh* modelOBJ :: getMesh(size_t meshNum) {
   return &mesh.mesh;
 }
 size_t modelOBJ :: getNumMeshes(void) {
-  post("%d meshes", m_meshes.size());
   return m_meshes.size();
 }
 bool modelOBJ :: updateMeshes(void) {
