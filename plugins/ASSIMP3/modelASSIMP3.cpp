@@ -197,7 +197,6 @@ static void recursive_render(
   , const struct aiScene *sc, const struct aiNode* nd
   , const aiVector2D&tex_scale
   , aiMatrix4x4* trafo
-  , unsigned int recursion_depth
   )
 {
   int i;
@@ -259,10 +258,9 @@ static void recursive_render(
   }
 
   // draw all children
-  int current_group=0;
   for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
     recursive_render(meshes, scene, sc, nd->mChildren[n], tex_scale,
-                     trafo, recursion_depth+1);
+                     trafo);
   }
 
   *trafo = prev;
@@ -274,13 +272,11 @@ modelASSIMP3 :: modelASSIMP3(void)
   : m_rebuild(true)
   , m_scene(NULL)
   , m_scale(1.f)
-  , m_useMaterial(false)
   , m_refresh(false)
   , m_have_texcoords(false)
   , m_textype("")
   , m_texscale(1., 1.)
   , m_smooth(175.)
-  , m_group(0)
 {
 }
 
@@ -376,7 +372,6 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
   writeable.set("_texheight", 1);
   writeable.set("rescale", 0);
   writeable.set("smooth", 0);
-  writeable.set("usematerials", 0);
 
   return true;
 }
@@ -441,25 +436,6 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
           m_scale=1.;
           m_offset.x=m_offset.y=m_offset.z=0.f;
         }
-      }
-      continue;
-    }
-
-    if("usematerials" == key) {
-      if(props.get(key, d)) {
-        bool useMaterial=d;
-        if(useMaterial!=m_useMaterial) {
-          m_rebuild=true;
-        }
-        m_useMaterial=useMaterial;
-      }
-      continue;
-    }
-
-    if("group" == key) {
-      if(props.get(key, d)) {
-        m_group=d;
-        m_rebuild=true;
       }
       continue;
     }
@@ -538,7 +514,7 @@ bool modelASSIMP3 :: compile(void)
 
   recursive_render(m_meshes,
                    m_scene, m_scene, m_scene->mRootNode, m_texscale,
-                   &trafo, 0);
+                   &trafo);
   m_have_texcoords = (m_texcoords.size() > 0);
 
   float texscale[2];

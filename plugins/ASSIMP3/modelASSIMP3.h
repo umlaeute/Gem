@@ -64,18 +64,10 @@ public:
 
 
   /**
-   * get the named mesh
-   * if meshNum exceeds the available meshes, NULL is returned
+   * get the mesh data
    */
-  virtual struct mesh*getMesh(size_t meshNum);
   virtual size_t getNumMeshes(void);
-
-  /**
-   * update the mesh data (for all meshes)
-   * the data pointers in previously obtained t_mesh'es stay valid
-   * (but the data they point to might change)
-   * returns TRUE if there was a change, FALSE otherwise
-   */
+  virtual struct mesh*getMesh(size_t meshNum);
   virtual bool updateMeshes(void);
 
   ///////////////////////////////////////////
@@ -107,8 +99,6 @@ protected:
 
   aiVector3D m_min, m_max, m_center;
 
-  bool m_useMaterial;
-
   std::vector<std::vector<float> > m_vertices, m_normals, m_texcoords, m_colors;
   std::vector<VBOarray> m_VBOarray;
   bool m_refresh;
@@ -118,8 +108,6 @@ protected:
 
   aiVector2D m_texscale;
   float m_smooth;
-
-  int m_group;
 
   std::vector<struct meshdata>m_meshes;
 
