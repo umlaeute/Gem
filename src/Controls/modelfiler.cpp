@@ -382,6 +382,38 @@ void modelfiler :: openMess(const std::string&filename)
   PRINTSUCCESS(normals);
 }
 
+namespace {
+  float*getVector(gem::plugins::modelloader*loader
+                  , size_t group, const std::string name
+                  , size_t &dimen, size_t &size
+    ) {
+    gem::plugins::modelloader::mesh *m=loader->getMesh(group);
+    if(!m)
+      return nullptr;
+    if("vertices" == name) {
+      size=m->size;
+      dimen=3;
+      return m->vertices;
+    }
+    if("normals" == name) {
+      size=m->size;
+      dimen=3;
+      return m->normals;
+    }
+    if("colors" == name) {
+      size=m->size;
+      dimen=4;
+      return m->colors;
+    }
+    if("texcoords" == name) {
+      size=m->size;
+      dimen=2;
+      return m->texcoords;
+    }
+    return 0;
+  }
+};
+
 size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablenames, size_t count)
 {
   if((count > 0) && tablenames[0].empty()) {
@@ -392,26 +424,45 @@ size_t modelfiler :: copyArrays(const std::string&name, const std::string*tablen
     error("no such array '%s' for %s", failed.c_str(), name.c_str());
     return 0;
   }
-  const std::vector<std::vector<float> >&data = m_loader->getVector(name);
-  std::vector<gem::RTE::Array> tabs;
 
-  size_t size = data.size();
-  if(!size) {
-    return size;
+  size_t totalsize=0;
+  size_t meshes = m_loader->getNumMeshes();
+  for(size_t m=0; m<meshes; m++) {
+    size_t dimen=0, meshsize=0;
+    float*data = getVector(m_loader, m, name, dimen, meshsize);
+    if(!data || !meshsize || (dimen!=count))
+      continue;
+    totalsize += meshsize;
   }
 
+  if(!totalsize) {
+    return 0;
+  }
+
+
+  std::vector<gem::RTE::Array> tabs;
   for(size_t i=0; i<count; i++) {
     gem::RTE::Array a(tablenames[i]);
-    a.resize(size);
+    a.resize(totalsize);
     tabs.push_back(a);
   }
-  for(size_t i=0; i<size; i++) {
-    for(size_t j=0; j<count; j++) {
-      tabs[j][i] = data[i][j];
-    }
-  }
 
-  return size;
+
+  size_t offset=0;
+
+  for(size_t m=0; m<meshes; m++) {
+    size_t dimen=0, meshsize=0;
+    float*data = getVector(m_loader, m, name, dimen, meshsize);
+    if(!data || !meshsize || (dimen!=count))
+      continue;
+    for(size_t i=0; i<meshsize; i++) {
+      for(size_t j=0; j<count; j++) {
+        tabs[j][offset+i] = data[i*dimen+j];
+      }
+    }
+    offset += meshsize;
+  }
+  return totalsize;
 }
 
 
