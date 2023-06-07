@@ -19,6 +19,7 @@
 #include "Gem/Properties.h"
 #include "Gem/VertexBuffer.h"
 #include "RTE/Outlet.h"
+#include "plugins/modelloader.h"
 
 #include <map>
 
@@ -118,6 +119,16 @@ protected:
   bool m_blend;
   GLfloat m_linewidth;
   GLfloat m_texscale[2];
+
+  /* ============================== */
+  struct modelmesh {
+    gem::plugins::modelloader::mesh* mesh;
+    gem::VBO vertices, normals, colors, texcoords;
+    modelmesh(gem::plugins::modelloader::mesh*m);
+    void update(void);
+    void render(GLenum);
+  };
+  std::vector<struct modelmesh>m_mesh;
 };
 
 #endif  // for header file

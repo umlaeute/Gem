@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////
 
 #include "model.h"
-#include "plugins/modelloader.h"
 #include "Gem/State.h"
 
 #include <algorithm> // std::min
@@ -32,6 +31,45 @@ static char mytolower(char in)
 };
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol*, A_DEFSYMBOL);
+
+model :: modelmesh :: modelmesh(gem::plugins::modelloader::mesh*m)
+  : mesh(m)
+  , vertices(GL_VERTEX_ARRAY)
+  , normals(GL_NORMAL_ARRAY)
+  , colors(GL_COLOR_ARRAY)
+  , texcoords(GL_TEXTURE_COORD_ARRAY)
+{
+}
+void model :: modelmesh :: update(void)
+{
+  vertices.update(mesh->size, mesh->vertices);
+  normals.update(mesh->size, mesh->normals);
+  colors.update(mesh->size, mesh->colors);
+  texcoords.update(mesh->size, mesh->texcoords);
+}
+void model :: modelmesh :: render(GLenum drawType)
+{
+  std::vector<size_t>sizes;
+  size_t sizeV=0, sizeN=0, sizeC=0, sizeT=0;
+  sizeV = vertices.render();
+  if(sizeV>0)sizes.push_back(sizeV);
+  sizeN = normals.render();
+  if(sizeN>0)sizes.push_back(sizeN);
+  sizeC = colors.render();
+  if(sizeC>0)sizes.push_back(sizeC);
+  sizeT = texcoords.render();
+  if(sizeT>0)sizes.push_back(sizeT);
+
+  if ( sizes.size() > 0 ) {
+    unsigned int npoints = *std::min_element(sizes.begin(),sizes.end());
+    glDrawArrays(drawType, 0, npoints);
+  }
+
+  if(sizeV)glDisableClientState(GL_VERTEX_ARRAY);
+  if(sizeN)glDisableClientState(GL_NORMAL_ARRAY);
+  if(sizeC)glDisableClientState(GL_COLOR_ARRAY);
+  if(sizeT)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+}
 
 /////////////////////////////////////////////////////////
 //
@@ -523,17 +561,22 @@ void model :: openMess(const std::string&filename)
   }
 
   m_loaded=true;
-  getVBOarray();
-  setModified();
+
+  m_mesh.clear();
+  const size_t nummeshes = m_loader->getNumMeshes();
+  for(size_t n=0; n < nummeshes; n++) {
+    gem::plugins::modelloader::mesh*mesh = m_loader->getMesh(n);
+    if(mesh) {
+      m_mesh.push_back(modelmesh(mesh));
+    }
+  }
+
 }
 
 void model :: startRendering()
 {
-  if (m_loaded) {
-    copyArray(m_loader->getVector("vertices"), m_position);
-    copyArray(m_loader->getVector("texcoords"), m_texture);
-    copyArray(m_loader->getVector("normals"), m_normal);
-    copyArray(m_loader->getVector("colors"), m_color);
+  for(auto m : m_mesh) {
+    m.update();
   }
 }
 /////////////////////////////////////////////////////////
@@ -585,69 +628,16 @@ void model :: render(GemState *state)
     break;
   }
 
-  if(!GLEW_VERSION_1_5) {
-    float*positions = m_position.size?m_position.array:0;
-    float*textures = m_texture.size?m_texture.array:0;
-    float*colors = m_color.size?m_color.array:0;
-    float*normals = m_normal.size?m_normal.array:0;
-    unsigned int size = m_position.size;
-    if(textures && m_texture.size < size) {
-      size = m_texture.size;
-    }
-    if(colors && m_color.size < size) {
-      size = m_color.size;
-    }
-    if(normals && m_normal.size < size) {
-      size = m_normal.size;
-    }
-
-    if(setwidth) {
-      glLineWidth(m_linewidth);
-    }
-    if(blend) {
-      glEnable(GL_POLYGON_SMOOTH);
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-      glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
-    }
-    glBegin(m_drawType);
-    for (unsigned int i=0; i<size; i++) {
-      if(normals) {
-        glNormal3fv(normals);
-        normals += m_normal.dimen;
-      }
-      if(textures) {
-        glTexCoord2fv(textures);
-        textures += m_texture.dimen;
-      }
-      if(colors) {
-        glColor4fv(colors);
-        colors += m_color.dimen;
-      }
-      if(positions) {
-        glVertex3fv(positions);
-        positions += m_position.dimen;
+#if 0
+  if(m_loader->updateMeshes()) {
+    if(GLEW_VERSION_1_5) {
+      /* update the VBOs */
+      for (auto m: m_mesh) {
+        m.update();
       }
     }
-    glEnd();
-    if(blend) {
-      glDisable(GL_POLYGON_SMOOTH);
-      glDisable(GL_BLEND);
-    }
-    if(setwidth) {
-      glLineWidth(1.0);
-    }
-    return;
   }
-
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
-       || m_size_change_flag ) {
-    createVBO();
-    m_size_change_flag = false;
-  }
-  getVBOarray();
-
-  std::vector<unsigned int> sizeList;
+#endif
 
   if(setwidth) {
     glLineWidth(m_linewidth);
@@ -658,52 +648,41 @@ void model :: render(GemState *state)
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
+  if(!GLEW_VERSION_1_5) {
+    for (auto m : m_mesh) {
+      size_t size = m.mesh->size;
+      float*positions = size?m.mesh->vertices:0;
+      float*textures = size?m.mesh->texcoords:0;
+      float*colors = size?m.mesh->colors:0;
+      float*normals = size?m.mesh->normals:0;
 
-  if(m_position.render()) {
-    glVertexPointer(m_position.dimen, GL_FLOAT, 0, 0);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    sizeList.push_back(m_position.size);
-  }
-  if(m_texture.render()) {
-    glTexCoordPointer(m_texture.dimen, GL_FLOAT, 0, 0);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    sizeList.push_back(m_texture.size);
-  }
-  if(m_color.render()) {
-    glColorPointer(m_color.dimen, GL_FLOAT, 0, 0);
-    glEnableClientState(GL_COLOR_ARRAY);
-    sizeList.push_back(m_color.size);
-  }
-  if(m_normal.render()) {
-    glNormalPointer(GL_FLOAT, 0, 0);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    sizeList.push_back(m_normal.size);
-  }
 
-  if ( sizeList.size() > 0 ) {
-    unsigned int npoints = *std::min_element(sizeList.begin(),sizeList.end());
-    glDrawArrays(m_drawType, 0, npoints);
-  }
-
-  if ( m_position.enabled ) {
-    glDisableClientState(GL_VERTEX_ARRAY);
-  }
-  if ( m_color.enabled    ) {
-    glDisableClientState(GL_COLOR_ARRAY);
-  }
-  if ( m_texture.enabled  ) {
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  }
-  if ( m_normal.enabled   ) {
-    glDisableClientState(GL_NORMAL_ARRAY);
-  }
-
-  if(blend) {
-    glDisable(GL_POLYGON_SMOOTH);
-    glDisable(GL_BLEND);
-  }
-  if(setwidth) {
-    glLineWidth(1.0);
+      glBegin(m_drawType);
+      for (unsigned int i=0; i<size; i++) {
+        if(normals) {
+          glNormal3fv(normals);
+          normals += m_normal.dimen;
+        }
+        if(textures) {
+          glTexCoord2fv(textures);
+          textures += m_texture.dimen;
+        }
+        if(colors) {
+          glColor4fv(colors);
+          colors += m_color.dimen;
+        }
+        if(positions) {
+          glVertex3fv(positions);
+          positions += m_position.dimen;
+        }
+      }
+      glEnd();
+    }
+  } else { /* openGL-2+ */
+    for (auto m: m_mesh) {
+      m.update();
+      m.render(m_drawType);
+    }
   }
 }
 
