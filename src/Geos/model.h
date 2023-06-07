@@ -98,12 +98,6 @@ protected:
   virtual void  render(GemState *state);
   virtual void  startRendering();
 
-  void copyArray(const std::vector<std::vector<float> >&tab,
-                 gem::VertexBuffer&vb);
-  void copyAllArrays();
-  void getVBOarray();
-  void createVBO(void);
-
   gem::plugins::modelloader*m_loader;
   bool m_loaded, m_size_change_flag;
 
