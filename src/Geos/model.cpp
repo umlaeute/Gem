@@ -432,9 +432,10 @@ void model :: rescaleMess(bool state)
 /////////////////////////////////////////////////////////
 void model :: groupMess(int state)
 {
-  gem::any value=state;
-  m_writeprops.set("group", value);
-  applyProperties();
+  m_group.clear();
+  if(state>0)
+    m_group.push_back(state-1);
+  setModified();
 }
 
 void model :: blendMess(bool mode)
@@ -644,7 +645,18 @@ void model :: render(GemState *state)
     glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
   }
   if(!GLEW_VERSION_1_5) {
-    for (const auto&m: m_mesh) {
+    std::vector<unsigned int>groups;
+    const unsigned int numMeshes = m_mesh.size();
+    if(m_group.empty()) {
+      for(unsigned int n=0; n<numMeshes; n++)
+        groups.push_back(n);
+    } else {
+      groups = m_group;
+    }
+    for (auto n: groups) {
+      if(n >= numMeshes)
+        continue;
+      const auto&m = m_mesh[n];
       size_t size = m.mesh->size;
       float*positions = size?m.mesh->vertices:0;
       const float*textures = size?m.mesh->texcoords:0;
@@ -674,8 +686,16 @@ void model :: render(GemState *state)
       glEnd();
     }
   } else { /* openGL-2+ */
-    for (const auto&m: m_mesh) {
-      m.render(m_drawType);
+    if(m_group.empty()) {
+      for (const auto&m: m_mesh) {
+        m.render(m_drawType);
+      }
+    } else {
+      const auto numGroups = m_mesh.size();
+      for(auto n: m_group) {
+        if (n >= numGroups) continue;
+        m_mesh[n].render(m_drawType);
+      }
     }
   }
 }

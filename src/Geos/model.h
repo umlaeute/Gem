@@ -114,6 +114,8 @@ protected:
   GLfloat m_linewidth;
   GLfloat m_texscale[2];
 
+  std::vector<unsigned int> m_group;
+
   /* ============================== */
   struct modelmesh {
     gem::plugins::modelloader::mesh* mesh;
