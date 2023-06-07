@@ -47,7 +47,7 @@ void model :: modelmesh :: update(void)
   colors.update(mesh->size, mesh->colors);
   texcoords.update(mesh->size, mesh->texcoords);
 }
-void model :: modelmesh :: render(GLenum drawType)
+void model :: modelmesh :: render(GLenum drawType) const
 {
   std::vector<size_t>sizes;
   size_t sizeV=0, sizeN=0, sizeC=0, sizeT=0;

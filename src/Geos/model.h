@@ -120,7 +120,7 @@ protected:
     gem::VBO vertices, normals, colors, texcoords;
     modelmesh(gem::plugins::modelloader::mesh*m);
     void update(void);
-    void render(GLenum);
+    void render(GLenum) const;
   };
   std::vector<struct modelmesh>m_mesh;
 };
