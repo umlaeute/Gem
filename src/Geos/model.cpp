@@ -539,6 +539,14 @@ void model :: groupMess(int state)
     m_group.push_back(state-1);
   setModified();
 }
+void model :: groupsMess(t_symbol*s, int argc, t_atom*argv)
+{
+  m_group.clear();
+  for(int i=0; i<argc; i++) {
+    m_group.push_back(int(atom_getfloat(argv+i)));
+  }
+  setModified();
+}
 
 void model :: blendMess(bool mode)
 {
@@ -753,6 +761,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "material", materialMess, bool);
   CPPEXTERN_MSG1(classPtr, "texture", textureMess, int);
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
+  CPPEXTERN_MSG (classPtr, "groups", groupsMess);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
 
   CPPEXTERN_MSG (classPtr, "set", setPropertyMess);

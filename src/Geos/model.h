@@ -123,6 +123,7 @@ protected:
   //////////
   // Set groups to render
   virtual void    groupMess(int group);
+  virtual void    groupsMess(t_symbol*, int, t_atom*);
 
   //////////
   // draw type
