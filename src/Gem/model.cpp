@@ -14,6 +14,7 @@
 
 #include "model.h"
 #include <algorithm> // std::min
+#include "m_pd.h"
 
 namespace
 {
@@ -73,18 +74,20 @@ namespace gem {
 
 
   modelGL::modelGL(gem::plugins::modelloader*loader)
-    : m_loader(loader)
+    : m_drawType(GL_TRIANGLES)
+    , m_useMaterial(false)
+    , m_texscale{1.0, 1.0}
   {
-    const size_t nummeshes = m_loader->getNumMeshes();
+    const size_t nummeshes = loader->getNumMeshes();
     for(size_t n=0; n < nummeshes; n++) {
-      gem::plugins::modelloader::mesh*mesh = m_loader->getMesh(n);
+      gem::plugins::modelloader::mesh*mesh = loader->getMesh(n);
       if(mesh) {
         m_mesh.push_back(modelmesh(mesh));
       }
     }
   }
   bool modelGL::update(void) {
-    if(m_loader->updateMeshes()) {
+    if(true) {
       if(GLEW_VERSION_1_5) {
         /* update the VBOs */
         for (auto&m: m_mesh) {
@@ -96,7 +99,7 @@ namespace gem {
     return false;
   }
   void modelGL::render(void) {
-    const unsigned int count = m_loader->getNumMeshes();
+    const unsigned int count = m_mesh.size();
     std::vector<unsigned int>groups;
     for (unsigned int g=0; g<count; g++) {
       groups.push_back(g);
