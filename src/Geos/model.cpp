@@ -28,22 +28,35 @@ static char mytolower(char in)
   }
   return in;
 }
+  template <typename T>
+  void setvector(std::vector<T>&vec, T*data, size_t size) {
+    if(data && size)
+      vec.insert(vec.end(), data, data+size);
+    else
+      vec.clear();
+  }
 };
 
 namespace gem {
   gem :: modelGL :: modelmesh :: modelmesh(gem::plugins::modelloader::mesh*m)
-    : mesh(m)
+    : size(m->size)
     , vertices(GL_VERTEX_ARRAY)
     , normals(GL_NORMAL_ARRAY)
     , colors(GL_COLOR_ARRAY)
     , texcoords(GL_TEXTURE_COORD_ARRAY)
-  {  }
+    , material(m->material)
+  {
+    setvector(vVertices, m->vertices, m->size * 3);
+    setvector(vNormals, m->normals, m->size * 3);
+    setvector(vColors, m->colors, m->size * 4);
+    setvector(vTexcoords, m->texcoords, m->size * 2);
+  }
   void gem :: modelGL :: modelmesh :: update(void)
   {
-    vertices.update(mesh->size, mesh->vertices);
-    normals.update(mesh->size, mesh->normals);
-    colors.update(mesh->size, mesh->colors);
-    texcoords.update(mesh->size, mesh->texcoords);
+    vertices.update(size, vVertices.data());
+    normals.update(size, vNormals.data());
+    colors.update(size, vColors.data());
+    texcoords.update(size, vTexcoords.data());
   }
   void gem :: modelGL :: modelmesh :: render(GLenum drawType) const
   {
@@ -108,14 +121,14 @@ namespace gem {
         if(n >= numMeshes)
           continue;
         const auto &m = m_mesh[n];
-        size_t size = m.mesh->size;
-        float*positions = size?m.mesh->vertices:0;
-        const float*textures = size?m.mesh->texcoords:0;
-        const float*colors = size?m.mesh->colors:0;
-        const float*normals = size?m.mesh->normals:0;
+        const size_t size = m.size;
+        const float*positions = size?m.vVertices.data():0;
+        const float*textures = size?m.vTexcoords.data():0;
+        const float*colors = size?m.vColors.data():0;
+        const float*normals = size?m.vNormals.data():0;
 
         if(m_useMaterial) {
-          gem::plugins::modelutils::render_material(m.mesh->material);
+          gem::plugins::modelutils::render_material(m.material);
         }
 
         glBegin(m_drawType);
@@ -144,7 +157,7 @@ namespace gem {
         if (n >= numMeshes) continue;
         const auto&m = m_mesh[n];
         if(m_useMaterial) {
-          gem::plugins::modelutils::render_material(m.mesh->material);
+          gem::plugins::modelutils::render_material(m.material);
         }
         m.render(m_drawType);
       }

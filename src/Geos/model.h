@@ -48,8 +48,11 @@ class modelloader;
   class modelGL {
   public:
   struct modelmesh {
-    gem::plugins::modelloader::mesh* mesh;
+    //gem::plugins::modelloader::mesh* mesh;
+    unsigned int size;
+    std::vector<float> vVertices, vNormals, vColors, vTexcoords;
     gem::VBO vertices, normals, colors, texcoords;
+    gem::plugins::modelloader::material material;
     modelmesh(gem::plugins::modelloader::mesh*m);
     void update(void);
     void render(GLenum drawtype) const;
