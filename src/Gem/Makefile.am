@@ -65,6 +65,11 @@ libGem_la_include_HEADERS += \
 	PixConvert.h \
 	$(empty)
 
+libGem_la_include_HEADERS += \
+	modeldata.h \
+	$(empty)
+
+
 libGem_la_SOURCES =
 
 if !HAVE_LIB_GLEW
