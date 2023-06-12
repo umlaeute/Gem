@@ -18,6 +18,7 @@
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
 #include "Gem/VertexBuffer.h"
+#include "Gem/model.h"
 #include "RTE/Outlet.h"
 #include "plugins/modelloader.h"
 
@@ -44,44 +45,6 @@ namespace plugins
 class modelloader;
 };
 
-  /* holds a model and renders it */
-  class modelGL {
-  public:
-  struct modelmesh {
-    //gem::plugins::modelloader::mesh* mesh;
-    unsigned int size;
-    std::vector<float> vVertices, vNormals, vColors, vTexcoords;
-    gem::VBO vertices, normals, colors, texcoords;
-    gem::plugins::modelloader::material material;
-    modelmesh(gem::plugins::modelloader::mesh*m);
-    void update(void);
-    void render(GLenum drawtype) const;
-  };
-    /* ctor
-     * initialize the model
-     */
-    modelGL(gem::plugins::modelloader*loader);
-    /* update data from the loader */
-    bool update(void);
-    /* render the model in the currrent openGL context */
-    void render(void);
-    /* render specified meshes of the model in the currrent openGL context */
-    void render(std::vector<unsigned int>&meshes);
-
-    /* influence the rendering */
-    void setDrawType(GLenum);
-    void useMaterial(bool);
-    void setTexture(float w, float h);
-
-  private:
-    gem::plugins::modelloader*m_loader;
-
-    std::vector<struct modelmesh>m_mesh;
-
-    GLenum m_drawType;
-    bool m_useMaterial;
-    GLfloat m_texscale[2];
-  };
 };
 
 class GEM_EXTERN model : public GemBase

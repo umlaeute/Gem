@@ -113,6 +113,8 @@ libGem_la_SOURCES += \
 	Loaders.h \
 	Manager.cpp \
 	Manager.h \
+	model.cpp \
+	model.h \
 	PBuffer.cpp \
 	PBuffer.h \
 	Properties.cpp \
