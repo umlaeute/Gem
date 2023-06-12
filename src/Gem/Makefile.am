@@ -46,7 +46,8 @@ libGem_la_include_HEADERS = \
 	Loaders.h \
 	Manager.h \
 	PBuffer.h \
-	Event.h
+	Event.h \
+	$(empty)
 
 libGem_la_include_HEADERS += \
 	GemGL.h \
@@ -54,12 +55,15 @@ libGem_la_include_HEADERS += \
 	glew.h \
 	glxew.h \
 	wglew.h \
-	GLStack.h
+	GLStack.h \
+	$(empty)
+
 
 libGem_la_include_HEADERS += \
 	Image.h \
 	ImageIO.h \
-	PixConvert.h
+	PixConvert.h \
+	$(empty)
 
 libGem_la_SOURCES =
 
@@ -118,5 +122,5 @@ libGem_la_SOURCES += \
 	State.h \
 	VertexBuffer.cpp \
 	VertexBuffer.h \
-	Version.h
-
+	Version.h \
+	$(empty)
