@@ -281,7 +281,7 @@ namespace {
   }
 }
 
-void gem::plugins::modelutils::render_material(gem::plugins::modelloader::material&m)
+void gem::plugins::modelutils::render_material(const gem::plugins::modelloader::material&m)
 {
   GLfloat glcol[4];
 #define COLOR2FLOAT4(col) color2gl(col, glcol)

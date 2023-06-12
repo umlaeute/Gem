@@ -217,7 +217,7 @@ static void genTexture_Spheremap(std::vector<float>& tex,
   }
 }
   /* perform some openGL calls so that the given material takes effect */
-  void render_material(gem::plugins::modelloader::material&material);
+  void render_material(const gem::plugins::modelloader::material&material);
 }; // namespace ..::modelutils
 
 };
