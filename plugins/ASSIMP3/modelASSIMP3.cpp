@@ -207,6 +207,9 @@ static void recursive_render(
 
   // draw all meshes assigned to this node
   for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
+    const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
+    if(!mesh->mNumFaces)continue;
+    if(mesh->mFaces[0].mNumIndices < 3)continue;
     struct gem::plugins::modelASSIMP3::meshdata newmesh;
     meshes.push_back(std::move(newmesh));
     struct gem::plugins::modelASSIMP3::meshdata&outmesh = meshes.back();
@@ -216,13 +219,10 @@ static void recursive_render(
     std::vector<float>&colors = outmesh.colors;
     size_t numVertices = 0;
 
-    const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
-
     apply_material(outmesh.mesh.material, sc->mMaterials[mesh->mMaterialIndex]);
 
     for (t = 0; t < mesh->mNumFaces; ++t) {
       const struct aiFace* face = &mesh->mFaces[t];
-
       for(i = 0; i < face->mNumIndices; i++) {
         int index = face->mIndices[i];
         numVertices++;
@@ -290,6 +290,7 @@ bool modelASSIMP3 :: open(const std::string&name,
 {
   destroy();
   int flags = aiProcessPreset_TargetRealtime_Quality;
+  flags |= aiProcess_Triangulate | aiProcess_SortByPType;
   flags &= ~aiProcess_GenNormals;
   flags &= ~aiProcess_GenSmoothNormals;
   flags |= aiProcess_FlipUVs;
