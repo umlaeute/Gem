@@ -166,45 +166,6 @@ namespace gem {
 
 CPPEXTERN_NEW_WITH_ONE_ARG(model, t_symbol*, A_DEFSYMBOL);
 
-model :: modelmesh :: modelmesh(gem::plugins::modelloader::mesh*m)
-  : mesh(m)
-  , vertices(GL_VERTEX_ARRAY)
-  , normals(GL_NORMAL_ARRAY)
-  , colors(GL_COLOR_ARRAY)
-  , texcoords(GL_TEXTURE_COORD_ARRAY)
-{
-}
-void model :: modelmesh :: update(void)
-{
-  vertices.update(mesh->size, mesh->vertices);
-  normals.update(mesh->size, mesh->normals);
-  colors.update(mesh->size, mesh->colors);
-  texcoords.update(mesh->size, mesh->texcoords);
-}
-void model :: modelmesh :: render(GLenum drawType) const
-{
-  std::vector<size_t>sizes;
-  size_t sizeV=0, sizeN=0, sizeC=0, sizeT=0;
-  sizeV = vertices.render();
-  if(sizeV>0)sizes.push_back(sizeV);
-  sizeN = normals.render();
-  if(sizeN>0)sizes.push_back(sizeN);
-  sizeC = colors.render();
-  if(sizeC>0)sizes.push_back(sizeC);
-  sizeT = texcoords.render();
-  if(sizeT>0)sizes.push_back(sizeT);
-
-  if ( sizes.size() > 0 ) {
-    unsigned int npoints = *std::min_element(sizes.begin(),sizes.end());
-    glDrawArrays(drawType, 0, npoints);
-  }
-
-  if(sizeV)glDisableClientState(GL_VERTEX_ARRAY);
-  if(sizeN)glDisableClientState(GL_NORMAL_ARRAY);
-  if(sizeC)glDisableClientState(GL_COLOR_ARRAY);
-  if(sizeT)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
 /////////////////////////////////////////////////////////
 //
 // model
@@ -675,7 +636,6 @@ void model :: openMess(const std::string&filename)
     return;
   }
   m_loader->close();
-  m_mesh.clear();
   if (m_loaded)
     delete m_loaded;
 
