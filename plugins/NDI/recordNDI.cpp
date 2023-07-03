@@ -58,6 +58,8 @@ recordNDI :: recordNDI(void)
   }
 
   if (!NDI->initialize()) {
+    if(!NDI->is_supported_CPU())
+      throw(GemException("NDI failed to initialize: unsupported CPU!"));
     throw(GemException("NDI failed to initialize!"));
   }
 }
