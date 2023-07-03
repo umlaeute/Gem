@@ -37,6 +37,7 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
     bool firsttime = s_firsttime;
     s_firsttime = false;
 
+    const NDIlib_gem* result = NULL;
     std::vector<std::string>paths;
 
     // The main NDI entry point for dynamic loading if we got the librari
@@ -107,7 +108,13 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
       verbose(1, "[GEM::%s] loading NewTek NDI Runtime from '%s'", prefix, ndi_path.c_str());
     }
     // Lets get all of the DLL entry points
-    return NDIlib__load();
+    if(1) {
+      result = NDIlib__load();
+      if(result) {
+        verbose(1, "[GEM::%s] %s", prefix, result->version());
+      }
+      return result;
+    }
   notfound:
     if(firsttime) {
       pd_error(0, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
