@@ -34,7 +34,7 @@ using namespace gem::plugins;
 #include "init_ndi_library.hh"
 namespace
 {
-const NDIlib_v4* NDI = 0;
+const NDIlib_gem* NDI = 0;
 };
 
 
