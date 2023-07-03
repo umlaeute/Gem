@@ -17,6 +17,7 @@
 
 #include "Gem/RTE.h"
 #include <string>
+#include <vector>
 
 #ifdef _WIN32
 # include <windows.h>
@@ -36,20 +37,31 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
     bool firsttime = s_firsttime;
     s_firsttime = false;
 
+    std::vector<std::string>paths;
+
     // The main NDI entry point for dynamic loading if we got the librari
     const NDIlib_gem* (*NDIlib__load)(void) = NULL;
 
     const char* p_NDI_runtime_folder = getenv(NDILIB_REDIST_FOLDER);
-    std::string ndi_path = p_NDI_runtime_folder ? p_NDI_runtime_folder : "";
-    if (!ndi_path.empty())
-    {
-      ndi_path += NDI_PATH_SEPARATOR;
-    }
-    ndi_path += NDILIB_LIBRARY_NAME;
+    std::string ndi_path;
+    if(p_NDI_runtime_folder)
+      paths.push_back(p_NDI_runtime_folder);
 
 #ifdef _WIN32
     // Try to load the library
-    HMODULE hNDILib = LoadLibraryA(ndi_path.c_str());
+    HMODULE hNDILib = 0;
+    paths.push_back("");
+    for(auto path: paths) {
+      ndi_path = path;
+      if(!ndi_path.empty()) {
+        ndi_path += NDI_PATH_SEPARATOR;
+      }
+      ndi_path += NDILIB_LIBRARY_NAME;
+
+      hNDILib = LoadLibraryA(ndi_path.c_str());
+      if(hNDILib)
+        break;
+    }
 
     if (hNDILib)
       *((FARPROC*)&NDIlib__load) = GetProcAddress(hNDILib, "NDIlib_v4_load");
@@ -66,7 +78,20 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
     }
 #else
     // Try to load the library
-    void *hNDILib = dlopen(ndi_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
+    void *hNDILib = 0;
+    paths.push_back("/usr/local/lib");
+    paths.push_back("/usr/lib");
+    paths.push_back("");
+    for(auto path: paths) {
+      ndi_path = path;
+      if(!ndi_path.empty()) {
+        ndi_path += NDI_PATH_SEPARATOR;
+      }
+      ndi_path += NDILIB_LIBRARY_NAME;
+      hNDILib = dlopen(ndi_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
+      if (hNDILib)
+        break;
+    }
 
     if (hNDILib)
       *((void**)&NDIlib__load) = dlsym(hNDILib, "NDIlib_v4_load");
