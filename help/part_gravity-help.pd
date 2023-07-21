@@ -7,7 +7,7 @@
 #X text 186 26 [part_gravity];
 #X text 327 152 This is gravitation vector;
 #X text 43 257 [part_gravity] sets the gravity-vector of the particle-system.
-No matter in which direction particles are emitted (pE. via [part_velsphere])
+No matter in which direction particles are emitted (pE. via [part_velocity])
 in the end \, they have to follow the gravity.;
 #X obj 528 8 declare -lib Gem;
 #X connect 0 0 3 0;
