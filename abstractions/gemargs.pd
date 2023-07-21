@@ -6,7 +6,7 @@
 #X obj 140 302 until;
 #X obj 140 327 i;
 #X obj 140 352 t f f;
-#X msg 140 377 get \$1;
+#X msg 140 377 get \$1 1;
 #X obj 140 402 list store;
 #X obj 188 338 + 1;
 #X msg 265 301 0;
