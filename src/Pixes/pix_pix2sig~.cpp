@@ -117,7 +117,7 @@ void pix_pix2sig :: filltypeMess(t_symbol*s, int argc, t_atom*argv) {
 // signal Performance
 namespace {
   template<typename T>
-  void perform_pix2sig(t_sample**out, size_t N, void*data_, size_t dataoffset, unsigned int format, t_sample scale) {
+  void perform_pix2sig(t_sample**out, size_t N, void*data_, size_t dataoffset, unsigned int format, t_sample scale, bool swap) {
     T*data = static_cast<T*>(data_);
     t_sample*out_red   = out[0];
     t_sample*out_green = out[1];
@@ -125,15 +125,30 @@ namespace {
     t_sample*out_alpha = out[3];
     size_t n = N;
 
+    const int R = (swap)?3:0;
+    const int G = (swap)?2:1;
+    const int B = (swap)?1:2;
+    const int A = (swap)?0:3;
+
     switch(format) {
-    case GEM_RGBA:
     default:
+    case GEM_RAW_RGBA:
       data += dataoffset*4;
       while(n--) {
-        *(out_red  ++) = scale * static_cast<t_sample>(data[chRed]);
-        *(out_green++) = scale * static_cast<t_sample>(data[chGreen]);
-        *(out_blue ++) = scale * static_cast<t_sample>(data[chBlue]);
-        *(out_alpha++) = scale * static_cast<t_sample>(data[chAlpha]);
+        *(out_red  ++) = scale * static_cast<t_sample>(data[R]);
+        *(out_green++) = scale * static_cast<t_sample>(data[G]);
+        *(out_blue ++) = scale * static_cast<t_sample>(data[B]);
+        *(out_alpha++) = scale * static_cast<t_sample>(data[A]);
+        data+=4;
+      }
+      break;
+    case GEM_RAW_BGRA:
+      data += dataoffset*4;
+      while(n--) {
+        *(out_red  ++) = scale * static_cast<t_sample>(data[B]);
+        *(out_green++) = scale * static_cast<t_sample>(data[G]);
+        *(out_blue ++) = scale * static_cast<t_sample>(data[R]);
+        *(out_alpha++) = scale * static_cast<t_sample>(data[A]);
         data+=4;
       }
       break;
@@ -188,9 +203,10 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   };
 
   /* metadata for the actual converters */
-  typedef void (*performer_t)(t_sample**out, size_t N, void*data, size_t offset, unsigned int format, t_sample scale);
+  typedef void (*performer_t)(t_sample**out, size_t N, void*data, size_t offset, unsigned int format, t_sample scale, bool swap);
   performer_t p2s_perform;
   t_sample scale = 1.;
+  bool swap = false;
 
   size_t processed = 0; /* number of converted pixels */
   int line; /* linenumber in waterfall mode */
@@ -207,6 +223,9 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
     line = height + line;
 
   switch(m_image.type) {
+  case GL_UNSIGNED_INT_8_8_8_8:
+    swap = true;
+    /* fallthrough */
   default:
     p2s_perform = perform_pix2sig<unsigned char>;
     scale = 1./255.;
@@ -236,7 +255,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       m_offsetY %= height;
       size_t r = m_image.upsidedown?m_offsetY:(height-m_offsetY);
       if ((m_offsetX + count) > width) count = (width - m_offsetX);
-      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale, swap);
       processed += count;
       m_offsetX = 0;
       m_offsetY = (m_offsetY+1)%height;
@@ -247,7 +266,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       if(!m_image.upsidedown) r = height-r-1;
       size_t count = N-processed;
       if (count>width) count = width;
-      p2s_perform(outsignal, count, data, r*width, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width, m_image.format, scale, swap);
       processed += count;
       m_offsetY = (m_offsetY+1)%height;
     }
@@ -257,7 +276,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
         if(!m_image.upsidedown) r = height-r-1;
         size_t count = N-processed;
         if (count>width) count = width;
-        p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
+        p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale, swap);
         processed += count;
         m_offsetX = (count % width);
         m_offsetY += !m_offsetX;
@@ -275,7 +294,7 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
       size_t r = m_offsetY;
       if (!m_image.upsidedown) r = height-r-1;
       if ((m_offsetX + count) > width) count = (width - m_offsetX);
-      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale);
+      p2s_perform(outsignal, count, data, r*width+m_offsetX, m_image.format, scale, swap);
       processed += count;
       m_offsetX = 0;
       m_offsetY = (m_offsetY+1)%height;

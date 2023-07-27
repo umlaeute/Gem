@@ -76,10 +76,13 @@ void pix_sig2pix :: dimenMess(int width, int height)
   }
 
   m_pixBlock.image.xsize =(GLint) width;
-  m_pixBlock.image.ysize = (GLint) height;
+  m_pixBlock.image.ysize =(GLint) height;
   m_pixBlock.image.setCsizeByFormat(m_reqFormat);
-  if(m_reqType)
+  if(m_reqType) {
+    if(GEM_RGBA == m_reqFormat)
+      m_pixBlock.image.setCsizeByFormat(GL_RGBA);
     m_pixBlock.image.type = m_reqType;
+  }
 
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
@@ -93,9 +96,7 @@ void pix_sig2pix :: csMess(std::string s)
     return;
   }
   m_reqFormat=cs;
-  m_pixBlock.image.setCsizeByFormat(m_reqFormat);
-  m_pixBlock.image.reallocate();
-  m_pixBlock.image.setBlack();
+  dimenMess(m_pixBlock.image.xsize, m_pixBlock.image.ysize);
 }
 
 
@@ -131,21 +132,35 @@ void pix_sig2pix :: startRendering()
 
 namespace {
   template<typename T>
-  void perform_sig2pix(t_sample**in, void*data_, unsigned int format, size_t n, t_sample scale) {
+  void perform_sig2pix(t_sample**in, void*data_, unsigned int format, size_t n, t_sample scale, bool swap) {
     T*data = static_cast<T*>(data_);
     t_sample*in_red = in[0];
     t_sample*in_green = in[1];
     t_sample*in_blue = in[2];
     t_sample*in_alpha = in[3];
 
+    const int R = (swap)?3:0;
+    const int G = (swap)?2:1;
+    const int B = (swap)?1:2;
+    const int A = (swap)?0:3;
+
     switch(format) {
-    case GL_RGBA:
     default:
+    case GEM_RAW_RGBA:
       while(n--) {
-        data[chRed]   = static_cast<T> (scale*(*in_red++));
-        data[chGreen] = static_cast<T> (scale*(*in_green++));
-        data[chBlue]  = static_cast<T> (scale*(*in_blue++));
-        data[chAlpha] = static_cast<T> (scale*(*in_alpha++));
+        data[R] = static_cast<T> (scale*(*in_red++));
+        data[G] = static_cast<T> (scale*(*in_green++));
+        data[B] = static_cast<T> (scale*(*in_blue++));
+        data[A] = static_cast<T> (scale*(*in_alpha++));
+        data+=4;
+      }
+      break;
+    case GEM_RAW_BGRA:
+      while(n--) {
+        data[B] = static_cast<T> (scale*(*in_red++));
+        data[G] = static_cast<T> (scale*(*in_green++));
+        data[R] = static_cast<T> (scale*(*in_blue++));
+        data[A] = static_cast<T> (scale*(*in_alpha++));
         data+=4;
       }
       break;
@@ -181,7 +196,11 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
   const int format = m_pixBlock.image.format;
   size_t pixsize = width * height;
   size_t chansize = 0;
+  bool swap = false;
   switch(type) {
+  case GL_UNSIGNED_INT_8_8_8_8:
+    swap = true;
+    /* fallthrough */
   default:
     chansize=sizeof(unsigned char);
     break;
@@ -242,13 +261,13 @@ void pix_sig2pix :: perform(t_sample**signals, size_t n)
 
   switch(type) {
   default:
-    perform_sig2pix<unsigned char>(signals, data + offset * chansize, format, count, 255.0);
+    perform_sig2pix<unsigned char>(signals, data + offset * chansize, format, count, 255.0, swap);
     break;
   case GL_FLOAT:
-    perform_sig2pix<GLfloat>(signals, data + offset * chansize, format, count, 1.0);
+    perform_sig2pix<GLfloat>(signals, data + offset * chansize, format, count, 1.0, swap);
     break;
   case GL_DOUBLE:
-    perform_sig2pix<GLdouble>(signals, data + offset * chansize, format, count, 1.0);
+    perform_sig2pix<GLdouble>(signals, data + offset * chansize, format, count, 1.0, swap);
     break;
   }
   m_pixBlock.newimage = 1;
