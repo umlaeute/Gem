@@ -31,7 +31,7 @@ CPPEXTERN_NEW_NAMED_WITH_TWO_ARGS(pix_sig2pix, "pix_sig2pix~", t_float,A_DEFFLOA
 /////////////////////////////////////////////////////////
 pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
   : m_width(0), m_height(0)
-  , m_reqFormat(GL_RGBA)
+  , m_reqFormat(GEM_RGBA)
   , m_reqType(0)
   , m_upsidedown(true)
   , m_fillType(CLEAR)
