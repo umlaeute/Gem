@@ -491,7 +491,7 @@ void glsl_program :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
 {
-  std::string name = std::string(s->s_name);
+  std::string name = removeArrayBrackets(std::string(s->s_name));
   if (!(m_program || m_programARB)) {
     /* cache the message */
     std::vector<t_atom>vec;
