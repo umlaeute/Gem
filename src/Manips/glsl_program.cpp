@@ -21,6 +21,13 @@ CPPEXTERN_NEW(glsl_program);
 
 namespace
 {
+  std::string removeArrayBrackets(const std::string name) {
+    ssize_t namesize = name.size()-3;
+    if(namesize>0 && 0 == name.compare(namesize, 3, "[0]")) {
+      return name.substr(0, namesize);
+    }
+    return name;
+  }
 GLenum uniform2type(CPPExtern*obj, GLenum type)
 {
   /* the base type for a (complex) uniform type;
@@ -505,21 +512,55 @@ void glsl_program :: paramMess(t_symbol*s,int argc, const t_atom *argv)
     //   copy the values into memory and add a flag that we have them for this parameter
     //   in the render cycle use it
     const int maxargc = uni.arraysize * uni.paramsize;
-    if(argc > maxargc) {
-      argc=maxargc;
-    }
-    switch(uni.paramtype) {
-    case GL_FLOAT: {
-      for (int j=0; j < argc; j++) {
-        uni.param.f[j] = atom_getfloat(&argv[j]);
+    if(argc == 1 && A_SYMBOL == argv[0].a_type) {
+      /* read from array */
+      t_symbol *s = atom_getsymbol(argv);
+      t_garray *a;
+      if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) {
+        error("no such table '%s' to fill values for uniform variable '%s'", s->s_name, name.c_str());
+        return;
       }
-      break;
-    }
-    case GL_INT: {
-      for (int j=0; j < argc; j++) {
-        uni.param.i[j] = (GLint)atom_getfloat(&argv[j]);
+      int npoints;
+      t_word *vec;
+      if (!garray_getfloatwords(a, &npoints, &vec)) {
+        error("%s: bad template for uniform '%s'", s->s_name, name.c_str());
+        return;
       }
-    }
+      if(npoints < 0) {
+        error("%s: illegal number of elements %d for uniform '%s'", s->s_name, npoints, name.c_str());
+        return;
+      }
+      if(npoints > maxargc)
+        npoints = maxargc;
+      switch(uni.paramtype) {
+      case GL_FLOAT:
+        for(int j=0; j<npoints; j++) {
+          uni.param.f[j] = vec[j].w_float;
+        }
+        break;
+      case GL_INT:
+        for(int j=0; j<npoints; j++) {
+          uni.param.i[j] = (GLint)(vec[j].w_float);
+        }
+        break;
+      }
+    } else {
+      /* read data from message */
+      if(argc > maxargc) {
+        argc=maxargc;
+      }
+      switch(uni.paramtype) {
+      case GL_FLOAT:
+        for (int j=0; j < argc; j++) {
+          uni.param.f[j] = atom_getfloat(&argv[j]);
+        }
+        break;
+      case GL_INT:
+        for (int j=0; j < argc; j++) {
+          uni.param.i[j] = (GLint)atom_getfloat(&argv[j]);
+        }
+        break;
+      }
     }
     // tell the GL state that this variable has changed next render
     uni.changed = true;
@@ -869,10 +910,7 @@ void glsl_program :: getVariables()
       arraysize = 1;
     }
 
-    ssize_t namesize = name.size()-3;
-    if(namesize>0 && 0 == name.compare(namesize, 3, "[0]")) {
-      name = name.substr(0, namesize);
-    }
+    name = removeArrayBrackets(name);
     std::map<std::string, t_uniform>::const_iterator it = olduniforms.find(name);
     if (olduniforms.end() == it || !m_keepUniforms) {
       m_uniforms[name] = t_uniform(this, loc, type, arraysize);
