@@ -868,6 +868,11 @@ void glsl_program :: getVariables()
       name=(char*)nameARB;
       arraysize = 1;
     }
+
+    ssize_t namesize = name.size()-3;
+    if(namesize>0 && 0 == name.compare(namesize, 3, "[0]")) {
+      name = name.substr(0, namesize);
+    }
     std::map<std::string, t_uniform>::const_iterator it = olduniforms.find(name);
     if (olduniforms.end() == it || !m_keepUniforms) {
       m_uniforms[name] = t_uniform(this, loc, type, arraysize);
