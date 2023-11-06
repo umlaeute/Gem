@@ -3,7 +3,7 @@
 ### configuration templates (to be used for snapshot and release builds)
 variables:
   PDVERSION:
-    value: 0.52-2
+    value: 0.54-1
     description: "The Pd-version against which to build"
   LANG:
     value: "C"
