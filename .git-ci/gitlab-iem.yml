@@ -1,3 +1,4 @@
+---
 ###################################################
 ### configuration templates (to be used for snapshot and release builds)
 variables:
@@ -7,8 +8,8 @@ variables:
   LANG:
     value: "C"
     description: ""
-  # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
   MACOSX_DEPLOYMENT_TARGET:
+    # compatibility for older OSX-builds (<mutex> requires C++11, available since OSX10.9/Mavericks)
     value: "10.9"
     description: "For macOS builds, specify the minimum version where Gem should run on"
   ARTIFACTSDIR:
@@ -92,7 +93,7 @@ stages:
   extends:
     - .build
   tags:
-     - bigsur
+    - bigsur
   retry:
     max: 1
     when:
@@ -300,15 +301,15 @@ deken:
     - test -n "${CI_COMMIT_TAG}" || test ! -e .git-ci/README.snapshot.pd.in || sed -e "s|@build-date@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@version@|${gitversion}|g" .git-ci/README.snapshot.pd.in > README.deken.pd
   script:
     - chmod -R u+rw,go-w ${ARTIFACTSDIR}/
-# remove ltlib leftovers
+    # remove ltlib leftovers
     - find ${ARTIFACTSDIR}/ "(" -name "*.la" -or -name "*.a" ")" -delete
-# remove debug information
+    # remove debug information
     - find ${ARTIFACTSDIR}/ -name "*.debug" -delete
-# inject any README.deken
+    # inject any README.deken
     - for f in README.deken.*; do [ -e "${f}" ] || continue; for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do cp "${f}" "${d}" || true; done; done
-# create deken packages
+    # create deken packages
     - for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do deken package --version="${version}" "${d}"; done
-# upload deken packages
+    # upload deken packages
     - test -z "${version}" || test -z "${DEKEN_USERNAME}" || test -z "${DEKEN_PASSWORD}" || deken upload --no-source-error ./*.dek
   artifacts:
     name: deken-package
