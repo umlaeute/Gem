@@ -1,20 +1,14 @@
-#N canvas 398 110 651 488 10;
+#N canvas 398 110 647 618 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 8 236 cnv 15 430 160 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X text 39 238 Inlets:;
-#X text 39 270 Outlets:;
-#X obj 8 196 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#X text 17 195 Arguments:;
-#X obj 8 66 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 77 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 316 cnv 15 430 160 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X text 39 318 Inlets:;
+#X obj 8 276 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#X text 17 275 Arguments:;
+#X obj 8 66 cnv 15 430 200 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 77 cnv 15 170 520 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 60 Example:;
-#X obj 514 290 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 514 530 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -33,15 +27,13 @@
 #X connect 5 0 1 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
-#X restore 519 329 pd gemwin;
-#X msg 519 310 create;
-#X text 515 289 Create window:;
-#X obj 451 158 cnv 15 160 100 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X restore 519 569 pd gemwin;
+#X msg 519 550 create;
+#X text 515 529 Create window:;
+#X obj 451 158 cnv 15 160 330 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 84 gemhead;
 #X text 71 31 Class: pix object;
-#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 -262144
--1 -1;
+#X obj 510 85 bng 15 250 50 0 empty empty pix_load 20 8 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 0 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -55,45 +47,75 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 113 pd image;
-#X obj 451 263 pix_texture;
-#X text 63 206 <none>;
-#X text 57 283 Outlet 1: gemlist;
-#X text 63 252 Inlet 1: gemlist;
-#X obj 451 285 square 3;
+#X obj 451 503 pix_texture;
+#X text 57 393 Outlet 1: gemlist;
+#X text 63 332 Inlet 1: gemlist;
+#X obj 451 525 square 3;
 #X text 516 105 open an image;
 #X text 509 118 (JPEG \, TIFF \, ..);
-#X floatatom 461 240 4 0 0 1 width - -;
-#X floatatom 471 222 4 0 0 1 height - -;
-#X floatatom 481 204 4 0 0 1 bytes/pixel - -;
-#X floatatom 491 187 5 0 0 1 coulorspace - -;
-#X text 57 297 Outlet 2: int: image-width;
-#X text 57 310 Outlet 3: int: image-height;
-#X text 57 323 Outlet 4: int: bytes per pixel;
-#X text 57 336 Outlet 5: int: colour-space (openGL-constant);
+#X floatatom 461 240 4 0 0 1 width - - 0;
+#X floatatom 471 222 4 0 0 1 height - - 0;
+#X floatatom 481 204 4 0 0 1 bytes/pixel - - 0;
+#X floatatom 491 187 5 0 0 1 format - - 0;
+#X text 57 407 Outlet 2: int: image-width;
+#X text 57 420 Outlet 3: int: image-height;
+#X text 57 433 Outlet 4: int: bytes per pixel;
 #X text 50 12 Synopsis: [pix_info];
-#X text 29 67 Description: get information about the current image
-;
-#X text 14 81 [pix_info] will give you some meta-information about
-the image data consisting of the image-dimensions \, the pixel-size
-\, the colour-space and the pointer to the image-data itself.;
-#X text 14 134 The colour-space is given as an openGL-int-constant.
-(6408=GL_RGBA (rgba) \, 6409=GL_LUMINANCE (grey) \, 34233 might be
-YUV (not standardized);
-#X text 13 171 You might not be able to do anything with the data-pointer.
-;
-#X obj 451 166 pix_info . . . .;
-#X text 57 380 Outlet 8: pointer: image-data;
-#X text 57 349 Outlet 6: list: <type> <upsidedown> <notowned>;
-#X text 57 366 Outlet 7: list: <newimage> <newfilm>;
+#X text 29 67 Description: get information about the current image;
+#X text 13 171 You might not be able to do anything with the data-pointer.;
+#X text 57 490 Outlet 8: pointer: image-data;
+#X text 57 459 Outlet 6: list: <type> <upsidedown> <notowned>;
+#X text 57 476 Outlet 7: list: <newimage> <newfilm>;
 #X obj 518 8 declare -lib Gem;
-#X connect 10 0 11 0;
-#X connect 11 0 10 0;
-#X connect 14 0 17 0;
-#X connect 16 0 17 1;
-#X connect 17 0 38 0;
-#X connect 18 0 22 0;
-#X connect 38 0 18 0;
-#X connect 38 1 25 0;
-#X connect 38 2 26 0;
-#X connect 38 3 27 0;
-#X connect 38 4 28 0;
+#X obj 451 265 pix_info -m, f 25;
+#X obj 451 162 pix_info, f 20;
+#X obj 461 314 unpack;
+#X floatatom 461 337 5 0 0 0 - - - 0;
+#X floatatom 494 337 5 0 0 0 - - - 0;
+#X floatatom 508 314 5 0 0 0 - - - 0;
+#X floatatom 547 337 5 0 0 0 - - - 0;
+#X text 57 446 Outlet 5: int: format (openGL-constant);
+#X obj 461 444 unpack;
+#X floatatom 461 467 5 0 0 0 - - - 0;
+#X floatatom 494 467 5 0 0 0 - - - 0;
+#X floatatom 508 444 5 0 0 0 - - - 0;
+#X obj 451 375 pix_info -m \; symbolic 1, f 25;
+#X symbolatom 544 466 10 0 0 0 - - - 0;
+#X text 14 134 The format is given as an openGL-int-constant. (6408=GL_RGBA (rgba) \, 6409=GL_LUMINANCE (grey) \, 34233 might be YUV (not standardized);
+#X text 63 286 [-m] - message mode;
+#X text 14 81 [pix_info] will give you some meta-information about the image data consisting of the image-dimensions \, the pixel-size \, the colour-space (format) and the pointer to the image-data itself.;
+#X text 15 189 In "message mode" (with the '-m' flag) \, there's only a single data outlet that gives all the information as messages (terminated by a 'bang' message). You can also ask to translate the openGL-constants into symbols with the "symbolic" message (which is a no-op in the default "raw" mode)., f 68;
+#X text 39 380 Outlets (in "raw" mode);
+#X text 64 349 Inlet 1: symbolic <bool> - output openGL constants as symbols rather than numbers when in message mode.;
+#X text 57 523 Outlet 1: gemlist;
+#X text 39 510 Outlets (in "message" mode);
+#X text 57 537 Outlet 2: various messages about the image ('bang' terminated);
+#X obj 461 291 route dimen bytes/pixel format;
+#X obj 460 421 route dimen bytes/pixel format;
+#X obj 544 444 symbol;
+#X connect 9 0 10 0;
+#X connect 10 0 9 0;
+#X connect 13 0 16 0;
+#X connect 15 0 16 1;
+#X connect 16 0 38 0;
+#X connect 17 0 20 0;
+#X connect 37 0 49 0;
+#X connect 37 1 60 0;
+#X connect 38 0 37 0;
+#X connect 38 1 23 0;
+#X connect 38 2 24 0;
+#X connect 38 3 25 0;
+#X connect 38 4 26 0;
+#X connect 39 0 40 0;
+#X connect 39 1 41 0;
+#X connect 45 0 46 0;
+#X connect 45 1 47 0;
+#X connect 49 0 17 0;
+#X connect 49 1 61 0;
+#X connect 60 0 39 0;
+#X connect 60 1 42 0;
+#X connect 60 2 43 0;
+#X connect 61 0 45 0;
+#X connect 61 1 48 0;
+#X connect 61 2 62 0;
+#X connect 62 0 50 0;
