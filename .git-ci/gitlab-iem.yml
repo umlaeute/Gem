@@ -197,22 +197,22 @@ Source:
     # create a source package
     - git archive --format=tar --prefix="${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/" HEAD | tar xf -
 
-Linux:
+Linux-amd64-32:
   extends:
     - .build:linux
     - .artifacts
     - .run-selected
-Darwin:
+Darwin-fat-32:
   extends:
     - .build:macos
     - .artifacts
     - .run-selected
-W32:
+Windows-i386-32:
   extends:
     - .build:w32
     - .artifacts
     - .run-selected
-W64:
+Windows-amd64-32:
   extends:
     - .build:w64
     - .artifacts
