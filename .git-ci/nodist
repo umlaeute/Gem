@@ -1,6 +1,7 @@
 .editorconfig
 .gitattributes
 .travis.yml
+.yamllint
 src/**/Makefile.am.template
 src/Output/README.cocoa
 src/Output/messages.txt
