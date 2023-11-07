@@ -260,6 +260,7 @@ bool gemhead :: activateContext(void) {
     SETSYMBOL(ap+0, s);
     typedmess(window_sym->s_thing, m_contextsym, 1, ap);
   }
+  /* NOTE: we could also just trust that 'make_current' succeeds... */
   return m_contextActive;
 }
 
