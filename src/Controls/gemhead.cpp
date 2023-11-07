@@ -60,30 +60,35 @@ gemhead :: gemhead(int argc, t_atom*argv) :
   m_cache(new GemCache(this)), m_renderOn(1)
 {
   if(m_fltin) {
+    /* get rid of left-over inlet from [gemreceive] */
     inlet_free(m_fltin);
   }
   m_fltin=NULL;
 
   m_basename=m_name->s_name;
   float priority=50.;
-#if 1
   switch(argc) {
   case 2:
     if(argv[0].a_type == A_FLOAT && argv[1].a_type == A_SYMBOL) {
+      /* priority, context */
       priority=atom_getfloat(argv+0);
       m_basename+=atom_getsymbol(argv+1)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_SYMBOL) {
+      /* context, priority */
       priority=atom_getfloat(argv+1);
       m_basename+=atom_getsymbol(argv+0)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_FLOAT) {
+      /* priority, context(num) */
       priority=atom_getfloat(argv+0);
       m_basename+=::float2str(atom_getfloat  (argv+1));
     }
     break;
   case 1:
     if(argv[0].a_type == A_FLOAT) {
+      /* priority */
       priority=atom_getfloat(argv+0);
     } else if(argv[0].a_type == A_SYMBOL) {
+      /* context */
       m_basename+=atom_getsymbol(argv+0)->s_name;
     }
     break;
@@ -91,17 +96,8 @@ gemhead :: gemhead(int argc, t_atom*argv) :
     priority=50.f;
     break;
   default:
-    throw(GemException("invalid arguments: 'gemhead [<priority> [<basereceivename>]]'"));
+    throw(GemException("invalid arguments: 'gemhead [<priority> [<contextname>]]'"));
   }
-#else
-  if(argc==0) {
-    priority=50.;
-  } else if(argv[0].a_type == A_FLOAT) {
-    priority=atom_getfloat(argv);
-  } else {
-    throw(GemException("invalid arguments: 'gemhead [<priority>]'"));
-  }
-#endif
   m_priority=priority+1;
   setMess(priority);
 }
@@ -247,7 +243,6 @@ void gemhead :: setMess(t_float priority)
 
 void gemhead :: setContext(const std::string&contextName)
 {
-
   std::string rcv="__gem_render"+contextName;
   m_basename=rcv;
 
