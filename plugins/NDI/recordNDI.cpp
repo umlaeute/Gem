@@ -30,7 +30,7 @@
 #include "init_ndi_library.hh"
 namespace
 {
-const NDIlib_v4* NDI = 0;
+const NDIlib_gem* NDI = 0;
 };
 
 using namespace gem::plugins;
@@ -58,6 +58,8 @@ recordNDI :: recordNDI(void)
   }
 
   if (!NDI->initialize()) {
+    if(!NDI->is_supported_CPU())
+      throw(GemException("NDI failed to initialize: unsupported CPU!"));
     throw(GemException("NDI failed to initialize!"));
   }
 }

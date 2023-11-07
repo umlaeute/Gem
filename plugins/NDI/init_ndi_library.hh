@@ -17,97 +17,115 @@
 
 #include "Gem/RTE.h"
 #include <string>
+#include <vector>
 
 #ifdef _WIN32
 # include <windows.h>
+# define NDI_PATH_SEPARATOR "\\"
 #else
 # include <stdlib.h>
 # include <dlfcn.h>
+# define NDI_PATH_SEPARATOR "/"
 #endif
 
+typedef NDIlib_v4 NDIlib_gem;
+
 namespace {
-const NDIlib_v4* init_ndi_library(const char*prefix)
+const NDIlib_gem* init_ndi_library(const char*prefix)
   {
-    static bool firsttime = true;
+    static bool s_firsttime = true;
+    bool firsttime = s_firsttime;
+    s_firsttime = false;
 
-#ifdef _WIN32
-    // We check whether the NDI run-time is installed
-    const char* p_ndi_runtime_v4 = getenv(NDILIB_REDIST_FOLDER);
-    if (!p_ndi_runtime_v4)
-    {       // The NDI run-time is not yet installed. Let the user know and take them to the download URL.
-      if(firsttime) {
-        pd_error(0, "[GEM:%s] Please install the NewTek NDI Runtimes to use this plugin.", prefix);
-        if (std::string("") != NDILIB_REDIST_URL)
-          pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
-      }
-      firsttime = false;
-      return 0;
-    }
-
-    // We now load the DLL as it is installed
-    std::string ndi_path = p_ndi_runtime_v4;
-    ndi_path += "\\" NDILIB_LIBRARY_NAME;
-
-    // Try to load the library
-    HMODULE hNDILib = LoadLibraryA(ndi_path.c_str());
+    const NDIlib_gem* result = NULL;
+    std::vector<std::string>paths;
 
     // The main NDI entry point for dynamic loading if we got the librari
-    const NDIlib_v4* (*NDIlib_v4_load)(void) = NULL;
+    const NDIlib_gem* (*NDIlib__load)(void) = NULL;
+
+    const char* p_NDI_runtime_folder = getenv(NDILIB_REDIST_FOLDER);
+    std::string ndi_path;
+    if(p_NDI_runtime_folder)
+      paths.push_back(p_NDI_runtime_folder);
+
+#ifdef _WIN32
+    // Try to load the library
+    HMODULE hNDILib = 0;
+    paths.push_back("");
+    for(auto path: paths) {
+      ndi_path = path;
+      if(!ndi_path.empty()) {
+        ndi_path += NDI_PATH_SEPARATOR;
+      }
+      ndi_path += NDILIB_LIBRARY_NAME;
+
+      hNDILib = LoadLibraryA(ndi_path.c_str());
+      if(hNDILib)
+        break;
+    }
+
     if (hNDILib)
-      *((FARPROC*)&NDIlib_v4_load) = GetProcAddress(hNDILib, "NDIlib_v4_load");
+      *((FARPROC*)&NDIlib__load) = GetProcAddress(hNDILib, "NDIlib_v4_load");
 
     // If we failed to load the library then we tell people to re-install it
-    if (!NDIlib_v4_load)
+    if (!NDIlib__load)
     {       // Unload the DLL if we loaded it
       if (hNDILib)
         FreeLibrary(hNDILib);
 
       // The NDI run-time is not installed correctly. Let the user know and take them to the download URL.
-      if(firsttime) {
-        pd_error(0, "[GEM:%s] Please re-install the NewTek NDI Runtimes to use this plugin.", prefix);
-        pd_error(0, "               need to find the library '%s'", NDILIB_LIBRARY_NAME);
-        if (std::string("") != NDILIB_REDIST_URL)
-          pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
-      }
-      firsttime = false;
+      goto notfound;
       return 0;
     }
 #else
-    std::string ndi_path;
-
-    const char* p_NDI_runtime_folder = getenv(NDILIB_REDIST_FOLDER);
-    if (p_NDI_runtime_folder)
-    {
-      ndi_path = p_NDI_runtime_folder;
-      ndi_path += NDILIB_LIBRARY_NAME;
-    }
-    else ndi_path = NDILIB_LIBRARY_NAME;
-
     // Try to load the library
-    void *hNDILib = dlopen(ndi_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
+    void *hNDILib = 0;
+    paths.push_back("/usr/local/lib");
+    paths.push_back("/usr/lib");
+    paths.push_back("");
+    for(auto path: paths) {
+      ndi_path = path;
+      if(!ndi_path.empty()) {
+        ndi_path += NDI_PATH_SEPARATOR;
+      }
+      ndi_path += NDILIB_LIBRARY_NAME;
+      hNDILib = dlopen(ndi_path.c_str(), RTLD_LOCAL | RTLD_LAZY);
+      if (hNDILib)
+        break;
+    }
 
-    // The main NDI entry point for dynamic loading if we got the library
-    const NDIlib_v4* (*NDIlib_v4_load)(void) = NULL;
     if (hNDILib)
-      *((void**)&NDIlib_v4_load) = dlsym(hNDILib, "NDIlib_v4_load");
+      *((void**)&NDIlib__load) = dlsym(hNDILib, "NDIlib_v4_load");
     // If we failed to load the library then we tell people to re-install it
-    if (!NDIlib_v4_load)
+    if (!NDIlib__load)
     {       // Unload the library if we loaded it
       if (hNDILib)
         dlclose(hNDILib);
-      if(firsttime) {
-        pd_error(0, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
-        pd_error(0, "               need to find the library '%s'", NDILIB_LIBRARY_NAME);
-        if (std::string("") != NDILIB_REDIST_URL)
-          pd_error(0, "               get it from %s", NDILIB_REDIST_URL);
-      }
-      firsttime = false;
-      return 0;
+      goto notfound;
     }
 #endif
-    firsttime = false;
+    if(firsttime) {
+      verbose(1, "[GEM::%s] loading NewTek NDI Runtime from '%s'", prefix, ndi_path.c_str());
+    }
     // Lets get all of the DLL entry points
-    return NDIlib_v4_load();
+    if(1) {
+      result = NDIlib__load();
+      if(result) {
+        verbose(1, "[GEM::%s] %s", prefix, result->version());
+      }
+      return result;
+    }
+  notfound:
+    if(firsttime) {
+      pd_error(0, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
+      pd_error(0, "        need to find the library '%s'", NDILIB_LIBRARY_NAME);
+      if (std::string("") != NDILIB_REDIST_URL)
+        pd_error(0, "        get the NewTek Runtimes from %s", NDILIB_REDIST_URL);
+      pd_error(0, "        use the '%s' environment variable to set the path to the library.", NDILIB_REDIST_FOLDER);
+      if(p_NDI_runtime_folder)
+        pd_error(0, "        (currently set to '%s').", p_NDI_runtime_folder);
+    }
+    return 0;
   }
 };
 #endif /* _INCLUDE_GEMPLUGIN__INITNDILIBRARY_INITNDILIBRARY_H_ */

@@ -63,13 +63,16 @@ public:
 
   virtual void receive(t_symbol*s, int argc, t_atom*argv);
 
+  /* make sur that the named context (of any) is valid */
+  bool activateContext(void);
+
 protected:
 
   //////////
   // Destructor
   virtual ~gemhead();
 
-  std::string m_basename;
+  std::string m_contextname;
 
 private:
 
@@ -81,6 +84,9 @@ private:
   int           m_renderOn;
 
   void          bangMess();
+
+  bool m_contextActive; // whether our selected context is currently active
+  t_symbol*m_contextsym;
 };
 
 #endif  // for header file

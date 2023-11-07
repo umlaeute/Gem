@@ -874,7 +874,6 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
     break;
 #endif
   case GL_BGRA:
-    post("%s:%d:: %s", __FILE__, __LINE__, __FUNCTION__);
     ARGBtoBGRA(argbdata, data, xsize, ysize);
     break;
   case GL_RGBA:

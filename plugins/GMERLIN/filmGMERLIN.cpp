@@ -300,7 +300,7 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   m_image.newfilm=true;
 
   if(gformat->frame_duration) {
-    m_fps = gformat->timescale / gformat->frame_duration;
+    m_fps = (double)gformat->timescale / (double)gformat->frame_duration;
   } else {
     m_fps = gformat->timescale;
   }

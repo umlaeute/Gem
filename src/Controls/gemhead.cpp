@@ -60,48 +60,44 @@ gemhead :: gemhead(int argc, t_atom*argv) :
   m_cache(new GemCache(this)), m_renderOn(1)
 {
   if(m_fltin) {
+    /* get rid of left-over inlet from [gemreceive] */
     inlet_free(m_fltin);
   }
   m_fltin=NULL;
 
-  m_basename=m_name->s_name;
+  m_contextname="";
   float priority=50.;
-#if 1
   switch(argc) {
   case 2:
     if(argv[0].a_type == A_FLOAT && argv[1].a_type == A_SYMBOL) {
+      /* priority, context */
       priority=atom_getfloat(argv+0);
-      m_basename+=atom_getsymbol(argv+1)->s_name;
+      m_contextname=atom_getsymbol(argv+1)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_SYMBOL) {
+      /* context, priority */
       priority=atom_getfloat(argv+1);
-      m_basename+=atom_getsymbol(argv+0)->s_name;
+      m_contextname=atom_getsymbol(argv+0)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_FLOAT) {
+      /* priority, context(num) */
       priority=atom_getfloat(argv+0);
-      m_basename+=::float2str(atom_getfloat  (argv+1));
+      m_contextname=::float2str(atom_getfloat  (argv+1));
     }
     break;
   case 1:
     if(argv[0].a_type == A_FLOAT) {
+      /* priority */
       priority=atom_getfloat(argv+0);
     } else if(argv[0].a_type == A_SYMBOL) {
-      m_basename+=atom_getsymbol(argv+0)->s_name;
+      /* context */
+      m_contextname=atom_getsymbol(argv+0)->s_name;
     }
     break;
   case 0:
     priority=50.f;
     break;
   default:
-    throw(GemException("invalid arguments: 'gemhead [<priority> [<basereceivename>]]'"));
+    throw(GemException("invalid arguments: 'gemhead [<priority> [<contextname>]]'"));
   }
-#else
-  if(argc==0) {
-    priority=50.;
-  } else if(argv[0].a_type == A_FLOAT) {
-    priority=atom_getfloat(argv);
-  } else {
-    throw(GemException("invalid arguments: 'gemhead [<priority>]'"));
-  }
-#endif
   m_priority=priority+1;
   setMess(priority);
 }
@@ -197,7 +193,7 @@ void gemhead :: bangMess()
 {
   int renderon = m_renderOn;
   // make sure that the window and the cache exist
-  if ( !GemMan::windowExists() || !m_cache ) {
+  if ( !activateContext() || !m_cache ) {
     return;
   }
 
@@ -236,20 +232,15 @@ void gemhead :: setMess(t_float priority)
 
   m_priority=priority;
 
-  std::string rcv=m_basename;
-  if(priority<0.f) {
-    rcv=m_basename+"_osd";
-  }
-
   gemreceive::priorityMess(priority);
-  gemreceive::nameMess(rcv);
+  setContext(m_contextname);
 }
 
 void gemhead :: setContext(const std::string&contextName)
 {
-
+  m_contextname = contextName;
+  m_contextsym = gensym(m_contextname.c_str());
   std::string rcv="__gem_render"+contextName;
-  m_basename=rcv;
 
   if(m_priority<0.f) {
     rcv+="_osd";
@@ -258,24 +249,51 @@ void gemhead :: setContext(const std::string&contextName)
   gemreceive::nameMess(rcv);
 }
 
+bool gemhead :: activateContext(void) {
+  if(!GemMan::windowExists())
+    return false;
+
+  t_symbol*window_sym = gensym("__gem_window");
+  if(window_sym->s_thing) {
+    t_symbol*s = gensym("make_current");
+    t_atom ap[1];
+    SETSYMBOL(ap+0, s);
+    typedmess(window_sym->s_thing, m_contextsym, 1, ap);
+  }
+  /* NOTE: we could also just trust that 'make_current' succeeds... */
+  return m_contextActive;
+}
+
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv)
 {
-  if(m_renderOn && gensym("gem_state")==s) {
-    if(1==argc && A_FLOAT==argv->a_type) {
-      int i=atom_getint(argv);
-      switch(i) {
-      case 0:
-        stopRendering();
-        break;
-      default:
-        startRendering();
+  if(!s)
+    return;
+
+  std::string sel = s->s_name;
+  if (sel == "gem_state") {
+    m_contextActive = true;
+    if (m_renderOn) {
+      if(1==argc && A_FLOAT==argv->a_type) {
+        int i=(int)atom_getfloat(argv);
+        switch(i) {
+        case 0:
+          stopRendering();
+          m_contextActive = false;
+          break;
+        default:
+          startRendering();
+        }
+      } else if (2==argc && A_POINTER==argv[0].a_type
+                 && A_POINTER==argv[1].a_type) {
+        //GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
+        GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
+        renderGL(state);
       }
-    } else if (2==argc && A_POINTER==argv[0].a_type
-               && A_POINTER==argv[1].a_type) {
-      //GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
-      GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
-      renderGL(state);
     }
+  } else if (sel == "context_active") {
+    int active = 0;
+    if(argc) active = (int)atom_getfloat(argv);
+    m_contextActive = !!active;
   } else {
     // not for us...
   }

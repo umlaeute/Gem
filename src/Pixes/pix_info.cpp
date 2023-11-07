@@ -18,7 +18,50 @@
 #include "pix_info.h"
 #include "Gem/State.h"
 
-CPPEXTERN_NEW(pix_info);
+CPPEXTERN_NEW_WITH_GIMME(pix_info);
+
+namespace {
+  const char*type2name(unsigned int type) {
+    switch(type) {
+    case GL_BYTE: return "GL_BYTE";
+    case GL_UNSIGNED_BYTE: return "GL_UNSIGNED_BYTE";
+    case GL_SHORT: return "GL_SHORT";
+    case GL_UNSIGNED_SHORT: return "GL_UNSIGNED_SHORT";
+    case GL_INT: return "GL_INT";
+    case GL_UNSIGNED_INT: return "GL_UNSIGNED_INT";
+    case GL_FLOAT: return "GL_FLOAT";
+    case GL_2_BYTES: return "GL_2_BYTES";
+    case GL_3_BYTES: return "GL_3_BYTES";
+    case GL_4_BYTES: return "GL_4_BYTES";
+    case GL_DOUBLE: return "GL_DOUBLE";
+    default:
+      break;
+    }
+    return 0;
+  }
+  const char*format2name(unsigned int format) {
+    switch(format) {
+#ifdef GL_ABGR_EXT
+    case GL_ABGR_EXT: return "GL_ABGR_EXT";
+#endif
+#ifdef GL_ARGB_EXT
+    case GL_ARGB_EXT: return "GL_ARGB_EXT";
+#endif
+    case GL_BGR: return "GL_BGR";
+    case GL_BGRA: return "GL_BGRA";
+    case GL_LUMINANCE: return "GL_LUMINANCE";
+    case GL_RGB: return "GL_RGB";
+    case GL_RGBA: return "GL_RGBA";
+#ifdef GL_YCBCR_422_APPLE
+    case GL_YCBCR_422_APPLE: return "GL_YCBCR_422_APPLE";
+#else
+    case GL_YUV422_GEM: return "GL_YUV422_GEM";
+#endif
+    default: break;
+    }
+    return 0;
+  }
+};
 
 /////////////////////////////////////////////////////////
 //
@@ -28,14 +71,19 @@ CPPEXTERN_NEW(pix_info);
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_info :: pix_info()
+pix_info :: pix_info(int argc, t_atom*argv)
+  : m_symbolic(false)
 {
-  m_x        = outlet_new(this->x_obj, 0);
-  m_y        = outlet_new(this->x_obj, 0);
-  m_c        = outlet_new(this->x_obj, 0);
-  m_format   = outlet_new(this->x_obj, 0);
-  m_misc     = outlet_new(this->x_obj, 0);
-  m_pixblock = outlet_new(this->x_obj, 0);
+  if(argc && (atom_getsymbol(argv) == gensym("-m"))) {
+    m_x = 0;
+  } else {
+    m_x        = outlet_new(this->x_obj, 0);
+    m_y        = outlet_new(this->x_obj, 0);
+    m_c        = outlet_new(this->x_obj, 0);
+    m_format   = outlet_new(this->x_obj, 0);
+    m_misc     = outlet_new(this->x_obj, 0);
+    m_pixblock = outlet_new(this->x_obj, 0);
+  }
   m_data     = outlet_new(this->x_obj, 0);
 }
 
@@ -45,12 +93,14 @@ pix_info :: pix_info()
 /////////////////////////////////////////////////////////
 pix_info :: ~pix_info()
 {
-  outlet_free(m_x);
-  outlet_free(m_y);
-  outlet_free(m_c);
-  outlet_free(m_format);
-  outlet_free(m_misc);
-  outlet_free(m_pixblock);
+  if(m_x) {
+    outlet_free(m_x);
+    outlet_free(m_y);
+    outlet_free(m_c);
+    outlet_free(m_format);
+    outlet_free(m_misc);
+    outlet_free(m_pixblock);
+  }
   outlet_free(m_data);
 }
 
@@ -58,16 +108,10 @@ pix_info :: ~pix_info()
 // trigger
 //
 /////////////////////////////////////////////////////////
-void pix_info :: render(GemState *state)
-{
-
+void pix_info :: showInfoRaw(pixBlock*img) {
   // 0 0 0  6408  5121 1 1 0  0 9.59521e+08
   t_atom abuf[3];
-  pixBlock*img=NULL;
-  if(state) {
-    state->get(GemState::_PIX, img);
-  }
-  if (!state || !img) { //no pixblock (or even no image!)!
+  if (!img) { //no pixblock (or even no image!)!
     outlet_float(m_pixblock, (t_float)-1);
     outlet_float(m_misc,     (t_float)-1);
     outlet_float(m_format,   (t_float)-1);
@@ -105,6 +149,77 @@ void pix_info :: render(GemState *state)
   outlet_float(m_y, (t_float)img->image.ysize);
   outlet_float(m_x, (t_float)img->image.xsize);
 }
+
+void pix_info :: showInfoCooked(pixBlock*img) {
+  t_atom abuf[10];
+  const char*name=0;
+
+  if(img) {
+    SETFLOAT(abuf+0, (t_float)img->image.xsize);
+    SETFLOAT(abuf+1, (t_float)img->image.ysize);
+    SETFLOAT(abuf+2, (t_float)img->image.csize);
+
+    name = 0;
+    if(m_symbolic)
+      name = format2name(img->image.format);
+    if(name)
+      SETSYMBOL(abuf+3, gensym(name));
+    else
+      SETFLOAT(abuf+3, (t_float)img->image.format);
+
+    name = 0;
+    if(m_symbolic)
+      name = type2name(img->image.type);
+    if(name)
+      SETSYMBOL(abuf+4, gensym(name));
+    else
+      SETFLOAT(abuf+4, (t_float)img->image.type);
+
+    SETFLOAT(abuf+5, (t_float)img->image.upsidedown);
+    SETFLOAT(abuf+6, (t_float)(!img->image.not_owned));
+
+    SETFLOAT(abuf+7, (t_float)img->newimage);
+    SETFLOAT(abuf+8, (t_float)img->newfilm);
+
+    if(img->image.data) {
+      t_gpointer*gp=(t_gpointer*)img->image.data;
+      SETPOINTER(abuf+9, gp);
+      outlet_anything(m_data, gensym("data"), 1, abuf+9);
+    }
+
+    outlet_anything(m_data, gensym("newfilm"), 1, abuf+8);
+    outlet_anything(m_data, gensym("newimage"), 1, abuf+7);
+
+    outlet_anything(m_data, gensym("owned"), 1, abuf+6);
+    outlet_anything(m_data, gensym("upsidedown"), 1, abuf+5);
+    outlet_anything(m_data, gensym("type"), 1, abuf+4);
+    outlet_anything(m_data, gensym("format"), 1, abuf+3);
+    outlet_anything(m_data, gensym("bytes/pixel"), 1, abuf+2);
+
+    outlet_anything(m_data, gensym("dimen"), 2, abuf+0);
+  }
+  outlet_bang(m_data);
+}
+
+
+void pix_info :: render(GemState *state)
+{
+  pixBlock*img=NULL;
+  if(state) {
+    state->get(GemState::_PIX, img);
+  }
+  if(m_x) {
+    showInfoRaw(img);
+  } else {
+    showInfoCooked(img);
+  }
+}
+
+void pix_info :: symbolicMess(bool v) {
+  m_symbolic = v;
+}
+
 void pix_info :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG1(classPtr, "symbolic", symbolicMess, bool);
 }

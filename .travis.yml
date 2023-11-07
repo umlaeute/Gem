@@ -1,3 +1,4 @@
+---
 ## Travis-CI configuration for Gem
 
 # build on: linux(native=amd64), osx(amd64) and osx(i386)
@@ -9,20 +10,20 @@
 language: cpp
 env:
   matrix:
-  - ARCH=
-  - ARCH=i386
+    - ARCH=
+    - ARCH=i386
   global:
-  # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-  #   via the "travis encrypt" command using the project repo's public key
-  # LATER: shouldn't this be set via env-variable in the webinterface for
-  # travis-ci?
-  - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
-  - secure: KixF9uaREz5Xx1/qf+1v0nkgksjhY0ztRxN3Npgd8m3ClpoTUz4y6tBkbKBNBEgPU257rJuyEB2aMS55HAFp86id8IUcbw0S4iZ+obHp1wpJI3zamYM0IAFpC8Z19Jih+/28xmHbxNST2d/LJ9GD6vZjycWh4JSFST3kSmutECI=
-  - COVERITY_SCAN_BRANCH_PATTERN="(master|coverity-.*)"
-  - COVERITY_SCAN_NOTIFICATION_EMAIL="pd-gem-CVS@lists.sourceforge.net"
-  - COVERITY_SCAN_BUILD_COMMAND="make"
-  - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
-  - SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    # LATER: shouldn't this be set via env-variable in the webinterface for
+    # travis-ci?
+    - secure: apX0Luqzl0ggMxDK8VffpG1smqLUy41dtMew+bPCbTEkZW8u5qBzLJzeOxMUJdgivpUcJGQYccpqfvvJxDHWQYdUZwMP3WLy64LxzmSppbPXqqp3wdHfWUfffGc7h37I/KLMAeJaZeJyvpRghfahgUwaIB1bJKAzAhlEbL82aLw=
+    - secure: KixF9uaREz5Xx1/qf+1v0nkgksjhY0ztRxN3Npgd8m3ClpoTUz4y6tBkbKBNBEgPU257rJuyEB2aMS55HAFp86id8IUcbw0S4iZ+obHp1wpJI3zamYM0IAFpC8Z19Jih+/28xmHbxNST2d/LJ9GD6vZjycWh4JSFST3kSmutECI=
+    - COVERITY_SCAN_BRANCH_PATTERN="(master|coverity-.*)"
+    - COVERITY_SCAN_NOTIFICATION_EMAIL="pd-gem-CVS@lists.sourceforge.net"
+    - COVERITY_SCAN_BUILD_COMMAND="make"
+    - COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
+    - SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 os:
   - linux
@@ -31,13 +32,13 @@ os:
 matrix:
   fast_finish: true
   exclude:
-   - os: linux
-     env: ARCH=i386
+    - os: linux
+      env: ARCH=i386
   allow_failures:
-   - env: ARCH=i386
+    - env: ARCH=i386
 
 before_install:
-- ".git-ci/travis-ci/depinstall.sh"
+  - ".git-ci/travis-ci/depinstall.sh"
 
 before_script:
   - ".git-ci/travis-ci/configure.sh"
@@ -47,16 +48,16 @@ before_script:
   - if [[ "x${TRAVIS_OS_NAME}${ARCH}" = "xlinux" ]] ; then curl -s 'https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh' | bash || true ; fi
 
 script:
-- "make"
+  - "make"
 
 ## deploy all build artefacts to a private git-repository
 after_success:
-- ".git-ci/travis-ci/deploy-git.sh"
+  - ".git-ci/travis-ci/deploy-git.sh"
 
 
 ## deploy tagged artefacts to github
 before_deploy:
-- ".git-ci/travis-ci/prepare-upload.sh"
+  - ".git-ci/travis-ci/prepare-upload.sh"
 
 deploy:
   provider: releases

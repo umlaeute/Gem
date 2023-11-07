@@ -157,8 +157,8 @@ void scopeXYZ :: renderShape(GemState *state)
 void scopeXYZ :: bangMess(void)
 {
   unsigned int i;
-  t_sample*vertL=m_vertices.array;
-  t_sample*vertR=m_vertices.array+m_length*m_vertices.dimen;
+  auto vertL=m_vertices.array;
+  auto vertR=m_vertices.array+m_length*m_vertices.dimen;
 
   post("x\ty\tz\t\tx\ty\tz");
   for(i=0; i<m_length; i++) {

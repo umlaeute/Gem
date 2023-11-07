@@ -1,51 +1,83 @@
-#N canvas 22 325 802 373 10;
+#N canvas 589 385 718 449 10;
 #X declare -lib Gem;
-#X text 583 138 particle acceleration;
-#X text 97 112 [part_follow] lets the particles follow each other.
-;
-#X text 51 65 Class: Particle System;
-#X text 38 41 inlet 1: gemlist (with part_head) \, draw [line|point|<nr>]
-;
-#X text 34 15 Synopsis: [part_follow];
-#X text 10 90 Description: Particle follow each other;
-#X obj 521 30 gemhead;
-#X obj 521 10 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
-;
-#N canvas 0 0 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 132 112 create \, 1;
-#X msg 198 112 destroy;
+#X text 34 1 Synopsis: [part_follow];
+#X obj 546 8 declare -lib Gem;
+#X obj 14 65 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
+0;
+#X text 66 25 Class: particle object;
+#X obj 475 64 cnv 15 220 300 empty empty empty 20 12 0 14 #dce4fc #404040
+0;
+#N canvas 340 107 682 322 gemwin 0;
+#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X obj 102 161 r \$0-gemstart;
+#X obj 102 182 select 1 0;
+#X msg 102 214 create \, 1;
+#X msg 177 215 destroy;
+#X obj 102 239 t a;
+#X obj 318 54 inlet;
+#X obj 318 255 gemwin;
+#X obj 318 100 t a a;
+#X obj 318 287 outlet;
+#X obj 350 128 route create destroy;
+#X obj 350 150 t b;
+#X msg 350 172 1;
+#X obj 390 150 t b;
+#X msg 390 172 0;
+#X obj 350 195 t f;
+#X msg 350 219 set \$1;
+#X text 118 122 rendering;
+#X connect 1 0 2 0;
 #X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 6 0;
-#X connect 3 1 5 0;
-#X connect 3 1 7 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 523 326 pd gemwin;
-#X msg 523 307 create;
-#X text 521 286 Create window:;
-#X floatatom 635 166 5 0 0 0 - - -;
-#X text 57 214 TODO: how does this work .. example !!!;
-#X obj 521 103 part_killold 5;
-#X obj 521 187 part_follow 0.001;
-#X obj 521 75 part_source 5;
-#X obj 521 51 part_head;
-#X obj 521 243 part_draw;
-#X obj 678 8 declare -lib Gem;
-#X connect 6 0 16 0;
-#X connect 7 0 6 0;
-#X connect 8 0 9 0;
-#X connect 9 0 8 0;
-#X connect 11 0 14 1;
+#X connect 2 1 4 0;
+#X connect 3 0 5 0;
+#X connect 4 0 5 0;
+#X connect 5 0 8 0;
+#X connect 6 0 8 0;
+#X connect 7 0 9 0;
+#X connect 8 0 7 0;
+#X connect 8 1 10 0;
+#X connect 10 0 11 0;
+#X connect 10 1 13 0;
+#X connect 11 0 12 0;
+#X connect 12 0 15 0;
 #X connect 13 0 14 0;
-#X connect 14 0 17 0;
-#X connect 15 0 13 0;
-#X connect 16 0 15 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 0 0;
+#X coords 0 -1 1 1 85 40 1 100 100;
+#X restore 491 316 pd gemwin;
+#X obj 484 234 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040
+0;
+#X obj 15 176 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040
+0;
+#X text 471 8 GEM object;
+#X text 474 45 Example:;
+#X obj 14 215 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
+0;
+#X text 119 105 [part_follow] lets the particles follow each other.
+;
+#X text 32 83 Description: Particle follow each other;
+#X text 27 132 inlet 1: gemlist (with part_head) \, draw [line|point|<nr>]
+;
+#X obj 489 92 gemhead;
+#X obj 489 113 part_head;
+#X obj 489 285 part_draw;
+#X text 24 178 Arguments: particle follow;
+#X obj 489 71 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X floatatom 594 202 5 0 100 2 particle\ follow - - 0;
+#X obj 489 156 part_velocity point 0 -0.1 0;
+#X obj 489 175 part_killold 40;
+#X obj 489 137 part_source 10;
+#X obj 594 221 * 0.0001;
+#X obj 489 249 part_follow 0.0001;
+#X connect 14 0 15 0;
+#X connect 15 0 22 0;
+#X connect 18 0 14 0;
+#X connect 19 0 23 0;
+#X connect 20 0 21 0;
+#X connect 21 0 24 0;
+#X connect 22 0 20 0;
+#X connect 23 0 24 1;
+#X connect 24 0 16 0;
