@@ -69,7 +69,7 @@ protected:
   // Destructor
   virtual ~gemhead();
 
-  std::string m_basename;
+  std::string m_contextname;
 
 private:
 

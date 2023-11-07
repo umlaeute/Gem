@@ -65,22 +65,22 @@ gemhead :: gemhead(int argc, t_atom*argv) :
   }
   m_fltin=NULL;
 
-  m_basename=m_name->s_name;
+  m_contextname="";
   float priority=50.;
   switch(argc) {
   case 2:
     if(argv[0].a_type == A_FLOAT && argv[1].a_type == A_SYMBOL) {
       /* priority, context */
       priority=atom_getfloat(argv+0);
-      m_basename+=atom_getsymbol(argv+1)->s_name;
+      m_contextname=atom_getsymbol(argv+1)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_SYMBOL) {
       /* context, priority */
       priority=atom_getfloat(argv+1);
-      m_basename+=atom_getsymbol(argv+0)->s_name;
+      m_contextname=atom_getsymbol(argv+0)->s_name;
     } else if(argv[1].a_type == A_FLOAT && argv[0].a_type == A_FLOAT) {
       /* priority, context(num) */
       priority=atom_getfloat(argv+0);
-      m_basename+=::float2str(atom_getfloat  (argv+1));
+      m_contextname=::float2str(atom_getfloat  (argv+1));
     }
     break;
   case 1:
@@ -89,7 +89,7 @@ gemhead :: gemhead(int argc, t_atom*argv) :
       priority=atom_getfloat(argv+0);
     } else if(argv[0].a_type == A_SYMBOL) {
       /* context */
-      m_basename+=atom_getsymbol(argv+0)->s_name;
+      m_contextname=atom_getsymbol(argv+0)->s_name;
     }
     break;
   case 0:
@@ -232,19 +232,14 @@ void gemhead :: setMess(t_float priority)
 
   m_priority=priority;
 
-  std::string rcv=m_basename;
-  if(priority<0.f) {
-    rcv=m_basename+"_osd";
-  }
-
   gemreceive::priorityMess(priority);
-  gemreceive::nameMess(rcv);
+  setContext(m_contextname);
 }
 
 void gemhead :: setContext(const std::string&contextName)
 {
+  m_contextname = contextName;
   std::string rcv="__gem_render"+contextName;
-  m_basename=rcv;
 
   if(m_priority<0.f) {
     rcv+="_osd";
