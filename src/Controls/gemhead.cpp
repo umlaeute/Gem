@@ -193,7 +193,7 @@ void gemhead :: bangMess()
 {
   int renderon = m_renderOn;
   // make sure that the window and the cache exist
-  if ( !GemMan::windowExists() || !m_cache ) {
+  if ( !activateContext() || !m_cache ) {
     return;
   }
 
@@ -239,6 +239,7 @@ void gemhead :: setMess(t_float priority)
 void gemhead :: setContext(const std::string&contextName)
 {
   m_contextname = contextName;
+  m_contextsym = gensym(m_contextname.c_str());
   std::string rcv="__gem_render"+contextName;
 
   if(m_priority<0.f) {
@@ -248,24 +249,50 @@ void gemhead :: setContext(const std::string&contextName)
   gemreceive::nameMess(rcv);
 }
 
+bool gemhead :: activateContext(void) {
+  if(!GemMan::windowExists())
+    return false;
+
+  t_symbol*window_sym = gensym("__gem_window");
+  if(window_sym->s_thing) {
+    t_symbol*s = gensym("make_current");
+    t_atom ap[1];
+    SETSYMBOL(ap+0, s);
+    typedmess(window_sym->s_thing, m_contextsym, 1, ap);
+  }
+  return m_contextActive;
+}
+
 void gemhead :: receive(t_symbol*s, int argc, t_atom*argv)
 {
-  if(m_renderOn && gensym("gem_state")==s) {
-    if(1==argc && A_FLOAT==argv->a_type) {
-      int i=atom_getint(argv);
-      switch(i) {
-      case 0:
-        stopRendering();
-        break;
-      default:
-        startRendering();
+  if(!s)
+    return;
+
+  std::string sel = s->s_name;
+  if (sel == "gem_state") {
+    m_contextActive = true;
+    if (m_renderOn) {
+      if(1==argc && A_FLOAT==argv->a_type) {
+        int i=(int)atom_getfloat(argv);
+        switch(i) {
+        case 0:
+          stopRendering();
+          m_contextActive = false;
+          break;
+        default:
+          startRendering();
+        }
+      } else if (2==argc && A_POINTER==argv[0].a_type
+                 && A_POINTER==argv[1].a_type) {
+        //GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
+        GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
+        renderGL(state);
       }
-    } else if (2==argc && A_POINTER==argv[0].a_type
-               && A_POINTER==argv[1].a_type) {
-      //GemCache*cache=reinterpret_cast<GemCache*>(argv[0].a_w.w_gpointer);
-      GemState*state=reinterpret_cast<GemState*>(argv[1].a_w.w_gpointer);
-      renderGL(state);
     }
+  } else if (sel == "context_active") {
+    int active = 0;
+    if(argc) active = (int)atom_getfloat(argv);
+    m_contextActive = !!active;
   } else {
     // not for us...
   }
