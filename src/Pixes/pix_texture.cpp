@@ -226,8 +226,6 @@ bool pix_texture :: isRunnable(void)
   if(wantRectangle) {
     if(GLEW_ARB_texture_rectangle) {
       m_canRectangle=2;
-    } else if (GLEW_EXT_texture_rectangle) {
-      m_canRectangle=1;
     }
   }
 
@@ -796,11 +794,7 @@ void pix_texture :: repeatMess(int type)
   if (type) {
     m_repeat = GL_REPEAT;
   } else {
-    if( (getState()!=INIT) && GLEW_EXT_texture_edge_clamp) {
-      m_repeat = GL_CLAMP_TO_EDGE;
-    } else {
-      m_repeat = GL_CLAMP;
-    }
+    m_repeat = GL_CLAMP_TO_EDGE;
   }
   GLuint doRepeat=m_repeat;
   if ( m_textureType ==  GL_TEXTURE_RECTANGLE_ARB

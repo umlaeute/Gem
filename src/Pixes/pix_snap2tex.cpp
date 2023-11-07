@@ -118,8 +118,6 @@ bool pix_snap2tex :: isRunnable(void)
   m_canRectangle=GL_TEXTURE_2D;
   if(GLEW_ARB_texture_rectangle) {
     m_canRectangle=GL_TEXTURE_RECTANGLE_ARB;
-  } else if (GLEW_EXT_texture_rectangle) {
-    m_canRectangle=GL_TEXTURE_RECTANGLE_EXT;
   }
 
   return true;

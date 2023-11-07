@@ -16,7 +16,7 @@ AC_CONFIG_FILES([Makefile abstractions/Makefile])
 AC_CONFIG_FILES([help/Makefile doc/Makefile examples/Makefile])
 
 # src
-AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/Utils/Makefile])
+AC_CONFIG_FILES([src/Makefile src/Gem/Makefile src/glad/Makefile src/Utils/Makefile])
 AC_CONFIG_FILES([src/RTE/Makefile src/Base/Makefile src/plugins/Makefile ])
 AC_CONFIG_FILES([src/Output/Makefile ])
 AC_CONFIG_FILES([src/deprecated/Makefile ])
@@ -164,7 +164,6 @@ GEM_CHECK_WERROR
 GEM_CPPFLAGS=""
 GEM_CHECK_EXTERNAL
 
-AC_ARG_WITH([GLU], AC_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
 dnl unlike MMX or SSE
@@ -251,42 +250,17 @@ AS_IF([test "x$with_x" != "xno"], [
 ])
 
 IEM_CHECK_GL
-no_glu=yes
-AS_IF([test "x$with_GLU" != "xno"], [IEM_CHECK_GLU])
-AM_CONDITIONAL([HAVE_GLU], [test "x${no_glu}" != "xyes"])
 IEM_CHECK_GLUT
 IEM_CHECK_GLX
 IEM_CHECK_AGL
 
 
-AS_IF([test "x$no_glu" != "xyes"],
- AC_DEFINE([GEM_HAVE_GLU], [1], [whether we can use libGLU (normally: yes)])
-)
-
-## use system's libGLEW
+## use GLAD (shpiped with Gem)
 GEM_ARG_ENABLE([multicontext], [experimental support for multiple windows])
-## glewmx-args default to glew-args
-AS_IF([test "x$with_glewmx" = "x"], [with_glewmx="$with_glew"])
-AS_IF([test "x$with_glewmx-includes" = "x"], [with_glewmx-includes="$with_glew-includes"])
-AS_IF([test "x$with_glewmx-libs" = "x"], [with_glewmx-libs="$with_glew-libs"])
-
-GEM_CHECK_LIB([glew], [GLEW],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
-GEM_CHECK_LIB([glewmx], [GLEWmx],[GL/glew.h], [glewInit],,,,[OpenGL Extension Wrangler library], [no])
-
-
 AS_IF([test "x$enable_multicontext" = "xyes"], [
-  have_glew="${have_glewmx}"
-  GEM_LIB_GLEW_CFLAGS="$GEM_LIB_GLEWMX_CFLAGS"
-  GEM_LIB_GLEW_LIBS="$GEM_LIB_GLEWMX_LIBS"
-
-  AM_CONDITIONAL(HAVE_LIB_GLEW, [test "x${have_glew}" = "xyes"])
   AC_DEFINE([GEM_MULTICONTEXT], [1], [whether Gem is built with multi-context support])
 ])
 AM_CONDITIONAL(ENABLE_MULTICONTEXT, [test "x${enable_multicontext}" = "xyes"])
-
-AS_IF([test "x${have_glew}" != "xyes"], [
-AC_DEFINE([GLEW_BUILD], [1], [Define to 1 if using the built-in glew])
-])
 
 GEM_CHECK_LIB([sdl], [SDL],[SDL.h], [SDL_Quit],,,,[SDL windowing])
 GEM_CHECK_LIB([sdl2], [SDL2],[SDL_log.h], [SDL_Quit],,,,[SDL2 windowing])
@@ -854,14 +828,6 @@ Configuration:
 
 AS_IF([test "x$have_pd" = "xno"], [
   AC_MSG_ERROR([Pd (header) is mandatory and seems to be missing!])
-])
-
-AS_IF([test "x$no_gl" = "xyes"], [
- AC_MSG_ERROR([GL (headers) not found! you need openGL!!!])
-])
-
-AS_IF([test "x$no_glu" = "xyes" && test "x$no_agl" = "xyes"], [
- AS_IF([test "x$with_GLU" != "xno"],[AC_MSG_ERROR([GLU (headers) not found! you need openGL Utility Library!!!])])
 ])
 
 AC_MSG_RESULT([Now run make ...])

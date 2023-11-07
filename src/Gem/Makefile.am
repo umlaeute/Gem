@@ -17,16 +17,6 @@ libGem_la_CXXFLAGS += $(GEM_RTE_CFLAGS) $(GEM_ARCH_CXXFLAGS)
 libGem_la_LIBADD   += $(GEM_RTE_LIBS)
 libGem_la_LDFLAGS  += $(GEM_ARCH_LDFLAGS)
 
-
-# GLEW
-if ENABLE_MULTICONTEXT
-libGem_la_CXXFLAGS += $(GEM_LIB_GLEWMX_CFLAGS)
-libGem_la_LIBADD   += $(GEM_LIB_GLEWMX_LIBS)
-else !ENABLE_MULTICONTEXT
-libGem_la_CXXFLAGS += $(GEM_LIB_GLEW_CFLAGS)
-libGem_la_LIBADD   += $(GEM_LIB_GLEW_LIBS)
-endif !ENABLE_MULTICONTEXT
-
 libGem_la_CFLAGS    = $(libGem_la_CXXFLAGS)
 
 libGem_la_includedir = $(includedir)/Gem/Gem
@@ -40,6 +30,7 @@ libGem_la_include_HEADERS = \
 	Exception.h \
 	Dylib.h \
 	Files.h \
+	Context.h \
 	ContextData.h \
 	Properties.h \
 	Settings.h \
@@ -51,9 +42,6 @@ libGem_la_include_HEADERS = \
 libGem_la_include_HEADERS += \
 	GemGL.h \
 	GemGLconfig.h \
-	glew.h \
-	glxew.h \
-	wglew.h \
 	GLStack.h
 
 libGem_la_include_HEADERS += \
@@ -63,21 +51,16 @@ libGem_la_include_HEADERS += \
 
 libGem_la_SOURCES =
 
-if !HAVE_LIB_GLEW
-libGem_la_SOURCES += glew.c
-endif !HAVE_LIB_GLEW
-
 libGem_la_SOURCES += \
 	configDarwin.h \
 	configLinux.h \
 	configNT.h \
 	GemConfig.h \
 	GemGL.h \
-	glew.h \
-	glxew.h \
-	wglew.h \
 	Cache.cpp \
 	Cache.h \
+	Context.cpp \
+	Context.h \
 	ContextData.cpp \
 	ContextData.h \
 	Dylib.cpp \

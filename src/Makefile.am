@@ -14,7 +14,7 @@ AM_LIBTOOLFLAGS = --preserve-dup-deps
 
 DISTCLEANFILES =
 
-SUBDIRS=Gem RTE Utils Base plugins
+SUBDIRS=Gem glad RTE Utils Base plugins
 pkglib_LTLIBRARIES = Gem.la
 
 ## make sure we use a c++-linker
@@ -31,7 +31,7 @@ sublibs =
 
 
 # LIBADD or LDADD for convenience libraries?
-sublibs += Gem/libGem.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
+sublibs += Gem/libGem.la glad/libglad.la RTE/libRTE.la Utils/libUtils.la Base/libBase.la plugins/libplugins.la
 
 ## Output: gets build directly from $(topsrcdir)
 #if DISABLED

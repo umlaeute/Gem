@@ -182,8 +182,6 @@ void GemMan :: checkOpenGLExtensions(void)
 
   if(GLEW_ARB_texture_rectangle) {
     texture_rectangle_supported=2;
-  } else if (GLEW_EXT_texture_rectangle) {
-    texture_rectangle_supported=1;
   }
 
   t_atom*a=gem::Settings::get("texture.rectangle");

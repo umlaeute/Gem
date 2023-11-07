@@ -12,7 +12,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-#include "GemContext.h"
+#include "Gem/Context.h"
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
@@ -20,6 +20,7 @@
 
 #include <stack>
 #include <set>
+#include <vector>
 
 #ifdef GEM_MULTICONTEXT
 # warning multicontext rendering currently under development
@@ -32,36 +33,37 @@ class Context::PIMPL
 public:
   PIMPL(void) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext),
+    context(new GladGLContext()),
 #else
     context(NULL),
 #endif
-#ifdef GemGlewXContext
-    xcontext(new GemGlewXContext),
-#endif /* GemGlewXContext */
+    xcontext(0),
     contextid(makeID())
-  {
-    /* check the stack-sizes */
-    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKTEXTURE);
-    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKPROJECTION);
-
-    maxStackDepth[GemMan::STACKCOLOR]=0;
-  }
+  { }
 
   PIMPL(const PIMPL&p) :
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext(*p.context)),
+    context(new GladGLContext(*p.context)),
 #else
     context(NULL),
 #endif
-#ifdef GemGlewXContext
-    xcontext(new GemGlewXContext(*p.xcontext)),
-#endif /* GemGlewXContext */
+    xcontext(0),
     contextid(makeID())
+  { }
+
+  ~PIMPL(void)
+  {
+    freeID(contextid);
+#ifdef GEM_MULTICONTEXT
+    if(context ) {
+      delete context;
+    }
+#endif
+    context=0;
+    xcontext=0;
+  }
+
+  void initialize(void)
   {
     /* check the stack-sizes */
     glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
@@ -72,31 +74,33 @@ public:
                   maxStackDepth+GemMan::STACKTEXTURE);
     glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
                   maxStackDepth+GemMan::STACKPROJECTION);
-  }
 
-  ~PIMPL(void)
+    GLint colorstack = 0;
+    if(GLEW_ARB_imaging) {
+      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, &colorstack);
+    }
+    maxStackDepth[GemMan::STACKCOLOR]=colorstack;
+  }
+  void makeCurrent(void)
   {
-    freeID(contextid);
-#ifdef GEM_MULTICONTEXT
-    if(context ) {
-      delete context;
-    }
-    context=NULL;
-# ifdef GemGlewXContext
-    if(xcontext) {
-      delete xcontext;
-    }
-    xcontext=0;
-# endif /* GemGlewXContext */
-#endif
+    GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=
+      maxStackDepth[GemMan::STACKMODELVIEW];
+    GemMan::maxStackDepth[GemMan::STACKCOLOR]=
+      maxStackDepth[GemMan::STACKCOLOR];
+    GemMan::maxStackDepth[GemMan::STACKTEXTURE]=
+      maxStackDepth[GemMan::STACKTEXTURE];
+    GemMan::maxStackDepth[GemMan::STACKPROJECTION]=
+      maxStackDepth[GemMan::STACKPROJECTION];
+
+    s_context=context;
+    s_xcontext=xcontext;
+    s_contextid=contextid;
   }
 
   GLint maxStackDepth[4];
 
-  GLEWContext    *context;
-#ifdef GemGlewXContext
-  GemGlewXContext*xcontext;
-#endif /* GemGlewXContext */
+  GladGLContext    *context;
+  void*xcontext;
 
   unsigned int contextid;
 
@@ -122,17 +126,16 @@ public:
   }
 
   static unsigned int s_contextid;
-  static GLEWContext*s_context;
-#ifdef GemGlewXContext
-  static GemGlewXContext*s_xcontext;
-#endif /* GemGlewXContext */
+  static GladGLContext*s_context;
+  static void*s_xcontext;
+
+  static std::vector<Context*>s_contextstack;
 };
-unsigned int    Context::PIMPL::s_contextid=0;
-GLEWContext*    Context::PIMPL::s_context=NULL;
-#ifdef GemGlewXContext
-GemGlewXContext*Context::PIMPL::s_xcontext=NULL;
-#endif /* GemGlewXContext */
+unsigned int    Context::PIMPL::s_contextid=Context::INVALID_CONTEXT;
+GladGLContext*  Context::PIMPL::s_context=NULL;
+void*Context::PIMPL::s_xcontext=NULL;
 std::set<unsigned int>      Context::PIMPL::s_takenIDs;
+std::vector<Context*> Context::PIMPL::s_contextstack;
 
 Context::Context(void)
   : m_pimpl(new PIMPL())
@@ -140,35 +143,18 @@ Context::Context(void)
   if(!m_pimpl) {
     throw(GemException("failed to initialize GemContext"));
   }
-  std::string errstring="";
   push(); // make our context the current one, for subsequent glew-calls
-  GLenum err = glewInit();
 
-  if (GLEW_OK != err) {
-    if(GLEW_ERROR_GLX_VERSION_11_ONLY == err) {
-      errstring=
-        "failed to init GLEW (glx): continuing anyhow - please report any problems to the gem-dev mailinglist!";
-    } else if (GLEW_ERROR_GL_VERSION_10_ONLY == err) {
-      errstring="failed to init GLEW: your system only supports openGL-1.0";
-    } else {
-      errstring="failed to init GLEW";
-    }
-  } else {
-    GLint colorstack = 0;
-    if(GLEW_ARB_imaging) {
-      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, &colorstack);
-    }
-
-    m_pimpl->maxStackDepth[GemMan::STACKCOLOR]=colorstack;
-  }
-
-  pop();
-
-  if(!errstring.empty()) {
+  int version = gladLoaderLoadGLContext(m_pimpl->context);
+  if(!version) {
     delete m_pimpl;
     m_pimpl=NULL;
-    throw(GemException(errstring));
+    throw(GemException("failed to init openGL/glad"));
   }
+  post("GEM: openGL/glad %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+  m_pimpl->initialize();
+
+  pop();
 
   /* update the stack variables (late initialization) */
   push();
@@ -180,7 +166,6 @@ Context::Context(const Context&c)
   : m_pimpl(new PIMPL(*(c.m_pimpl)))
 {
   push();
-  post("foo GLEW version %s",glewGetString(GLEW_VERSION));
   pop();
 }
 
@@ -212,28 +197,51 @@ Context::~Context(void)
 
 bool Context::push(void)
 {
-  GemMan::maxStackDepth[GemMan::STACKMODELVIEW]=
-    m_pimpl->maxStackDepth[GemMan::STACKMODELVIEW];
-  GemMan::maxStackDepth[GemMan::STACKCOLOR]=
-    m_pimpl->maxStackDepth[GemMan::STACKCOLOR];
-  GemMan::maxStackDepth[GemMan::STACKTEXTURE]=
-    m_pimpl->maxStackDepth[GemMan::STACKTEXTURE];
-  GemMan::maxStackDepth[GemMan::STACKPROJECTION]=
-    m_pimpl->maxStackDepth[GemMan::STACKPROJECTION];
-
-  m_pimpl->s_context=m_pimpl->context;
-#ifdef GemGlewXContext
-  m_pimpl->s_xcontext=m_pimpl->xcontext;
-#endif /* GemGlewXContext */
-  m_pimpl->s_contextid=m_pimpl->contextid;
+  m_pimpl->s_contextstack.push_back(this);
+  m_pimpl->makeCurrent();
   return true;
 }
 
 bool Context::pop(void)
 {
+  m_pimpl->s_contextstack.pop_back();
+  if(m_pimpl->s_contextstack.empty()) {
+    m_pimpl->s_context=0;
+    m_pimpl->s_xcontext=0;
+    m_pimpl->s_contextid=INVALID_CONTEXT;
+    return true;
+  }
+  Context*last = m_pimpl->s_contextstack.back();
+  last->m_pimpl->makeCurrent();
   return true;
 }
 
+bool Context::initializeXContext(void*display, int screen)
+{
+#ifdef __APPLE__
+#elif defined _WIN32
+  if(display) {
+    HDC hdc=static_cast<HDC>(display);
+    int version = gladLoaderLoadWGL(hdc);
+    if(!version) {
+      pd_error(0, "failed to init WGL");
+      return false;
+    }
+    post("GEM: WGL %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+  }
+#elif defined(__linux__) || defined(__FreeBSD_kernel__)
+  if(display) {
+    Display*dpy=static_cast<Display*>(display);
+    int version = gladLoaderLoadGLX(dpy, screen);
+    if(!version) {
+      pd_error(0, "failed to init GLX");
+      return false;
+    }
+    post("GEM: GLX %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+  }
+#endif
+  return true;
+}
 unsigned int Context::getContextId(void)
 {
   return PIMPL::s_contextid;
@@ -242,26 +250,20 @@ unsigned int Context::getContextId(void)
 /* returns the last GemWindow that called makeCurrent()
  * LATER: what to do if this has been invalidated (e.g. because the context was destroyed) ?
  */
-GLEWContext*Context::getGlewContext(void)
+void*Context::getCurrentContext(void)
 {
   return PIMPL::s_context;
 }
-GLEWContext*glewGetContext(void)
+void*gemGetCurrentContext(void)
 {
-  return  gem::Context::getGlewContext();
+  return gem::Context::getCurrentContext();
 }
 
-#ifdef GemGlewXContext
-GemGlewXContext*Context::getGlewXContext(void)
+void*Context::getCurrentXContext(void)
 {
   return PIMPL::s_xcontext;
 }
-GemGlewXContext*wglewGetContext(void)
+void*gemGetCurrentXContext(void)
 {
-  return  gem::Context::getGlewXContext();
+  return gem::Context::getCurrentXContext();
 }
-GemGlewXContext*glxewGetContext(void)
-{
-  return  gem::Context::getGlewXContext();
-}
-#endif /* GemGlewXContext */

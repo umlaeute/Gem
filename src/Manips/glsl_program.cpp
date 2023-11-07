@@ -421,7 +421,11 @@ glsl_program :: ~glsl_program()
 
 bool glsl_program :: isRunnable()
 {
-  if (GLEW_VERSION_2_0 || GLEW_ARB_shader_objects) {
+  if (GLEW_VERSION_2_0
+#ifndef __APPLE__
+      || GLEW_ARB_shader_objects
+#endif
+      ) {
     return true;
   }
 
@@ -604,7 +608,12 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
       continue;
     }
     m_shaderObj[m_numShaders]    = ui;
+#ifdef __APPLE__
+# warning ARB-shaders non-functional on Apple
+    m_shaderObjARB[m_numShaders] = 0;
+#else
     m_shaderObjARB[m_numShaders] = ui;//static_cast<GLhandleARB>(fi.i);
+#endif
     m_numShaders++;
   }
   setModified();
@@ -847,7 +856,9 @@ void glsl_program :: LinkProgram()
   if(GLEW_VERSION_2_0) {
     m_programmapped=m_programmapper.set(m_program, m_programmapped);
   } else {
+#ifndef __APPLE__
     m_programmapped=m_programmapper.set(m_programARB, m_programmapped);
+#endif
   }
   SETFLOAT(&a, m_programmapped);
   outlet_list(m_outProgramID, 0, 1, &a);

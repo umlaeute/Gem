@@ -39,9 +39,11 @@ GEMglUseProgramObjectARB :: ~GEMglUseProgramObjectARB ()
 // extension check
 bool GEMglUseProgramObjectARB :: isRunnable(void)
 {
+#ifndef __APPLE__
   if(GLEW_ARB_shader_objects) {
     return true;
   }
+#endif
   error("ARB shader_objects not supported by this system");
   return false;
 }
@@ -68,8 +70,10 @@ void GEMglUseProgramObjectARB :: postrender(GemState *state)
 //
 void GEMglUseProgramObjectARB :: programMess (int program)      // FUN
 {
+#ifndef __APPLE__
   m_program = static_cast<GLhandleARB>(program);
   setModified();
+#endif
 }
 
 /////////////////////////////////////////////////////////

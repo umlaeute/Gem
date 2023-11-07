@@ -55,7 +55,7 @@ libBase_la_include_HEADERS= \
 
 libBase_la_include_HEADERS+= \
 	GemWindow.h \
-	GemContext.h
+	$(empty)
 
 libBase_la_SOURCES=  \
     CPPExtern.cpp \
@@ -63,8 +63,6 @@ libBase_la_SOURCES=  \
     GemBase.cpp \
     GemBase.h \
     GemGLBase.h \
-    GemContext.cpp \
-    GemContext.h \
     GemGluObj.cpp \
     GemGluObj.h \
     GemPathBase.cpp \

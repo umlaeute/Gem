@@ -16,7 +16,7 @@
 #include "RTE/MessageCallbacks.h"
 
 #include "Gem/Settings.h"
-#include "GemContext.h"
+#include "Gem/Context.h"
 #include "Gem/Exception.h"
 #include "GemBase.h"
 
@@ -84,8 +84,8 @@ public:
   double dispatchTime;
   void dispatch(void)
   {
-    parent->dispatch();
     clock_delay(dispatchClock, dispatchTime);
+    parent->dispatch();
   }
   static void dispatchCallBack(PIMPL*x)
   {
@@ -243,7 +243,12 @@ void GemWindow :: info(const std::string& s, const std::string& value)
 
 void GemWindow :: bang(void)
 {
-  outlet_bang(m_pimpl->infoOut);
+  if(pushContext()) {
+    outlet_bang(m_pimpl->infoOut);
+    popContext();
+  } else {
+    error("unable to switch to current context, cannot render!");
+  }
 }
 
 
@@ -379,8 +384,10 @@ void GemWindow::stopInAllContexts(GemBase*obj)
        ++it) {
     GemWindow*w=(*it);
     w->makeCurrent();
+    w->pushContext();
     t_pd*x=&obj->x_obj->ob_pd;
     sendContextDestroyedMsg(x);
+    w->popContext();
   }
 }
 
@@ -411,7 +418,9 @@ bool GemWindow::createGemWindow(void)
 void GemWindow::destroyGemWindow(void)
 {
   // tell all objects that this context is vanishing
+  pushContext();
   sendContextDestroyedMsg(gensym("__gemBase")->s_thing);
+  popContext();
   // do the rest
   m_pimpl->mycontext=destroyContext(m_pimpl->mycontext);
   m_pimpl->undispatch();
@@ -420,16 +429,7 @@ void GemWindow::destroyGemWindow(void)
 
 bool GemWindow::pushContext(void)
 {
-  if(!m_context) {
-    return false;
-  }
-
-  if(!m_context->push()) {
-    return false;
-  }
-
-  dispatch();
-  return true;
+  return (m_context && m_context->push());
 }
 bool GemWindow::popContext(void)
 {
@@ -442,16 +442,25 @@ void GemWindow::render(void)
     error("unable to switch to current window (do you have one?), cannot render!");
     return;
   }
-  if(!pushContext()) {
-    error("unable to switch to current context, cannot render!");
+
+  if(pushContext()) {
+    dispatch();
+    popContext();
+  } else {
+    error("unable to switch to current context, cannot dispatch!");
     return;
   }
-  bang();
-  if(m_buffer==2) {
-    swapBuffers();
-  }
 
-  popContext();
+  bang();
+
+  if(2 == m_buffer) {
+    if (pushContext()) {
+      swapBuffers();
+      popContext();
+    } else {
+      error("unable to switch to current context, cannot swapBuffers!");
+    }
+  }
 }
 
 void GemWindow:: bufferMess(int buf)
@@ -522,7 +531,6 @@ void GemWindow::       printMess(void)
   post("\tVendor: %s", glGetString(GL_VENDOR));
   post("\tRenderer: %s", glGetString(GL_RENDERER));
   post("\tVersion: %s", glGetString(GL_VERSION));
-  post("\tGLEW: %s", glewGetString(GLEW_VERSION));
 
   std::string extensions = (char*)glGetString(GL_EXTENSIONS);
   std::string ext;
@@ -531,6 +539,11 @@ void GemWindow::       printMess(void)
   while (std::getline(extStream, ext, ' ')) {
     verbose(0, "\tExtension: %s", ext.c_str());    // Print extension string
   }
+}
+
+void GemWindow::sharedcontextMess(bool on)
+{
+  m_context_sharing=on;
 }
 
 void GemWindow:: anyMess(t_symbol*s, int argc, t_atom*argv)
@@ -555,6 +568,7 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "border", borderMess, bool);
   CPPEXTERN_MSG1(classPtr, "cursor", cursorMess, bool);
   CPPEXTERN_MSG1(classPtr, "transparent", transparentMess, bool);
+  CPPEXTERN_MSG1(classPtr, "sharedcontext", sharedcontextMess, bool);
 
   CPPEXTERN_MSG0(classPtr, "print", printMess);
 
