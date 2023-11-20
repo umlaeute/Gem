@@ -299,56 +299,56 @@ struct glsl_program::t_uniform {
     switch (type) {
       /* float vectors */
     case GL_FLOAT:
-      glUniform1fARB( loc, floatarray[0] );
+      glUniform1fvARB( loc, arraysize, floatarray );
       break;
     case GL_FLOAT_VEC2_ARB:
-      glUniform2fARB( loc, floatarray[0], floatarray[1] );
+      glUniform2fvARB( loc, arraysize, floatarray );
       break;
     case GL_FLOAT_VEC3_ARB:
-      glUniform3fARB( loc, floatarray[0], floatarray[1], floatarray[2] );
+      glUniform3fvARB( loc, arraysize, floatarray );
       break;
     case GL_FLOAT_VEC4_ARB:
-      glUniform4fARB( loc, floatarray[0], floatarray[1], floatarray[2], floatarray[3] );
+      glUniform4fvARB( loc, arraysize, floatarray );
       break;
 
       /* int vectors */
     case GL_INT:
-      glUniform1iARB( loc, intarray[0] );
+      glUniform1ivARB( loc, arraysize, intarray );
       break;
     case GL_INT_VEC2_ARB:
-      glUniform2iARB( loc, intarray[0], intarray[1] );
+      glUniform2ivARB( loc, arraysize, intarray );
       break;
     case GL_INT_VEC3_ARB:
-      glUniform3iARB( loc, intarray[0], intarray[1], intarray[2] );
+      glUniform3ivARB( loc, arraysize, intarray );
       break;
     case GL_INT_VEC4_ARB:
-      glUniform4iARB( loc, intarray[0], intarray[1], intarray[2], intarray[3] );
+      glUniform4ivARB( loc, arraysize, intarray );
       break;
 
       /* bool vectors */
     case GL_BOOL_ARB:
-      glUniform1fARB( loc, floatarray[0] );
+      glUniform1ivARB( loc, arraysize, intarray );
       break;
     case GL_BOOL_VEC2_ARB:
-      glUniform2fARB( loc, floatarray[0], floatarray[1] );
+      glUniform2ivARB( loc, arraysize, intarray );
       break;
     case GL_BOOL_VEC3_ARB:
-      glUniform3fARB( loc, floatarray[0], floatarray[1], floatarray[2] );
+      glUniform3ivARB( loc, arraysize, intarray );
       break;
     case GL_BOOL_VEC4_ARB:
-      glUniform4fARB( loc, floatarray[0], floatarray[1], floatarray[2], floatarray[3] );
+      glUniform4ivARB( loc, arraysize, intarray );
       break;
 
       /* float matrices */
     case GL_FLOAT_MAT2_ARB:
       // GL_TRUE = row major order, GL_FALSE = column major
-      glUniformMatrix2fvARB( loc, 1, GL_FALSE, floatarray );
+      glUniformMatrix2fvARB( loc, arraysize, GL_FALSE, floatarray );
       break;
     case GL_FLOAT_MAT3_ARB:
-      glUniformMatrix3fvARB( loc, 1, GL_FALSE, floatarray );
+      glUniformMatrix3fvARB( loc, arraysize, GL_FALSE, floatarray );
       break;
     case GL_FLOAT_MAT4_ARB:
-      glUniformMatrix4fvARB( loc, 1, GL_FALSE, floatarray );
+      glUniformMatrix4fvARB( loc, arraysize, GL_FALSE, floatarray );
       break;
 
       /* textures */
@@ -359,7 +359,7 @@ struct glsl_program::t_uniform {
     case GL_SAMPLER_1D_SHADOW_ARB:
     case GL_SAMPLER_2D_SHADOW_ARB:
     case GL_SAMPLER_2D_RECT_ARB:
-      glUniform1iARB(loc, floatarray[0]);
+      glUniform1ivARB(loc, arraysize, intarray);
       break;
     default:
       break;
