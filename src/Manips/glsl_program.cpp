@@ -969,7 +969,12 @@ void glsl_program :: printInfo()
     const t_uniform &uni = it->second;
     startpost("uniform#%d: \"%s\": ",
               uni.loc, it->first.c_str());
-#define SWITCHPOST(label) case label: post("%s", #label); break
+#define SWITCHPOST(label) \
+    case label:                                             \
+      startpost("%s", #label);                              \
+      if(uni.arraysize!=1)startpost("[%d]", uni.arraysize); \
+      endpost();                                            \
+      break
     switch (uni.type) {
       SWITCHPOST(GL_FLOAT);
       SWITCHPOST(GL_FLOAT_VEC2);
