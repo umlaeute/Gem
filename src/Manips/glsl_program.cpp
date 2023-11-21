@@ -901,13 +901,15 @@ void glsl_program :: getVariables()
       name=(char*)nameGL;
       if (glGetActiveUniformsiv) {
         glGetActiveUniformsiv(m_program, 1, &i, GL_UNIFORM_SIZE, &arraysize);
+      } else {
+        arraysize = (size>0)?size:1;
       }
     } else if (GLEW_ARB_shader_objects) {
       glGetActiveUniformARB(m_programARB, i, maxLength, &length, &size,
                             &type, nameARB);
       loc = glGetUniformLocationARB( m_programARB, nameARB );
       name=(char*)nameARB;
-      arraysize = 1;
+      arraysize = (size>0)?size:1;
     }
 
     name = removeArrayBrackets(name);
