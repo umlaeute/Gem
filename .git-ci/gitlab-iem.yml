@@ -283,6 +283,23 @@ nodist:
     - git diff-index --quiet HEAD
 
 
+macOS:notarize:
+  stage: deploy
+  image: python:alpine
+  dependencies:
+    - Darwin-fat-32
+  needs:
+    - Darwin-fat-32
+  variables:
+    IEM_NOTARIZE_SRCDIR: artifacts
+    IEM_NOTARIZE_ARCHIVE: Gem.zip
+  before_script:
+    - apk add curl zip
+  script:
+    - !reference [.script:notarize:macos]
+  allow_failure: true
+
+
 deken:
   extends:
     - .run-selected
