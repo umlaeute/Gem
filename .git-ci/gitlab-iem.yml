@@ -294,7 +294,7 @@ macOS:notarize:
     IEM_NOTARIZE_SRCDIR: artifacts
     IEM_NOTARIZE_ARCHIVE: Gem.zip
   before_script:
-    - apk add curl zip
+    - apk add zip git
   script:
     - !reference [.script:notarize:macos]
   allow_failure: true
