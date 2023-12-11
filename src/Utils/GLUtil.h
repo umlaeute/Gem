@@ -36,16 +36,19 @@ namespace utils
 {
 namespace gl
 {
-GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
-GEM_EXTERN extern int           getGLdefine(const char *name);
-GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
-GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
-GEM_EXTERN extern int           getGLbitfield(int argc,
-    struct _atom *argv);
-GEM_EXTERN extern void          gluLookAt(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
-GEM_EXTERN extern void          gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
+  GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
+  GEM_EXTERN extern int           getGLdefine(const char *name);
+  GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
+  GEM_EXTERN extern int           getGLdefine(const struct _atom *name);
+  GEM_EXTERN extern int           getGLbitfield(int argc,
+      struct _atom *argv);
+  GEM_EXTERN extern void          gluLookAt(GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
+  GEM_EXTERN extern void          gluPerspective(GLdouble, GLdouble, GLdouble, GLdouble);
 
-
+  /* convert openGL pixel types (e.g. GL_BYTE) to a symbolic representation ("GL_BYTE") */
+  GEM_EXTERN extern const char   *pixtype2name(GLenum);
+  /* convert openGL pixel formats (e.g. GL_RGB) to a symbolic representation ("GL_RGB") */
+  GEM_EXTERN extern const char   *pixformat2name(GLenum);
 
 /* mapping between GLSL-program IDs and float */
 /* this can also return different IDs for different contexts */

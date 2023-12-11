@@ -17,51 +17,9 @@
 
 #include "pix_info.h"
 #include "Gem/State.h"
+#include "Utils/GLUtil.h"
 
 CPPEXTERN_NEW_WITH_GIMME(pix_info);
-
-namespace {
-  const char*type2name(unsigned int type) {
-    switch(type) {
-    case GL_BYTE: return "GL_BYTE";
-    case GL_UNSIGNED_BYTE: return "GL_UNSIGNED_BYTE";
-    case GL_SHORT: return "GL_SHORT";
-    case GL_UNSIGNED_SHORT: return "GL_UNSIGNED_SHORT";
-    case GL_INT: return "GL_INT";
-    case GL_UNSIGNED_INT: return "GL_UNSIGNED_INT";
-    case GL_FLOAT: return "GL_FLOAT";
-    case GL_2_BYTES: return "GL_2_BYTES";
-    case GL_3_BYTES: return "GL_3_BYTES";
-    case GL_4_BYTES: return "GL_4_BYTES";
-    case GL_DOUBLE: return "GL_DOUBLE";
-    default:
-      break;
-    }
-    return 0;
-  }
-  const char*format2name(unsigned int format) {
-    switch(format) {
-#ifdef GL_ABGR_EXT
-    case GL_ABGR_EXT: return "GL_ABGR_EXT";
-#endif
-#ifdef GL_ARGB_EXT
-    case GL_ARGB_EXT: return "GL_ARGB_EXT";
-#endif
-    case GL_BGR: return "GL_BGR";
-    case GL_BGRA: return "GL_BGRA";
-    case GL_LUMINANCE: return "GL_LUMINANCE";
-    case GL_RGB: return "GL_RGB";
-    case GL_RGBA: return "GL_RGBA";
-#ifdef GL_YCBCR_422_APPLE
-    case GL_YCBCR_422_APPLE: return "GL_YCBCR_422_APPLE";
-#else
-    case GL_YUV422_GEM: return "GL_YUV422_GEM";
-#endif
-    default: break;
-    }
-    return 0;
-  }
-};
 
 /////////////////////////////////////////////////////////
 //
@@ -161,7 +119,7 @@ void pix_info :: showInfoCooked(pixBlock*img) {
 
     name = 0;
     if(m_symbolic)
-      name = format2name(img->image.format);
+      name = gem::utils::gl::pixformat2name(img->image.format);
     if(name)
       SETSYMBOL(abuf+3, gensym(name));
     else
@@ -169,7 +127,7 @@ void pix_info :: showInfoCooked(pixBlock*img) {
 
     name = 0;
     if(m_symbolic)
-      name = type2name(img->image.type);
+      name = gem::utils::gl::pixtype2name(img->image.type);
     if(name)
       SETSYMBOL(abuf+4, gensym(name));
     else

@@ -92,6 +92,8 @@ GLenum gem::utils::gl::glReportError (bool verbose)
   }
 }
 
+
+
 #warning TODO: use gem::ContextData
 using namespace gem::utils::gl;
 struct gem::utils::gl::GLuintMap::PIMPL {
@@ -277,3 +279,52 @@ void gem::utils::gl::gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNe
   m[3][3] = 0;
   glMultMatrixd(&m[0][0]);
 }
+
+
+#define CASE2NAME(x) case x: return #x
+
+namespace gem { namespace utils { namespace gl {
+const char*pixtype2name (GLenum type) {
+  switch(type) {
+  CASE2NAME(GL_BYTE);
+  CASE2NAME(GL_UNSIGNED_BYTE);
+  CASE2NAME(GL_SHORT);
+  CASE2NAME(GL_UNSIGNED_SHORT);
+  CASE2NAME(GL_INT);
+  CASE2NAME(GL_UNSIGNED_INT);
+  CASE2NAME(GL_UNSIGNED_INT_8_8_8_8);
+  CASE2NAME(GL_FLOAT);
+  CASE2NAME(GL_2_BYTES);
+  CASE2NAME(GL_3_BYTES);
+  CASE2NAME(GL_4_BYTES);
+  CASE2NAME(GL_DOUBLE);
+  default:
+    break;
+  }
+  return 0;
+}
+
+
+const char*pixformat2name (GLenum format) {
+  switch(format) {
+#ifdef GL_ABGR_EXT
+    CASE2NAME(GL_ABGR_EXT);
+#endif
+#ifdef GL_ARGB_EXT
+    CASE2NAME(GL_ARGB_EXT);
+#endif
+    CASE2NAME(GL_BGR);
+    CASE2NAME(GL_BGRA);
+    CASE2NAME(GL_LUMINANCE);
+    CASE2NAME(GL_RGB);
+    CASE2NAME(GL_RGBA);
+#ifdef GL_YCBCR_422_APPLE
+    CASE2NAME(GL_YCBCR_422_APPLE);
+#else
+    CASE2NAME(GL_YUV422_GEM);
+#endif
+  default: break;
+  }
+  return 0;
+}
+}}}
