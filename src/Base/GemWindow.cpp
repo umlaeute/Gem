@@ -438,9 +438,14 @@ bool GemWindow::popContext(void)
 
 void GemWindow::render(void)
 {
-  if(!makeCurrent()) {
-    error("unable to switch to current window (do you have one?), cannot render!");
-    return;
+  if(m_context && m_context->isActive()) {
+    // the context is already current, no need to force it
+    // (which might be slow)
+  } else {
+    if(!makeCurrent()) {
+      error("unable to switch to current window (do you have one?), cannot render!");
+      return;
+    }
   }
   if(!pushContext()) {
     error("unable to switch to current context, cannot render!");
