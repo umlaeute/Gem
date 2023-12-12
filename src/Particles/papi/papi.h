@@ -50,6 +50,13 @@ PARTICLEDLL_API enum PDomainEnum {
   PDRectangle = 10 // Rhombus-shaped planar region
 };
 
+
+// calls for managing the global state
+struct _ParticleState;
+PARTICLEDLL_API _ParticleState* pStateCreate(void);
+PARTICLEDLL_API void pStateDestroy(_ParticleState*ps);
+PARTICLEDLL_API void pStateActivate(_ParticleState*ps);
+
 // State setting calls
 
 PARTICLEDLL_API void pColor(float red, float green, float blue,
