@@ -36,7 +36,7 @@ public:
 
   //////////
   // Constructor
-  part_head(t_floatarg priority);
+  part_head(t_floatarg numParts);
 
 protected:
 

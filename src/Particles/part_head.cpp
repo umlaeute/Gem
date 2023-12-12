@@ -59,6 +59,9 @@ void part_head :: renderParticles(GemState *state)
     return;
   }
 
+  // reset local data saved to the global particle state struct
+  pResetGlobalToDefault();
+
   // The original default was 50.f milliseconds (20 fps)
   pTimeStep((m_tickTime / 50.f) * m_speed);
 

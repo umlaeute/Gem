@@ -52,6 +52,8 @@ PARTICLEDLL_API enum PDomainEnum {
 
 // State setting calls
 
+PARTICLEDLL_API void pResetGlobalToDefault();
+
 PARTICLEDLL_API void pColor(float red, float green, float blue,
                             float alpha = 1.0f);
 

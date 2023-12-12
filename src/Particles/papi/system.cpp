@@ -397,6 +397,16 @@ void _pAddActionToList(ParticleAction *S, int size)
 ////////////////////////////////////////////////////////
 // State setting calls
 
+// Reset the values of the local particle chains saved to the global struct
+PARTICLEDLL_API void pResetGlobalToDefault()
+{
+  _ParticleState &_ps = _GetPState();
+
+  _ps.Alpha = 1.0f;
+  _ps.Color = pDomain(PDPoint, 1.0f, 1.0f, 1.0f);
+  _ps.Vel = pDomain(PDPoint, 0.0f, 0.0f, 0.0f);
+}
+
 PARTICLEDLL_API void pColor(float red, float green, float blue,
                             float alpha)
 {
