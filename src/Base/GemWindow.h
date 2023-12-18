@@ -159,6 +159,15 @@ public:
    */
   virtual void render(void);
 
+  /* activate this window
+   * this ensures that our context is the current one
+   * it's practically the same as render(), but skips
+   * dispatch(), swap();
+   * if output_state is <true> it will outputs 1/0 depending on the success
+   * otherwise no output is generated
+   */
+  virtual void activate(bool output_state);
+
   /* set/get the dimension of the context
    * setting is done by supplying arguments to the method;
    * querying is done by supplying NO arguments
