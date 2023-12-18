@@ -38,6 +38,17 @@ bool sendContextDestroyedMsg(t_pd*x)
 }
 };
 
+/* make sure that we can use these as enums */
+#ifdef TRUE
+# undef TRUE
+#endif
+#ifdef FALSE
+# undef FALSE
+#endif
+#ifdef NONE
+# undef NONE
+#endif
+
 class GemWindow::PIMPL
 {
 public:
