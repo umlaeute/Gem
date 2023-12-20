@@ -119,6 +119,9 @@ stages:
     - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
     - brew unlink libpng || true
     - brew list --full-name || true
+    # make sure we have a good gitlab runner
+    - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
+    - (which gitlab-runner; gitlab-runner --version) || true
 
     # download Pd
     - rm -rf /Applications/Pd*.app/
