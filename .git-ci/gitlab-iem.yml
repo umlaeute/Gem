@@ -110,7 +110,6 @@ stages:
     HOMEBREW_NO_ANALYTICS: 1
     HOMEBREW_NO_INSTALL_UPGRADE: 1
     HOMEBREW_NO_INSTALL_CLEANUP: 1
-    HOMEBREW_NO_AUTO_UPDATE: 1
   before_script:
     - *script_zsh_compat
     - tools/systeminfo.sh || true
@@ -119,6 +118,7 @@ stages:
     - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
     - brew unlink libpng || true
     - brew list --full-name || true
+    - brew update || true
     # make sure we have a good gitlab runner
     - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
     - (which gitlab-runner; gitlab-runner --version) || true
