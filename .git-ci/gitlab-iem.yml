@@ -48,9 +48,15 @@ stages:
     # otherwise, don't run
     - when: never
 
+.script:zsh_compat: &script_zsh_compat
+  - | # zsh fixes
+    set -o shwordsplit || true     # zsh doesn't do wordsplitting by default...
+    set -o nonomatch   || true     # zsh bails out if globbing patterns do not expand
+
 .build:
   stage: build
   script:
+    - *script_zsh_compat
     - echo building against Pd-${PDVERSION}
     - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
     - tools/systeminfo.sh || true
@@ -106,14 +112,19 @@ stages:
     HOMEBREW_NO_INSTALL_CLEANUP: 1
     HOMEBREW_NO_AUTO_UPDATE: 1
   before_script:
+    - *script_zsh_compat
     - tools/systeminfo.sh || true
     - date
-    - rm -rf /Applications/Pd*.app/
+    # cleanup brew (tart is broken)
+    - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
+    - brew unlink libpng || true
+    - brew list --full-name || true
 
     # download Pd
+    - rm -rf /Applications/Pd*.app/
     - curl -sL http://msp.ucsd.edu/Software/pd-${PDVERSION}.mac.tar.gz | tar --extract --gzip --directory /Applications/ || mkdir -p "${IEM_CI_TMPDIR}"
     # if there was no tarball, try to get a zip-file
-    - test ! -d "${IEM_CI_TMPDIR}" || wget -q -O "${IEM_CI_TMPDIR}"/Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.macos.zip
+    - test ! -d "${IEM_CI_TMPDIR}" || curl -sL -o "${IEM_CI_TMPDIR}"/Pd.zip http://msp.ucsd.edu/Software/pd-${PDVERSION}.macos.zip
     - test ! -f "${IEM_CI_TMPDIR}"/Pd.zip || unzip "${IEM_CI_TMPDIR}"/Pd.zip -d "${IEM_CI_TMPDIR}"
     # the ZIP-file shoud contain a .dmg containing Pd
     - |
@@ -134,12 +145,15 @@ stages:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
-    - brew unlink libpng || true
-    - brew bundle --no-upgrade --file=.git-ci/macOS.brew
+    - brew bundle --no-upgrade --file=.git-ci/macOS.brew || true
+    - brew list --full-name || true
+    # older versions of assimp are broken with clang>=14
+    - sed -e 's|^\([[:space:]]*mTextureCoordsNames = new aiString \*\[AI_MAX_NUMBER_OF_TEXTURECOORDS\]\) {};[[:space:]]*$|\1; for (size_t i=0; i<AI_MAX_NUMBER_OF_TEXTURECOORDS; ++i) {mTextureCoordsNames[i] = nullptr;}|' -i.bak "$(brew --cellar)"/assimp-fat/5.2*/include/assimp/mesh.h || true
     - /usr/local/opt/gettext/bin/gettextize || true
     - date
     - echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
   after_script:
+    - *script_zsh_compat
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec .git-ci/localdeps.macos.sh {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
