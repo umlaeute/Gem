@@ -19,6 +19,8 @@
 #include "Gem/Cache.h"
 #include "Gem/State.h"
 #include "Gem/Settings.h"
+#include "Utils/GLUtil.h"
+
 
 CPPEXTERN_NEW_WITH_GIMME(pix_snap);
 
@@ -139,7 +141,13 @@ void pix_snap :: snapMess(void)
     if(m_reqType)
       m_originalImage->type = m_reqType;
     m_reqType = m_originalImage->type;
-    post("type: %d (%d)",  m_originalImage->type, m_reqType);
+
+    const char* type_name = gem::utils::gl::pixtype2name(m_reqType);
+    if(type_name) {
+      post("type: %s", type_name);
+    } else {
+      post("type: %d (0x%X)", m_reqType, m_reqType);
+    }
 
     // FIXXXME: upsidedown should default be 'true'
     m_originalImage->upsidedown = false;
