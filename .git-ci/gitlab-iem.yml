@@ -99,7 +99,8 @@ stages:
   extends:
     - .build
   tags:
-    - bigsur
+    - tart
+  image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
   retry:
     max: 1
     when:
