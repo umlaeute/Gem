@@ -163,44 +163,39 @@ extern "C" {
 */
 
 #if 0
-void FORMATtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoY   (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoVYUY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
-void FORMATtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
-void FORMATtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoYUYV(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoRGB (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void FORMATtoBGR (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void FORMATtoARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 #endif
 
-#define PIXCONVERT(from)                                                \
-  void from##toY   (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toRGB (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toBGR (const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height)
-#define PIXCONVERT16(from)                                              \
-  void from##toY   (const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toVYUY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toYVYU(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toRGB (const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toBGR (const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toABGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height); \
-  void from##toARGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height)
+#undef PIXCONVERT
+#define PIXCONVERT(T, from)                                      \
+  void from##toY   (const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toUYVY(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toVYUY(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toYVYU(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toYUYV(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toRGB (const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toBGR (const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toRGBA(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toABGR(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toBGRA(const T*indata, unsigned char*outdata, size_t width, size_t height); \
+  void from##toARGB(const T*indata, unsigned char*outdata, size_t width, size_t height)
 
 #define PIXCONVERT_YUVp(T, from)                                         \
   void from##toY   (const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toUYVY(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toVYUY(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toYVYU(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
+  void from##toYUYV(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toRGB (const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toBGR (const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
   void from##toRGBA(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height); \
@@ -211,31 +206,31 @@ void FORMATtoARGB(const unsigned char*indata, unsigned char*outdata, size_t widt
 
 
   /* grayscale */
-PIXCONVERT(Y);
+PIXCONVERT(unsigned char, Y);
 void YtoVYUY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
   /* grayscale (16bit) */
-PIXCONVERT16(Yu16);
+PIXCONVERT(unsigned short, Yu16);
 
     /* YUV420/planar */
 PIXCONVERT_YUVp(unsigned char, I420);
 PIXCONVERT_YUVp(short, I420S16);
 
     /* YUV422/packed */
-PIXCONVERT(UYVY);
-PIXCONVERT(VYUY);
-PIXCONVERT(YUYV);
-PIXCONVERT(YVYU);
+PIXCONVERT(unsigned char, UYVY);
+PIXCONVERT(unsigned char, VYUY);
+PIXCONVERT(unsigned char, YUYV);
+PIXCONVERT(unsigned char, YVYU);
 
   /* RGB/packed */
-PIXCONVERT(RGB);
-PIXCONVERT(BGR);
-PIXCONVERT(RGB16);
+PIXCONVERT(unsigned char, RGB);
+PIXCONVERT(unsigned char, BGR);
+PIXCONVERT(unsigned char, RGB16);
     /* RGBA/packed */
-PIXCONVERT(RGBA);
-PIXCONVERT(BGRA);
-PIXCONVERT(ABGR);
-PIXCONVERT(ARGB);
+PIXCONVERT(unsigned char, RGBA);
+PIXCONVERT(unsigned char, BGRA);
+PIXCONVERT(unsigned char, ABGR);
+PIXCONVERT(unsigned char, ARGB);
 
 
 void UYVYtoRGB_SSE2(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
@@ -261,5 +256,7 @@ void YUV422_to_YV12_altivec(short*pY, short*pY2, short*pU, short*pV, const unsig
 } /* extern 'C' */
 #endif
 
+#undef PIXCONVERT
+#undef PIXCONVERT_YUVp
 
 #endif /* _INCLUDE__GEM_GEM_PIXCONVERT_H_ */

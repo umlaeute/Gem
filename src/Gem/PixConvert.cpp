@@ -200,7 +200,7 @@ namespace {
     }
   }
 
-  /* YUV4 (actually: YUV2?) -> ... */
+  /* YUV4 -> ... */
   template <int U, int Y0, int V, int Y1>
   static void yuv4_to_y(
     const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
@@ -214,8 +214,8 @@ namespace {
 
   template <int inU, int inY0, int inV, int inY1,
             int outR, int outG, int outB>
-  static void yuv4_to_rgb3(
-                           const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void yuv4_to_rgb3(const unsigned char*indata, unsigned char*outdata,
+                           size_t width, size_t height) {
     size_t size = (width*height)>>1;
 
     while(size--) {
@@ -245,8 +245,8 @@ namespace {
 
   template <int inU, int inY0, int inV, int inY1,
             int outR, int outG, int outB, int outA>
-  static void yuv4_to_rgb4(
-                           const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void yuv4_to_rgb4(const unsigned char*indata, unsigned char*outdata,
+                           size_t width, size_t height) {
     size_t size = (width*height)>>1;
 
     while(size--) {
@@ -439,7 +439,8 @@ namespace {
 
   /* RGB3 -> ... */
   template <int inR, int inG, int inB>
-  static void rgb3_to_y(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void rgb3_to_y(const unsigned char*indata, unsigned char*outdata,
+                        size_t width, size_t height) {
     size_t size = width*height;
     while(size--) {
       *outdata++=(indata[inR]*RGB2GRAY_RED
@@ -451,7 +452,8 @@ namespace {
 
   template <int inR, int inG, int inB,
             int U, int Y0, int V, int Y1>
-  static void rgb3_to_yuv4(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void rgb3_to_yuv4(const unsigned char*indata, unsigned char*outdata,
+                           size_t width, size_t height) {
     size_t size = (width*height)>>1;
     while(size--) {
       outdata[U ]=((RGB2YUV_21*indata[inR]+
@@ -474,7 +476,8 @@ namespace {
   template <int inR, int inG, int inB,
             int outR, int outG, int outB, int outA>
   static void rgb3_to_rgb4(
-    const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+    const unsigned char*indata, unsigned char*outdata,
+    size_t width, size_t height) {
     size_t size = width*height;
     if(indata==outdata) {
       outdata += size*4;
@@ -508,7 +511,8 @@ namespace {
   /* RGB4 -> ... */
 
   template <int inR, int inG, int inB, int inA>
-  static void rgb4_to_y(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void rgb4_to_y(const unsigned char*indata, unsigned char*outdata,
+                        size_t width, size_t height) {
     size_t size = width*height;
     while(size--) {
       *outdata++=(indata[inR]*RGB2GRAY_RED
@@ -521,7 +525,8 @@ namespace {
 
   template <int inR, int inG, int inB, int inA,
             int U, int Y0, int V, int Y1>
-  static void rgb4_to_yuv4(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+  static void rgb4_to_yuv4(const unsigned char*indata, unsigned char*outdata,
+                           size_t width, size_t height) {
     size_t size = (width*height)>>1;
     while(size--) {
       outdata[U ]=((RGB2YUV_21*indata[inR]+
@@ -542,113 +547,6 @@ namespace {
   }
 
 };
-
-
-/* GRAY -> */
-void YtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<0, UYVY>(indata, outdata, width, height);
-}
-void YtoYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<0, YVYU>(indata, outdata, width, height);
-}
-void YtoVYUY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<0, VYUY>(indata, outdata, width, height);
-}
-void YtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_three<0, RGB>(indata, outdata, width, height);
-}
-void YtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_three<0, BGR>(indata, outdata, width, height);
-}
-void YtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<0, RGBA>(indata, outdata, width, height);
-}
-void YtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<0, BGRA>(indata, outdata, width, height);
-}
-void YtoABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<0, ABGR>(indata, outdata, width, height);
-}
-void YtoARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<0, ARGB>(indata, outdata, width, height);
-}
-
-void Yu16toY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  size_t size = width*height;
-  while(size--) {
-    *outdata++ = (*indata++)>>8;
-  }
-}
-void Yu16toUYVY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<8, UYVY>(indata, outdata, width, height);
-}
-void Yu16toVYUY(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<8, VYUY>(indata, outdata, width, height);
-}
-void Yu16toYVYU(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_yuv4<8, YVYU>(indata, outdata, width, height);
-}
-void Yu16toRGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_three<8, RGB>(indata, outdata, width, height);
-}
-void Yu16toBGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_three<8, BGR>(indata, outdata, width, height);
-}
-void Yu16toRGBA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<8, RGBA>(indata, outdata, width, height);
-}
-void Yu16toBGRA(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<8, BGRA>(indata, outdata, width, height);
-}
-void Yu16toABGR(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<8, ABGR>(indata, outdata, width, height);
-}
-void Yu16toARGB(const unsigned short*indata, unsigned char*outdata, size_t width, size_t height) {
-  y_to_rgb4<8, ARGB>(indata, outdata, width, height);
-}
-/* YUV420planar -> */
-
-void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                unsigned char*outdata, size_t width, size_t height) {
-  memcpy(outdata, Y, width*height);
-}
-
-void I420toRGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                  unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb3<RGB>(Y, U, V, outdata, width, height);
-}
-void I420toBGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                  unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb3<BGR>(Y, U, V, outdata, width, height);
-}
-void I420toRGBA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb4<RGBA>(Y, U, V, outdata, width, height);
-}
-void I420toBGRA(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb4<BGRA>(Y, U, V, outdata, width, height);
-}
-void I420toABGR(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb4<ABGR>(Y, U, V, outdata, width, height);
-}
-void I420toARGB(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_rgb4<ARGB>(Y, U, V, outdata, width, height);
-}
-void I420toUYVY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
-}
-void I420toVYUY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_yuv4<VYUY>(Y, U, V, outdata, width, height);
-}
-void I420toYVYU(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  yuv420p_to_yuv4<YVYU>(Y, U, V, outdata, width, height);
-}
 
 /* YUV420planar (signed short) -> */
 namespace {
@@ -818,161 +716,6 @@ namespace {
 };
 
 
-void I420S16toY(const short*Y, const short*U, const short*V,
-                  unsigned char*outdata, size_t width, size_t height) {
-  size_t size = width*height;
-  while(size--) {
-    *outdata++ = ((*Y++)>>8) + Y_OFFSET;
-  }
-}
-void I420S16toRGB(const short*Y, const short*U, const short*V,
-                  unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb3<RGB>(Y, U, V, outdata, width, height);
-}
-void I420S16toBGR(const short*Y, const short*U, const short*V,
-                  unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb3<BGR>(Y, U, V, outdata, width, height);
-}
-void I420S16toRGBA(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb4<RGBA>(Y, U, V, outdata, width, height);
-}
-void I420S16toBGRA(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb4<BGRA>(Y, U, V, outdata, width, height);
-}
-void I420S16toARGB(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb4<ARGB>(Y, U, V, outdata, width, height);
-}
-void I420S16toABGR(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_rgb4<ABGR>(Y, U, V, outdata, width, height);
-}
-void I420S16toUYVY(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_yuv4<UYVY>(Y, U, V, outdata, width, height);
-}
-void I420S16toVYUY(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_yuv4<VYUY>(Y, U, V, outdata, width, height);
-}
-void I420S16toYVYU(const short*Y, const short*U, const short*V,
-                   unsigned char*outdata, size_t width, size_t height) {
-  i420ps16_to_yuv4<YVYU>(Y, U, V, outdata, width, height);
-}
-
-/* UYVY -> */
-#define PIXCONVERT_yuv4(from)                                           \
-  void from##toY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    yuv4_to_y<from>(indata, outdata, width, height);                    \
-  }                                                                     \
-  void from##toVYUY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, VYUY>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toYUYV(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, YUYV>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, YVYU>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, UYVY>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    yuv4_to_rgb3<from, RGB>(indata, outdata, width, height);            \
-  }                                                                     \
-  void from##toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    yuv4_to_rgb3<from, BGR>(indata, outdata, width, height);            \
-  }                                                                     \
-  void from##toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    yuv4_to_rgb4<from, RGBA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height){ \
-    yuv4_to_rgb4<from, BGRA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    yuv4_to_rgb4<from, ABGR>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height){ \
-    yuv4_to_rgb4<from, ARGB>(indata, outdata, width, height);           \
-  }
-
-PIXCONVERT_yuv4(UYVY);
-PIXCONVERT_yuv4(VYUY);
-PIXCONVERT_yuv4(YUYV);
-PIXCONVERT_yuv4(YVYU);
-
-
-/* RGB -> */
-#define PIXCONVERT_rgb3(from)                                           \
-  void from##toY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_y<from>(indata, outdata, width, height);                    \
-  }                                                                     \
-  void from##toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_yuv4<from, UYVY>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_yuv4<from, YVYU>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    three_to_three<from, RGB>(indata, outdata, width, height);          \
-  }                                                                     \
-  void from##toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    three_to_three<from, BGR>(indata, outdata, width, height);          \
-  }                                                                     \
-  void from##toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_rgb4<from, RGBA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_rgb4<from, ABGR>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_rgb4<from, BGRA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb3_to_rgb4<from, ARGB>(indata, outdata, width, height);           \
-  }
-
-PIXCONVERT_rgb3(RGB);
-PIXCONVERT_rgb3(BGR);
-
-/* RGBA -> */
-
-#define PIXCONVERT_rgb4(from)                                           \
-  void from##toY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb4_to_y<from>(indata, outdata, width, height);                    \
-  }                                                                     \
-  void from##toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb4_to_yuv4<from, UYVY>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    rgb4_to_yuv4<from, YVYU>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_three<from, RGB>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_three<from, BGR>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, RGBA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, ABGR>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, BGRA>(indata, outdata, width, height);           \
-  }                                                                     \
-  void from##toARGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) { \
-    four_to_four<from, ARGB>(indata, outdata, width, height);           \
-  }
-
-PIXCONVERT_rgb4(RGBA);
-PIXCONVERT_rgb4(BGRA);
-PIXCONVERT_rgb4(ABGR);
-PIXCONVERT_rgb4(ARGB);
-
 /* RGB16 -> */
 /*
   RGB16 packs R,G,B into 16bits (2bytes)
@@ -980,20 +723,8 @@ PIXCONVERT_rgb4(ARGB);
    R R R R R G G G   G G G B B B B B
 */
 
-void RGB16toY(const unsigned char*indata_, unsigned char*outdata, size_t width, size_t height) {
-  size_t size = width*height;
-  const unsigned short*indata = (const unsigned short*)indata_;
-  while(size--) {
-    unsigned short rgb=*indata++;
-    *outdata++=(
-      ((rgb>>8)&0xF8)*RGB2GRAY_RED   +
-      ((rgb>>3)&0xFC)*RGB2GRAY_GREEN +
-      ((rgb<<3)&0xF8)*RGB2GRAY_BLUE
-      )>>8;
-  }
-}
 namespace {
-  template <int U, int Y0, int V, int Y1>
+  template <int U, int Y0, int V, int Y1, int dummy>
   void RGB16_to_yuv4(const unsigned char*indata_, unsigned char*outdata, size_t width, size_t height) {
     size_t size = (width*height)>>1;
     const unsigned short*indata = (const unsigned short*)indata_;
@@ -1015,7 +746,7 @@ namespace {
       outdata+=4;
     }
   }
-  template <int r, int g, int b>
+  template <int r, int g, int b, int dummy>
   static void RGB16_to_rgb3(const unsigned char*indata_, unsigned char*outdata, size_t width, size_t height) {
     size_t size = width*height;
     const unsigned short*indata = (const unsigned short*)indata_;
@@ -1027,7 +758,7 @@ namespace {
       outdata+=3;
     }
   }
-  template <int r, int g, int b, int a>
+  template <int r, int g, int b, int a, int dummy>
   static void RGB16_to_rgb4(const unsigned char*indata_, unsigned char*outdata, size_t width, size_t height) {
     size_t size = width*height;
     const unsigned short*indata = (const unsigned short*)indata_;
@@ -1042,27 +773,239 @@ namespace {
   }
 }
 
-void RGB16toUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_yuv4<UYVY>(indata, outdata, width, height);
+/* the actual converter instances */
+
+#define CONVERT(SRC, DST, templ, T)                                     \
+  void SRC##to##DST(const T*indata, unsigned char*outdata, size_t width, size_t height) { templ<SRC, DST>(indata, outdata, width, height); }
+
+#define CONVERT0(SRC, DST, templ, T, shift)                              \
+  void SRC##to##DST(const T*indata, unsigned char*outdata, size_t width, size_t height) { templ<shift, DST>(indata, outdata, width, height); }
+
+
+#define CONVERTy(SRC, templ, T)                         \
+  void SRC##toY(const T*indata, unsigned char*outdata,  \
+                size_t width, size_t height) {          \
+    templ<SRC>(indata, outdata, width, height);         \
+  }
+
+#define CONVERTp(SRC, DST, templ, T)                             \
+  void SRC##to##DST(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height) { templ<DST>(Y, U, V, outdata, width, height); }
+
+
+
+/* GRAY -> */
+void YtoY(const unsigned short*indata,
+          unsigned char*outdata, size_t width, size_t height) {
+  memcpy(outdata, indata, width*height);
 }
-void RGB16toVYUY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_yuv4<VYUY>(indata, outdata, width, height);
+CONVERT0(Y, UYVY, y_to_yuv4, unsigned char, 0);
+CONVERT0(Y, VYUY, y_to_yuv4, unsigned char, 0);
+CONVERT0(Y, YVYU, y_to_yuv4, unsigned char, 0);
+CONVERT0(Y, YUYV, y_to_yuv4, unsigned char, 0);
+CONVERT0(Y, RGB , y_to_three, unsigned char, 0);
+CONVERT0(Y, BGR , y_to_three, unsigned char, 0);
+CONVERT0(Y, RGBA, y_to_rgb4, unsigned char, 0);
+CONVERT0(Y, BGRA, y_to_rgb4, unsigned char, 0);
+CONVERT0(Y, ABGR, y_to_rgb4, unsigned char, 0);
+CONVERT0(Y, ARGB, y_to_rgb4, unsigned char, 0);
+
+void Yu16toY(const unsigned short*indata,
+             unsigned char*outdata, size_t width, size_t height) {
+  size_t size = width*height;
+  while(size--) {
+    *outdata++ = (*indata++)>>8;
+  }
 }
-void RGB16toYVYU(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_yuv4<YVYU>(indata, outdata, width, height);
+CONVERT0(Yu16, UYVY, y_to_yuv4, unsigned short, 8);
+CONVERT0(Yu16, VYUY, y_to_yuv4, unsigned short, 8);
+CONVERT0(Yu16, YVYU, y_to_yuv4, unsigned short, 8);
+CONVERT0(Yu16, YUYV, y_to_yuv4, unsigned short, 8);
+CONVERT0(Yu16, RGB, y_to_three, unsigned short, 8);
+CONVERT0(Yu16, BGR, y_to_three, unsigned short, 8);
+CONVERT0(Yu16, RGBA, y_to_rgb4, unsigned short, 8);
+CONVERT0(Yu16, BGRA, y_to_rgb4, unsigned short, 8);
+CONVERT0(Yu16, ABGR, y_to_rgb4, unsigned short, 8);
+CONVERT0(Yu16, ARGB, y_to_rgb4, unsigned short, 8);
+
+
+/* YUV420planar -> */
+void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+             unsigned char*outdata, size_t width, size_t height) {
+  memcpy(outdata, Y, width*height);
 }
-void RGB16toRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_rgb3<RGB>(indata, outdata, width, height);
+
+CONVERTp(I420, UYVY, yuv420p_to_yuv4, unsigned char);
+CONVERTp(I420, VYUY, yuv420p_to_yuv4, unsigned char);
+CONVERTp(I420, YVYU, yuv420p_to_yuv4, unsigned char);
+CONVERTp(I420, YUYV, yuv420p_to_yuv4, unsigned char);
+CONVERTp(I420, RGB , yuv420p_to_rgb3, unsigned char);
+CONVERTp(I420, BGR , yuv420p_to_rgb3, unsigned char);
+CONVERTp(I420, RGBA, yuv420p_to_rgb4, unsigned char);
+CONVERTp(I420, BGRA, yuv420p_to_rgb4, unsigned char);
+CONVERTp(I420, ABGR, yuv420p_to_rgb4, unsigned char);
+CONVERTp(I420, ARGB, yuv420p_to_rgb4, unsigned char);
+
+void I420S16toY(const short*Y, const short*U, const short*V,
+                unsigned char*outdata, size_t width, size_t height) {
+  size_t size = width*height;
+  while(size--) {
+    *outdata++ = ((*Y++)>>8) + Y_OFFSET;
+  }
 }
-void RGB16toBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_rgb3<BGR>(indata, outdata, width, height);
+CONVERTp(I420S16, UYVY, i420ps16_to_yuv4, short);
+CONVERTp(I420S16, VYUY, i420ps16_to_yuv4, short);
+CONVERTp(I420S16, YVYU, i420ps16_to_yuv4, short);
+CONVERTp(I420S16, YUYV, i420ps16_to_yuv4, short);
+CONVERTp(I420S16, RGB , i420ps16_to_rgb3, short);
+CONVERTp(I420S16, BGR , i420ps16_to_rgb3, short);
+CONVERTp(I420S16, RGBA, i420ps16_to_rgb4, short);
+CONVERTp(I420S16, BGRA, i420ps16_to_rgb4, short);
+CONVERTp(I420S16, ARGB, i420ps16_to_rgb4, short);
+CONVERTp(I420S16, ABGR, i420ps16_to_rgb4, short);
+
+/* UYVY -> */
+CONVERTy(UYVY, yuv4_to_y, unsigned char);
+CONVERT(UYVY, UYVY, four_to_four, unsigned char);
+CONVERT(UYVY, VYUY, four_to_four, unsigned char);
+CONVERT(UYVY, YVYU, four_to_four, unsigned char);
+CONVERT(UYVY, YUYV, four_to_four, unsigned char);
+CONVERT(UYVY, RGB , yuv4_to_rgb3, unsigned char);
+CONVERT(UYVY, BGR , yuv4_to_rgb3, unsigned char);
+CONVERT(UYVY, RGBA, yuv4_to_rgb4, unsigned char);
+CONVERT(UYVY, BGRA, yuv4_to_rgb4, unsigned char);
+CONVERT(UYVY, ABGR, yuv4_to_rgb4, unsigned char);
+CONVERT(UYVY, ARGB, yuv4_to_rgb4, unsigned char);
+
+CONVERTy(VYUY, yuv4_to_y, unsigned char);
+CONVERT(VYUY, UYVY, four_to_four, unsigned char);
+CONVERT(VYUY, VYUY, four_to_four, unsigned char);
+CONVERT(VYUY, YVYU, four_to_four, unsigned char);
+CONVERT(VYUY, YUYV, four_to_four, unsigned char);
+CONVERT(VYUY, RGB , yuv4_to_rgb3, unsigned char);
+CONVERT(VYUY, BGR , yuv4_to_rgb3, unsigned char);
+CONVERT(VYUY, RGBA, yuv4_to_rgb4, unsigned char);
+CONVERT(VYUY, BGRA, yuv4_to_rgb4, unsigned char);
+CONVERT(VYUY, ABGR, yuv4_to_rgb4, unsigned char);
+CONVERT(VYUY, ARGB, yuv4_to_rgb4, unsigned char);
+
+CONVERTy(YUYV, yuv4_to_y, unsigned char);
+CONVERT(YUYV, UYVY, four_to_four, unsigned char);
+CONVERT(YUYV, VYUY, four_to_four, unsigned char);
+CONVERT(YUYV, YVYU, four_to_four, unsigned char);
+CONVERT(YUYV, YUYV, four_to_four, unsigned char);
+CONVERT(YUYV, RGB , yuv4_to_rgb3, unsigned char);
+CONVERT(YUYV, BGR , yuv4_to_rgb3, unsigned char);
+CONVERT(YUYV, RGBA, yuv4_to_rgb4, unsigned char);
+CONVERT(YUYV, BGRA, yuv4_to_rgb4, unsigned char);
+CONVERT(YUYV, ABGR, yuv4_to_rgb4, unsigned char);
+CONVERT(YUYV, ARGB, yuv4_to_rgb4, unsigned char);
+
+CONVERTy(YVYU, yuv4_to_y, unsigned char);
+CONVERT(YVYU, UYVY, four_to_four, unsigned char);
+CONVERT(YVYU, VYUY, four_to_four, unsigned char);
+CONVERT(YVYU, YVYU, four_to_four, unsigned char);
+CONVERT(YVYU, YUYV, four_to_four, unsigned char);
+CONVERT(YVYU, RGB , yuv4_to_rgb3, unsigned char);
+CONVERT(YVYU, BGR , yuv4_to_rgb3, unsigned char);
+CONVERT(YVYU, RGBA, yuv4_to_rgb4, unsigned char);
+CONVERT(YVYU, BGRA, yuv4_to_rgb4, unsigned char);
+CONVERT(YVYU, ABGR, yuv4_to_rgb4, unsigned char);
+CONVERT(YVYU, ARGB, yuv4_to_rgb4, unsigned char);
+
+/* RGB -> */
+void RGB16toY(const unsigned char*indata_,
+              unsigned char*outdata, size_t width, size_t height) {
+  size_t size = width*height;
+  const unsigned short*indata = (const unsigned short*)indata_;
+  while(size--) {
+    unsigned short rgb=*indata++;
+    *outdata++=(
+      ((rgb>>8)&0xF8)*RGB2GRAY_RED   +
+      ((rgb>>3)&0xFC)*RGB2GRAY_GREEN +
+      ((rgb<<3)&0xF8)*RGB2GRAY_BLUE
+      )>>8;
+  }
 }
-void RGB16toRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_rgb4<RGBA>(indata, outdata, width, height);
-}
-void RGB16toBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_rgb4<BGRA>(indata, outdata, width, height);
-}
-void RGB16toABGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
-  RGB16_to_rgb4<ABGR>(indata, outdata, width, height);
-}
+CONVERT0(RGB16, UYVY, RGB16_to_yuv4, unsigned char, 0);
+CONVERT0(RGB16, VYUY, RGB16_to_yuv4, unsigned char, 0);
+CONVERT0(RGB16, YVYU, RGB16_to_yuv4, unsigned char, 0);
+CONVERT0(RGB16, YUYV, RGB16_to_yuv4, unsigned char, 0);
+CONVERT0(RGB16, RGB , RGB16_to_rgb3, unsigned char, 0);
+CONVERT0(RGB16, BGR , RGB16_to_rgb3, unsigned char, 0);
+CONVERT0(RGB16, RGBA, RGB16_to_rgb4, unsigned char, 0);
+CONVERT0(RGB16, BGRA, RGB16_to_rgb4, unsigned char, 0);
+CONVERT0(RGB16, ABGR, RGB16_to_rgb4, unsigned char, 0);
+CONVERT0(RGB16, ARGB, RGB16_to_rgb4, unsigned char, 0);
+
+CONVERTy(RGB, rgb3_to_y, unsigned char);
+CONVERT(RGB, UYVY, rgb3_to_yuv4, unsigned char);
+CONVERT(RGB, VYUY, rgb3_to_yuv4, unsigned char);
+CONVERT(RGB, YVYU, rgb3_to_yuv4, unsigned char);
+CONVERT(RGB, YUYV, rgb3_to_yuv4, unsigned char);
+CONVERT(RGB, RGB, three_to_three, unsigned char);
+CONVERT(RGB, BGR, three_to_three, unsigned char);
+CONVERT(RGB, RGBA, rgb3_to_rgb4, unsigned char);
+CONVERT(RGB, ABGR, rgb3_to_rgb4, unsigned char);
+CONVERT(RGB, BGRA, rgb3_to_rgb4, unsigned char);
+CONVERT(RGB, ARGB, rgb3_to_rgb4, unsigned char);
+
+CONVERTy(BGR, rgb3_to_y, unsigned char);
+CONVERT(BGR, UYVY, rgb3_to_yuv4, unsigned char);
+CONVERT(BGR, VYUY, rgb3_to_yuv4, unsigned char);
+CONVERT(BGR, YVYU, rgb3_to_yuv4, unsigned char);
+CONVERT(BGR, YUYV, rgb3_to_yuv4, unsigned char);
+CONVERT(BGR, RGB, three_to_three, unsigned char);
+CONVERT(BGR, BGR, three_to_three, unsigned char);
+CONVERT(BGR, RGBA, rgb3_to_rgb4, unsigned char);
+CONVERT(BGR, ABGR, rgb3_to_rgb4, unsigned char);
+CONVERT(BGR, BGRA, rgb3_to_rgb4, unsigned char);
+CONVERT(BGR, ARGB, rgb3_to_rgb4, unsigned char);
+
+/* RGBA -> */
+CONVERTy(RGBA, rgb4_to_y, unsigned char);
+CONVERT(RGBA, UYVY, rgb4_to_yuv4, unsigned char);
+CONVERT(RGBA, VYUY, rgb4_to_yuv4, unsigned char);
+CONVERT(RGBA, YVYU, rgb4_to_yuv4, unsigned char);
+CONVERT(RGBA, YUYV, rgb4_to_yuv4, unsigned char);
+CONVERT(RGBA, RGB, four_to_three, unsigned char);
+CONVERT(RGBA, BGR, four_to_three, unsigned char);
+CONVERT(RGBA, RGBA, four_to_four, unsigned char);
+CONVERT(RGBA, ABGR, four_to_four, unsigned char);
+CONVERT(RGBA, BGRA, four_to_four, unsigned char);
+CONVERT(RGBA, ARGB, four_to_four, unsigned char);
+
+CONVERTy(BGRA, rgb4_to_y, unsigned char);
+CONVERT(BGRA, UYVY, rgb4_to_yuv4, unsigned char);
+CONVERT(BGRA, VYUY, rgb4_to_yuv4, unsigned char);
+CONVERT(BGRA, YVYU, rgb4_to_yuv4, unsigned char);
+CONVERT(BGRA, YUYV, rgb4_to_yuv4, unsigned char);
+CONVERT(BGRA, RGB, four_to_three, unsigned char);
+CONVERT(BGRA, BGR, four_to_three, unsigned char);
+CONVERT(BGRA, RGBA, four_to_four, unsigned char);
+CONVERT(BGRA, ABGR, four_to_four, unsigned char);
+CONVERT(BGRA, BGRA, four_to_four, unsigned char);
+CONVERT(BGRA, ARGB, four_to_four, unsigned char);
+
+CONVERTy(ABGR, rgb4_to_y, unsigned char);
+CONVERT(ABGR, UYVY, rgb4_to_yuv4, unsigned char);
+CONVERT(ABGR, VYUY, rgb4_to_yuv4, unsigned char);
+CONVERT(ABGR, YVYU, rgb4_to_yuv4, unsigned char);
+CONVERT(ABGR, YUYV, rgb4_to_yuv4, unsigned char);
+CONVERT(ABGR, RGB, four_to_three, unsigned char);
+CONVERT(ABGR, BGR, four_to_three, unsigned char);
+CONVERT(ABGR, RGBA, four_to_four, unsigned char);
+CONVERT(ABGR, ABGR, four_to_four, unsigned char);
+CONVERT(ABGR, BGRA, four_to_four, unsigned char);
+CONVERT(ABGR, ARGB, four_to_four, unsigned char);
+
+CONVERTy(ARGB, rgb4_to_y, unsigned char);
+CONVERT(ARGB, UYVY, rgb4_to_yuv4, unsigned char);
+CONVERT(ARGB, VYUY, rgb4_to_yuv4, unsigned char);
+CONVERT(ARGB, YVYU, rgb4_to_yuv4, unsigned char);
+CONVERT(ARGB, YUYV, rgb4_to_yuv4, unsigned char);
+CONVERT(ARGB, RGB, four_to_three, unsigned char);
+CONVERT(ARGB, BGR, four_to_three, unsigned char);
+CONVERT(ARGB, RGBA, four_to_four, unsigned char);
+CONVERT(ARGB, ABGR, four_to_four, unsigned char);
+CONVERT(ARGB, BGRA, four_to_four, unsigned char);
+CONVERT(ARGB, ARGB, four_to_four, unsigned char);
