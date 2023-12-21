@@ -570,20 +570,20 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
 
   upsidedown=from->upsidedown;
 
-  bool fixOrder = needsReverseOrdering(from->type);
+  bool reverse = needsReverseOrdering(from->type);
 
   switch (from->format) {
   default:
     pd_error(0, "%s: unable to convert from %s", __FUNCTION__, format2name(from->format));
     break;
   case GL_RGBA:
-    if (fixOrder)
+    if (reverse)
       return fromABGR(from->data);
     else
       return fromRGBA(from->data);
     break;
   case GL_BGRA: /* "RGBA" on apple */
-    if (fixOrder)
+    if (reverse)
       return fromARGB(from->data);
     else
       return fromBGRA(from->data);
@@ -595,7 +595,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
   case GL_LUMINANCE:
     return fromGray(from->data);
   case GL_YUV422_GEM: {
-    if (fixOrder)
+    if (reverse)
       return fromYVYU(from->data); // TODO
     else
       return fromUYVY(from->data);
@@ -623,6 +623,8 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   unsigned char *pixels=data;
   switch (format) {
   default:
@@ -635,23 +637,32 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     RGBtoBGR(rgbdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    RGBtoRGBA(rgbdata, data, xsize, ysize);
+    if(reverse)
+      RGBtoABGR(rgbdata, data, xsize, ysize);
+    else
+      RGBtoRGBA(rgbdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    RGBtoBGRA(rgbdata, data, xsize, ysize);
+    if(reverse)
+      RGBtoARGB(rgbdata, data, xsize, ysize);
+    else
+      RGBtoBGRA(rgbdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     RGBtoY(rgbdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      RGBtoUYVY_Altivec(rgbdata, data, xsize, ysize);
-      break;
-    default:
-      RGBtoUYVY(rgbdata, data, xsize, ysize);
-      break;
-    }
+    if(reverse)
+      RGBtoYVYU(rgbdata, data, xsize, ysize);
+    else
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        RGBtoUYVY_Altivec(rgbdata, data, xsize, ysize);
+        break;
+      default:
+        RGBtoUYVY(rgbdata, data, xsize, ysize);
+        break;
+      }
     break;
   }
   return true;
@@ -667,18 +678,26 @@ GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
   const unsigned short*rgbdata=(const unsigned short*)rgb16data;
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGBA:
-    RGB16toRGBA(rgb16data, data, xsize, ysize);
+    if(reverse)
+      RGB16toABGR(rgb16data, data, xsize, ysize);
+    else
+      RGB16toRGBA(rgb16data, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     RGB16toY(rgb16data, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    RGB16toUYVY(rgb16data, data, xsize, ysize);
+    if(reverse)
+      RGB16toYVYU(rgb16data, data, xsize, ysize);
+    else
+      RGB16toUYVY(rgb16data, data, xsize, ysize);
     break;
   }
   return true;
@@ -691,6 +710,8 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   unsigned char *pixels=data;
   switch (format) {
   default:
@@ -703,30 +724,42 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
     RGBAtoBGR(rgbadata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    memcpy(data, rgbadata, xsize*ysize*csize);
+    if(reverse)
+      RGBAtoABGR(rgbadata, data, xsize, ysize);
+    else
+      memcpy(data, rgbadata, xsize*ysize*csize);
     break;
   case GL_ABGR_EXT:
-    RGBAtoABGR(rgbadata, data, xsize, ysize);
+    if(reverse)
+      memcpy(data, rgbadata, xsize*ysize*csize);
+    else
+      RGBAtoABGR(rgbadata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    RGBAtoBGRA(rgbadata, data, xsize, ysize);
+    if(reverse)
+      RGBAtoARGB(rgbadata, data, xsize, ysize);
+    else
+      RGBAtoBGRA(rgbadata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     RGBAtoY(rgbadata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      RGBAtoUYVY_Altivec(rgbadata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_SSE2:
-      RGBAtoUYVY_SSE2(rgbadata, pixels, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      RGBAtoUYVY(rgbadata, data, xsize, ysize);
-    }
+    if(reverse)
+      RGBAtoYVYU(rgbadata, data, xsize, ysize);
+    else
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        RGBAtoUYVY_Altivec(rgbadata, data, xsize, ysize);
+        break;
+      case GEM_SIMD_SSE2:
+        RGBAtoUYVY_SSE2(rgbadata, pixels, xsize, ysize);
+        break;
+      case GEM_SIMD_NONE:
+      default:
+        RGBAtoUYVY(rgbadata, data, xsize, ysize);
+      }
     STOP_TIMING("RGBA to UYVY");
     break;
   }
@@ -741,6 +774,8 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -752,23 +787,32 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
     BGRtoRGB(bgrdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    BGRtoBGRA(bgrdata, data, xsize, ysize);
+    if(reverse)
+      BGRtoARGB(bgrdata, data, xsize, ysize);
+    else
+      BGRtoBGRA(bgrdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    BGRtoRGBA(bgrdata, data, xsize, ysize);
+    if(reverse)
+      BGRtoABGR(bgrdata, data, xsize, ysize);
+    else
+      BGRtoRGBA(bgrdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     BGRtoY(bgrdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      BGRtoUYVY_Altivec(bgrdata, data, xsize, ysize);
-      break;
-    default:
-      BGRtoUYVY(bgrdata, data, xsize, ysize);
-      break;
-    }
+    if(reverse)
+      BGRtoYVYU(bgrdata, data, xsize, ysize);
+    else
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        BGRtoUYVY_Altivec(bgrdata, data, xsize, ysize);
+        break;
+      default:
+        BGRtoUYVY(bgrdata, data, xsize, ysize);
+        break;
+      }
     break;
   }
   return true;
@@ -781,6 +825,8 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -792,25 +838,34 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     BGRAtoBGR(bgradata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    memcpy(data, bgradata, xsize*ysize*csize);
+    if(reverse)
+      BGRAtoARGB(bgradata, data, xsize, ysize);
+    else
+      memcpy(data, bgradata, xsize*ysize*csize);
     break;
   case GL_RGBA:
-    BGRAtoRGBA(bgradata, data, xsize, ysize);
+    if(reverse)
+      BGRAtoABGR(bgradata, data, xsize, ysize);
+    else
+      BGRAtoRGBA(bgradata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     BGRAtoY(bgradata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     START_TIMING;
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      BGRAtoUYVY_Altivec(bgradata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      BGRAtoUYVY(bgradata, data, xsize, ysize);
-      break;
-    }
+    if(reverse)
+      BGRAtoYVYU(bgradata, data, xsize, ysize);
+    else
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        BGRAtoUYVY_Altivec(bgradata, data, xsize, ysize);
+        break;
+      case GEM_SIMD_NONE:
+      default:
+        BGRAtoUYVY(bgradata, data, xsize, ysize);
+        break;
+      }
     STOP_TIMING("BGRA_to_YCbCr");
     break;
   }
@@ -826,6 +881,8 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -837,18 +894,30 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
     ABGRtoRGB(abgrdata, data, xsize, ysize);
     break;
   case GL_ABGR_EXT:
-    memcpy(data, abgrdata, xsize*ysize*csize);
+    if(reverse)
+      ABGRtoRGBA(abgrdata, data, xsize, ysize);
+    else
+      memcpy(data, abgrdata, xsize*ysize*csize);
     break;
   case GL_BGRA:
-    ABGRtoBGRA(abgrdata, data, xsize, ysize);
+    if(reverse)
+      ABGRtoARGB(abgrdata, data, xsize, ysize);
+    else
+      ABGRtoBGRA(abgrdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    ABGRtoRGBA(abgrdata, data, xsize, ysize);
+    if(reverse)
+      memcpy(data, abgrdata, xsize*ysize*csize);
+    else
+      ABGRtoRGBA(abgrdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     ABGRtoY(abgrdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
+    if(reverse)
+      ABGRtoYVYU(abgrdata, data, xsize, ysize);
+    else
     ABGRtoUYVY(abgrdata, data, xsize, ysize);
     break;
   }
@@ -862,6 +931,8 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -874,20 +945,32 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
     break;
 #if 0
   case GL_ARGB_EXT:
-    memcpy(data, argbdata, xsize*ysize*csize);
+    if(reverse)
+      ARGBtoBGRA(argbdata, data, xsize, ysize);
+    else
+      memcpy(data, argbdata, xsize*ysize*csize);
     break;
 #endif
   case GL_BGRA:
-    ARGBtoBGRA(argbdata, data, xsize, ysize);
+    if(reverse)
+      memcpy(data, argbdata, xsize*ysize*csize);
+    else
+      ARGBtoBGRA(argbdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    ARGBtoRGBA(argbdata, data, xsize, ysize);
+    if(reverse)
+      ARGBtoABGR(argbdata, data, xsize, ysize);
+    else
+      ARGBtoRGBA(argbdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     ARGBtoY(argbdata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    ARGBtoUYVY(argbdata, data, xsize, ysize);
+    if(reverse)
+      ARGBtoYVYU(argbdata, data, xsize, ysize);
+    else
+      ARGBtoUYVY(argbdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -900,6 +983,8 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -911,16 +996,25 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
     YtoBGR(greydata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YtoRGBA(greydata, data, xsize, ysize);
+    if(reverse)
+      YtoABGR(greydata, data, xsize, ysize);
+    else
+      YtoRGBA(greydata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YtoBGRA(greydata, data, xsize, ysize);
+    if(reverse)
+      YtoARGB(greydata, data, xsize, ysize);
+    else
+      YtoBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     memcpy(data, greydata, xsize*ysize);
     break;
   case GL_YUV422_GEM:
-    YtoUYVY(greydata, data, xsize, ysize);
+    if(reverse)
+      YtoYVYU(greydata, data, xsize, ysize);
+    else
+      YtoUYVY(greydata, data, xsize, ysize);
     break;
   }
   return true;
@@ -934,6 +1028,8 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -945,16 +1041,25 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
     Yu16toBGR(greydata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    Yu16toRGBA(greydata, data, xsize, ysize);
+    if(reverse)
+      Yu16toABGR(greydata, data, xsize, ysize);
+    else
+      Yu16toRGBA(greydata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    Yu16toBGRA(greydata, data, xsize, ysize);
+    if(reverse)
+      Yu16toARGB(greydata, data, xsize, ysize);
+    else
+      Yu16toBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     Yu16toY(greydata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    Yu16toUYVY(greydata, data, xsize, ysize);
+    if(reverse)
+      Yu16toYVYU(greydata, data, xsize, ysize);
+    else
+      Yu16toUYVY(greydata, data, xsize, ysize);
     break;
   }
   return true;
@@ -989,6 +1094,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
 
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -1003,13 +1110,22 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     I420toBGR(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGBA:
-    I420toRGBA(Y, U, V, data, xsize, ysize);
+    if(reverse)
+      I420toABGR(Y, U, V, data, xsize, ysize);
+    else
+      I420toRGBA(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGRA:
-    I420toBGRA(Y, U, V, data, xsize, ysize);
+    if(reverse)
+      I420toARGB(Y, U, V, data, xsize, ysize);
+    else
+      I420toBGRA(Y, U, V, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
-    I420toUYVY(Y, U, V, data, xsize, ysize);
+    if(reverse)
+      I420toYVYU(Y, U, V, data, xsize, ysize);
+    else
+      I420toUYVY(Y, U, V, data, xsize, ysize);
     break;
   }
   return true;
@@ -1036,6 +1152,8 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
 
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
@@ -1050,22 +1168,31 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     I420S16toBGR(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGBA:
-    I420S16toRGBA(Y, U, V, data, xsize, ysize);
+    if(reverse)
+      I420S16toABGR(Y, U, V, data, xsize, ysize);
+    else
+      I420S16toRGBA(Y, U, V, data, xsize, ysize);
     break;
   case GL_BGRA:
-    I420S16toBGRA(Y, U, V, data, xsize, ysize);
+    if(reverse)
+      I420S16toARGB(Y, U, V, data, xsize, ysize);
+    else
+      I420S16toBGRA(Y, U, V, data, xsize, ysize);
     break;
   case GL_YUV422_GEM: {
     START_TIMING;
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      I420S16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      I420S16toUYVY(Y, U, V, data, xsize, ysize);
-      break;
-    }
+    if(reverse)
+      I420S16toYVYU(Y, U, V, data, xsize, ysize);
+    else
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        I420S16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
+        break;
+      case GEM_SIMD_NONE:
+      default:
+        I420S16toUYVY(Y, U, V, data, xsize, ysize);
+        break;
+      }
     STOP_TIMING("YV12_to_YUV422");
   }
     break;
@@ -1082,14 +1209,14 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
   setCsizeByFormat();
   reallocate();
 
-  bool fixOrder = needsReverseOrdering(type);
+  bool reverse = needsReverseOrdering(type);
 
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    if(fixOrder) {
+    if(reverse) {
       UYVYtoYVYU(yuvdata, data, xsize, ysize);
     } else {
       memcpy(data, yuvdata, xsize*ysize*csize);
@@ -1127,39 +1254,39 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     break;
   case GL_RGBA: {
     START_TIMING;
-    if(fixOrder) {
+    if(reverse) {
       UYVYtoABGR(yuvdata, data, xsize, ysize);
     } else {
-    switch(m_simd) {
-    case GEM_SIMD_SSE2:
-      UYVYtoRGBA_SSE2(yuvdata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      UYVYtoRGBA(yuvdata, data, xsize, ysize);
-      break;
-    }
+      switch(m_simd) {
+      case GEM_SIMD_SSE2:
+        UYVYtoRGBA_SSE2(yuvdata, data, xsize, ysize);
+        break;
+      case GEM_SIMD_NONE:
+      default:
+        UYVYtoRGBA(yuvdata, data, xsize, ysize);
+        break;
+      }
     }
     STOP_TIMING("UYVY_to_RGBA");
   }
     break;
   case GL_BGRA: {
     START_TIMING;
-    if(fixOrder) {
+    if(reverse) {
       UYVYtoARGB(yuvdata, data, xsize, ysize);
     } else {
-    switch(m_simd) {
-    case GEM_SIMD_ALTIVEC:
-      UYVYtoBGRA_Altivec(yuvdata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_SSE2:
-      UYVYtoBGRA(yuvdata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      UYVYtoBGRA(yuvdata, data, xsize, ysize);
-      break;
-    }
+      switch(m_simd) {
+      case GEM_SIMD_ALTIVEC:
+        UYVYtoBGRA_Altivec(yuvdata, data, xsize, ysize);
+        break;
+      case GEM_SIMD_SSE2:
+        UYVYtoBGRA(yuvdata, data, xsize, ysize);
+        break;
+      case GEM_SIMD_NONE:
+      default:
+        UYVYtoBGRA(yuvdata, data, xsize, ysize);
+        break;
+      }
     }
     STOP_TIMING("UYVY_to_BGRA");
   }
@@ -1175,12 +1302,17 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char*yuvdata)   // YUYV
   }
   setCsizeByFormat();
   reallocate();
+  bool reverse = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    YUYVtoUYVY(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YUYVtoYVYU(yuvdata, data, xsize, ysize);
+    else
+      YUYVtoUYVY(yuvdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     YUYVtoY(yuvdata, data, xsize, ysize);
@@ -1192,10 +1324,16 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char*yuvdata)   // YUYV
     YUYVtoBGR(yuvdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YUYVtoRGBA(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YUYVtoABGR(yuvdata, data, xsize, ysize);
+    else
+      YUYVtoRGBA(yuvdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YUYVtoBGRA(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YUYVtoARGB(yuvdata, data, xsize, ysize);
+    else
+      YUYVtoBGRA(yuvdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -1207,14 +1345,18 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
     return false;
   }
   setCsizeByFormat();
-  bool fixOrder = needsReverseOrdering(type);
+  bool reverse = needsReverseOrdering(type);
+
   reallocate();
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    YVYUtoUYVY(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YVYUtoYVYU(yuvdata, data, xsize, ysize);
+    else
+      YVYUtoUYVY(yuvdata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
     YVYUtoY(yuvdata, data, xsize, ysize);
@@ -1226,10 +1368,16 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
     YVYUtoBGR(yuvdata, data, xsize, ysize);
     break;
   case GL_RGBA:
-    YVYUtoRGBA(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YVYUtoABGR(yuvdata, data, xsize, ysize);
+    else
+      YVYUtoRGBA(yuvdata, data, xsize, ysize);
     break;
   case GL_BGRA:
-    YVYUtoBGRA(yuvdata, data, xsize, ysize);
+    if(reverse)
+      YVYUtoARGB(yuvdata, data, xsize, ysize);
+    else
+      YVYUtoBGRA(yuvdata, data, xsize, ysize);
     break;
   }
   return true;
