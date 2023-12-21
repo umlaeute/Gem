@@ -1113,7 +1113,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     }
     STOP_TIMING("YUV2BGR");
   }
-  break;
+    break;
   case GL_RGBA: {
     START_TIMING;
     switch(m_simd) {
@@ -1143,7 +1143,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     }
     STOP_TIMING("UYVY_to_BGRA");
   }
-  break;
+    break;
   }
   return true;
 }
