@@ -594,8 +594,12 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
     return fromBGR(from->data);
   case GL_LUMINANCE:
     return fromGray(from->data);
-  case GL_YUV422_GEM:
-    return fromUYVY(from->data);
+  case GL_YUV422_GEM: {
+    if (fixOrder)
+      return fromYVYU(from->data); // TODO
+    else
+      return fromUYVY(from->data);
+    }
   }
   return false;
 }
@@ -1077,12 +1081,19 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
   }
   setCsizeByFormat();
   reallocate();
+
+  bool fixOrder = needsReverseOrdering(type);
+
   switch (format) {
   default:
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_YUV422_GEM:
-    memcpy(data, yuvdata, xsize*ysize*csize);
+    if(fixOrder) {
+      UYVYtoYVYU(yuvdata, data, xsize, ysize);
+    } else {
+      memcpy(data, yuvdata, xsize*ysize*csize);
+    }
     break;
   case GL_LUMINANCE:
     UYVYtoY(yuvdata, data, xsize, ysize);
@@ -1116,6 +1127,9 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     break;
   case GL_RGBA: {
     START_TIMING;
+    if(fixOrder) {
+      UYVYtoABGR(yuvdata, data, xsize, ysize);
+    } else {
     switch(m_simd) {
     case GEM_SIMD_SSE2:
       UYVYtoRGBA_SSE2(yuvdata, data, xsize, ysize);
@@ -1125,11 +1139,15 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
       UYVYtoRGBA(yuvdata, data, xsize, ysize);
       break;
     }
+    }
     STOP_TIMING("UYVY_to_RGBA");
   }
     break;
   case GL_BGRA: {
     START_TIMING;
+    if(fixOrder) {
+      UYVYtoARGB(yuvdata, data, xsize, ysize);
+    } else {
     switch(m_simd) {
     case GEM_SIMD_ALTIVEC:
       UYVYtoBGRA_Altivec(yuvdata, data, xsize, ysize);
@@ -1141,6 +1159,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     default:
       UYVYtoBGRA(yuvdata, data, xsize, ysize);
       break;
+    }
     }
     STOP_TIMING("UYVY_to_BGRA");
   }
@@ -1184,11 +1203,11 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char*yuvdata)   // YUYV
 
 GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
 {
-  // this is the yuv-format with Gem
   if(!yuvdata) {
     return false;
   }
   setCsizeByFormat();
+  bool fixOrder = needsReverseOrdering(type);
   reallocate();
   switch (format) {
   default:
