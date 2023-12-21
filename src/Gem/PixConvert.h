@@ -218,7 +218,6 @@ void I420S16toUYVY(const short*Y, const short*U, const short*V,
 
     /* YUV422/packed */
 void UYVYtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
-void UYVYtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void UYVYtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void UYVYtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void UYVYtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
