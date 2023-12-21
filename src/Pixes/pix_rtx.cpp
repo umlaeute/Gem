@@ -46,8 +46,8 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 {
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
-  size_t dataSize = reference.xsize * reference.xsize * reference.ysize *
-                    reference.csize * sizeof(unsigned char);
+  size_t imagesize = reference.xsize * reference.ysize * reference.csize  * sizeof(unsigned char);
+  size_t dataSize = imagesize * reference.ysize;
   bool refresh=
     (reference.xsize != buffer.xsize) ||
     (reference.ysize != buffer.ysize) ||
@@ -112,8 +112,8 @@ void pix_rtx :: processImage(imageStruct &image)
   }
 
   size_t pixsize = image.ysize * image.xsize;
-  int cols=image.xsize, c=0, c1=0;
-  int rows=image.ysize, r=0;
+  size_t cols=image.xsize, c=0, c1=0;
+  size_t rows=image.ysize, r=0;
 
   unsigned char *pixels = image.data;
   unsigned char *wp;                   // write pointer
@@ -159,7 +159,7 @@ void pix_rtx :: processImage(imageStruct &image)
       c1 = mode?((c+cols-bufcount)%cols):(c+1)%cols;
       while (r < rows) {
         rp = buffer.data + buffer.csize * (buffer.xsize * buffer.ysize * c +
-                                           buffer.xsize * r + (bufcount - c + cols) % cols );
+                                           buffer.xsize * r + (bufcount + cols - c) % cols );
         pixels = image.data + image.csize * (image.xsize * r + cols - c1);
 
         pixels[0]  = rp[0];
