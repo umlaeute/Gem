@@ -223,6 +223,14 @@ void UYVYtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, 
 void UYVYtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void UYVYtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 
+   /* YUV422/packed */
+void VYUYtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void VYUYtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void VYUYtoRGB(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void VYUYtoBGR(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void VYUYtoRGBA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+void VYUYtoBGRA(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
+
     /* YUV422/packed */
 void YUYVtoY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
 void YUYVtoUYVY(const unsigned char*indata, unsigned char*outdata, size_t width, size_t height);
