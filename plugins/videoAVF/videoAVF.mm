@@ -219,14 +219,14 @@ pixBlock* videoAVF::getFrame(void)
   }
   m_videoGrabber->lock.lock();
   pixBlock*img = &[m_videoGrabber getCurrentFrame];
-  if(img) {
+  if(img && img->image.data && img->image.xsize && img->image.ysize) {
     img->newfilm = (m_width != img->image.xsize) || (m_height != img->image.ysize);
     m_width = img->image.xsize;
     m_height = img->image.ysize;
+    img->image.copy2Image(&m_img.image);
+    m_img.newfilm = img->newfilm;
+    m_img.newimage = img->newimage;
   }
-  img->image.copy2Image(&m_img.image);
-  m_img.newfilm = img->newfilm;
-  m_img.newimage = img->newimage;
 
   return &m_img;
 }
