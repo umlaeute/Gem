@@ -60,6 +60,15 @@
 #define YUYV 1,0,3,2
 #define YVYU 3,0,1,2
 
+
+#undef CONVERTER_MARK
+#if GEM_DEBUG_PIXCONVERT
+# include "m_pd.h"
+# define CONVERTER_MARK() verbose(1, "%s(%ux%u)", __FUNCTION__, (unsigned int)width, (unsigned int)height)
+#else
+# define CONVERTER_MARK() 0
+#endif
+
 namespace {
   /* generic channel swizzling conversions */
   template <int inR, int inG, int inB,
@@ -774,28 +783,39 @@ namespace {
 }
 
 /* the actual converter instances */
-
-#define CONVERT(SRC, DST, templ, T)                                     \
-  void SRC##to##DST(const T*indata, unsigned char*outdata, size_t width, size_t height) { templ<SRC, DST>(indata, outdata, width, height); }
-
-#define CONVERT0(SRC, DST, templ, T, shift)                              \
-  void SRC##to##DST(const T*indata, unsigned char*outdata, size_t width, size_t height) { templ<shift, DST>(indata, outdata, width, height); }
-
-
-#define CONVERTy(SRC, templ, T)                         \
-  void SRC##toY(const T*indata, unsigned char*outdata,  \
-                size_t width, size_t height) {          \
-    templ<SRC>(indata, outdata, width, height);         \
+#define CONVERT(SRC, DST, templ, T)                   \
+  void SRC##to##DST(                                  \
+    const T*indata, unsigned char*outdata,            \
+    size_t width, size_t height) {                    \
+    CONVERTER_MARK();                                 \
+    templ<SRC, DST>(indata, outdata, width, height);  \
   }
-
-#define CONVERTp(SRC, DST, templ, T)                             \
-  void SRC##to##DST(const T*Y, const T*U, const T*V, unsigned char*outdata, size_t width, size_t height) { templ<DST>(Y, U, V, outdata, width, height); }
-
-
+#define CONVERT0(SRC, DST, templ, T, shift)             \
+  void SRC##to##DST(                                    \
+    const T*indata, unsigned char*outdata,              \
+    size_t width, size_t height) {                      \
+    CONVERTER_MARK();                                   \
+    templ<shift, DST>(indata, outdata, width, height);  \
+  }
+#define CONVERTy(SRC, templ, T)                 \
+  void SRC##toY(                                \
+    const T*indata, unsigned char*outdata,      \
+    size_t width, size_t height) {              \
+    CONVERTER_MARK();                           \
+    templ<SRC>(indata, outdata, width, height); \
+  }
+#define CONVERTp(SRC, DST, templ, T)                        \
+  void SRC##to##DST(                                        \
+    const T*Y, const T*U, const T*V, unsigned char*outdata, \
+    size_t width, size_t height) {                          \
+    CONVERTER_MARK();                                       \
+    templ<DST>(Y, U, V, outdata, width, height);            \
+  }
 
 /* GRAY -> */
 void YtoY(const unsigned short*indata,
           unsigned char*outdata, size_t width, size_t height) {
+  CONVERTER_MARK();
   memcpy(outdata, indata, width*height);
 }
 CONVERT0(Y, UYVY, y_to_yuv4, unsigned char, 0);
@@ -811,6 +831,7 @@ CONVERT0(Y, ARGB, y_to_rgb4, unsigned char, 0);
 
 void Yu16toY(const unsigned short*indata,
              unsigned char*outdata, size_t width, size_t height) {
+  CONVERTER_MARK();
   size_t size = width*height;
   while(size--) {
     *outdata++ = (*indata++)>>8;
@@ -831,6 +852,7 @@ CONVERT0(Yu16, ARGB, y_to_rgb4, unsigned short, 8);
 /* YUV420planar -> */
 void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
              unsigned char*outdata, size_t width, size_t height) {
+  CONVERTER_MARK();
   memcpy(outdata, Y, width*height);
 }
 
@@ -847,6 +869,7 @@ CONVERTp(I420, ARGB, yuv420p_to_rgb4, unsigned char);
 
 void I420S16toY(const short*Y, const short*U, const short*V,
                 unsigned char*outdata, size_t width, size_t height) {
+  CONVERTER_MARK();
   size_t size = width*height;
   while(size--) {
     *outdata++ = ((*Y++)>>8) + Y_OFFSET;
@@ -915,6 +938,7 @@ CONVERT(YVYU, ARGB, yuv4_to_rgb4, unsigned char);
 /* RGB -> */
 void RGB16toY(const unsigned char*indata_,
               unsigned char*outdata, size_t width, size_t height) {
+  CONVERTER_MARK();
   size_t size = width*height;
   const unsigned short*indata = (const unsigned short*)indata_;
   while(size--) {
