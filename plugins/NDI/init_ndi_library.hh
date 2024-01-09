@@ -117,13 +117,13 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
     }
   notfound:
     if(firsttime) {
-      pd_error(0, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
-      pd_error(0, "        need to find the library '%s'", NDILIB_LIBRARY_NAME);
+      verbose(1, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
+      verbose(1, "        need to find the library '%s'", NDILIB_LIBRARY_NAME);
       if (std::string("") != NDILIB_REDIST_URL)
-        pd_error(0, "        get the NewTek Runtimes from %s", NDILIB_REDIST_URL);
-      pd_error(0, "        use the '%s' environment variable to set the path to the library.", NDILIB_REDIST_FOLDER);
+        verbose(1, "        get the NewTek Runtimes from %s", NDILIB_REDIST_URL);
+      verbose(1, "        use the '%s' environment variable to set the path to the library.", NDILIB_REDIST_FOLDER);
       if(p_NDI_runtime_folder)
-        pd_error(0, "        (currently set to '%s').", p_NDI_runtime_folder);
+        verbose(1, "        (currently set to '%s').", p_NDI_runtime_folder);
     }
     return 0;
   }
