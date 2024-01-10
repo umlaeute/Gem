@@ -631,7 +631,7 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_RGB:
-    memcpy(data, rgbdata, xsize*ysize*csize);
+    RGBtoRGB(rgbdata, data, xsize, ysize);
     break;
   case GL_BGR:
     RGBtoBGR(rgbdata, data, xsize, ysize);
@@ -727,11 +727,11 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
     if(reverse)
       RGBAtoABGR(rgbadata, data, xsize, ysize);
     else
-      memcpy(data, rgbadata, xsize*ysize*csize);
+      RGBAtoRGBA(rgbadata, data, xsize, ysize);
     break;
   case GL_ABGR_EXT:
     if(reverse)
-      memcpy(data, rgbadata, xsize*ysize*csize);
+      RGBAtoRGBA(rgbadata, data, xsize, ysize);
     else
       RGBAtoABGR(rgbadata, data, xsize, ysize);
     break;
@@ -781,7 +781,7 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_BGR:
-    memcpy(data, bgrdata, xsize*ysize*csize);
+    BGRtoBGR(bgrdata, data, xsize, ysize);
     break;
   case GL_RGB:
     BGRtoRGB(bgrdata, data, xsize, ysize);
@@ -841,7 +841,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     if(reverse)
       BGRAtoARGB(bgradata, data, xsize, ysize);
     else
-      memcpy(data, bgradata, xsize*ysize*csize);
+      BGRAtoBGRA(bgradata, data, xsize, ysize);
     break;
   case GL_RGBA:
     if(reverse)
@@ -897,7 +897,7 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
     if(reverse)
       ABGRtoRGBA(abgrdata, data, xsize, ysize);
     else
-      memcpy(data, abgrdata, xsize*ysize*csize);
+      ABGRtoABGR(abgrdata, data, xsize, ysize);
     break;
   case GL_BGRA:
     if(reverse)
@@ -907,7 +907,7 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
     break;
   case GL_RGBA:
     if(reverse)
-      memcpy(data, abgrdata, xsize*ysize*csize);
+      ABGRtoABGR(abgrdata, data, xsize, ysize);
     else
       ABGRtoRGBA(abgrdata, data, xsize, ysize);
     break;
@@ -948,12 +948,12 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
     if(reverse)
       ARGBtoBGRA(argbdata, data, xsize, ysize);
     else
-      memcpy(data, argbdata, xsize*ysize*csize);
+      ARGBtoARGB(bgradata, data, xsize, ysize);
     break;
 #endif
   case GL_BGRA:
     if(reverse)
-      memcpy(data, argbdata, xsize*ysize*csize);
+      ARGBtoARGB(argbdata, data, xsize, ysize);
     else
       ARGBtoBGRA(argbdata, data, xsize, ysize);
     break;
@@ -1008,7 +1008,7 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
       YtoBGRA(greydata, data, xsize, ysize);
     break;
   case GL_LUMINANCE:
-    memcpy(data, greydata, xsize*ysize);
+    YtoY(greydata, data, xsize, ysize);
     break;
   case GL_YUV422_GEM:
     if(reverse)
@@ -1101,7 +1101,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_LUMINANCE:
-    memcpy(data, Y, xsize*ysize);
+    I420toY(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGB:
     I420toRGB(Y, U, V, data, xsize, ysize);
@@ -1159,7 +1159,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     pd_error(0, "%s: unable to convert to %s", __FUNCTION__, format2name(format));
     return false;
   case GL_LUMINANCE:
-    memcpy(data, Y, xsize*ysize);
+    I420S16toY(Y, U, V, data, xsize, ysize);
     break;
   case GL_RGB:
     I420S16toRGB(Y, U, V, data, xsize, ysize);
@@ -1219,7 +1219,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     if(reverse) {
       UYVYtoYVYU(yuvdata, data, xsize, ysize);
     } else {
-      memcpy(data, yuvdata, xsize*ysize*csize);
+      UYVYtoUYVY(yuvdata, data, xsize, ysize);
     }
     break;
   case GL_LUMINANCE:
