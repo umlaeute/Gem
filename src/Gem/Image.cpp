@@ -119,6 +119,108 @@ static int m_simd=3;
 static int m_simd=GemSIMD::getCPU();
 #endif
 
+#define RGBtoUYVY(indata, outdata, xsize, ysize)          \
+  switch(m_simd) {                                        \
+  case GEM_SIMD_ALTIVEC:                                  \
+    RGBtoUYVY_Altivec(indata, outdata, xsize, ysize);     \
+    break;                                                \
+  case GEM_SIMD_NONE:                                     \
+  default:                                                \
+    RGBtoUYVY(indata, outdata, xsize, ysize);             \
+    break;                                                \
+  }
+
+#define RGBAtoUYVY(indata, outdata, xsize, ysize);      \
+  switch(m_simd) {                                      \
+  case GEM_SIMD_ALTIVEC:                                \
+    RGBAtoUYVY_Altivec(indata, outdata, xsize, ysize);  \
+    break;                                              \
+  case GEM_SIMD_SSE2:                                   \
+    RGBAtoUYVY_SSE2(indata, pixels, xsize, ysize);      \
+    break;                                              \
+  case GEM_SIMD_NONE:                                   \
+  default:                                              \
+    RGBAtoUYVY(indata, outdata, xsize, ysize);          \
+    break;                                              \
+  }
+
+#define BGRtoUYVY(indata, outdata, xsize, ysize);     \
+  switch(m_simd) {                                    \
+  case GEM_SIMD_ALTIVEC:                              \
+    BGRtoUYVY_Altivec(indata, outdata, xsize, ysize); \
+    break;                                            \
+  case GEM_SIMD_NONE:                                 \
+  default:                                            \
+    BGRtoUYVY(indata, outdata, xsize, ysize);         \
+    break;                                            \
+  }
+
+#define BGRAtoUYVY(indata, outdata, xsize, ysize)       \
+  switch(m_simd) {                                      \
+  case GEM_SIMD_ALTIVEC:                                \
+    BGRAtoUYVY_Altivec(indata, outdata, xsize, ysize);  \
+    break;                                              \
+  case GEM_SIMD_NONE:                                   \
+  default:                                              \
+    BGRAtoUYVY(indata, outdata, xsize, ysize);          \
+    break;                                              \
+  }
+
+#define I420S16toUYVY(Y, U, V, outdata, xsize, ysize)       \
+  switch(m_simd) {                                          \
+  case GEM_SIMD_ALTIVEC:                                    \
+    I420S16toUYVY_Altivec(Y, U, V, outdata, xsize, ysize);  \
+    break;                                                  \
+  case GEM_SIMD_NONE:                                       \
+  default:                                                  \
+    I420S16toUYVY(Y, U, V, outdata, xsize, ysize);          \
+    break;                                                  \
+  }
+
+#define UYVYtoRGB(indata, outdata, xsize, ysize)    \
+  switch(m_simd) {                                  \
+  case GEM_SIMD_SSE2:                               \
+    UYVYtoRGB_SSE2(indata, outdata, xsize, ysize);  \
+    break;                                          \
+  case GEM_SIMD_NONE:                               \
+  default:                                          \
+    UYVYtoRGB(indata, outdata, xsize, ysize);       \
+    break;                                          \
+  }
+
+#define UYVYtoBGR(indata, outdata, xsize, ysize)    \
+  switch(m_simd) {                                  \
+  case GEM_SIMD_SSE2:                               \
+    UYVYtoBGR_SSE2(indata, outdata, xsize, ysize);  \
+    break;                                          \
+  case GEM_SIMD_NONE:                               \
+  default:                                          \
+    UYVYtoBGR(indata, outdata, xsize, ysize);       \
+    break;                                          \
+  }
+
+#define UYVYtoRGBA(indata, outdata, xsize, ysize)   \
+  switch(m_simd) {                                  \
+  case GEM_SIMD_SSE2:                               \
+    UYVYtoRGBA_SSE2(indata, outdata, xsize, ysize); \
+    break;                                          \
+  case GEM_SIMD_NONE:                               \
+  default:                                          \
+    UYVYtoRGBA(indata, outdata, xsize, ysize);      \
+    break;                                          \
+  }
+
+#define UYVYtoBGRA(indata, outdata, xsize, ysize)       \
+  switch(m_simd) {                                      \
+  case GEM_SIMD_ALTIVEC:                                \
+    UYVYtoBGRA_Altivec(indata, outdata, xsize, ysize);  \
+    break;                                              \
+  case GEM_SIMD_NONE:                                   \
+  default:                                              \
+    UYVYtoBGRA(indata, outdata, xsize, ysize);          \
+    break;                                              \
+  }
+
 namespace {
   size_t type2size(unsigned int type) {
     switch(type) {
@@ -655,14 +757,7 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
     if(reverse)
       RGBtoYVYU(rgbdata, data, xsize, ysize);
     else
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        RGBtoUYVY_Altivec(rgbdata, data, xsize, ysize);
-        break;
-      default:
-        RGBtoUYVY(rgbdata, data, xsize, ysize);
-        break;
-      }
+      RGBtoUYVY(rgbdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -749,17 +844,7 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
     if(reverse)
       RGBAtoYVYU(rgbadata, data, xsize, ysize);
     else
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        RGBAtoUYVY_Altivec(rgbadata, data, xsize, ysize);
-        break;
-      case GEM_SIMD_SSE2:
-        RGBAtoUYVY_SSE2(rgbadata, pixels, xsize, ysize);
-        break;
-      case GEM_SIMD_NONE:
-      default:
-        RGBAtoUYVY(rgbadata, data, xsize, ysize);
-      }
+      RGBAtoUYVY(rgbadata, data, xsize, ysize);
     STOP_TIMING("RGBA to UYVY");
     break;
   }
@@ -805,14 +890,7 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
     if(reverse)
       BGRtoYVYU(bgrdata, data, xsize, ysize);
     else
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        BGRtoUYVY_Altivec(bgrdata, data, xsize, ysize);
-        break;
-      default:
-        BGRtoUYVY(bgrdata, data, xsize, ysize);
-        break;
-      }
+      BGRtoUYVY(bgrdata, data, xsize, ysize);
     break;
   }
   return true;
@@ -857,15 +935,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
     if(reverse)
       BGRAtoYVYU(bgradata, data, xsize, ysize);
     else
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        BGRAtoUYVY_Altivec(bgradata, data, xsize, ysize);
-        break;
-      case GEM_SIMD_NONE:
-      default:
-        BGRAtoUYVY(bgradata, data, xsize, ysize);
-        break;
-      }
+      BGRAtoUYVY(bgradata, data, xsize, ysize);
     STOP_TIMING("BGRA_to_YCbCr");
     break;
   }
@@ -1184,15 +1254,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     if(reverse)
       I420S16toYVYU(Y, U, V, data, xsize, ysize);
     else
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        I420S16toUYVY_Altivec(Y, U, V, data, xsize, ysize);
-        break;
-      case GEM_SIMD_NONE:
-      default:
-        I420S16toUYVY(Y, U, V, data, xsize, ysize);
-        break;
-      }
+      I420S16toUYVY(Y, U, V, data, xsize, ysize);
     STOP_TIMING("YV12_to_YUV422");
   }
     break;
@@ -1227,28 +1289,13 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     break;
   case GL_RGB: {
     START_TIMING;
-    switch(m_simd) {
-    case GEM_SIMD_SSE2:
-      UYVYtoRGB_SSE2(yuvdata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      UYVYtoRGB(yuvdata, data, xsize, ysize);
-      break;
-    }
+    UYVYtoRGB(yuvdata, data, xsize, ysize);
     STOP_TIMING("YUV2RGB");
   }
     break;
   case GL_BGR: {
     START_TIMING;
-    switch(m_simd) {
-    case GEM_SIMD_SSE2:
-      UYVYtoBGR_SSE2(yuvdata, data, xsize, ysize);
-      break;
-    case GEM_SIMD_NONE:
-    default:
-      UYVYtoBGR(yuvdata, data, xsize, ysize);
-    }
+    UYVYtoBGR(yuvdata, data, xsize, ysize);
     STOP_TIMING("YUV2BGR");
   }
     break;
@@ -1257,15 +1304,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     if(reverse) {
       UYVYtoABGR(yuvdata, data, xsize, ysize);
     } else {
-      switch(m_simd) {
-      case GEM_SIMD_SSE2:
-        UYVYtoRGBA_SSE2(yuvdata, data, xsize, ysize);
-        break;
-      case GEM_SIMD_NONE:
-      default:
-        UYVYtoRGBA(yuvdata, data, xsize, ysize);
-        break;
-      }
+      UYVYtoRGBA(yuvdata, data, xsize, ysize);
     }
     STOP_TIMING("UYVY_to_RGBA");
   }
@@ -1275,18 +1314,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
     if(reverse) {
       UYVYtoARGB(yuvdata, data, xsize, ysize);
     } else {
-      switch(m_simd) {
-      case GEM_SIMD_ALTIVEC:
-        UYVYtoBGRA_Altivec(yuvdata, data, xsize, ysize);
-        break;
-      case GEM_SIMD_SSE2:
-        UYVYtoBGRA(yuvdata, data, xsize, ysize);
-        break;
-      case GEM_SIMD_NONE:
-      default:
-        UYVYtoBGRA(yuvdata, data, xsize, ysize);
-        break;
-      }
+      UYVYtoBGRA(yuvdata, data, xsize, ysize);
     }
     STOP_TIMING("UYVY_to_BGRA");
   }
