@@ -1422,42 +1422,6 @@ GEM_EXTERN void imageStruct::fixUpDown(void)
   upsidedown=true;
 }
 
-/* swap the Red and Blue channel _in-place_ */
-GEM_EXTERN void imageStruct::swapRedBlue(void)
-{
-  size_t pixelnum=xsize*ysize;
-  unsigned char *pixels=data;
-  switch (format) {
-  case GL_YUV422_GEM:
-    pixelnum>>=1;
-    while(pixelnum--) {
-      unsigned char dummy=pixels[chU];
-      pixels[chU]=pixels[chV]; // u
-      pixels[chV]=dummy; // v
-      pixels+=4;
-    }
-    break;
-  case GL_RGB:
-  case GL_BGR:
-    while(pixelnum--) {
-      unsigned char dummy=pixels[chRed];
-      pixels[chRed]=pixels[chBlue];
-      pixels[chBlue]=dummy;
-      pixels+=3;
-    }
-    break;
-  case GL_RGBA:
-  case GL_BGRA:
-    while(pixelnum--) {
-      unsigned char dummy=pixels[chRed];
-      pixels[chRed]=pixels[chBlue];
-      pixels[chBlue]=dummy;
-      pixels+=4;
-    }
-    break;
-  }
-}
-
 
 GEM_EXTERN bool imageStruct::getRGB(int X, int Y, unsigned char*r,
                                     unsigned char*g, unsigned char*b, unsigned char*a) const
