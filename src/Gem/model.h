@@ -51,8 +51,6 @@ namespace gem
     void useMaterial(bool);
     void setTexture(float w, float h);
  private:
-    gem::plugins::modelloader*m_loader;
-
     std::vector<struct modelmesh>m_mesh;
 
     unsigned int m_drawType;
