@@ -73,10 +73,11 @@ model :: ~model(void)
     m_loader->close();
     delete m_loaded;
   }
+  m_loaded = 0;
   if(m_loader) {
     delete m_loader;
-    m_loader=NULL;
   }
+  m_loader = 0;
 }
 
 static gem::any atom2any(t_atom*ap)
@@ -512,6 +513,7 @@ void model :: openMess(const std::string&filename)
   m_loader->close();
   if (m_loaded)
     delete m_loaded;
+  m_loaded = 0;
 
   if(!m_backends.empty()) {
     wantProps.set("backends", m_backends);
