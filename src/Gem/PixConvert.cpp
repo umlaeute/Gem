@@ -77,6 +77,12 @@ namespace {
     const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
     size_t size = width*height;
 
+    if(inR == outR && inG == outG && inB == outB) {
+      if(indata != outdata)
+        memcpy(outdata, indata, width*height*3);
+      return;
+    }
+
     if(indata==outdata) {
       // in place conversion
       while(size--) {
@@ -137,6 +143,13 @@ namespace {
   static void four_to_four(
     const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
     size_t size = width*height;
+
+    if(inR == outR && inG == outG && inB == outB && inA == outA) {
+      if(indata != outdata)
+        memcpy(outdata, indata, width*height*4);
+      return;
+    }
+
 
     if(indata==outdata) {
       // in place conversion
@@ -813,10 +826,11 @@ namespace {
   }
 
 /* GRAY -> */
-void YtoY(const unsigned short*indata,
+void YtoY(const unsigned char*indata,
           unsigned char*outdata, size_t width, size_t height) {
   CONVERTER_MARK();
-  memcpy(outdata, indata, width*height);
+  if(indata != outdata)
+    memcpy(outdata, indata, width*height);
 }
 CONVERT0(Y, UYVY, y_to_yuv4, unsigned char, 0);
 CONVERT0(Y, VYUY, y_to_yuv4, unsigned char, 0);
@@ -853,7 +867,8 @@ CONVERT0(Yu16, ARGB, y_to_rgb4, unsigned short, 8);
 void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
              unsigned char*outdata, size_t width, size_t height) {
   CONVERTER_MARK();
-  memcpy(outdata, Y, width*height);
+  if(Y != outdata)
+    memcpy(outdata, Y, width*height);
 }
 
 CONVERTp(I420, UYVY, yuv420p_to_yuv4, unsigned char);
