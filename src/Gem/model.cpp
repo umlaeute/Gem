@@ -107,8 +107,10 @@ namespace
     std::vector<float> vNormals;
     std::vector<float> vTexCoordsUV, vTexCoordsLinear, vTexCoordsSpheremap;
 
+    /* processed data */
+    std::vector<float> vTexCoords; /* scaled version of one of ...UV/Linear/Spheremap */
 
-
+    /* VBOs */
     gem::VBO vertices, normals, colors, texcoords;
     gem::plugins::modelloader::material material;
 
@@ -136,12 +138,33 @@ namespace
       }
 
     }
-    void update(void)
+    void update(enum gem::modelGL::texturetype t, float texW, float texH)
     {
       vertices.update(size, vVertices.data());
       normals.update(size, vNormals.data());
       colors.update(size, vColors.data());
-      texcoords.update(size, vTexCoordsUV.data());
+
+      float*texCoords = 0;
+      switch(t) {
+      case gem::modelGL::LINEAR:
+        texCoords = vTexCoordsLinear.data();
+        break;
+      case gem::modelGL::SPHEREMAP:
+        texCoords = vTexCoordsSpheremap.data();
+        break;
+      default:
+      case gem::modelGL::UV:
+        texCoords = vTexCoordsUV.data();
+        break;
+      }
+      vTexCoords.resize(size * 2);
+      if(texCoords) {
+        for(unsigned int i=0; i<size; i++) {
+          vTexCoords[2*i+0] = *texCoords++ * texW;
+          vTexCoords[2*i+1] = *texCoords++ * texH;
+        }
+      }
+      texcoords.update(size, vTexCoords.data());
     }
     void render(GLenum drawType) const
     {
@@ -214,7 +237,7 @@ namespace gem {
       if(GLEW_VERSION_1_5) {
         /* update the VBOs */
         for (auto&m: m_pimpl->mesh) {
-          m.update();
+          m.update(m_pimpl->texType, m_pimpl->texScale[0], m_pimpl->texScale[1]);
         }
       }
       return true;

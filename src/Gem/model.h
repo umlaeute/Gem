@@ -46,7 +46,6 @@ namespace gem
     /* influence the rendering */
     void setDrawType(unsigned int);
     void useMaterial(bool);
-    void setTexture(float w, float h);
 
     enum texturetype {
       LINEAR = 0,
@@ -54,6 +53,7 @@ namespace gem
       UV = 2,
     };
     void setTextureType(enum texturetype);
+    void setTexture(float w, float h);
  private:
     class PIMPL;
     PIMPL*m_pimpl;
