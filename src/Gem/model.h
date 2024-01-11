@@ -33,6 +33,9 @@ namespace gem
      * initialize the model
      */
     modelGL(gem::plugins::modelloader&loader);
+    virtual ~modelGL(void);
+
+
     /* update data */
     bool update(void);
     /* render the model in the current openGL context */
@@ -44,6 +47,13 @@ namespace gem
     void setDrawType(unsigned int);
     void useMaterial(bool);
     void setTexture(float w, float h);
+
+    enum texturetype {
+      LINEAR = 0,
+      SPHEREMAP = 1,
+      UV = 2,
+    };
+    void setTextureType(enum texturetype);
  private:
     class PIMPL;
     PIMPL*m_pimpl;
