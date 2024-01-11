@@ -97,12 +97,12 @@ namespace gem {
   };
 
 
-  modelGL::modelGL(gem::plugins::modelloader*loader)
+  modelGL::modelGL(gem::plugins::modelloader&loader)
     : m_pimpl(new PIMPL())
   {
-    const size_t nummeshes = loader->getNumMeshes();
+    const size_t nummeshes = loader.getNumMeshes();
     for(size_t n=0; n < nummeshes; n++) {
-      gem::plugins::modelloader::mesh*mesh = loader->getMesh(n);
+      gem::plugins::modelloader::mesh*mesh = loader.getMesh(n);
       if(mesh) {
         m_pimpl->mesh.push_back(modelmesh(mesh));
       }

@@ -32,7 +32,7 @@ namespace gem
     /* ctor
      * initialize the model
      */
-    modelGL(gem::plugins::modelloader*loader);
+    modelGL(gem::plugins::modelloader&loader);
     /* update data */
     bool update(void);
     /* render the model in the current openGL context */

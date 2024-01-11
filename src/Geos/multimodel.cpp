@@ -342,7 +342,7 @@ void multimodel :: open(const std::string&filename, int baseModel,
     verbose(1, "trying to load '%s'", newName);
 
     if(m_loader->open(newName, wantProps)) {
-      loaded.push_back(gem::modelGL(m_loader));
+      loaded.push_back(gem::modelGL(*m_loader));
     } else {
       break;
     }

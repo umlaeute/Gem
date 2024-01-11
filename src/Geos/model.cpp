@@ -527,7 +527,7 @@ void model :: openMess(const std::string&filename)
     return;
   }
 
-  m_loaded=new gem::modelGL(m_loader);
+  m_loaded=new gem::modelGL(*m_loader);
 }
 
 void model :: startRendering()
