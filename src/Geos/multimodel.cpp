@@ -112,27 +112,19 @@ void multimodel :: materialMess(int material)
 /////////////////////////////////////////////////////////
 void multimodel :: textureMess(int state)
 {
-  std::string textype;
   switch(state) {
   case 0:
-    textype="linear";
+    m_texType = gem::modelGL::texturetype::LINEAR;
     break;
   case 1:
-    textype="spheremap";
+    m_texType = gem::modelGL::texturetype::SPHEREMAP;
     break;
   case 2:
-    textype="UV";
+    m_texType = gem::modelGL::texturetype::UV;
     break;
   default:
     break;
   }
-  if(textype.empty()) {
-    m_properties.erase("textype");
-  } else {
-    gem::any value=textype;
-    m_properties.set("textype", value);
-  }
-  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
@@ -399,8 +391,6 @@ void multimodel :: render(GemState *state)
     m_model->update();
     //m_update = false;
   }
-  float texscale[2] = {1., 1.};
-
   bool blend = m_blend;
   GLfloat linewidth = m_linewidth;
   bool setwidth = false;
@@ -414,21 +404,9 @@ void multimodel :: render(GemState *state)
     state->get(GemState::_GL_TEX_COORDS, texCoords);
     state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
     if(texNum>1 && texCoords) {
-      if(texCoords[1].s != texscale[0])
-        rebuild = true;
-      if(texCoords[1].t != texscale[1])
-        rebuild = true;
-      texscale[0] = texCoords[1].s;
-      texscale[1] = texCoords[1].t;
+      m_model->setTexture(texCoords[1].s, texCoords[1].t);
     }
-#if 0
-    if(rebuild) {
-      gem::Properties props = gem::Properties(m_writeprops);
-      props.set("_texwidth", texscale[0]);
-      props.set("_texheight", texscale[1]);
-      m_loader->setProperties(props);
-    }
-#endif
+    m_model->setTextureType(m_texType);
   }
 
   switch(m_drawType) {
@@ -445,8 +423,6 @@ void multimodel :: render(GemState *state)
 
   m_model->setDrawType(m_drawType);
   m_model->useMaterial(m_useMaterial);
-  m_model->setTexture(texscale[0], texscale[1]);
-  m_model->update();
 
   if(setwidth) {
     glLineWidth(linewidth);

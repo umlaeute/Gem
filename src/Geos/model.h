@@ -113,7 +113,7 @@ protected:
   std::map<std::string, GLenum>m_drawTypes;
   bool m_blend;
   GLfloat m_linewidth;
-  GLfloat m_texscale[2];
+  enum gem::modelGL::texturetype m_texType;
 
   std::vector<unsigned int> m_group;
   bool m_useMaterial;

@@ -47,6 +47,7 @@ model :: model(t_symbol* filename)
   , m_drawType(GL_TRIANGLES)
   , m_blend(false)
   , m_linewidth(1.0)
+  , m_texType(gem::modelGL::texturetype::LINEAR)
 {
   m_drawTypes.clear();
   m_drawTypes["default"]=m_drawType;
@@ -55,7 +56,6 @@ model :: model(t_symbol* filename)
   m_drawTypes["line"]=GL_LINES;
   m_drawTypes["lines"]=GL_LINES;
   m_drawTypes["fill"]=GL_TRIANGLES;
-  m_texscale[0] = m_texscale[1] = 1.;
 
   // make sure that there are some characters
   if (filename&&filename->s_name&&*filename->s_name) {
@@ -328,27 +328,19 @@ void model :: materialMess(int material)
 /////////////////////////////////////////////////////////
 void model :: textureMess(int state)
 {
-  std::string textype;
   switch(state) {
   case 0:
-    textype="linear";
+    m_texType = gem::modelGL::texturetype::LINEAR;
     break;
   case 1:
-    textype="spheremap";
+    m_texType = gem::modelGL::texturetype::SPHEREMAP;
     break;
   case 2:
-    textype="UV";
+    m_texType = gem::modelGL::texturetype::UV;
     break;
   default:
     break;
   }
-  if(textype.empty()) {
-    m_writeprops.erase("textype");
-  } else {
-    gem::any value=textype;
-    m_writeprops.set("textype", value);
-  }
-  applyProperties();
 }
 
 /////////////////////////////////////////////////////////
@@ -555,19 +547,9 @@ void model :: render(GemState *state)
     state->get(GemState::_GL_TEX_COORDS, texCoords);
     state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
     if(texNum>1 && texCoords) {
-      if(texCoords[1].s != m_texscale[0])
-        rebuild = true;
-      if(texCoords[1].t != m_texscale[1])
-        rebuild = true;
-      m_texscale[0] = texCoords[1].s;
-      m_texscale[1] = texCoords[1].t;
+      m_loaded->setTexture(texCoords[1].s, texCoords[1].t);
     }
-    if(rebuild) {
-      gem::Properties props = gem::Properties(m_writeprops);
-      props.set("_texwidth", m_texscale[0]);
-      props.set("_texheight", m_texscale[1]);
-      m_loader->setProperties(props);
-    }
+    m_loaded->setTextureType(m_texType);
   }
 
   switch(m_drawType) {
@@ -584,8 +566,7 @@ void model :: render(GemState *state)
 
   m_loaded->setDrawType(m_drawType);
   m_loaded->useMaterial(m_useMaterial);
-  m_loaded->setTexture(m_texscale[0], m_texscale[1]);
-  m_loaded->update();
+
 
   if(setwidth) {
     glLineWidth(m_linewidth);

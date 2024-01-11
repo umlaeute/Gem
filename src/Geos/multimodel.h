@@ -133,6 +133,7 @@ protected:
   bool m_blend;
   GLfloat m_linewidth;
   bool m_useMaterial;
+  enum gem::modelGL::texturetype m_texType;
 
   std::vector<unsigned int> m_group;
 };
