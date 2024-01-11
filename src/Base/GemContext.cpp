@@ -229,6 +229,11 @@ bool Context::push(void)
   return true;
 }
 
+bool Context::isActive(void)
+{
+  return (m_pimpl->s_contextid == m_pimpl->contextid);
+}
+
 bool Context::pop(void)
 {
   return true;

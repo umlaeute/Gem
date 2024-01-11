@@ -45,13 +45,11 @@ pix_invert :: ~pix_invert()
 void pix_invert :: processRGBAImage(imageStruct &image)
 {
   int i = image.xsize * image.ysize;
-
   unsigned char *base = image.data;
-  while (i) {
-    i--;
-    unsigned char alpha = base[chAlpha];
-    *((unsigned long *)base) = ~*((unsigned long *)base);
-    base[chAlpha] = alpha;
+  while (i--) {
+    base[chRed]   = 255 - base[chRed];
+    base[chGreen] = 255 - base[chGreen];
+    base[chBlue]  = 255 - base[chBlue];
     base += 4;
   }
 }

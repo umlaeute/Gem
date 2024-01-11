@@ -149,6 +149,14 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_SED
 
+
+AC_ARG_ENABLE([debug],
+        AS_HELP_STRING([--enable-debug=FACILITIES],
+                [enable additional debugging for the named FACILITIES (comma-separated);
+                known facilities are 'pixconvert'. Others may follow.
+                ]))
+
+
 AC_ARG_WITH([ALL],
              AS_HELP_STRING([--without-ALL],[en/disable ALL libraries by default]))
 
@@ -163,6 +171,16 @@ AC_SUBST(GEM_LIBS)
 GEM_CHECK_WERROR
 GEM_CPPFLAGS=""
 GEM_CHECK_EXTERNAL
+
+# additional debugging
+gem_debug_pixconvert=""
+AS_CASE([$enable_debug],
+        [yes], [
+            GEM_CPPFLAGS="${GEM_CPPFLAGS} -DGEM_DEBUG_PIXCONVERT=1"
+        ], [ # fallback
+            AS_CASE([,"${enable_debug}",], [,pixconvert,], [GEM_CPPFLAGS="${GEM_CPPFLAGS} -DGEM_DEBUG_PIXCONVERT=1"])
+        ])
+
 
 AC_ARG_WITH([GLU], AC_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
 GEM_ARG_ENABLE([mmx],     [MMX-support])

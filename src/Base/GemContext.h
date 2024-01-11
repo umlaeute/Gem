@@ -49,6 +49,10 @@ public:
   // make context uncurrent
   bool pop(void);
 
+
+  // check if this context is current
+  bool isActive(void);
+
 public:
   static unsigned int getContextId(void);
   static GLEWContext*getGlewContext(void);

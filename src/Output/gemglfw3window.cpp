@@ -800,7 +800,12 @@ bool gemglfw3window :: create(void)
   glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 
 #ifdef GLFW_COCOA_FRAME_NAME
-  glfwWindowHintString(GLFW_COCOA_FRAME_NAME, "Gem");
+  /* setting a name here, enables "autosaving the window frame",
+     which basically means, that hints like width/height are ignored
+     at window creation.
+     so we set it to an empty string...
+   */
+  glfwWindowHintString(GLFW_COCOA_FRAME_NAME, "");
 #endif
 
   /* do we want OpenGL-ES? */

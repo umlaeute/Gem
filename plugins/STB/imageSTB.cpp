@@ -73,12 +73,7 @@ bool imageSTB :: load(std::string filename, imageStruct&result,
   result.setCsizeByFormat(GEM_RGBA);
   result.reallocate();
 
-#ifdef __APPLE__
-  result.fromARGB(data);
-  result.swapRedBlue();
-#else
   result.fromRGBA(data);
-#endif
 
   stbi_image_free(data);
   return true;

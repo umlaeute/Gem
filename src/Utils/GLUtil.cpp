@@ -92,6 +92,8 @@ GLenum gem::utils::gl::glReportError (bool verbose)
   }
 }
 
+
+
 #warning TODO: use gem::ContextData
 using namespace gem::utils::gl;
 struct gem::utils::gl::GLuintMap::PIMPL {
@@ -277,3 +279,81 @@ void gem::utils::gl::gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNe
   m[3][3] = 0;
   glMultMatrixd(&m[0][0]);
 }
+
+
+#define CASE2NAME(x) case x: return #x
+
+namespace gem { namespace utils { namespace gl {
+const char*pixtype2name (GLenum type) {
+  switch(type) {
+  CASE2NAME(GL_BYTE);
+  CASE2NAME(GL_UNSIGNED_BYTE);
+  CASE2NAME(GL_SHORT);
+  CASE2NAME(GL_UNSIGNED_SHORT);
+  CASE2NAME(GL_INT);
+  CASE2NAME(GL_UNSIGNED_INT);
+  CASE2NAME(GL_FLOAT);
+  CASE2NAME(GL_2_BYTES);
+  CASE2NAME(GL_3_BYTES);
+  CASE2NAME(GL_4_BYTES);
+  CASE2NAME(GL_DOUBLE);
+
+  CASE2NAME(GL_UNSIGNED_BYTE_3_3_2);
+  CASE2NAME(GL_UNSIGNED_BYTE_2_3_3_REV);
+
+  CASE2NAME(GL_UNSIGNED_SHORT_4_4_4_4);
+  CASE2NAME(GL_UNSIGNED_SHORT_5_5_5_1);
+  CASE2NAME(GL_UNSIGNED_SHORT_5_6_5);
+  CASE2NAME(GL_UNSIGNED_SHORT_5_6_5_REV);
+  CASE2NAME(GL_UNSIGNED_SHORT_4_4_4_4_REV);
+  CASE2NAME(GL_UNSIGNED_SHORT_1_5_5_5_REV);
+  CASE2NAME(GL_UNSIGNED_SHORT_8_8_APPLE);
+  CASE2NAME(GL_UNSIGNED_SHORT_8_8_REV_APPLE);
+
+  CASE2NAME(GL_UNSIGNED_INT_8_8_8_8);
+  CASE2NAME(GL_UNSIGNED_INT_10_10_10_2);
+  CASE2NAME(GL_UNSIGNED_INT_8_8_8_8_REV);
+  CASE2NAME(GL_UNSIGNED_INT_2_10_10_10_REV);
+  CASE2NAME(GL_UNSIGNED_INT_24_8);
+  CASE2NAME(GL_UNSIGNED_INT_S8_S8_8_8_NV);
+  CASE2NAME(GL_UNSIGNED_INT_8_8_S8_S8_REV_NV);
+  CASE2NAME(GL_UNSIGNED_INT_10F_11F_11F_REV);
+  CASE2NAME(GL_UNSIGNED_INT_5_9_9_9_REV);
+
+  default:
+    break;
+  }
+  return 0;
+}
+
+
+const char*pixformat2name (GLenum format) {
+  switch(format) {
+    CASE2NAME(GL_RED);
+    CASE2NAME(GL_GREEN);
+    CASE2NAME(GL_BLUE);
+    CASE2NAME(GL_ALPHA);
+    CASE2NAME(GL_RGB);
+    CASE2NAME(GL_RGBA);
+    CASE2NAME(GL_LUMINANCE);
+    CASE2NAME(GL_LUMINANCE_ALPHA);
+
+    CASE2NAME(GL_BGR);
+    CASE2NAME(GL_BGRA);
+
+#ifdef GL_ABGR_EXT
+    CASE2NAME(GL_ABGR_EXT);
+#endif
+#ifdef GL_ARGB_EXT
+    CASE2NAME(GL_ARGB_EXT);
+#endif
+#ifdef GL_YCBCR_422_APPLE
+    CASE2NAME(GL_YCBCR_422_APPLE);
+#else
+    CASE2NAME(GL_YUV422_GEM);
+#endif
+  default: break;
+  }
+  return 0;
+}
+}}}

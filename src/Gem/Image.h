@@ -186,9 +186,6 @@ struct GEM_EXTERN imageStruct {
   virtual void refreshImage(imageStruct *to) const;
 
 
-  /* inplace swapping Red and Blue channel */
-  virtual void swapRedBlue(void);
-
   ///////////////////////////////////////////////////////////////////////////////
   // acquiring data including colour-transformations
   // should be accelerated if possible

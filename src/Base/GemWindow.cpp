@@ -38,9 +38,25 @@ bool sendContextDestroyedMsg(t_pd*x)
 }
 };
 
+/* make sure that we can use these as enums */
+#ifdef TRUE
+# undef TRUE
+#endif
+#ifdef FALSE
+# undef FALSE
+#endif
+#ifdef NONE
+# undef NONE
+#endif
+
 class GemWindow::PIMPL
 {
 public:
+  typedef enum {
+    NONE = -1,
+    FALSE = 0,
+    TRUE = 1,
+  } tristate_t;
   explicit PIMPL(GemWindow*gc)
     : parent(gc)
     , mycontext(0)
@@ -159,6 +175,49 @@ public:
   void requeue(void)
   {
     clock_delay(qClock, 0);
+  }
+
+  bool render(bool swap, bool dispatch, tristate_t output_state=NONE)
+  {
+    if(!mycontext)
+      goto fail;
+    if (!mycontext->isActive()) {
+      if(!parent->makeCurrent()) {
+        parent->error("unable to switch to current window (do you have one?), cannot render!");
+        goto fail;
+      }
+    }
+
+    if(!mycontext->push()) {
+      parent->error("unable to switch to current context, cannot render!");
+      goto fail;
+    }
+
+    if(dispatch)
+      parent->dispatch();
+
+    switch(output_state) {
+    case TRUE:
+      parent->info("float", 1);
+      break;
+    case NONE:
+      parent->bang();
+      break;
+    default: case FALSE:
+      break;
+    }
+
+    if(swap) {
+      parent->swapBuffers();
+    }
+
+    mycontext->pop();
+    return true;
+
+  fail:
+    if(TRUE == output_state)
+      parent->info("float", 0);
+    return false;
   }
 
   static std::set<GemWindow*>s_contexts;
@@ -438,20 +497,11 @@ bool GemWindow::popContext(void)
 
 void GemWindow::render(void)
 {
-  if(!makeCurrent()) {
-    error("unable to switch to current window (do you have one?), cannot render!");
-    return;
-  }
-  if(!pushContext()) {
-    error("unable to switch to current context, cannot render!");
-    return;
-  }
-  bang();
-  if(m_buffer==2) {
-    swapBuffers();
-  }
-
-  popContext();
+  m_pimpl->render(m_buffer==2, true);
+}
+void GemWindow::activate(bool output_state)
+{
+  m_pimpl->render(false, false, output_state?GemWindow::PIMPL::TRUE:GemWindow::PIMPL::FALSE);
 }
 
 void GemWindow:: bufferMess(int buf)
@@ -557,6 +607,8 @@ void GemWindow :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "transparent", transparentMess, bool);
 
   CPPEXTERN_MSG0(classPtr, "print", printMess);
+
+  CPPEXTERN_MSG1(classPtr, "activate", activate, bool);
 
   struct _CB_any {
     static void callback(void*data, t_symbol*s, int argc, t_atom*argv)
