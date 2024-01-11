@@ -17,6 +17,11 @@
 #include "m_pd.h"
 #include "plugins/modelloader.h"
 
+typedef struct bbox {
+  float minX, minY, minZ;
+  float maxX, maxY, maxZ;
+} bbox_t;
+
 namespace
 {
   /* various little helpers */
@@ -26,6 +31,10 @@ namespace
       vec.insert(vec.end(), data, data+size);
     else
       vec.clear();
+  }
+  template <typename T>
+  T max(const T&a, const T&b) {
+    return (a>b)?a:b;
   }
 
   GLfloat*color2gl(const gem::plugins::modelloader::color&c, GLfloat buf[4]) {
@@ -189,6 +198,30 @@ namespace
       if(sizeC)glDisableClientState(GL_COLOR_ARRAY);
       if(sizeT)glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
+    void bbox(bbox&bb, bool initialize=false) const {
+      const float*vert = vVertices.data();
+      if(initialize) {
+        if(size) {
+          bb.minX = bb.maxX = vert[0];
+          bb.minY = bb.maxY = vert[1];
+          bb.minZ = bb.maxZ = vert[2];
+        } else {
+          bb.minX = bb.maxX = 0;
+          bb.minY = bb.maxY = 0;
+          bb.minZ = bb.maxZ = 0;
+        }
+      }
+
+      for(unsigned int i=0; i<size; i++) {
+        float x=*vert++;
+        float y=*vert++;
+        float z=*vert++;
+
+        if(x<bb.minX)bb.minX=x; if(x>bb.maxX)bb.maxX=x;
+        if(y<bb.minY)bb.minY=y; if(y>bb.maxY)bb.maxY=y;
+        if(z<bb.minZ)bb.minZ=z; if(z>bb.maxZ)bb.maxZ=z;
+      }
+    }
   };
 
 
@@ -204,6 +237,9 @@ namespace gem {
     bool useMaterial;
     float texScale[2];
     enum modelGL::texturetype texType;
+    enum modelGL::rescale rescale;
+    float offset[3];
+    float scale;
 
     PIMPL()
       : update(true)
@@ -211,7 +247,21 @@ namespace gem {
       , useMaterial(false)
       , texScale{1.0, 1.0}
       , texType(LINEAR)
-    { ; }
+      , rescale(NORMALIZE_CENTER)
+      , offset{0.0, 0.0, 0.0}
+      , scale(1.0)
+      {
+        ; }
+
+    bbox_t bbox(void) {
+      bbox_t bb;
+      bool first=true;
+      for (auto&m: mesh) {
+        m.bbox(bb, first);
+        first = false;
+      }
+      return bb;
+    }
   };
 
 
@@ -225,6 +275,16 @@ namespace gem {
         m_pimpl->mesh.push_back(modelmesh(mesh));
       }
     }
+    bbox_t bb = m_pimpl->bbox();
+    float maxdim = bb.maxX-bb.minX;
+    maxdim = max(maxdim, bb.maxY-bb.minY);
+    maxdim = max(maxdim, bb.maxZ-bb.minZ);
+    if(maxdim<=0.)maxdim = 2.;
+    m_pimpl->scale = 2.f / maxdim;
+
+    m_pimpl->offset[0] = ((bb.minX+bb.maxX) / -2.);
+    m_pimpl->offset[1] = ((bb.minY+bb.maxY) / -2.);
+    m_pimpl->offset[2] = ((bb.minZ+bb.maxZ) / -2.);
   }
   modelGL::~modelGL(void)
   {
@@ -256,6 +316,16 @@ namespace gem {
     if(m_pimpl->update) update();
 
     const unsigned int numMeshes = m_pimpl->mesh.size();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    if(m_pimpl->rescale & NORMALIZE) {
+      GLfloat f = m_pimpl->scale;
+      glScalef(f, f, f);
+    }
+    if(m_pimpl->rescale & CENTER) {
+      glTranslatef(m_pimpl->offset[0], m_pimpl->offset[1], m_pimpl->offset[2]);
+    }
+
     if(!GLEW_VERSION_1_5) {
       for(auto n: meshes) {
         if(n >= numMeshes)
@@ -263,7 +333,7 @@ namespace gem {
         const auto &m = m_pimpl->mesh[n];
         const size_t size = m.size;
         const float*positions = size?m.vVertices.data():0;
-        const float*textures = size?m.vTexCoordsUV.data():0;
+        const float*textures = size?m.vTexCoords.data():0;
         const float*colors = size?m.vColors.data():0;
         const float*normals = size?m.vNormals.data():0;
 
@@ -302,6 +372,7 @@ namespace gem {
         m.render(m_pimpl->drawType);
       }
     }
+    glPopMatrix();
   }
 
   void modelGL :: setDrawType(GLenum drawtype) {
@@ -321,6 +392,9 @@ namespace gem {
     if (m_pimpl->texType != t)
       m_pimpl->update = true;
     m_pimpl->texType = t;
+  }
+  void modelGL :: setRescale(enum rescale r) {
+    m_pimpl->rescale = r;
   }
 
 

@@ -54,6 +54,15 @@ namespace gem
     };
     void setTextureType(enum texturetype);
     void setTexture(float w, float h);
+
+    enum rescale {
+      ORIGINAL = 0,
+      NORMALIZE = 1<<0,
+      CENTER = 1<<1,
+      NORMALIZE_CENTER = NORMALIZE | CENTER,
+    };
+    void setRescale(enum rescale);
+
  private:
     class PIMPL;
     PIMPL*m_pimpl;
