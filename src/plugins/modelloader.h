@@ -170,6 +170,7 @@ public:
 
 namespace modelutils
 {
+#warning remove obsolete genTexture_Linear
 static void genTexture_Linear(std::vector<float>& tex,
                               const std::vector<float>& pos,
                               const float scale[2])
@@ -181,6 +182,7 @@ static void genTexture_Linear(std::vector<float>& tex,
     tex.push_back(scale[1] * (pos[3*i+2] + 1.0) / 2.0);
   }
 }
+#warning remove obsolete genTexture_Spheremap
 static void genTexture_Spheremap(std::vector<float>& tex,
                                  const std::vector<float>& norm,
                                  const float scale[2])
@@ -217,6 +219,7 @@ static void genTexture_Spheremap(std::vector<float>& tex,
   }
 }
   /* perform some openGL calls so that the given material takes effect */
+#warning remove obsolete render_material
   void render_material(const gem::plugins::modelloader::material&material);
 }; // namespace ..::modelutils
 
