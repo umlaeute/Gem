@@ -59,6 +59,7 @@ namespace
     post("specular = %f/%f/%f/%f", m.specular.r, m.specular.g, m.specular.b, m.specular.a);
     post("ambient  = %f/%f/%f/%f", m.ambient.r, m.ambient.g, m.ambient.b, m.ambient.a);
     post("emissive = %f/%f/%f/%f", m.emissive.r, m.emissive.g, m.emissive.b, m.emissive.a);
+    post("shininess= %f", m.shininess);
 #endif
   }
 
@@ -298,6 +299,15 @@ namespace gem {
         /* update the VBOs */
         for (auto&m: m_pimpl->mesh) {
           m.update(m_pimpl->texType, m_pimpl->texScale[0], m_pimpl->texScale[1]);
+#if 0
+          const gem::plugins::modelloader::material&mat = m.material;
+          post("============== material ================");
+          post("diffuse  = %f/%f/%f/%f", mat.diffuse.r, mat.diffuse.g, mat.diffuse.b, mat.diffuse.a);
+          post("specular = %f/%f/%f/%f", mat.specular.r, mat.specular.g, mat.specular.b, mat.specular.a);
+          post("ambient  = %f/%f/%f/%f", mat.ambient.r, mat.ambient.g, mat.ambient.b, mat.ambient.a);
+          post("emissive = %f/%f/%f/%f", mat.emissive.r, mat.emissive.g, mat.emissive.b, mat.emissive.a);
+          post("shininess= %f", mat.shininess);
+#endif
         }
       }
       return true;
