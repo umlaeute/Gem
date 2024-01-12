@@ -134,6 +134,7 @@ protected:
   GLfloat m_linewidth;
   bool m_useMaterial;
   enum gem::modelGL::texturetype m_texType;
+  enum gem::modelGL::rescale m_rescale;
 
   std::vector<unsigned int> m_group;
 };

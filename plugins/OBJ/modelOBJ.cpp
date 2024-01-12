@@ -71,11 +71,6 @@ bool modelOBJ :: open(const std::string&name,
   }
   m_reverse=false;
 
-  double d=1;
-  requestprops.get("rescale", d);
-  if(d) {
-    glmUnitize(m_model);
-  }
   glmFacetNormals (m_model);
 
   gem::Properties props=requestprops;
@@ -118,7 +113,6 @@ bool modelOBJ :: enumProperties(gem::Properties&readable,
   writeable.set("textype", std::string("default"));
   writeable.set("_texwidth", 1);
   writeable.set("_texheight", 1);
-  writeable.set("rescale", 1);
   writeable.set("smooth", 0);
   writeable.set("usematerials", 0);
   writeable.set("group", 0);

@@ -153,9 +153,7 @@ void multimodel :: reverseMess(bool reverse)
 /////////////////////////////////////////////////////////
 void multimodel :: rescaleMess(bool state)
 {
-  gem::any value=(double)state;
-  m_properties.set("rescale", value);
-  applyProperties();
+  m_rescale = state?gem::modelGL::rescale::NORMALIZE_CENTER:gem::modelGL::rescale::ORIGINAL;
 }
 
 /////////////////////////////////////////////////////////
@@ -423,6 +421,7 @@ void multimodel :: render(GemState *state)
 
   m_model->setDrawType(m_drawType);
   m_model->useMaterial(m_useMaterial);
+  m_model->setRescale(m_rescale);
 
   if(setwidth) {
     glLineWidth(linewidth);

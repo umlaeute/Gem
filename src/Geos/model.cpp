@@ -48,6 +48,7 @@ model :: model(t_symbol* filename)
   , m_blend(false)
   , m_linewidth(1.0)
   , m_texType(gem::modelGL::texturetype::LINEAR)
+  , m_rescale(gem::modelGL::rescale::NORMALIZE_CENTER)
 {
   m_drawTypes.clear();
   m_drawTypes["default"]=m_drawType;
@@ -369,9 +370,7 @@ void model :: reverseMess(bool reverse)
 /////////////////////////////////////////////////////////
 void model :: rescaleMess(bool state)
 {
-  gem::any value=(double)state;
-  m_writeprops.set("rescale", value);
-  applyProperties();
+  m_rescale = state?gem::modelGL::rescale::NORMALIZE_CENTER:gem::modelGL::rescale::ORIGINAL;
 }
 
 /////////////////////////////////////////////////////////
@@ -566,6 +565,7 @@ void model :: render(GemState *state)
 
   m_loaded->setDrawType(m_drawType);
   m_loaded->useMaterial(m_useMaterial);
+  m_loaded->setRescale(m_rescale);
 
 
   if(setwidth) {

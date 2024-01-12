@@ -306,6 +306,9 @@ bool modelASSIMP3 :: open(const std::string&name,
   m_center.y=(m_min.y+m_max.y)/2.f;
   m_center.z=(m_min.z+m_max.z)/2.f;
 
+  m_offset.x = m_offset.y = m_offset.z = 0.f;
+  m_scale = 1.f;
+#if 0
   /* default is to rescale the object */
   float tmp;
   tmp = m_max.x-m_min.x;
@@ -314,7 +317,7 @@ bool modelASSIMP3 :: open(const std::string&name,
   m_scale = 2.f / tmp;
 
   m_offset = m_center * (-m_scale);
-
+#endif
   m_rebuild=true;
   m_refresh=true;
 
@@ -352,7 +355,6 @@ bool modelASSIMP3 :: enumProperties(gem::Properties&readable,
   writeable.set("textype", std::string("UV"));
   writeable.set("_texwidth", 1);
   writeable.set("_texheight", 1);
-  writeable.set("rescale", 0);
   writeable.set("smooth", 0);
 
   return true;
@@ -399,25 +401,6 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
           m_rebuild=true;
         }
         m_texscale.y = d;
-      }
-      continue;
-    }
-
-    if("rescale" == key) {
-      if(props.get(key, d)) {
-        bool b=(bool)d;
-        if(b) {
-          float tmp;
-          tmp = m_max.x-m_min.x;
-          tmp = aisgl_max(m_max.y - m_min.y,tmp);
-          tmp = aisgl_max(m_max.z - m_min.z,tmp);
-          m_scale = 2.f / tmp;
-          m_offset = m_center * (-m_scale);
-        } else {
-          // FIXXME shouldn't this be the default???
-          m_scale=1.;
-          m_offset.x=m_offset.y=m_offset.z=0.f;
-        }
       }
       continue;
     }
