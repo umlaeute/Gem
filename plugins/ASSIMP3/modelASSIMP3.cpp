@@ -265,7 +265,6 @@ modelASSIMP3 ::~modelASSIMP3(void)
 {
   destroy();
 }
-
 bool modelASSIMP3 :: open(const std::string&name,
                           const gem::Properties&requestprops)
 {
@@ -277,13 +276,16 @@ bool modelASSIMP3 :: open(const std::string&name,
   flags |= aiProcess_FlipUVs;
 
 #if 0
-  if(m_smooth > 90.)
-    flags |= aiProcess_GenSmoothNormals;
-  else
-    flags |= aiProcess_GenNormals;
+  double d;
+  if(requestprops.get("reverse", d)) {
+    bool reverse = d;
+    if (reverse)
+      flags |= aiProcess_FlipWindingOrder;
+  }
 
-  m_scene = aiImportFile(name.c_str(), flags);
-#else
+#endif
+
+
   aiPropertyStore *aiprops = aiCreatePropertyStore();
   if(aiprops) {
     flags |= aiProcess_GenSmoothNormals;
@@ -296,7 +298,7 @@ bool modelASSIMP3 :: open(const std::string&name,
   }
   m_scene = aiImportFileExWithProperties(name.c_str(), flags, 0, aiprops);
   aiReleasePropertyStore(aiprops);
-#endif
+
   if(!m_scene) {
     return false;
   }
