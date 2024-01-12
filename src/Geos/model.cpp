@@ -49,6 +49,7 @@ model :: model(t_symbol* filename)
   , m_linewidth(1.0)
   , m_texType(gem::modelGL::texturetype::LINEAR)
   , m_rescale(gem::modelGL::rescale::NORMALIZE_CENTER)
+  , m_useMaterial(false)
 {
   m_drawTypes.clear();
   m_drawTypes["default"]=m_drawType;
