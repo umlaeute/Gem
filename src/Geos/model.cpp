@@ -47,7 +47,7 @@ model :: model(t_symbol* filename)
   , m_drawType(GL_TRIANGLES)
   , m_blend(false)
   , m_linewidth(1.0)
-  , m_texType(gem::modelGL::texturetype::LINEAR)
+  , m_texType(gem::modelGL::texturetype::UV)
   , m_rescale(gem::modelGL::rescale::NORMALIZE_CENTER)
   , m_useMaterial(false)
 {
