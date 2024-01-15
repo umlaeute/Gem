@@ -286,8 +286,7 @@ bool filmGMERLIN :: open(const std::string&sfilename,
 #endif
 
   m_finalframe = gavl_video_frame_create_nopad(finalformat);
-  m_doConvert= (gavl_video_converter_init (m_gconverter, gformat,
-                finalformat)>0);
+  m_doConvert = (gavl_video_converter_init (m_gconverter, gformat, finalformat)>0);
   m_image.image.xsize=gformat->frame_width;
   m_image.image.ysize=gformat->frame_height;
 #ifdef __APPLE__
