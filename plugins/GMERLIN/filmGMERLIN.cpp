@@ -186,6 +186,11 @@ bool filmGMERLIN :: open(const std::string&sfilename,
     bgav_options_set_network_bandwidth(m_opt, network_bandwidth);
   */
   bgav_options_set_seek_subtitles(m_opt, 0);
+
+  /* requesting seample-accurate seeking here, and opening a single-frame file (foo.jpg)
+   * will crash on bgav_open()!
+   * OTOH, we do want sample accurate seeking whenever possible. how to fix this?
+   */
   bgav_options_set_sample_accurate(m_opt, 1);
 
   SET_LOG_CALLBACK(m_opt, this);
