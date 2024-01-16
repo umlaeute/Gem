@@ -181,8 +181,8 @@ struct GEM_EXTERN imageStruct {
    * into a new imageStruct
    */
   virtual void copy2Image(imageStruct *to) const;
-  virtual void copy2ImageStruct(imageStruct *to)
-  const; // copy the imageStruct (but not the actual data)
+  virtual void copy2ImageStruct(imageStruct *to) const;
+  // copy the imageStruct (but not the actual data)
   /* this is a sort of better copy2Image,
    * which only copies the imageStruct-data if it is needed
    */
