@@ -74,7 +74,7 @@ pix_artoolkit :: pix_artoolkit()
     m_object[i].center[0] = 0.0;
     m_object[i].center[1] = 0.0;
   }
-  m_image.setCsizeByFormat(GEM_GRAY);
+  m_image.setFormat(GEM_GRAY);
 # if AR_HEADER_VERSION_MAJOR >= 5
   m_patterns = arPattCreateHandle();
 # endif
@@ -288,7 +288,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
   m_image.fromGray(image.data);
   image.data   = m_image.data;
   image.notowned = 0;
-  image.setCsizeByFormat(m_image.format);
+  image.setFormat(m_image.format);
 }
 
 /////////////////////////////////////////////////////////
@@ -304,7 +304,7 @@ void pix_artoolkit :: processYUVImage(imageStruct &image)
   m_image.fromUYVY(image.data);
   image.data   = m_image.data;
   image.notowned = 0;
-  image.setCsizeByFormat(m_image.format);
+  image.setFormat(m_image.format);
 }
 
 /////////////////////////////////////////////////////////
