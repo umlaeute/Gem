@@ -25,7 +25,7 @@ pix_deinterlace :: pix_deinterlace() :
 {
   m_savedImage.xsize=320;
   m_savedImage.ysize=240;
-  m_savedImage.setCsizeByFormat(GEM_RGBA);
+  m_savedImage.setFormat(GEM_RGBA);
   m_savedImage.reallocate();
   m_savedImage.setBlack();
 }
@@ -49,7 +49,7 @@ void pix_deinterlace :: processRGBAImage(imageStruct &image)
       || (m_savedImage.ysize != image.ysize)) {
     m_savedImage.xsize=image.xsize;
     m_savedImage.ysize=image.ysize;
-    m_savedImage.setCsizeByFormat(image.format);
+    m_savedImage.setFormat(image.format);
     m_savedImage.reallocate();
   }
 //      if(saved!=m_savedImage.data)m_savedImage.setBlack();saved=m_savedImage.data;

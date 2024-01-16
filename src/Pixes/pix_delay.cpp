@@ -75,7 +75,7 @@ void pix_delay :: processImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
 
   dest = myImage.data+m_curframe*dataSize;

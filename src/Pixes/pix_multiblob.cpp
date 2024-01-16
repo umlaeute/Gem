@@ -121,7 +121,7 @@ pix_multiblob :: pix_multiblob(t_floatarg f) :
   // initialize image
   m_image.xsize=320;
   m_image.ysize=240;
-  m_image.setCsizeByFormat(GEM_GRAY);
+  m_image.setFormat(GEM_GRAY);
   m_image.allocate();
 
   // outlets
@@ -323,7 +323,7 @@ void pix_multiblob :: processImage(imageStruct &image)
 {
   // store the image in greyscale
   // since the algorithm is destructive we do it in a sandbox...
-  m_image.setCsizeByFormat();
+  m_image.setFormat();
   m_image.convertFrom(&image);
   doProcessing();
 }

@@ -39,7 +39,7 @@ pix_rds :: pix_rds(t_floatarg f) :
   static int count = 0;
   fastrand_val=count++;
   myImage.xsize=myImage.ysize=512;
-  myImage.setCsizeByFormat(GEM_RGBA);
+  myImage.setFormat(GEM_RGBA);
   myImage.allocate();
 
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -71,7 +71,7 @@ void pix_rds :: processRGBAImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.upsidedown = image.upsidedown;
   myImage.reallocate();
 
@@ -180,7 +180,7 @@ void pix_rds :: processGrayImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(GEM_GRAY);
+  myImage.setFormat(GEM_GRAY);
   myImage.upsidedown = image.upsidedown;
   myImage.reallocate();
 
@@ -291,7 +291,7 @@ void pix_rds :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(GEM_GRAY);
+  myImage.setFormat(GEM_GRAY);
   myImage.upsidedown = image.upsidedown;
   myImage.reallocate();
 

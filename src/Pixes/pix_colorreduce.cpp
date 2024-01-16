@@ -52,7 +52,7 @@ pix_colorreduce :: pix_colorreduce(t_floatarg fcount) :
 
   tempImage.xsize=0;
   tempImage.ysize=0;
-  tempImage.setCsizeByFormat(GEM_RGBA);
+  tempImage.setFormat(GEM_RGBA);
 }
 
 /////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ void pix_colorreduce :: processRGBAImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   pOutput = reinterpret_cast<U32*>(myImage.data);
 

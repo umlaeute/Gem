@@ -45,13 +45,13 @@ pix_biquad :: pix_biquad(int argc, t_atom*argv) :
 {
   prev.xsize = 64;
   prev.ysize = 64;
-  prev.setCsizeByFormat(GEM_RGBA);
+  prev.setFormat(GEM_RGBA);
   prev.reallocate();
   prev.setBlack();
 
   last.xsize = 64;
   last.ysize = 64;
-  last.setCsizeByFormat(GEM_RGBA);
+  last.setFormat(GEM_RGBA);
   last.reallocate();
   last.setBlack();
 
@@ -80,11 +80,11 @@ void pix_biquad :: processRGBAImage(imageStruct &image)
                  || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
-  prev.setCsizeByFormat(image.format);
+  prev.setFormat(image.format);
   prev.reallocate();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
-  last.setCsizeByFormat(image.format);
+  last.setFormat(image.format);
   last.reallocate();
 
   if (set) {
@@ -153,11 +153,11 @@ void pix_biquad :: processYUVImage(imageStruct &image)
                  || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
-  prev.setCsizeByFormat(image.format);
+  prev.setFormat(image.format);
   prev.reallocate();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
-  last.setCsizeByFormat(image.format);
+  last.setFormat(image.format);
   last.reallocate();
 
   if (set) {
@@ -231,11 +231,11 @@ void pix_biquad :: processRGBAMMX(imageStruct &image)
                  || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
-  prev.setCsizeByFormat(image.format);
+  prev.setFormat(image.format);
   prev.reallocate();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
-  last.setCsizeByFormat(image.format);
+  last.setFormat(image.format);
   last.reallocate();
 
   if (set) {
@@ -378,11 +378,11 @@ void pix_biquad :: processYUVAltivec(imageStruct &image)
                  || image.csize!=prev.csize);
   prev.xsize = image.xsize;
   prev.ysize = image.ysize;
-  prev.setCsizeByFormat(image.format);
+  prev.setFormat(image.format);
   prev.reallocate();
   last.xsize = image.xsize;
   last.ysize = image.ysize;
-  last.setCsizeByFormat(image.format);
+  last.setFormat(image.format);
   last.reallocate();
 
   if (set) {

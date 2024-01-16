@@ -430,7 +430,7 @@ void pix_texture :: render(GemState *state)
     //(skip Alpha since it isn't used)
     const bool do_yuv = m_yuv && GLEW_APPLE_ycbcr_422;
     if (!do_yuv && m_imagebuf.format == GEM_YUV) {
-      m_imagebuf.setCsizeByFormat(GL_RGB);
+      m_imagebuf.setFormat(GL_RGB);
       m_imagebuf.reallocate();
       if(img) {
         m_imagebuf.fromYUV422(img->image.data);

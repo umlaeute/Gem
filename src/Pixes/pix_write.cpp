@@ -84,7 +84,7 @@ pix_write :: pix_write(int argc, t_atom *argv)
   m_originalImage = new imageStruct();
   m_originalImage->xsize=m_width;
   m_originalImage->ysize=m_height;
-  m_originalImage->setCsizeByFormat(m_color);
+  m_originalImage->setFormat(m_color);
   m_originalImage->allocate();
 
 }
@@ -130,9 +130,9 @@ void pix_write :: doWrite(void)
   m_originalImage->ysize = height;
 
 #ifndef __APPLE__
-  m_originalImage->setCsizeByFormat(m_color);
+  m_originalImage->setFormat(m_color);
 #else
-  m_originalImage->setCsizeByFormat(GEM_RGBA);
+  m_originalImage->setFormat(GEM_RGBA);
 #endif /* APPLE */
 
   m_originalImage->reallocate();

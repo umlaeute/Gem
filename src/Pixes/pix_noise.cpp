@@ -57,7 +57,7 @@ pix_noise :: pix_noise(t_floatarg xsize, t_floatarg ysize) :
   //    m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.allocate();
 
   generateNoise();
@@ -241,7 +241,7 @@ void pix_noise :: SETMess(int xsize, int ysize)
   m_pixBlock.image.clear();
   m_pixBlock.image.xsize = (int)xsize;
   m_pixBlock.image.ysize = (int)ysize;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
 
   generateNoise();

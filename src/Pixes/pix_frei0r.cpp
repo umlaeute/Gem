@@ -440,8 +440,8 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
 {
   //  throw(GemException("Gem has been compiled without Frei0r-support!"));
   int can_rgba=0;
-  m_image.setCsizeByFormat(GEM_RGBA);
-  m_converterImage.setCsizeByFormat(GEM_RGBA);
+  m_image.setFormat(GEM_RGBA);
+  m_converterImage.setFormat(GEM_RGBA);
 
   if(!s || s==&s_) {
     m_canopen=true;
@@ -592,7 +592,7 @@ void pix_frei0r :: processRGBAImage(imageStruct &image)
     swapBytes(image);
   }
   image.not_owned = true;
-  image.setCsizeByFormat(m_image.format);
+  image.setFormat(m_image.format);
 }
 
 void pix_frei0r :: parmMess(const std::string&key, int argc, t_atom *argv)

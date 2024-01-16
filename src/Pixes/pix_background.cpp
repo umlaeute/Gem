@@ -29,7 +29,7 @@ pix_background :: pix_background(int argc, t_atom*argv) :
 
   m_savedImage.xsize=320;
   m_savedImage.ysize=240;
-  m_savedImage.setCsizeByFormat(GEM_RGBA);
+  m_savedImage.setFormat(GEM_RGBA);
   m_savedImage.reallocate();
   switch(argc) {
   case 4:
@@ -73,7 +73,7 @@ void pix_background :: processRGBAImage(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -122,7 +122,7 @@ void pix_background :: processGrayImage(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -163,7 +163,7 @@ void pix_background :: processYUVImage(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -217,7 +217,7 @@ void pix_background :: processRGBAMMX(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -271,7 +271,7 @@ void pix_background :: processYUVMMX(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -334,7 +334,7 @@ void pix_background :: processGrayMMX(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {
@@ -396,7 +396,7 @@ void pix_background :: processYUVAltivec(imageStruct &image)
 
   m_savedImage.xsize=image.xsize;
   m_savedImage.ysize=image.ysize;
-  m_savedImage.setCsizeByFormat(image.format);
+  m_savedImage.setFormat(image.format);
   m_savedImage.reallocate();
 
   if (m_reset) {

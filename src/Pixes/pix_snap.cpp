@@ -137,7 +137,7 @@ void pix_snap :: snapMess(void)
     m_originalImage = new imageStruct;
     m_originalImage->xsize = m_width;
     m_originalImage->ysize = m_height;
-    m_originalImage->setCsizeByFormat(GEM_RGBA);
+    m_originalImage->setFormat(GEM_RGBA);
     if(m_reqType)
       m_originalImage->type = m_reqType;
     m_reqType = m_originalImage->type;

@@ -55,7 +55,7 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
 
   buffer.xsize = reference.xsize;
   buffer.ysize = reference.ysize;
-  buffer.setCsizeByFormat(reference.format);
+  buffer.setFormat(reference.format);
 
   if(data!=buffer.reallocate( dataSize ) || refresh) {
     buffer.setBlack();
@@ -80,7 +80,7 @@ pix_rtx :: pix_rtx()
   imageStruct image;
 
   image.xsize  = image.ysize = 64;
-  image.setCsizeByFormat(GEM_RGBA);
+  image.setFormat(GEM_RGBA);
 
   refresh_buffer(image, buffer);
 

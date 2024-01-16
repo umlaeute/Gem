@@ -44,7 +44,7 @@ pix_puzzle :: pix_puzzle() :
   m_game(false)
 {
   myImage.xsize=myImage.ysize=512;
-  myImage.setCsizeByFormat(GEM_RGBA);
+  myImage.setFormat(GEM_RGBA);
   myImage.allocate();
 }
 
@@ -214,7 +214,7 @@ void pix_puzzle :: processImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
+    myImage.setFormat(image.format);
 
     myImage.reallocate();
 
@@ -224,7 +224,7 @@ void pix_puzzle :: processImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
 
   dest = myImage.data;
 
@@ -296,7 +296,7 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 
     myImage.xsize = image.xsize;
     myImage.ysize = image.ysize;
-    myImage.setCsizeByFormat(image.format);
+    myImage.setFormat(image.format);
     myImage.reallocate();
 
     makePuzzleBlocks(image.xsize, image.ysize, image.csize);
@@ -305,7 +305,7 @@ void pix_puzzle :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
 
   dest = myImage.data;
 

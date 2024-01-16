@@ -37,7 +37,7 @@ void pix_share_read :: render(GemState *state)
     if (shm_addr) {
       t_pixshare_header *h=(t_pixshare_header *)shm_addr;
       unsigned char* data=shm_addr+sizeof(t_pixshare_header);
-      int csize=pix.image.setCsizeByFormat(h->format);
+      int csize=pix.image.setFormat(h->format);
       int imgsize=csize*h->xsize*h->ysize;
       if(imgsize) {
         pix.image.xsize=h->xsize;

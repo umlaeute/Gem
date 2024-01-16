@@ -167,7 +167,7 @@ void pix_buffer :: allocateMess(unsigned int x, unsigned int y,
   while(i--) {
     m_buffer[i].xsize=x;
     m_buffer[i].ysize=y;
-    m_buffer[i].setCsizeByFormat(format);
+    m_buffer[i].setFormat(format);
     m_buffer[i].reallocate();
     m_buffer[i].setBlack();
   }

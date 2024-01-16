@@ -80,7 +80,7 @@ pix_tIIR :: pix_tIIR(t_floatarg fb_numf, t_floatarg ff_numf) :
 
   m_buffer.xsize=64;
   m_buffer.ysize=64;
-  m_buffer.setCsizeByFormat(GEM_RGBA);
+  m_buffer.setFormat(GEM_RGBA);
   m_buffer.allocate(m_buffer.xsize*m_buffer.ysize*m_buffer.csize*m_bufnum);
 }
 
@@ -225,7 +225,7 @@ void pix_tIIR :: processRGBAMMX(imageStruct &image)
       || m_buffer.format!=image.format) {
     m_buffer.xsize=image.xsize;
     m_buffer.ysize=image.ysize;
-    m_buffer.setCsizeByFormat(image.format);
+    m_buffer.setFormat(image.format);
 
     set=true;
     set_zero=true;

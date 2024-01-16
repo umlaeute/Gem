@@ -64,7 +64,7 @@ void pix_metaimage :: processRGBAImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   pOutput = reinterpret_cast<U32*>(myImage.data);
 
@@ -116,7 +116,7 @@ void pix_metaimage :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   //    myImage.setBlack();
   pOutput = reinterpret_cast<U32*>(myImage.data);
@@ -168,7 +168,7 @@ void pix_metaimage :: processGrayImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   //    myImage.setBlack();
   pOutput = reinterpret_cast<U32*>(myImage.data);

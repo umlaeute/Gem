@@ -77,10 +77,10 @@ void pix_sig2pix :: dimenMess(int width, int height)
 
   m_pixBlock.image.xsize =(GLint) width;
   m_pixBlock.image.ysize =(GLint) height;
-  m_pixBlock.image.setCsizeByFormat(m_reqFormat);
+  m_pixBlock.image.setFormat(m_reqFormat);
   if(m_reqType) {
     if(GEM_RGBA == m_reqFormat)
-      m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+      m_pixBlock.image.setFormat(GL_RGBA);
     m_pixBlock.image.type = m_reqType;
   }
 

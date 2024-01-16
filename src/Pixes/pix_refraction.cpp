@@ -60,7 +60,7 @@ void pix_refraction :: processRGBAImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
 
   pOutput = (U32*)myImage.data;
@@ -148,7 +148,7 @@ void pix_refraction :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   pOutput = (U32*)myImage.data;
 

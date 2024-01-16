@@ -917,7 +917,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   const char *pluginname = s->s_name;
 
   m_plugin = new FFPlugin(pluginname, getCanvas());
-  m_image.setCsizeByFormat(m_plugin->GLformat());
+  m_image.setFormat(m_plugin->GLformat());
 
   unsigned int numparams = m_plugin->getNumParameters();
   char tempVt[5];
@@ -1010,7 +1010,7 @@ void pix_freeframe :: processImage(imageStruct &image)
   }
 
   // convert the current image into a format that suits the FreeFrame-plugin
-  m_image.setCsizeByFormat();
+  m_image.setFormat();
   if(image.format != m_image.format) {
     if(m_image.convertFrom(&image)) {
       m_plugin->processFrame(m_image);

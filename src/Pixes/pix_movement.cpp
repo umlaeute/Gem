@@ -40,10 +40,10 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_movement,t_floatarg, A_DEFFLOAT);
 pix_movement :: pix_movement(t_floatarg f)
 {
   buffer.xsize  = buffer.ysize = 64;
-  buffer.setCsizeByFormat(GEM_GRAY);
+  buffer.setFormat(GEM_GRAY);
   buffer.reallocate();
   buffer2.xsize  = buffer2.ysize = 64;
-  buffer2.setCsizeByFormat(GEM_GRAY);
+  buffer2.setFormat(GEM_GRAY);
   buffer2.reallocate();
 
   if(f<=0.) {

@@ -370,7 +370,7 @@ void pix_dot :: processRGBAImage(imageStruct &image)
   }
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
 
   if(!alreadyInit) {
@@ -435,7 +435,7 @@ void pix_dot :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
 
   if(!alreadyInit) {
@@ -502,7 +502,7 @@ void pix_dot :: processGrayImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
 
   if(!alreadyInit) {

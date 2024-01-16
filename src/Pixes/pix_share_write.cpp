@@ -270,7 +270,7 @@ int pix_share_write :: getShm(int argc,t_atom*argv)
   }
 
   imageStruct dummy;
-  dummy.setCsizeByFormat(color);
+  dummy.setFormat(color);
 
   m_size = (size)?(size):(xsize * ysize * dummy.csize);
 

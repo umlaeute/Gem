@@ -34,22 +34,22 @@ pix_movement2 :: pix_movement2(t_float lothresh, t_float hithresh):
   while(i--) {
     m_frame[i].xsize=0;
     m_frame[i].ysize=0;
-    m_frame[i].setCsizeByFormat(GEM_GRAY);
+    m_frame[i].setFormat(GEM_GRAY);
     m_frame[i].reallocate();
   }
   m_output.xsize=0;
   m_output.ysize=0;
-  m_output.setCsizeByFormat(GEM_GRAY);
+  m_output.setFormat(GEM_GRAY);
   m_output.reallocate();
 
   m_background.xsize=0;
   m_background.ysize=0;
-  m_background.setCsizeByFormat(GEM_GRAY);
+  m_background.setFormat(GEM_GRAY);
   m_background.reallocate();
 
   m_threshold.xsize=0;
   m_threshold.ysize=0;
-  m_threshold.setCsizeByFormat(GEM_GRAY);
+  m_threshold.setFormat(GEM_GRAY);
   m_threshold.reallocate();
 
   m_lowthresh=CLAMP(255.f*MIN(lothresh, hithresh));
@@ -125,7 +125,7 @@ void pix_movement2 :: processImage(imageStruct &image)
   }
 
   // 1. store the current frame as gray-image in the appropriate buffer
-  m_frame[m_frameIndex].setCsizeByFormat();
+  m_frame[m_frameIndex].setFormat();
   if(!m_frame[m_frameIndex].convertFrom(&image)) {
     error("no method for this kind of color");
     return;

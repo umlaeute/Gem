@@ -34,7 +34,7 @@ pix_convert :: pix_convert(t_symbol*s)
   m_image.xsize=128;
   m_image.ysize=128;
   int fmt = getPixFormat(s->s_name);
-  m_image.setCsizeByFormat(fmt?fmt:GEM_RGBA);
+  m_image.setFormat(fmt?fmt:GEM_RGBA);
 
   m_image.reallocate();
 }
@@ -56,7 +56,7 @@ void pix_convert :: processImage(imageStruct &image)
   if (image.format==m_image.format) {
     return;
   }
-  m_image.setCsizeByFormat();
+  m_image.setFormat();
   if(!m_image.convertFrom(&image)) {
     post("no method for this format !!!");
     post("if you know how to convert this format (0x%X) to (0x%X),\n"
@@ -66,7 +66,7 @@ void pix_convert :: processImage(imageStruct &image)
   }
   image.data = m_image.data;
   image.not_owned = true;
-  image.setCsizeByFormat(m_image.format);
+  image.setFormat(m_image.format);
 
 }
 
@@ -82,7 +82,7 @@ void pix_convert :: colorMess(t_symbol*s)
 {
   int fo = getPixFormat(s->s_name);
   if(fo) {
-    m_image.setCsizeByFormat(fo);
+    m_image.setFormat(fo);
   }
   setPixModified();
 }

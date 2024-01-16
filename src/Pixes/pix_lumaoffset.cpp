@@ -63,7 +63,7 @@ void pix_lumaoffset :: processRGBAImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   U32*pOutput = reinterpret_cast<U32*>(myImage.data);
 
@@ -269,7 +269,7 @@ void pix_lumaoffset :: processGrayImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   U8* pOutput = static_cast<U8*>(myImage.data);
 
@@ -448,7 +448,7 @@ void pix_lumaoffset :: processYUVImage(imageStruct &image)
 
   myImage.xsize = image.xsize;
   myImage.ysize = image.ysize;
-  myImage.setCsizeByFormat(image.format);
+  myImage.setFormat(image.format);
   myImage.reallocate();
   myImage.setBlack();
   U32*pOutput = reinterpret_cast<U32*>(myImage.data);

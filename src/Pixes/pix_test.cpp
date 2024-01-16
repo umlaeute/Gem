@@ -281,13 +281,13 @@ pix_test :: pix_test(int argc, t_atom*argv)
     break;
   }
 
-  m_pix.image.setCsizeByFormat(GEM_RGBA);
+  m_pix.image.setFormat(GEM_RGBA);
   m_pix.image.reallocate();
 }
 pix_test :: pix_test()
 {
   m_pix.image.xsize=m_pix.image.ysize=128;
-  m_pix.image.setCsizeByFormat(GEM_RGBA);
+  m_pix.image.setFormat(GEM_RGBA);
   m_pix.image.reallocate();
 }
 
@@ -372,7 +372,7 @@ void pix_test :: csMess(std::string cs)
           cs.c_str());
     return;
   }
-  m_pix.image.setCsizeByFormat(fmt);
+  m_pix.image.setFormat(fmt);
   dimenMess(m_pix.image.xsize, m_pix.image.ysize);
 
 }
