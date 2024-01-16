@@ -1474,78 +1474,89 @@ GEM_EXTERN void imageStruct::fixUpDown(void)
   upsidedown=true;
 }
 
+namespace {
+  template <class T>
+  void _yuv2rgb(const T y, const T u, const T v,
+                T&r, T&g, T&b) {
+    const T Y = y*static_cast<T>(YUV2RGB_11);
+    r = CLAMP(Y + u*static_cast<T>(YUV2RGB_12) + v*static_cast<T>(YUV2RGB_13));
+    g = CLAMP(Y + u*static_cast<T>(YUV2RGB_22) + v*static_cast<T>(YUV2RGB_23));
+    b = CLAMP(Y + u*static_cast<T>(YUV2RGB_32) + v*static_cast<T>(YUV2RGB_33));
+  }
+  template<>
+  void _yuv2rgb(const unsigned char y, const unsigned char u, const unsigned char v,
+                unsigned char&r, unsigned char&g, unsigned char&b) {
+    const int Y = YUV2RGB_11*(y - Y_OFFSET);
+    const int U = u - UV_OFFSET;
+    const int V = v - UV_OFFSET;
+    const int uv_r=YUV2RGB_12*U + YUV2RGB_13*V;
+    const int uv_g=YUV2RGB_22*U + YUV2RGB_23*V;
+    const int uv_b=YUV2RGB_32*U + YUV2RGB_33*V;
+    r = CLAMP((Y + uv_r) >> 8);
+    g = CLAMP((Y + uv_g) >> 8);
+    b = CLAMP((Y + uv_b) >> 8);
+  }
+
+  template <class T>
+  void _getRGB(const T*data, unsigned int format, size_t position, T&red, T&green, T&blue, T&alpha) {
+    int csize = format2csize(format);
+    const T*pixels = data+position*csize;
+    switch(format) {
+    case GL_LUMINANCE:
+      red=green=blue=pixels[0];
+      alpha=255;
+      break;
+    case GL_RGB:
+      red=pixels[0];
+      green=pixels[1];
+      blue=pixels[2];
+      break;
+    case GL_BGR:
+      red=pixels[0];
+      green=pixels[1];
+      blue=pixels[2];
+      break;
+    case GL_RGBA:
+      red=pixels[0];
+      green=pixels[1];
+      blue=pixels[2];
+      alpha=pixels[3];
+      break;
+    case GL_BGRA:
+#ifdef __APPLE__
+      /* ARGB */
+      red=pixels[1];
+      green=pixels[2];
+      blue=pixels[3];
+      alpha=pixels[0];
+#else
+      red=pixels[2];
+      green=pixels[1];
+      blue=pixels[0];
+      alpha=pixels[3];
+#endif
+      break;
+    case GL_YUV422_GEM:
+      pixels = data + ((position>>1)<<1)*csize;
+      _yuv2rgb(pixels[(position%2)?chY1:chY0], pixels[chU], pixels[chV], red, green, blue);
+      break;
+    default:
+      break;
+    }
+  }
+};
 
 GEM_EXTERN bool imageStruct::getRGB(int X, int Y, unsigned char*r,
                                     unsigned char*g, unsigned char*b, unsigned char*a) const
 {
+  bool reverse = needsReverseOrdering(type);
   unsigned char red=0, green=0, blue=0, alpha=255;
   int position = (X+(upsidedown?(ysize-Y-1):Y)*xsize);
-  const unsigned char*pixels=data+position*csize;
-
-  switch(format) {
-  case GL_LUMINANCE:
-    red=green=blue=pixels[0];
-    alpha=255;
-    break;
-  case GL_RGB:
-    red=pixels[0];
-    green=pixels[1];
-    blue=pixels[2];
-    break;
-  case GL_BGR:
-    red=pixels[0];
-    green=pixels[1];
-    blue=pixels[2];
-    break;
-  case GL_RGBA:
-    red=pixels[0];
-    green=pixels[1];
-    blue=pixels[2];
-    alpha=pixels[3];
-    break;
-  case GL_BGRA:
-#ifdef __APPLE__
-    red=pixels[1];
-    green=pixels[2];
-    blue=pixels[3];
-    alpha=pixels[0];
-#else
-    red=pixels[2];
-    green=pixels[1];
-    blue=pixels[0];
-    alpha=pixels[3];
-#endif
-    break;
-  case GL_YUV422_GEM: {
-    position = (((X+(upsidedown?(ysize-Y-1):Y)*xsize)>>1)<<1);
-    pixels=data+position*csize;
-    int y=YUV2RGB_11*(pixels[(X%2)?chY1:chY0]-Y_OFFSET);
-    int u=pixels[chU] - UV_OFFSET;
-    int v=pixels[chV] - UV_OFFSET;
-    int uv_r=YUV2RGB_12*u+YUV2RGB_13*v;
-    int uv_g=YUV2RGB_22*u+YUV2RGB_23*v;
-    int uv_b=YUV2RGB_32*u+YUV2RGB_33*v;
-
-    red =   CLAMP((y + uv_r) >> 8);
-    green = CLAMP((y + uv_g) >> 8);
-    blue =  CLAMP((y + uv_b) >> 8);
-  }
-  break;
-  default:
-    break;
-  }
-  if(r) {
-    *r=red;
-  }
-  if(g) {
-    *g=green;
-  }
-  if(b) {
-    *b=blue;
-  }
-  if(a) {
-    *a=alpha;
-  }
+  _getRGB(data, format, position, red, green, blue, alpha);
+  if(r) *r=red;
+  if(g) *g=green;
+  if(b) *b=blue;
+  if(a) *a=alpha;
   return true;
 }
 GEM_EXTERN bool imageStruct::getGrey(int X, int Y, unsigned char*g) const
