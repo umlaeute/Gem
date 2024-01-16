@@ -278,6 +278,32 @@ namespace {
     return buf;
   }
 
+  const unsigned char format2csize(int fmt) {
+    switch(fmt) {
+    case GL_LUMINANCE:
+      return 1;
+    case GL_YUV422_GEM:
+      return 2;
+    case GL_RGB:
+    case GL_BGR:
+      return 3;
+    case GL_RGBA:
+    case GL_BGRA:
+#ifdef GL_ABGR_EXT
+    case GL_ABGR_EXT:
+#endif
+#ifdef GL_ARGB_EXT
+    case GL_ARGB_EXT:
+#endif
+      return 4;
+    default:
+      break;
+    }
+    /* default */
+    return 4;
+  }
+
+
   const bool needsReverseOrdering(unsigned int type) {
     const bool isBigEndian =
 #ifdef __BIG_ENDIAN__
@@ -520,11 +546,11 @@ imageStruct&imageStruct::operator=(const imageStruct&org)
 
 GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
 {
+  csize = format2csize(setformat);
   switch(setformat) {
   case GL_LUMINANCE:
     format=setformat;
     type=GL_UNSIGNED_BYTE;
-    csize=1;
     break;
 
   case GL_YUV422_GEM:
@@ -540,14 +566,12 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
       GL_UNSIGNED_BYTE
 #endif
       ;
-    csize=2;
     break;
 
   case GL_RGB:
   case GL_BGR:
     format=setformat;
     type=GL_UNSIGNED_BYTE;
-    csize=3;
     break;
 
   case GL_RGBA:
@@ -569,12 +593,12 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
 # endif
 #endif
       ;
-    csize=4;
     break;
   }
 
   return csize;
 }
+
 GEM_EXTERN int imageStruct::setCsizeByFormat(void)
 {
   return setCsizeByFormat(format);
