@@ -168,8 +168,11 @@ struct GEM_EXTERN imageStruct {
    * and set and return the correct csize (like 1)
    * if no format is given the current format is used
    */
-  virtual int setCsizeByFormat(int format);
-  virtual int setCsizeByFormat(void);
+  virtual int setFormat(int format);
+  virtual int setFormat(void);
+
+  GEM_DEPRECATED int setCsizeByFormat(int format) { return setFormat(format); }
+  GEM_DEPRECATED int setCsizeByFormat(void) { return setFormat(); }
 
 
   /* various copy functions

@@ -544,7 +544,7 @@ imageStruct&imageStruct::operator=(const imageStruct&org)
 }
 
 
-GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
+GEM_EXTERN int imageStruct::setFormat(int setformat)
 {
   csize = format2csize(setformat);
   switch(setformat) {
@@ -599,9 +599,9 @@ GEM_EXTERN int imageStruct::setCsizeByFormat(int setformat)
   return csize;
 }
 
-GEM_EXTERN int imageStruct::setCsizeByFormat(void)
+GEM_EXTERN int imageStruct::setFormat(void)
 {
-  return setCsizeByFormat(format);
+  return setFormat(format);
 }
 
 void pix_addsat(unsigned char *leftPix, unsigned char *rightPix,
