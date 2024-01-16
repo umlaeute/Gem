@@ -691,7 +691,7 @@ GEM_EXTERN bool imageStruct::convertFrom(const imageStruct *from,
   ysize=from->ysize;
 
   if(to_format>0) {
-    setCsizeByFormat(to_format);
+    setFormat(to_format);
   }
 
   upsidedown=from->upsidedown;
@@ -747,7 +747,7 @@ GEM_EXTERN bool imageStruct::fromRGB(const unsigned char *rgbdata)
   if(!rgbdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -795,7 +795,7 @@ GEM_EXTERN bool imageStruct::fromRGB16(const unsigned char *rgb16data)
     return false;
   }
   const unsigned short*rgbdata=(const unsigned short*)rgb16data;
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -827,7 +827,7 @@ GEM_EXTERN bool imageStruct::fromRGBA(const unsigned char *rgbadata)
   if(!rgbadata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -881,7 +881,7 @@ GEM_EXTERN bool imageStruct::fromBGR(const unsigned char *bgrdata)
   if(!bgrdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -925,7 +925,7 @@ GEM_EXTERN bool imageStruct::fromBGRA(const unsigned char *bgradata)
   if(!bgradata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -973,7 +973,7 @@ GEM_EXTERN bool imageStruct::fromABGR(const unsigned char *abgrdata)
   if(!abgrdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1023,7 +1023,7 @@ GEM_EXTERN bool imageStruct::fromARGB(const unsigned char *argbdata)
   if(!argbdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1075,7 +1075,7 @@ GEM_EXTERN bool imageStruct::fromGray(const unsigned char *greydata)
   if(!greydata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1120,7 +1120,7 @@ GEM_EXTERN bool imageStruct::fromGray(const short *greydata_)
   if(!greydata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1186,7 +1186,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const unsigned char*Y,
     return false;
   }
 
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1244,7 +1244,7 @@ GEM_EXTERN bool imageStruct::fromYV12(const short*Y, const short*U,
     return false;
   }
 
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1292,7 +1292,7 @@ GEM_EXTERN bool imageStruct::fromUYVY(const unsigned char *yuvdata)
   if(!yuvdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
 
   bool reverse = needsReverseOrdering(type);
@@ -1352,7 +1352,7 @@ GEM_EXTERN bool imageStruct::fromYUY2(const unsigned char*yuvdata)   // YUYV
   if(!yuvdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   reallocate();
   bool reverse = needsReverseOrdering(type);
 
@@ -1396,7 +1396,7 @@ GEM_EXTERN bool imageStruct::fromYVYU(const unsigned char *yuvdata)
   if(!yuvdata) {
     return false;
   }
-  setCsizeByFormat();
+  setFormat();
   bool reverse = needsReverseOrdering(type);
 
   reallocate();
