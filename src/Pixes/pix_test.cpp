@@ -356,6 +356,7 @@ void pix_test :: csMess(std::string cs)
     for(i=0; i<len; i++) {
       col[i] = tolower(cs[i]);
     }
+    col[len] = 0;
     color = col;
   }
   if ("rgba" == color) {
