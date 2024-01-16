@@ -483,7 +483,7 @@ pixBlock*videoVIDS::getFrame(void)
     unsigned char*data=m_pixBlock.image.data;
     m_pixBlock.image.xsize=m_width;
     m_pixBlock.image.ysize=m_height;
-    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+    m_pixBlock.image.setFormat(GEM_RGBA);
     m_pixBlock.image.reallocate();
     m_pixBlock.newimage=(data==m_pixBlock.image.data);
 

@@ -56,8 +56,8 @@ recordV4L2 :: recordV4L2(void):
 {
   m_image.xsize=720;
   m_image.ysize=576;
-  m_image.setCsizeByFormat(GEM_YUV);
-  //m_image.setCsizeByFormat(GEM_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
+  m_image.setFormat(GEM_YUV);
+  //m_image.setFormat(GEM_RGBA); /* RGBA works with Gem, but not with GStreamer and xawtv */
   m_image.reallocate();
 
   switch(m_image.format) {
@@ -198,7 +198,7 @@ bool recordV4L2 :: write(imageStruct*img)
       return true;
     }
   }
-  m_image.setCsizeByFormat();
+  m_image.setFormat();
   m_image.convertFrom(img);
 
   //  m_image.upsidedown=!m_image.upsidedown;

@@ -135,7 +135,7 @@ bool filmAVIPLAY :: open(const std::string&filename,
     m_image.image.ysize = l_info->GetVideoHeight();
     m_fps= l_info->GetFps();
   }
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
   if (!(m_image.image.xsize*m_image.image.ysize*m_image.image.csize)) {
     goto unsupported;
   }
@@ -172,7 +172,7 @@ pixBlock* filmAVIPLAY :: getFrame()
   if (m_aviimage) {
     int format = m_aviimage->Format();
     m_rawdata=m_aviimage->Data();
-    m_image.image.setCsizeByFormat(m_wantedFormat);
+    m_image.image.setFormat(m_wantedFormat);
     switch(format) {
     case IMG_FMT_RGB24:
       m_image.image.fromRGB (m_rawdata);

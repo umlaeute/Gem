@@ -403,7 +403,7 @@ void videoVLC::resize(unsigned int width, unsigned int height,
 
   m_pixBlock.image.xsize = width;
   m_pixBlock.image.ysize = height;
-  m_pixBlock.image.setCsizeByFormat(format);
+  m_pixBlock.image.setFormat(format);
   m_pixBlock.image.reallocate();
 
   if(&m_pixBlock.image == m_convertImg) {

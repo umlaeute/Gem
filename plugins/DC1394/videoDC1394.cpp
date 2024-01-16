@@ -48,7 +48,7 @@ videoDC1394 :: videoDC1394() : videoBase("dc1394"),
 
   m_frame.xsize=1600;
   m_frame.ysize=1200;
-  m_frame.setCsizeByFormat(GEM_RGBA);
+  m_frame.setFormat(GEM_RGBA);
   m_frame.allocate();
 
   provide("iidc");
@@ -92,7 +92,7 @@ bool videoDC1394 :: grabFrame()
 
   m_frame.xsize=frame->size[0];
   m_frame.ysize=frame->size[1];
-  m_frame.setCsizeByFormat(GEM_RGBA);
+  m_frame.setFormat(GEM_RGBA);
   m_frame.fromRGB(colframe->image);
 
   lock();

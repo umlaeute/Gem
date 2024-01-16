@@ -210,7 +210,7 @@ bool filmDarwin :: open(const std::string&filename,
     pixelformat=k32ARGBPixelFormat;
     break;
   }
-  m_image.image.setCsizeByFormat();
+  m_image.image.setFormat();
 
   m_image.image.data = new unsigned
   char [m_image.image.xsize*m_image.image.ysize*m_image.image.csize];

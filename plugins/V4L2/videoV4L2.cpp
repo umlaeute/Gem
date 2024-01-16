@@ -728,7 +728,7 @@ bool videoV4L2 :: startTransfer()
      just used RGB, I wonder? */
   m_image.image.xsize = fmt.fmt.pix.width;
   m_image.image.ysize = fmt.fmt.pix.height;
-  m_image.image.setCsizeByFormat(m_reqFormat);
+  m_image.image.setFormat(m_reqFormat);
   m_image.image.reallocate();
 
   debugPost("v4l2: format: %c%c%c%c -> 0x%X",

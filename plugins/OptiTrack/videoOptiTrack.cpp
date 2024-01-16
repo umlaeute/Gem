@@ -77,7 +77,7 @@ videoOptiTrack::videoOptiTrack(void) :
 {
   m_pixBlock.image.xsize = 320;
   m_pixBlock.image.ysize = 240;
-  m_pixBlock.image.setCsizeByFormat(GEM_GRAY);
+  m_pixBlock.image.setFormat(GEM_GRAY);
   m_pixBlock.image.allocate();
 }
 

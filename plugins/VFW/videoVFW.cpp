@@ -172,7 +172,7 @@ bool videoVFW :: openDevice(gem::Properties&props)
 
   m_image.image.xsize = m_width;
   m_image.image.ysize = m_height;
-  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.setFormat(GEM_RGBA);
 
   m_image.image.reallocate();
   m_image.image.setBlack();
@@ -259,7 +259,7 @@ bool videoVFW :: stopTransfer(void)
 bool videoVFW :: setColor(int format)
 {
   if(format) {
-    m_image.image.setCsizeByFormat(format);
+    m_image.image.setFormat(format);
   }
   return true;
 }

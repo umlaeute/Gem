@@ -40,7 +40,7 @@ filmTEST :: filmTEST(void)
   : m_fps(20)
   , m_numFrames(100)
 {
-  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.setFormat(GEM_RGBA);
   m_image.image.xsize=320;
   m_image.image.ysize=240;
   m_image.image.reallocate();

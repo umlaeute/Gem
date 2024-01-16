@@ -115,7 +115,7 @@ filmQT :: filmQT(void) :
   if(!filmQT_initQT()) {
     throw(GemException("unable to initialize QuickTime"));
   }
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
   m_bInit = true;
 }
 
@@ -275,7 +275,7 @@ bool filmQT :: open(const std::string&filename_,
     pixelformat=k32RGBAPixelFormat;
     break;
   }
-  m_image.image.setCsizeByFormat();
+  m_image.image.setFormat();
   m_image.image.allocate();
 
   m_rowBytes = m_image.image.xsize * m_image.image.csize;

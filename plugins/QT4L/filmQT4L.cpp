@@ -116,12 +116,12 @@ bool filmQT4L :: open(const std::string&filename,
       m_quickfile=0;
       return false;
     }
-    m_image.image.setCsizeByFormat(wantedFormat);
+    m_image.image.setFormat(wantedFormat);
     m_image.image.reallocate();
 
     m_qtimage.xsize=m_image.image.xsize;
     m_qtimage.ysize=m_image.image.ysize;
-    m_qtimage.setCsizeByFormat(GEM_RGB);
+    m_qtimage.setFormat(GEM_RGB);
     m_qtimage.reallocate();
 
     m_newfilm = true;
@@ -146,7 +146,7 @@ pixBlock* filmQT4L :: getFrame()
     return &m_image;
   }
 
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
   m_image.image.reallocate();
 
   pixBlock* pimage = 0;

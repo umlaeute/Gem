@@ -632,7 +632,7 @@ public:
       averageTimePerFrame = infoheader->AvgTimePerFrame / 10000000.0;
       pix.image.xsize = width;
       pix.image.ysize = height;
-      pix.image.setCsizeByFormat(pixelFormat);
+      pix.image.setFormat(pixelFormat);
       pix.image.reallocate();
 
       //we need to manually change the output from the renderer window to the null renderer
@@ -1036,7 +1036,7 @@ public:
     if(pix.image.xsize != getWidth()  || pix.image.ysize != getHeight()) {
       pix.image.xsize = getWidth();
       pix.image.ysize = getHeight();
-      pix.image.setCsizeByFormat(GEM_RGBA);
+      pix.image.setFormat(GEM_RGBA);
       pix.image.reallocate();
       pix.newfilm = true;
     }

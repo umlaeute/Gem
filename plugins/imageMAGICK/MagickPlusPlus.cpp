@@ -48,7 +48,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
 
     result.xsize=static_cast<int>(image.columns());
     result.ysize=static_cast<int>(image.rows());
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
     result.reallocate();
 
     result.upsidedown=true;

@@ -270,7 +270,7 @@ bool videoDV4L :: startTransfer()
   m_image.image.data=0;
   m_image.image.xsize=720;
   m_image.image.ysize=576;
-  m_image.image.setCsizeByFormat(m_reqFormat);
+  m_image.image.setFormat(m_reqFormat);
   m_image.image.reallocate();
 
   if(NULL==m_raw) {
@@ -356,7 +356,7 @@ bool videoDV4L :: setColor(int format)
   }
   m_reqFormat=format;
   lock();
-  m_image.image.setCsizeByFormat(m_reqFormat);
+  m_image.image.setFormat(m_reqFormat);
   unlock();
   return true;
 }

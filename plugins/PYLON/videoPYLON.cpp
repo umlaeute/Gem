@@ -55,7 +55,7 @@ public:
       m_pix.newimage = true;
       m_pix.image.xsize = ptrGrabResult->GetWidth();
       m_pix.image.ysize = ptrGrabResult->GetHeight();
-      m_pix.image.setCsizeByFormat(m_color);
+      m_pix.image.setFormat(m_color);
       m_pix.image.reallocate();
       m_converter.Convert (m_pix.image.data, m_pix.image.xsize*m_pix.image.ysize*m_pix.image.csize, ptrGrabResult);
     } else {

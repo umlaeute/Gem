@@ -357,7 +357,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
     pixes.image.xsize = widthIn;
     pixes.image.ysize = heightIn;
 
-    pixes.image.setCsizeByFormat(glformat);
+    pixes.image.setFormat(glformat);
     pixes.image.reallocate();
     switch(capformat)
     {

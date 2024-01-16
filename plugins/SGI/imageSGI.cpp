@@ -60,9 +60,9 @@ bool imageSGI :: load(std::string filename, imageStruct&result,
   result.ysize=ysize;
 
   if (csize == 4 || csize == 3) {
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
   } else if (csize == 1) {
-    result.setCsizeByFormat(GEM_GRAY);
+    result.setFormat(GEM_GRAY);
   } else {
     fprintf(stderr,
             "[GEM:imageSGI] unknown color components in SGI file: %s\n",

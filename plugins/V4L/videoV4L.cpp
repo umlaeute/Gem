@@ -400,7 +400,7 @@ bool videoV4L :: startTransfer()
      just used RGB, I wonder? */
   m_image.image.xsize = vmmap[frame].width;
   m_image.image.ysize = vmmap[frame].height;
-  m_image.image.setCsizeByFormat(m_reqFormat);
+  m_image.image.setFormat(m_reqFormat);
   m_image.image.reallocate();
 
   switch((m_gotFormat=vmmap[frame].format)) {

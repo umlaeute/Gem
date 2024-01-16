@@ -267,7 +267,7 @@ videoDECKLINK::videoDECKLINK(void)
 
   m_pixBlock.image.xsize = 1920;
   m_pixBlock.image.ysize = 1080;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   m_pixBlock.image.xsize = -1;
   m_pixBlock.image.ysize = -1;
@@ -462,7 +462,7 @@ void videoDECKLINK::setFrame(unsigned int w, unsigned int h, unsigned int format
   m_mutex.lock();
   m_pixBlock.image.xsize=w;
   m_pixBlock.image.ysize=h;
-  m_pixBlock.image.setCsizeByFormat(format);
+  m_pixBlock.image.setFormat(format);
   m_pixBlock.image.reallocate();
 
   m_pixBlock.image.fromUYVY(data);

@@ -70,7 +70,7 @@ bool imageSTB :: load(std::string filename, imageStruct&result,
 
   result.xsize=xsize;
   result.ysize=ysize;
-  result.setCsizeByFormat(GEM_RGBA);
+  result.setFormat(GEM_RGBA);
   result.reallocate();
 
   result.fromRGBA(data);

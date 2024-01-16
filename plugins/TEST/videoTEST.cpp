@@ -18,7 +18,7 @@ videoTEST::videoTEST(void) :
 {
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
 }
 
@@ -79,7 +79,7 @@ static void setBlue(unsigned char*data, unsigned int count)
 
 pixBlock*videoTEST::getFrame(void)
 {
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   const unsigned int count = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
   unsigned int i=0;

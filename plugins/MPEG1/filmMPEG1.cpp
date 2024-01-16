@@ -102,7 +102,7 @@ bool filmMPEG1 :: open(const std::string&filename, int format)
       goto unsupported;
     }
 
-    m_image.image.setCsizeByFormat(wantedFormat);
+    m_image.image.setFormat(wantedFormat);
     m_image.image.reallocate();
 
     int length=m_image.image.xsize*m_image.image.ysize;

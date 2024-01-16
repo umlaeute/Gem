@@ -146,7 +146,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   size_t h = CGImageGetHeight(myImage);
   result.xsize = w;
   result.ysize = h;
-  result.setCsizeByFormat(GEM_RGBA);
+  result.setFormat(GEM_RGBA);
   result.upsidedown = !fixUpDown;
   result.reallocate();
   result.setBlack();

@@ -184,7 +184,7 @@ bool filmAVI :: open(const std::string&filename,
 
   m_image.image.xsize = streaminfo.rcFrame.right - streaminfo.rcFrame.left;
   m_image.image.ysize = streaminfo.rcFrame.bottom - streaminfo.rcFrame.top;
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
   m_image.image.reallocate();
 
   if (!(m_hic = ICLocate(ICTYPE_VIDEO, 0, m_pbmihRaw, m_pbmihDst,
@@ -239,7 +239,7 @@ pixBlock* filmAVI :: getFrame(void)
 
   m_image.newimage=1;
   m_image.image.upsidedown=false;
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
   m_image.image.reallocate();
 
   if (!AVIStreamRead(m_streamVid,

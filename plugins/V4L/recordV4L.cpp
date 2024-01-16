@@ -54,8 +54,8 @@ recordV4L :: recordV4L(void):
 {
   m_image.xsize=720;
   m_image.ysize=576;
-  m_image.setCsizeByFormat(GEM_YUV);
-  m_image.setCsizeByFormat(GEM_RGBA);
+  m_image.setFormat(GEM_YUV);
+  m_image.setFormat(GEM_RGBA);
   m_image.reallocate();
 
   switch(m_image.format) {
@@ -190,7 +190,7 @@ bool recordV4L :: write(imageStruct*img)
       return false;
     }
   }
-  m_image.setCsizeByFormat();
+  m_image.setFormat();
   m_image.convertFrom(img);
 
   //  m_image.upsidedown=!m_image.upsidedown;

@@ -490,7 +490,7 @@ bool filmDS :: open(const std::string&filename,
   // this is a guess at the fast past for pixels on Windows
   m_image.image.xsize   = m_xsize;
   m_image.image.ysize   = m_ysize;
-  m_image.image.setCsizeByFormat((m_csize==3)?GEM_RAW_BGR:GEM_RAW_BGRA);
+  m_image.image.setFormat((m_csize==3)?GEM_RAW_BGR:GEM_RAW_BGRA);
   m_image.image.upsidedown=false;
 
   // Start the video stream

@@ -179,7 +179,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   m_numFrames = m_avstream->nb_frames;
   m_image.image.xsize = m_avdecoder->width;
   m_image.image.ysize = m_avdecoder->height;
-  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.setFormat(GEM_RGBA);
   m_image.image.reallocate();
   m_image.newfilm = true;
 
@@ -269,7 +269,7 @@ void filmFFMPEG :: initConverter(const int width, const int height, const int fo
      ) {
     m_image.image.xsize = width;
     m_image.image.ysize = height;
-    m_image.image.setCsizeByFormat(gformat);
+    m_image.image.setFormat(gformat);
     m_image.image.reallocate();
     m_image.newfilm = true;
   }

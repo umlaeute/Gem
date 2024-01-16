@@ -267,14 +267,14 @@ static bool QuickTimeImage2mem(GraphicsImportComponent inImporter,
 #ifdef k8GrayPixelFormat
   /* from the docs on "depth": what depth is this data (1-32) or ( 33-40 grayscale ) */
   if ((*imageDescH)->depth <= 32) {
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
     pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
   } else {
-    result.setCsizeByFormat(GEM_GRAY);
+    result.setFormat(GEM_GRAY);
     pixelformat = k8GrayPixelFormat;
   }
 #else
-  result.setCsizeByFormat(GEM_RGBA);
+  result.setFormat(GEM_RGBA);
   pixelformat = IMAGEQT_RGBA_PIXELFORMAT;
 #endif
 

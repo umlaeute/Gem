@@ -41,7 +41,7 @@ filmAVF::filmAVF(void)
 {
   close(); // default values
   m_wantedFormat = FILMAVF_DEFAULT_PIXELFORMAT;
-  m_image.image.setCsizeByFormat(m_wantedFormat);
+  m_image.image.setFormat(m_wantedFormat);
 }
 
 /////////////////////////////////////////////////////////
@@ -297,7 +297,7 @@ bool filmAVF::changeFormat(unsigned int format)
     }
   }
   m_image.image.format = m_wantedFormat;
-  m_image.image.setCsizeByFormat();
+  m_image.image.setFormat();
   if(m_image.image.data) {
     m_image.image.reallocate();
   } else {

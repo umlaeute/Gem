@@ -114,7 +114,7 @@ bool filmMPEG3 :: open(const std::string&filename,
     }
     double d;
     if(wantProps.get("colorspace", d)) {
-      m_image.image.setCsizeByFormat((int)d);
+      m_image.image.setFormat((int)d);
       m_wantedFormat=m_image.image.format;
     }
     m_image.image.reallocate();
@@ -144,7 +144,7 @@ pixBlock* filmMPEG3 :: getFrame(void)
 
   char*u=NULL,*y=NULL,*v=NULL;
 
-  m_image.image.setCsizeByFormat(wantedFormat);
+  m_image.image.setFormat(wantedFormat);
   int datasize=m_image.image.xsize*m_image.image.ysize*m_image.image.csize;
   m_image.image.reallocate(datasize+4);
 

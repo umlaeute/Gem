@@ -147,17 +147,17 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
   bool knownFormat = false;
   // Is it a gray8 image?
   if (bits == 8 && samps == 1) {
-    result.setCsizeByFormat(GEM_GRAY);
+    result.setFormat(GEM_GRAY);
     knownFormat = true;
   }
   // Is it an RGB image?
   else if (bits == 8 && samps == 3) {
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
     knownFormat = true;
   }
   // Is it an RGBA image?
   else if (bits == 8 && samps == 4) {
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
     knownFormat = true;
   }
 
@@ -243,7 +243,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     }
 
     TIFFRGBAImageEnd(&img);
-    result.setCsizeByFormat(GEM_RGBA);
+    result.setFormat(GEM_RGBA);
     result.reallocate();
 
     unsigned char *dstLine = result.data;

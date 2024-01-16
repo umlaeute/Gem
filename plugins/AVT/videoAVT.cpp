@@ -140,7 +140,7 @@ void videoAVT::grabbedFrame(const tPvFrame&pFrame)
   lock();
   m_image.image.xsize=pFrame.Width;
   m_image.image.ysize=pFrame.Height;
-  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.setFormat(GEM_RGBA);
   m_image.image.reallocate();
 
   switch(pFrame.Format) {

@@ -76,7 +76,7 @@ videoPIPEWIRE::videoPIPEWIRE(void)
 {
   m_pixBlock.image.xsize = 1;
   m_pixBlock.image.ysize = 1;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
   videoPIPEWIRE_init();
@@ -266,7 +266,7 @@ pixBlock*videoPIPEWIRE::getFrame(void)
   }
   return &m_pixBlock;
 
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   const unsigned int count = m_pixBlock.image.xsize * m_pixBlock.image.ysize;
   unsigned int i=0;
@@ -491,16 +491,16 @@ void videoPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
   case(SPA_VIDEO_FORMAT_BGR):
   case(SPA_VIDEO_FORMAT_BGRA):
   case(SPA_VIDEO_FORMAT_RGB16):
-    m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+    m_pixBlock.image.setFormat(GEM_RGBA);
     break;
   case(SPA_VIDEO_FORMAT_YUY2):
   case(SPA_VIDEO_FORMAT_UYVY):
-    m_pixBlock.image.setCsizeByFormat(GEM_YUV);
+    m_pixBlock.image.setFormat(GEM_YUV);
     break;
   case(SPA_VIDEO_FORMAT_GRAY8):
   case(SPA_VIDEO_FORMAT_GRAY16_BE):
   case(SPA_VIDEO_FORMAT_GRAY16_LE):
-    m_pixBlock.image.setCsizeByFormat(GEM_GRAY);
+    m_pixBlock.image.setFormat(GEM_GRAY);
     break;
   default:
     m_pixBlock.image.csize = 0;

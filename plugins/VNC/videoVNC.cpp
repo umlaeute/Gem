@@ -30,7 +30,7 @@ videoVNC::videoVNC(void)
   m_mouse.mask=0;
   m_pixBlock.image.xsize = 64;
   m_pixBlock.image.ysize = 64;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
 }
 
@@ -216,7 +216,7 @@ void videoVNC::frameBufferCallback(rfbClient *client, int x, int y, int w,
   int bpp=pf->bitsPerPixel/8;
   int row_stride=client->width*bpp;
 
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.xsize=client->width;
   m_pixBlock.image.ysize=client->height;
   m_pixBlock.image.reallocate();

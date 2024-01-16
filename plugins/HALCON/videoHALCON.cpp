@@ -179,7 +179,7 @@ bool videoHALCON :: grabFrame()
     lock();
     m_image.image.xsize=w;
     m_image.image.ysize=h;
-    m_image.image.setCsizeByFormat(GEM_RGBA);
+    m_image.image.setFormat(GEM_RGBA);
     m_image.image.reallocate();
     long row, col;
     unsigned char*data=m_image.image.data;

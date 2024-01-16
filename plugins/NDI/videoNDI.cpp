@@ -304,7 +304,7 @@ pixBlock*videoNDI::getFrame(void)
       verbose(1, "[GEM:videoNDI] unknown format...");
       return NULL;
     }
-    m_pixBlock.image.setCsizeByFormat();
+    m_pixBlock.image.setFormat();
     m_pixBlock.image.data = m_ndi_frame.p_data;
     m_pixBlock.image.not_owned = 1;
     m_pixBlock.newimage = 1;

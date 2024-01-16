@@ -243,7 +243,7 @@ recordDECKLINK :: recordDECKLINK(void)
 
   m_pixBlock.image.xsize = 1920;
   m_pixBlock.image.ysize = 1080;
-  m_pixBlock.image.setCsizeByFormat(GEM_RGBA);
+  m_pixBlock.image.setFormat(GEM_RGBA);
   m_pixBlock.image.reallocate();
   m_pixBlock.image.xsize = -1;
   m_pixBlock.image.ysize = -1;

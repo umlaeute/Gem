@@ -99,7 +99,7 @@ videoDS :: videoDS(void)
   for (int i = 0; i <= 2; i++) {
     m_pixBlockBuf[i].image.xsize=m_width;
     m_pixBlockBuf[i].image.ysize=m_height;
-    m_pixBlockBuf[i].image.setCsizeByFormat(GEM_RGBA);
+    m_pixBlockBuf[i].image.setFormat(GEM_RGBA);
     m_pixBlockBuf[i].image.reallocate();
 
     m_pixBlockBuf[i].newimage = 0;
@@ -111,7 +111,7 @@ videoDS :: videoDS(void)
 
   m_image.image.xsize=m_width;
   m_image.image.ysize=m_height;
-  m_image.image.setCsizeByFormat(GEM_RGBA);
+  m_image.image.setFormat(GEM_RGBA);
   m_image.image.reallocate();
 
 #ifdef USE_RECORDING
@@ -517,7 +517,7 @@ void videoDS :: copyBuffer(void)
 
   m_pixBlockBuf[m_writeIdx].image.xsize = m_width;
   m_pixBlockBuf[m_writeIdx].image.ysize = m_height;
-  m_pixBlockBuf[m_writeIdx].image.setCsizeByFormat(m_format);
+  m_pixBlockBuf[m_writeIdx].image.setFormat(m_format);
   m_pixBlockBuf[m_writeIdx].image.reallocate();
   m_pixBlockBuf[m_writeIdx].image.reallocate(SampleSize);
   m_nPixDataSize[m_writeIdx] = SampleSize;
@@ -658,7 +658,7 @@ bool videoDS :: setDimen(int x, int y, int leftmargin, int rightmargin,
 bool videoDS :: setColor(int format)
 {
   if(format) {
-    m_image.image.setCsizeByFormat(format);
+    m_image.image.setFormat(format);
   }
   return true;
 }

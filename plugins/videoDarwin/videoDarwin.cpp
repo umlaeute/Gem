@@ -64,7 +64,7 @@ videoDarwin :: videoDarwin()
 
   m_img.xsize = 800;
   m_img.ysize = 600;
-  m_img.setCsizeByFormat(GEM_RGBA);
+  m_img.setFormat(GEM_RGBA);
   m_img.allocate();
 
   //initSeqGrabber();
@@ -296,12 +296,12 @@ bool videoDarwin :: initSeqGrabber()
   m_img.ysize = m_height;
 
   if (m_colorspace==GEM_RGBA) {
-    m_img.setCsizeByFormat(m_colorspace);
+    m_img.setFormat(m_colorspace);
     m_rowBytes = m_width*m_img.csize;
     pixelFormat=k32ARGBPixelFormat;
     verbose(1, "[GEM:videoDarwin] using RGB");
   } else {
-    m_img.setCsizeByFormat(GEM_YUV);
+    m_img.setFormat(GEM_YUV);
     m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
     verbose(1, "[GEM:videoDarwin] using YUV");
