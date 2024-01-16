@@ -132,7 +132,6 @@ pix_multiblob :: pix_multiblob(t_floatarg f) :
     m_blobNumber = 6;
   }
   numBlobsMess(m_blobNumber);
-
 }
 
 /*------------------------------------------------------------
@@ -174,8 +173,7 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
     assert(cp);
 
     pb->area++;
-    t_float grey=(static_cast<t_float>(m_image.GetPixel(cp->y, cp->x,
-                                       chGray))/255.0);
+    t_float grey=static_cast<t_float>(m_image.data[cp->y * m_image.xsize + cp->x])/255.;
     double x = static_cast<t_float>(cp->x);
     double y = static_cast<t_float>(cp->y);
     pb->m_xaccum  += grey*x;
@@ -198,7 +196,7 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
       pb->ymax(cp->y);
     }
 
-    m_image.SetPixel(cp->y,cp->x,chGray,0);
+    m_image.data[m_image.xsize * cp->y + cp->x] = 0;
     for(int i = -1; i<= 1; i++) {
       for(int j = -1; j <= 1; j++) {
         np.x = cp->x + j;
@@ -206,7 +204,7 @@ void pix_multiblob :: makeBlob(Blob *pb, int x_ini, int y_ini)
 
         if(np.x >= 0 && np.y >= 0 &&
             np.x < m_image.xsize && np.y < m_image.ysize &&
-            m_image.GetPixel(np.y, np.x, chGray) > m_threshold ) {
+            m_image.data[m_image.xsize * np.y + np.x] > m_threshold ) {
           ptpush(&current, &np);
         }
       }
@@ -258,7 +256,7 @@ void pix_multiblob :: doProcessing(void)
   // detect blobs and add them to the currentBlobs-array
   for(int y = 0; y < m_image.ysize; y++) {
     for(int x = 0; x < m_image.xsize; x++) {
-      if (m_image.GetPixel(y,x,0) > 0) {
+      if (m_image.data[y * m_image.xsize + x] > 0) {
         Blob *blob = new Blob();
         if(0 == blob) {
           continue;
