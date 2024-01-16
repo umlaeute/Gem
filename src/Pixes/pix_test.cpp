@@ -373,8 +373,8 @@ void pix_test :: csMess(std::string cs)
     return;
   }
   m_pix.image.setCsizeByFormat(fmt);
-  m_pix.image.reallocate();
-  m_pix.newfilm=true;
+  dimenMess(m_pix.image.xsize, m_pix.image.ysize);
+
 }
 void pix_test :: postrender(GemState *state)
 {
@@ -387,6 +387,8 @@ void pix_test :: dimenMess(unsigned int w, unsigned int h)
 {
   m_pix.image.xsize=w;
   m_pix.image.ysize=h;
+  if(GEM_YUV == m_pix.image.format && m_pix.image.xsize%2)
+    m_pix.image.xsize+=1;
   m_pix.image.reallocate();
   m_pix.newfilm=true;
 }
