@@ -136,6 +136,10 @@ public:
     queue(alist);
   }
 
+  void sendInfoNow(t_float f) {
+    outlet_float(infoOut, f);
+  }
+
   void sendInfo(std::vector<t_atom>alist)
   {
     int argc=alist.size();
@@ -198,7 +202,8 @@ public:
 
     switch(output_state) {
     case TRUE:
-      parent->info("float", 1);
+      sendInfoNow(1);
+      //parent->info("float", 1);
       break;
     case NONE:
       parent->bang();
@@ -215,8 +220,10 @@ public:
     return true;
 
   fail:
-    if(TRUE == output_state)
-      parent->info("float", 0);
+    if(TRUE == output_state) {
+      sendInfoNow(0);
+      //parent->info("float", 0);
+    }
     return false;
   }
 
