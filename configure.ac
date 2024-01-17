@@ -717,7 +717,8 @@ AS_CASE(["$with_defaultwindow"],
          [GEM_DEFAULT_WINDOW=""])
 
 AS_IF([test "x${GEM_DEFAULT_WINDOW}" = "x"], [
- AS_IF([test "x$WINDOWS" = "xyes"], [GEM_DEFAULT_WINDOW="gemw32window"],
+ AS_IF([test "x${have_glfw3}" = "xyes"], [GEM_DEFAULT_WINDOW="gemglfw3window"],
+       [test "x$WINDOWS" = "xyes"], [GEM_DEFAULT_WINDOW="gemw32window"],
        [test "x$DARWIN" = "xyes"], [GEM_DEFAULT_WINDOW="gemcocoawindow"],
        [test "x$no_glx" != "xyes"], [GEM_DEFAULT_WINDOW="gemglxwindow"],
        [test "x$no_glut" != "xyes"], [GEM_DEFAULT_WINDOW="gemglutwindow"]
