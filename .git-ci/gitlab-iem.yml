@@ -111,6 +111,7 @@ stages:
     HOMEBREW_NO_ANALYTICS: 1
     HOMEBREW_NO_INSTALL_UPGRADE: 1
     HOMEBREW_NO_INSTALL_CLEANUP: 1
+    HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
     CODESIGNFLAGS: --timestamp --strict --force
   before_script:
     - *script_zsh_compat
