@@ -458,7 +458,11 @@ bool GemWindow::createGemWindow(void)
     }
     m_context=m_pimpl->mycontext;
   } else {
-    m_pimpl->mycontext = 0;
+    /* JMZ20240117: this used be 'm_pimpl->mycontext = 0;' which i don't understand... */
+    /* as setting mycontext to NULL breaks rendering for backends
+     * with shared contexts ([gemglxwindow]), we do the obvious thing for now...
+     */
+    m_pimpl->mycontext = m_context;
   }
 
   m_pimpl->dispatch();
