@@ -1,0 +1,9 @@
+name: General Ticket
+description: Feature requests, improvements, whatever...
+body:
+  - type: textarea
+    id: details
+    attributes:
+      label: Add a description
+    validations:
+      required: true
