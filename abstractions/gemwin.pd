@@ -1,4 +1,4 @@
-#N canvas 702 37 937 794 10;
+#N canvas 697 37 942 872 10;
 #X obj 126 74 inlet;
 #X obj 626 678 outlet;
 #N canvas 6 61 1083 500 argument 0;
@@ -2799,7 +2799,7 @@
 #X connect 10 0 8 0;
 #X connect 10 1 9 0;
 #X restore 258 606 pd CrystalEyeStereo;
-#X obj 131 746 GEMglReportError;
+#X obj 131 836 GEMglReportError;
 #X msg 390 149 1000 \$1;
 #X obj 390 171 /;
 #X obj 131 202 metro 20;
@@ -3167,6 +3167,23 @@
 #X obj 131 268 list split 1;
 #X obj 131 291 list trim;
 #X obj 131 245 t a s;
+#N canvas 735 459 450 300 flush 0;
+#X obj 48 49 inlet;
+#X obj 48 72 t a a;
+#X obj 48 95 outlet;
+#X obj 132 158 GEMglFlush;
+#X obj 132 137 spigot;
+#X obj 139 71 r \$0-buffer;
+#X obj 139 93 t f f;
+#X obj 171 115 == 1;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 4 0;
+#X connect 4 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 1 7 0;
+#X connect 7 0 4 1;
+#X restore 131 795 pd flush;
 #X connect 0 0 37 0;
 #X connect 4 0 48 0;
 #X connect 4 1 39 0;
@@ -3190,7 +3207,7 @@
 #X connect 20 0 28 0;
 #X connect 21 0 17 0;
 #X connect 22 0 30 0;
-#X connect 23 0 16 0;
+#X connect 23 0 54 0;
 #X connect 23 1 13 0;
 #X connect 24 0 26 0;
 #X connect 25 0 26 1;
@@ -3229,3 +3246,4 @@
 #X connect 52 0 4 0;
 #X connect 53 0 51 0;
 #X connect 53 1 48 1;
+#X connect 54 0 16 0;
