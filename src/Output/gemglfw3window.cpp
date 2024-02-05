@@ -858,6 +858,8 @@ bool gemglfw3window :: create(void)
   dispatch();
 
   int fb_width=0, fb_height=0;
+  glfwGetWindowSize(m_window, &fb_width, &fb_height);
+  dimension(fb_width, fb_height);
   glfwGetFramebufferSize(m_window, &fb_width, &fb_height);
   framebuffersize(fb_width, fb_height);
 
