@@ -647,7 +647,10 @@ void gemglfw3window :: bufferMess(int buf)
   case 2:
     m_buffer=buf;
     if(m_window) {
-      post("changing buffer type will only effect newly created windows");
+      static int warned = 0;
+      if(!warned)
+        post("changing buffer type will only effect newly created windows");
+      warned = 1;
     }
     break;
   default:
