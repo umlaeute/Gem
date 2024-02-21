@@ -43,6 +43,26 @@ else
 fi
 
 gempath=${gempath%:}
+
+# help paths
+helppath=""
+if [ -d "${srcdir}/help" ]; then
+  helppath="${helppath}:${srcdir}/help"
+fi
+for d in $(for pd in "${srcdir}/plugins"/*/*.pd "${builddir}/plugins"/*/*.pd; do
+	if [ -f "${pd}" ]; then
+		echo "${pd%/*}"
+	fi
+done | uniq); do
+  helppath="${helppath}:${d}"
+done
+helppath=${helppath#:}
+helppath=${helppath%:}
+if [ -n "${helppath}" ]; then
+	gempath="${gempath}:${helppath}"
+	gempath="${gempath#:}"
+fi
+
 if [ "x${gempath}" = "x" ]; then
   gempath=${builddir}
 fi
