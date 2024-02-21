@@ -54,9 +54,9 @@ input device;
 for the image (does not work on all capture devices);
 #X text 15 371 Inlet 1: enumerate: list all devices to the console
 ;
-#X text 17 245 Inlet 1: driver <number>: switch between different drivers
+#X text 17 245 Inlet 1: backend <number>: switch between different backends
 \, e.g. v4l \, ieee1394 \, etc.;
-#X text 16 276 Inlet 1: driver <symbol>: switch between different drivers
+#X text 16 276 Inlet 1: backend <symbol>: switch between different backends
 \, e.g. v4l \, v4l2 \, dv...;
 #X text 13 66 [pix_video] opens a wide array of cameras \, USB to FireWire
 to capture cards \, as long as the camera is supported by your operating
@@ -68,7 +68,7 @@ system.;
 #X msg 641 283 dialog;
 #X msg 604 153 colorspace RGBA;
 #X msg 609 211 device 0;
-#X msg 642 312 driver dv;
+#X msg 642 312 backend dv;
 #N canvas 516 113 572 565 properties 0;
 #X msg 41 203 enumProps;
 #X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 -233017
@@ -399,20 +399,20 @@ at the same time!;
 #X obj 657 393 print videoctl;
 #X obj 647 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X msg 665 345 driver \$1;
+#X msg 665 345 backend \$1;
 #X text 686 286 (if available);
 #X text 16 388 Inlet 1: dialog: open a dialog to configure the input
-device (depending on driver / Operating System);
+device (depending on backend / Operating System);
 #X text 18 501 Outlet 2: info (for enumerating devices \, querying
 properties \, ...);
 #X text 15 423 Inlet 1: enumProps \, get \, set \, clearProps \, setProps
-\, applyProps: interact with driver/device properties;
+\, applyProps: interact with backend/device properties;
 #X obj 657 374 r \$0-ctl;
 #X text 54 600 you can use [pix_buffer] to distribute the same pix
 to different parts of your render-chain;
 #X msg 625 235 device /dev/fw1;
 #N canvas 697 49 586 667 backend 0;
-#X obj 104 122 bng 15 250 50 0 \$0-backendinfo \$0-backendinfo <--show_info_on_drivers
+#X obj 104 122 bng 15 250 50 0 \$0-backendinfo \$0-backendinfo <--show_info_on_backends
 17 8 0 10 -262144 -1 -1;
 #N canvas 15 49 450 300 \$0-backendinfo 0;
 #X restore 184 207 pd \$0-backendinfo;
@@ -420,32 +420,32 @@ to different parts of your render-chain;
 #X msg 223 331 clear;
 #X obj 223 351 s pd-\$0-backendinfo;
 #X obj 203 424 s \$0-ctl;
-#X msg 203 405 driver;
+#X msg 203 405 backend;
 #N canvas 4 49 685 300 fake 0;
 #X obj 178 5 inlet bang;
-#X msg 178 25 currentdriver v4l2 \, drivers 3 \, driver v4l2 analog
-\, driver v4l analog \, driver dc1394 iidc \, driver unicap analog
-\, driver vlc;
+#X msg 178 25 currentbackend v4l2 \, backends 3 \, backend v4l2 analog
+\, backend v4l analog \, backend dc1394 iidc \, backend unicap analog
+\, backend vlc;
 #X obj 178 67 outlet;
 #X connect 0 0 1 0;
 #X connect 1 0 2 0;
 #X restore 265 414 pd fake;
 #X obj 265 434 s \$0-info;
 #N canvas 14 49 450 300 content 0;
-#X obj 123 124 route driver drivers currentdriver;
-#N canvas 509 196 644 372 numdrivers 0;
+#X obj 123 124 route backend backends currentbackend;
+#N canvas 509 196 644 372 numbackends 0;
 #X obj 119 11 inlet;
 #X obj 119 316 outlet;
 #X obj 119 81 f;
 #X obj 277 69 inlet reset;
 #X msg 277 89 0;
 #X obj 119 298 list prepend text 50;
-#X msg 119 154 50 On this system you have \$1 drivers available;
+#X msg 119 154 50 On this system you have \$1 backends available;
 #X obj 119 101 t f f;
 #X obj 146 201 select 0;
 #X obj 119 31 route bang float;
 #X msg 191 223 90 Click on any of the patches below for information
-about a specific driver:;
+about a specific backend:;
 #X connect 0 0 9 0;
 #X connect 2 0 7 0;
 #X connect 3 0 4 0;
@@ -458,8 +458,8 @@ about a specific driver:;
 #X connect 9 0 2 0;
 #X connect 9 1 2 1;
 #X connect 10 0 5 0;
-#X restore 190 179 pd numdrivers;
-#N canvas 12 49 638 300 currentdriver 0;
+#X restore 190 179 pd numbackends;
+#N canvas 12 49 638 300 currentbackend 0;
 #X obj 119 31 inlet;
 #X obj 119 186 outlet;
 #X obj 119 82 symbol <undefined>;
@@ -469,8 +469,8 @@ about a specific driver:;
 #X obj 119 164 list prepend text 50 65;
 #X obj 119 51 route bang;
 #X obj 202 54 symbol;
-#X msg 224 124 You are currently using the '\$1' driver;
-#X msg 119 144 Currently you are not using any specific driver...;
+#X msg 224 124 You are currently using the '\$1' backend;
+#X msg 119 144 Currently you are not using any specific backend...;
 #X connect 0 0 7 0;
 #X connect 2 0 5 0;
 #X connect 3 0 4 0;
@@ -483,8 +483,8 @@ about a specific driver:;
 #X connect 8 0 2 1;
 #X connect 9 0 6 0;
 #X connect 10 0 6 0;
-#X restore 280 179 pd currentdriver;
-#N canvas 12 49 456 510 listdrivers 0;
+#X restore 280 179 pd currentbackend;
+#N canvas 12 49 456 510 listbackends 0;
 #X obj 149 61 inlet;
 #X obj 149 276 outlet;
 #X obj 241 61 inlet reset;
@@ -522,7 +522,7 @@ about a specific driver:;
 #X connect 16 0 5 0;
 #X connect 16 1 11 0;
 #X connect 16 2 13 0;
-#X restore 123 149 pd listdrivers;
+#X restore 123 149 pd listbackends;
 #X obj 123 94 r \$0-info;
 #X obj 190 211 t a;
 #X obj 337 125 t b b b;

@@ -156,8 +156,8 @@ auto-mode \, the film is NOT looped. Instead you can reset the current-frame
 to zero when the end of the film is reached., f 69;
 #X text 16 445 Inlet 2: float: <frame#> changes the frame to be decoded
 on rendering (starting with 0), f 69;
-#X msg 486 212 loader foo;
-#X text 17 391 Inlet 1: message : loader <name>: open the film using
+#X msg 486 212 backend foo;
+#X text 17 391 Inlet 1: message : backend <name>: open the film using
 only the specified backend(s), f 70;
 #X obj 578 8 declare -lib Gem;
 #N canvas 2 93 450 310 :: 0;
