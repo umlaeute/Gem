@@ -344,16 +344,17 @@ namespace {
   static void yuv420p_to_rgb3(
     const unsigned char*Y, const unsigned char*U, const unsigned char*V,
     unsigned char*outdata, const size_t width, const size_t height) {
-
     const unsigned char*py1=Y;
     const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
     const unsigned char*pu=U;
     const unsigned char*pv=V;
     unsigned char*pixels1=outdata;
     unsigned char*pixels2=outdata+width*3;
+    const size_t rows = height>>1;
+    const size_t cols = width>>1;
 
-    for(int row=0; row<(width>>1); row++) {
-      for(int col=0; col<(height>>1); col++) {
+    for(int row=0; row<rows; row++) {
+      for(int col=0; col<cols; col++) {
         int y;
         int u=*pu++ -UV_OFFSET;
         int v=*pv++ -UV_OFFSET;
@@ -390,8 +391,8 @@ namespace {
         pixels2+=3;
       }
       /* need to skip 1 row, as we keep track of even and odd rows separately */
-      pixels1+=width*2;
-      pixels2+=width*2;
+      pixels1+=width*3;
+      pixels2+=width*3;
       py1+=width*1;
       py2+=width*1;
     }
@@ -402,14 +403,16 @@ namespace {
     const unsigned char*Y, const unsigned char*U, const unsigned char*V,
     unsigned char*outdata, size_t width, size_t height) {
     const unsigned char*py1=Y;
-    const unsigned char*py2=py1+width; // plane_1 is luminance (csize==1)
+    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
     const unsigned char*pu=U;
     const unsigned char*pv=V;
     unsigned char*pixels1=outdata;
-    unsigned char*pixels2=outdata+width*3;
+    unsigned char*pixels2=outdata+width*4;
+    const size_t rows = height>>1;
+    const size_t cols = width>>1;
 
-    for(int row=0; row<(width>>1); row++) {
-      for(int col=0; col<(height>>1); col++) {
+    for(int row=0; row<rows; row++) {
+      for(int col=0; col<cols; col++) {
         int y;
         int u=*pu++ -UV_OFFSET;
         int v=*pv++ -UV_OFFSET;
@@ -423,7 +426,7 @@ namespace {
         pixels1[outG] = CLAMP((y + uv_g) >> 8);
         pixels1[outB] = CLAMP((y + uv_b) >> 8);
         pixels1[outA] = 255; // a
-        pixels1+=3;
+        pixels1+=4;
 
         // 1st row - 2nd pixel
         y=YUV2RGB_11*(*py1++ -Y_OFFSET);
@@ -431,7 +434,7 @@ namespace {
         pixels1[outG] = CLAMP((y + uv_g) >> 8);
         pixels1[outB] = CLAMP((y + uv_b) >> 8);
         pixels1[outA] = 255; // a
-        pixels1+=3;
+        pixels1+=4;
 
         // 2nd row - 1st pixel
         y=YUV2RGB_11*(*py2++ -Y_OFFSET);
@@ -439,7 +442,7 @@ namespace {
         pixels2[outG] = CLAMP((y + uv_g) >> 8);
         pixels2[outB] = CLAMP((y + uv_b) >> 8);
         pixels2[outA] = 255; // a
-        pixels2+=3;
+        pixels2+=4;
 
         // 2nd row - 2nd pixel
         y=YUV2RGB_11*(*py2++ -Y_OFFSET);
@@ -447,11 +450,11 @@ namespace {
         pixels2[outG] = CLAMP((y + uv_g) >> 8);
         pixels2[outB] = CLAMP((y + uv_b) >> 8);
         pixels2[outA] = 255; // a
-        pixels2+=3;
+        pixels2+=4;
       }
       /* need to skip 1 row, as we keep track of even and odd rows separately */
-      pixels1+=width*2;
-      pixels2+=width*2;
+      pixels1+=width*4;
+      pixels2+=width*4;
       py1+=width*1;
       py2+=width*1;
     }
