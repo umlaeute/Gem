@@ -650,6 +650,10 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
   } else {
     /* no backend requested, just enumerate them */
     if(m_handle) {
+      const std::string selector = (s==gensym("backend"))?"backend":"loader";
+      t_symbol*sel=gensym(selector.c_str());
+      t_symbol*sels=gensym((selector+"s").c_str());
+
       t_atom at;
       t_atom*ap=&at;
       gem::Properties props;
@@ -662,13 +666,13 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
         props.get("backends", backends);
       }
       SETFLOAT(ap+0, backends.size());
-      outlet_anything(m_outEnd, gensym("loaders"), 1, ap);
+      outlet_anything(m_outEnd, sels, 1, ap);
       if(!backends.empty()) {
         for(i=0; i<backends.size(); i++) {
           std::string id=backends[i];
           SETSYMBOL(ap+0, gensym(id.c_str()));
           post("loader[%d] %s", i, id.c_str());
-          outlet_anything(m_outEnd, gensym("loader"), 1, ap);
+          outlet_anything(m_outEnd, sel, 1, ap);
         }
       } else {
         post("no decoding backends found!");
@@ -720,6 +724,7 @@ void pix_film :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, t_float);
   CPPEXTERN_MSG1(classPtr, "colorspace", csMess, t_symbol*);
   CPPEXTERN_MSG1(classPtr, "thread", threadMess, bool);
+  CPPEXTERN_MSG (classPtr, "backend", backendMess);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
   CPPEXTERN_MSG (classPtr, "driver", backendMess);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
