@@ -464,6 +464,7 @@ void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
   } else {
     /* no backend requested, just enumerate them */
     if(m_loader) {
+      const std::string sel = s->s_name;
       std::vector<gem::any>atoms;
       gem::any value;
       gem::Properties props;
@@ -475,13 +476,13 @@ void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
       }
       atoms.clear();
       atoms.push_back(value=(int)(backends.size()));
-      m_infoOut.send("loaders", atoms);
+      m_infoOut.send(sel+"s", atoms);
       if(!backends.empty()) {
         for(i=0; i<backends.size(); i++) {
           atoms.clear();
           atoms.push_back(value=backends[i]);
           post("loader[%d] %s", i, backends[i].c_str());
-          m_infoOut.send("loader", atoms);
+          m_infoOut.send(sel, atoms);
         }
       } else {
         post("no model-loading backends found!");
@@ -600,6 +601,7 @@ void model :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "group", groupMess, int);
   CPPEXTERN_MSG (classPtr, "groups", groupsMess);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
+  CPPEXTERN_MSG (classPtr, "backend", backendMess);
 
   CPPEXTERN_MSG (classPtr, "set", setPropertyMess);
   CPPEXTERN_MSG (classPtr, "get", getPropertyMess);
