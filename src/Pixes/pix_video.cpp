@@ -329,13 +329,12 @@ bool pix_video :: driverMess(t_symbol*s, int argc, t_atom*argv)
 {
   switch(argc) {
   case 0:
-    driverMess();
+    enumDrivers(s->s_name);
     return true;
   case 1:
     break;
   default:
-    error("'driver' takes a single numeric or symbolic driver ID");
-    return false;
+    goto oops;
   }
 
   switch(argv->a_type) {
@@ -345,25 +344,30 @@ bool pix_video :: driverMess(t_symbol*s, int argc, t_atom*argv)
     return driverMess(atom_getsymbol(argv)->s_name);
   default: break;
   }
-  error("'driver' takes a single numeric or symbolic driver ID");
+ oops:
+  error("'%s' takes a single numeric or symbolic driver ID", s->s_name);
   return false;
 }
 
-void pix_video :: driverMess()
+void pix_video :: enumDrivers(const char*selector)
 {
   // a little bit of info
   t_atom at;
   t_atom*ap=&at;
+  const std::string sel  = selector;
+  const std::string sel0 = std::string("current") + sel;
+  const std::string sels = sel+"s";
+
   if(m_videoHandle) {
     post("current driver: '%s'", m_videoHandle->getName().c_str());
 
     SETSYMBOL(ap+0, gensym(m_videoHandle->getName().c_str()));
-    outlet_anything(m_infoOut, gensym("currentdriver"), 1, ap);
+    outlet_anything(m_infoOut, gensym(sel0.c_str()), 1, ap);
   }
   if(m_videoHandles.size()>0) {
     unsigned int i=0;
     SETFLOAT(ap+0, m_videoHandles.size());
-    outlet_anything(m_infoOut, gensym("drivers"), 1, ap);
+    outlet_anything(m_infoOut, gensym(sels.c_str()), 1, ap);
     post("available drivers:");
     for(i=0; i<m_videoHandles.size(); i++) {
       gem::plugins::video*handle= m_videoHandles[i];
@@ -393,7 +397,7 @@ void pix_video :: driverMess()
       }
       endpost();
 
-      outlet_anything(m_infoOut, gensym("driver"), asize, ap);
+      outlet_anything(m_infoOut, gensym(sel.c_str()), asize, ap);
       delete[]ap;
       ap =NULL;
       asize=0;
@@ -929,6 +933,7 @@ void pix_video :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "enumerate", enumerateMess);
 
   CPPEXTERN_MSG (classPtr, "driver", driverMess);
+  CPPEXTERN_MSG (classPtr, "backend", driverMess);
   CPPEXTERN_MSG (classPtr, "device", deviceMess);
   CPPEXTERN_MSG (classPtr, "open", openMess);
   CPPEXTERN_MSG0(classPtr, "close", closeMess);

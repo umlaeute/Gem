@@ -83,7 +83,7 @@ protected:
   virtual bool  driverMess(int dev);
   virtual bool  driverMess(std::string);
   virtual bool  driverMess(t_symbol*, int, t_atom*);
-  virtual void  driverMess(void);
+  virtual void  enumDrivers(const char*selector);
 
   virtual void  openMess(t_symbol*, int, t_atom*);
   virtual void  closeMess(void);
