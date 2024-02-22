@@ -73,7 +73,7 @@ public:
     } else if(ISTYPE(unsigned int)) {
       atype=A_FLOAT;
       d=any_cast<unsigned int>(value);
-#if 0
+#if 1
       /* "long"s cannot be stored in "double"s without losing precision... */
     } else if(ISTYPE(long)) {
       atype=A_FLOAT;
