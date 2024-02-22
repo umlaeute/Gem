@@ -4,6 +4,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 AM_CXXFLAGS =
 
 pkglib_LTLIBRARIES=
+
+gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
 
 pkglib_LTLIBRARIES+= gem_recordPNM.la
