@@ -39,7 +39,7 @@ public:
       parent_=NULL;
     }
   }
-  static bool any2atom(const gem::any value, t_atom&atom)
+  bool any2atom(const gem::any value, t_atom&atom)
   {
     double d=0;
     std::string s=std::string();
@@ -104,6 +104,13 @@ public:
     } else if(ISTYPE(void*)) {
       atype=A_POINTER;
       p=any_cast<void*>(value);
+    } else {
+      if(parent_)
+        parent_->error("cannot convert gem::any of unknown type '%s' to t_atom",
+                       value.get_type().name());
+      else
+        pd_error(0, "cannot convert gem::any of unknown type '%s' to t_atom",
+                 value.get_type().name());
     }
 
     switch(atype) {
