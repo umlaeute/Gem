@@ -444,16 +444,9 @@ void model :: drawMess(std::string name)
 /////////////////////////////////////////////////////////
 void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
 {
-#if 0
-  gem::any value=ids;
-  m_writeprops.set("backends", value);
-  applyProperties();
-#endif
-  int i;
-
   m_backends.clear();
   if(argc) {
-    for(i=0; i<argc; i++) {
+    for(int i=0; i<argc; i++) {
       if(A_SYMBOL == argv->a_type) {
         t_symbol* b=atom_getsymbol(argv+i);
         m_backends.push_back(b->s_name);
@@ -478,7 +471,7 @@ void model :: backendMess(t_symbol*s, int argc, t_atom*argv)
       atoms.push_back(value=(int)(backends.size()));
       m_infoOut.send(sel+"s", atoms);
       if(!backends.empty()) {
-        for(i=0; i<backends.size(); i++) {
+        for(int i=0; i<backends.size(); i++) {
           atoms.clear();
           atoms.push_back(value=backends[i]);
           post("loader[%d] %s", i, backends[i].c_str());
