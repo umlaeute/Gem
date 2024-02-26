@@ -260,17 +260,37 @@ public:
     std::string mimetype=(mimetype_c.empty())?imgName2Mime(
                            filename):mimetype_c;
 
-    for(unsigned int i=0; i<m_savers.size(); i++) {
-      float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
-      priorities.insert( std::multimap<float, int>::value_type(prio, i));
+    std::vector<std::string> backends;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      props.get("_backends", backends);
     }
+    if(!backends.empty()) {
+      /* if the user requested some backends, prioritize these */
+      for(unsigned int j=0; j<backends.size(); j++) {
+        std::string id=backends[j];
+        for(unsigned int i=0; i<m_savers.size(); i++) {
+          if(id!=m_ids[i])
+            continue;
+          verbose(2, "trying saver[%d]=%s", i, m_ids[i].c_str());
+          if(m_savers[i]->save(img, filename, mimetype, props)) {
+            return true;
+          }
+        }
+      }
+    } else {
+      /* otherwise get the best saver (based on their own estimate */
+      for(unsigned int i=0; i<m_savers.size(); i++) {
+        float prio=m_savers[i]->estimateSave(img, filename, mimetype, props);
+        priorities.insert( std::multimap<float, int>::value_type(prio, i));
+      }
 
-    for(rit=priorities.rbegin(); rit != priorities.rend(); ++rit) {
-      float prio=rit->first;
-      int index=rit->second;
-      verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);
-      if(m_savers[index]->save(img, filename, mimetype, props)) {
-        return true;
+      for(rit=priorities.rbegin(); rit != priorities.rend(); ++rit) {
+        float prio=rit->first;
+        int index=rit->second;
+        verbose(2, "trying saver[%d]=%s / %f", index, m_ids[index].c_str(), prio);
+        if(m_savers[index]->save(img, filename, mimetype, props)) {
+          return true;
+        }
       }
     }
 
@@ -286,6 +306,12 @@ public:
   virtual void getWriteCapabilities(std::vector<std::string>&mimetypes,
                                     gem::Properties&props)
   {
+    std::vector<std::string> ids;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
+        ids.push_back(m_ids[i]);
+      }
+    }
     mimetypes.clear();
     props.clear();
 
@@ -305,6 +331,10 @@ public:
       for(unsigned int j=0; j<keys.size(); j++) {
         props.set(keys[j], props_.get(keys[j]));
       }
+    }
+
+    if(!ids.empty()) {
+      props.set("_backends", ids);
     }
   }
   virtual bool isThreadable(void)
