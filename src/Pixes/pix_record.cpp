@@ -80,9 +80,9 @@ public:
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_record :: pix_record(int argc, t_atom *argv):
+pix_record :: pix_record(int argc, t_atom *argv) :
   m_banged(false), m_automatic(true),
-  m_outNumFrames(NULL), m_outInfo(NULL),
+  m_framesOut(gem::RTE::Outlet(this)), m_infoOut(gem::RTE::Outlet(this)),
   m_currentFrame(-1),
   m_maxFrames(0),
   m_recording(false),
@@ -92,9 +92,6 @@ pix_record :: pix_record(int argc, t_atom *argv):
   if (argc != 0) {
     error("ignoring arguments");
   }
-  m_outNumFrames = outlet_new(this->x_obj, 0);
-  m_outInfo      = outlet_new(this->x_obj, 0);
-
 
   m_handle=gem::plugins::record::getInstance();
   getCodecList();
@@ -109,9 +106,6 @@ pix_record :: ~pix_record()
   if(m_handle) {
     delete m_handle;
   }
-  outlet_free(m_outNumFrames);
-  outlet_free(m_outInfo);
-
   if(m_pimpl) {
     delete m_pimpl;
   }
@@ -214,7 +208,7 @@ void pix_record :: stopRecording()
   if(m_recording) {
     m_handle->stop();
     m_currentFrame = 0;
-    outlet_float(m_outNumFrames,m_currentFrame);
+    m_framesOut.send(m_currentFrame);
     verbose(1, "movie written");
   }
 
@@ -250,7 +244,7 @@ void pix_record :: render(GemState *state)
 
     if(success) {
       m_currentFrame++;
-      outlet_float(m_outNumFrames,m_currentFrame);
+      m_framesOut.send(m_currentFrame);
     } else {
       stopRecording();
     }
@@ -272,45 +266,45 @@ void pix_record :: enumPropertiesMess()
     return;
   }
 
-  t_atom ap[3];
+  std::vector<gem::any>data;
+  gem::any value;
   std::vector<std::string>keys=props.keys();
+  data.clear();
+  data.push_back(value=(int)keys.size());
+  m_infoOut.send("numprops", data);
 
-  SETFLOAT(ap+0, keys.size());
-  outlet_anything(m_outInfo, gensym("numprops"), 1, ap);
 
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     int ac=2;
     std::string key=keys[i];
-    SETSYMBOL(ap+0, gensym(key.c_str()));
+    data.clear();
+    data.push_back(value=key);
     switch(props.type(key)) {
     case gem::Properties::NONE:
-      SETSYMBOL(ap+1, gensym("Bang"));
+      data.push_back(value=std::string("Bang"));
       break;
     case gem::Properties::DOUBLE: {
       double d=-1;
-      SETSYMBOL(ap+1, gensym("Float"));
+      data.push_back(value=std::string("Float"));
       /* LATER: get and show ranges */
       if(props.get(key, d)) {
-        ac=3;
-        SETFLOAT(ap+2, d);
+        data.push_back(value=d);
       }
     }
     break;
     case gem::Properties::STRING: {
-      SETSYMBOL(ap+1, gensym("Symbol"));
+      data.push_back(value=std::string("Symbol"));
       std::string s;
       if(props.get(key, s)) {
-        ac=3;
-        SETSYMBOL(ap+2, gensym(s.c_str()));
+        data.push_back(value=s);
       }
     }
     break;
     default:
-      SETSYMBOL(ap+1, gensym("unknown"));
+      data.push_back(value=std::string("unknown"));
       break;
     }
-    outlet_anything(m_outInfo, gensym("property"), ac, ap);
+    m_infoOut.send("property", data);
   }
 }
 void pix_record :: setPropertiesMess(t_symbol*s, int argc, t_atom*argv)
@@ -364,18 +358,19 @@ void pix_record :: getCodecList()
 
   std::vector<std::string>codecs=m_handle->getCodecs();
 
-  unsigned int i;
-  for(i=0; i<codecs.size(); i++) {
+  for(unsigned int i=0; i<codecs.size(); i++) {
     const std::string codecname=codecs[i];
     const std::string descr=m_handle->getCodecDescription(codecname);
+    std::vector<gem::any>data;
+    gem::any value;
     t_atom ap[3];
 
     verbose(2, "codec%d: '%s': %s", i, codecname.c_str(),
             (descr.empty()?"":descr.c_str()));
-    SETFLOAT (ap+0, static_cast<t_float>(i));
-    SETSYMBOL(ap+1, gensym(codecname.c_str()));
-    SETSYMBOL(ap+2, gensym(descr.c_str()));
-    outlet_anything(m_outInfo, gensym("codec"), 3, ap);
+    data.push_back(value=i);
+    data.push_back(value=codecname);
+    data.push_back(value=descr);
+    m_infoOut.send("codec", data);
   }
 }
 
@@ -452,12 +447,12 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
-  CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&pix_record::codecMessCallback),
                   gensym("codec"), A_GIMME, A_NULL);
 
+  CPPEXTERN_MSG0(classPtr, "dialog", dialogMess);
   CPPEXTERN_MSG0(classPtr, "proplist", enumPropertiesMess);
   CPPEXTERN_MSG0(classPtr, "enumProps", enumPropertiesMess);
   CPPEXTERN_MSG (classPtr, "set", setPropertiesMess);

@@ -21,6 +21,7 @@
 
 #include "Base/GemBase.h"
 #include "Gem/Image.h"
+#include "RTE/Outlet.h"
 
 #include "plugins/record.h"
 
@@ -95,9 +96,9 @@ protected:
 
   //////////
   // a outlet for information like #frames
-  t_outlet     *m_outNumFrames;
+  gem::RTE::Outlet m_framesOut;
   // another outlet for extra information (like list of codecs...)
-  t_outlet     *m_outInfo;
+  gem::RTE::Outlet m_infoOut;
 
   int m_currentFrame; //keep track of the number of frames
 
