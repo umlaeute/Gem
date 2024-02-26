@@ -75,6 +75,10 @@ protected:
   virtual void  fileMess(t_symbol*s,int argc, t_atom *argv);
 
   //////////
+  // Set backend to use
+  virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
+
+  //////////
   // turn recording on/off
   virtual void  recordMess(bool on);
 
@@ -114,11 +118,6 @@ protected:
 private:
   bool m_recording;
   gem::plugins::record *m_handle;
-  std::vector<std::string>m_ids;
-  std::vector<gem::plugins::record*>m_handles;
-  std::vector<gem::plugins::record*>m_allhandles;
-  virtual bool addHandle(std::vector<std::string>available_ids,
-                         std::string id=std::string(""));
   //////////
   // static member functions
   void  autoMess(bool on);

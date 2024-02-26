@@ -111,62 +111,6 @@ pix_record :: ~pix_record()
   }
 }
 
-
-/////////////////////////////////////////////////////////
-// add backends
-//
-/////////////////////////////////////////////////////////
-bool pix_record :: addHandle( std::vector<std::string>available,
-                              std::string ID)
-{
-  unsigned int i=0;
-  int count=0;
-
-  std::vector<std::string>id;
-  if(!ID.empty()) {
-    // if requested 'cid' is in 'available' add it to the list of 'id's
-    if(std::find(available.begin(), available.end(), ID)!=available.end()) {
-      id.push_back(ID);
-    } else {
-      // request for an unavailable ID
-      verbose(2, "backend '%s' unavailable", ID.c_str());
-      return false;
-    }
-  } else {
-    // no 'ID' given: add all available IDs
-    id=available;
-  }
-
-  for(i=0; i<id.size(); i++) {
-    std::string key=id[i];
-    verbose(2, "trying to add '%s' as backend", key.c_str());
-    if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
-      // not yet added, do so now!
-      gem::plugins::record         *handle=NULL;
-      startpost("backend #%d='%s'\t", (int)m_allhandles.size(), key.c_str());
-      try {
-        handle=gem::PluginFactory<gem::plugins::record>::getInstance(key);
-      } catch (GemException&ex) {
-        startpost("(%s) ", ex.what());
-        handle=NULL;
-      }
-      if(NULL==handle) {
-        post("<--- DISABLED");
-        break;
-      }
-      endpost();
-
-      m_ids.push_back(key);
-      m_allhandles.push_back(handle);
-      count++;
-      verbose(2, "added backend#%d '%s' @ %p", m_allhandles.size()-1,
-              key.c_str(), handle);
-    }
-  }
-
-  return (count>0);
-}
-
 //
 // stops recording into the movie
 //
