@@ -69,7 +69,7 @@ static bool touch(const std::string&filename)
   return false;
 }
 
-REGISTER_RECORDFACTORY("QT", recordQT);
+REGISTER_RECORDFACTORY("QuickTime", recordQT);
 /////////////////////////////////////////////////////////
 //
 // recordQT

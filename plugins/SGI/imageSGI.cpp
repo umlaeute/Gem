@@ -26,8 +26,8 @@
 
 using namespace gem::plugins;
 
-REGISTER_IMAGELOADERFACTORY("SGI", imageSGI);
-REGISTER_IMAGESAVERFACTORY ("SGI", imageSGI);
+REGISTER_IMAGELOADERFACTORY("sgi", imageSGI);
+REGISTER_IMAGESAVERFACTORY ("sgi", imageSGI);
 
 /////////////////////////////////////////////////////////
 //

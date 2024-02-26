@@ -55,8 +55,8 @@
 
 using namespace gem::plugins;
 
-REGISTER_IMAGELOADERFACTORY("QT", imageQT);
-REGISTER_IMAGESAVERFACTORY("QT", imageQT);
+REGISTER_IMAGELOADERFACTORY("QuickTime", imageQT);
+REGISTER_IMAGESAVERFACTORY("QuickTime", imageQT);
 
 #if defined __APPLE__
 static OSStatus

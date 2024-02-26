@@ -33,7 +33,7 @@ using namespace gem::plugins;
 
 #ifdef  GEM_USE_RECORDQT4L
 #include <lqt_version.h>
-REGISTER_RECORDFACTORY("QT4L", recordQT4L);
+REGISTER_RECORDFACTORY("quicktime4linux", recordQT4L);
 #endif
 /////////////////////////////////////////////////////////
 //

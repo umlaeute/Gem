@@ -36,8 +36,8 @@
 
 using namespace gem::plugins;
 
-REGISTER_IMAGELOADERFACTORY("STB", imageSTB);
-REGISTER_IMAGESAVERFACTORY ("STB", imageSTB);
+REGISTER_IMAGELOADERFACTORY("stb", imageSTB);
+REGISTER_IMAGESAVERFACTORY ("stb", imageSTB);
 
 /////////////////////////////////////////////////////////
 //
