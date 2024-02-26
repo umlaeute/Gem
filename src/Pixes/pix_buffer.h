@@ -88,7 +88,7 @@ protected:
 
   gem::Properties m_writeprops;
 
-  gem::plugins::imagesaver*m_handle;
+  gem::plugins::imagesaver*m_saver;
   gem::RTE::Outlet*m_outlet;
 };
 

@@ -93,7 +93,7 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   : m_buffer(NULL),
     m_numframes(0),
     m_bindname(NULL),
-    m_handle(NULL),
+    m_saver(NULL),
     m_outlet(new gem::RTE::Outlet(this))
 {
   if (s==&s_) {
@@ -113,7 +113,7 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   m_numframes = (unsigned int)f;
   m_buffer = new imageStruct[m_numframes];
 
-  m_handle = gem::plugins::imagesaver::getInstance();
+  m_saver = gem::plugins::imagesaver::getInstance();
 
   pd_bind(&this->x_obj->ob_pd, m_bindname);
   outlet_new(this->x_obj, &s_float);
@@ -130,10 +130,10 @@ pix_buffer :: ~pix_buffer( void )
     delete [] m_buffer;
   }
   m_buffer=NULL;
-  if(m_handle) {
-    delete m_handle;
+  if(m_saver) {
+    delete m_saver;
   }
-  m_handle=NULL;
+  m_saver=NULL;
   delete m_outlet;
 }
 /////////////////////////////////////////////////////////
@@ -307,8 +307,8 @@ void pix_buffer :: saveMess(std::string filename, int pos)
 
   if(img && img->data) {
     std::string fullname=gem::files::getFullpath(filename);
-    if(m_handle) {
-      m_handle->save(*img, fullname, std::string(), m_writeprops);
+    if(m_saver) {
+      m_saver->save(*img, fullname, std::string(), m_writeprops);
     } else {
       mem2image(img, fullname.c_str(), 0);
     }
@@ -343,8 +343,8 @@ void pix_buffer :: enumProperties(void)
   gem::Properties props;
 
   props.set("quality", 100);
-  if(m_handle) {
-    m_handle->getWriteCapabilities(mimetypes, props);
+  if(m_saver) {
+    m_saver->getWriteCapabilities(mimetypes, props);
   }
 
   std::vector<gem::any>data;
