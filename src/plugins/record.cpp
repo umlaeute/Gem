@@ -36,7 +36,7 @@ class recordMeta : public gem::plugins::record
 {
 private:
   static recordMeta*s_instance;
-  std::vector<gem::plugins::record*>m_allHandles, // all available handles
+  std::vector<gem::plugins::record*>m_handles, // all available handles
       m_selectedHandles; // handles with the currently selected codec
   gem::plugins::record*m_handle; // currently opened handle (or NULL)
   std::vector<std::string>m_ids; // list of handle names
@@ -88,8 +88,8 @@ public:
 #endif
 #if 0
     unsigned int i;
-    for(i=0; i<m_allHandles.size(); i++) {
-      //if(!m_allHandles[i]->isThreadable()) {
+    for(i=0; i<m_handles.size(); i++) {
+      //if(!m_handles[i]->isThreadable()) {
       if(1) {
         m_canThread=false;
         break;
@@ -145,9 +145,9 @@ public:
           continue;
         }
         m_ids.push_back(key);
-        m_allHandles.push_back(handle);
+        m_handles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", (int)(m_allHandles.size()-1),
+        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1),
                 key.c_str());
       }
     }
@@ -158,9 +158,9 @@ public:
   virtual ~recordMeta(void)
   {
     unsigned int i;
-    for(i=0; i<m_allHandles.size(); i++) {
-      delete m_allHandles[i];
-      m_allHandles[i]=NULL;
+    for(i=0; i<m_handles.size(); i++) {
+      delete m_handles[i];
+      m_handles[i]=NULL;
     }
   }
 
@@ -168,11 +168,11 @@ public:
   {
     clearCodecHandle();
     unsigned int i;
-    for(i=0; i<m_allHandles.size(); i++) {
-      std::vector<std::string>c=m_allHandles[i]->getCodecs();
+    for(i=0; i<m_handles.size(); i++) {
+      std::vector<std::string>c=m_handles[i]->getCodecs();
       unsigned int j;
       for(j=0; j<c.size(); j++) {
-        addCodecHandle(m_allHandles[i], c[j]);
+        addCodecHandle(m_handles[i], c[j]);
       }
     }
     return m_codecs;
@@ -221,7 +221,7 @@ public:
   bool checkSelectedHandles(void)
   {
     if(m_selectedHandles.size()==0 && m_codec.empty()) {
-      m_selectedHandles=m_allHandles;
+      m_selectedHandles=m_handles;
     }
     return (m_selectedHandles.size()>0);
   }
