@@ -29,14 +29,14 @@ namespace gem
 {
 namespace plugins
 {
-class imageloaderMeta : public gem::plugins::imageloader
+struct imageloaderMeta : public gem::plugins::imageloader
 {
-private:
+public:
   static imageloaderMeta*s_instance;
   std::vector<gem::plugins::imageloader*>m_loaders;
   std::vector<std::string>m_ids;
   bool m_canThread;
-public:
+
   imageloaderMeta(void) : m_canThread(true)
   {
     gem::PluginFactory<gem::plugins::imageloader>::loadPlugins("image");
@@ -57,6 +57,7 @@ public:
     firsttime=false;
 
     m_canThread=true;
+
     for(unsigned int i=0; i<m_loaders.size(); i++) {
       if(!m_loaders[i]->isThreadable()) {
         m_canThread=false;
@@ -110,7 +111,6 @@ public:
     return (count>0);
   }
 
-public:
   virtual ~imageloaderMeta(void)
   {
     for(unsigned int i=0; i<m_loaders.size(); i++) {
