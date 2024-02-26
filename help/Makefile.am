@@ -237,4 +237,9 @@ dist_gemhelp_DATA += \
 	triangle-help.pd \
 	tube-help.pd \
 	vertex_program-help.pd \
-	world_light-help.pd
+	world_light-help.pd \
+	$(empty)
+
+dist_gemhelp_DATA += \
+	_backendinfo.pd \
+	$(empty)
