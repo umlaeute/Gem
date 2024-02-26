@@ -21,31 +21,6 @@ public:
   PIMPL(void) {};
   ~PIMPL(void) {};
 
-  struct codechandle {
-    codechandle(gem::plugins::record*h, const std::string&c):handle(h),
-      codec(c) {}
-
-    gem::plugins::record*handle;
-    std::string codec;
-  };
-  std::map<std::string, std::vector<codechandle> >m_codechandle;
-  std::vector<std::string>m_codecs;
-
-  void addCodecHandle(gem::plugins::record*handle, const std::string&codec)
-  {
-#ifdef __GNUC__
-# warning better handling of duplicate codecs
-#endif
-    /* FIXME: we should generate a unique codec-ID, e.g. "<handlename>:<codec>" */
-    m_codechandle[codec].push_back(codechandle(handle, codec));
-    m_codecs.push_back(codec);
-  }
-  void clearCodecHandle(void)
-  {
-    m_codecs.clear();
-    m_codechandle.clear();
-  }
-
   static gem::any atom2any(t_atom*ap)
   {
     gem::any result;
