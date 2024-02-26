@@ -27,54 +27,64 @@
 #include "RTE/Outlet.h"
 
 /* utilities */
-static gem::any atom2any(t_atom*ap)
+struct pix_buffer :: PIMPL
 {
-  gem::any result;
-  if(ap) {
-    switch(ap->a_type) {
-    case A_FLOAT:
-      result=atom_getfloat(ap);
-      break;
-    case A_SYMBOL:
-      result=std::string(atom_getsymbol(ap)->s_name);
-      break;
+  CPPExtern*parent;
+
+  PIMPL(CPPExtern*_parent)
+    : parent(_parent)
+  {};
+  ~PIMPL(void) {};
+
+  static gem::any atom2any(t_atom*ap)
+  {
+    gem::any result;
+    if(ap) {
+      switch(ap->a_type) {
+      case A_FLOAT:
+        result=atom_getfloat(ap);
+        break;
+      case A_SYMBOL:
+        result=std::string(atom_getsymbol(ap)->s_name);
+        break;
+      default:
+        result=ap->a_w.w_gpointer;
+      }
+    }
+    return result;
+  }
+  void addProperties(gem::Properties&props, int argc, t_atom*argv)
+  {
+    if(!argc) {
+      return;
+    }
+
+    if(argv->a_type != A_SYMBOL) {
+      pd_error(parent, "no key given...");
+      return;
+    }
+    std::string key=std::string(atom_getsymbol(argv)->s_name);
+    std::vector<gem::any> values;
+    argc--;
+    argv++;
+    while(argc-->0) {
+      values.push_back(atom2any(argv++));
+    }
+    switch(values.size()) {
     default:
-      result=ap->a_w.w_gpointer;
+      props.set(key, values);
+      break;
+    case 1:
+      props.set(key, values[0]);
+      break;
+    case 0: {
+      gem::any dummy;
+      props.set(key, dummy);
+    }
+      break;
     }
   }
-  return result;
-}
-static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
-{
-  if(!argc) {
-    return;
-  }
-
-  if(argv->a_type != A_SYMBOL) {
-    pd_error(obj, "no key given...");
-    return;
-  }
-  std::string key=std::string(atom_getsymbol(argv)->s_name);
-  std::vector<gem::any> values;
-  argc--;
-  argv++;
-  while(argc-->0) {
-    values.push_back(atom2any(argv++));
-  }
-  switch(values.size()) {
-  default:
-    props.set(key, values);
-    break;
-  case 1:
-    props.set(key, values[0]);
-    break;
-  case 0: {
-    gem::any dummy;
-    props.set(key, dummy);
-  }
-  break;
-  }
-}
+};
 
 /////////////////////////////////////////////////////////
 //
@@ -95,6 +105,7 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   , m_bindname(NULL)
   , m_saver(NULL)
   , m_outlet(new gem::RTE::Outlet(this))
+  , m_pimpl(new PIMPL(this))
 {
   if (s==&s_) {
     static int buffercounter=0;
@@ -411,7 +422,7 @@ void pix_buffer :: clearProperties(void)
 }
 void pix_buffer :: setProperties(t_symbol*s, int argc, t_atom*argv)
 {
-  addProperties(this, m_writeprops, argc, argv);
+  m_pimpl->addProperties(m_writeprops, argc, argv);
 }
 
 /////////////////////////////////////////////////////////

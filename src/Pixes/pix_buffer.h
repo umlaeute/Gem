@@ -90,6 +90,10 @@ protected:
 
   gem::plugins::imagesaver*m_saver;
   gem::RTE::Outlet*m_outlet;
+
+ private:
+  class PIMPL;
+  PIMPL*m_pimpl;
 };
 
 #endif  // for header file
