@@ -315,10 +315,10 @@ void modelfiler :: backendMess(t_symbol*s, int argc, t_atom*argv)
       gem::any value;
       gem::Properties props;
       std::vector<std::string> backends;
-      props.set("backends", value);
+      props.set("_backends", value);
       m_loader->getProperties(props);
-      if(props.type("backends")!=gem::Properties::UNSET) {
-        props.get("backends", backends);
+      if(props.type("_backends")!=gem::Properties::UNSET) {
+        props.get("_backends", backends);
       }
       atoms.clear();
       atoms.push_back(value=(int)(backends.size()));
@@ -350,7 +350,7 @@ void modelfiler :: openMess(const std::string&filename)
     return;
   }
   if(!m_backends.empty()) {
-    wantProps.set("backends", m_backends);
+    wantProps.set("_backends", m_backends);
   }
 
   char buf[MAXPDSTRING];

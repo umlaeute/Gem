@@ -237,8 +237,8 @@ public:
     }
 
     std::vector<std::string> backends;
-    if(requestprops.type("backends")!=gem::Properties::UNSET) {
-      requestprops.get("backends", backends);
+    if(requestprops.type("_backends")!=gem::Properties::UNSET) {
+      requestprops.get("_backends", backends);
     }
 
     bool tried=false;
@@ -335,13 +335,13 @@ public:
   virtual void getProperties(gem::Properties&props)
   {
     std::vector<std::string> ids;
-    if(props.type("backends")!=gem::Properties::UNSET) {
+    if(props.type("_backends")!=gem::Properties::UNSET) {
       unsigned int i;
       for(i=0; i<m_ids.size(); i++) {
         ids.push_back(m_ids[i]);
       }
     }
-    props.erase("backends");
+    props.erase("_backends");
 
     if(m_handle) {
       m_handle->getProperties(props);
@@ -350,7 +350,7 @@ public:
     }
 
     if(!ids.empty()) {
-      props.set("backends", ids);
+      props.set("_backends", ids);
     }
   }
 };

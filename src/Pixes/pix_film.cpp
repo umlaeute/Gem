@@ -222,9 +222,9 @@ pix_film :: pix_film(t_symbol* filename) :
     gem::Properties props;
     gem::any value;
     value=m_ids;
-    props.set("backends", value);
+    props.set("_backends", value);
     m_handle->getProperties(props);
-    if(props.get("backends", m_ids)) {
+    if(props.get("_backends", m_ids)) {
       //
     }
   }
@@ -343,9 +343,9 @@ void pix_film :: openMess(std::string filename, int format,
     // FIXXME: check whether using vector<string> works on all platforms
     std::vector<std::string>backends;
     backends.push_back(backend);
-    wantProps.set("backends", backends);
+    wantProps.set("_backends", backends);
   } else if (!m_backends.empty()) {
-    wantProps.set("backends", m_backends);
+    wantProps.set("_backends", m_backends);
   }
 
   if(!m_handle->open(fname, wantProps)) {
@@ -660,10 +660,10 @@ void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
       gem::any value;
       std::vector<std::string> backends;
       value=m_ids;
-      props.set("backends", value);
+      props.set("_backends", value);
       m_handle->getProperties(props);
-      if(props.type("backends")!=gem::Properties::UNSET) {
-        props.get("backends", backends);
+      if(props.type("_backends")!=gem::Properties::UNSET) {
+        props.get("_backends", backends);
       }
       SETFLOAT(ap+0, backends.size());
       outlet_anything(m_outEnd, sels, 1, ap);
