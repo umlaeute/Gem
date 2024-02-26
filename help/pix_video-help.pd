@@ -1,28 +1,22 @@
-#N canvas 235 64 871 639 10;
+#N canvas 235 64 871 645 10;
 #X declare -lib Gem;
 #X text 671 9 GEM object;
-#X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 559 47 cnv 15 280 500 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 46 cnv 15 540 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 559 47 cnv 15 280 500 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 71 21 Class: pix object (pix source);
 #X text 561 33 Example:;
 #X text 50 2 Synopsis: [pix_video];
 #X text 29 47 Description: open a camera and get input;
-#X obj 9 182 cnv 15 540 365 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 9 149 cnv 15 540 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 9 182 cnv 15 540 365 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 9 149 cnv 15 540 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 18 148 Arguments:;
 #X text 17 486 Outlet 1: gemlist;
 #X text 17 198 Inlet 1: gemlist;
-#X text 16 308 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current
-film into the specified colorspace \, if supported by the backend., f 62;
+#X text 16 308 Inlet 1: colorspace "RGBA|YUV|Grey": decodes the current film into the specified colorspace \, if supported by the backend., f 62;
 #X text 64 159 none;
 #X text 33 184 Inlet:;
 #X text 33 472 Outlet:;
-#X obj 717 460 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 717 460 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -44,23 +38,15 @@ film into the specified colorspace \, if supported by the backend., f 62;
 #X restore 722 499 pd gemwin;
 #X msg 722 477 create;
 #X text 718 456 Create window:;
-#X obj 563 86 cnv 15 230 280 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 563 86 cnv 15 230 280 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 567 526 rectangle 4 3;
 #X obj 567 502 pix_texture;
-#X text 17 216 Inlet 1: device <spec>: the number or file path to the
-input device;
-#X text 16 339 Inlet 1: dimen <number> <number>: set various dimensions
-for the image (does not work on all capture devices);
-#X text 15 371 Inlet 1: enumerate: list all devices to the console
-;
-#X text 17 245 Inlet 1: backend <number>: switch between different backends
-\, e.g. v4l \, ieee1394 \, etc.;
-#X text 16 276 Inlet 1: backend <symbol>: switch between different backends
-\, e.g. v4l \, v4l2 \, dv...;
-#X text 13 66 [pix_video] opens a wide array of cameras \, USB to FireWire
-to capture cards \, as long as the camera is supported by your operating
-system.;
+#X text 17 216 Inlet 1: device <spec>: the number or file path to the input device;
+#X text 16 339 Inlet 1: dimen <number> <number>: set various dimensions for the image (does not work on all capture devices);
+#X text 15 371 Inlet 1: enumerate: list all devices to the console;
+#X text 17 245 Inlet 1: backend <number>: switch between different backends \, e.g. v4l \, ieee1394 \, etc.;
+#X text 16 276 Inlet 1: backend <symbol>: switch between different backends \, e.g. v4l \, v4l2 \, dv...;
+#X text 13 66 [pix_video] opens a wide array of cameras \, USB to FireWire to capture cards \, as long as the camera is supported by your operating system.;
 #X obj 567 58 gemhead;
 #X msg 596 124 dimen 64 64;
 #X msg 586 99 dimen 256 128;
@@ -71,12 +57,9 @@ system.;
 #X msg 642 312 backend dv;
 #N canvas 516 113 572 565 properties 0;
 #X msg 41 203 enumProps;
-#X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 -233017
--66577 0;
-#X obj 39 47 hradio 15 1 0 1 \$0-propreadId \$0-propreadId empty 0
--8 0 10 -262144 -1 -1 0;
-#X obj 40 70 cnv 15 260 20 empty \$0-propreadName <none> 10 9 0 14
--203904 -66577 0;
+#X obj 31 21 cnv 15 400 80 empty empty readProperties 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 39 47 hradio 15 1 0 1 \$0-propreadId \$0-propreadId empty 0 -8 0 10 #fcfcfc #000000 #000000 0;
+#X obj 40 70 cnv 15 260 20 empty \$0-propreadName <none> 10 9 0 14 #c4c4fc #404040 0;
 #N canvas 186 49 450 537 PropertyLogic 0;
 #N canvas 586 84 774 460 id2property 0;
 #X obj 353 106 r \$0-info;
@@ -304,30 +287,21 @@ system.;
 #X connect 13 0 8 0;
 #X connect 16 0 17 0;
 #X restore 41 526 pd PropertyLogic;
-#X obj 310 70 cnv 15 100 20 empty \$0-propreadValue -- 10 9 0 14 -261234
--66577 0;
-#X obj 31 111 cnv 15 400 80 empty empty writeProperties 20 12 0 14
--233017 -66577 0;
-#X obj 39 137 hradio 15 1 0 1 \$0-propwriteId \$0-propwriteId empty
-0 -8 0 10 -262144 -1 -1 0;
-#X obj 40 160 cnv 15 260 20 empty \$0-propwriteName <none> 10 9 0 14
--203904 -66577 0;
-#X obj 311 160 nbx 5 20 -1e+37 1e+37 0 0 \$0-propwriteValue \$0-propwriteValue
-empty 0 -8 0 14 -204786 -1 -1 0 256;
+#X obj 310 70 cnv 15 100 20 empty \$0-propreadValue -- 10 9 0 14 #fcc4c4 #404040 0;
+#X obj 31 111 cnv 15 400 80 empty empty writeProperties 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 39 137 hradio 15 1 0 1 \$0-propwriteId \$0-propwriteId empty 0 -8 0 10 #fcfcfc #000000 #000000 0;
+#X obj 40 160 cnv 15 260 20 empty \$0-propwriteName <none> 10 9 0 14 #c4c4fc #404040 0;
+#X obj 311 160 nbx 5 20 -1e+37 1e+37 0 0 \$0-propwriteValue \$0-propwriteValue empty 0 -8 0 14 #c4fcc4 #000000 #000000 0 256;
 #X msg 66 315 get bus_info;
 #X msg 83 392 set quality 5;
 #X obj 66 294 r \$0-propget;
 #X obj 83 372 r \$0-propset;
 #X msg 87 340 get Hue Saturation;
 #X text 208 340 you can query several properties at once;
-#X text 146 295 query a (readable) property via a message "get <propname>"
-;
-#X text 161 372 set a (writable) property via a message "set <prop>
-<value>";
-#X text 70 224 this will return 2 lists of readable and writable properties
-through the "info" outlet of [pix_video].;
-#X text 72 257 NOTE that propertynames are always single symbols that
-might contain spaces (and other weird characters);
+#X text 146 295 query a (readable) property via a message "get <propname>";
+#X text 161 372 set a (writable) property via a message "set <prop> <value>";
+#X text 70 224 this will return 2 lists of readable and writable properties through the "info" outlet of [pix_video].;
+#X text 72 257 NOTE that propertynames are always single symbols that might contain spaces (and other weird characters);
 #X text 103 203 INIT: query names of all available properties;
 #X text 83 423 ATOMIC setting of multiple properties;
 #X msg 99 441 clearProps;
@@ -354,10 +328,8 @@ might contain spaces (and other weird characters);
 #X obj 655 459 s \$0-info;
 #X obj 586 376 t a a;
 #N canvas 166 121 570 420 device 0;
-#X obj 204 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 -233017
--1 0;
-#X obj 60 61 hradio 18 1 0 8 empty empty empty 0 -6 0 8 -225271 -1
--1 0;
+#X obj 204 60 cnv 20 20 20 empty \$0-open-canvas 0 4 10 0 16 #e0e0e0 #000000 0;
+#X obj 60 61 hradio 18 1 0 8 empty empty empty 0 -6 0 8 #d8fcd8 #000000 #000000 0;
 #X obj 60 13 inlet;
 #X msg 160 254 label \$1;
 #X obj 160 232 makefilename %d;
@@ -389,186 +361,22 @@ might contain spaces (and other weird characters);
 #X connect 15 0 8 0;
 #X coords 0 -1 1 1 165 20 1 60 60;
 #X restore 609 187 pd device;
-#X obj 36 565 cnv 15 400 30 empty empty empty 20 12 0 14 -260097 -66577
-0;
-#X text 48 565 NOTE: usually you cannot use a camera more than once
-at the same time!;
-#X obj 563 413 cnv 15 80 30 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 36 565 cnv 15 400 30 empty empty empty 20 12 0 14 #fc8000 #404040 0;
+#X text 48 565 NOTE: usually you cannot use a camera more than once at the same time!;
+#X obj 563 413 cnv 15 80 30 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 567 418 pix_video;
 #X obj 657 393 print videoctl;
-#X obj 647 346 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 647 346 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 665 345 backend \$1;
 #X text 686 286 (if available);
-#X text 16 388 Inlet 1: dialog: open a dialog to configure the input
-device (depending on backend / Operating System);
-#X text 18 501 Outlet 2: info (for enumerating devices \, querying
-properties \, ...);
-#X text 15 423 Inlet 1: enumProps \, get \, set \, clearProps \, setProps
-\, applyProps: interact with backend/device properties;
+#X text 16 388 Inlet 1: dialog: open a dialog to configure the input device (depending on backend / Operating System);
+#X text 18 501 Outlet 2: info (for enumerating devices \, querying properties \, ...);
+#X text 15 423 Inlet 1: enumProps \, get \, set \, clearProps \, setProps \, applyProps: interact with backend/device properties;
 #X obj 657 374 r \$0-ctl;
-#X text 54 600 you can use [pix_buffer] to distribute the same pix
-to different parts of your render-chain;
+#X text 54 600 you can use [pix_buffer] to distribute the same pix to different parts of your render-chain;
 #X msg 625 235 device /dev/fw1;
-#N canvas 697 49 586 667 backend 0;
-#X obj 104 122 bng 15 250 50 0 \$0-backendinfo \$0-backendinfo <--show_info_on_backends
-17 8 0 10 -262144 -1 -1;
-#N canvas 15 49 450 300 \$0-backendinfo 0;
-#X restore 184 207 pd \$0-backendinfo;
-#X obj 184 240 r \$0-backendinfo;
-#X msg 223 331 clear;
-#X obj 223 351 s pd-\$0-backendinfo;
-#X obj 203 424 s \$0-ctl;
-#X msg 203 405 backend;
-#N canvas 4 49 685 300 fake 0;
-#X obj 178 5 inlet bang;
-#X msg 178 25 currentbackend v4l2 \, backends 3 \, backend v4l2 analog
-\, backend v4l analog \, backend dc1394 iidc \, backend unicap analog
-\, backend vlc;
-#X obj 178 67 outlet;
-#X connect 0 0 1 0;
-#X connect 1 0 2 0;
-#X restore 265 414 pd fake;
-#X obj 265 434 s \$0-info;
-#N canvas 14 49 450 300 content 0;
-#X obj 123 124 route backend backends currentbackend;
-#N canvas 509 196 644 372 numbackends 0;
-#X obj 119 11 inlet;
-#X obj 119 316 outlet;
-#X obj 119 81 f;
-#X obj 277 69 inlet reset;
-#X msg 277 89 0;
-#X obj 119 298 list prepend text 50;
-#X msg 119 154 50 On this system you have \$1 backends available;
-#X obj 119 101 t f f;
-#X obj 146 201 select 0;
-#X obj 119 31 route bang float;
-#X msg 191 223 90 Click on any of the patches below for information
-about a specific backend:;
-#X connect 0 0 9 0;
-#X connect 2 0 7 0;
-#X connect 3 0 4 0;
-#X connect 4 0 2 1;
-#X connect 5 0 1 0;
-#X connect 6 0 5 0;
-#X connect 7 0 6 0;
-#X connect 7 1 8 0;
-#X connect 8 1 10 0;
-#X connect 9 0 2 0;
-#X connect 9 1 2 1;
-#X connect 10 0 5 0;
-#X restore 190 179 pd numbackends;
-#N canvas 12 49 638 300 currentbackend 0;
-#X obj 119 31 inlet;
-#X obj 119 186 outlet;
-#X obj 119 82 symbol <undefined>;
-#X obj 325 33 inlet reset;
-#X obj 325 53 symbol <undefined>;
-#X obj 119 102 select <undefined>;
-#X obj 119 164 list prepend text 50 65;
-#X obj 119 51 route bang;
-#X obj 202 54 symbol;
-#X msg 224 124 You are currently using the '\$1' backend;
-#X msg 119 144 Currently you are not using any specific backend...;
-#X connect 0 0 7 0;
-#X connect 2 0 5 0;
-#X connect 3 0 4 0;
-#X connect 4 0 2 1;
-#X connect 5 0 10 0;
-#X connect 5 1 9 0;
-#X connect 6 0 1 0;
-#X connect 7 0 2 0;
-#X connect 7 1 8 0;
-#X connect 8 0 2 1;
-#X connect 9 0 6 0;
-#X connect 10 0 6 0;
-#X restore 280 179 pd currentbackend;
-#N canvas 12 49 456 510 listbackends 0;
-#X obj 149 61 inlet;
-#X obj 149 276 outlet;
-#X obj 241 61 inlet reset;
-#X obj 149 81 list split 1;
-#X obj 149 101 symbol unknown;
-#X obj 241 101 symbol unknown;
-#X obj 149 121 t b s;
-#X obj 149 141 i;
-#X obj 149 161 + 20;
-#X obj 149 181 t f f;
-#X msg 149 221 \$1 \$2-videoplugin \$3;
-#X msg 194 122 100;
-#X obj 149 253 list prepend obj 60;
-#X msg 291 143 0;
-#X obj 291 163 makefilename $%d;
-#X obj 149 201 pack 0 s s;
-#X obj 241 81 t b b b;
-#X connect 0 0 3 0;
-#X connect 2 0 16 0;
-#X connect 3 0 4 0;
-#X connect 4 0 6 0;
-#X connect 5 0 4 1;
-#X connect 6 0 7 0;
-#X connect 6 1 15 1;
-#X connect 7 0 8 0;
-#X connect 8 0 9 0;
-#X connect 9 0 15 0;
-#X connect 9 1 7 1;
-#X connect 10 0 12 0;
-#X connect 11 0 7 1;
-#X connect 12 0 1 0;
-#X connect 13 0 14 0;
-#X connect 14 0 15 2;
-#X connect 15 0 10 0;
-#X connect 16 0 5 0;
-#X connect 16 1 11 0;
-#X connect 16 2 13 0;
-#X restore 123 149 pd listbackends;
-#X obj 123 94 r \$0-info;
-#X obj 190 211 t a;
-#X obj 337 125 t b b b;
-#X obj 337 59 inlet reset;
-#X obj 190 251 s pd-\$0-backendinfo;
-#X obj 190 231 list trim;
-#X obj 140 25 inlet finalize;
-#X connect 0 0 3 0;
-#X connect 0 1 1 0;
-#X connect 0 2 2 0;
-#X connect 1 0 5 0;
-#X connect 2 0 5 0;
-#X connect 3 0 5 0;
-#X connect 4 0 0 0;
-#X connect 5 0 9 0;
-#X connect 6 0 3 1;
-#X connect 6 1 1 1;
-#X connect 6 2 2 1;
-#X connect 7 0 6 0;
-#X connect 9 0 8 0;
-#X connect 10 0 2 0;
-#X connect 10 0 1 0;
-#X restore 351 305 pd content;
-#X obj 203 375 t b;
-#X msg 265 388 bang;
-#X obj 184 280 t b b;
-#X obj 223 280 t b b;
-#X obj 184 260 t b b b;
-#X msg 184 311 loadbang \, vis 1;
-#X connect 2 0 14 0;
-#X connect 3 0 4 0;
-#X connect 6 0 5 0;
-#X connect 7 0 8 0;
-#X connect 10 0 6 0;
-#X connect 11 0 7 0;
-#X connect 12 0 15 0;
-#X connect 12 1 9 0;
-#X connect 13 0 3 0;
-#X connect 13 1 9 1;
-#X connect 14 0 12 0;
-#X connect 14 1 10 0;
-#X connect 14 2 13 0;
-#X connect 15 0 4 0;
-#X coords 0 -1 1 1 170 40 1 100 100;
-#X restore 156 103 pd backend specific information;
 #X obj 738 8 declare -lib Gem;
+#X obj 156 103 _backendinfo \$0 video;
 #X connect 17 0 18 0;
 #X connect 18 0 17 0;
 #X connect 22 0 21 0;
