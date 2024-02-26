@@ -146,7 +146,6 @@ public:
     if(requestprops.type("backends")!=gem::Properties::UNSET) {
       requestprops.get("backends", backends);
     }
-    //      requestprops.erase("backends");
 
     bool tried=false;
     if(!backends.empty()) {
