@@ -30,11 +30,21 @@
 struct pix_buffer :: PIMPL
 {
   CPPExtern*parent;
+  gem::RTE::Outlet outlet;
+
+  gem::plugins::imagesaver*saver;
 
   PIMPL(CPPExtern*_parent)
     : parent(_parent)
+    , outlet(_parent)
+    , saver(gem::plugins::imagesaver::getInstance())
   {};
-  ~PIMPL(void) {};
+  ~PIMPL(void) {
+    if(saver) {
+      delete saver;
+    }
+    saver=NULL;
+  };
 
   static gem::any atom2any(t_atom*ap)
   {
@@ -103,8 +113,6 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   : m_buffer(NULL)
   , m_numframes(0)
   , m_bindname(NULL)
-  , m_saver(NULL)
-  , m_outlet(new gem::RTE::Outlet(this))
   , m_pimpl(new PIMPL(this))
 {
   if (s==&s_) {
@@ -124,10 +132,7 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   m_numframes = (unsigned int)f;
   m_buffer = new imageStruct[m_numframes];
 
-  m_saver = gem::plugins::imagesaver::getInstance();
-
   pd_bind(&this->x_obj->ob_pd, m_bindname);
-  outlet_new(this->x_obj, &s_float);
 }
 /////////////////////////////////////////////////////////
 // Destructor
@@ -141,11 +146,10 @@ pix_buffer :: ~pix_buffer( void )
     delete [] m_buffer;
   }
   m_buffer=NULL;
-  if(m_saver) {
-    delete m_saver;
+  if(m_pimpl) {
+    delete m_pimpl;
   }
-  m_saver=NULL;
-  delete m_outlet;
+  m_pimpl=NULL;
 }
 /////////////////////////////////////////////////////////
 // allocateMess
@@ -228,7 +232,7 @@ void pix_buffer :: resizeMess(int newsize)
 /////////////////////////////////////////////////////////
 void pix_buffer :: bangMess( void )
 {
-  m_outlet->send(m_numframes);
+  m_pimpl->outlet.send(m_numframes);
 }
 unsigned int pix_buffer :: numFrames( void )
 {
@@ -318,8 +322,8 @@ void pix_buffer :: saveMess(std::string filename, int pos)
 
   if(img && img->data) {
     std::string fullname=gem::files::getFullpath(filename);
-    if(m_saver) {
-      m_saver->save(*img, fullname, std::string(), m_writeprops);
+    if(m_pimpl->saver) {
+      m_pimpl->saver->save(*img, fullname, std::string(), m_writeprops);
     } else {
       mem2image(img, fullname.c_str(), 0);
     }
@@ -354,8 +358,8 @@ void pix_buffer :: enumProperties(void)
   gem::Properties props;
 
   props.set("quality", 100);
-  if(m_saver) {
-    m_saver->getWriteCapabilities(mimetypes, props);
+  if(m_pimpl->saver) {
+    m_pimpl->saver->getWriteCapabilities(mimetypes, props);
   }
 
   std::vector<gem::any>data;
@@ -366,20 +370,20 @@ void pix_buffer :: enumProperties(void)
   /* mimetypes */
   data.push_back(std::string("numwrite"));
   data.push_back(mimetypes.size());
-  m_outlet->send("mimelist", data);
+  m_pimpl->outlet.send("mimelist", data);
 
   for(i=0; i<mimetypes.size(); i++) {
     data.clear();
     data.push_back(std::string("write"));
     data.push_back(mimetypes[i]);
-    m_outlet->send("mimelist", data);
+    m_pimpl->outlet.send("mimelist", data);
   }
 
   /* write properties */
   data.clear();
   data.push_back(std::string("numwrite"));
   data.push_back(keys.size());
-  m_outlet->send("proplist", data);
+  m_pimpl->outlet.send("proplist", data);
 
   for(i=0; i<keys.size(); i++) {
     std::string key=keys[i];
@@ -413,7 +417,7 @@ void pix_buffer :: enumProperties(void)
       break;
     }
 
-    m_outlet->send("proplist", data);
+    m_pimpl->outlet.send("proplist", data);
   }
 }
 void pix_buffer :: clearProperties(void)
