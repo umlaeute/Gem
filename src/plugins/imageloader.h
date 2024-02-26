@@ -61,6 +61,12 @@ public:
 
   /* returns TRUE if this object can be used from within a thread */
   virtual bool isThreadable(void) = 0;
+
+  /**
+   * get the current value of the given properties from the loader
+   * not really used, except for controlling the meta-loader
+   */
+  static void getProperties(imageloader*loader, gem::Properties&props);
 };
 
 };
