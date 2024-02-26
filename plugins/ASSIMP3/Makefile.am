@@ -6,9 +6,12 @@ EXTRA_DIST =
 EXTRA_DIST += README.txt
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
 if HAVE_ASSIMP3
 pkglib_LTLIBRARIES += gem_modelASSIMP3.la
+dist_gemhelp_DATA += ASSIMP3-modelplugin.pd
 endif
 
 gem_modelASSIMP3_la_CXXFLAGS =

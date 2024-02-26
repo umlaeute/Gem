@@ -8,6 +8,10 @@ EXTRA_DIST += win-vs2008/modelOBJ.sln win-vs2008/modelOBJ.vcproj
 
 pkglib_LTLIBRARIES= gem_modelOBJ.la
 
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+dist_gemhelp_DATA += OBJ-modelplugin.pd
+
 gem_modelOBJ_la_CXXFLAGS =
 gem_modelOBJ_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS

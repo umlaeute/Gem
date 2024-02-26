@@ -9,9 +9,12 @@ EXTRA_DIST += win-vs2008/modelASSIMP2.sln win-vs2008/modelASSIMP2.vcproj
 EXTRA_DIST += win-vs2008/ASSIMP2.vsprops
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 
 if HAVE_ASSIMP2
 pkglib_LTLIBRARIES += gem_modelASSIMP2.la
+dist_gemhelp_DATA += ASSIMP2-modelplugin.pd
 endif
 
 gem_modelASSIMP2_la_CXXFLAGS =

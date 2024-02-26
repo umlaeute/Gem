@@ -1,0 +1,3 @@
+#N canvas 242 133 479 182 12;
+#X text 26 29 With the ASSIMP backend \, you can load a multitude of different model formats.;
+#X text 24 79 This is the backend for the old ASSIMP2 library \, which is no longer maintained.;

@@ -1,0 +1,14 @@
+#N canvas 242 133 450 499 12;
+#X text 26 30 With the OBJ backend \, you can load Alias Wavefront OBJ files.;
+#X text 21 74 This is a simple text-based format \, and the loader does not require any additional dependencies (so should be available on all installations of Gem).;
+#X obj 95 416 s \$1-ctl;
+#X text 178 232 smoothing (0..1);
+#X msg 112 302 reverse \$1;
+#X obj 112 278 tgl 20 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X msg 104 233 smooth \$1;
+#X obj 107 207 hsl 170 20 0 1 0 0 empty empty empty -2 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X text 143 281 reverse winding;
+#X connect 4 0 2 0;
+#X connect 5 0 4 0;
+#X connect 6 0 2 0;
+#X connect 7 0 6 0;
