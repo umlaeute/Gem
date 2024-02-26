@@ -81,6 +81,10 @@ public:
   virtual void clearProperties( void );
   virtual void setProperties( t_symbol*, int, t_atom*);
 
+  //////////
+  // Set backend to use
+  virtual void  backendMess(t_symbol*s, int argc, t_atom*argv);
+
 protected:
   imageStruct    *m_buffer;
   unsigned int m_numframes;
