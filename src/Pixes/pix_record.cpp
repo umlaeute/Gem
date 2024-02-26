@@ -18,10 +18,13 @@ CPPEXTERN_NEW_WITH_GIMME(pix_record);
 struct pix_record :: PIMPL
 {
   CPPExtern*parent;
+
   PIMPL(CPPExtern*_parent)
-    :parent(_parent)
+    : parent(_parent)
   {};
   ~PIMPL(void) {};
+
+  std::vector<std::string> backends;
 
   static gem::any atom2any(t_atom*ap)
   {
@@ -95,7 +98,7 @@ pix_record :: pix_record(int argc, t_atom *argv) :
     error("ignoring arguments");
   }
 
-  m_handle=gem::plugins::record::getInstance();
+  m_handle = gem::plugins::record::getInstance();
   getCodecList();
 }
 
@@ -128,12 +131,17 @@ void pix_record :: startRecording()
   }
 
   // find a handle for the current settings (filename, codec, props)
-  /* const std::string codec=m_codec; */
   stopRecording();
-
   m_currentFrame = 0;
+
   // do not re-set the codec, if there is no need...
   /* m_handle->setCodec(codec); */
+
+  m_props.erase("_backends");
+  if(!m_pimpl->backends.empty()) {
+    m_props.set("_backends", m_pimpl->backends);
+  }
+
   if(m_handle->start(m_filename, m_props)) {
     m_filename=std::string("");
     m_recording=true;
@@ -383,6 +391,52 @@ void pix_record :: fileMess(t_symbol*s, int argc, t_atom *argv)
 }
 
 /////////////////////////////////////////////////////////
+// backendMess
+//
+/////////////////////////////////////////////////////////
+void pix_record :: backendMess(t_symbol*s, int argc, t_atom*argv)
+{
+  m_pimpl->backends.clear();
+  if(argc) {
+    for(int i=0; i<argc; i++) {
+      if(A_SYMBOL == argv->a_type) {
+        t_symbol* b=atom_getsymbol(argv+i);
+        m_pimpl->backends.push_back(b->s_name);
+      } else {
+        error("%s must be symbolic", s->s_name);
+      }
+    }
+  } else {
+    /* no backend requested, just enumerate them */
+    if(m_handle) {
+      const std::string sel = s->s_name;
+      std::vector<gem::any>atoms;
+      gem::any value;
+      gem::Properties props;
+      std::vector<std::string> backends;
+      props.set("_backends", value);
+      m_handle->getProperties(props);
+      if(props.type("_backends")!=gem::Properties::UNSET) {
+        props.get("_backends", backends);
+      }
+      atoms.clear();
+      atoms.push_back(value=(int)(backends.size()));
+      m_infoOut.send(sel+"s", atoms);
+      if(!backends.empty()) {
+        for(int i=0; i<backends.size(); i++) {
+          atoms.clear();
+          atoms.push_back(value=backends[i]);
+          post("backend[%d] %s", i, backends[i].c_str());
+          m_infoOut.send(sel, atoms);
+        }
+      } else {
+        post("no recording-backends found!");
+      }
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////
 // static member functions
 //
 /////////////////////////////////////////////////////////
@@ -393,6 +447,9 @@ void pix_record :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "auto", autoMess, bool);
   CPPEXTERN_MSG0(classPtr, "bang", bangMess);
   CPPEXTERN_MSG1(classPtr, "record", recordMess, bool);
+
+  CPPEXTERN_MSG (classPtr, "backend", backendMess);
+
   CPPEXTERN_MSG0(classPtr, "codeclist", getCodecList);
   class_addmethod(classPtr,
                   reinterpret_cast<t_method>(&pix_record::codecMessCallback),
