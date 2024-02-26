@@ -79,8 +79,7 @@ private:
       id=available;
     }
 
-    unsigned int i=0;
-    for(i=0; i<id.size(); i++) {
+    for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
       verbose(2, "Gem::video: trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
@@ -135,8 +134,7 @@ public:
     static bool firsttime=true;
     if(firsttime && ids.size()>0) {
       startpost("GEM: video capture plugins:");
-      unsigned int i;
-      for(i=0; i<ids.size(); i++) {
+      for(unsigned int i=0; i<ids.size(); i++) {
         startpost(" %s", ids[i].c_str());
       }
       endpost();
@@ -147,8 +145,7 @@ public:
   virtual ~videoMeta(void)
   {
     // compat
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       delete m_handles[i];
       m_handles[i]=NULL;
     }

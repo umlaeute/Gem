@@ -87,8 +87,7 @@ public:
 # warning isThreadable
 #endif
 #if 0
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       //if(!m_handles[i]->isThreadable()) {
       if(1) {
         m_canThread=false;
@@ -100,8 +99,7 @@ public:
     static bool firsttime=true;
     if(firsttime && m_ids.size()>0) {
       startpost("GEM: video record plugins:");
-      unsigned int i;
-      for(i=0; i<m_ids.size(); i++) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
         startpost(" %s", m_ids[i].c_str());
       }
       endpost();
@@ -128,8 +126,7 @@ public:
       id=available;
     }
 
-    unsigned int i=0;
-    for(i=0; i<id.size(); i++) {
+    for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
       verbose(2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
@@ -157,8 +154,7 @@ public:
 public:
   virtual ~recordMeta(void)
   {
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       delete m_handles[i];
       m_handles[i]=NULL;
     }
@@ -167,11 +163,9 @@ public:
   virtual std::vector<std::string>getCodecs(void)
   {
     clearCodecHandle();
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       std::vector<std::string>c=m_handles[i]->getCodecs();
-      unsigned int j;
-      for(j=0; j<c.size(); j++) {
+      for(unsigned int j=0; j<c.size(); j++) {
         addCodecHandle(m_handles[i], c[j]);
       }
     }
@@ -206,8 +200,7 @@ public:
       return false;
     }
 
-    unsigned int i;
-    for(i=0; i<handles.size(); i++) {
+    for(unsigned int i=0; i<handles.size(); i++) {
       gem::plugins::record*handle=handles[i].handle;
       std::string codec=handles[i].codec;
       if(handle->setCodec(codec)) {
@@ -234,9 +227,8 @@ public:
     }
     checkSelectedHandles();
 
-    unsigned int i;
     gem::plugins::record*handle=NULL;
-    for(i=0; i<m_selectedHandles.size(); i++) {
+    for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
       handle=m_selectedHandles[i];
       if(handle->dialog()) {
         break;
@@ -261,8 +253,7 @@ public:
       return false;
     }
 
-    unsigned int i;
-    for(i=0; i<m_selectedHandles.size(); i++) {
+    for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
       props.clear();
       if(m_selectedHandles[i]->enumProperties(props)) {
         return true;
@@ -284,8 +275,7 @@ public:
       return false; // no selected codec available
     }
 
-    unsigned int i;
-    for(i=0; i<m_selectedHandles.size(); i++) {
+    for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
       if(m_selectedHandles[i]->start(filename, props)) {
         m_handle=m_selectedHandles[i];
         return true;

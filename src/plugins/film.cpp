@@ -91,8 +91,7 @@ public:
   virtual void getProperties(gem::Properties&props)
   {
     std::vector<std::string>keys=props.keys();
-    unsigned int i=0;
-    for(i=0; i<keys.size(); i++) {
+    for(unsigned int i=0; i<keys.size(); i++) {
       std::string key=keys[i];
       props.erase(key);
       if("frames"==key) {
@@ -144,8 +143,7 @@ private:
       id=available;
     }
 
-    unsigned int i=0;
-    for(i=0; i<id.size(); i++) {
+    for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
       verbose(2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
@@ -191,8 +189,7 @@ public:
     addPlugin(ids, "MPEG1");
     addPlugin(ids);
 
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       if(!m_handles[i]->isThreadable()) {
         m_canThread=false;
         break;
@@ -211,8 +208,7 @@ public:
     static bool firsttime=true;
     if(firsttime && ids.size()>0) {
       startpost("GEM: film loading plugins:");
-      unsigned int i;
-      for(i=0; i<ids.size(); i++) {
+      for(unsigned int i=0; i<ids.size(); i++) {
         startpost(" %s", ids[i].c_str());
       }
       endpost();
@@ -222,8 +218,7 @@ public:
 
   virtual ~filmMeta(void)
   {
-    unsigned int i;
-    for(i=0; i<m_handles.size(); i++) {
+    for(unsigned int i=0; i<m_handles.size(); i++) {
       delete m_handles[i];
       m_handles[i]=NULL;
     }
@@ -243,10 +238,9 @@ public:
 
     bool tried=false;
     if(!backends.empty()) {
-      unsigned int i, j;
-      for(j=0; !m_handle && j<backends.size(); j++) {
+      for(unsigned int j=0; !m_handle && j<backends.size(); j++) {
         std::string id=backends[j];
-        for(i=0; i<m_handles.size(); i++) {
+        for(unsigned int i=0; i<m_handles.size(); i++) {
           /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
           if(id==m_ids[i] && (tried=true)
               && m_handles[i]->open(name, requestprops)) {
@@ -260,8 +254,7 @@ public:
       if(!backends.empty() && !m_handles.empty()) {
         verbose(2, "no available backend selected, fall back to valid ones");
       }
-      unsigned int i=0;
-      for(i=0; i<m_handles.size(); i++) {
+      for(unsigned int i=0; i<m_handles.size(); i++) {
         if(m_handles[i] && m_handles[i]->open(name, requestprops)) {
           m_handle=m_handles[i];
           break;
@@ -336,8 +329,7 @@ public:
   {
     std::vector<std::string> ids;
     if(props.type("_backends")!=gem::Properties::UNSET) {
-      unsigned int i;
-      for(i=0; i<m_ids.size(); i++) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
         ids.push_back(m_ids[i]);
       }
     }

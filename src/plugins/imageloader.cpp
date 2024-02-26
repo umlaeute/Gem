@@ -49,8 +49,7 @@ public:
     static bool firsttime=true;
     if(firsttime && m_ids.size()>0) {
       startpost("GEM: image loading plugins:");
-      unsigned int i;
-      for(i=0; i<m_ids.size(); i++) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
         startpost(" %s", m_ids[i].c_str());
       }
       endpost();
@@ -58,8 +57,7 @@ public:
     firsttime=false;
 
     m_canThread=true;
-    unsigned int i;
-    for(i=0; i<m_loaders.size(); i++) {
+    for(unsigned int i=0; i<m_loaders.size(); i++) {
       if(!m_loaders[i]->isThreadable()) {
         m_canThread=false;
         break;
@@ -86,8 +84,7 @@ public:
       id=available;
     }
 
-    unsigned int i=0;
-    for(i=0; i<id.size(); i++) {
+    for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
       verbose(2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
@@ -116,8 +113,7 @@ public:
 public:
   virtual ~imageloaderMeta(void)
   {
-    unsigned int i;
-    for(i=0; i<m_loaders.size(); i++) {
+    for(unsigned int i=0; i<m_loaders.size(); i++) {
       delete m_loaders[i];
       m_loaders[i]=NULL;
     }
@@ -126,8 +122,7 @@ public:
   virtual bool load(std::string filename, imageStruct&result,
                     gem::Properties&props)
   {
-    unsigned int i;
-    for(i=0; i<m_loaders.size(); i++) {
+    for(unsigned int i=0; i<m_loaders.size(); i++) {
       if(m_loaders[i]->load(filename, result, props)) {
         return true;
       }

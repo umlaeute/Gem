@@ -94,8 +94,7 @@ public:
     if(locks_>0) {
       numlocks=locks_;
       locks=new pthread_mutex_t*[numlocks];
-      unsigned int i=0;
-      for(i=0; i<locks_; i++) {
+      for(unsigned int i=0; i<locks_; i++) {
         locks[i]=NULL;
       }
 
@@ -160,8 +159,7 @@ public:
   bool lock_new(void)
   {
     if(locks) {
-      unsigned int i=0;
-      for(i=0; i<numlocks; i++) {
+      for(unsigned int i=0; i<numlocks; i++) {
         locks[i]=new pthread_mutex_t;
         if ( pthread_mutex_init(locks[i], NULL) < 0 ) {
           lock_delete();
@@ -175,8 +173,7 @@ public:
   void lock_delete(void)
   {
     if(locks) {
-      unsigned int i=0;
-      for(i=0; i<numlocks; i++) {
+      for(unsigned int i=0; i<numlocks; i++) {
         if(locks[i]) {
           pthread_mutex_destroy(locks[i]);
           delete locks[i];
@@ -569,8 +566,7 @@ bool videoBase :: provides(const std::string&name)
   if(!m_pimpl) {
     return false;
   }
-  unsigned int i;
-  for(i=0; i<m_pimpl->m_providers.size(); i++)
+  for(unsigned int i=0; i<m_pimpl->m_providers.size(); i++)
     if(name == m_pimpl->m_providers[i]) {
       return true;
     }
@@ -581,8 +577,7 @@ std::vector<std::string>videoBase :: provides()
 {
   std::vector<std::string>result;
   if(m_pimpl) {
-    unsigned int i;
-    for(i=0; i<m_pimpl->m_providers.size(); i++) {
+    for(unsigned int i=0; i<m_pimpl->m_providers.size(); i++) {
       result.push_back(m_pimpl->m_providers[i]);
     }
   }
@@ -615,8 +610,7 @@ void videoBase :: setProperties(gem::Properties&props)
   // nada
 
   std::vector<std::string> keys=props.keys();
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     enum gem::Properties::PropertyType typ=props.type(keys[i]);
     std::cerr  << "key["<<keys[i]<<"]: "<<typ<<" :: ";
     switch(typ) {
@@ -641,8 +635,7 @@ void videoBase :: getProperties(gem::Properties&props)
 {
   // nada
   std::vector<std::string>keys=props.keys();
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     gem::any unset;
     props.set(keys[i], unset);
   }
