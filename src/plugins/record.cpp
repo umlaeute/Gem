@@ -263,6 +263,28 @@ public:
     return false;
   }
 
+  virtual void getProperties(gem::Properties&props)
+  {
+    std::vector<std::string> ids;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
+        ids.push_back(m_ids[i]);
+      }
+    }
+    props.erase("_backends");
+
+    if(m_handle) {
+      m_handle->getProperties(props);
+    } else {
+      props.clear();
+    }
+
+    if(!ids.empty()) {
+      props.set("_backends", ids);
+    }
+  }
+
+
   //////////
   // start recording
   //

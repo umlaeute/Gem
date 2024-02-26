@@ -70,8 +70,12 @@ public:
    */
   virtual bool enumProperties(gem::Properties&props) = 0;
 
+  /** get the given properties from the currently selected codec
+   */
+  virtual void getProperties(gem::Properties&props) = 0;
+
   //////////
-  // popup a dialog to set the codec interactively (interesting on os-x and w32)
+  // popup a dialog to set the codec interactively (interesting on OSX and w32)
   // just return FALSE if you don't support dialogs
   virtual bool dialog(void) = 0;
 
