@@ -569,8 +569,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
 {
   bool needrestart = false;
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     const std::string key =keys[i];
     if(canrestart  && needrestart) {
       return true;
@@ -678,8 +677,7 @@ bool videoDECKLINK::trySetProperties(gem::Properties&props, bool canrestart)
 void videoDECKLINK::getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);
     }

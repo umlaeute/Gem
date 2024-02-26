@@ -63,8 +63,7 @@ static std::vector<std::string>getBackends(void)
                         +GemDylib::getDefaultExtension();
 
   std::vector<std::string>listing=gem::files::getFilenameListing(pattern);
-  int i=0;
-  for(i=0; i<listing.size(); i++) {
+  for(int i=0; i<listing.size(); i++) {
     std::string needle="hAcq";
     const size_t found = listing[i].rfind(needle);
 
@@ -111,9 +110,7 @@ videoHALCON :: videoHALCON() : videoBase("halcon"),
   Halcon::HException::InstallHHandler(&MyHalconExceptionHandler);
   m_backends=getBackends();
   if(m_backends.size()>0) {
-    int i=0;
-
-    for(i=0; i<m_backends.size(); i++) {
+    for(int i=0; i<m_backends.size(); i++) {
       provide(m_backends[i]);
     }
   }
@@ -181,10 +178,9 @@ bool videoHALCON :: grabFrame()
     m_image.image.ysize=h;
     m_image.image.setFormat(GEM_RGBA);
     m_image.image.reallocate();
-    long row, col;
     unsigned char*data=m_image.image.data;
-    for(row=0; row<h; row++) {
-      for(col=0; col<w; col++) {
+    for(long row=0; row<h; row++) {
+      for(long col=0; col<w; col++) {
         data[chRed  ]=*ptrR++;
         data[chGreen]=*ptrG++;
         data[chBlue ]=*ptrB++;
@@ -260,9 +256,7 @@ static std::string parsedevicename(std::string devicename,
 
 static void printtuple(Halcon::HTuple t)
 {
-  int i=0;
-  for(i=0; i< t.Num(); i++) {
-
+  for(int i=0; i< t.Num(); i++) {
     Halcon::HCtrlVal v=t[i];
     std::cerr<<"["<<i<<"]: ";
     switch(v.ValType()) {
@@ -474,9 +468,7 @@ std::vector<std::string> videoHALCON::enumerate()
     backends.push_back(m_backendname);
   }
 
-  int i=0;
-
-  for(i=0; i<backends.size(); i++) {
+  for(int i=0; i<backends.size(); i++) {
     try {
       Halcon::HTuple Information;
       Halcon::HTuple ValueList;
@@ -488,8 +480,7 @@ std::vector<std::string> videoHALCON::enumerate()
         continue;
       }
 
-      int j=0;
-      for(j=0; j<ValueList.Num(); j++) {
+      for(int j=0; j<ValueList.Num(); j++) {
         Halcon::HCtrlVal v=ValueList[j];
         std::string device;
         switch(v.ValType()) {
@@ -519,7 +510,6 @@ std::vector<std::string> videoHALCON::enumerate()
 bool videoHALCON::enumProperties(gem::Properties&readable,
                                  gem::Properties&writeable)
 {
-  int i=0;
   gem::any typeval;
   (void*)0;
 
@@ -537,7 +527,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
                                  &Information,
                                  &ValueList);
     if(ValueList.Num()>0) {
-      for(i=0; i< ValueList.Num(); i++) {
+      for(int i=0; i< ValueList.Num(); i++) {
         Halcon::HCtrlVal v=ValueList[i];
         if(v.ValType() == Halcon::StringVal) {
           readable.set(v.S(), typeval);
@@ -560,7 +550,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
                                  &Information,
                                  &ValueList);
     if(ValueList.Num()>0) {
-      for(i=0; i< ValueList.Num(); i++) {
+      for(int i=0; i< ValueList.Num(); i++) {
         Halcon::HCtrlVal v=ValueList[i];
         if(v.ValType() == Halcon::StringVal) {
           readable.set(v.S(), typeval);
@@ -585,7 +575,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
                                  &Information,
                                  &ValueList);
     if(ValueList.Num()>0) {
-      for(i=0; i< ValueList.Num(); i++) {
+      for(int i=0; i< ValueList.Num(); i++) {
         Halcon::HCtrlVal v=ValueList[i];
         if(v.ValType() == Halcon::StringVal) {
           writeable.set(v.S(), typeval);
@@ -611,8 +601,7 @@ void videoHALCON::setProperties(gem::Properties&props)
     return;
   }
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::string s;
 
@@ -700,15 +689,13 @@ void videoHALCON::getProperties(gem::Properties&props)
     return;
   }
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if(m_readable.find(key) != m_readable.end()) {
       try {
         Halcon::HTuple hresult=m_grabber->GetFramegrabberParam(key.c_str());
         gem::any nonetype;
-        int j=0;
-        for(j=0; j< hresult.Num(); j++) {
+        for(int j=0; j< hresult.Num(); j++) {
           Halcon::HCtrlVal v=hresult[j];
           switch(v.ValType()) {
           case Halcon::LongVal:

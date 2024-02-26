@@ -222,14 +222,13 @@ bool filmGMERLIN :: open(const std::string&sfilename,
     }
   }
   if(bgav_is_redirector(m_file)) {
-    int i=0;
     int num_urls=bgav_redirector_get_num_urls(m_file);
     verbose(1, "[GEM:filmGMERLIN] Found redirector:");
-    for(i = 0; i < num_urls; i++) {
+    for(int i = 0; i < num_urls; i++) {
       verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i,
               bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
     }
-    for(i = 0; i < num_urls; i++) {
+    for(int i = 0; i < num_urls; i++) {
       filename=(char*)bgav_redirector_get_url(m_file, i);
       close();
       if (open(filename, wantProps)) {
@@ -468,8 +467,7 @@ void filmGMERLIN::getProperties(gem::Properties&props)
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     props.erase(key);
     if("fps"==key) {

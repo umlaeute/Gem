@@ -97,13 +97,12 @@ videoV4L :: videoV4L() : videoBase("v4l")
   m_channel(V4L_COMPOSITEIN),
   errorcount(0)
 {
-  unsigned int i;
   memset(&vtuner,   0, sizeof(vtuner));
   memset(&vpicture, 0, sizeof(vpicture));
   memset(&vcap,     0, sizeof(vcap));
   memset(&vchannel, 0, sizeof(vchannel));
   memset(&vmbuf,    0, sizeof(vmbuf));
-  for(i=0; i<V4L_NBUF; i++) {
+  for(unsigned int i=0; i<V4L_NBUF; i++) {
     memset(vmmap+i, 0, sizeof(vmmap[i]));
   }
 
@@ -218,7 +217,6 @@ bool videoV4L :: grabFrame()
 bool videoV4L :: openDevice(gem::Properties&props)
 {
   char buf[256];
-  int i;
 
   if(!m_devicename.empty()) {
     snprintf(buf,256,"%s", m_devicename.c_str());
@@ -250,7 +248,7 @@ bool videoV4L :: openDevice(gem::Properties&props)
     goto closit;
   }
 
-  for (i = 0; i < vcap.channels; i++) {
+  for (int i = 0; i < vcap.channels; i++) {
     vchannel.channel = i;
     verbose(1, "[GEM:videoV4L] getting channel info for #%d", i);
     if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)  {
@@ -289,7 +287,6 @@ bool videoV4L :: startTransfer()
   if(tvfd<0) {
     return false;
   }
-  int i;
   int width, height;
 
 
@@ -305,7 +302,7 @@ bool videoV4L :: startTransfer()
   }
 
   /* hmm, what does this do? */
-  for (i = 0; i < vcap.channels; i++) {
+  for (int i = 0; i < vcap.channels; i++) {
     vchannel.channel = i;
     if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0) {
       perror("[GEM:videoV4L] VDIOCGCHAN");
@@ -356,7 +353,7 @@ bool videoV4L :: startTransfer()
   height =(m_height > vcap.minheight) ? m_height       : vcap.minheight;
   height =(height   > vcap.maxheight) ? vcap.maxheight : height;
 
-  for (i = 0; i < V4L_NBUF; i++)    {
+  for (int i = 0; i < V4L_NBUF; i++)    {
     switch(m_reqFormat) {
     case GEM_RAW_GRAY:
       vmmap[i].format = VIDEO_PALETTE_GREY;
@@ -385,7 +382,7 @@ bool videoV4L :: startTransfer()
   }
 
   if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
-    for (i = 0; i < V4L_NBUF; i++) {
+    for (int i = 0; i < V4L_NBUF; i++) {
       vmmap[i].format = vpicture.palette;
     }
     if (v4l1_ioctl(tvfd, VIDIOCMCAPTURE, &vmmap[frame]) < 0)    {
@@ -462,18 +459,17 @@ std::vector<std::string> videoV4L::enumerate()
 {
   std::vector<std::string> result;
   std::vector<std::string> glob, allglob;
-  int i=0;
   glob=gem::files::getFilenameListing("/dev/video*");
-  for(i=0; i<glob.size(); i++) {
+  for(int i=0; i<glob.size(); i++) {
     allglob.push_back(glob[i]);
   }
 
   glob=gem::files::getFilenameListing("/dev/v4l/video*");
-  for(i=0; i<glob.size(); i++) {
+  for(int i=0; i<glob.size(); i++) {
     allglob.push_back(glob[i]);
   }
 
-  for(i=0; i<allglob.size(); i++) {
+  for(int i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
     verbose(1, "[GEM:videoV4L] found possible device %s", dev.c_str());
     int fd=v4l1_open(dev.c_str(), O_RDONLY | O_NONBLOCK);
@@ -500,7 +496,6 @@ std::vector<std::string> videoV4L::enumerate()
 bool videoV4L::enumProperties(gem::Properties&readable,
                               gem::Properties&writeable)
 {
-  int i=0;
   std::vector<std::string>keys;
   gem::any type;
 
@@ -521,7 +516,7 @@ bool videoV4L::enumProperties(gem::Properties&readable,
   keys.push_back("frequency");
 
   type=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     readable .set(keys[i], type);
     writeable.set(keys[i], type);
   }
@@ -530,7 +525,7 @@ bool videoV4L::enumProperties(gem::Properties&readable,
   keys.push_back("norm");
 
   type=std::string("");
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     readable .set(keys[i], type);
     writeable.set(keys[i], type);
   }
@@ -542,7 +537,6 @@ void videoV4L::setProperties(gem::Properties&props)
   std::vector<std::string>keys=props.keys();
   bool restart=false;
   bool do_s_chan=false, do_s_pict=false;
-  int i=0;
   double d;
   std::string s;
 
@@ -554,7 +548,7 @@ void videoV4L::setProperties(gem::Properties&props)
     perror("[GEM:videoV4L] VDIOCGCHAN");
   }
 
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     if(0) {
       ;
@@ -697,9 +691,8 @@ void videoV4L::getProperties(gem::Properties&props)
     props.clear();
     return;
   }
-  int i;
 
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
 
     if(key=="width") {

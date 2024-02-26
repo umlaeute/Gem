@@ -115,7 +115,6 @@ static struct {
 static lqt_file_type_t guess_qtformat(const std::string&filename)
 {
   const char * extension = strrchr(filename.c_str(), '.');
-  unsigned int i=0;
 
   if(!extension) {
     verbose(0,
@@ -125,7 +124,7 @@ static lqt_file_type_t guess_qtformat(const std::string&filename)
 
   extension++;
 
-  for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
+  for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
       return qtformats[i].type;
     }
@@ -171,12 +170,11 @@ static void applyProperties(quicktime_t*file, int track,
   std::vector<std::string>keys=props.keys();
 
   std::map<std::string, lqt_parameter_type_t>proptypes;
-  int i=0;
-  for(i=0; i<codec->num_encoding_parameters; i++) {
+  for(int i=0; i<codec->num_encoding_parameters; i++) {
     proptypes[codec->encoding_parameters[i].name]=
       codec->encoding_parameters[i].type;
   }
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     std::map<std::string,lqt_parameter_type_t>::iterator it = proptypes.find(
           key);
@@ -240,8 +238,7 @@ static int try_colormodel(quicktime_t *          file,
                           int   track,
                           std::vector<int>      colormodel)
 {
-  int i=0;
-  for(i=0; i<colormodel.size(); i++) {
+  for(int i=0; i<colormodel.size(); i++) {
     int result=try_colormodel(file, track, colormodel[i]);
     if(result) {
       return result;
@@ -440,8 +437,7 @@ bool recordQT4L :: setCodec(const std::string&name)
   if(codecname.empty() && m_qtfile) {
     /* LATER figure out automatically which codec to use */
     lqt_file_type_t type = lqt_get_file_type(m_qtfile);
-    unsigned int i=0;
-    for(i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
+    for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
       if(type == qtformats[i].type) {
         codecname = qtformats[i].default_video_codec;
       }
@@ -474,8 +470,7 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
 
   const int paramcount=m_codec->num_encoding_parameters;
   lqt_parameter_info_t*params=m_codec->encoding_parameters;
-  int i=0;
-  for(i=0; i<paramcount; i++) {
+  for(int i=0; i<paramcount; i++) {
     gem::any typ;
     switch(params[i].type) {
     case(LQT_PARAMETER_INT):

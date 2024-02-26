@@ -55,8 +55,7 @@ videoDV4L :: videoDV4L() : videoBase("dv4l"),
 {
   m_devicenum  = -1;
 
-  int i=0;
-  for(i=0; i<3; i++) {
+  for(int i=0; i<3; i++) {
     m_frame  [i] = NULL;
     m_pitches[i] = 0;
   }
@@ -192,8 +191,7 @@ bool videoDV4L :: openDevice(gem::Properties&props)
     devnum=-1;
   }
 
-  int i=0;
-  for(i=0; i<ports; i++) {
+  for(int i=0; i<ports; i++) {
     verbose(1, "[GEM:videoDV4L] port#%02d: %.*s", i, 32, pinf[i].name);
     if (devnum<0 && m_devicename==pinf[i].name) {
       devnum=i;
@@ -331,8 +329,7 @@ bool videoDV4L :: stopTransfer()
     m_decoder=NULL;
   }
 
-  int i=0;
-  for(i=0; i<3; i++) {
+  for(int i=0; i<3; i++) {
     if(m_frame[i]) {
       delete[]m_frame[i];
     }
@@ -399,8 +396,7 @@ std::vector<std::string> videoDV4L::enumerate()
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
 
   int ports = raw1394_get_port_info(handle, pinf, num_pinf);
-  int i=0;
-  for(i=0; i<ports; i++) {
+  for(int i=0; i<ports; i++) {
     result.push_back(pinf[i].name);
   }
   delete[]pinf;

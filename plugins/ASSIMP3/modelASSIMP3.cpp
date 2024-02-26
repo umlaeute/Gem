@@ -41,14 +41,13 @@ static void get_bounding_box_for_node (const struct aiScene*scene,
                                       )
 {
   aiMatrix4x4 prev;
-  unsigned int n = 0, t;
 
   prev = *trafo;
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
-  for (; n < nd->mNumMeshes; ++n) {
+  for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
-    for (t = 0; t < mesh->mNumVertices; ++t) {
+    for (unsigned int t = 0; t < mesh->mNumVertices; ++t) {
 
       aiVector3D tmp = mesh->mVertices[t];
       aiTransformVecByMatrix4(&tmp,trafo);
@@ -63,7 +62,7 @@ static void get_bounding_box_for_node (const struct aiScene*scene,
     }
   }
 
-  for (n = 0; n < nd->mNumChildren; ++n) {
+  for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
     get_bounding_box_for_node(scene, nd->mChildren[n],min,max,trafo);
   }
   *trafo = prev;
@@ -180,8 +179,6 @@ static void recursive_render(
   , aiMatrix4x4* trafo
   )
 {
-  int i;
-  unsigned int t;
   aiMatrix4x4 prev = *trafo;
   // update transform
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
@@ -202,9 +199,9 @@ static void recursive_render(
 
     apply_material(outmesh.mesh.material, sc->mMaterials[mesh->mMaterialIndex]);
 
-    for (t = 0; t < mesh->mNumFaces; ++t) {
+    for (unsigned int t = 0; t < mesh->mNumFaces; ++t) {
       const struct aiFace* face = &mesh->mFaces[t];
-      for(i = 0; i < face->mNumIndices; i++) {
+      for(int i = 0; i < face->mNumIndices; i++) {
         int index = face->mIndices[i];
         numVertices++;
 
@@ -427,9 +424,8 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
 void modelASSIMP3 :: getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
   props.clear();
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if("texwidth" == key) {
       props.set(key, m_texscale.x);

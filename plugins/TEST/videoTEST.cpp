@@ -34,8 +34,7 @@ bool videoTEST::open(gem::Properties&props)
 
 static void setNoise(unsigned char*data, unsigned int count)
 {
-  unsigned int i=0;
-  for(i=0; i<count; i++) {
+  for(unsigned int i=0; i<count; i++) {
     data[chRed]=(255*getRandom());
     data[chGreen]=(255*getRandom());
     data[chBlue]=(255*getRandom());
@@ -45,8 +44,7 @@ static void setNoise(unsigned char*data, unsigned int count)
 }
 static void setRed(unsigned char*data, unsigned int count)
 {
-  unsigned int i=0;
-  for(i=0; i<count; i++) {
+  for(unsigned int i=0; i<count; i++) {
     data[chRed]=255;
     data[chGreen]=0;
     data[chBlue]=0;
@@ -56,8 +54,7 @@ static void setRed(unsigned char*data, unsigned int count)
 }
 static void setGreen(unsigned char*data, unsigned int count)
 {
-  unsigned int i=0;
-  for(i=0; i<count; i++) {
+  for(unsigned int i=0; i<count; i++) {
     data[chRed]=0;
     data[chGreen]=255;
     data[chBlue]=0;
@@ -67,8 +64,7 @@ static void setGreen(unsigned char*data, unsigned int count)
 }
 static void setBlue(unsigned char*data, unsigned int count)
 {
-  unsigned int i=0;
-  for(i=0; i<count; i++) {
+  for(unsigned int i=0; i<count; i++) {
     data[chRed]=0;
     data[chGreen]=0;
     data[chBlue]=255;
@@ -168,8 +164,7 @@ void videoTEST::setProperties(gem::Properties&props)
 void videoTEST::getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);
     }

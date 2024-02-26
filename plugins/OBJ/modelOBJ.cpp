@@ -60,8 +60,7 @@ bool modelOBJ :: open(const std::string&name,
 
 #if 0
   std::vector<std::string>keys=requestprops.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     verbose(1, "[GEM:modelOBJ] key[%d]=%s", i, keys[i].c_str());
   }
 #endif
@@ -198,9 +197,8 @@ void modelOBJ :: setProperties(gem::Properties&props)
 void modelOBJ :: getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
   props.clear();
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if("texwidth" == key) {
       props.set(key, m_currentW);

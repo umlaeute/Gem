@@ -140,8 +140,7 @@ imageMAGICK :: imageMAGICK(void)
 
   DestroyExceptionInfo(exception);
 
-  unsigned int i;
-  for(i=0; i<length; i++) {
+  for(unsigned int i=0; i<length; i++) {
     m_mimetypes.push_back(mimelist[i]);
   }
 
@@ -157,8 +156,7 @@ float imageMAGICK::estimateSave(const imageStruct&image,
                                 const gem::Properties&props)
 {
   float result=0.5; // slightly preference for MAGICK
-  unsigned int i;
-  for(i=0; i<m_mimetypes.size(); i++) {
+  for(unsigned int i=0; i<m_mimetypes.size(); i++) {
     if(mimetype==m_mimetypes[i]) {
       result+=100.;
       break;

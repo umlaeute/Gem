@@ -138,7 +138,8 @@ static void InvertGLImage( unsigned char *imageData,
   // FIXXME use a flip function in GemPixUtils for this
 
   // Copy rows into tmp buffer one at a time, reversing their order
-  for (i = 0, j = imageSize - rowBytes; i < imageSize;
+  for (i = 0, j = imageSize - rowBytes;
+       i < imageSize;
        i += rowBytes, j -= rowBytes) {
     memcpy( &outData[j], &imageData[i], static_cast<size_t>(rowBytes) );
   }

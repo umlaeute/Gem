@@ -118,8 +118,7 @@ bool videoUNICAP :: open(gem::Properties&props)
     ds=m_name2devices[m_devicename];
   }
   unicap_status_t status = -1;
-  int i=0;
-  for(i=0; i<ds.size(); i++) {
+  for(int i=0; i<ds.size(); i++) {
     unicap_device_t device;
     unsigned int d=ds[i];
     status = unicap_enumerate_devices (NULL, &device, d); // (1)
@@ -405,8 +404,8 @@ bool videoUNICAP :: start(void)
 
   std::string s;
   if(m_props.get("format", s)) {
-    for( unsigned i = 0;
-         SUCCESS( unicap_enumerate_formats( m_handle, NULL, &format, i ) ); i++) {
+    for(unsigned i = 0;
+        SUCCESS( unicap_enumerate_formats( m_handle, NULL, &format, i ) ); i++) {
       count_format++;
       if(s == format.identifier) {
         default_format=i;
@@ -565,7 +564,6 @@ std::vector<std::string> videoUNICAP::enumerate(void)
   std::vector<std::string> result;
   int devcount=0;
   unicap_status_t status = 0;
-  int i=0;
 
   m_providers.clear();
   m_providers.push_back(s_name);
@@ -581,7 +579,7 @@ std::vector<std::string> videoUNICAP::enumerate(void)
   m_name2devices.clear();
 
 
-  for(i=0; i<devcount; i++) {
+  for(int i=0; i<devcount; i++) {
     unicap_device_t device;
     status = unicap_enumerate_devices (NULL, &device, i); // (1)
 
@@ -682,8 +680,7 @@ bool videoUNICAP :: enumProperties(gem::Properties&readable,
       return false;
     }
 
-    int id=0;
-    for(id=0; id<count; id++) {
+    for(int id=0; id<count; id++) {
       unicap_property_t prop;
       gem::any typ;
 
@@ -741,8 +738,7 @@ void videoUNICAP :: getProperties(gem::Properties&props)
   std::vector<std::string> keys=props.keys();
 
   bool getwidth=false, getheight=false;
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     unicap_property_t prop;
     strncpy(prop.identifier, key.c_str(), 127);
@@ -809,8 +805,7 @@ void videoUNICAP :: setProperties(gem::Properties&props)
   unsigned int width=0, height=0;
 
   std::vector<std::string> keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
 
     double d=0;

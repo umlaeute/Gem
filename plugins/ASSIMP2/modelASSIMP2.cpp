@@ -43,14 +43,13 @@ static void get_bounding_box_for_node (const struct aiScene*scene,
                                       )
 {
   struct aiMatrix4x4 prev;
-  unsigned int n = 0, t;
 
   prev = *trafo;
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
-  for (; n < nd->mNumMeshes; ++n) {
+  for (unsigned int n=0; n < nd->mNumMeshes; ++n) {
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
-    for (t = 0; t < mesh->mNumVertices; ++t) {
+    for (unsigned int t = 0; t < mesh->mNumVertices; ++t) {
 
       struct aiVector3D tmp = mesh->mVertices[t];
       aiTransformVecByMatrix4(&tmp,trafo);
@@ -65,7 +64,7 @@ static void get_bounding_box_for_node (const struct aiScene*scene,
     }
   }
 
-  for (n = 0; n < nd->mNumChildren; ++n) {
+  for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
     get_bounding_box_for_node(scene, nd->mChildren[n],min,max,trafo);
   }
   *trafo = prev;
@@ -197,15 +196,13 @@ static void recursive_render (const struct aiScene*scene,
                               std::vector<std::vector<float> >& colors,
                               aiMatrix4x4* trafo)
 {
-  int i;
-  unsigned int n = 0, t;
   aiMatrix4x4 prev = *trafo;
 
   // update transform
   aiMultiplyMatrix4(trafo,&nd->mTransformation);
 
   // draw all meshes assigned to this node
-  for (; n < nd->mNumMeshes; ++n) {
+  for (unsigned int =0; n < nd->mNumMeshes; ++n) {
     const struct aiMesh* mesh = scene->mMeshes[nd->mMeshes[n]];
     if(use_material) {
       apply_material(sc->mMaterials[mesh->mMaterialIndex]);
@@ -226,7 +223,7 @@ static void recursive_render (const struct aiScene*scene,
       glDisable(GL_COLOR_MATERIAL);
     }
 #endif
-    for (t = 0; t < mesh->mNumFaces; ++t) {
+    for (unsigned int t = 0; t < mesh->mNumFaces; ++t) {
       const struct aiFace* face = &mesh->mFaces[t];
       GLenum face_mode;
 
@@ -248,7 +245,7 @@ static void recursive_render (const struct aiScene*scene,
       float* pt;
       std::vector<float> vec;
 
-      for(i = 0; i < face->mNumIndices; i++) {
+      for(int i = 0; i < face->mNumIndices; i++) {
         int index = face->mIndices[i];
 
         if(use_material && mesh->mColors[0] != NULL) {
@@ -281,7 +278,7 @@ static void recursive_render (const struct aiScene*scene,
   }
 
   // draw all children
-  for (n = 0; n < nd->mNumChildren; ++n) {
+  for (unsigned int n = 0; n < nd->mNumChildren; ++n) {
     recursive_render(scene, sc, nd->mChildren[n], use_material, vertices,
                      normals, texcoords, colors, trafo);
   }
@@ -403,8 +400,7 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
 
 #if 0
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(),
             props.type(keys[i]));
   }

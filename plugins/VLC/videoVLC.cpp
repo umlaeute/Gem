@@ -117,8 +117,7 @@ bool videoVLC::open(gem::Properties&props)
 
 
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     double d;
     std::string s;
@@ -297,9 +296,8 @@ void videoVLC::getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
   double d;
-  int i;
 
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);
     }

@@ -161,8 +161,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props)
   if(m_devicenum>=0) {
     devicenum=m_devicenum;
   } else if (!m_devicename.empty()) {
-    int i=0;
-    for(i=0; i<list->num; i++) {
+    for(int i=0; i<list->num; i++) {
       // find camera based on its GUID
       std::string name=guid2string(list->ids[i].guid);
       if(guid2string(list->ids[i].guid)==m_devicename) {
@@ -230,8 +229,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props)
       }
     }
 
-    int i;
-    for (i=video_modes.num-1; i>=0; i--) {
+    for (int i=video_modes.num-1; i>=0; i--) {
       unsigned int w=0, h=0;
       if(DC1394_SUCCESS==dc1394_get_image_size_from_video_mode(m_dccamera,
           video_modes.modes[i], &w, &h)) {
@@ -261,6 +259,7 @@ bool videoDC1394 :: openDevice(gem::Properties&props)
 
     if(mode<0) {
       // select highest res mode:
+      int i = -1;
       for (i=video_modes.num-1; i>=0; i--) {
         if (!dc1394_is_video_mode_scalable(video_modes.modes[i])) {
           dc1394_get_color_coding_from_video_mode(m_dccamera,video_modes.modes[i],
@@ -430,8 +429,7 @@ std::vector<std::string>videoDC1394 :: enumerate()
     return result;
   }
 
-  int i=0;
-  for(i=0; i<list->num; i++) {
+  for(int i=0; i<list->num; i++) {
     //    verbose(1, "[GEM:videoDC1394] IIDC#%02d: %"PRIx64"\t%x\t%s", i, list->ids[i].guid, list->ids[i].unit, buf);
     result.push_back(guid2string(list->ids[i].guid, list->ids[i].unit));
   }
@@ -533,7 +531,7 @@ bool videoDC1394::enumProperties(gem::Properties&readable,
     return false;
   }
 
-  for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+  for (int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
     if ( feature_set.feature[i].available ) {
       // TODO remove space in feature name (eg. "Trigger Delay")
       key = dc1394_feature_get_string(feature_set.feature[i].id);
@@ -572,8 +570,7 @@ void videoDC1394::getProperties(gem::Properties&props)
   double value;
   std::string svalue;
 
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     dc1394error_t err=DC1394_SUCCESS;
 #define DC1394_TRYGET(x)                                    \
@@ -769,7 +766,7 @@ void videoDC1394::getProperties(gem::Properties&props)
       // if ( err ) return false;
 
       uint32_t dc1394_value;
-      for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+      for (int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
         dc1394feature_t feature=feature_set.feature[i].id;
         std::string sfeature = dc1394_feature_get_string(feature);
         if(feature_set.feature[i].available) {
@@ -810,8 +807,7 @@ void videoDC1394::setProperties(gem::Properties&props)
   double value;
   std::string svalue;
 
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     dc1394error_t err=DC1394_SUCCESS;
 
@@ -938,8 +934,7 @@ void videoDC1394::setProperties(gem::Properties&props)
       dc1394speed_t speed=DC1394_ISO_SPEED_MIN;
 
       if (props.get(key, value) && value>0) {
-        int s;
-        for(s=DC1394_ISO_SPEED_MIN; s<DC1394_ISO_SPEED_MAX; s++) {
+        for(int s=DC1394_ISO_SPEED_MIN; s<DC1394_ISO_SPEED_MAX; s++) {
           if(value>=(100*(1<<s))) {
             speed=(dc1394speed_t)s;
           }
@@ -1007,7 +1002,7 @@ void videoDC1394::setProperties(gem::Properties&props)
       // if ( err ) return false;
 
       uint32_t dc1394_value;
-      for ( int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
+      for (int i = 0 ; i < DC1394_FEATURE_NUM ; i++ ) {
         dc1394feature_t feature=feature_set.feature[i].id;
         std::string sfeature=dc1394_feature_get_string(feature);
         if(feature_set.feature[i].available) {

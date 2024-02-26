@@ -115,14 +115,13 @@ recordQT :: recordQT(void)
   //get list of codecs installed  -- useful later
   CodecNameSpecListPtr codecList;
   CodecNameSpec codecName;
-  int   i;
   int count;
 
   GetCodecNameList(&codecList,1);
   count=codecList->count;
   codecContainer.clear();
   verbose(0, "[GEM:recordQT] %i codecs installed",codecList->count);
-  for (i = 0; i < count; i++) {
+  for (int i = 0; i < count; i++) {
     codecName = codecList->list[i];
     std::string typeName = std::string((char*)codecName.typeName + 1, ((char*)codecName.typeName)[0]);
     codecListStorage cod = {i, codecName.cType, typeName, codecName.codec};
@@ -135,7 +134,7 @@ recordQT :: recordQT(void)
   nResID = movieInDataForkResID;
   m_codecType = kJPEGCodecType;
 
-  for(i = 0; i < count; i++) {
+  for(int i = 0; i < count; i++) {
     if (codecContainer[i].ctype == kJPEGCodecType) {
       m_codec = codecContainer[i].codec;
       verbose(1, "[GEM:recordQT] found pjpeg codec %i %lu %p ctype",
@@ -650,8 +649,7 @@ const char*recordQT :: getCodecName(int i)
 std::vector<std::string>recordQT::getCodecs(void)
 {
   std::vector<std::string>result;
-  int i;
-  for(i=0; i<codecContainer.size(); i++) {
+  for(int i=0; i<codecContainer.size(); i++) {
     result.push_back(codecContainer[i].name);
   }
   return result;
@@ -683,7 +681,6 @@ bool recordQT :: setCodec(int num)
 }
 bool recordQT :: setCodec(const std::string&codecName)
 {
-  int   i;
   int requestedCodec=0;
   if(codecName=="pjpeg") {
     requestedCodec=1;
@@ -697,7 +694,7 @@ bool recordQT :: setCodec(const std::string&codecName)
     requestedCodec=5;
   }
 
-  for(i=0; i < codecContainer.size(); i++)  {
+  for(int i=0; i < codecContainer.size(); i++)  {
     switch(requestedCodec) {
     case 1: /* PJPEG */
       if (codecContainer[i].ctype == kJPEGCodecType) {

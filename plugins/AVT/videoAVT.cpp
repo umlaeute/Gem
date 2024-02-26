@@ -79,8 +79,7 @@ videoAVT :: videoAVT() : videoBase("avt"),
 
   static PvApiInitClass paic;
 
-  int i=0;
-  for(i=0; i<AVT_FRAMESCOUNT; i++) {
+  for(int i=0; i<AVT_FRAMESCOUNT; i++) {
     m_frames[i].ImageBuffer = NULL;
     m_frames[i].ImageBufferSize = 0;
   }
@@ -101,8 +100,7 @@ videoAVT :: ~videoAVT()
 
 void videoAVT::resizeFrames(unsigned long int size)
 {
-  int i=0;
-  for(i=0; i<AVT_FRAMESCOUNT; i++) {
+  for(int i=0; i<AVT_FRAMESCOUNT; i++) {
     if(m_frames[i].ImageBuffer) {
       unsigned char*frame=(unsigned char*)m_frames[i].ImageBuffer;
       delete[]frame;
@@ -251,13 +249,12 @@ bool videoAVT :: openDevice(gem::Properties&props)
       cameraList[i].UniqueId,
       IP
     */
-    unsigned long i=0;
     errno=0;
     const unsigned long uid=strtoul(m_devicename.c_str(), NULL, 0);
 
     if(NULL==m_grabber && 0==errno) {
       verbose(1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
-      for(i=0; i<cameraNum; i++) {
+      for(unsigned long i=0; i<cameraNum; i++) {
         if(uid==cameraList[i].UniqueId
             && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
                             &m_grabber) == ePvErrSuccess) {
@@ -269,7 +266,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     if(NULL==m_grabber) {
       verbose(1, "[GEM:videoAVT] checking SerialString: %s",
               m_devicename.c_str());
-      for(i=0; i<cameraNum; i++) {
+      for(unsigned long i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].SerialString
             && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
                             &m_grabber) == ePvErrSuccess) {
@@ -280,7 +277,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     if(NULL==m_grabber) {
       verbose(1, "[GEM:videoAVT] checking DisplayName: %s",
               m_devicename.c_str());
-      for(i=0; i<cameraNum; i++) {
+      for(unsigned long i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].DisplayName
             && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
                             &m_grabber) == ePvErrSuccess) {
@@ -389,8 +386,7 @@ std::vector<std::string> videoAVT::enumerate()
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
   cameraNum = PvCameraList(cameraList,cameraNum,NULL);
 
-  unsigned long i = 0;
-  for (i = 0; i < cameraNum; i++) {
+  for (unsigned long i = 0; i < cameraNum; i++) {
     result.push_back(cameraList[i].DisplayName);
   }
 
@@ -461,9 +457,8 @@ bool videoAVT::enumProperties(gem::Properties&readable,
 }
 void videoAVT::setProperties(gem::Properties&props)
 {
-  int i;
   std::vector<std::string>keys=props.keys();
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     tPvAttributeInfo pInfo;
     std::string key=keys[i];
     if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo)) {
@@ -542,9 +537,8 @@ void videoAVT::setProperties(gem::Properties&props)
     } // loop
   }
   void videoAVT::getProperties(gem::Properties&props) {
-    int i;
     std::vector<std::string>keys=props.keys();
-    for(i=0; i<keys.size(); i++) {
+    for(int i=0; i<keys.size(); i++) {
       tPvAttributeInfo pInfo;
       std::string key=keys[i];
       if(ePvErrSuccess!=PvAttrInfo(m_grabber, key.c_str(), &pInfo)) {

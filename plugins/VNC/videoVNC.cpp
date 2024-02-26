@@ -176,8 +176,7 @@ void videoVNC::setProperties(gem::Properties&props)
 void videoVNC::getProperties(gem::Properties&props)
 {
   std::vector<std::string>keys=props.keys();
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     if("width"==keys[i]) {
       props.set(keys[i], m_pixBlock.image.xsize);
     }

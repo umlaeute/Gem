@@ -679,8 +679,7 @@ bool videoDS :: dialog(std::vector<std::string>dlg)
   if(dlg.empty()) {
     SetupCaptureDevice(m_pCG, m_pCDbase);
   } else {
-    int i;
-    for(i=0; i<dlg.size(); i++) {
+    for(int i=0; i<dlg.size(); i++) {
       std::string type=dlg[i];
 
       if(type=="source") {

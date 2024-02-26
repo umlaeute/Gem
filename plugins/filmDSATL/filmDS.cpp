@@ -697,8 +697,7 @@ void filmDS::setProperties(gem::Properties&props)
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if("auto"==key) {
       if(props.get(key, d)) {
@@ -713,8 +712,7 @@ void filmDS::getProperties(gem::Properties&props)
   std::vector<std::string> keys=props.keys();
   gem::any value;
   double d;
-  unsigned int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     props.erase(key);
     if("frames"==key) {

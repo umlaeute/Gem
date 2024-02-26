@@ -430,7 +430,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
       '/') { // assuming all v4l2 device's paths starts with '/'
 
     std::vector<std::string> alldev = enumerate();
-    int i;
+    int i=0;
     for(i=0; i<alldev.size(); i++) {
       std::string dev=alldev[i];
       verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
@@ -703,7 +703,7 @@ bool videoV4L2 :: startTransfer()
     goto closit;
   }
 
-  for (i = 0; i < m_nbuffers; ++i) {
+  for (int i = 0; i < m_nbuffers; ++i) {
     struct v4l2_buffer buf;
 
     memset (&(buf), 0, sizeof (buf));
@@ -931,7 +931,6 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
                                  gem::Properties&writeable)
 {
   struct v4l2_queryctrl queryctrl;
-  __u32 id=0;
   std::string dummy_s;
 
   if(m_tvfd<0) {
@@ -946,7 +945,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
 
   memset (&queryctrl, 0, sizeof (queryctrl));
 
-  for (id = V4L2_CID_BASE;
+  for (__u32 id = V4L2_CID_BASE;
        id < V4L2_CID_LASTP1;
        id++) {
     queryctrl.id = id;
@@ -960,8 +959,7 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
     }
   }
 
-  for (id = V4L2_CID_PRIVATE_BASE;;
-       id++) {
+  for (__u32 id = V4L2_CID_PRIVATE_BASE;;id++) {
     queryctrl.id = id;
     if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
       addProperties(queryctrl, readable, writeable);

@@ -178,8 +178,7 @@ std::vector<std::string>videoOptiTrack::enumerate(void)
   }
 
   CameraList list;
-  int i;
-  for(i=0; i<list.Count(); i++) {
+  for(int i=0; i<list.Count(); i++) {
     result.push_back(list[i].Name());
   }
 
@@ -393,8 +392,7 @@ void videoOptiTrack::getProperties(gem::Properties&props)
     return;
   }
 
-  unsigned int i;
-  for(i=0; i<keys.size(); i++) {
+  for(unsigned int i=0; i<keys.size(); i++) {
     const std::string key=keys[i];
     if("width"==key) {
       props.set(key, m_pixBlock.image.xsize);

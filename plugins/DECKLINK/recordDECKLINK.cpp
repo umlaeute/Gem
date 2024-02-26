@@ -291,8 +291,7 @@ bool recordDECKLINK :: start(const std::string&filename, gem::Properties&props)
   BMDVideoConnection vconn = m_connectionType;
 
   std::vector<std::string>keys=props.keys();
-  int i;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     if("format" == key) {
       std::string s;

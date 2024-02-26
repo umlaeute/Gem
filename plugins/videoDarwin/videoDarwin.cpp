@@ -225,10 +225,9 @@ bool videoDarwin :: initSeqGrabber()
   if(m_devicenum>=0) {
     m_inputDevice=m_devicenum;
   } else if (!m_devicename.empty()) {
-    int i;
     const int maxcount=(deviceCount<m_devices.size()?deviceCount:
                         m_devices.size());
-    for(i=0; i<maxcount; i++) {
+    for(int i=0; i<maxcount; i++) {
       if(m_devicename==m_devices[i]) {
         m_inputDevice=i;
         break;
@@ -538,8 +537,7 @@ bool videoDarwin::applyProperties(gem::Properties&props)
   }
 
   std::vector<std::string>keys=props.keys();
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     double value_d=0.;
     unsigned short value_us=0;
     std::string key=keys[i];
@@ -664,8 +662,7 @@ void videoDarwin::getProperties(gem::Properties&props)
     iidc=(vdSubtypeIIDC == desc.componentSubType);
   }
 
-  int i=0;
-  for(i=0; i<keys.size(); i++) {
+  for(int i=0; i<keys.size(); i++) {
     std::string key=keys[i];
     unsigned short value_us=0;
     if(0) {
@@ -706,9 +703,8 @@ std::vector<std::string> videoDarwin::enumerate()
     short inputIndex;
     verbose(1, "[GEM:videoDarwin] SG channel Device List count %d index %d",
             deviceCount,deviceIndex);
-    int i;
     m_devices.clear();
-    for (i = 0; i < deviceCount; i++) {
+    for (int i = 0; i < deviceCount; i++) {
       m_devices.push_back(pascal2str((*devices)->entry[i].name));
       verbose(1, "[GEM:videoDarwin] SG channel Device List[%d]  %s", i,
               m_devices[i].c_str());
@@ -723,7 +719,7 @@ std::vector<std::string> videoDarwin::enumerate()
 
     //we should have device names in big ass undocumented structs
     //walk through the list
-    for (i = 0; i < inputIndex; i++) {
+    for (int i = 0; i < inputIndex; i++) {
       std::string input=pascal2str((*theSGInputList)->entry[i].name);
       verbose(1, "[GEM:videoDarwin] SG channel Input Device List %d %s",
               i, input.c_str());
