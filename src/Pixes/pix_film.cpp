@@ -627,8 +627,8 @@ void pix_film :: autoMess(double speed)
 void pix_film :: backendMess(t_symbol*s, int argc, t_atom*argv)
 {
   int i;
-  if(gensym("loader") != s) {
-    error("'%s' is deprecated; please use '%s' instead", s->s_name, "loader");
+  if(gensym("backend") != s) {
+    error("'%s' is deprecated; please use '%s' instead", s->s_name, "backend");
   }
   m_backends.clear();
   if(argc) {
