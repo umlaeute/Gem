@@ -271,18 +271,43 @@ public:
   virtual bool start(const std::string&filename, gem::Properties&props)
   {
     stop();
+
     if(!checkSelectedHandles()) {
       return false; // no selected codec available
     }
 
-    for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
-      if(m_selectedHandles[i]->start(filename, props)) {
-        m_handle=m_selectedHandles[i];
-        return true;
+    /* if the user requested some backends, prioritize these */
+    std::vector<std::string> backends;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      props.get("_backends", backends);
+    }
+
+    bool tried=false;
+    if(!backends.empty()) {
+      for(unsigned int j=0; !m_handle && j<backends.size(); j++) {
+        std::string id=backends[j];
+        for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
+          /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
+          if(id==m_ids[i] && (tried=true)
+             && m_selectedHandles[i]->start(filename, props)) {
+            m_handle=m_selectedHandles[i];
+            break;
+          }
+        }
       }
     }
-    m_handle=NULL;
-    return false;
+    if(!tried) {
+      if(!backends.empty() && !m_selectedHandles.empty()) {
+        verbose(2, "no available backend selected, fall back to valid ones");
+      }
+      for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
+        if(m_selectedHandles[i]->start(filename, props)) {
+          m_handle=m_selectedHandles[i];
+          break;
+        }
+      }
+    }
+    return (NULL != m_handle);
   }
 
   //////////

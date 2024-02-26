@@ -197,13 +197,38 @@ public:
     if(m_handle) {
       close();
     }
-    for(unsigned int i=0; i<m_handles.size(); i++) {
-      if(m_handles[i]->open(props)) {
-        m_handle=m_handles[i];
-        return true;
+
+    std::vector<std::string> backends;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      props.get("_backends", backends);
+    }
+
+    bool tried=false;
+    if(!backends.empty()) {
+      for(unsigned int j=0; !m_handle && j<backends.size(); j++) {
+        std::string id=backends[j];
+        for(unsigned int i=0; i<m_handles.size(); i++) {
+          /* coverity[assign_where_compare_meant] we set 'tried' to true if we have found at least one matching backend */
+          if(id==m_ids[i] && (tried=true)
+              && m_handles[i]->open(props)) {
+            m_handle=m_handles[i];
+            break;
+          }
+        }
       }
     }
-    return false;
+    if(!tried) {
+      if(!backends.empty() && !m_handles.empty()) {
+        verbose(2, "no available backend selected, fall back to valid ones");
+      }
+      for(unsigned int i=0; i<m_handles.size(); i++) {
+        if(m_handles[i] && m_handles[i]->open(props)) {
+          m_handle=m_handles[i];
+          break;
+        }
+      }
+    }
+    return (NULL != m_handle);
   }
   virtual bool start(void)
   {
@@ -277,9 +302,22 @@ public:
   }
   virtual void getProperties(gem::Properties&props)
   {
-    // OK
+    std::vector<std::string> ids;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      for(unsigned int i=0; i<m_ids.size(); i++) {
+        ids.push_back(m_ids[i]);
+      }
+    }
+    props.erase("_backends");
+
     if(m_handle) {
       m_handle->getProperties(props);
+    } else {
+      props.clear();
+    }
+
+    if(!ids.empty()) {
+      props.set("_backends", ids);
     }
   }
   virtual bool dialog(std::vector<std::string>names)
