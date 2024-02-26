@@ -15,10 +15,12 @@
 
 CPPEXTERN_NEW_WITH_GIMME(pix_record);
 
-class pix_record :: PIMPL
+struct pix_record :: PIMPL
 {
-public:
-  PIMPL(void) {};
+  CPPExtern*parent;
+  PIMPL(CPPExtern*_parent)
+    :parent(_parent)
+  {};
   ~PIMPL(void) {};
 
   static gem::any atom2any(t_atom*ap)
@@ -38,14 +40,14 @@ public:
     }
     return result;
   }
-  static void addProperties(CPPExtern*obj, gem::Properties&props, int argc, t_atom*argv)
+  void addProperties(gem::Properties&props, int argc, t_atom*argv)
   {
     if(!argc) {
       return;
     }
 
     if(argv->a_type != A_SYMBOL) {
-      pd_error(obj, "no key given...");
+      pd_error(parent, "no key given...");
       return;
     }
     std::string key=std::string(atom_getsymbol(argv)->s_name);
@@ -87,7 +89,7 @@ pix_record :: pix_record(int argc, t_atom *argv) :
   m_maxFrames(0),
   m_recording(false),
   m_handle(NULL),
-  m_pimpl(new PIMPL())
+  m_pimpl(new PIMPL(this))
 {
   if (argc != 0) {
     error("ignoring arguments");
@@ -253,7 +255,7 @@ void pix_record :: enumPropertiesMess()
 }
 void pix_record :: setPropertiesMess(t_symbol*s, int argc, t_atom*argv)
 {
-  PIMPL::addProperties(this, m_props, argc, argv);
+  m_pimpl->addProperties(m_props, argc, argv);
 }
 
 void pix_record :: clearPropertiesMess()
