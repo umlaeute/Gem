@@ -90,11 +90,11 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_buffer, t_symbol*,A_DEFSYMBOL,t_float,
 //
 /////////////////////////////////////////////////////////
 pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
-  : m_buffer(NULL),
-    m_numframes(0),
-    m_bindname(NULL),
-    m_saver(NULL),
-    m_outlet(new gem::RTE::Outlet(this))
+  : m_buffer(NULL)
+  , m_numframes(0)
+  , m_bindname(NULL)
+  , m_saver(NULL)
+  , m_outlet(new gem::RTE::Outlet(this))
 {
   if (s==&s_) {
     static int buffercounter=0;
