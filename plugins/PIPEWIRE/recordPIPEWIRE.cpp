@@ -32,7 +32,7 @@ using namespace gem::plugins;
 
 #include <stdio.h>
 
-REGISTER_RECORDFACTORY("PIPEWIRE", recordPIPEWIRE);
+REGISTER_RECORDFACTORY("pipewire", recordPIPEWIRE);
 
 namespace
 {
