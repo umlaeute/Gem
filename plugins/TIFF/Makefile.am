@@ -7,9 +7,13 @@ EXTRA_DIST += win-vs2003/imageTIFF.sln win-vs2003/imageTIFF.vcproj
 EXTRA_DIST += win-vs2008/imageTIFF.sln win-vs2008/imageTIFF.vcproj
 EXTRA_DIST += win-vs2008/TIFF.vsprops
 
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 pkglib_LTLIBRARIES=
+
 if HAVE_LIB_TIFF
 pkglib_LTLIBRARIES+= gem_imageTIFF.la
+dist_gemhelp_DATA += tiff-imageloaderplugin.pd tiff-imagesaverplugin.pd
 endif
 
 

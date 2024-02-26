@@ -9,6 +9,10 @@ EXTRA_DIST += win-vs2008/imageSGI.sln win-vs2008/imageSGI.vcproj
 
 pkglib_LTLIBRARIES= gem_imageSGI.la
 
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+dist_gemhelp_DATA += sgi-imageloaderplugin.pd sgi-imagesaverplugin.pd
+
 gem_imageSGI_la_CXXFLAGS =
 gem_imageSGI_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS

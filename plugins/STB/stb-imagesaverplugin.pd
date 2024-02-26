@@ -1,0 +1,8 @@
+#N canvas 702 134 529 313 12;
+#X text 21 74 The STB plugin can write the following formats:;
+#X text 37 120 - PNG;
+#X text 37 100 - JPEG, f 69;
+#X text 37 140 - TGA;
+#X text 37 160 - BMP;
+#X text 32 249 All images are converted to RGBA before saving.;
+#X text 29 200 Typically only some baseline subset is supported for each format. JPEG saving takes a 'quality' property (1..100).;

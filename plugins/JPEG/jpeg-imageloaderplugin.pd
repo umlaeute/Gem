@@ -1,0 +1,4 @@
+#N canvas 977 251 588 226 12;
+#X text 21 44 The JPEG plugin can load JPEG images.;
+#X text 29 78 Note that any orientation metadata embedded into the image (like an upside-down flag) will be *ignored*.;
+#X text 34 143 This plugins requires libJPEG.;

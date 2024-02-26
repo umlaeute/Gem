@@ -12,6 +12,10 @@ EXTRA_DIST+= \
 
 pkglib_LTLIBRARIES= gem_imageSTB.la
 
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+dist_gemhelp_DATA += stb-imageloaderplugin.pd stb-imagesaverplugin.pd
+
 gem_imageSTB_la_CXXFLAGS =
 gem_imageSTB_la_LDFLAGS  = -module -avoid-version -shared
 if WINDOWS

@@ -1,0 +1,5 @@
+#N canvas 1042 282 588 226 12;
+#X text 31 173 This plugins requires libJPEG.;
+#X text 21 44 The JPEG plugin can write JPEG images.;
+#X text 29 78 All images will be converted to RGB before saving.;
+#X text 29 101 You can set the 'quality' property to adjust the compression level.;

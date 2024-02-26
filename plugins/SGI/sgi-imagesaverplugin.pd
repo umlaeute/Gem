@@ -1,0 +1,6 @@
+#N canvas 242 133 489 314 12;
+#X text 43 79 SGI images were popular in the 90ies on the SGI workstations.;
+#X text 42 122 These days they are rather seldom.;
+#X text 22 42 The SGI plugin writes SGI images.;
+#X text 47 174 All images are converted to RGBA before saving.;
+#X text 49 205 You can pass the 'imagename' property to set the metadata in the image.;

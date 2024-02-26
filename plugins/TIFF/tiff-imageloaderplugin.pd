@@ -1,0 +1,5 @@
+#N canvas 500 228 588 226 12;
+#X text 34 163 This plugins requires libTIFF.;
+#X text 19 78 Upside-down images should be automatically corrected and displayed correctly.;
+#X text 19 110 If present \, metadata like x/yresolution \, resolutionuntits \, creatoing artist and software will be extracted.;
+#X text 21 44 The TIFF plugin can load TIFF images.;

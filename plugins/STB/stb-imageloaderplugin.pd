@@ -1,0 +1,12 @@
+#N canvas 678 202 588 374 12;
+#X text 37 110 - TGA (unknown subset);
+#X text 37 130 - PSD (composited view only \, no extra channels \, 8/16 bpc);
+#X text 37 170 - PIC (Softimage PIC);
+#X text 37 190 - PNM (PPM and PGM binary only);
+#X text 37 150 - GIF (unknown subset);
+#X text 21 44 The STB plugin can load the following formats:;
+#X text 29 280 Not all variants of the given formats might be supported!;
+#X text 30 307 However \, STB does not require any additional dependencies \, so it should be available (with the same capabilities) on all platforms supported by Gem., f 77;
+#X text 39 91 - PNG¹ ( 1/2/4/8/16-bpc);
+#X text 39 71 - JPEG¹ (baseline & progressive. 12 bpc/arithmethic NOT supported), f 66;
+#X text 30 227 ¹ Note that (at least) JPEG and PNG images that have the upside-down flag set will not be automatically corrected., f 77;

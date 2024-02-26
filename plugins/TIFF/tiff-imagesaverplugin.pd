@@ -1,0 +1,10 @@
+#N canvas 811 273 589 325 12;
+#X text 31 233 This plugins requires libTIFF.;
+#X text 21 44 The TIFF plugin can write TIFF images.;
+#X text 35 79 The following properties can be set when saving the image:;
+#X text 49 204 - 'hostcomputer';
+#X text 49 104 - 'xresolution' (default: 72.);
+#X text 49 124 - 'yresolution' (default: 72);
+#X text 49 144 - 'resolutionunit' (default: 'inch');
+#X text 49 184 - 'artist';
+#X text 49 164 - 'software' (default: 'PD/GEM');

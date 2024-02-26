@@ -7,9 +7,14 @@ EXTRA_DIST += win-vs2003/imageJPEG.sln win-vs2003/imageJPEG.vcproj
 EXTRA_DIST += win-vs2008/imageJPEG.sln win-vs2008/imageJPEG.vcproj
 EXTRA_DIST += win-vs2008/JPEG.vsprops
 
+
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
 pkglib_LTLIBRARIES=
+
 if HAVE_LIB_JPEG
 pkglib_LTLIBRARIES+= gem_imageJPEG.la
+dist_gemhelp_DATA += jpeg-imageloaderplugin.pd jpeg-imagesaverplugin.pd
 endif
 
 gem_imageJPEG_la_CXXFLAGS =
