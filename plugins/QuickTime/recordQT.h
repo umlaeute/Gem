@@ -92,6 +92,7 @@ public:
   virtual std::vector<std::string>getCodecs(void);
   virtual const std::string getCodecDescription(const std::string&codecname);
   virtual bool enumProperties(gem::Properties&props);
+  virtual void getProperties(gem::Properties&props) {;};
 
 private:
 

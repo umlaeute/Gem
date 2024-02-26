@@ -80,10 +80,8 @@ public:
   // properties
   virtual bool enumProperties(gem::Properties&props);
 
-  virtual bool dialog(void)
-  {
-    return false;
-  }
+  virtual void getProperties(gem::Properties&props) {;};
+  virtual bool dialog(void) { return false; }
 
 private:
 

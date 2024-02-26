@@ -97,10 +97,8 @@ public:
   virtual const std::string getCodecDescription(const std::string&);
   virtual bool enumProperties(gem::Properties&);
 
-  virtual bool dialog(void)
-  {
-    return false;
-  }
+  virtual void getProperties(gem::Properties&props) {;};
+  virtual bool dialog(void) { return false; }
 
 
 private:

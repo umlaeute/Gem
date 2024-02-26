@@ -78,10 +78,8 @@ public:
   // properties
   virtual bool enumProperties(gem::Properties&props);
 
-  virtual bool dialog(void)
-  {
-    return false;
-  }
+  virtual void getProperties(gem::Properties&props) {;};
+  virtual bool dialog(void) { return false; }
   void on_process(void);
   void on_param_changed(uint32_t id, const struct spa_pod *param);
 private:
