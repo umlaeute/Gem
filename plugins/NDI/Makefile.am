@@ -26,7 +26,7 @@ EXTRA_DIST += \
 
 if HAVE_NDI
 pkglib_LTLIBRARIES+= gem_videoNDI.la gem_recordNDI.la
-dist_gemhelp_DATA  += ndi-videoplugin.pd ndi-recordplugin.pd
+dist_gemhelp_DATA  += NDI-videoplugin.pd NDI-recordplugin.pd
 endif
 
 # videoNDI
