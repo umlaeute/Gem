@@ -120,7 +120,7 @@
 #X obj 67 549 _backendinfo \$0save imagesaver;
 #X obj 67 523 _backendinfo \$0load imageloader;
 #X text 244 524 loading images;
-#X text 244 554 saving images;
+#X text 244 551 saving images;
 #X connect 16 0 23 0;
 #X connect 18 0 23 0;
 #X connect 23 0 37 0;
