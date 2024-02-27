@@ -4,7 +4,7 @@
 #X msg 95 313 smooth \$1;
 #X obj 98 287 hsl 170 20 0 1 0 0 empty empty empty -2 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X text 26 104 It depends on the AssImp (Asset Importer) library \, which must be present on your system in order to be used.;
-#X text 26 29 With the ASSIMP backend \, you can load a multitude of different model formats (a tthe time of writing its about 40 different formats \, from simple OBJ files to Collada and Blender meshes).;
+#X text 26 29 With the ASSIMP backend \, you can load a multitude of different model formats (at the time of writing its about 40 different formats \, from simple OBJ files to Collada and Blender meshes).;
 #X msg 80 163 https://assimp.org;
 #N canvas 614 438 450 300 URL 0;
 #X obj 37 37 inlet;

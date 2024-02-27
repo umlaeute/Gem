@@ -8,7 +8,7 @@
 #X text 53 342 if you want to wait for future (not-yet-existing) streams \, you can do do by setting the "future" property to "1" *immediately* before you try to 'open' the stream.;
 #X text 57 389 Once the NDI-stream appears \, [pix_video] will start outputting it:;
 #X obj 232 253 s \$1-ctl;
-#X text 457 151 NDI-stream names contain spaces and parantheses.;
+#X text 457 151 NDI-stream names contain spaces and parentheses.;
 #X text 456 166 You must escape the spaces with backspace.;
 #X obj 232 503 s \$1-ctl;
 #X text 89 57 ====================================;

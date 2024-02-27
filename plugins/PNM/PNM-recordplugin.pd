@@ -19,12 +19,12 @@
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
 #X restore 237 159 pd open;
-#X text 104 149 Sepcification:;
-#X text 76 197 The 'pnm' backend writes a single file containing a concatenated stream of PNM images.;
+#X text 104 149 Specification:;
+#X text 76 197 The 'PNM' backend writes a single file containing a concatenated stream of PNM images.;
 #X text 78 231 The following codecs are currently supported:;
 #X text 103 255 - ppm (rgb888 PPM P6 binary format);
 #X text 103 270 - pgm (gray8 PGM P5 binary format);
-#X text 28 310 Example cuse case:;
+#X text 28 310 Example use case:;
 #X text 51 332 I. create a named pipe (in the terminal): 'mkfifo fifo.ppm';
 #X text 49 357 II. record frames into the named pipe using this backend:;
 #X text 52 490 III. encode the video with FFMPEG:;
