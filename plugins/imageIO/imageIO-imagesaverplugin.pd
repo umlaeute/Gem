@@ -1,0 +1,4 @@
+#N canvas 673 187 529 313 12;
+#X text 21 74 The imageIO plugin can write the following formats:;
+#X text 37 100 - JPEG \, JPEG2000 \, TIFF \, GIF \, PNG \, BMP \, icns \, ico \, QuickTime images, f 69;
+#X text 22 176 This plugin uses Apple's Image I/O framework (and is therefore only available on macOS)., f 47;

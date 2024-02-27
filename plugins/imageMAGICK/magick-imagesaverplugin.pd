@@ -1,0 +1,17 @@
+#N canvas 859 250 591 292 12;
+#X text 23 91 among them are:;
+#X text 22 236 This plugin uses the ImageMagick library.;
+#X text 33 114 - JPEG \, JPEG2000 \, TIFF \, GIF \, PNG \, BMP \, ..., f 69;
+#X msg 306 144 https://imagemagick.org;
+#N canvas 735 459 450 300 URL 0;
+#X obj 37 37 inlet;
+#X obj 37 62 symbol;
+#X msg 37 87 browse \$1;
+#X obj 37 112 pdcontrol;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X restore 306 169 pd URL;
+#X text 58 143 for a more complete list \, visit:;
+#X text 12 50 The ImageMagick plugin can save a wide variety of image formats (over 100).;
+#X connect 3 0 4 0;

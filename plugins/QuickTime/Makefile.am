@@ -8,9 +8,13 @@ EXTRA_DIST += win-vs2003/filmQT.sln win-vs2003/filmQT.vcproj
 EXTRA_DIST += win-vs2008/filmQT.sln win-vs2008/filmQT.vcproj
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if HAVE_FRAMEWORK_QUICKTIME
 pkglib_LTLIBRARIES+= gem_filmQT.la
 pkglib_LTLIBRARIES+= gem_imageQT.la
+dist_gemhelp_DATA += QuickTime-imageloaderplugin.pd QuickTime-imagesaverplugin.pd
 pkglib_LTLIBRARIES+= gem_recordQT.la
 endif
 

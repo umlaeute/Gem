@@ -5,8 +5,12 @@ AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
 EXTRA_DIST =
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if HAVE_FRAMEWORK_IMAGEIO
-pkglib_LTLIBRARIES += gem_imageIO.la
+pkglib_LTLIBRARIES+= gem_imageIO.la
+dist_gemhelp_DATA += imageIO-imageloaderplugin.pd imageIO-imagesaverplugin.pd
 endif
 
 gem_imageIO_la_OBJCFLAGS = $(GEM_EXTERNAL_CFLAGS) -fobjc-arc

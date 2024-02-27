@@ -8,11 +8,16 @@ EXTRA_DIST += win-vs2008/imageMAGICK.sln win-vs2008/imageMAGICK.vcproj
 EXTRA_DIST += win-vs2008/ImageMagick_Release.vsprops win-vs2008/ImageMagick.vsprops
 
 pkglib_LTLIBRARIES=
+gemhelpdir=$(pkglibdir)
+dist_gemhelp_DATA =
+
 if HAVE_LIB_IMAGEMAGICK__
 pkglib_LTLIBRARIES+= gem_imageMAGICK.la
+dist_gemhelp_DATA += magick-imageloaderplugin.pd magick-imagesaverplugin.pd
 else
 if HAVE_LIB_MAGICKCORE
 pkglib_LTLIBRARIES+= gem_imageMAGICK.la
+dist_gemhelp_DATA += magick-imageloaderplugin.pd magick-imagesaverplugin.pd
 endif
 endif
 

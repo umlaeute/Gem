@@ -1,0 +1,5 @@
+#N canvas 678 202 532 328 12;
+#X text 22 246 This plugin uses Apple's Image I/O framework (and is therefore only available on macOS)., f 46;
+#X text 21 74 The imageIO plugin can load "most image formats" (at least that's what the manufacturer of the underlying library claims).;
+#X text 34 164 - JPEG \, JPEG2000 \, TIFF \, GIF \, PNG \, BMP \, icns \, ico \, QuickTime images, f 69;
+#X text 23 141 among them are:;
