@@ -32,12 +32,276 @@
 
 namespace
 {
+  static std::map<std::string, BMDDisplayMode> s_name2mode;
+  static bool name2mode(const std::string&name, BMDDisplayMode&mode)
+  {
+    static bool done=false;
+    if(!done) {
+      done = true;
+      /* fourcc-like codes from DeckLink API */
+      s_name2mode["ntsc"] = bmdModeNTSC;
+      s_name2mode["nt23"] = bmdModeNTSC2398;
+      s_name2mode["pal "] = bmdModePAL;
+      s_name2mode["ntsp"] = bmdModeNTSCp;
+      s_name2mode["palp"] = bmdModePALp;
+      s_name2mode["23ps"] = bmdModeHD1080p2398;
+      s_name2mode["24ps"] = bmdModeHD1080p24;
+      s_name2mode["Hp25"] = bmdModeHD1080p25;
+      s_name2mode["Hp29"] = bmdModeHD1080p2997;
+      s_name2mode["Hp30"] = bmdModeHD1080p30;
+      s_name2mode["Hp47"] = bmdModeHD1080p4795;
+      s_name2mode["Hp48"] = bmdModeHD1080p48;
+      s_name2mode["Hp50"] = bmdModeHD1080p50;
+      s_name2mode["Hp59"] = bmdModeHD1080p5994;
+      s_name2mode["Hp60"] = bmdModeHD1080p6000;
+      s_name2mode["Hp95"] = bmdModeHD1080p9590;
+      s_name2mode["Hp96"] = bmdModeHD1080p96;
+      s_name2mode["Hp10"] = bmdModeHD1080p100;
+      s_name2mode["Hp11"] = bmdModeHD1080p11988;
+      s_name2mode["Hp12"] = bmdModeHD1080p120;
+      s_name2mode["Hi50"] = bmdModeHD1080i50;
+      s_name2mode["Hi59"] = bmdModeHD1080i5994;
+      s_name2mode["Hi60"] = bmdModeHD1080i6000;
+      s_name2mode["hp50"] = bmdModeHD720p50;
+      s_name2mode["hp59"] = bmdModeHD720p5994;
+      s_name2mode["hp60"] = bmdModeHD720p60;
+      s_name2mode["2k23"] = bmdMode2k2398;
+      s_name2mode["2k24"] = bmdMode2k24;
+      s_name2mode["2k25"] = bmdMode2k25;
+      s_name2mode["2d23"] = bmdMode2kDCI2398;
+      s_name2mode["2d24"] = bmdMode2kDCI24;
+      s_name2mode["2d25"] = bmdMode2kDCI25;
+      s_name2mode["2d29"] = bmdMode2kDCI2997;
+      s_name2mode["2d30"] = bmdMode2kDCI30;
+      s_name2mode["2d47"] = bmdMode2kDCI4795;
+      s_name2mode["2d48"] = bmdMode2kDCI48;
+      s_name2mode["2d50"] = bmdMode2kDCI50;
+      s_name2mode["2d59"] = bmdMode2kDCI5994;
+      s_name2mode["2d60"] = bmdMode2kDCI60;
+      s_name2mode["2d95"] = bmdMode2kDCI9590;
+      s_name2mode["2d96"] = bmdMode2kDCI96;
+      s_name2mode["2d10"] = bmdMode2kDCI100;
+      s_name2mode["2d11"] = bmdMode2kDCI11988;
+      s_name2mode["2d12"] = bmdMode2kDCI120;
+      s_name2mode["4k23"] = bmdMode4K2160p2398;
+      s_name2mode["4k24"] = bmdMode4K2160p24;
+      s_name2mode["4k25"] = bmdMode4K2160p25;
+      s_name2mode["4k29"] = bmdMode4K2160p2997;
+      s_name2mode["4k30"] = bmdMode4K2160p30;
+      s_name2mode["4k47"] = bmdMode4K2160p4795;
+      s_name2mode["4k48"] = bmdMode4K2160p48;
+      s_name2mode["4k50"] = bmdMode4K2160p50;
+      s_name2mode["4k59"] = bmdMode4K2160p5994;
+      s_name2mode["4k60"] = bmdMode4K2160p60;
+      s_name2mode["4k95"] = bmdMode4K2160p9590;
+      s_name2mode["4k96"] = bmdMode4K2160p96;
+      s_name2mode["4k10"] = bmdMode4K2160p100;
+      s_name2mode["4k11"] = bmdMode4K2160p11988;
+      s_name2mode["4k12"] = bmdMode4K2160p120;
+      s_name2mode["4d23"] = bmdMode4kDCI2398;
+      s_name2mode["4d24"] = bmdMode4kDCI24;
+      s_name2mode["4d25"] = bmdMode4kDCI25;
+      s_name2mode["4d29"] = bmdMode4kDCI2997;
+      s_name2mode["4d30"] = bmdMode4kDCI30;
+      s_name2mode["4d47"] = bmdMode4kDCI4795;
+      s_name2mode["4d48"] = bmdMode4kDCI48;
+      s_name2mode["4d50"] = bmdMode4kDCI50;
+      s_name2mode["4d59"] = bmdMode4kDCI5994;
+      s_name2mode["4d60"] = bmdMode4kDCI60;
+      s_name2mode["4d95"] = bmdMode4kDCI9590;
+      s_name2mode["4d96"] = bmdMode4kDCI96;
+      s_name2mode["4d10"] = bmdMode4kDCI100;
+      s_name2mode["4d11"] = bmdMode4kDCI11988;
+      s_name2mode["4d12"] = bmdMode4kDCI120;
+      s_name2mode["8k23"] = bmdMode8K4320p2398;
+      s_name2mode["8k24"] = bmdMode8K4320p24;
+      s_name2mode["8k25"] = bmdMode8K4320p25;
+      s_name2mode["8k29"] = bmdMode8K4320p2997;
+      s_name2mode["8k30"] = bmdMode8K4320p30;
+      s_name2mode["8k47"] = bmdMode8K4320p4795;
+      s_name2mode["8k48"] = bmdMode8K4320p48;
+      s_name2mode["8k50"] = bmdMode8K4320p50;
+      s_name2mode["8k59"] = bmdMode8K4320p5994;
+      s_name2mode["8k60"] = bmdMode8K4320p60;
+      s_name2mode["8d23"] = bmdMode8kDCI2398;
+      s_name2mode["8d24"] = bmdMode8kDCI24;
+      s_name2mode["8d25"] = bmdMode8kDCI25;
+      s_name2mode["8d29"] = bmdMode8kDCI2997;
+      s_name2mode["8d30"] = bmdMode8kDCI30;
+      s_name2mode["8d47"] = bmdMode8kDCI4795;
+      s_name2mode["8d48"] = bmdMode8kDCI48;
+      s_name2mode["8d50"] = bmdMode8kDCI50;
+      s_name2mode["8d59"] = bmdMode8kDCI5994;
+      s_name2mode["8d60"] = bmdMode8kDCI60;
+      s_name2mode["vga6"] = bmdMode640x480p60;
+      s_name2mode["svg6"] = bmdMode800x600p60;
+      s_name2mode["wxg5"] = bmdMode1440x900p50;
+      s_name2mode["wxg6"] = bmdMode1440x900p60;
+      s_name2mode["sxg5"] = bmdMode1440x1080p50;
+      s_name2mode["sxg6"] = bmdMode1440x1080p60;
+      s_name2mode["uxg5"] = bmdMode1600x1200p50;
+      s_name2mode["uxg6"] = bmdMode1600x1200p60;
+      s_name2mode["wux5"] = bmdMode1920x1200p50;
+      s_name2mode["wux6"] = bmdMode1920x1200p60;
+      s_name2mode["1945"] = bmdMode1920x1440p50;
+      s_name2mode["1946"] = bmdMode1920x1440p60;
+      s_name2mode["wqh5"] = bmdMode2560x1440p50;
+      s_name2mode["wqh6"] = bmdMode2560x1440p60;
+      s_name2mode["wqx5"] = bmdMode2560x1600p50;
+      s_name2mode["wqx6"] = bmdMode2560x1600p60;
+      s_name2mode["rwci"] = bmdModeCintelRAW;
+      s_name2mode["rwcc"] = bmdModeCintelCompressedRAW;
+      s_name2mode["iunk"] = bmdModeUnknown;
+
+      /* GStreamer short names */
+      s_name2mode["ntsc2398"] = bmdModeNTSC2398;
+      s_name2mode["pal"] = bmdModePAL;
+      s_name2mode["ntsc-p"] = bmdModeNTSCp;
+      s_name2mode["pal-p"] = bmdModePALp;
+      s_name2mode["1080p2398"] = bmdModeHD1080p2398;
+      s_name2mode["1080p24"] = bmdModeHD1080p24;
+      s_name2mode["1080p25"] = bmdModeHD1080p25;
+      s_name2mode["1080p2997"] = bmdModeHD1080p2997;
+      s_name2mode["1080p30"] = bmdModeHD1080p30;
+      s_name2mode["1080i50"] = bmdModeHD1080i50;
+      s_name2mode["1080i5994"] = bmdModeHD1080i5994;
+      s_name2mode["1080i60"] = bmdModeHD1080i6000;
+      s_name2mode["1080p50"] = bmdModeHD1080p50;
+      s_name2mode["1080p5994"] = bmdModeHD1080p5994;
+      s_name2mode["1080p60"] = bmdModeHD1080p6000;
+      s_name2mode["720p50"] = bmdModeHD720p50;
+      s_name2mode["720p5994"] = bmdModeHD720p5994;
+      s_name2mode["720p60"] = bmdModeHD720p60;
+      s_name2mode["1556p2398"] = bmdMode2k2398;
+      s_name2mode["1556p24"] = bmdMode2k24;
+      s_name2mode["1556p25"] = bmdMode2k25;
+      s_name2mode["2kdcip2398"] = bmdMode2kDCI2398;
+      s_name2mode["2kdcip24"] = bmdMode2kDCI24;
+      s_name2mode["2kdcip25"] = bmdMode2kDCI25;
+      s_name2mode["2kdcip2997"] = bmdMode2kDCI2997;
+      s_name2mode["2kdcip30"] = bmdMode2kDCI30;
+      s_name2mode["2kdcip50"] = bmdMode2kDCI50;
+      s_name2mode["2kdcip5994"] = bmdMode2kDCI5994;
+      s_name2mode["2kdcip60"] = bmdMode2kDCI60;
+      s_name2mode["2160p2398"] = bmdMode4K2160p2398;
+      s_name2mode["2160p24"] = bmdMode4K2160p24;
+      s_name2mode["2160p25"] = bmdMode4K2160p25;
+      s_name2mode["2160p2997"] = bmdMode4K2160p2997;
+      s_name2mode["2160p30"] = bmdMode4K2160p30;
+      s_name2mode["2160p50"] = bmdMode4K2160p50;
+      s_name2mode["2160p5994"] = bmdMode4K2160p5994;
+      s_name2mode["2160p60"] = bmdMode4K2160p60;
+      s_name2mode["4kdcip2398"] = bmdMode4kDCI2398;
+      s_name2mode["8kdcip2398"] = bmdMode8kDCI2398;
+      s_name2mode["4kdcip24"] = bmdMode4kDCI24;
+      s_name2mode["8kdcip24"] = bmdMode8kDCI24;
+      s_name2mode["4kdcip25"] = bmdMode4kDCI25;
+      s_name2mode["8kdcip25"] = bmdMode8kDCI25;
+      s_name2mode["4kdcip2997"] = bmdMode4kDCI2997;
+      s_name2mode["8kdcip2997"] = bmdMode8kDCI2997;
+      s_name2mode["4kdcip30"] = bmdMode4kDCI30;
+      s_name2mode["8kdcip30"] = bmdMode8kDCI30;
+      s_name2mode["4kdcip50"] = bmdMode4kDCI50;
+      s_name2mode["8kdcip50"] = bmdMode8kDCI50;
+      s_name2mode["4kdcip5994"] = bmdMode4kDCI5994;
+      s_name2mode["8kdcip5994"] = bmdMode8kDCI5994;
+      s_name2mode["4kdcip60"] = bmdMode4kDCI60;
+      s_name2mode["8kdcip60"] = bmdMode8kDCI60;
+      s_name2mode["8kp2398"] = bmdMode8K4320p2398;
+      s_name2mode["8kp24"] = bmdMode8K4320p24;
+      s_name2mode["8kp25"] = bmdMode8K4320p25;
+      s_name2mode["8kp2997"] = bmdMode8K4320p2997;
+      s_name2mode["8kp30"] = bmdMode8K4320p30;
+      s_name2mode["8kp50"] = bmdMode8K4320p50;
+      s_name2mode["8kp5994"] = bmdMode8K4320p5994;
+      s_name2mode["8kp60"] = bmdMode8K4320p60;
+
+      /* GStreamer long names */
+      s_name2mode["NTSC SD 60i"] = bmdModeNTSC;
+      s_name2mode["NTSC SD 60i (24 fps)"] = bmdModeNTSC2398;
+      s_name2mode["PAL SD 50i"] = bmdModePAL;
+      s_name2mode["NTSC SD 60p"] = bmdModeNTSCp;
+      s_name2mode["PAL SD 50p"] = bmdModePALp;
+      s_name2mode["HD1080 23.98p"] = bmdModeHD1080p2398;
+      s_name2mode["HD1080 24p"] = bmdModeHD1080p24;
+      s_name2mode["HD1080 25p"] = bmdModeHD1080p25;
+      s_name2mode["HD1080 29.97p"] = bmdModeHD1080p2997;
+      s_name2mode["HD1080 30p"] = bmdModeHD1080p30;
+      s_name2mode["HD1080 50i"] = bmdModeHD1080i50;
+      s_name2mode["HD1080 59.94i"] = bmdModeHD1080i5994;
+      s_name2mode["HD1080 60i"] = bmdModeHD1080i6000;
+      s_name2mode["HD1080 50p"] = bmdModeHD1080p50;
+      s_name2mode["HD1080 59.94p"] = bmdModeHD1080p5994;
+      s_name2mode["HD1080 60p"] = bmdModeHD1080p6000;
+      s_name2mode["HD720 50p"] = bmdModeHD720p50;
+      s_name2mode["HD720 59.94p"] = bmdModeHD720p5994;
+      s_name2mode["HD720 60p"] = bmdModeHD720p60;
+      s_name2mode["2k 23.98p"] = bmdMode2k2398;
+      s_name2mode["2k 24p"] = bmdMode2k24;
+      s_name2mode["2k 25p"] = bmdMode2k25;
+      s_name2mode["2k dci 23.98p"] = bmdMode2kDCI2398;
+      s_name2mode["2k dci 24p"] = bmdMode2kDCI24;
+      s_name2mode["2k dci 25p"] = bmdMode2kDCI25;
+      s_name2mode["2k dci 29.97p"] = bmdMode2kDCI2997;
+      s_name2mode["2k dci 30p"] = bmdMode2kDCI30;
+      s_name2mode["2k dci 50p"] = bmdMode2kDCI50;
+      s_name2mode["2k dci 59.94p"] = bmdMode2kDCI5994;
+      s_name2mode["2k dci 60p"] = bmdMode2kDCI60;
+      s_name2mode["4k 23.98p"] = bmdMode4K2160p2398;
+      s_name2mode["4k 24p"] = bmdMode4K2160p24;
+      s_name2mode["4k 25p"] = bmdMode4K2160p25;
+      s_name2mode["4k 29.97p"] = bmdMode4K2160p2997;
+      s_name2mode["4k 30p"] = bmdMode4K2160p30;
+      s_name2mode["4k 50p"] = bmdMode4K2160p50;
+      s_name2mode["4k 59.94p"] = bmdMode4K2160p5994;
+      s_name2mode["4k 60p"] = bmdMode4K2160p60;
+      s_name2mode["4k dci 23.98p"] = bmdMode4kDCI2398;
+      s_name2mode["8k dci 23.98p"] = bmdMode8kDCI2398;
+      s_name2mode["4k dci 24p"] = bmdMode4kDCI24;
+      s_name2mode["8k dci 24p"] = bmdMode8kDCI24;
+      s_name2mode["4k dci 25p"] = bmdMode4kDCI25;
+      s_name2mode["8k dci 25p"] = bmdMode8kDCI25;
+      s_name2mode["4k dci 29.97p"] = bmdMode4kDCI2997;
+      s_name2mode["8k dci 29.97p"] = bmdMode8kDCI2997;
+      s_name2mode["4k dci 30p"] = bmdMode4kDCI30;
+      s_name2mode["8k dci 30p"] = bmdMode8kDCI30;
+      s_name2mode["4k dci 50p"] = bmdMode4kDCI50;
+      s_name2mode["8k dci 50p"] = bmdMode8kDCI50;
+      s_name2mode["4k dci 59.94p"] = bmdMode4kDCI5994;
+      s_name2mode["8k dci 59.94p"] = bmdMode8kDCI5994;
+      s_name2mode["4k dci 60p"] = bmdMode4kDCI60;
+      s_name2mode["8k dci 60p"] = bmdMode8kDCI60;
+      s_name2mode["8k 23.98p"] = bmdMode8K4320p2398;
+      s_name2mode["8k 24p"] = bmdMode8K4320p24;
+      s_name2mode["8k 25p"] = bmdMode8K4320p25;
+      s_name2mode["8k 29.97p"] = bmdMode8K4320p2997;
+      s_name2mode["8k 30p"] = bmdMode8K4320p30;
+      s_name2mode["8k 50p"] = bmdMode8K4320p50;
+      s_name2mode["8k 59.94p"] = bmdMode8K4320p5994;
+      s_name2mode["8k 60p"] = bmdMode8K4320p60;
+
+
+    }
+    std::map<std::string, BMDDisplayMode>::iterator it = s_name2mode.find(name);
+    if(s_name2mode.end() != it) {
+      mode=it->second;
+      return true;
+    }
+    return false;
+  }
+
+
+
+
 IDeckLinkDisplayMode*getDisplayMode(IDeckLinkOutput*dlo,
                                     const std::string&formatname, int formatnum)
 {
   IDeckLinkDisplayModeIterator*dmi = NULL;
   IDeckLinkDisplayMode*displayMode = NULL;
   int count=formatnum;
+  BMDDisplayMode mode = bmdModeUnknown;
+  bool have_mode = name2mode(formatname, mode);
+
   if(S_OK == dlo->GetDisplayModeIterator(&dmi)) {
     while(S_OK == dmi->Next(&displayMode)) {
       if (formatnum<0 && formatname.empty()) {
@@ -54,6 +318,9 @@ IDeckLinkDisplayMode*getDisplayMode(IDeckLinkOutput*dlo,
           verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
           free_deckstring(dmn);
           if(found) {
+            break;
+          }
+          if(have_mode && displayMode->GetDisplayMode() == mode) {
             break;
           }
         }
