@@ -1,0 +1,3 @@
+#N canvas 675 202 527 229 12;
+#X text 27 129 This plugin uses Apple's deprecated QuickTime framework and is only available on 32bit OSX and Windows., f 55;
+#X text 34 62 TODO: describe this plugin.;

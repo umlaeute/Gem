@@ -15,6 +15,7 @@ if HAVE_FRAMEWORK_QUICKTIME
 pkglib_LTLIBRARIES+= gem_filmQT.la
 pkglib_LTLIBRARIES+= gem_imageQT.la
 dist_gemhelp_DATA += QuickTime-imageloaderplugin.pd QuickTime-imagesaverplugin.pd
+dist_gemhelp_DATA += QuickTime-filmplugin.pd QuickTime-recordplugin.pd
 pkglib_LTLIBRARIES+= gem_recordQT.la
 endif
 
