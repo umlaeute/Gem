@@ -544,10 +544,10 @@ struct gemglxwindow::PIMPL {
         errstr+="???";
         break;
       case 1:
-        errstr+"single";
+        errstr+="single";
         break;
       case 2:
-        errstr+"double";
+        errstr+="double";
         break;
       }
       errstr+=" buffer window";
