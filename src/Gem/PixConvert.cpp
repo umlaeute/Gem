@@ -146,7 +146,7 @@ namespace {
 
     if(inR == outR && inG == outG && inB == outB && inA == outA) {
       if(indata != outdata)
-        memcpy(outdata, indata, width*height*4);
+        memcpy(outdata, indata, size*4);
       return;
     }
 
