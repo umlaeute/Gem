@@ -20,7 +20,7 @@
 #include <string>
 #include <map>
 
-#define MARK() printf("%s:%d\t%s\n", __FILE__, __LINE__, __FUNCTION__)
+#define MARK() printf("%s:%d\t[%s]\n", __FILE__, __LINE__, __FUNCTION__)
 
 #ifdef _WIN32
 # include <windows.h>
