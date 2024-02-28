@@ -12,6 +12,7 @@ if HAVE_V4L
 pkglib_LTLIBRARIES+=gem_videoV4L.la
 pkglib_LTLIBRARIES+=gem_recordV4L.la
 dist_gemhelp_DATA +=v4l-videoplugin.pd
+dist_gemhelp_DATA +=v4l-recordplugin.pd
 endif
 
 if WINDOWS

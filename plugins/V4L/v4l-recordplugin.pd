@@ -1,3 +1,3 @@
 #N canvas 8 49 528 177 10;
-#X text 89 47 Nothing special about this backend...;
 #X text 89 76 Note however \, that V4L(1) has been deprecated in the linux-kernel for many years now \, and you should probably use the V4L2 backend instead.;
+#X text 89 47 This backend allows you to write to V4L(1) output devices.;
