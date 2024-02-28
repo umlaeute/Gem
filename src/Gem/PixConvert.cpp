@@ -179,6 +179,13 @@ namespace {
     }
   }
 
+  template <int inR, int inG, int inB, int inA,
+            int outR, int outG, int outB, int outA>
+  static void four_to_four_2(
+    const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
+    four_to_four<inR, inG, inB, inA, outR, outG, outB, outA>(indata, outdata, width>>1, height);
+  }
+
   /* Y -> ... */
   template<int shift,
            int U, int Y0, int V, int Y1,
@@ -925,10 +932,10 @@ CONVERTp(I420S16, ABGR, i420ps16_to_rgb4, short);
 
 /* UYVY -> */
 CONVERTy(UYVY, yuv4_to_y, unsigned char);
-CONVERT(UYVY, UYVY, four_to_four, unsigned char);
-CONVERT(UYVY, VYUY, four_to_four, unsigned char);
-CONVERT(UYVY, YVYU, four_to_four, unsigned char);
-CONVERT(UYVY, YUYV, four_to_four, unsigned char);
+CONVERT(UYVY, UYVY, four_to_four_2, unsigned char);
+CONVERT(UYVY, VYUY, four_to_four_2, unsigned char);
+CONVERT(UYVY, YVYU, four_to_four_2, unsigned char);
+CONVERT(UYVY, YUYV, four_to_four_2, unsigned char);
 CONVERT(UYVY, RGB , yuv4_to_rgb3, unsigned char);
 CONVERT(UYVY, BGR , yuv4_to_rgb3, unsigned char);
 CONVERT(UYVY, RGBA, yuv4_to_rgb4, unsigned char);
@@ -937,10 +944,10 @@ CONVERT(UYVY, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(UYVY, ARGB, yuv4_to_rgb4, unsigned char);
 
 CONVERTy(VYUY, yuv4_to_y, unsigned char);
-CONVERT(VYUY, UYVY, four_to_four, unsigned char);
-CONVERT(VYUY, VYUY, four_to_four, unsigned char);
-CONVERT(VYUY, YVYU, four_to_four, unsigned char);
-CONVERT(VYUY, YUYV, four_to_four, unsigned char);
+CONVERT(VYUY, UYVY, four_to_four_2, unsigned char);
+CONVERT(VYUY, VYUY, four_to_four_2, unsigned char);
+CONVERT(VYUY, YVYU, four_to_four_2, unsigned char);
+CONVERT(VYUY, YUYV, four_to_four_2, unsigned char);
 CONVERT(VYUY, RGB , yuv4_to_rgb3, unsigned char);
 CONVERT(VYUY, BGR , yuv4_to_rgb3, unsigned char);
 CONVERT(VYUY, RGBA, yuv4_to_rgb4, unsigned char);
@@ -949,10 +956,10 @@ CONVERT(VYUY, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(VYUY, ARGB, yuv4_to_rgb4, unsigned char);
 
 CONVERTy(YUYV, yuv4_to_y, unsigned char);
-CONVERT(YUYV, UYVY, four_to_four, unsigned char);
-CONVERT(YUYV, VYUY, four_to_four, unsigned char);
-CONVERT(YUYV, YVYU, four_to_four, unsigned char);
-CONVERT(YUYV, YUYV, four_to_four, unsigned char);
+CONVERT(YUYV, UYVY, four_to_four_2, unsigned char);
+CONVERT(YUYV, VYUY, four_to_four_2, unsigned char);
+CONVERT(YUYV, YVYU, four_to_four_2, unsigned char);
+CONVERT(YUYV, YUYV, four_to_four_2, unsigned char);
 CONVERT(YUYV, RGB , yuv4_to_rgb3, unsigned char);
 CONVERT(YUYV, BGR , yuv4_to_rgb3, unsigned char);
 CONVERT(YUYV, RGBA, yuv4_to_rgb4, unsigned char);
@@ -961,10 +968,10 @@ CONVERT(YUYV, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(YUYV, ARGB, yuv4_to_rgb4, unsigned char);
 
 CONVERTy(YVYU, yuv4_to_y, unsigned char);
-CONVERT(YVYU, UYVY, four_to_four, unsigned char);
-CONVERT(YVYU, VYUY, four_to_four, unsigned char);
-CONVERT(YVYU, YVYU, four_to_four, unsigned char);
-CONVERT(YVYU, YUYV, four_to_four, unsigned char);
+CONVERT(YVYU, UYVY, four_to_four_2, unsigned char);
+CONVERT(YVYU, VYUY, four_to_four_2, unsigned char);
+CONVERT(YVYU, YVYU, four_to_four_2, unsigned char);
+CONVERT(YVYU, YUYV, four_to_four_2, unsigned char);
 CONVERT(YVYU, RGB , yuv4_to_rgb3, unsigned char);
 CONVERT(YVYU, BGR , yuv4_to_rgb3, unsigned char);
 CONVERT(YVYU, RGBA, yuv4_to_rgb4, unsigned char);
