@@ -798,7 +798,16 @@ namespace {
   }
 }
 
-/* the actual converter instances */
+/* the actual converter instances.
+ * these macros create <SRC>to<DST>() functions (e.g. RGBAtoUYYV),
+ * instantiating the named template.
+ * all converters use PACKED formats (except where stated otherwise
+ */
+
+/* generic converter: CONVERT(ARGB, UYVY, rgb4_to_yuv4, unsigned char);
+ *    converts from (ushort*)ARGB to (uchar*)UYVY using rgb4_to_yuv4
+ *    the type 'T' must be 'unsigned char' (it's only there for symmetry)
+ */
 #define CONVERT(SRC, DST, templ, T)                   \
   void SRC##to##DST(                                  \
     const T*indata, unsigned char*outdata,            \
@@ -806,6 +815,10 @@ namespace {
     CONVERTER_MARK();                                 \
     templ<SRC, DST>(indata, outdata, width, height);  \
   }
+/* same as CONVERTER, but inputdata T can be non-(uchar*)
+ * at the expense that 'templ' can only convert from 'SRC'.
+ * the 'shift' parameter is 8*(sizeof(T)-sizeof(unsigned char*))
+ */
 #define CONVERT0(SRC, DST, templ, T, shift)             \
   void SRC##to##DST(                                    \
     const T*indata, unsigned char*outdata,              \
@@ -813,6 +826,9 @@ namespace {
     CONVERTER_MARK();                                   \
     templ<shift, DST>(indata, outdata, width, height);  \
   }
+/* greyscale converter: CONVERTy(ARGB, rgb4_to_y, unsigned char);
+ *    converts from (uchar*)ARGB to (uchar*)Y using rgb4_to_y
+ */
 #define CONVERTy(SRC, templ, T)                 \
   void SRC##toY(                                \
     const T*indata, unsigned char*outdata,      \
@@ -820,6 +836,9 @@ namespace {
     CONVERTER_MARK();                           \
     templ<SRC>(indata, outdata, width, height); \
   }
+/* planar->packed converter: CONVERTp(I420, UYVY, yuv420p_to_yuv4, unsigned char);
+ *    converts from (uchar*)I420 (3planes) to (uchar*)UYVY (1plane) using yuv420p_to_yuv4
+ */
 #define CONVERTp(SRC, DST, templ, T)                        \
   void SRC##to##DST(                                        \
     const T*Y, const T*U, const T*V, unsigned char*outdata, \
