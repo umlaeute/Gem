@@ -48,7 +48,7 @@
 #X text 470 670 4Kp24 DCI;
 #X text 470 690 4Kp25 DCI;
 #X msg 230 400 set connection SDI;
-#X msg 244 371 set format 1080p2398;
+#X msg 244 371 set format 1080p25;
 #X connect 10 0 15 0;
 #X connect 12 0 15 0;
 #X connect 20 0 15 0;
