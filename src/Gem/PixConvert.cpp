@@ -47,6 +47,8 @@
   YVYU
 */
 
+#define Y 0
+
 #define RGB 0,1,2
 #define BGR 2,1,0
 #define RGBA 0,1,2,3
@@ -230,7 +232,7 @@ namespace {
   }
 
   /* YUV4 -> ... */
-  template <int U, int Y0, int V, int Y1>
+  template <int U, int Y0, int V, int Y1, int dummy>
   static void yuv4_to_y(
     const unsigned char*indata, unsigned char*outdata, size_t width, size_t height) {
     size_t size = (width*height)>>1;
@@ -310,12 +312,12 @@ namespace {
 
   template <int outU, int outY0, int outV, int outY1>
   static void yuv420p_to_yuv4(
-    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    const unsigned char*Y_, const unsigned char*U, const unsigned char*V,
     unsigned char*outdata, size_t width, size_t height) {
     unsigned char *pixels1=outdata;
     unsigned char *pixels2=pixels1+width*2;
-    const unsigned char*py1=Y;
-    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
+    const unsigned char*py1=Y_;
+    const unsigned char*py2=Y_+width; // plane_1 is luminance (csize==1)
     const unsigned char*pu=U;
     const unsigned char*pv=V;
     int row=height>>1;
@@ -349,10 +351,10 @@ namespace {
 
   template <int outR, int outG, int outB>
   static void yuv420p_to_rgb3(
-    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    const unsigned char*Y_, const unsigned char*U, const unsigned char*V,
     unsigned char*outdata, const size_t width, const size_t height) {
-    const unsigned char*py1=Y;
-    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
+    const unsigned char*py1=Y_;
+    const unsigned char*py2=Y_+width; // plane_1 is luminance (csize==1)
     const unsigned char*pu=U;
     const unsigned char*pv=V;
     unsigned char*pixels1=outdata;
@@ -407,10 +409,10 @@ namespace {
 
   template <int outR, int outG, int outB, int outA>
   static void yuv420p_to_rgb4(
-    const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+    const unsigned char*Y_, const unsigned char*U, const unsigned char*V,
     unsigned char*outdata, size_t width, size_t height) {
-    const unsigned char*py1=Y;
-    const unsigned char*py2=Y+width; // plane_1 is luminance (csize==1)
+    const unsigned char*py1=Y_;
+    const unsigned char*py2=Y_+width; // plane_1 is luminance (csize==1)
     const unsigned char*pu=U;
     const unsigned char*pv=V;
     unsigned char*pixels1=outdata;
@@ -470,7 +472,7 @@ namespace {
 
 
   /* RGB3 -> ... */
-  template <int inR, int inG, int inB>
+  template <int inR, int inG, int inB, int dummy>
   static void rgb3_to_y(const unsigned char*indata, unsigned char*outdata,
                         size_t width, size_t height) {
     size_t size = width*height;
@@ -542,7 +544,7 @@ namespace {
 
   /* RGB4 -> ... */
 
-  template <int inR, int inG, int inB, int inA>
+  template <int inR, int inG, int inB, int inA, int dummy>
   static void rgb4_to_y(const unsigned char*indata, unsigned char*outdata,
                         size_t width, size_t height) {
     size_t size = width*height;
@@ -584,13 +586,13 @@ namespace {
 namespace {
   template <int outR, int outG, int outB>
   static void i420ps16_to_rgb3(
-    const short*Y, const short*U, const short*V,
+    const short*Y_, const short*U, const short*V,
     unsigned char*outdata, const size_t width, const size_t height) {
     unsigned char *pixels1=outdata;
     unsigned char *pixels2=outdata+width*3;
 
-    const short*py1=Y;
-    const short*py2=Y+width; // plane_1 is luminance (csize==1)
+    const short*py1=Y_;
+    const short*py2=Y_+width; // plane_1 is luminance (csize==1)
     const short*pv=V;//(format==GL_BGR)?V:U;
     const short*pu=U;//(format==GL_RGB)?V:U;
 
@@ -646,13 +648,13 @@ namespace {
   }
   template <int outR, int outG, int outB, int outA>
   static void i420ps16_to_rgb4(
-    const short*Y, const short*U, const short*V,
+    const short*Y_, const short*U, const short*V,
     unsigned char*outdata, const size_t width, const size_t height) {
     unsigned char *pixels1=outdata;
     unsigned char *pixels2=outdata+width*4;
 
-    const short*py1=Y; // odd row
-    const short*py2=Y+width;// even row
+    const short*py1=Y_; // odd row
+    const short*py2=Y_+width;// even row
     const short*pv=V;
     const short*pu=U;
 
@@ -709,12 +711,12 @@ namespace {
   }
   template <int outU, int outY0, int outV, int outY1>
   static void i420ps16_to_yuv4(
-    const short*Y, const short*U, const short*V,
+    const short*Y_, const short*U, const short*V,
     unsigned char*outdata, size_t width, size_t height) {
     unsigned char *pixels1=outdata;
     unsigned char *pixels2=pixels1+width*2;
-    const short*py1=Y;
-    const short*py2=Y+width; // plane_1 is luminance (csize==1)
+    const short*py1=Y_;
+    const short*py2=Y_+width; // plane_1 is luminance (csize==1)
     const short*pu=U;
     const short*pv=V;
     int row=height>>1;
@@ -833,25 +835,15 @@ namespace {
     CONVERTER_MARK();                                   \
     templ<shift, DST>(indata, outdata, width, height);  \
   }
-/* greyscale converter: CONVERTy(ARGB, rgb4_to_y, unsigned char);
- *    converts from (uchar*)ARGB to (uchar*)Y using rgb4_to_y
- */
-#define CONVERTy(SRC, templ, T)                 \
-  void SRC##toY(                                \
-    const T*indata, unsigned char*outdata,      \
-    size_t width, size_t height) {              \
-    CONVERTER_MARK();                           \
-    templ<SRC>(indata, outdata, width, height); \
-  }
 /* planar->packed converter: CONVERTp(I420, UYVY, yuv420p_to_yuv4, unsigned char);
  *    converts from (uchar*)I420 (3planes) to (uchar*)UYVY (1plane) using yuv420p_to_yuv4
  */
 #define CONVERTp(SRC, DST, templ, T)                        \
   void SRC##to##DST(                                        \
-    const T*Y, const T*U, const T*V, unsigned char*outdata, \
+    const T*Y_, const T*U, const T*V, unsigned char*outdata, \
     size_t width, size_t height) {                          \
     CONVERTER_MARK();                                       \
-    templ<DST>(Y, U, V, outdata, width, height);            \
+    templ<DST>(Y_, U, V, outdata, width, height);            \
   }
 
 /* GRAY -> */
@@ -893,11 +885,11 @@ CONVERT0(Yu16, ARGB, y_to_rgb4, unsigned short, 8);
 
 
 /* YUV420planar -> */
-void I420toY(const unsigned char*Y, const unsigned char*U, const unsigned char*V,
+void I420toY(const unsigned char*Y_, const unsigned char*U, const unsigned char*V,
              unsigned char*outdata, size_t width, size_t height) {
   CONVERTER_MARK();
-  if(Y != outdata)
-    memcpy(outdata, Y, width*height);
+  if(Y_ != outdata)
+    memcpy(outdata, Y_, width*height);
 }
 
 CONVERTp(I420, UYVY, yuv420p_to_yuv4, unsigned char);
@@ -911,12 +903,12 @@ CONVERTp(I420, BGRA, yuv420p_to_rgb4, unsigned char);
 CONVERTp(I420, ABGR, yuv420p_to_rgb4, unsigned char);
 CONVERTp(I420, ARGB, yuv420p_to_rgb4, unsigned char);
 
-void I420S16toY(const short*Y, const short*U, const short*V,
+void I420S16toY(const short*Y_, const short*U, const short*V,
                 unsigned char*outdata, size_t width, size_t height) {
   CONVERTER_MARK();
   size_t size = width*height;
   while(size--) {
-    *outdata++ = ((*Y++)>>8) + Y_OFFSET;
+    *outdata++ = ((*Y_++)>>8) + Y_OFFSET;
   }
 }
 CONVERTp(I420S16, UYVY, i420ps16_to_yuv4, short);
@@ -931,7 +923,7 @@ CONVERTp(I420S16, ARGB, i420ps16_to_rgb4, short);
 CONVERTp(I420S16, ABGR, i420ps16_to_rgb4, short);
 
 /* UYVY -> */
-CONVERTy(UYVY, yuv4_to_y, unsigned char);
+CONVERT(UYVY, Y, yuv4_to_y, unsigned char);
 CONVERT(UYVY, UYVY, four_to_four_2, unsigned char);
 CONVERT(UYVY, VYUY, four_to_four_2, unsigned char);
 CONVERT(UYVY, YVYU, four_to_four_2, unsigned char);
@@ -943,7 +935,7 @@ CONVERT(UYVY, BGRA, yuv4_to_rgb4, unsigned char);
 CONVERT(UYVY, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(UYVY, ARGB, yuv4_to_rgb4, unsigned char);
 
-CONVERTy(VYUY, yuv4_to_y, unsigned char);
+CONVERT(VYUY, Y, yuv4_to_y, unsigned char);
 CONVERT(VYUY, UYVY, four_to_four_2, unsigned char);
 CONVERT(VYUY, VYUY, four_to_four_2, unsigned char);
 CONVERT(VYUY, YVYU, four_to_four_2, unsigned char);
@@ -955,7 +947,7 @@ CONVERT(VYUY, BGRA, yuv4_to_rgb4, unsigned char);
 CONVERT(VYUY, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(VYUY, ARGB, yuv4_to_rgb4, unsigned char);
 
-CONVERTy(YUYV, yuv4_to_y, unsigned char);
+CONVERT(YUYV, Y, yuv4_to_y, unsigned char);
 CONVERT(YUYV, UYVY, four_to_four_2, unsigned char);
 CONVERT(YUYV, VYUY, four_to_four_2, unsigned char);
 CONVERT(YUYV, YVYU, four_to_four_2, unsigned char);
@@ -967,7 +959,7 @@ CONVERT(YUYV, BGRA, yuv4_to_rgb4, unsigned char);
 CONVERT(YUYV, ABGR, yuv4_to_rgb4, unsigned char);
 CONVERT(YUYV, ARGB, yuv4_to_rgb4, unsigned char);
 
-CONVERTy(YVYU, yuv4_to_y, unsigned char);
+CONVERT(YVYU, Y, yuv4_to_y, unsigned char);
 CONVERT(YVYU, UYVY, four_to_four_2, unsigned char);
 CONVERT(YVYU, VYUY, four_to_four_2, unsigned char);
 CONVERT(YVYU, YVYU, four_to_four_2, unsigned char);
@@ -1005,7 +997,7 @@ CONVERT0(RGB16, BGRA, RGB16_to_rgb4, unsigned char, 0);
 CONVERT0(RGB16, ABGR, RGB16_to_rgb4, unsigned char, 0);
 CONVERT0(RGB16, ARGB, RGB16_to_rgb4, unsigned char, 0);
 
-CONVERTy(RGB, rgb3_to_y, unsigned char);
+CONVERT(RGB, Y, rgb3_to_y, unsigned char);
 CONVERT(RGB, UYVY, rgb3_to_yuv4, unsigned char);
 CONVERT(RGB, VYUY, rgb3_to_yuv4, unsigned char);
 CONVERT(RGB, YVYU, rgb3_to_yuv4, unsigned char);
@@ -1017,7 +1009,7 @@ CONVERT(RGB, ABGR, rgb3_to_rgb4, unsigned char);
 CONVERT(RGB, BGRA, rgb3_to_rgb4, unsigned char);
 CONVERT(RGB, ARGB, rgb3_to_rgb4, unsigned char);
 
-CONVERTy(BGR, rgb3_to_y, unsigned char);
+CONVERT(BGR, Y, rgb3_to_y, unsigned char);
 CONVERT(BGR, UYVY, rgb3_to_yuv4, unsigned char);
 CONVERT(BGR, VYUY, rgb3_to_yuv4, unsigned char);
 CONVERT(BGR, YVYU, rgb3_to_yuv4, unsigned char);
@@ -1030,7 +1022,7 @@ CONVERT(BGR, BGRA, rgb3_to_rgb4, unsigned char);
 CONVERT(BGR, ARGB, rgb3_to_rgb4, unsigned char);
 
 /* RGBA -> */
-CONVERTy(RGBA, rgb4_to_y, unsigned char);
+CONVERT(RGBA, Y, rgb4_to_y, unsigned char);
 CONVERT(RGBA, UYVY, rgb4_to_yuv4, unsigned char);
 CONVERT(RGBA, VYUY, rgb4_to_yuv4, unsigned char);
 CONVERT(RGBA, YVYU, rgb4_to_yuv4, unsigned char);
@@ -1042,7 +1034,7 @@ CONVERT(RGBA, ABGR, four_to_four, unsigned char);
 CONVERT(RGBA, BGRA, four_to_four, unsigned char);
 CONVERT(RGBA, ARGB, four_to_four, unsigned char);
 
-CONVERTy(BGRA, rgb4_to_y, unsigned char);
+CONVERT(BGRA, Y, rgb4_to_y, unsigned char);
 CONVERT(BGRA, UYVY, rgb4_to_yuv4, unsigned char);
 CONVERT(BGRA, VYUY, rgb4_to_yuv4, unsigned char);
 CONVERT(BGRA, YVYU, rgb4_to_yuv4, unsigned char);
@@ -1054,7 +1046,7 @@ CONVERT(BGRA, ABGR, four_to_four, unsigned char);
 CONVERT(BGRA, BGRA, four_to_four, unsigned char);
 CONVERT(BGRA, ARGB, four_to_four, unsigned char);
 
-CONVERTy(ABGR, rgb4_to_y, unsigned char);
+CONVERT(ABGR, Y, rgb4_to_y, unsigned char);
 CONVERT(ABGR, UYVY, rgb4_to_yuv4, unsigned char);
 CONVERT(ABGR, VYUY, rgb4_to_yuv4, unsigned char);
 CONVERT(ABGR, YVYU, rgb4_to_yuv4, unsigned char);
@@ -1066,7 +1058,7 @@ CONVERT(ABGR, ABGR, four_to_four, unsigned char);
 CONVERT(ABGR, BGRA, four_to_four, unsigned char);
 CONVERT(ABGR, ARGB, four_to_four, unsigned char);
 
-CONVERTy(ARGB, rgb4_to_y, unsigned char);
+CONVERT(ARGB, Y, rgb4_to_y, unsigned char);
 CONVERT(ARGB, UYVY, rgb4_to_yuv4, unsigned char);
 CONVERT(ARGB, VYUY, rgb4_to_yuv4, unsigned char);
 CONVERT(ARGB, YVYU, rgb4_to_yuv4, unsigned char);
