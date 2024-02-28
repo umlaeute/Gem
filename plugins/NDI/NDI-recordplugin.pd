@@ -10,8 +10,7 @@
 #X text 75 161 2- name the NDI-stream;
 #X text 75 211 3- start sending out stream;
 #X msg 260 362 filename Waiting\ Man;
-#X text 74 332 Your streamname can contain spaces which must escape
-with backspace., f 71;
+#X text 74 332 If your streamname should contain spaces \, escape them with backspace., f 74;
 #X connect 5 0 1 0;
 #X connect 6 0 1 0;
 #X connect 7 0 1 0;
