@@ -147,6 +147,8 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
   stop();
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   m_filename = filename;
+  if (m_filename.empty())
+    m_filename = "gem-output";
   if(!m_image.xsize) {
     m_image.xsize = 640;
   }
@@ -166,7 +168,7 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
                pw_thread_loop_get_loop(s_loop),
-               "gem-output",
+               m_filename.c_str(),
                pw_properties_new(
                  PW_KEY_MEDIA_CLASS, "Video/Source",
                  PW_KEY_MEDIA_TYPE, "Video",
