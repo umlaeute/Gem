@@ -444,10 +444,13 @@ public:
 #endif
 
     if (m_videoFrame->GetPixelFormat() != srcformat) {
-      if(srcformat != bmdFormatUnspecified) {
+      result = E_NOTIMPL;
+      switch(srcformat) {
+      case bmdFormatUnspecified:
+      case gemBmdFormat8BitRGBA:
+        break;
+      default:
         result = m_frameConverter?m_frameConverter->ConvertFrame(isw, m_videoFrame):E_NOTIMPL;
-      } else {
-        result = E_NOTIMPL;
       }
 
       if (result != S_OK)  {
@@ -463,6 +466,12 @@ public:
         isw = new ImageStructWrapper(img);
       }
     }
+
+#if 0
+    post("schedule image %p[%dx%d@%s]"
+         , isw, (int)isw->GetWidth(), (int)isw->GetHeight(), pixformat2string(isw->GetPixelFormat()).c_str()
+         );
+#endif
 
     result = m_deckLinkOutput->ScheduleVideoFrame(isw, (m_totalFramesScheduled * m_frameDuration), m_frameDuration, m_frameTimescale);
     if (result != S_OK)  {

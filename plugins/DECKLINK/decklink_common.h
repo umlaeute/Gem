@@ -105,6 +105,11 @@ void free_deckstring(deckstring_t s)
 static std::map<std::string, BMDVideoConnection> s_connectionstrings;
 namespace
 {
+  enum _gem_BMDPixelFormat {
+    /* GEM specific */
+    gemBmdFormat8BitRGBA                                            = /* 'RGBA' */ 0x52474241,
+  };
+
 BMDVideoConnection string2connection(std::string Name)
 {
   static bool done = false;
@@ -205,6 +210,7 @@ BMDPixelFormat string2pixformat(std::string Name)
     s_pixformatstrings["yuv"] = bmdFormat8BitYUV;
     s_pixformatstrings["argb"] = bmdFormat8BitARGB;
     s_pixformatstrings["bgra"] = bmdFormat8BitBGRA;
+    s_pixformatstrings["rgba8"] = gemBmdFormat8BitRGBA;
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #else
     verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires pixformats to be lower-case");
@@ -259,10 +265,13 @@ public:
   }
   virtual BMDPixelFormat STDMETHODCALLTYPE GetPixelFormat()
   {
-    switch(m_img->csize) {
-    case 4:
-      return bmdFormat8BitARGB;
-    case 2:
+    bool reverse = false;
+    switch(m_img->format) {
+    case GEM_RAW_RGBA:
+      return gemBmdFormat8BitRGBA;
+    case GEM_RAW_BGRA:
+      return bmdFormat8BitBGRA;
+    case GEM_RAW_UYVY:
       return bmdFormat8BitYUV;
     default:
       break;
@@ -333,6 +342,7 @@ int GetRowBytes(BMDPixelFormat pixelFormat, int frameWidth)
 
   case bmdFormat8BitARGB:
   case bmdFormat8BitBGRA:
+  case gemBmdFormat8BitRGBA:
   default:
     bytesPerRow = frameWidth * 4;
     break;
