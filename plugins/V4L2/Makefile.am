@@ -13,6 +13,7 @@ if HAVE_V4L2
 pkglib_LTLIBRARIES+= gem_videoV4L2.la
 pkglib_LTLIBRARIES+= gem_recordV4L2.la
 dist_gemhelp_DATA += v4l2-videoplugin.pd
+dist_gemhelp_DATA += v4l2-recordplugin.pd
 endif
 
 if WINDOWS
