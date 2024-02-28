@@ -35,11 +35,13 @@ EXTRA_DIST += \
 
 if HAVE_LIB_DECKLINK
 pkglib_LTLIBRARIES+= gem_videoDECKLINK.la gem_recordDECKLINK.la
-dist_gemhelp_DATA  += decklink-videoplugin.pd
+dist_gemhelp_DATA += decklink-videoplugin.pd
+dist_gemhelp_DATA += decklink-recordplugin.pd
 else
 if GEM_DECKLINK_LOCAL
 pkglib_LTLIBRARIES+= gem_videoDECKLINK.la gem_recordDECKLINK.la
-dist_gemhelp_DATA  += decklink-videoplugin.pd
+dist_gemhelp_DATA += decklink-videoplugin.pd
+dist_gemhelp_DATA += decklink-recordplugin.pd
 endif
 endif
 
