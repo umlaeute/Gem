@@ -8,11 +8,10 @@ AM_LDFLAGS  = -module -avoid-version -shared
 
 gemhelpdir=$(pkglibdir)
 dist_gemhelp_DATA =
-
-
 pkglib_LTLIBRARIES =
 
 pkglib_LTLIBRARIES+=gem_filmTEST.la
+dist_gemhelp_DATA +=test-filmplugin.pd
 pkglib_LTLIBRARIES+=gem_videoTEST.la
 dist_gemhelp_DATA +=test-videoplugin.pd
 

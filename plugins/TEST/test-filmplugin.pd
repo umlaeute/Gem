@@ -1,0 +1,6 @@
+#N canvas 856 26 505 263 10;
+#X obj 143 227 s \$1-ctl;
+#X msg 143 184 backend test \, open test;
+#X text 51 50 a test backend for [pix_film];
+#X text 55 111 This pretends to open a 'test' video file that contains a simple test-pattern.;
+#X connect 1 0 0 0;
