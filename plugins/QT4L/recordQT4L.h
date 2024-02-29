@@ -155,6 +155,7 @@ private:
   double m_timeTick;
 
   size_t m_curFrame;
+  int m_curTrack;
 #endif /* QT */
 };
 };

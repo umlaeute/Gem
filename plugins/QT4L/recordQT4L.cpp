@@ -141,6 +141,7 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 
   lqt_file_type_t type =  guess_qtformat(filename);
 
+  m_curTrack = -1;
   m_qtfile = lqt_open_write(filename.c_str(), type);
   if(m_qtfile==NULL) {
     pd_error(0, "[GEM:recordQT4L] starting to record to %s failed",
@@ -253,8 +254,6 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   int rowspan=0, rowspan_uv=0;
   lqt_codec_info_t*codec=NULL;
   int err=0;
-  int track=0;
-
 
   if(!m_qtfile || !img || fps < 0.) {
     return false;
@@ -292,8 +291,9 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   if(err!=0) {
     return false;
   }
+  m_curTrack++;
 
-  applyProperties(m_qtfile, track, m_codec, m_props);
+  applyProperties(m_qtfile, m_curTrack, m_codec, m_props);
 
   /* set the colormodel */
   std::vector<int>trycolormodels;
@@ -301,7 +301,7 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
   trycolormodels.push_back(BC_RGB888);
   trycolormodels.push_back(BC_YUV422);
 
-  m_colormodel=try_colormodel(m_qtfile, track, trycolormodels);
+  m_colormodel=try_colormodel(m_qtfile, m_curTrack, trycolormodels);
   if(!m_colormodel) {
     return false;
   }
@@ -318,7 +318,6 @@ bool recordQT4L :: init(const imageStruct*img, double fps)
 
   return true;
 }
-
 /////////////////////////////////////////////////////////
 // do the actual encoding and writing to file
 //
@@ -344,6 +343,11 @@ bool recordQT4L :: write(imageStruct*img)
       return false;
     }
     m_restart=false;
+  }
+
+  if(m_curTrack<0) {
+    pd_error(0, "[GEM:recordQt4L] detected invalid track %d", m_curTrack);
+    return false;
   }
 
   double timestamp_d=(m_useTimeStamp
@@ -382,7 +386,7 @@ bool recordQT4L :: write(imageStruct*img)
     }
   }
 
-  lqt_encode_video(m_qtfile, rowpointers, 0, timestamp);
+  lqt_encode_video(m_qtfile, rowpointers, m_curTrack, timestamp);
   delete[]rowpointers;
   return true;
 }
