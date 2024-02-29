@@ -210,7 +210,7 @@ BMDPixelFormat string2pixformat(std::string Name)
     s_pixformatstrings["yuv"] = bmdFormat8BitYUV;
     s_pixformatstrings["argb"] = bmdFormat8BitARGB;
     s_pixformatstrings["bgra"] = bmdFormat8BitBGRA;
-    s_pixformatstrings["rgba8"] = gemBmdFormat8BitRGBA;
+    s_pixformatstrings["rgba8"] = (BMDPixelFormat)((int)bmdFormat8BitYUV);
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #else
     verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires pixformats to be lower-case");
@@ -268,11 +268,11 @@ public:
     bool reverse = false;
     switch(m_img->format) {
     case GEM_RAW_RGBA:
-      return gemBmdFormat8BitRGBA;
+      return (BMDPixelFormat)((int)bmdFormat8BitYUV);
     case GEM_RAW_BGRA:
       return bmdFormat8BitBGRA;
     case GEM_RAW_UYVY:
-      return bmdFormat8BitYUV;
+      return (BMDPixelFormat)((int)bmdFormat8BitYUV);
     default:
       break;
     }
