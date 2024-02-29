@@ -186,6 +186,7 @@ dist_gemhelp_DATA += \
 	pix_snap-help.pd \
 	pix_subtract-help.pd \
 	pix_takealpha-help.pd \
+	pix_test-help.pd \
 	pix_texture-help.pd \
 	pix_threshold_bernsen-help.pd \
 	pix_threshold-help.pd \
