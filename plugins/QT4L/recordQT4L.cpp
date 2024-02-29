@@ -111,21 +111,35 @@ static struct {
   { "mp4",      LQT_FILE_MP4,       "mp4", "ISO MPEG-4",                   "yuv2" }, /* ffmpeg_mpg4 */
   { "m4a",      LQT_FILE_M4A,       "m4a", "m4a (iTunes compatible)",      "yuv2" }, /* ffmpeg_mpg4 */
 };
+/* get the filetype from the short name */
+static lqt_file_type_t get_qtformat(const char*name)
+{
+  for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(*qtformats); i++) {
+    if(!strcasecmp(name, qtformats[i].name)) {
+      verbose(1, "[GEM:recordQT4L] using format '%s'", qtformats[i].description);
+      return qtformats[i].type;
+    }
+  }
+
+  verbose(0,
+          "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
+  return LQT_FILE_QT; /* should be save for now */
+}
 /* guess the file-format by inspecting the extension */
 static lqt_file_type_t guess_qtformat(const std::string&filename)
 {
   const char * extension = strrchr(filename.c_str(), '.');
 
   if(!extension) {
-    verbose(0,
-            "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
+    verbose(0, "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
     return LQT_FILE_QT;
   }
 
   extension++;
 
-  for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(qtformats[0]); i++) {
+  for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(*qtformats); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
+      verbose(1, "[GEM:recordQT4L] detected format '%s'", qtformats[i].description);
       return qtformats[i].type;
     }
   }
@@ -139,10 +153,18 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 {
   stop();
 
-  lqt_file_type_t type =  guess_qtformat(filename);
+  lqt_file_type_t format = LQT_FILE_NONE;
+  std::string s;
+  if (props.get("qtformat", s)) {
+    format = get_qtformat(s.c_str());
+  }
+
+  if (LQT_FILE_NONE == format) {
+    format =  guess_qtformat(filename);
+  }
 
   m_curTrack = -1;
-  m_qtfile = lqt_open_write(filename.c_str(), type);
+  m_qtfile = lqt_open_write(filename.c_str(), format);
   if(m_qtfile==NULL) {
     pd_error(0, "[GEM:recordQT4L] starting to record to %s failed",
              filename.c_str());
@@ -491,6 +513,10 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
     }
 
     props.set(params[i].name, typ);
+  }
+
+  if(gem::Properties::UNSET == props.type("qtformat")) {
+    props.set("qtformat", std::string("auto"));
   }
 
   return true;
