@@ -59,7 +59,7 @@
 #X connect 4 0 2 0;
 #X restore 484 244 pd savepanel;
 #X msg 520 287 record \$1;
-#X obj 500 289 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
+#X obj 500 289 tgl 15 0 empty \$0-record empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X obj 463 287 t a;
 #X text 18 174 When file and codec are specified \, you can open the writing connection with the message "record 1"., f 69;
 #X text 18 212 To actually do record a frame into the file \, send the object a "bang" message. If you want to record a consecutive number of frames \, use the "auto" message. This allows you to have full control on which frames are to be recorded., f 69;
@@ -383,8 +383,17 @@
 #X obj 102 242 print INFO;
 #X text 62 90 actually you can just hook a [print] to the 3rd outlet.;
 #X text 64 115 here it's a bit more complicated \, as we want to filter out the messages generated from the [pd PROPERTIES] window.;
+#X obj 272 179 r \$0-ctl;
+#X obj 272 202 route record;
+#X obj 272 225 route float;
+#X msg 272 248 set \$1;
+#X obj 272 271 s \$0-record;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;
+#X connect 6 0 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
 #X restore 553 375 pd print;
 #X obj 518 8 declare -lib Gem;
 #X obj 451 120 pix_texture;
