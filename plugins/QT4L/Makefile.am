@@ -11,11 +11,12 @@ if HAVE_LIB_LIBQUICKTIME
 pkglib_LTLIBRARIES+= gem_filmQT4L.la
 pkglib_LTLIBRARIES+= gem_recordQT4L.la
 dist_gemhelp_DATA += quicktime4linux-recordplugin.pd
-endif
+else
 if HAVE_LIB_LQT
 pkglib_LTLIBRARIES+= gem_filmQT4L.la
 pkglib_LTLIBRARIES+= gem_recordQT4L.la
 dist_gemhelp_DATA += quicktime4linux-recordplugin.pd
+endif
 endif
 
 AM_LDFLAGS  = -module -avoid-version -shared
