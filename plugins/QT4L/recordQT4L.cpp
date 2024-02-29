@@ -155,7 +155,7 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
 
   lqt_file_type_t format = LQT_FILE_NONE;
   std::string s;
-  if (props.get("qtformat", s)) {
+  if (props.get("lqtformat", s)) {
     format = get_qtformat(s.c_str());
   }
 
@@ -170,6 +170,22 @@ bool recordQT4L :: start(const std::string&filename, gem::Properties&props)
              filename.c_str());
     return false;
   }
+
+#define prop2quicktime(qtfile, propname) \
+  if (props.get(#propname, s)) { quicktime_set_##propname(qtfile, (char*)s.c_str()); }
+#define prop2lqt(qtfile, propname) \
+  if (props.get(#propname, s)) { lqt_set_##propname(qtfile, (char*)s.c_str()); }
+
+  prop2quicktime(m_qtfile, name);
+  prop2quicktime(m_qtfile, copyright);
+  prop2quicktime(m_qtfile, info);
+
+  prop2lqt(m_qtfile, album);
+  prop2lqt(m_qtfile, artist);
+  prop2lqt(m_qtfile, genre);
+  prop2lqt(m_qtfile, track);
+  prop2lqt(m_qtfile, comment);
+  prop2lqt(m_qtfile, author);
 
   m_props=props;
 
@@ -492,6 +508,19 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
     return false;
   }
 
+  props.set("lqtformat", std::string("auto"));
+
+  props.set("name", std::string(""));
+  props.set("copyright", std::string(""));
+  props.set("info", std::string(""));
+
+  props.set("album", std::string(""));
+  props.set("artist", std::string(""));
+  props.set("genre", std::string(""));
+  props.set("track", std::string(""));
+  props.set("comment", std::string(""));
+  props.set("author", std::string(""));
+
   props.set("framerate", 0.f);
 
   const int paramcount=m_codec->num_encoding_parameters;
@@ -513,10 +542,6 @@ bool recordQT4L :: enumProperties(gem::Properties&props)
     }
 
     props.set(params[i].name, typ);
-  }
-
-  if(gem::Properties::UNSET == props.type("qtformat")) {
-    props.set("qtformat", std::string("auto"));
   }
 
   return true;
