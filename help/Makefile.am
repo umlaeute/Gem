@@ -243,4 +243,5 @@ dist_gemhelp_DATA += \
 
 dist_gemhelp_DATA += \
 	_backendinfo.pd \
+	_gemwin.pd \
 	$(empty)
