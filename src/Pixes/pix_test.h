@@ -61,6 +61,9 @@ protected:
 
   void dimenMess(unsigned int, unsigned int);
   void csMess(std::string);
+  void noiseMess(bool);
+
+  bool m_noise;
 };
 
 #endif  // for header file

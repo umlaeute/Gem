@@ -51,14 +51,14 @@ static volatile unsigned char getRandom(void)
 }
 
 static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
-                           unsigned char*DATA, float scale)
+                           unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
   unsigned int r,c;
   unsigned int row0, row1;
 
   row0=0;
-  row1=rows*2/3;
+  row1=noise?(rows*2/3):(rows*3/4);
   for(r=row0; r<row1; r++) {
     for(c=0; c<cols; c++) {
       unsigned int idx=c*7/cols;
@@ -70,7 +70,7 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
     }
   }
   row0=r;
-  row1=rows*3/4;
+  row1=noise?(rows*3/4):(rows*7/8);
   for(r=row0; r<row1; r++) {
     for(c=0; c<cols; c++) {
       unsigned int grey=c*255/cols;
@@ -82,7 +82,7 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
     }
   }
   row0=r;
-  row1=rows*5/6;
+  row1=noise?(rows*5/6):(rows);
   for(r=row0; r<row1; r++) {
     for(c=0; c<cols; c++) {
       unsigned int grey=255-c*255/cols;
@@ -105,7 +105,7 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
   }
 }
 static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
-                          unsigned char*DATA, float scale)
+                          unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
   unsigned int r,c;
@@ -155,7 +155,7 @@ static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
   }
 }
 void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
-                   unsigned char*DATA, float scale)
+                   unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
   unsigned int r,c;
@@ -207,7 +207,7 @@ void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
   }
 }
 void makeSMPTE_Grey(unsigned int cols, unsigned int rows,
-                    unsigned char*data, float scale)
+                    unsigned char*data, float scale, bool noise)
 {
   unsigned int r,c;
   unsigned int row0, row1;
@@ -250,6 +250,7 @@ void makeSMPTE_Grey(unsigned int cols, unsigned int rows,
 //
 /////////////////////////////////////////////////////////
 pix_test :: pix_test(int argc, t_atom*argv)
+  : m_noise(true)
 {
   m_pix.image.xsize=m_pix.image.ysize=128;
   switch(argc) {
@@ -304,6 +305,7 @@ pix_test :: ~pix_test()
 /////////////////////////////////////////////////////////
 void pix_test :: render(GemState*state)
 {
+  bool noise = m_noise;
   float scale=1.;
   int rows=m_pix.image.xsize;
   int cols=m_pix.image.ysize;
@@ -312,19 +314,19 @@ void pix_test :: render(GemState*state)
   switch (m_pix.image.format) {
   case GEM_RGBA:
     makeSMPTE_RGBA(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
-                   scale);
+                   scale, noise);
     break;
   case GEM_RGB:
     makeSMPTE_RGB(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
-                  scale);
+                  scale, noise);
     break;
   case GEM_YUV:
     makeSMPTE_YUV(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
-                  scale);
+                  scale, noise);
     break;
   case GEM_GRAY:
     makeSMPTE_Grey(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
-                   scale);
+                   scale, noise);
     break;
   }
   //post("image=%d\tfilm=%d", m_pix.newimage,m_pix.newfilm);
@@ -332,15 +334,7 @@ void pix_test :: render(GemState*state)
   state->set(GemState::_PIX, &m_pix);
 }
 
-/////////////////////////////////////////////////////////
-// static member function
-//
-/////////////////////////////////////////////////////////
-void pix_test :: obj_setupCallback(t_class *classPtr)
-{
-  CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, unsigned int, unsigned int);
-  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, std::string);
-}
+
 void pix_test :: csMess(std::string cs)
 {
   std::string color;
@@ -391,4 +385,18 @@ void pix_test :: dimenMess(unsigned int w, unsigned int h)
     m_pix.image.xsize+=1;
   m_pix.image.reallocate();
   m_pix.newfilm=true;
+}
+void pix_test :: noiseMess(bool noise) {
+  m_noise = noise;
+}
+
+/////////////////////////////////////////////////////////
+// static member function
+//
+/////////////////////////////////////////////////////////
+void pix_test :: obj_setupCallback(t_class *classPtr)
+{
+  CPPEXTERN_MSG2(classPtr, "dimen", dimenMess, unsigned int, unsigned int);
+  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "noise", noiseMess, bool);
 }
