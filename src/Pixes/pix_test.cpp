@@ -50,17 +50,35 @@ static volatile unsigned char getRandom(void)
   return (random_nextseed % 0xFF);
 }
 
+static unsigned int getLastRow(int rows, int stage, bool noise) {
+  if(noise) {
+    switch(stage) {
+    case 0: return rows*2/3; /* SMPTE */
+    case 1: return rows*3/4; /* black-white */
+    case 2: return rows*5/6; /* white-black */
+    default: break;
+    }
+  } else {
+    switch(stage) {
+    case 0: return rows*3/4; /* SMPTE */
+    case 1: return rows*7/8; /* black-white */
+    case 2: return rows; /* white-black */
+    default: break;
+    }
+  }
+  return rows;
+}
+
 static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
                            unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
-  unsigned int r,c;
+  unsigned int r=0;
   unsigned int row0, row1;
 
-  row0=0;
-  row1=noise?(rows*2/3):(rows*3/4);
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 0, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int idx=c*7/cols;
       data[chRed  ]=bars_RGBA[idx][0]*scale;
       data[chGreen]=bars_RGBA[idx][1]*scale;
@@ -69,10 +87,9 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
       data+=4;
     }
   }
-  row0=r;
-  row1=noise?(rows*3/4):(rows*7/8);
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 1, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=c*255/cols;
       data[chRed  ]=grey;
       data[chGreen]=grey;
@@ -81,10 +98,9 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
       data+=4;
     }
   }
-  row0=r;
-  row1=noise?(rows*5/6):(rows);
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 2, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=255-c*255/cols;
       data[chRed  ]=grey;
       data[chGreen]=grey;
@@ -94,7 +110,7 @@ static void makeSMPTE_RGBA(unsigned int cols, unsigned int rows,
     }
   }
   row0=r;
-  row1=rows;
+  row1=getLastRow(rows, 3, noise);
   for(r=0; r<(row1-row0)*cols; r++) {
     unsigned char grey=getRandom();
     data[chRed  ]=grey;
@@ -108,13 +124,12 @@ static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
                           unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
-  unsigned int r,c;
+  unsigned int r=0;
   unsigned int row0, row1;
 
-  row0=0;
-  row1=rows*2/3;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 0, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int idx=c*7/cols;
       data[chRed  ]=bars_RGBA[idx][0]*scale;
       data[chGreen]=bars_RGBA[idx][1]*scale;
@@ -122,10 +137,9 @@ static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
       data+=3;
     }
   }
-  row0=r;
-  row1=rows*3/4;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 1, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=c*255/cols;
       data[chRed  ]=grey;
       data[chGreen]=grey;
@@ -133,10 +147,9 @@ static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
       data+=3;
     }
   }
-  row0=r;
-  row1=rows*5/6;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 2, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=255-c*255/cols;
       data[chRed  ]=grey;
       data[chGreen]=grey;
@@ -145,7 +158,7 @@ static void makeSMPTE_RGB(unsigned int cols, unsigned int rows,
     }
   }
   row0=r;
-  row1=rows;
+  row1=getLastRow(rows, 3, noise);
   for(r=0; r<(row1-row0)*cols; r++) {
     unsigned char grey=getRandom();
     data[chRed  ]=grey;
@@ -158,15 +171,14 @@ void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
                    unsigned char*DATA, float scale, bool noise)
 {
   unsigned char*data=DATA;
-  unsigned int r,c;
+  unsigned int r=0;
   unsigned int row0, row1;
   unsigned int halfcols=cols>>1;
 
-  row0=0;
-  row1=rows*2/3;
-  for(r=row0; r<row1; r++) {
+  row1=getLastRow(rows, 0, noise);
+  for(; r<row1; r++) {
     data=DATA+r*cols*2;
-    for(c=0; c<halfcols; c++) {
+    for(unsigned int c=0; c<halfcols; c++) {
       unsigned int idx=c*7/halfcols;
       data[chY0]=data[chY1]=bars_YUV[idx][0]*scale;
       data[chU ]=bars_YUV[idx][1];
@@ -174,22 +186,20 @@ void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
       data+=4;
     }
   }
-  row0=r;
-  row1=rows*3/4;
-  for(r=row0; r<row1; r++) {
+  row1=getLastRow(rows, 1, noise);
+  for(; r<row1; r++) {
     data=DATA+r*cols*2;
-    for(c=0; c<cols; c++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=c*255/cols;
       data[chY0]=grey;
       data[chU ]=0x80;
       data+=2;
     }
   }
-  row0=r;
-  row1=rows*5/6;
-  for(r=row0; r<row1; r++) {
+  row1=getLastRow(rows, 2, noise);
+  for(; r<row1; r++) {
     data=DATA+r*cols*2;
-    for(c=0; c<cols; c++) {
+    for(unsigned int c=0; c<cols; c++) {
       unsigned int grey=255-c*255/cols;
       data[chY0]=grey;
       data[chU ]=0x80;
@@ -197,7 +207,7 @@ void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
     }
   }
   row0=r;
-  row1=rows;
+  row1=getLastRow(rows, 3, noise);
   data=DATA+r*cols*2;
   for(r=0; r<(row1-row0)*cols; r++) {
     unsigned char grey=getRandom();
@@ -209,32 +219,29 @@ void makeSMPTE_YUV(unsigned int cols, unsigned int rows,
 void makeSMPTE_Grey(unsigned int cols, unsigned int rows,
                     unsigned char*data, float scale, bool noise)
 {
-  unsigned int r,c;
+  unsigned int r=0;
   unsigned int row0, row1;
 
-  row0=0;
-  row1=rows*2/3;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 0, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       *data++=bars_YUV[c*7/cols][0]*scale;
     }
   }
-  row0=r;
-  row1=rows*3/4;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 1, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       *data++=c*255/cols;
     }
   }
-  row0=r;
-  row1=rows*5/6;
-  for(r=row0; r<row1; r++) {
-    for(c=0; c<cols; c++) {
+  row1=getLastRow(rows, 2, noise);
+  for(; r<row1; r++) {
+    for(unsigned int c=0; c<cols; c++) {
       *data++=255-c*255/cols;
     }
   }
   row0=r;
-  row1=rows;
+  row1=getLastRow(rows, 3, noise);
   for(r=0; r<(row1-row0)*cols; r++) {
     *data++=getRandom();
   }
