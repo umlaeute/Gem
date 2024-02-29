@@ -1,74 +1,38 @@
 #N canvas 50 237 711 539 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 8 196 cnv 15 430 330 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 196 cnv 15 430 330 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 37 195 Inlets:;
 #X text 453 355 Outlets:;
 #X text 461 366 Outlet 1: gemlist;
-#X obj 8 161 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 161 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 160 Arguments:;
-#X obj 8 76 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 77 cnv 15 250 250 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 76 cnv 15 430 80 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 77 cnv 15 250 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 60 Example:;
-#X obj 584 254 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 50 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 132 112 create \, 1;
-#X msg 198 112 destroy;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 6 0;
-#X connect 3 1 5 0;
-#X connect 3 1 7 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 589 293 pd gemwin;
-#X msg 589 274 create;
-#X text 585 253 Create window:;
 #X text 71 31 Class: manipulation object;
-#X obj 451 197 cnv 15 80 60 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 451 197 cnv 15 80 60 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 579 186 color 1 0 0 0.5;
-#X text 60 219 Inlet 1: float: turn alpha blending on/off (default:1)
-;
+#X text 60 219 Inlet 1: float: turn alpha blending on/off (default:1);
 #X text 50 12 Synopsis: [alpha];
 #X text 29 77 Description: enable alpha blending;
 #X obj 458 310 square;
 #X obj 458 233 alpha;
 #X obj 458 108 color 0 1 0 0.5;
 #X text 61 208 Inlet 1: gemlist;
-#X text 60 231 Inlet 1: message "auto 1" | "auto 0" turn on/off automatic
-depth detection;
-#X floatatom 583 139 5 0 0 0 - - -;
+#X text 60 231 Inlet 1: message "auto 1" | "auto 0" turn on/off automatic depth detection;
+#X floatatom 583 139 5 0 0 0 - - - 0;
 #X obj 458 86 gemhead 51;
 #X obj 579 211 sphere;
 #X obj 458 137 rotate 114 0 1 0;
 #X obj 579 162 gemhead 50;
 #X msg 474 176 auto \$1;
-#X obj 474 158 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 474 158 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X msg 583 108 0 1 0 \$1;
-#X floatatom 583 88 5 0 1 0 - - -;
-#X obj 628 88 hsl 64 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 0 1;
-#X text 22 91 [alpha] turns on and off alpha blending. Be aware that
-the rendering order matters \, so you probably want to set the gemhead
-order number high so that the object is rendered after all of the non-alpha
-blended ones.;
-#X text 63 171 float : blending function (default:GL_ONE_MINUS_SRC_ALPHA)
-;
+#X floatatom 583 88 5 0 1 0 - - - 0;
+#X obj 628 88 hsl 64 15 0 1 0 0 empty empty empty -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X text 22 91 [alpha] turns on and off alpha blending. Be aware that the rendering order matters \, so you probably want to set the gemhead order number high so that the object is rendered after all of the non-alpha blended ones.;
+#X text 63 171 float : blending function (default:GL_ONE_MINUS_SRC_ALPHA);
 #X text 60 260 Inlet 2: float: blending function;
 #X text 70 272 0=GL_ONE_MINUS_SOURCE_ALPHA;
 #X text 70 282 1=GL_ONE;
@@ -90,23 +54,21 @@ blended ones.;
 #X text 70 474 17=GL_ONE_MINUS_SRC1_COLOR;
 #X text 70 486 18=GL_SRC1_ALPHA;
 #X text 70 498 19=GL_ONE_MINUS_SRC1_ALPHA;
-#X obj 477 210 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X floatatom 501 210 2 0 19 0 - - -;
+#X obj 477 210 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X floatatom 501 210 2 0 19 0 - - - 0;
 #X obj 588 8 declare -lib Gem;
-#X connect 11 0 12 0;
-#X connect 12 0 11 0;
-#X connect 16 0 27 0;
-#X connect 21 0 20 0;
-#X connect 22 0 28 0;
-#X connect 25 0 28 1;
-#X connect 26 0 22 0;
-#X connect 28 0 21 0;
-#X connect 29 0 16 0;
-#X connect 30 0 21 0;
-#X connect 31 0 30 0;
-#X connect 32 0 22 1;
-#X connect 33 0 32 0;
-#X connect 34 0 33 0;
-#X connect 58 0 21 0;
-#X connect 59 0 21 1;
+#X obj 588 271 _gemwin;
+#X connect 12 0 23 0;
+#X connect 17 0 16 0;
+#X connect 18 0 24 0;
+#X connect 21 0 24 1;
+#X connect 22 0 18 0;
+#X connect 24 0 17 0;
+#X connect 25 0 12 0;
+#X connect 26 0 17 0;
+#X connect 27 0 26 0;
+#X connect 28 0 18 1;
+#X connect 29 0 28 0;
+#X connect 30 0 29 0;
+#X connect 54 0 17 0;
+#X connect 55 0 17 1;
