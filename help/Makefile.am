@@ -244,4 +244,5 @@ dist_gemhelp_DATA += \
 dist_gemhelp_DATA += \
 	_backendinfo.pd \
 	_gemwin.pd \
+	_pix2rectangle.pd \
 	$(empty)
