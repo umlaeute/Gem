@@ -1,4 +1,4 @@
-#N canvas 152 61 983 713 10;
+#N canvas 505 74 983 713 10;
 #X declare -lib Gem;
 #N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
@@ -18,19 +18,15 @@
 #X connect 6 0 7 0;
 #X connect 7 0 5 0;
 #X restore 466 149 pd fps;
-#X floatatom 466 172 5 0 0 1 fps - -;
-#X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 7 236 cnv 15 450 375 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 7 181 cnv 15 450 50 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X floatatom 466 172 5 0 0 1 fps - - 0;
+#X obj 6 76 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 7 236 cnv 15 450 375 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 7 181 cnv 15 450 50 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 59 27 Class: geometric object;
 #X text 467 7 GEM object;
 #X text 61 7 Synopsis: [gemvertexbuffer];
-#X obj 462 76 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 5 76 450 300 gemwin 0;
+#X obj 462 76 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#N canvas 1327 265 450 300 gemwin 0;
 #X obj 132 246 gemwin;
 #X obj 67 89 outlet;
 #X obj 67 10 inlet;
@@ -74,69 +70,44 @@
 #X text 27 253 Inlet 1: gemlist;
 #X text 9 580 Outlets:;
 #X text 21 593 Outlet 1: gemlist;
-#X obj 569 7 cnv 15 400 700 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 576 668 cnv 15 150 30 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 569 7 cnv 15 400 700 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 576 668 cnv 15 150 30 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X msg 792 593 draw line;
 #X msg 802 614 draw points;
 #X msg 692 384 color_enable \$1;
-#X obj 673 384 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 673 384 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 579 134 GEMglPointSize 1;
 #X obj 816 638 loadbang;
 #X obj 579 76 translateXYZ 0 0 -2;
 #X obj 579 114 rotateXYZ -45 0 -50;
 #X obj 579 54 gemhead;
 #X text 594 254 update VBO using table value;
-#X obj 643 366 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 643 366 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 665 364 position_enable \$1;
-#X obj 729 424 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
-#X obj 699 406 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 729 424 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 699 406 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 721 404 texture_enable \$1;
 #X msg 748 424 normal_enable \$1;
-#X obj 579 215 pix_image;
 #X obj 579 234 pix_texture;
-#X obj 593 153 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
-#N canvas 1 51 450 300 openpanel 0;
-#X obj 114 62 inlet;
-#X obj 121 254 outlet;
-#X obj 114 125 openpanel;
-#X msg 114 162 set open \$1;
-#X obj 114 199 t b a;
-#X connect 0 0 2 0;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 4 0 1 0;
-#X connect 4 1 1 0;
-#X restore 593 170 pd openpanel;
-#X msg 593 189;
 #X text 671 349 enable / disable specific VBO;
-#X obj 579 32 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 579 32 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 577 14 Example:;
 #X msg 816 658 resize 128;
-#X floatatom 636 96 5 0 0 0 - - -;
+#X floatatom 636 96 5 0 0 0 - - - 0;
 #X obj 579 95 scale 3;
 #X msg 593 271 position blablax blablay blablaz;
 #X msg 604 290 color colorr colorg colorb colora;
 #X msg 614 310 texture colorr colorg;
 #X msg 627 331 normal colorr blablay blablaz;
-#X obj 696 169 bng 15 250 50 0 empty \$0-init100 empty 17 7 0 10 -262144
--1 -1;
-#X obj 841 56 cnv 15 120 160 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 696 169 bng 15 250 50 0 empty \$0-init100 empty 17 7 0 10 #fcfcfc #000000 #000000;
+#X obj 841 56 cnv 15 120 160 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #N canvas 615 145 657 666 lorenz 0;
-#X floatatom 82 248 5 0 0 0 - - -;
-#X floatatom 124 248 5 0 0 0 - - -;
-#X floatatom 83 201 5 0 0 0 - - -;
-#X floatatom 125 201 5 0 0 0 - - -;
-#X floatatom 81 156 5 0 0 0 - - -;
-#X floatatom 124 156 5 0 0 0 - - -;
+#X floatatom 82 248 5 0 0 0 - - - 0;
+#X floatatom 124 248 5 0 0 0 - - - 0;
+#X floatatom 83 201 5 0 0 0 - - - 0;
+#X floatatom 125 201 5 0 0 0 - - - 0;
+#X floatatom 81 156 5 0 0 0 - - - 0;
+#X floatatom 124 156 5 0 0 0 - - - 0;
 #N canvas 145 116 1131 666 table 0;
 #X obj 266 31 loadbang;
 #X msg 266 53 dsp 1;
@@ -147,44 +118,37 @@
 #X obj 88 160 abs~;
 #X obj 87 223 osc~ 11;
 #X obj 86 243 abs~;
-#X obj 38 58 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 38 58 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 87 310 sig~ 0.7;
 #X obj 392 275 v pr;
 #X obj 523 276 v r;
 #X obj 449 277 v b;
-#X floatatom 392 246 5 0 0 0 - - -;
-#X floatatom 523 248 5 0 0 0 - - -;
+#X floatatom 392 246 5 0 0 0 - - - 0;
+#X floatatom 523 248 5 0 0 0 - - - 0;
 #X msg 393 221 10;
 #X obj 447 218 expr 8./3;
 #X msg 344 344 set 1.2 2.3 4.4;
-#X floatatom 449 247 7 0 0 0 - - -;
+#X floatatom 449 247 7 0 0 0 - - - 0;
 #X msg 321 308 stop;
 #X msg 291 275 start;
-#X floatatom 615 248 5 0 0 0 - - -;
+#X floatatom 615 248 5 0 0 0 - - - 0;
 #X obj 615 277 v dt;
 #X msg 526 220 18;
 #X msg 611 221 0.01;
-#X obj 344 167 bng 15 250 50 0 empty empty empty 20 8 0 8 -262144 -1
--1;
+#X obj 344 167 bng 15 250 50 0 empty empty empty 20 8 0 8 #fcfcfc #000000 #000000;
 #X text 679 250 <- experiment with these numbers;
 #X obj 705 223 line;
 #X obj 344 449 /~ 20;
 #X obj 450 446 /~ 20;
 #X obj 556 445 /~ 20;
 #X msg 706 198 0.01 \, 0.04 5000;
-#X obj 344 393 fexpr~ $y1+(pr*$y2-pr*$y1)*dt \; $y2 +(-$y1*$y3 + r*$y1-$y2)*dt
-\; $y3+($y1*$y2 - b*$y3)*dt;
+#X obj 344 393 fexpr~ $y1+(pr*$y2-pr*$y1)*dt \; $y2 +(-$y1*$y3 + r*$y1-$y2)*dt \; $y3+($y1*$y2 - b*$y3)*dt;
 #X obj 276 164 loadbang;
-#X text 329 108 This is an example of how fexpr~ could be used for
-solving differential equations \, in this case the lorenz equations
-which generate chaotic signals;
+#X text 329 108 This is an example of how fexpr~ could be used for solving differential equations \, in this case the lorenz equations which generate chaotic signals;
 #X text 577 390 Note the following shorthands:;
 #X text 576 406 $y1 -> $y1[-1] \, $y2 -> $y2[-1] \, .....;
-#X text 464 344 the 'set' commands sets the initial previous values
-;
-#X obj 639 442 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X text 464 344 the 'set' commands sets the initial previous values;
+#X obj 639 442 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 673 437 loadbang;
 #X obj 572 473 sig~ -1;
 #X obj 673 467 metro 1000;
@@ -251,38 +215,32 @@ which generate chaotic signals;
 #X obj 38 136 alpha;
 #X msg 118 577 draw line;
 #X msg 184 575 draw points;
-#X floatatom 147 288 5 0 0 0 - - -;
+#X floatatom 147 288 5 0 0 0 - - - 0;
 #X msg 82 449 color_enable \$1;
-#X obj 82 430 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 82 430 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 38 222 scaleXYZ 3 3 3;
 #X obj 38 305 GEMglPointSize 1;
 #X obj 38 174 translateXYZ 0 0 -2;
 #X obj 38 267 rotateXYZ -45 0 -50;
 #X obj 38 114 gemhead;
 #X obj 56 346 gemhead 10;
-#X obj 56 327 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 56 327 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 56 367 t b;
 #X obj 98 115 switch~;
-#X obj 38 43 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
-;
+#X obj 38 43 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 116 10 loadbang;
 #X obj 90 497 delay 1000;
 #X obj 90 475 sel 1;
 #X obj 38 13 inlet;
-#X obj 218 469 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X obj 218 469 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 218 444 loadbang;
 #X obj 38 614 gemvertexbuffer 100000;
 #X msg 116 32 0;
 #X obj 91 516 i \$0;
-#X msg 90 538 colorR \$1colorr2 \, colorG \$1colorg2 \, colorB \$1colorb2
-\, colorA \$1colora2;
+#X msg 90 538 colorR \$1colorr2 \, colorG \$1colorg2 \, colorB \$1colorb2 \, colorA \$1colora2;
 #X obj 38 69 t f f f f;
 #X obj 56 387 i \$0;
-#X msg 56 407 posX \$1blablax2 \, posY \$1blablay2 \, posZ \$1blablaz2
-;
+#X msg 56 407 posX \$1blablax2 \, posY \$1blablay2 \, posZ \$1blablaz2;
 #X connect 0 0 16 1;
 #X connect 1 0 16 2;
 #X connect 2 0 13 1;
@@ -320,22 +278,20 @@ which generate chaotic signals;
 #X connect 34 0 35 0;
 #X connect 35 0 29 0;
 #X restore 849 100 pd lorenz;
-#X obj 849 80 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 849 80 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #N canvas 285 255 805 628 wave 0;
-#X floatatom 87 237 5 0 0 0 - - -;
-#X floatatom 129 237 5 0 0 0 - - -;
-#X floatatom 172 237 5 0 0 0 - - -;
-#X floatatom 88 190 5 0 0 0 - - -;
-#X floatatom 130 190 5 0 0 0 - - -;
-#X floatatom 173 190 5 0 0 0 - - -;
-#X floatatom 86 145 5 0 0 0 - - -;
-#X floatatom 129 145 5 0 0 0 - - -;
-#X floatatom 173 145 5 0 0 0 - - -;
+#X floatatom 87 237 5 0 0 0 - - - 0;
+#X floatatom 129 237 5 0 0 0 - - - 0;
+#X floatatom 172 237 5 0 0 0 - - - 0;
+#X floatatom 88 190 5 0 0 0 - - - 0;
+#X floatatom 130 190 5 0 0 0 - - - 0;
+#X floatatom 173 190 5 0 0 0 - - - 0;
+#X floatatom 86 145 5 0 0 0 - - - 0;
+#X floatatom 129 145 5 0 0 0 - - - 0;
+#X floatatom 173 145 5 0 0 0 - - - 0;
 #X obj 43 592 gemvertexbuffer;
 #N canvas 145 161 1131 747 table 0;
-#X obj 36 59 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 36 59 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 583 129 until;
 #X msg 583 110 100;
 #N canvas 0 50 450 300 count 0;
@@ -354,8 +310,7 @@ which generate chaotic signals;
 #X connect 4 1 3 0;
 #X connect 5 0 1 1;
 #X restore 583 148 pd count;
-#X obj 440 70 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 440 70 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 583 91 t b b;
 #X obj 583 264 until;
 #X msg 583 245 100;
@@ -461,24 +416,20 @@ which generate chaotic signals;
 #X obj 341 72 t b b;
 #X obj 349 318 f;
 #X obj 440 380 +;
-#X floatatom 903 395 5 0 0 0 - - -;
-#X obj 583 71 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X floatatom 903 395 5 0 0 0 - - - 0;
+#X obj 583 71 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 87 310 sig~ 0.3;
 #X obj 903 371 / 99;
 #X msg 903 347 1;
 #X obj 383 322 - 0.1;
 #X obj 440 354 * 7;
 #X obj 440 31 t b b b;
-#X text 162 619 color and position are updated at every frame. you
-just have to change array value....;
-#X text 156 504 replace this with iem_tab_* stuff in order to increase
-performance if you wish to update point positions at every frame;
+#X text 162 619 color and position are updated at every frame. you just have to change array value....;
+#X text 156 504 replace this with iem_tab_* stuff in order to increase performance if you wish to update point positions at every frame;
 #X obj 36 -2 inlet;
 #X obj 123 122 f;
 #X obj 279 120 f;
-#X obj 438 6 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 438 6 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 123 56 sin;
 #X obj 123 78 + 1;
 #X obj 123 100 * 0.5;
@@ -609,8 +560,7 @@ performance if you wish to update point positions at every frame;
 #X obj 106 549 loadbang;
 #X obj 43 163 translateXYZ 0 0 -2;
 #X obj 43 63 gemhead;
-#X obj 61 306 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 61 306 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 61 346 t b;
 #X msg 106 572 resize 60000;
 #X msg 94 495 draw triangle;
@@ -664,13 +614,11 @@ performance if you wish to update point positions at every frame;
 #X connect 33 0 34 0;
 #X connect 34 0 16 0;
 #X restore 849 184 pd wave;
-#X obj 849 162 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 849 162 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #N canvas 786 231 654 435 oscillo~ 0;
 #X obj 47 78 gemhead;
 #X obj 122 116 adc~;
-#X obj 218 63 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
+#X obj 218 63 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 218 41 loadbang;
 #X obj 47 5 inlet;
 #X obj 123 152 *~ 3;
@@ -696,12 +644,12 @@ performance if you wish to update point positions at every frame;
 #X obj 118 231 table \$0phasor 8192;
 #X obj 79 306 i \$0;
 #X msg 79 342 posX \$1phasor \, posY \$1sound;
-#X floatatom 155 34 5 0 0 0 - - -;
+#X floatatom 155 34 5 0 0 0 - - - 0;
 #X obj 15 157 scale 1;
-#X floatatom 52 115 5 0 0 0 - - -;
+#X floatatom 52 115 5 0 0 0 - - - 0;
 #X msg 227 395 draw points;
 #X msg 298 73 8192;
-#X floatatom 298 95 5 0 0 0 - - -;
+#X floatatom 298 95 5 0 0 0 - - - 0;
 #X obj 298 234 /;
 #X obj 298 118 t f b f f;
 #X msg 414 154 resize \$1;
@@ -752,31 +700,22 @@ performance if you wish to update point positions at every frame;
 #X connect 37 1 38 0;
 #X connect 37 2 39 0;
 #X restore 849 141 pd oscillo~;
-#X obj 849 121 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 849 121 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 846 60 other examples;
-#X text 27 327 Inlet 1: message: texture / textureU / textureV: update
-vertex texcoords from tables;
-#X text 27 357 Inlet 1: message: normal / normalX / normalY / normalZ:
-update vertex normals from tables;
-#X text 27 297 Inlet 1: message: color / colorR / colorG / colorB /
-colorA: update vertex colors from tables;
-#X text 27 267 Inlet 1: message: position / posX / posY / posZ: update
-vertex positions from tables;
+#X text 27 327 Inlet 1: message: texture / textureU / textureV: update vertex texcoords from tables;
+#X text 27 357 Inlet 1: message: normal / normalX / normalY / normalZ: update vertex normals from tables;
+#X text 27 297 Inlet 1: message: color / colorR / colorG / colorB / colorA: update vertex colors from tables;
+#X text 27 267 Inlet 1: message: position / posX / posY / posZ: update vertex positions from tables;
 #N canvas 428 155 679 574 tabledata 0;
 #X text 65 43 applying table data as vertex data;
 #X msg 30 100 position tabX tabY tabZ 0;
 #X msg 30 130 position tabXYZ 0;
-#X text 200 102 will read X \, Y & Z values from the 3 tables as position
-data \, starting at offset=0 (offset can be omitted);
-#X text 200 132 will read interleaved X \, Y & Z values from the table
-tabXYZ \, starting at offset=0 (offset can be omitted);
-#X text 200 172 will update only X values from given table (starting
-at offset=10);
+#X text 200 102 will read X \, Y & Z values from the 3 tables as position data \, starting at offset=0 (offset can be omitted);
+#X text 200 132 will read interleaved X \, Y & Z values from the table tabXYZ \, starting at offset=0 (offset can be omitted);
+#X text 200 172 will update only X values from given table (starting at offset=10);
 #X msg 31 169 posX tabX 10;
 #X msg 31 209 posY tabY;
-#X text 200 212 will update only Y values from given table (starting
-at default offset=0);
+#X text 200 212 will update only Y values from given table (starting at default offset=0);
 #X text 39 290 the same applies to the other vertex data types:;
 #X msg 234 346 colorR r;
 #X msg 294 346 colorG g;
@@ -798,15 +737,11 @@ at default offset=0);
 #X msg 234 316 positionX X;
 #X msg 314 316 positionY Y;
 #X msg 394 316 positionZ Z;
-#X text 51 453 offset is always optional (default:0) \, and comes after
-the table names;
+#X text 51 453 offset is always optional (default:0) \, and comes after the table names;
 #X text 50 507 unset table data is initialized to 0.f;
 #X restore 464 333 pd tabledata;
-#X text 27 384 Inlet 1: message: resize float : change the number of
-vertex to use;
-#X text 23 98 Vertex position \, color etc can be copy from pd table
-to the vertex buffer (VBO = Vertex Buffer Object). This object can
-draw lot's of points very efficiently.;
+#X text 27 384 Inlet 1: message: resize float : change the number of vertex to use;
+#X text 23 98 Vertex position \, color etc can be copy from pd table to the vertex buffer (VBO = Vertex Buffer Object). This object can draw lot's of points very efficiently.;
 #X obj 696 191 t b b b;
 #N canvas 990 92 450 459 load_tables 0;
 #X obj 31 71 noise~;
@@ -856,78 +791,80 @@ draw lot's of points very efficiently.;
 #X obj 579 675 gemvertexbuffer;
 #X msg 728 569 draw_range \$1 \$2;
 #X obj 728 549 pack 0 0;
-#X floatatom 728 507 5 0 0 0 - - -;
-#X floatatom 774 507 5 0 0 0 - - -;
+#X floatatom 728 507 5 0 0 0 - - - 0;
+#X floatatom 774 507 5 0 0 0 - - - 0;
 #X obj 774 526 t b f;
-#X text 27 452 Inlet 1: message: draw_range float float : set the range
-for partial draw.;
-#X text 726 480 set start and end indexes to draw only a range of VBO
-, f 33;
+#X text 27 452 Inlet 1: message: draw_range float float : set the range for partial draw.;
+#X text 726 480 set start and end indexes to draw only a range of VBO, f 33;
 #X text 668 458 as soon as they are updated;
-#X text 598 443 default : all VBO are disabled \, but they are enabled
-;
-#X floatatom 699 135 5 1 64 0 - - -;
-#X floatatom 719 113 5 0 0 0 - - -;
-#X text 27 479 Inlet 1: message: program float : set the id for glsl
-program.;
-#X text 27 409 Inlet 1: message: position_enable float \, color_enable
-float \, texture_enable float \, normal_enable float \, attribute_enable
-float : enable/disable the use of this data;
-#X text 27 507 Inlet 1: message: attribute name table (offset) : add
-attribute / update attribute from table;
-#X text 27 537 Inlet 1: message: reset_attributes : clear attribute
-data;
-#X text 27 552 Inlet 1: message: print_attributes : print active attributes
-;
-#X text 14 646 see examples/10.glsl/16.vertexbuffer_attributes.pd on
-how to;
+#X text 598 443 default : all VBO are disabled \, but they are enabled;
+#X floatatom 699 135 5 1 64 0 - - - 0;
+#X floatatom 719 113 5 0 0 0 - - - 0;
+#X text 27 479 Inlet 1: message: program float : set the id for glsl program.;
+#X text 27 409 Inlet 1: message: position_enable float \, color_enable float \, texture_enable float \, normal_enable float \, attribute_enable float : enable/disable the use of this data;
+#X text 27 507 Inlet 1: message: attribute name table (offset) : add attribute / update attribute from table;
+#X text 27 537 Inlet 1: message: reset_attributes : clear attribute data;
+#X text 27 552 Inlet 1: message: print_attributes : print active attributes;
+#X text 14 646 see examples/10.glsl/16.vertexbuffer_attributes.pd on how to;
 #X text 15 661 use attribute tables with the vertex buffer.;
-#X text 57 190 number of vertices to be used. if this is a power of
-two (2^n) \, you might have some performance gain.;
+#X text 57 190 number of vertices to be used. if this is a power of two (2^n) \, you might have some performance gain.;
 #X obj 868 8 declare -lib Gem;
+#N canvas 735 418 450 300 startDSP 0;
+#X obj 46 30 inlet;
+#X obj 46 97 select 1;
+#X obj 46 120 t b b;
+#X obj 46 143 delay 100;
+#X obj 46 166 s \$0-init100;
+#X msg 137 166 \; pd dsp 1;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 1 5 0;
+#X connect 3 0 4 0;
+#X restore 469 484 pd startDSP;
+#X obj 469 426 _gemwin 100;
+#X obj 579 195 pix_test \; noise 0;
 #X connect 0 0 1 0;
 #X connect 9 0 10 0;
 #X connect 10 0 9 0;
-#X connect 20 0 69 0;
-#X connect 21 0 69 0;
-#X connect 22 0 69 0;
+#X connect 20 0 65 0;
+#X connect 21 0 65 0;
+#X connect 22 0 65 0;
 #X connect 23 0 22 0;
-#X connect 24 0 36 0;
-#X connect 25 0 44 0;
-#X connect 26 0 46 0;
+#X connect 24 0 88 0;
+#X connect 25 0 40 0;
+#X connect 26 0 42 0;
 #X connect 27 0 24 0;
 #X connect 28 0 26 0;
 #X connect 30 0 31 0;
-#X connect 31 0 69 0;
+#X connect 31 0 65 0;
 #X connect 32 0 35 0;
 #X connect 33 0 34 0;
-#X connect 34 0 69 0;
-#X connect 35 0 69 0;
-#X connect 36 0 37 0;
-#X connect 37 0 69 0;
-#X connect 38 0 39 0;
-#X connect 39 0 40 0;
-#X connect 40 0 36 0;
-#X connect 42 0 28 0;
-#X connect 44 0 69 0;
-#X connect 45 0 46 1;
-#X connect 46 0 27 0;
-#X connect 47 0 69 0;
-#X connect 48 0 69 0;
-#X connect 49 0 69 0;
-#X connect 50 0 69 0;
-#X connect 51 0 67 0;
+#X connect 34 0 65 0;
+#X connect 35 0 65 0;
+#X connect 36 0 65 0;
+#X connect 38 0 28 0;
+#X connect 40 0 65 0;
+#X connect 41 0 42 1;
+#X connect 42 0 27 0;
+#X connect 43 0 65 0;
+#X connect 44 0 65 0;
+#X connect 45 0 65 0;
+#X connect 46 0 65 0;
+#X connect 47 0 63 0;
+#X connect 50 0 49 0;
+#X connect 52 0 51 0;
 #X connect 54 0 53 0;
-#X connect 56 0 55 0;
-#X connect 58 0 57 0;
-#X connect 67 0 47 0;
-#X connect 67 1 48 0;
-#X connect 67 2 68 0;
-#X connect 70 0 69 0;
-#X connect 71 0 70 0;
-#X connect 72 0 71 0;
-#X connect 73 0 74 0;
-#X connect 74 0 71 0;
-#X connect 74 1 71 1;
-#X connect 79 0 24 1;
-#X connect 80 0 27 3;
+#X connect 63 0 43 0;
+#X connect 63 1 44 0;
+#X connect 63 2 64 0;
+#X connect 66 0 65 0;
+#X connect 67 0 66 0;
+#X connect 68 0 67 0;
+#X connect 69 0 70 0;
+#X connect 70 0 67 0;
+#X connect 70 1 67 1;
+#X connect 75 0 24 1;
+#X connect 76 0 27 3;
+#X connect 87 0 86 0;
+#X connect 88 0 36 0;

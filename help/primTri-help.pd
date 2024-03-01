@@ -1,38 +1,11 @@
 #N canvas 130 61 696 468 10;
 #X declare -lib Gem;
 #X text 54 30 Class: geometric object;
-#X obj 479 107 cnv 15 200 250 empty empty empty 20 12 0 14 -228992
--66577 0;
-#X obj 494 294 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 0 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 198 112 destroy;
-#X msg 132 112 create \, 1;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 7 0;
-#X connect 3 1 5 0;
-#X connect 3 1 6 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 499 333 pd gemwin;
-#X msg 499 314 create;
-#X text 495 293 Create window:;
-#X obj 7 65 cnv 15 450 80 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 8 196 cnv 15 450 220 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 479 107 cnv 15 200 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 7 65 cnv 15 450 80 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 8 196 cnv 15 450 220 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 9 201 Inlets:;
-#X obj 8 156 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 156 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 155 Arguments:;
 #X text 27 227 Inlet 1: message: draw [line|fill|point];
 #X text 512 8 GEM object;
@@ -40,10 +13,8 @@
 #X text 9 380 Outlets:;
 #X text 21 393 Outlet 1: gemlist;
 #X text 485 89 Example:;
-#X obj 482 137 cnv 15 190 110 empty empty empty 20 12 0 14 -81876 -66577
-0;
-#X obj 534 252 cnv 15 100 30 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 482 137 cnv 15 190 110 empty empty empty 20 12 0 14 #4cfc4c #404040 0;
+#X obj 534 252 cnv 15 100 30 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X msg 485 145 draw line;
 #X msg 485 166 draw fill;
 #X msg 485 188 draw point;
@@ -61,34 +32,25 @@
 #X text 635 218 (XYZ)2;
 #X text 645 238 (XYZ)3;
 #X text 32 14 Synopsis: [primTri];
-#X text 7 69 Description: Renders a triangle with gradient colors.
-;
-#X text 16 86 The [primTri] object renders a triangle. The corner-points
-can be specified with respect to position and color.;
+#X text 7 69 Description: Renders a triangle with gradient colors.;
+#X text 16 86 The [primTri] object renders a triangle. The corner-points can be specified with respect to position and color.;
 #X text 63 166 (none);
-#X text 27 248 Inlet 2: list: 3(XYZ) float values (position of 1st
-corner);
-#X text 27 265 Inlet 3: list: 3(XYZ) float values (position of 2nd
-corner);
-#X text 27 282 Inlet 4: list: 3(XYZ) float values (position of 3rd
-corner);
-#X text 27 298 Inlet 5: list: 3(RGB) or 4(RGBA) float values (color
-of 1st corner);
-#X text 27 325 Inlet 6: list: 3(RGB) or 4(RGBA) float values (color
-of 2nd corner);
-#X text 27 352 Inlet 7: list: 3(RGB) or 4(RGBA) float values (color
-of 3rd corner);
-#X obj 543 259 primTri;
+#X text 27 248 Inlet 2: list: 3(XYZ) float values (position of 1st corner);
+#X text 27 265 Inlet 3: list: 3(XYZ) float values (position of 2nd corner);
+#X text 27 282 Inlet 4: list: 3(XYZ) float values (position of 3rd corner);
+#X text 27 298 Inlet 5: list: 3(RGB) or 4(RGBA) float values (color of 1st corner);
+#X text 27 325 Inlet 6: list: 3(RGB) or 4(RGBA) float values (color of 2nd corner);
+#X text 27 352 Inlet 7: list: 3(RGB) or 4(RGBA) float values (color of 3rd corner);
+#X obj 543 259 primTri, f 10;
 #X obj 578 8 declare -lib Gem;
-#X connect 3 0 4 0;
-#X connect 4 0 3 0;
-#X connect 19 0 45 0;
-#X connect 20 0 45 0;
-#X connect 21 0 45 0;
-#X connect 22 0 45 0;
-#X connect 23 0 45 3;
-#X connect 24 0 45 2;
-#X connect 25 0 45 1;
-#X connect 29 0 45 6;
-#X connect 30 0 45 5;
-#X connect 31 0 45 4;
+#X obj 491 296 _gemwin;
+#X connect 15 0 41 0;
+#X connect 16 0 41 0;
+#X connect 17 0 41 0;
+#X connect 18 0 41 0;
+#X connect 19 0 41 3;
+#X connect 20 0 41 2;
+#X connect 21 0 41 1;
+#X connect 25 0 41 6;
+#X connect 26 0 41 5;
+#X connect 27 0 41 4;

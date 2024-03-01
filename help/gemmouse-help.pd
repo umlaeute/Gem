@@ -1,53 +1,22 @@
 #N canvas 179 61 929 414 10;
 #X declare -lib Gem;
-#X obj 7 65 cnv 15 450 170 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 8 283 cnv 15 450 120 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 7 65 cnv 15 450 170 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 8 283 cnv 15 450 120 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 9 288 Inlets:;
-#X obj 8 245 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 245 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 244 Arguments:;
 #X text 712 8 GEM object;
 #X text 9 317 Outlets:;
 #X text 475 29 Example:;
 #X text 54 30 Class: control object;
-#X obj 466 64 cnv 15 170 180 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 466 284 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 22 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 198 112 destroy;
-#X msg 132 112 create \, 1;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 7 0;
-#X connect 3 1 5 0;
-#X connect 3 1 6 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 471 323 pd gemwin;
-#X msg 471 304 create;
-#X text 467 283 Create window:;
+#X obj 466 64 cnv 15 170 180 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 27 300 Inlet 1: non - used;
 #X text 468 364 see also:;
 #X text 33 14 Synopsis: [gemmouse];
 #X text 7 69 Description: mouse events in the GEM window;
-#X text 16 86 [gemmouse] sends out mouse events which occur in the
-GEM window. The X and Y Position go from 0 to the size of the window
-in pixels. The point (0 \, 0) is in the top left of the window.;
-#X text 15 141 You can also set some normalization of the output coordinates
-with arguments.;
-#X text 15 170 The button outlets send a 1 when the specified button
-is pressed and a 0 when it is released.;
+#X text 16 86 [gemmouse] sends out mouse events which occur in the GEM window. The X and Y Position go from 0 to the size of the window in pixels. The point (0 \, 0) is in the top left of the window.;
+#X text 15 141 You can also set some normalization of the output coordinates with arguments.;
+#X text 15 170 The button outlets send a 1 when the specified button is pressed and a 0 when it is released.;
 #X text 63 255 [list : x-normalization y-normalization];
 #X text 21 330 Outlet 1: x position;
 #X text 21 343 Outlet 2: y position;
@@ -55,25 +24,23 @@ is pressed and a 0 when it is released.;
 #X text 21 368 Outlet 4: middle button state;
 #X text 21 381 Outlet 5: right button state;
 #X obj 466 385 gemkeyboard;
-#X obj 478 82 cnv 15 100 40 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 478 82 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 491 93 gemmouse;
-#X floatatom 491 218 9 0 0 1 X-position - -;
-#X floatatom 502 196 8 0 0 1 Y-position - -;
-#X floatatom 513 174 2 0 0 1 left-Button - -;
-#X floatatom 524 153 2 0 0 1 middle-Button - -;
-#X floatatom 536 129 2 0 0 1 right-Button - -;
-#X obj 642 64 cnv 15 280 180 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 654 82 cnv 15 100 40 empty empty empty 20 12 0 14 -24198 -66577
-0;
-#X floatatom 657 135 9 0 0 1 X-position - -;
-#X floatatom 674 113 8 0 0 1 Y-position - -;
+#A saved init;
+#X floatatom 491 218 9 0 0 1 X-position - - 0;
+#X floatatom 502 196 8 0 0 1 Y-position - - 0;
+#X floatatom 513 174 2 0 0 1 left-Button - - 0;
+#X floatatom 524 153 2 0 0 1 middle-Button - - 0;
+#X floatatom 536 129 2 0 0 1 right-Button - - 0;
+#X obj 642 64 cnv 15 280 180 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 654 82 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
+#X floatatom 657 135 9 0 0 1 X-position - - 0;
+#X floatatom 674 113 8 0 0 1 Y-position - - 0;
 #X text 792 134 (normalized to 0..1);
 #X obj 657 89 gemmouse 1 1;
+#A saved init;
 #X text 791 111 (normalized to 0..1);
-#X obj 656 186 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
+#X obj 656 186 tgl 15 1 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 1 1;
 #N canvas 589 352 498 353 follow_mouse 0;
 #X obj 112 29 inlet;
 #X obj 168 74 * 8;
@@ -103,15 +70,14 @@ is pressed and a 0 when it is released.;
 #X connect 13 0 11 0;
 #X restore 656 209 pd follow_mouse;
 #X obj 788 8 declare -lib Gem;
-#X connect 11 0 12 0;
-#X connect 12 0 11 0;
-#X connect 29 0 30 0;
-#X connect 29 1 31 0;
-#X connect 29 2 32 0;
-#X connect 29 3 33 0;
-#X connect 29 4 34 0;
-#X connect 37 0 43 1;
-#X connect 38 0 43 2;
-#X connect 40 0 37 0;
-#X connect 40 1 38 0;
-#X connect 42 0 43 0;
+#X obj 464 299 _gemwin;
+#X connect 25 0 26 0;
+#X connect 25 1 27 0;
+#X connect 25 2 28 0;
+#X connect 25 3 29 0;
+#X connect 25 4 30 0;
+#X connect 33 0 39 1;
+#X connect 34 0 39 2;
+#X connect 36 0 33 0;
+#X connect 36 1 34 0;
+#X connect 38 0 39 0;

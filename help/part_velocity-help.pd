@@ -1,128 +1,43 @@
 #N canvas 600 294 692 462 10;
 #X declare -lib Gem;
 #X obj 546 22 declare -lib Gem;
-#X obj 14 79 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
-#X obj 475 78 cnv 15 200 300 empty empty empty 20 12 0 14 #dce4fc #404040
-0;
-#N canvas 340 107 682 322 gemwin 0;
-#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc
-#000000 #000000 0 1;
-#X obj 102 161 r \$0-gemstart;
-#X obj 102 182 select 1 0;
-#X msg 102 214 create \, 1;
-#X msg 177 215 destroy;
-#X obj 102 239 t a;
-#X obj 318 54 inlet;
-#X obj 318 255 gemwin;
-#X obj 318 100 t a a;
-#X obj 318 287 outlet;
-#X obj 350 128 route create destroy;
-#X obj 350 150 t b;
-#X msg 350 172 1;
-#X obj 390 150 t b;
-#X msg 390 172 0;
-#X obj 350 195 t f;
-#X msg 350 219 set \$1;
-#X text 118 122 rendering;
-#X connect 1 0 2 0;
-#X connect 2 0 3 0;
-#X connect 2 1 4 0;
-#X connect 3 0 5 0;
-#X connect 4 0 5 0;
-#X connect 5 0 8 0;
-#X connect 6 0 8 0;
-#X connect 7 0 9 0;
-#X connect 8 0 7 0;
-#X connect 8 1 10 0;
-#X connect 10 0 11 0;
-#X connect 10 1 13 0;
-#X connect 11 0 12 0;
-#X connect 12 0 15 0;
-#X connect 13 0 14 0;
-#X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 16 0 0 0;
-#X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 484 324 pd gemwin;
-#X obj 480 222 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040
-0;
+#X obj 14 79 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 475 78 cnv 15 200 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 480 222 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 484 102 gemhead;
 #X obj 484 295 part_draw;
 #X obj 484 266 part_killold 50;
-#X obj 15 190 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040
-0;
+#X obj 15 190 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 471 22 GEM object;
 #X text 474 59 Example:;
-#X obj 14 229 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 14 229 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 484 123 part_head;
 #X obj 484 143 part_source 20;
 #X obj 484 233 part_velocity point 0 0 0.1;
-#X text 48 90 [part_velocity] sets velocity of newly emitted particles
-within the system. You can set the velocity-domain and the corresponding
-arguments.;
-#X text 37 232 <domain>: one of "point" \, "line" \, "triangle" \,
-"plane" \, "box" \, "sphere" \, "cylinder" \, "cone" \, "blob" \, "disc"
-\, "rectangle";
-#X text 36 273 <arguments>: up to 9 floats \, defining the specified
-domain (like "x y z" for "point" \, "x1 y1 z1 x2 y2 z2" for "line"
-\, "x y z r" for "sphere" \, ...). The meaning of the arguments depends
--of course- on the domain.;
+#X text 48 90 [part_velocity] sets velocity of newly emitted particles within the system. You can set the velocity-domain and the corresponding arguments.;
+#X text 37 232 <domain>: one of "point" \, "line" \, "triangle" \, "plane" \, "box" \, "sphere" \, "cylinder" \, "cone" \, "blob" \, "disc" \, "rectangle";
+#X text 36 273 <arguments>: up to 9 floats \, defining the specified domain (like "x y z" for "point" \, "x1 y1 z1 x2 y2 z2" for "line" \, "x y z r" for "sphere" \, ...). The meaning of the arguments depends -of course- on the domain.;
 #X text 59 43 Class: particle object;
 #X text 49 13 Synopsis: [part_velocity];
 #X text 24 192 Arguments:;
 #X text 96 192 domain \, arguments;
 #X msg 489 181 symbol sphere;
 #X msg 579 202 0 0.1 0 0.1;
-#X text 48 126 A newly created particle will be given an initial velocity
-directing to a random point within the domain. The speed will also
-vary according to how far the point is.;
-#X obj 484 83 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
-#000000 0 1;
+#X text 48 126 A newly created particle will be given an initial velocity directing to a random point within the domain. The speed will also vary according to how far the point is.;
+#X obj 484 83 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X msg 578 176 0.1 -0.1 0 0.05;
 #X text 578 160 arguments;
 #X text 489 162 domain;
 #N canvas 146 246 934 704 domain_infos 0;
-#X text 36 9 'point' \; A point in space \; arg.1 X pos \; arg.2 Y
-pos \; arg.3 Z pos \; \; 'line' \; A line between two points. \; arg.1-3
-Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of
-point 1 \; \; 'rectangle' \; A rectangular space between four points.
-The fourth point is assumed automatically. \; arg.1-3 Positions X \,
-Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7-9
-Positions X \, Y \, Z of point 2 \; \; 'sphere' A space within a sphere.
-When argument 5 is larger than zero \, the core is left blank with
-the given radius. \; arg.1-3 Positions X \, Y \, Z of center. \; arg.4
-Outer radius \; arg.5 Inner radius \; \; 'box' \; By specifying the
-position of two diagonal corners \, the rest will be assumed \; arg.1-3
-Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of
-point 1 \; \; 'cylinder' \; When argument 8 is larger than zero \,
-the core is left blank with the given radius. arg.1-3 Positions X \,
-Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7
-Outer radius \; arg.8 Inner radius \; \; 'cone' \; When argument 8
-is larger than zero \, the core is left blank with the given radius.
-arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \,
-Y \, Z of point 1 \; arg.7 Outer radius \; arg.8 Inner radius \; \;
-'blob' \; Not too sure what this is other than that it seems to be
-a random range. arg.1-3 Positions X \, Y \, Z of center. \; arg.4 Standard
-deviation (??) \; \; 'plane' \; You will being specifying two points.
-The plain will include point 0 and perpendicular to a line between
-the two points. \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6
-Positions X \, Y \, Z of point 1 \; Note: When used with [part_source]
-this domain always return the position of point 0 and is useless for
-such context. \; \; 'disc' \; The concept of arguments 1 through 6
-are identical to 'plane'. \; You can additionally limit the area by
-specifying the outer/inner radius of a circle centering at point 0
-\; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X
-\, Y \, Z of point 1 \; arg.7 Outer radius \; arg.8 Inner radius \;
-, f 211;
+#X text 36 9 'point' \; A point in space \; arg.1 X pos \; arg.2 Y pos \; arg.3 Z pos \; \; 'line' \; A line between two points. \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; \; 'rectangle' \; A rectangular space between four points. The fourth point is assumed automatically. \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7-9 Positions X \, Y \, Z of point 2 \; \; 'sphere' A space within a sphere. When argument 5 is larger than zero \, the core is left blank with the given radius. \; arg.1-3 Positions X \, Y \, Z of center. \; arg.4 Outer radius \; arg.5 Inner radius \; \; 'box' \; By specifying the position of two diagonal corners \, the rest will be assumed \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; \; 'cylinder' \; When argument 8 is larger than zero \, the core is left blank with the given radius. arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7 Outer radius \; arg.8 Inner radius \; \; 'cone' \; When argument 8 is larger than zero \, the core is left blank with the given radius. arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7 Outer radius \; arg.8 Inner radius \; \; 'blob' \; Not too sure what this is other than that it seems to be a random range. arg.1-3 Positions X \, Y \, Z of center. \; arg.4 Standard deviation (??) \; \; 'plane' \; You will being specifying two points. The plain will include point 0 and perpendicular to a line between the two points. \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; Note: When used with [part_source] this domain always return the position of point 0 and is useless for such context. \; \; 'disc' \; The concept of arguments 1 through 6 are identical to 'plane'. \; You can additionally limit the area by specifying the outer/inner radius of a circle centering at point 0 \; arg.1-3 Positions X \, Y \, Z of point 0 \; arg.4-6 Positions X \, Y \, Z of point 1 \; arg.7 Outer radius \; arg.8 Inner radius \;, f 211;
 #X restore 18 342 pd domain_infos;
-#X connect 5 0 12 0;
-#X connect 7 0 6 0;
+#X obj 484 343 _gemwin;
+#X connect 4 0 11 0;
+#X connect 6 0 5 0;
+#X connect 11 0 12 0;
 #X connect 12 0 13 0;
-#X connect 13 0 14 0;
-#X connect 14 0 7 0;
-#X connect 22 0 14 1;
-#X connect 23 0 14 2;
-#X connect 25 0 5 0;
-#X connect 26 0 14 2;
+#X connect 13 0 6 0;
+#X connect 21 0 13 1;
+#X connect 22 0 13 2;
+#X connect 24 0 4 0;
+#X connect 25 0 13 2;

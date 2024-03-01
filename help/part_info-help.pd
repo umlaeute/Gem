@@ -1,68 +1,19 @@
 #N canvas 469 318 684 479 10;
 #X declare -lib Gem;
 #X obj 539 58 declare -lib Gem;
-#X obj 7 115 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
-#X obj 468 114 cnv 15 200 320 empty empty empty 20 12 0 14 #dce4fc
-#404040 0;
-#N canvas 340 107 682 322 gemwin 0;
-#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc
-#000000 #000000 0 1;
-#X obj 102 161 r \$0-gemstart;
-#X obj 102 182 select 1 0;
-#X msg 102 214 create \, 1;
-#X msg 177 215 destroy;
-#X obj 102 239 t a;
-#X obj 318 54 inlet;
-#X obj 318 255 gemwin;
-#X obj 318 100 t a a;
-#X obj 318 287 outlet;
-#X obj 350 128 route create destroy;
-#X obj 350 150 t b;
-#X msg 350 172 1;
-#X obj 390 150 t b;
-#X msg 390 172 0;
-#X obj 350 195 t f;
-#X msg 350 219 set \$1;
-#X text 118 122 rendering;
-#X connect 1 0 2 0;
-#X connect 2 0 3 0;
-#X connect 2 1 4 0;
-#X connect 3 0 5 0;
-#X connect 4 0 5 0;
-#X connect 5 0 8 0;
-#X connect 6 0 8 0;
-#X connect 7 0 9 0;
-#X connect 8 0 7 0;
-#X connect 8 1 10 0;
-#X connect 10 0 11 0;
-#X connect 10 1 13 0;
-#X connect 11 0 12 0;
-#X connect 12 0 15 0;
-#X connect 13 0 14 0;
-#X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 16 0 0 0;
-#X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 476 390 pd gemwin;
-#X obj 468 246 cnv 15 200 120 empty empty empty 20 12 0 14 #14e814
-#404040 0;
-#X obj 8 226 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040
-0;
+#X obj 7 115 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 468 114 cnv 15 200 280 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 468 246 cnv 15 200 120 empty empty empty 20 12 0 14 #14e814 #404040 0;
+#X obj 8 226 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 464 58 GEM object;
 #X text 467 95 Example:;
-#X obj 7 265 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 7 265 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 481 140 gemhead;
 #X obj 481 161 part_head;
-#X obj 481 118 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
-#000000 0 1;
+#X obj 481 118 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 481 250 part_info, f 18;
-#X text 24 130 [part_info] gives you all available information of all
-the particles in the system draws a particle system set up with [part_head]
-and other [part_]-objects.;
-#X text 25 179 If your system contains 15 particles \, then you will
-get the information on the outlets 15 times per rendering circle.;
+#X text 24 130 [part_info] gives you all available information of all the particles in the system draws a particle system set up with [part_head] and other [part_]-objects.;
+#X text 25 179 If your system contains 15 particles \, then you will get the information on the outlets 15 times per rendering circle.;
 #X text 39 88 Class: Particle System;
 #X text 39 58 Synopsis [part_render];
 #X floatatom 633 270 5 0 0 3 age - - 0;
@@ -75,16 +26,17 @@ get the information on the outlets 15 times per rendering circle.;
 #X obj 481 204 part_velocity point 0 0.1 0;
 #X obj 481 184 part_source 1;
 #X obj 481 224 part_draw;
-#X connect 9 0 10 0;
-#X connect 10 0 25 0;
-#X connect 11 0 9 0;
-#X connect 12 0 23 0;
-#X connect 12 1 22 0;
-#X connect 12 2 21 0;
-#X connect 12 3 20 0;
-#X connect 12 4 19 0;
-#X connect 12 5 18 0;
-#X connect 12 6 17 0;
-#X connect 24 0 26 0;
-#X connect 25 0 24 0;
-#X connect 26 0 12 0;
+#X obj 487 402 _gemwin;
+#X connect 8 0 9 0;
+#X connect 9 0 24 0;
+#X connect 10 0 8 0;
+#X connect 11 0 22 0;
+#X connect 11 1 21 0;
+#X connect 11 2 20 0;
+#X connect 11 3 19 0;
+#X connect 11 4 18 0;
+#X connect 11 5 17 0;
+#X connect 11 6 16 0;
+#X connect 23 0 25 0;
+#X connect 24 0 23 0;
+#X connect 25 0 11 0;

@@ -1,98 +1,56 @@
 #N canvas 265 153 653 455 10;
 #X declare -lib Gem;
 #X text 475 59 Example:;
-#X obj 7 64 cnv 15 450 200 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 7 317 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 7 64 cnv 15 450 200 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 7 317 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 26 322 Inlets:;
-#X obj 8 276 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 276 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 275 Arguments:;
 #X text 452 8 GEM object;
 #X text 44 334 Inlet 1: gemlist;
 #X text 26 388 Outlets:;
 #X text 38 401 Outlet 1: gemlist;
-#X obj 469 77 cnv 15 170 320 empty empty empty 20 12 0 14 -228992 -66577
-0;
-#X obj 474 331 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 22 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 256 112 destroy;
-#X obj 322 45 inlet;
-#X msg 132 112 create \, 1;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 8 0;
-#X connect 3 1 5 0;
-#X connect 3 1 6 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X connect 8 0 0 0;
-#X restore 479 370 pd gemwin;
-#X msg 479 351 create;
-#X text 475 330 Create window:;
-#X obj 473 129 cnv 15 150 100 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 469 77 cnv 15 170 320 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 474 331 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#X obj 473 129 cnv 15 150 100 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 481 84 gemhead;
 #X text 53 30 Class: non-geometric object;
 #X text 7 69 Description: adds a point-light to the scene;
-#X text 44 360 Inlet 1: message: debug 1|0 : show debugging object
-(default:0), f 66;
+#X text 44 360 Inlet 1: message: debug 1|0 : show debugging object (default:0), f 66;
 #X text 44 373 Inlet 2: list: 3(RGB) or 4(RGBA) float values;
 #X msg 568 182 1 1 1;
-#X obj 495 157 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 495 157 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X msg 495 178 debug \$1;
-#X text 19 189 Keep in mind that the attributes have to be set before
-rendering the vertices \, so if you are trying for frame accurate rendering
-\, you will want to set the gemhead order to a low number so that all
-of the values of the light get set first.;
+#X text 19 189 Keep in mind that the attributes have to be set before rendering the vertices \, so if you are trying for frame accurate rendering \, you will want to set the gemhead order to a low number so that all of the values of the light get set first.;
 #X obj 480 264 sphere;
-#X floatatom 561 88 5 0 0 0 - - -;
+#X floatatom 561 88 5 0 0 0 - - - 0;
 #X obj 481 106 rotateXYZ 0 -120 0;
 #X obj 480 242 gemhead 40;
-#X obj 537 271 cnv 15 85 50 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 537 271 cnv 15 85 50 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X msg 539 298 lighting \$1;
-#X obj 539 276 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 539 276 tgl 15 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X msg 567 159 1 1 0;
-#X text 18 169 The second inlet sets the color of the light-source.
-;
+#X text 18 169 The second inlet sets the color of the light-source.;
 #X text 63 287 light-number;
 #X obj 481 204 world_light;
-#X text 19 86 [world_light] produces a light which is at an infinite
-distance from the scene. This means that all of the light rays are
-parallel \, which reduces the computation somewhat.;
-#X text 17 135 You can adjust the light with [rotate]. If you are lost
-use "debug" to display the light source as a small cone.;
+#X text 19 86 [world_light] produces a light which is at an infinite distance from the scene. This means that all of the light rays are parallel \, which reduces the computation somewhat.;
+#X text 17 135 You can adjust the light with [rotate]. If you are lost use "debug" to display the light source as a small cone.;
 #X text 33 14 Synopsis: [world_light];
-#X obj 490 134 tgl 20 0 empty \$0-onoff empty 17 7 0 10 -262144 -1
--1 0 1;
+#X obj 490 134 tgl 20 0 empty \$0-onoff empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 40 425 see also:;
 #X obj 145 425 spot_light;
 #X obj 103 425 light;
 #X text 44 347 Inlet 1: float: turn light on/off (default:1);
 #X obj 528 8 declare -lib Gem;
-#X connect 12 0 13 0;
-#X connect 13 0 12 0;
-#X connect 16 0 27 0;
-#X connect 21 0 35 1;
-#X connect 22 0 23 0;
-#X connect 23 0 35 0;
-#X connect 26 0 27 2;
-#X connect 27 0 35 0;
-#X connect 28 0 25 0;
-#X connect 30 0 12 1;
-#X connect 31 0 30 0;
-#X connect 32 0 35 1;
-#X connect 39 0 35 0;
+#X obj 481 338 _gemwin;
+#X connect 13 0 24 0;
+#X connect 18 0 32 1;
+#X connect 19 0 20 0;
+#X connect 20 0 32 0;
+#X connect 23 0 24 2;
+#X connect 24 0 32 0;
+#X connect 25 0 22 0;
+#X connect 27 0 42 0;
+#X connect 28 0 27 0;
+#X connect 29 0 32 1;
+#X connect 36 0 32 0;

@@ -1,4 +1,4 @@
-#N canvas 877 124 754 622 10;
+#N canvas 436 84 754 622 10;
 #X declare -lib Gem;
 #X text 44 383 default = D1 and D2;
 #X text 54 27 Class: geometric object;

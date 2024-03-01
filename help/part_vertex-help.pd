@@ -1,65 +1,18 @@
 #N canvas 609 462 664 466 10;
 #X declare -lib Gem;
 #X obj 539 28 declare -lib Gem;
-#X obj 7 85 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 7 85 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 52 49 Class: particle object;
-#X obj 468 84 cnv 15 170 300 empty empty empty 20 12 0 14 #dce4fc #404040
-0;
-#N canvas 340 107 682 322 gemwin 0;
-#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc
-#000000 #000000 0 1;
-#X obj 102 161 r \$0-gemstart;
-#X obj 102 182 select 1 0;
-#X msg 102 214 create \, 1;
-#X msg 177 215 destroy;
-#X obj 102 239 t a;
-#X obj 318 54 inlet;
-#X obj 318 255 gemwin;
-#X obj 318 100 t a a;
-#X obj 318 287 outlet;
-#X obj 350 128 route create destroy;
-#X obj 350 150 t b;
-#X msg 350 172 1;
-#X obj 390 150 t b;
-#X msg 390 172 0;
-#X obj 350 195 t f;
-#X msg 350 219 set \$1;
-#X text 118 122 rendering;
-#X connect 1 0 2 0;
-#X connect 2 0 3 0;
-#X connect 2 1 4 0;
-#X connect 3 0 5 0;
-#X connect 4 0 5 0;
-#X connect 5 0 8 0;
-#X connect 6 0 8 0;
-#X connect 7 0 9 0;
-#X connect 8 0 7 0;
-#X connect 8 1 10 0;
-#X connect 10 0 11 0;
-#X connect 10 1 13 0;
-#X connect 11 0 12 0;
-#X connect 12 0 15 0;
-#X connect 13 0 14 0;
-#X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 16 0 0 0;
-#X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 476 326 pd gemwin;
-#X obj 472 204 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040
-0;
+#X obj 468 84 cnv 15 170 220 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 472 204 cnv 15 100 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 476 104 gemhead;
-#X obj 8 196 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040
-0;
+#X obj 8 196 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 464 28 GEM object;
 #X text 467 65 Example:;
-#X obj 7 235 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 7 235 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 476 128 part_head;
 #X obj 476 271 part_draw;
-#X text 23 110 add a particle at the specified offset. You will need
-this if you want any particles in your particle-system \, especially
-with moving particle sources.;
+#X text 23 110 add a particle at the specified offset. You will need this if you want any particles in your particle-system \, especially with moving particle sources.;
 #X text 42 29 Synopsis: [part_vertex];
 #X obj 476 222 part_vertex;
 #X msg 539 184 -1 1 0;
@@ -68,10 +21,11 @@ with moving particle sources.;
 #X obj 476 155 part_velocity point 0 -0.05 0;
 #X text 17 195 Arguments: default x y z;
 #X text 536 170 position x y z;
-#X connect 6 0 11 0;
-#X connect 11 0 19 0;
-#X connect 15 0 18 0;
-#X connect 16 0 15 1;
-#X connect 17 0 15 1;
-#X connect 18 0 12 0;
-#X connect 19 0 15 0;
+#X obj 476 326 _gemwin;
+#X connect 5 0 10 0;
+#X connect 10 0 18 0;
+#X connect 14 0 17 0;
+#X connect 15 0 14 1;
+#X connect 16 0 14 1;
+#X connect 17 0 11 0;
+#X connect 18 0 14 0;

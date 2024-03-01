@@ -1,55 +1,18 @@
 #N canvas 41 102 968 681 10;
 #X declare -lib Gem;
 #X text 58 45 Class: geometric object;
-#X obj 13 64 cnv 15 450 100 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 13 212 cnv 15 450 280 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 13 64 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 13 212 cnv 15 450 280 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 17 214 Inlets:;
-#X obj 13 173 cnv 15 450 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 13 173 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 22 172 Arguments:;
 #X text 32 229 Inlet 1: gemlist;
 #X text 16 448 Outlets:;
 #X text 30 460 Outlet 1: gemlist;
-#X obj 475 63 cnv 15 480 560 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 805 544 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 0 455 304 gemwin 0;
-#X obj 132 182 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 198 112 destroy;
-#X msg 132 112 create \, 1;
-#X obj 294 56 gemhead;
-#X obj 294 76 world_light;
-#X msg 207 155 lighting 1;
-#X obj 207 134 loadbang;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 7 0;
-#X connect 3 1 5 0;
-#X connect 3 1 6 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X connect 8 0 9 0;
-#X connect 10 0 0 0;
-#X connect 11 0 10 0;
-#X restore 821 583 pd gemwin;
-#X msg 821 564 create;
-#X text 817 543 Create window:;
-#X obj 796 74 cnv 15 150 150 empty empty empty 20 12 0 14 -24198 -66577
-0;
-#X obj 796 234 cnv 15 150 150 empty empty empty 20 12 0 14 -24198 -66577
-0;
-#X obj 486 74 cnv 15 300 310 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 475 63 cnv 15 480 560 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 796 74 cnv 15 150 150 empty empty empty 20 12 0 14 #14e814 #404040 0;
+#X obj 796 234 cnv 15 150 150 empty empty empty 20 12 0 14 #14e814 #404040 0;
+#X obj 486 74 cnv 15 300 310 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X msg 519 175 draw line;
 #X msg 519 155 draw fill;
 #X msg 519 195 draw point;
@@ -78,15 +41,14 @@
 #X obj 807 356 s curve3d;
 #X text 660 139 of the curve;
 #X text 647 125 draw control point;
-#X obj 486 398 cnv 15 300 210 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 486 398 cnv 15 300 210 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 494 407 gemhead;
-#X floatatom 522 450 5 0 0 0 - - -;
-#X floatatom 557 450 5 0 0 0 - - -;
-#X floatatom 593 450 5 0 0 0 - - -;
-#X floatatom 562 408 5 0 0 0 - - -;
-#X floatatom 610 408 5 0 0 0 - - -;
-#X floatatom 659 408 5 0 0 0 - - -;
+#X floatatom 522 450 5 0 0 0 - - - 0;
+#X floatatom 557 450 5 0 0 0 - - - 0;
+#X floatatom 593 450 5 0 0 0 - - - 0;
+#X floatatom 562 408 5 0 0 0 - - - 0;
+#X floatatom 610 408 5 0 0 0 - - - 0;
+#X floatatom 659 408 5 0 0 0 - - - 0;
 #X obj 494 471 rotateXYZ 0 0 0;
 #X obj 494 428 translateXYZ -2.5 -2.5 -2;
 #X obj 504 496 r curve3d;
@@ -96,8 +58,7 @@
 #X text 826 250 curve grid;
 #X text 28 430 Inlet 2: not used;
 #X text 32 243 Inlet 1: message: draw [line|fill|point|...];
-#X obj 13 503 cnv 15 450 120 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 13 503 cnv 15 450 120 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 253 49 691 493 forme2 0;
 #N canvas 0 0 353 257 tripleRnd 0;
 #X obj 12 63 random 100;
@@ -1104,10 +1065,8 @@
 #X connect 51 0 24 0;
 #X connect 52 0 25 0;
 #X restore 136 549 pd forme2;
-#X obj 136 530 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
-#X obj 57 550 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 136 530 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
+#X obj 57 550 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #N canvas 253 49 697 499 forme1 0;
 #X obj 76 418 outlet;
 #X obj 36 15 inlet;
@@ -1572,13 +1531,9 @@
 #X text 31 336 Inlet 1 : message: set Mx My X Y Z;
 #X text 31 296 Inlet 1: message: grid X Y;
 #X text 31 259 Inlet 1: message: res X Y;
-#X text 53 272 This message is use for changing the size of the control
-matrix (X \, Y are 2 int);
-#X text 52 310 This message is use for changing the subdivision of
-the displayed curve (X Y are 2 int);
-#X text 53 349 This message can be use to set the position of a control
-point. (Mx \, My : position of the point in the matrix. X \, Y \, Z
-: position of this control point;
+#X text 53 272 This message is use for changing the size of the control matrix (X \, Y are 2 int);
+#X text 52 310 This message is use for changing the subdivision of the displayed curve (X Y are 2 int);
+#X text 53 349 This message can be use to set the position of a control point. (Mx \, My : position of the point in the matrix. X \, Y \, Z : position of this control point;
 #X text 21 507 examples :;
 #X obj 494 520 surface3d 5 5;
 #X obj 504 561 r curve3d;
@@ -1587,70 +1542,65 @@ point. (Mx \, My : position of the point in the matrix. X \, Y \, Z
 #X text 59 28 Synopsis: [surface3d];
 #X text 13 68 Description: Renders a 3d bicubic curve.;
 #X text 67 182 size of the control matrix (default : 4 4);
-#X text 33 85 The surface3d object renders a curve at the current position
-with current color or texture. The shape of the curve is controlled
-from a matrix. The curve go throw all control points (between point
-1 to res-1);
+#X text 33 85 The surface3d object renders a curve at the current position with current color or texture. The shape of the curve is controlled from a matrix. The curve go throw all control points (between point 1 to res-1);
 #X text 31 388 Inlet 1: normal 0/1;
-#X text 51 399 since computing normal use a lot's of processing power
-\, you can disable normal with this message;
+#X text 51 399 since computing normal use a lot's of processing power \, you can disable normal with this message;
 #X obj 490 344 s curve3d_render;
 #X obj 623 343 s curve3d_render;
 #X obj 580 496 r curve3d_render;
 #X obj 594 539 loadbang;
-#X obj 795 399 cnv 15 150 110 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 795 399 cnv 15 150 110 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X msg 812 434 normal \$1;
-#X obj 812 415 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 812 415 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 812 455 s curve3d_render;
 #X text 33 146 This object is related to curve3d;
-#X text 271 4 Create a 3d bicubic curve \, using a matrix of control
-points;
+#X text 271 4 Create a 3d bicubic curve \, using a matrix of control points;
 #X obj 848 8 declare -lib Gem;
-#X connect 11 0 12 0;
-#X connect 12 0 11 0;
-#X connect 17 0 89 0;
-#X connect 18 0 89 0;
-#X connect 19 0 89 0;
-#X connect 20 0 89 0;
-#X connect 21 0 89 0;
-#X connect 22 0 89 0;
-#X connect 23 0 89 0;
-#X connect 24 0 89 0;
-#X connect 25 0 89 0;
-#X connect 26 0 90 0;
-#X connect 27 0 90 0;
-#X connect 28 0 90 0;
-#X connect 29 0 90 0;
-#X connect 30 0 90 0;
-#X connect 31 0 41 0;
-#X connect 32 0 42 0;
-#X connect 33 0 41 0;
-#X connect 34 0 42 0;
-#X connect 35 0 42 0;
-#X connect 36 0 41 0;
-#X connect 37 0 41 0;
-#X connect 38 0 42 0;
-#X connect 46 0 54 0;
-#X connect 47 0 53 1;
-#X connect 48 0 53 2;
-#X connect 49 0 53 3;
-#X connect 50 0 54 1;
-#X connect 51 0 54 2;
-#X connect 52 0 54 3;
-#X connect 53 0 79 0;
-#X connect 54 0 53 0;
-#X connect 55 0 79 0;
-#X connect 63 0 70 0;
-#X connect 64 0 63 0;
-#X connect 65 0 66 0;
-#X connect 66 0 71 0;
-#X connect 69 0 65 0;
-#X connect 79 0 81 0;
-#X connect 80 0 81 0;
-#X connect 82 0 81 0;
-#X connect 91 0 79 0;
-#X connect 92 0 82 0;
-#X connect 94 0 96 0;
-#X connect 95 0 94 0;
+#X obj 821 582 gemhead;
+#X obj 821 602 world_light;
+#X obj 815 515 _gemwin \; 0 \; 0 \; lighting 1;
+#X connect 13 0 85 0;
+#X connect 14 0 85 0;
+#X connect 15 0 85 0;
+#X connect 16 0 85 0;
+#X connect 17 0 85 0;
+#X connect 18 0 85 0;
+#X connect 19 0 85 0;
+#X connect 20 0 85 0;
+#X connect 21 0 85 0;
+#X connect 22 0 86 0;
+#X connect 23 0 86 0;
+#X connect 24 0 86 0;
+#X connect 25 0 86 0;
+#X connect 26 0 86 0;
+#X connect 27 0 37 0;
+#X connect 28 0 38 0;
+#X connect 29 0 37 0;
+#X connect 30 0 38 0;
+#X connect 31 0 38 0;
+#X connect 32 0 37 0;
+#X connect 33 0 37 0;
+#X connect 34 0 38 0;
+#X connect 42 0 50 0;
+#X connect 43 0 49 1;
+#X connect 44 0 49 2;
+#X connect 45 0 49 3;
+#X connect 46 0 50 1;
+#X connect 47 0 50 2;
+#X connect 48 0 50 3;
+#X connect 49 0 75 0;
+#X connect 50 0 49 0;
+#X connect 51 0 75 0;
+#X connect 59 0 66 0;
+#X connect 60 0 59 0;
+#X connect 61 0 62 0;
+#X connect 62 0 67 0;
+#X connect 65 0 61 0;
+#X connect 75 0 77 0;
+#X connect 76 0 77 0;
+#X connect 78 0 77 0;
+#X connect 87 0 75 0;
+#X connect 88 0 78 0;
+#X connect 90 0 92 0;
+#X connect 91 0 90 0;
+#X connect 96 0 97 0;

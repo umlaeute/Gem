@@ -1,82 +1,35 @@
 #N canvas 619 333 677 430 10;
 #X declare -lib Gem;
 #X obj 541 10 declare -lib Gem;
-#X obj 9 67 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 9 67 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 54 31 Class: particle object;
-#X obj 470 66 cnv 15 200 300 empty empty empty 20 12 0 14 #dce4fc #404040
-0;
-#N canvas 340 107 682 322 gemwin 0;
-#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc
-#000000 #000000 0 1;
-#X obj 102 161 r \$0-gemstart;
-#X obj 102 182 select 1 0;
-#X msg 102 214 create \, 1;
-#X msg 177 215 destroy;
-#X obj 102 239 t a;
-#X obj 318 54 inlet;
-#X obj 318 255 gemwin;
-#X obj 318 100 t a a;
-#X obj 318 287 outlet;
-#X obj 350 128 route create destroy;
-#X obj 350 150 t b;
-#X msg 350 172 1;
-#X obj 390 150 t b;
-#X msg 390 172 0;
-#X obj 350 195 t f;
-#X msg 350 219 set \$1;
-#X text 118 122 rendering;
-#X connect 1 0 2 0;
-#X connect 2 0 3 0;
-#X connect 2 1 4 0;
-#X connect 3 0 5 0;
-#X connect 4 0 5 0;
-#X connect 5 0 8 0;
-#X connect 6 0 8 0;
-#X connect 7 0 9 0;
-#X connect 8 0 7 0;
-#X connect 8 1 10 0;
-#X connect 10 0 11 0;
-#X connect 10 1 13 0;
-#X connect 11 0 12 0;
-#X connect 12 0 15 0;
-#X connect 13 0 14 0;
-#X connect 14 0 15 0;
-#X connect 15 0 16 0;
-#X connect 16 0 0 0;
-#X coords 0 -1 1 1 85 40 1 100 100;
-#X restore 485 308 pd gemwin;
-#X obj 481 219 cnv 15 120 40 empty empty empty 20 12 0 14 #14e814 #404040
-0;
+#X obj 470 66 cnv 15 200 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
+#X obj 481 219 cnv 15 120 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 485 96 gemhead;
-#X obj 10 178 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040
-0;
+#X obj 10 178 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 466 10 GEM object;
 #X text 469 47 Example:;
-#X obj 9 217 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040
-0;
+#X obj 9 217 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 485 174 part_velocity point 0 -0.1 0;
 #X obj 485 265 part_draw;
-#X text 28 97 kill all particles which are older than the kill time.
-The default time is 10 Make the number longer for particles to live
-longer and shorter to remove them quicker.;
+#X text 28 97 kill all particles which are older than the kill time. The default time is 10 Make the number longer for particles to live longer and shorter to remove them quicker.;
 #X obj 485 123 part_head;
 #X text 44 11 Synopsis: [part_killold];
 #X text 17 179 Arguments: kill time;
 #X floatatom 572 199 5 0 100 1 kill\ time - - 0;
 #X msg 584 127 0 4 0;
-#X obj 485 76 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
-#000000 0 1;
+#X obj 485 76 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 584 106 loadbang;
 #X text 625 127 xyz;
 #X obj 485 153 part_source 10, f 17;
 #X obj 485 231 part_killold 40;
-#X connect 6 0 14 0;
-#X connect 11 0 23 0;
-#X connect 14 0 22 0;
-#X connect 17 0 23 1;
-#X connect 18 0 22 3;
-#X connect 19 0 6 0;
-#X connect 20 0 18 0;
+#X obj 504 322 _gemwin;
+#X connect 5 0 13 0;
+#X connect 10 0 22 0;
+#X connect 13 0 21 0;
+#X connect 16 0 22 1;
+#X connect 17 0 21 3;
+#X connect 18 0 5 0;
+#X connect 19 0 17 0;
+#X connect 21 0 10 0;
 #X connect 22 0 11 0;
-#X connect 23 0 12 0;
