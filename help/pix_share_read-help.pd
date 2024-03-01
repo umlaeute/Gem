@@ -1,62 +1,25 @@
 #N canvas 246 139 904 368 10;
 #X declare -lib Gem;
 #X text 701 8 GEM object;
-#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 270 cnv 15 430 80 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 271 Inlets:;
 #X text 34 306 Outlets:;
-#X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 231 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 230 Arguments:;
-#X obj 7 56 cnv 15 430 170 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 57 cnv 15 440 220 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 7 56 cnv 15 430 170 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 57 cnv 15 440 220 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 40 Example:;
-#X obj 484 204 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 50 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 132 112 create \, 1;
-#X msg 198 112 destroy;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 6 0;
-#X connect 3 1 5 0;
-#X connect 3 1 7 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 489 243 pd gemwin;
-#X msg 489 224 create;
-#X text 485 203 Create window:;
-#X obj 450 84 cnv 15 400 60 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 484 204 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#X obj 450 84 cnv 15 400 60 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 64 gemhead;
 #X text 71 31 Class: pix object;
 #X text 63 283 Inlet 1: gemlist;
 #X text 63 241 <i:ID> <i:width> <i:height> <colorspace>;
 #X text 446 284 see also:;
-#X text 18 127 [pix_share_write] and [pix_share_read] need not be in
-the same instance of Pd. However all objects need to have access to
-the same memory (they probably need to run on the same computer);
-#X obj 451 154 pix_texture;
-#X obj 451 175 square;
-#X text 15 181 [pix_share_read] needs to know the image-dimensions
-(and color-space) in advance. The color-space can be given as a symbol
-("RGBA" \, "YUV" \, "Grey") or as pixel-width (4 \, 2 \, 1);
-#X text 18 72 [pix_share_read] will create (if needed) a portion of
-shared memory - identified by a given ID - where it can read pix-data
-from. This data needs to be written by a [pix_share_write] object (referencing
-to the same ID).;
-#X text 29 56 Description: read pixels from a shared memory region
-;
+#X text 18 127 [pix_share_write] and [pix_share_read] need not be in the same instance of Pd. However all objects need to have access to the same memory (they probably need to run on the same computer);
+#X text 15 181 [pix_share_read] needs to know the image-dimensions (and color-space) in advance. The color-space can be given as a symbol ("RGBA" \, "YUV" \, "Grey") or as pixel-width (4 \, 2 \, 1);
+#X text 18 72 [pix_share_read] will create (if needed) a portion of shared memory - identified by a given ID - where it can read pix-data from. This data needs to be written by a [pix_share_write] object (referencing to the same ID).;
+#X text 29 56 Description: read pixels from a shared memory region;
 #X text 50 12 Synopsis: [pix_share_read];
 #X text 446 313 Run the [pix_share_write] help-patch;
 #X text 446 327 in a different Pd instance on your;
@@ -76,16 +39,15 @@ to the same ID).;
 #X msg 666 103 set memory_name 256 256 RGBA;
 #X text 669 86 also work with symbol :;
 #X obj 778 8 declare -lib Gem;
-#X connect 10 0 11 0;
-#X connect 11 0 10 0;
-#X connect 14 0 39 0;
-#X connect 20 0 21 0;
-#X connect 31 0 39 0;
-#X connect 32 0 33 0;
-#X connect 32 1 34 0;
-#X connect 33 0 36 0;
-#X connect 34 0 36 0;
-#X connect 35 0 32 0;
-#X connect 39 0 20 0;
-#X connect 39 1 35 0;
-#X connect 41 0 39 0;
+#X obj 451 154 _pix2rectangle;
+#X obj 490 211 _gemwin;
+#X connect 11 0 34 0;
+#X connect 26 0 34 0;
+#X connect 27 0 28 0;
+#X connect 27 1 29 0;
+#X connect 28 0 31 0;
+#X connect 29 0 31 0;
+#X connect 30 0 27 0;
+#X connect 34 0 39 0;
+#X connect 34 1 30 0;
+#X connect 36 0 34 0;

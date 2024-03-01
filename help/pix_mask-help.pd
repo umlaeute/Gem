@@ -1,46 +1,17 @@
 #N canvas 71 263 665 372 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 8 226 cnv 15 430 110 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 226 cnv 15 430 110 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 33 229 Inlets:;
 #X text 33 285 Outlets:;
-#X obj 8 191 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 191 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 190 Arguments:;
-#X obj 8 56 cnv 15 430 130 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 56 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 56 cnv 15 430 130 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 56 cnv 15 170 280 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 39 Example:;
-#X obj 514 269 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 22 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 132 92 create \, 1 \, color 0.5 0.5 0.5;
-#X msg 198 112 destroy \, reset;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 6 0;
-#X connect 3 1 5 0;
-#X connect 3 1 7 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 519 308 pd gemwin;
-#X msg 519 289 create;
-#X text 515 268 Create window:;
-#X obj 451 166 cnv 15 160 40 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 451 166 cnv 15 160 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 108 gemhead;
-#X obj 496 91 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
--1 -1;
+#X obj 496 91 bng 15 250 50 0 empty empty pix_load -45 8 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -54,11 +25,9 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 128 pd image;
-#X obj 451 242 pix_texture;
 #X text 63 201 <none>;
 #X text 41 299 Outlet 1: gemlist;
 #X text 47 243 Inlet 1: gemlist;
-#X obj 451 264 square 3;
 #X text 503 67 (JPEG \, TIFF \, ..);
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
@@ -73,19 +42,15 @@
 #X connect 4 0 3 0;
 #X connect 5 0 1 0;
 #X restore 531 128 pd image;
-#X obj 576 89 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
--1 -1;
+#X obj 576 89 bng 15 250 50 0 empty empty pix_load -45 8 0 8 #fcfcfc #000000 #000000;
 #X text 47 272 Inlet 2: gemlist;
 #X text 449 56 open two different images;
 #X text 71 31 Class: pix mix object;
 #X text 50 12 Synopsis: [pix_mask];
 #X obj 451 177 pix_mask;
 #X text 29 57 Description: mask out a pix;
-#X text 16 75 [pix_mask] uses one pix as a mask against another. Where
-ever the mask has a black pixel \, the alpha component of the other
-image will be set to 0 (transparent).;
-#X text 19 115 Basically \, the luminance-value of the right pix will
-become the alpha-value of the left pix.;
+#X text 16 75 [pix_mask] uses one pix as a mask against another. Where ever the mask has a black pixel \, the alpha component of the other image will be set to 0 (transparent).;
+#X text 19 115 Basically \, the luminance-value of the right pix will become the alpha-value of the left pix.;
 #X text 12 152 The 2 images have to be of the same size.;
 #X text 11 168 The left pix has to be in RGBA-space;
 #X obj 451 218 alpha;
@@ -93,14 +58,13 @@ become the alpha-value of the left pix.;
 #X text 17 340 see also:;
 #X obj 82 342 pix_takealpha;
 #X obj 518 8 declare -lib Gem;
-#X connect 10 0 11 0;
-#X connect 11 0 10 0;
-#X connect 14 0 16 0;
-#X connect 15 0 16 1;
-#X connect 16 0 29 0;
-#X connect 17 0 21 0;
-#X connect 23 0 29 1;
-#X connect 24 0 23 1;
+#X obj 491 267 _gemwin \; 0 \; 0 \; color 0.5 0.5 0.5;
+#X obj 450 242 _pix2rectangle 3;
+#X connect 10 0 12 0;
+#X connect 11 0 12 1;
+#X connect 12 0 23 0;
+#X connect 17 0 23 1;
+#X connect 18 0 17 1;
+#X connect 23 0 29 0;
 #X connect 29 0 35 0;
-#X connect 35 0 17 0;
-#X connect 36 0 23 0;
+#X connect 30 0 17 0;

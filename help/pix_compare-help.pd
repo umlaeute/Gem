@@ -1,47 +1,19 @@
 #N canvas 69 186 628 389 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
-#X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 -233017 -66577
-0;
+#X obj 8 226 cnv 15 430 120 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 228 Inlets:;
 #X text 39 294 Outlets:;
-#X obj 8 186 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 8 186 cnv 15 430 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #X text 17 185 Arguments:;
-#X obj 8 66 cnv 15 430 110 empty empty empty 20 12 0 14 -233017 -66577
-0;
-#X obj 449 66 cnv 15 170 280 empty empty empty 20 12 0 14 -228992 -66577
-0;
+#X obj 8 66 cnv 15 430 110 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
+#X obj 449 66 cnv 15 170 280 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X text 453 49 Example:;
-#X obj 514 279 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
-#N canvas 0 22 450 300 gemwin 0;
-#X obj 132 136 gemwin;
-#X obj 67 89 outlet;
-#X obj 67 10 inlet;
-#X obj 67 41 route create;
-#X msg 67 70 set destroy;
-#X msg 142 68 set create;
-#X msg 132 112 create \, 1;
-#X msg 198 112 destroy;
-#X connect 2 0 3 0;
-#X connect 3 0 4 0;
-#X connect 3 0 6 0;
-#X connect 3 1 5 0;
-#X connect 3 1 7 0;
-#X connect 4 0 1 0;
-#X connect 5 0 1 0;
-#X connect 6 0 0 0;
-#X connect 7 0 0 0;
-#X restore 519 318 pd gemwin;
-#X msg 519 299 create;
-#X text 515 278 Create window:;
-#X obj 451 157 cnv 15 160 80 empty empty empty 20 12 0 14 -24198 -66577
-0;
+#X obj 514 279 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
+#X obj 451 157 cnv 15 160 80 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 451 112 gemhead;
 #X text 71 31 Class: pix object;
-#X obj 496 95 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
--1 -1;
+#X obj 496 95 bng 15 250 50 0 empty empty pix_load -45 8 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 22 587 366 image 0;
 #X obj 77 48 inlet;
 #X obj 77 344 outlet;
@@ -55,11 +27,9 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 451 131 pd image;
-#X obj 451 252 pix_texture;
 #X text 63 196 <direction>;
 #X text 47 308 Outlet 1: gemlist;
 #X text 53 242 Inlet 1: gemlist;
-#X obj 451 274 square 3;
 #X text 503 77 (JPEG \, TIFF \, ..);
 #X obj 541 115 gemhead;
 #N canvas 0 22 587 366 image 0;
@@ -75,37 +45,28 @@
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
 #X restore 541 134 pd image;
-#X obj 586 96 bng 15 250 50 0 empty empty pix_load -45 8 0 8 -262144
--1 -1;
+#X obj 586 96 bng 15 250 50 0 empty empty pix_load -45 8 0 8 #fcfcfc #000000 #000000;
 #X msg 491 185 direction \$1;
-#X obj 491 167 tgl 15 1 empty empty empty 0 -6 0 8 -262144 -1 -1 0
-1;
+#X obj 491 167 tgl 15 1 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000 0 1;
 #X text 50 12 Synopsis: [pix_compare];
 #X text 29 67 Description: mix 2 images based on their luminance;
 #X text 53 281 Inlet 2: gemlist;
 #X obj 451 215 pix_compare;
-#X text 53 254 Inlet 1: message: direction [0|1]: take lower or higher(default)
-valued pixel;
+#X text 53 254 Inlet 1: message: direction [0|1]: take lower or higher(default) valued pixel;
 #X text 449 66 open two different images;
-#X text 18 81 [pix_compare] compares two images pixel by pixel and
-outputs a composite image. [pix_compare] can do a greater than comparison
-where a brighter pixel in the right stream will replace the corresponding
-pixel in the left stream or the comparison can be reversed and the
-dimmer pixel can be replaced. this operation works best using YUV but
-can also be effective in RGB.;
+#X text 18 81 [pix_compare] compares two images pixel by pixel and outputs a composite image. [pix_compare] can do a greater than comparison where a brighter pixel in the right stream will replace the corresponding pixel in the left stream or the comparison can be reversed and the dimmer pixel can be replaced. this operation works best using YUV but can also be effective in RGB.;
 #X text 33 354 see also:;
 #X obj 99 355 pix_diff;
 #X obj 159 355 pix_subtract;
 #X obj 518 8 declare -lib Gem;
-#X connect 10 0 11 0;
-#X connect 11 0 10 0;
-#X connect 14 0 17 0;
-#X connect 16 0 17 1;
-#X connect 17 0 32 0;
-#X connect 18 0 22 0;
-#X connect 24 0 25 0;
-#X connect 25 0 32 1;
-#X connect 26 0 25 1;
-#X connect 27 0 32 0;
-#X connect 28 0 27 0;
-#X connect 32 0 18 0;
+#X obj 451 252 _pix2rectangle 3;
+#X obj 521 283 _gemwin;
+#X connect 11 0 14 0;
+#X connect 13 0 14 1;
+#X connect 14 0 27 0;
+#X connect 19 0 20 0;
+#X connect 20 0 27 1;
+#X connect 21 0 20 1;
+#X connect 22 0 27 0;
+#X connect 23 0 22 0;
+#X connect 27 0 35 0;
