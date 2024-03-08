@@ -40,6 +40,26 @@ void *Obj_header::operator new(size_t, void *location, void *)
 t_object * CPPExtern::s_holder=NULL;
 const char* CPPExtern::s_holdname=NULL;
 
+struct CPPExtern::PIMPL {
+  t_symbol*objectname;
+  t_canvas*canvas;
+  t_class*cls;
+  mutable bool endpost; /* internal state for startpost/post/endpost */
+  PIMPL(const char*name)
+    : objectname(name?gensym(name):gensym("unknown Gem object"))
+    , canvas(canvas_getcurrent())
+    , cls(0)
+    , endpost(true)
+  {  }
+  PIMPL(PIMPL*p)
+    : objectname(p->objectname)
+    , canvas(p->canvas)
+    , cls(p->cls)
+    , endpost(true)
+  {  }
+
+};
+
 
 /////////////////////////////////////////////////////////
 //
@@ -50,23 +70,13 @@ const char* CPPExtern::s_holdname=NULL;
 //
 /////////////////////////////////////////////////////////
 CPPExtern :: CPPExtern()
-  : x_obj(s_holder),
-    m_objectname(NULL),
-    m_canvas(NULL),
-    m_endpost(true)
+  : x_obj(s_holder)
+  , pimpl(new PIMPL(s_holdname))
 {
-  m_canvas = canvas_getcurrent();
-  if(s_holdname) {
-    m_objectname=gensym(s_holdname);
-  } else {
-    m_objectname=gensym("unknown Gem object");
-  }
 }
-CPPExtern :: CPPExtern(const CPPExtern&org) :
-  x_obj(org.x_obj),
-  m_objectname(org.m_objectname),
-  m_canvas(org.m_canvas),
-  m_endpost(true)
+CPPExtern :: CPPExtern(const CPPExtern&org)
+  : x_obj(org.x_obj)
+  , pimpl(new PIMPL(org.pimpl))
 {
 }
 
@@ -75,7 +85,10 @@ CPPExtern :: CPPExtern(const CPPExtern&org) :
 //
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
-{ }
+{
+  delete pimpl;
+  pimpl=0;
+}
 
 
 void CPPExtern :: post(const char*fmt,...) const
@@ -85,13 +98,13 @@ void CPPExtern :: post(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
-      && &s_ != m_objectname) {
-    ::post("[%s]: %s", m_objectname->s_name, buf);
+  if(pimpl->endpost && NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+      && &s_ != pimpl->objectname) {
+    ::post("[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
     ::post("%s", buf);
   }
-  m_endpost=true;
+  pimpl->endpost=true;
 }
 void CPPExtern :: startpost(const char*fmt,...) const
 {
@@ -100,18 +113,18 @@ void CPPExtern :: startpost(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(m_endpost && NULL!=m_objectname && NULL!=m_objectname->s_name
-      && &s_ != m_objectname) {
-    ::startpost("[%s]: %s", m_objectname->s_name, buf);
+  if(pimpl->endpost && NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+      && &s_ != pimpl->objectname) {
+    ::startpost("[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
     ::startpost("%s", buf);
   }
-  m_endpost=false;
+  pimpl->endpost=false;
 }
 void CPPExtern :: endpost(void) const
 {
   ::endpost();
-  m_endpost=true;
+  pimpl->endpost=true;
 }
 typedef void (*verbose_t)(int level, const char *fmt, ...);
 
@@ -134,16 +147,16 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
 
   /* only pd>=0.39(?) supports ::verbose() */
   if(rte_verbose) {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name
-        && &s_ != m_objectname) {
-      rte_verbose(level, "[%s]: %s", m_objectname->s_name, buf);
+    if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+        && &s_ != pimpl->objectname) {
+      rte_verbose(level, "[%s]: %s", pimpl->objectname->s_name, buf);
     } else {
       rte_verbose(level, "%s", buf);
     }
   } else {
-    if(NULL!=m_objectname && NULL!=m_objectname->s_name
-        && &s_ != m_objectname) {
-      ::post("[%s]: %s", m_objectname->s_name, buf);
+    if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+        && &s_ != pimpl->objectname) {
+      ::post("[%s]: %s", pimpl->objectname->s_name, buf);
     } else {
       ::post("%s", buf);
     }
@@ -157,9 +170,9 @@ void CPPExtern :: error(const char*fmt,...) const
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  if(NULL!=m_objectname && NULL!=m_objectname->s_name
-      && &s_ != m_objectname) {
-    const char*objname=m_objectname->s_name;
+  if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+      && &s_ != pimpl->objectname) {
+    const char*objname=pimpl->objectname->s_name;
     if(x_obj) {
       pd_error(x_obj, "[%s]: %s", objname, buf);
     } else if (s_holder) {
@@ -179,6 +192,11 @@ void CPPExtern :: error(const char*fmt,...) const
 }
 
 typedef int (*close_t)(int fd);
+
+const t_canvas* CPPExtern::getCanvas(void) const {
+  return pimpl->canvas;
+}
+
 
 std::string CPPExtern::findFile(const std::string&f,
                                 const std::string&e) const
@@ -211,9 +229,10 @@ bool CPPExtern :: checkGemVersion(const int major, const int minor)
 CPPExtern&CPPExtern::operator=(const CPPExtern&org)
 {
   x_obj=org.x_obj;
-  m_objectname=org.m_objectname;
-  m_canvas=org.m_canvas;
-  m_endpost=true;
+  pimpl->objectname=org.pimpl->objectname;
+  pimpl->canvas=org.pimpl->canvas;
+  pimpl->cls = org.pimpl->cls;
+  pimpl->endpost = true;
   return *this;
 }
 

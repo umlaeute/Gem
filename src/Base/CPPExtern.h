@@ -123,10 +123,7 @@ public:
 
   //////////
   // Get the object's canvas
-  const t_canvas* getCanvas(void) const
-  {
-    return(m_canvas);
-  }
+  const t_canvas* getCanvas(void) const;
 
   //////////
   // This is a holder - don't touch it
@@ -135,7 +132,6 @@ public:
   //////////
   // my name
   static const char* s_holdname;
-  t_symbol* m_objectname;
 
 protected:
 
@@ -150,6 +146,8 @@ protected:
   virtual void beforeDeletion();
 
 private:
+  class PIMPL;
+  PIMPL*pimpl;
 
   //////////
   // The canvas that the object is in
@@ -172,7 +170,6 @@ public:
   std::string findFile(const std::string&filename) const;
 
 private:
-  mutable bool m_endpost; /* internal state for startpost/post/endpost */
   static bool checkGemVersion(const int major, const int minor);
   CPPExtern(const CPPExtern&);
   virtual CPPExtern&operator=(const CPPExtern&);
