@@ -40,6 +40,10 @@ void *Obj_header::operator new(size_t, void *location, void *)
 t_object * CPPExtern::s_holder=NULL;
 const char* CPPExtern::s_holdname=NULL;
 
+namespace {
+  static t_class*s_holdclass = NULL;
+};
+
 struct CPPExtern::PIMPL {
   t_symbol*objectname;
   t_canvas*canvas;
@@ -48,7 +52,7 @@ struct CPPExtern::PIMPL {
   PIMPL(const char*name)
     : objectname(name?gensym(name):gensym("unknown Gem object"))
     , canvas(canvas_getcurrent())
-    , cls(0)
+    , cls(s_holdclass)
     , endpost(true)
   {  }
   PIMPL(PIMPL*p)
@@ -73,11 +77,27 @@ CPPExtern :: CPPExtern()
   : x_obj(s_holder)
   , pimpl(new PIMPL(s_holdname))
 {
+  t_symbol*asym = gensym("#A");
+  /* bashily unbind #A -- this would create garbage if #A were
+     multiply bound but we believe in this context it's at most
+     bound to whichever textobj or array was created most recently */
+  asym->s_thing = 0;
+  /* and now bind #A to us to receive following messages in the
+     saved file or copy buffer */
+  pd_bind(&x_obj->ob_pd, asym);
 }
 CPPExtern :: CPPExtern(const CPPExtern&org)
   : x_obj(org.x_obj)
   , pimpl(new PIMPL(org.pimpl))
 {
+  t_symbol*asym = gensym("#A");
+  /* bashily unbind #A -- this would create garbage if #A were
+     multiply bound but we believe in this context it's at most
+     bound to whichever textobj or array was created most recently */
+  asym->s_thing = 0;
+  /* and now bind #A to us to receive following messages in the
+     saved file or copy buffer */
+  pd_bind(&x_obj->ob_pd, asym);
 }
 
 /////////////////////////////////////////////////////////
@@ -86,6 +106,14 @@ CPPExtern :: CPPExtern(const CPPExtern&org)
 /////////////////////////////////////////////////////////
 CPPExtern :: ~CPPExtern()
 {
+
+  if(pimpl->cls) {
+    /* just in case we're still bound to #A from loading... */
+    t_pd*x;
+    while ((x = pd_findbyclass(gensym("#A"), pimpl->cls))) {
+      pd_unbind(x, gensym("#A"));
+    }
+  }
   delete pimpl;
   pimpl=0;
 }
@@ -239,6 +267,8 @@ CPPExtern&CPPExtern::operator=(const CPPExtern&org)
 void CPPExtern::beforeDeletion(void)
 {
   //post("CPPExtern to be deleted");
+
+
 }
 
 
@@ -299,6 +329,7 @@ gem::CPPExtern_proxy::CPPExtern_proxy(
     throw(GemException("unknown class"));
   }
 
+  s_holdclass = cls;
   CPPExtern::s_holder = &obj->pd_obj;
 
   pimpl->obj = obj;
