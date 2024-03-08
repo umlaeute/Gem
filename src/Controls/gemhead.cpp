@@ -346,4 +346,7 @@ void gemhead :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "float", renderOnOff, int);
   CPPEXTERN_MSG1(classPtr, "set", setMess, float);
   CPPEXTERN_MSG1(classPtr, "context", setContext, std::string);
+
+  /* compat with [gemhead] abstraction that uses [savestate] */
+  class_addmethod(classPtr, reinterpret_cast<t_method>(::nullfn), gensym("saved"), A_GIMME, A_NULL);
 }
