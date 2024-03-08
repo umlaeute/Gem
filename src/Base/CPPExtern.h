@@ -130,11 +130,11 @@ public:
 
   //////////
   // This is a holder - don't touch it
-  static t_object* m_holder;
+  static t_object* s_holder;
 
   //////////
   // my name
-  static const char* m_holdname;
+  static const char* s_holdname;
   t_symbol* m_objectname;
 
 protected:
@@ -333,7 +333,7 @@ static void obj_setupCallback(t_class *classPtr);
 
 #define REAL_NEW__CREATE2(NEW_CLASS)                                    \
   return proxy.initialize();                                            \
-  } catch (...) {gem::catchGemException(CPPExtern::m_holdname, CPPExtern::m_holder); return NULL;} \
+  } catch (...) {gem::catchGemException(CPPExtern::s_holdname, CPPExtern::s_holder); return NULL;} \
   }
 
 #define REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)                           \

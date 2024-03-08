@@ -37,8 +37,9 @@ void *Obj_header::operator new(size_t, void *location, void *)
   return(location);
 }
 
-t_object * CPPExtern::m_holder=NULL;
-const char* CPPExtern::m_holdname=NULL;
+t_object * CPPExtern::s_holder=NULL;
+const char* CPPExtern::s_holdname=NULL;
+
 
 /////////////////////////////////////////////////////////
 //
@@ -49,14 +50,14 @@ const char* CPPExtern::m_holdname=NULL;
 //
 /////////////////////////////////////////////////////////
 CPPExtern :: CPPExtern()
-  : x_obj(m_holder),
+  : x_obj(s_holder),
     m_objectname(NULL),
     m_canvas(NULL),
     m_endpost(true)
 {
   m_canvas = canvas_getcurrent();
-  if(m_holdname) {
-    m_objectname=gensym(m_holdname);
+  if(s_holdname) {
+    m_objectname=gensym(s_holdname);
   } else {
     m_objectname=gensym("unknown Gem object");
   }
@@ -161,16 +162,16 @@ void CPPExtern :: error(const char*fmt,...) const
     const char*objname=m_objectname->s_name;
     if(x_obj) {
       pd_error(x_obj, "[%s]: %s", objname, buf);
-    } else if (m_holder) {
-      pd_error(m_holder, "[%s]: %s", objname, buf);
+    } else if (s_holder) {
+      pd_error(s_holder, "[%s]: %s", objname, buf);
     } else {
       pd_error(0, "[%s]: %s", objname, buf);
     }
   } else {
     if(x_obj) {
       pd_error(x_obj, "%s", buf);
-    } else if (m_holder) {
-      pd_error(m_holder, "%s", buf);
+    } else if (s_holder) {
+      pd_error(s_holder, "%s", buf);
     } else {
       pd_error(0, "%s", buf);
     }
@@ -255,8 +256,8 @@ gem::CPPExtern_proxy::CPPExtern_proxy(
   int argc = realargc;
   if(!name && s)
     name=s->s_name;
-  CPPExtern::m_holder = 0;
-  CPPExtern::m_holdname = name;
+  CPPExtern::s_holder = 0;
+  CPPExtern::s_holdname = name;
 
   /* if we want init-messages, check if we have a semi-colon
    * (that marks the beginning of the init-messages),
@@ -279,7 +280,7 @@ gem::CPPExtern_proxy::CPPExtern_proxy(
     throw(GemException("unknown class"));
   }
 
-  CPPExtern::m_holder = &obj->pd_obj;
+  CPPExtern::s_holder = &obj->pd_obj;
 
   pimpl->obj = obj;
   pimpl->realargc = realargc;
@@ -291,8 +292,8 @@ gem::CPPExtern_proxy::CPPExtern_proxy(
 gem::CPPExtern_proxy::~CPPExtern_proxy()
 {
   delete pimpl;
-  CPPExtern::m_holder = 0;
-  CPPExtern::m_holdname = 0;
+  CPPExtern::s_holder = 0;
+  CPPExtern::s_holdname = 0;
 }
 void gem::CPPExtern_proxy::setObject(CPPExtern*obj)
 {
