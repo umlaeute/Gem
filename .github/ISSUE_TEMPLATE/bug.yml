@@ -27,7 +27,7 @@ body:
     id: pdversion
     attributes:
       label: Pd Version
-      description: Which version of Pure Data are you using?
+      description: Which version of Pure Data are you using? (also include the Pd-flavour, unless it is Pd-vanilla)
       placeholder: e.g. 0.54-1
   - type: dropdown
     id: OS
