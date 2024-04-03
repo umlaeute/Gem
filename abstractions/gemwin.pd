@@ -2800,8 +2800,8 @@
 #X connect 10 1 9 0;
 #X restore 258 606 pd CrystalEyeStereo;
 #X obj 131 836 GEMglReportError;
-#X msg 390 149 1000 \$1;
-#X obj 390 171 /;
+#X msg 505 215 1000 \$1;
+#X obj 505 237 /;
 #X obj 131 202 metro 20;
 #N canvas 272 224 751 300 GemState 0;
 #X obj 138 134 gemlist;
@@ -2833,7 +2833,7 @@
 #X connect 11 1 12 0;
 #X connect 12 0 5 0;
 #X restore 131 476 pd GemState;
-#X obj 390 126 r \$0-rate;
+#X obj 466 113 r \$0-rate;
 #X obj 131 155 r \$0-render;
 #X obj 131 563 t a a;
 #X obj 163 699 t a;
@@ -3184,6 +3184,9 @@
 #X connect 6 1 7 0;
 #X connect 7 0 4 1;
 #X restore 131 795 pd flush;
+#X obj 466 134 moses 0;
+#X obj 505 157 sel 0;
+#X msg 505 187 20;
 #X connect 0 0 37 0;
 #X connect 4 0 48 0;
 #X connect 4 1 39 0;
@@ -3205,7 +3208,7 @@
 #X connect 18 0 19 1;
 #X connect 19 0 35 0;
 #X connect 20 0 28 0;
-#X connect 21 0 17 0;
+#X connect 21 0 55 0;
 #X connect 22 0 30 0;
 #X connect 23 0 54 0;
 #X connect 23 1 13 0;
@@ -3247,3 +3250,8 @@
 #X connect 53 0 51 0;
 #X connect 53 1 48 1;
 #X connect 54 0 16 0;
+#X connect 55 0 57 0;
+#X connect 55 1 56 0;
+#X connect 56 0 57 0;
+#X connect 56 1 17 0;
+#X connect 57 0 17 0;
