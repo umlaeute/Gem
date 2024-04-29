@@ -1,4 +1,4 @@
-#N canvas 375 67 860 713 10;
+#N canvas 804 152 860 713 10;
 #X declare -lib Gem;
 #N canvas 1 89 450 300 fps 0;
 #X obj 46 -61 gemhead;
@@ -55,7 +55,7 @@
 #X connect 13 1 12 0;
 #X connect 14 0 15 0;
 #X restore 577 115 pd gemwin;
-#X msg 577 96 create;
+#X msg 577 96 destroy;
 #X text 573 75 Create window:;
 #X msg 184 350 link \$1 \$2;
 #X obj 154 264 glsl_vertex;
@@ -162,8 +162,8 @@
 #X restore 184 330 pd modulelist;
 #X msg 272 416 bang;
 #X obj 753 7 declare -lib Gem;
-#X msg 168 207 open ../shader/brick.vert;
-#X msg 195 234 open ../shader/brick.frag;
+#X msg 168 207 open shader/brick.vert;
+#X msg 195 234 open shader/brick.frag;
 #X connect 0 0 1 0;
 #X connect 2 0 3 0;
 #X connect 3 0 2 0;
