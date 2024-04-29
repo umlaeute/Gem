@@ -1,20 +1,20 @@
-#N canvas 30 77 1126 659 10;
+#N canvas 472 147 1126 659 10;
 #X declare -lib Gem;
 #X obj 9 470 translateXYZ 0 0 -4;
 #X obj 9 234 ortho;
-#X floatatom 83 538 5 0 0 0 - - -;
+#X floatatom 83 538 5 0 0 0 - - - 0;
 #X msg 83 515 \$1;
 #X obj 9 365 gemframebuffer;
 #X obj 9 494 pix_texture;
 #X obj 218 474 translateXYZ 0 0 -4;
 #X obj 218 501 pix_texture;
-#X floatatom 484 153 5 0 0 0 - - -;
+#X floatatom 484 153 5 0 0 0 - - - 0;
 #X msg 484 131 \$1;
-#X floatatom 325 550 5 0 0 0 - - -;
+#X floatatom 325 550 5 0 0 0 - - - 0;
 #X msg 325 528 \$1;
-#X floatatom 104 412 5 0 0 0 - - -;
+#X floatatom 104 412 5 0 0 0 - - - 0;
 #X msg 104 389 \$1;
-#X floatatom 294 411 5 0 0 0 - - -;
+#X floatatom 294 411 5 0 0 0 - - - 0;
 #X msg 294 388 \$1;
 #X obj 435 58 loadbang;
 #X obj 199 364 gemframebuffer;
@@ -23,9 +23,9 @@
 #X obj 126 137 change;
 #X obj 126 183 print linking;
 #X obj 32 117 glsl_fragment;
-#X floatatom 130 239 5 0 0 0 - - -;
-#X floatatom 232 239 5 0 0 0 - - -;
-#X floatatom 181 239 5 0 0 0 - - -;
+#X floatatom 130 239 5 0 0 0 - - - 0;
+#X floatatom 232 239 5 0 0 0 - - - 0;
+#X floatatom 181 239 5 0 0 0 - - - 0;
 #X msg 130 260 K1 \$1;
 #X msg 181 260 K3 \$1;
 #X msg 232 260 D1 \$1;
@@ -44,8 +44,7 @@
 #X obj 32 36 inlet;
 #X obj 32 363 outlet;
 #X obj 304 38 inlet;
-#X obj 139 343 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X obj 139 343 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #N canvas 0 0 450 300 init_shader 0;
 #X obj 89 154 outlet;
 #X obj 89 45 inlet;
@@ -60,7 +59,7 @@
 #X msg 181 213 0;
 #X msg 232 215 0;
 #X msg 193 151 text 0;
-#X msg 42 93 open wave.frag;
+#X msg 42 93 open shader/wave.frag;
 #X connect 0 0 14 0;
 #X connect 0 1 17 0;
 #X connect 1 0 11 0;
@@ -92,8 +91,7 @@
 #X restore 9 274 pd shader;
 #X obj 137 289 t a;
 #X obj 137 197 t b;
-#X obj 147 177 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X obj 147 177 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 137 156 loadbang;
 #X obj 218 421 t a a;
 #X obj 402 518 separator;
@@ -101,10 +99,8 @@
 #X obj 218 537 color 1 1 1;
 #X obj 218 563 rectangle 4 4;
 #X obj 9 563 rectangle 4 4;
-#X obj 66 250 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X obj 93 251 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 66 250 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
+#X obj 93 251 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 390 472 t a;
 #N canvas 0 0 857 562 border 0;
 #X obj 14 10 inlet;
@@ -141,22 +137,19 @@
 #X connect 15 0 5 0;
 #X connect 16 0 3 0;
 #X restore 390 569 pd border;
-#X obj 774 148 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
-1;
+#X obj 774 148 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 774 172 gemhead 40;
-#X floatatom 825 519 5 0 0 0 - - -;
+#X floatatom 825 519 5 0 0 0 - - - 0;
 #X obj 774 484 pix_texture;
-#X floatatom 876 520 5 0 0 0 - - -;
+#X floatatom 876 520 5 0 0 0 - - - 0;
 #X obj 442 357 pix_texture;
-#X floatatom 867 236 5 0 0 0 - - -;
-#X obj 653 216 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X floatatom 867 236 5 0 0 0 - - - 0;
+#X obj 653 216 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 454 308 loadbang;
 #X obj 786 442 loadbang;
 #N canvas 93 153 804 667 _glsl 0;
 #X obj 80 426 glsl_program;
-#X obj 261 238 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 261 238 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #N canvas 0 22 450 300 open 0;
 #X obj 75 103 openpanel;
 #X obj 75 173 outlet;
@@ -173,7 +166,7 @@
 #X obj 166 331 change;
 #X msg 34 420 print;
 #X obj 80 310 glsl_fragment;
-#X floatatom 166 355 2 0 0 0 ID - -;
+#X floatatom 166 355 2 0 0 0 ID - - 0;
 #X obj 184 400 print linking;
 #X obj 13 52 inlet;
 #X obj 80 462 outlet;
@@ -181,8 +174,7 @@
 #X msg 204 261 open \$1;
 #X obj 422 77 inlet;
 #X obj 13 75 route bang;
-#X obj 140 83 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
+#X obj 140 83 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X obj 140 109 t b b;
 #X msg 140 202 symbol \$1/\$2;
 #X obj 255 11 gemhead 1;
@@ -193,7 +185,7 @@
 #X obj 159 468 t b;
 #X obj 159 491 outlet;
 #X msg 166 379 link \$1;
-#X obj 140 133 symbol vague;
+#X obj 140 133 symbol shader/vague;
 #X connect 0 0 10 0;
 #X connect 0 1 22 0;
 #X connect 1 0 2 0;
@@ -223,8 +215,7 @@
 #X connect 25 0 8 0;
 #X connect 26 0 11 0;
 #X restore 774 326 pd _glsl;
-#X obj 743 302 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
+#X obj 743 302 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
 #X msg 435 82 texunit 3;
 #X obj 410 108 pix_texture;
 #X obj 181 299 t a;
@@ -257,8 +248,7 @@
 #X restore 402 542 pd gouttes;
 #X msg 244 284 quality 0;
 #X obj 774 541 rectangle 4 4;
-#X obj 9 155 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
-;
+#X obj 9 155 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 220 180 delay 1000;
 #N canvas 0 0 450 300 init 0;
 #X obj 89 154 outlet;
@@ -277,17 +267,12 @@
 #X obj 9 177 gemhead 10;
 #X obj 442 240 pix_image img2.jpg;
 #X msg 867 215 111;
-#X text 33 612 This shader is rendered into a framebuffer \, in order
-to use it in the next frame for a simple physical modeling simulation
-;
-#X text 345 168 This creates a texture (texunit 3) from the shaders'
-output;
+#X text 33 612 This shader is rendered into a framebuffer \, in order to use it in the next frame for a simple physical modeling simulation;
+#X text 345 168 This creates a texture (texunit 3) from the shaders' output;
 #X text 437 386 this loads a texture (texunit 2);
 #X text 691 411 not used \, just to set texture coordinate;
-#X text 633 594 This uses the two textures (texunit 2 and 3) in order
-to render the final images;
-#X text 201 9 This is an example of rendering to texture (using framebuffer)
-and multitextures;
+#X text 633 594 This uses the two textures (texunit 2 and 3) in order to render the final images;
+#X text 201 9 This is an example of rendering to texture (using framebuffer) and multitextures;
 #X obj 402 497 t a a a a a;
 #X obj 774 393 pix_set 512 512;
 #N canvas 87 154 452 208 Gem.init 0;
@@ -298,8 +283,7 @@ and multitextures;
 #X connect 2 0 1 0;
 #X restore 760 47 pd Gem.init;
 #N canvas 340 107 682 322 gemwin 0;
-#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 -262144
--1 -1 0 1;
+#X obj 102 122 tgl 15 0 \$0-gemstart \$0-gemstart empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 102 161 r \$0-gemstart;
 #X obj 102 182 select 1 0;
 #X msg 102 214 create \, 1;

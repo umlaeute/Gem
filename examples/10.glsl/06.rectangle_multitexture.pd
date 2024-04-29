@@ -1,4 +1,4 @@
-#N canvas 511 97 648 675 10;
+#N canvas 684 111 648 675 10;
 #X declare -lib Gem;
 #X obj 279 76 gemhead;
 #X obj 295 208 loadbang;
@@ -6,18 +6,15 @@
 #X msg 295 231 rectangle 1 \, texunit 1;
 #X obj 334 97 openpanel;
 #X msg 334 118 open \$1;
-#X obj 334 76 bng 15 250 50 0 empty empty empty 17 7 0 10 -257985 -1
--1;
+#X obj 334 76 bng 15 250 50 0 empty empty empty 17 7 0 10 #f8fc00 #000000 #000000;
 #X obj 459 76 gemhead;
 #X obj 475 208 loadbang;
 #X obj 459 251 pix_texture;
 #X obj 514 97 openpanel;
 #X msg 514 118 open \$1;
-#X obj 514 76 bng 15 250 50 0 empty empty empty 17 7 0 10 -257985 -1
--1;
+#X obj 514 76 bng 15 250 50 0 empty empty empty 17 7 0 10 #f8fc00 #000000 #000000;
 #X msg 475 231 rectangle 1 \, texunit 2;
-#X obj 279 275 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 279 275 cnv 15 100 60 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 0 450 300 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -39,18 +36,16 @@
 #X restore 284 314 pd gemwin;
 #X msg 284 295 create;
 #X text 280 274 Create window:;
-#X obj 101 358 cnv 15 100 120 empty empty empty 20 12 0 14 -4034 -66577
-0;
+#X obj 101 358 cnv 15 100 120 empty empty empty 20 12 0 14 #00fc04 #404040 0;
 #X obj 37 538 glsl_program;
 #X obj 100 259 pack 0 0;
 #X obj 118 236 t b f;
 #X obj 118 194 change;
 #X msg 100 285 link \$1 \$2;
-#X floatatom 118 217 2 0 0 0 ID - -;
-#X floatatom 100 133 2 0 0 0 ID - -;
+#X floatatom 118 217 2 0 0 0 ID - - 0;
+#X floatatom 100 133 2 0 0 0 ID - - 0;
 #X obj 105 309 print linking;
-#X obj 124 43 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
--1;
+#X obj 124 43 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X obj 37 88 glsl_vertex;
 #X obj 37 174 glsl_fragment;
 #N canvas 0 0 450 300 load_shader 0;
@@ -97,25 +92,16 @@
 #X obj 37 625 pix_texture;
 #X msg 106 603 rectangle 1 \, texunit 0;
 #X obj 37 598 pix_set;
-#X obj 142 457 hsl 50 10 0 1 0 0 empty empty MIX_FACTOR -2 -4 0 7 -262144
--1 -1 0 1;
-#X msg 51 66 open GLSL_mix.vert;
-#X msg 51 151 open GLSL_mix.frag;
+#X obj 142 457 hsl 50 10 0 1 0 0 empty empty MIX_FACTOR -2 -4 0 7 #fcfcfc #000000 #000000 0 1;
 #X msg 109 411 diff;
 #X text 383 295 <- 1 : create GEM window;
-#X text 248 375 add : add two texture together (it is easy to get a
-white out);
+#X text 248 375 add : add two texture together (it is easy to get a white out);
 #X msg 109 391 subtract;
-#X text 277 16 This shader program give you the possibility to mix
-two sources of different size. You can add \, subtract \, diff \, multiply
-and mix the two sources.;
-#X text 248 401 subtract : subtract two texture together (it is easy
-to get a black out);
-#X text 248 427 diff : subtract two texture together (get absolute
-value);
+#X text 277 16 This shader program give you the possibility to mix two sources of different size. You can add \, subtract \, diff \, multiply and mix the two sources.;
+#X text 248 401 subtract : subtract two texture together (it is easy to get a black out);
+#X text 248 427 diff : subtract two texture together (get absolute value);
 #X text 248 441 multiply : multiply two texture together;
-#X text 248 455 mix : mix two texture together (use the mix factor
-for crossfading);
+#X text 248 455 mix : mix two texture together (use the mix factor for crossfading);
 #N canvas 242 260 450 300 onebang 0;
 #X obj 120 71 inlet;
 #X obj 120 151 outlet;
@@ -142,22 +128,24 @@ for crossfading);
 #X msg 139 507 mix_factor \$1;
 #X obj 37 646 square 4;
 #X obj 543 647 declare -lib Gem;
-#X connect 0 0 61 0;
+#X msg 51 66 open shader/GLSL_mix.vert;
+#X msg 51 151 open shader/GLSL_mix.frag;
+#X connect 0 0 59 0;
 #X connect 1 0 3 0;
 #X connect 3 0 2 0;
 #X connect 4 0 5 0;
-#X connect 5 0 61 0;
+#X connect 5 0 59 0;
 #X connect 6 0 4 0;
-#X connect 7 0 62 0;
+#X connect 7 0 60 0;
 #X connect 8 0 13 0;
 #X connect 10 0 11 0;
-#X connect 11 0 62 0;
+#X connect 11 0 60 0;
 #X connect 12 0 10 0;
 #X connect 13 0 9 0;
 #X connect 15 0 16 0;
 #X connect 16 0 15 0;
 #X connect 19 0 44 0;
-#X connect 19 1 57 0;
+#X connect 19 1 55 0;
 #X connect 20 0 23 0;
 #X connect 21 0 20 0;
 #X connect 21 1 20 1;
@@ -166,8 +154,8 @@ for crossfading);
 #X connect 23 0 26 0;
 #X connect 24 0 21 0;
 #X connect 25 0 20 0;
-#X connect 27 0 46 0;
-#X connect 27 0 47 0;
+#X connect 27 0 65 0;
+#X connect 27 0 66 0;
 #X connect 28 0 29 0;
 #X connect 28 1 31 0;
 #X connect 29 0 19 0;
@@ -184,18 +172,18 @@ for crossfading);
 #X connect 39 0 19 0;
 #X connect 40 0 19 0;
 #X connect 41 0 34 0;
-#X connect 42 0 65 0;
+#X connect 42 0 63 0;
 #X connect 43 0 42 0;
 #X connect 44 0 42 0;
-#X connect 45 0 64 0;
-#X connect 46 0 28 0;
-#X connect 47 0 29 0;
-#X connect 48 0 37 0;
-#X connect 51 0 37 0;
-#X connect 57 0 38 0;
-#X connect 57 0 39 0;
-#X connect 59 0 9 0;
-#X connect 60 0 2 0;
-#X connect 61 0 60 0;
-#X connect 62 0 59 0;
-#X connect 64 0 19 0;
+#X connect 45 0 62 0;
+#X connect 46 0 37 0;
+#X connect 49 0 37 0;
+#X connect 55 0 38 0;
+#X connect 55 0 39 0;
+#X connect 57 0 9 0;
+#X connect 58 0 2 0;
+#X connect 59 0 58 0;
+#X connect 60 0 57 0;
+#X connect 62 0 19 0;
+#X connect 65 0 28 0;
+#X connect 66 0 29 0;

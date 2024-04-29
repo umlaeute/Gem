@@ -1,4 +1,4 @@
-#N canvas 22 145 681 529 10;
+#N canvas 615 231 681 529 10;
 #X declare -lib Gem;
 #X obj 232 189 gemhead;
 #X obj 232 356 pix_noise 5 5;
@@ -6,23 +6,19 @@
 #X obj 232 465 square 4;
 #X msg 240 403 rectangle 1;
 #X obj 240 382 loadbang;
-#X obj 242 222 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
-#X floatatom 250 272 5 0 0 0 - - -;
+#X obj 242 222 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
+#X floatatom 250 272 5 0 0 0 - - - 0;
 #X obj 35 196 gemwin;
 #X msg 250 334 set \$1 \$2;
 #X obj 250 314 pack f f;
 #X obj 303 288 t b f;
-#X floatatom 303 271 5 0 0 0 - - -;
+#X floatatom 303 271 5 0 0 0 - - - 0;
 #X msg 35 151 create \, 1;
 #X msg 42 173 0 \, destroy;
-#X obj 232 243 _glsl bicubic_interpolation;
 #X obj 436 191 gemhead;
 #X msg 358 408 quality \$1;
-#X obj 358 389 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
-1;
-#X obj 33 246 vradio 15 1 1 3 empty empty empty 0 -8 0 10 -262144 -1
--1 1;
+#X obj 358 389 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 33 246 vradio 15 1 1 3 empty empty empty 0 -8 0 10 #fcfcfc #000000 #000000 1;
 #X text 53 246 bicubic interpolation;
 #X text 53 264 bilinear interpolation;
 #X text 55 276 no interpolation;
@@ -33,17 +29,15 @@
 #X obj 436 172 != 0;
 #X obj 358 369 != 2;
 #X obj 358 349 r sel_interpolation;
-#X text 46 16 This example use shader in order to compute a bicubic
-image interpolation. Bicubic interpolation offer a smoother surface
-than obtain with bilinear interpolation. But since it need 16 sample
-to compute the interpolation \, it is quite slow.;
+#X text 46 16 This example use shader in order to compute a bicubic image interpolation. Bicubic interpolation offer a smoother surface than obtain with bilinear interpolation. But since it need 16 sample to compute the interpolation \, it is quite slow.;
 #X obj 563 7 declare -lib Gem;
-#X connect 0 0 15 0;
+#X obj 232 243 _glsl shader/bicubic_interpolation;
+#X connect 0 0 31 0;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
 #X connect 4 0 2 0;
 #X connect 5 0 4 0;
-#X connect 6 0 15 0;
+#X connect 6 0 31 0;
 #X connect 7 0 10 0;
 #X connect 9 0 1 0;
 #X connect 10 0 9 0;
@@ -53,13 +47,13 @@ to compute the interpolation \, it is quite slow.;
 #X connect 13 0 8 0;
 #X connect 14 0 8 0;
 #X connect 15 0 1 0;
-#X connect 16 0 1 0;
-#X connect 17 0 2 0;
-#X connect 18 0 17 0;
-#X connect 19 0 23 0;
-#X connect 24 0 0 0;
-#X connect 25 0 24 0;
-#X connect 26 0 27 0;
-#X connect 27 0 16 0;
-#X connect 28 0 18 0;
-#X connect 29 0 28 0;
+#X connect 16 0 2 0;
+#X connect 17 0 16 0;
+#X connect 18 0 22 0;
+#X connect 23 0 0 0;
+#X connect 24 0 23 0;
+#X connect 25 0 26 0;
+#X connect 26 0 15 0;
+#X connect 27 0 17 0;
+#X connect 28 0 27 0;
+#X connect 31 0 1 0;
