@@ -382,10 +382,10 @@
 #X msg 18 373 1.62;
 #X msg 199 87 1.38;
 #X msg 37 232 dimen 1024 256;
-#X msg 177 304 thread 0 \, open cam1.jpg;
-#X msg 370 305 thread 0 \, open cam2.jpg;
-#X msg 569 306 thread 0 \, open cam3.jpg;
-#X msg 764 307 thread 0 \, open cam4.jpg;
+#X msg 177 304 thread 0 \, open ../data/cam1.jpg;
+#X msg 370 305 thread 0 \, open ../data/cam2.jpg;
+#X msg 569 306 thread 0 \, open ../data/cam3.jpg;
+#X msg 764 307 thread 0 \, open ../data/cam4.jpg;
 #X obj 964 623 declare -lib Gem;
 #X connect 0 0 101 0;
 #X connect 1 0 101 0;

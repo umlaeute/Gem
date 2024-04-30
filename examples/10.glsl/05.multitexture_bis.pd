@@ -54,10 +54,10 @@
 #X obj 919 379 loadbang;
 #X obj 890 220 gemhead 22;
 #X text 187 360 2) change shader texunit;
-#X msg 685 311 open img2.jpg;
-#X obj 666 340 pix_image img2.jpg;
-#X obj 890 337 pix_image img3.jpg;
-#X msg 907 309 open img3.jpg;
+#X msg 685 311 open ../data/img2.jpg;
+#X obj 666 340 pix_image ../data/img2.jpg;
+#X obj 890 337 pix_image ../data/img3.jpg;
+#X msg 907 309 open ../data/img3.jpg;
 #X obj 148 98 change;
 #X text 343 147 This is an example of multitexturing \, this shader mixes 2 textures;
 #N canvas 87 154 247 179 Gem.init 0;
@@ -121,8 +121,8 @@
 #X obj 462 288 loadbang;
 #X obj 443 427 pix_texture;
 #X msg 471 402 rectangle 0;
-#X msg 462 313 open img1.jpg;
-#X obj 443 342 pix_image img1.jpg;
+#X msg 462 313 open ../data/img1.jpg;
+#X obj 443 342 pix_image ../data/img1.jpg;
 #X obj 983 7 declare -lib Gem;
 #X msg 90 57 open shader/multitexture.vert;
 #X msg 86 153 open shader/multitexture.frag;

@@ -39,7 +39,7 @@
 #X restore 373 156 pd init;
 #X text 6 4 first input \, render whatever in a framebuffer;
 #X obj 691 357 loadbang;
-#X obj 42 222 pix_image img1.jpg;
+#X obj 42 222 pix_image ../data/img1.jpg;
 #X obj 42 54 gemhead 11;
 #X obj 666 187 loadbang;
 #X obj 650 166 translateXYZ 0 0 -4;
@@ -288,7 +288,7 @@
 #X obj 353 332 mesh_square 10 10;
 #X obj 353 311 scaleXYZ 4 4 1;
 #X obj 353 57 gemhead 21;
-#X obj 353 222 pix_image img2.jpg;
+#X obj 353 222 pix_image ../data/img2.jpg;
 #X obj 353 291 pix_texture;
 #X msg 666 209 rectangle 0;
 #X msg 691 378 rectangle 0;

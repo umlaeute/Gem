@@ -34,8 +34,8 @@
 #X restore 540 93 pd load_glsl;
 #X obj 504 525 rotateXYZ -30 0 0;
 #X obj 504 551 scaleXYZ 3 3 1;
-#X obj 28 388 pix_image img1.jpg;
-#X msg 46 363 open img2.jpg;
+#X obj 28 388 pix_image ../data/img1.jpg;
+#X msg 46 363 open ../data/img2.jpg;
 #X text 137 11 This patch need a glsl 3 compliant hardware;
 #X text 26 535 draw an image in a framebuffer;
 #X text 49 274 this configuration is very important to have full hardware support for vertex texture fetching;

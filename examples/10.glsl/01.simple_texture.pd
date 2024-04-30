@@ -13,8 +13,8 @@
 #X obj 76 197 glsl_fragment;
 #X text 215 459 <- load texture;
 #X obj 106 535 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
-#X obj 76 489 pix_image img1.jpg;
-#X msg 103 460 open img2.jpg;
+#X obj 76 489 pix_image ../data/img1.jpg;
+#X msg 103 460 open ../data/img2.jpg;
 #X msg 114 114 0;
 #X obj 283 72 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X text 315 70 <-load an other shader;

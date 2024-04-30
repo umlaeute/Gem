@@ -265,7 +265,7 @@
 #X obj 199 342 gemhead 12;
 #X obj 442 214 gemhead 17;
 #X obj 9 177 gemhead 10;
-#X obj 442 240 pix_image img2.jpg;
+#X obj 442 240 pix_image ../data/img2.jpg;
 #X msg 867 215 111;
 #X text 33 612 This shader is rendered into a framebuffer \, in order to use it in the next frame for a simple physical modeling simulation;
 #X text 345 168 This creates a texture (texunit 3) from the shaders' output;
