@@ -563,7 +563,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
 
   if((argc!=2 && argc!=3) || (argv[0].a_type!=A_SYMBOL
                               || argv[1].a_type!=A_SYMBOL)) {
-    error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
+    error("illegal arguments to 'attribute': must be <attribute_name> <table> [<offset>]");
     return;
   }
   if(argc==3) {
@@ -571,7 +571,7 @@ void gemvertexbuffer :: attribute(t_symbol*s, int argc, t_atom *argv)
       tab_offset=atom_getfloat(argv+2);
       resize=false;
     } else {
-      error("illegal arguments to 'attribute': must be <vbo_index> <attribute_name> <table> [<offset>]");
+      error("illegal arguments to 'attribute': must be <attribute_name> <table> [<offset>]");
       return;
     }
   }
