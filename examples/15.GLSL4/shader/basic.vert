@@ -2,6 +2,8 @@
 
 //simple test shader
 // Cyrille Henry 2024
+// based on "OpenGL 4 Shading Language Cookbook" by David Wolff
+
 // This is the vertex shader, the 1st on the pipeline. It is executed for every vertex.
 
 layout (location=0) in vec3 position;
