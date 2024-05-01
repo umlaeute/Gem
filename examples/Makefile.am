@@ -132,7 +132,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/14.blur.pd \
 	10.glsl/15.bicubic_image_interpolation.pd \
 	10.glsl/16.vertexbuffer_attributes.pd \
-	10.glsl/17.light.pd
+	10.glsl/17.light.pd \
 	10.glsl/_glsl.pd \
 	10.glsl/single_blur.pd \
 	10.glsl/shader/bicubic_interpolation.frag \
