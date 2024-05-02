@@ -24,6 +24,6 @@ void main()
 	Color = vec4(colorR, colorG, colorB, 1.);
 	Normal = vec3(normal_X, normal_Y, normal_Z);
 	vec3 pos = vec3(positionX, positionY, positionZ);
-	Position = transformation_matrix * vec4(pos,1.0); 
+	Position = transformation_matrix * vec4(pos,1.0);
 	gl_Position = Position;
 }
