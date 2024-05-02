@@ -228,6 +228,9 @@ nobase_dist_gemexamples_DATA = \
 	15.GLSL4/shader/02.transformation.vert \
 	15.GLSL4/shader/03.texture.frag \
 	15.GLSL4/shader/03.texture.vert \
+	15.GLSL4/04.model.pd \
+	15.GLSL4/shader/04.model.vert \
+	15.GLSL4/shader/04.model.frag \
 	99.games/puzzle.pd \
 	data/img1.jpg \
 	data/img2.jpg \
