@@ -1,4 +1,4 @@
-attribute vec3 LightPosition; 
+attribute vec3 LightPosition;
 attribute vec3 BrickColor, MortarColor;
 attribute vec2 BrickSize, BrickPct;
 
@@ -35,7 +35,7 @@ void main()
       spec = pow(spec, 16.0);
    }
 
-   LightIntensity  = DiffuseContribution * diffuse + 
+   LightIntensity  = DiffuseContribution * diffuse +
    		     SpecularContribution * spec;
 
    MCposition      = gl_Vertex.xy;

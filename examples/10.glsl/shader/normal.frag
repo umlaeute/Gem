@@ -19,7 +19,7 @@ void main (void)
 		vec4 posD = texture2DRect(texture_mass, test1(coord+vec2( 1., 0.))) ;
 		vec4 posH = texture2DRect(texture_mass, test1(coord+vec2( 0.,-1.))) ;
 		vec4 posB = texture2DRect(texture_mass, test1(coord+vec2( 0., 1.))) ;
-	
+
 		vec3 normal = cross((posG.xyz-posD.xyz),(posH.xyz-posB.xyz));
 		color.xyz = normalize(normal);
 		color.xyz = normal;

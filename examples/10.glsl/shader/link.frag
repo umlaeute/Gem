@@ -4,7 +4,7 @@
 uniform sampler2DRect texture_mass, texture_mass_old, texture_normal;
 uniform float init, gravite;
 uniform vec2 wind;
-uniform float D; 
+uniform float D;
 uniform float K1; // rigiditée liaison
 uniform float W,f,N; // amplitude du Wind et frequence; Noise
 uniform float t; //temps
@@ -29,7 +29,7 @@ void main (void)
 		vec4 pos     = texture2DRect(texture_mass,    coord             );// -vec4(0.5);
 		vec4 pos_old = texture2DRect(texture_mass_old,coord             );// -vec4(0.5);
 		vec4 posG    = texture2DRect(texture_mass, (coord+vec2(-1., 0.)));// -vec4(0.5);
-		vec4 posD    = texture2DRect(texture_mass, (coord+vec2( 1., 0.)));// -vec4(0.5); 
+		vec4 posD    = texture2DRect(texture_mass, (coord+vec2( 1., 0.)));// -vec4(0.5);
 		vec4 posH    = texture2DRect(texture_mass, (coord+vec2( 0., 1.)));// -vec4(0.5);
 		vec4 posB    = texture2DRect(texture_mass, (coord+vec2( 0.,-1.)));// -vec4(0.5);
 		vec4 posHD   = texture2DRect(texture_mass, (coord+vec2( 1.,-1.)));// -vec4(0.5);
@@ -42,10 +42,10 @@ void main (void)
 		vec4 pos2B   = texture2DRect(texture_mass, (coord+vec2( 0.,-2.)));// -vec4(0.5);
 			// lecture des position des masses voisinnes
 
-		force = pos-pos_old; 
+		force = pos-pos_old;
 			// ajout de la force d'inertie (conservation de la vitesse)
 
-		force *= 1.-D; 
+		force *= 1.-D;
 			// damping relatif a un point fix
 			// ATTENTION, c'est le seul damping du system!
 
@@ -54,64 +54,64 @@ void main (void)
 		// on ajoute une force ssi la taille est > 0
 		// on limite aussi ds l'espace pour ne prendre en compte que le lien valide (effet de bord)
 
-		dist = pos.xyz - posG.xyz ; 
+		dist = pos.xyz - posG.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x >  1.) )
 			{ force.xyz += -K1 * (taille - 1./1000.)* normalize(dist); }
 
-		dist = pos.xyz - posD.xyz ; 
+		dist = pos.xyz - posD.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x < 91.) )
 			{ force.xyz += -K1 * (taille - 1./1000.)* normalize(dist); }
 
-		dist = pos.xyz - posH.xyz ; 
+		dist = pos.xyz - posH.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.y < 63.) )
 			{ force.xyz += -K1 * (taille - 1./1000.)* normalize(dist); }
 
-		dist = pos.xyz - posB.xyz ; 
+		dist = pos.xyz - posB.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.y >  1.) )
 			{ force.xyz += -K1 * (taille - 1./1000.)* normalize(dist); }
 
 	// 4 liens diagonaux (haut gauche, bas droite, etc)
-		dist = pos.xyz - posHD.xyz ; 
+		dist = pos.xyz - posHD.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x < 91.) && (coord.y >  1.) )
 			{ force.xyz += -K1 * (taille - 1.4142/1000.)* normalize(dist); }
-	 
-		dist = pos.xyz - posBG.xyz ; 
+
+		dist = pos.xyz - posBG.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x >  1.) && (coord.y < 63.) )
 			{ force.xyz += -K1 * (taille - 1.4142/1000.)* normalize(dist); }
 
-		dist = pos.xyz - posHG.xyz ; 
+		dist = pos.xyz - posHG.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x < 91.) && (coord.y < 63.) )
 			{ force.xyz += -K1 * (taille - 1.4142/1000.)* normalize(dist); }
 
-		dist = pos.xyz - posBD.xyz ; 
+		dist = pos.xyz - posBD.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x >  1.) && (coord.y >  1.) )
 			{ force.xyz += -K1 * (taille - 1.4142/1000.)* normalize(dist); }
 
 	// 4 liens double longeur (rigidité de flexion)
-		dist = pos.xyz - pos2G.xyz ; 
+		dist = pos.xyz - pos2G.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x >  2.) )
 			{ force.xyz += -K1 * (taille - 2./1000.)* normalize(dist); }
 
-		dist = pos.xyz - pos2D.xyz ; 
+		dist = pos.xyz - pos2D.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.x < 90.) )
 			{ force.xyz += -K1 * (taille - 2./1000.)* normalize(dist); }
 
-		dist = pos.xyz - pos2H.xyz ; 
+		dist = pos.xyz - pos2H.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.y < 62.) )
 			{ force.xyz += -K1 * (taille - 2./1000.)* normalize(dist); }
 
-		dist = pos.xyz - pos2B.xyz ; 
+		dist = pos.xyz - pos2B.xyz ;
 		taille = length(dist) ;
 		if ( (taille > 0.) && (coord.y >  2.) )
 			{ force.xyz += -K1 * (taille - 2./1000.)* normalize(dist); }

@@ -10,7 +10,7 @@ in vec2 texcoord;
 out vec2 TexCoord;
 
 void main()
-{	
+{
 	TexCoord = texcoord; // pass the data from VBO to the frag shader
-	gl_Position = vec4(position,1.0); 
+	gl_Position = vec4(position,1.0);
 }

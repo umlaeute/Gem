@@ -15,9 +15,9 @@ void main (void)
 
 		force = min(max(force,vec4(-0.5)),vec4(0.5));
 			// on vire les +inf et -inf qui peuvent poser pb en cas d'instabilités
-		pos += force; 
+		pos += force;
 			//increment de la position
-	
+
 		float reset = step(coord.x,1.);
 //		reset *= step(mod(coord.y,10.),4.);
 			// les point en x<1 sont tjrs reseté : ils sont dc imobiles

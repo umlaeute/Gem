@@ -13,7 +13,7 @@ vec2 pos_(vec2 V, float x, float y)
 
 void main (void)
 {
-	vec2 pos = gl_TexCoord[0].st * vec2(90.,62.)/256. ; 
+	vec2 pos = gl_TexCoord[0].st * vec2(90.,62.)/256. ;
 
 	vec4 color1 = texture2DRect(texture,pos_(pos,-1./256.,-1./256.));
 	vec4 color2 = texture2DRect(texture,pos_(pos, 0./256.,-1./256.));
@@ -26,11 +26,11 @@ void main (void)
 	vec4 color9 = texture2DRect(texture,pos_(pos, 1./256., 1./256.));
 
 	vec4 colorBG = color1 + color2 + color4 + color5;
-	vec4 colorBD = color3 + color2 + color6 + color5; 
-	vec4 colorHG = color4 + color5 + color7 + color8; 
+	vec4 colorBD = color3 + color2 + color6 + color5;
+	vec4 colorHG = color4 + color5 + color7 + color8;
 	vec4 colorHD = color5 + color6 + color8 + color9;
 
-	vec2 fract_pos = (fract(pos)); 
+	vec2 fract_pos = (fract(pos));
 
 	vec4 XB = mix(colorBG,colorBD,fract_pos.x);
 	vec4 XH = mix(colorHG,colorHD,fract_pos.x);
@@ -52,5 +52,3 @@ void main (void)
     gl_FragColor = color;
 
 }
-
-

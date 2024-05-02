@@ -12,4 +12,3 @@ void main (void)
  vec4 color2 = texture2DRect(MyTex1, texcoord1); // texcoord2 does not work.
  gl_FragColor = (color + color2) / 2.;
 }
-

@@ -10,7 +10,7 @@ void main()
    vec3 color;
    vec2 position, useBrick;
    position = MCposition / BrickSize_f;
-  
+
    if (fract(position.y * 0.5) > 0.5)
       position.x += 0.5;
 

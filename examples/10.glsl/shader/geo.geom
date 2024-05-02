@@ -1,5 +1,5 @@
-#version 120 
-#extension GL_EXT_geometry_shader4: enable 
+#version 120
+#extension GL_EXT_geometry_shader4: enable
 
 void main(void)
 {
@@ -23,6 +23,6 @@ void main(void)
 			// the geometry as already been transform in 2d, so we jut have to move it in X and Y
 			EmitVertex();
 		}
-		EndPrimitive();	
+		EndPrimitive();
 	}
 }

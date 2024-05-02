@@ -19,13 +19,3 @@ void main()
 	gl_FragColor = texture2D(tex0, C + K1 * 0.01 *vec2(xs3,ys3)) ;
 
 }
-
-
-
-
-
-
-
-
-
-

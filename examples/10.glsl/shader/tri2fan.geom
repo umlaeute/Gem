@@ -1,11 +1,11 @@
 // Cyrille Henry 2010
 
-#version 120 
+#version 120
 #extension GL_EXT_geometry_shader4 : enable
 
 void main(void)
 {
-	
+
 	int i; //increment variable
 	vec4 pos1,pos2, pos3, pos4, pos5; // tmp
 	vec3 high;
@@ -16,7 +16,7 @@ void main(void)
 		pos3 = gl_PositionIn[i+2];
 		pos4 = (pos1 + pos2 + pos3) / 3.; // center of the triangle
 
-		high = 10.*cross(pos2.xyz-pos1.xyz,pos3.xyz-pos2.xyz); 
+		high = 10.*cross(pos2.xyz-pos1.xyz,pos3.xyz-pos2.xyz);
 			// hight and orientation of the piramide
 
 		high = normalize(high);
@@ -43,9 +43,8 @@ void main(void)
 		gl_Position = gl_ModelViewProjectionMatrix * pos5;
 		EmitVertex();
 
-		EndPrimitive();	
+		EndPrimitive();
 			// new primitive
 	}
 
 }
-

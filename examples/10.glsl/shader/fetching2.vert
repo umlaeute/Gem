@@ -11,11 +11,10 @@ void main()
 
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 
-	v.x = color.r -0.5;	
-	v.y = color.g -0.5;	
-	v.z = color.b -0.5;	
+	v.x = color.r -0.5;
+	v.y = color.g -0.5;
+	v.z = color.b -0.5;
 
 	gl_Position = gl_ModelViewProjectionMatrix * v;
-	
-}
 
+}

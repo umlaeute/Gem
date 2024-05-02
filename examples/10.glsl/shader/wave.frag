@@ -5,7 +5,7 @@
 uniform float K1,K3,D1,K;
 uniform sampler2DRect text;
 
-const float dx = 1.; 
+const float dx = 1.;
 const float dy = 1.;
 
 void main (void)
@@ -17,7 +17,7 @@ void main (void)
 	x=texture1.x;
 	y=texture1.y;
 
-	C = texture2DRect(text, vec2(x, y)); 
+	C = texture2DRect(text, vec2(x, y));
 
 	vec4 color_cote  = texture2DRect(text, vec2(x-dx, y-dy));
 	color_cote += texture2DRect(text, vec2(x+dx, y-dy));

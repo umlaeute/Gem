@@ -2,12 +2,12 @@
 
 #extension GL_ARB_texture_rectangle : enable
 
-uniform float K; 
+uniform float K;
 uniform sampler2DRect texture, texture1, texture2;
 
-const float dx = 1.; 
-const float dy = 1.; 
-const float dp = 1.; 
+const float dx = 1.;
+const float dy = 1.;
+const float dp = 1.;
 
 void main (void)
 {

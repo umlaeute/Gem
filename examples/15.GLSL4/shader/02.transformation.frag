@@ -5,10 +5,10 @@
 
 // This is the fragment shader : it is executed for every pixel to display
 
-in vec3 Color_to_frag; 
+in vec3 Color_to_frag;
 // the variable commint from the VBO
 
-out vec4 FragColor; 
+out vec4 FragColor;
 // The only output of this shader : the color of the pixel
 
 void main() {

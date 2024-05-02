@@ -33,11 +33,11 @@ void main (void)
 	vec4 w1 = C21;
 	vec4 w2 = C12;
 	vec4 w3 = C22;
-	// x derivative 
-	vec4 x0 = (C21 - C01) / 2.; 
-	vec4 x1 = (C31 - C11) / 2.; 
-	vec4 x2 = (C22 - C02) / 2.; 
-	vec4 x3 = (C32 - C12) / 2.; 
+	// x derivative
+	vec4 x0 = (C21 - C01) / 2.;
+	vec4 x1 = (C31 - C11) / 2.;
+	vec4 x2 = (C22 - C02) / 2.;
+	vec4 x3 = (C32 - C12) / 2.;
 	// y derivative
 	vec4 y0 = (C12 - C10) / 2.;
 	vec4 y1 = (C22 - C20) / 2.;

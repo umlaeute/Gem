@@ -5,12 +5,12 @@ uniform sampler2D texture;
 const float dx = 1./500.; // change to gemwin dim
 
 void main (void)
-{	
+{
     vec2 tmp = (gl_TextureMatrix[0] * gl_TexCoord[0]).st;
 
 	float x = tmp.s;
 	float y = tmp.t;
-	
+
 	vec4 c;
 	c  = texture2D(texture, vec2(x-dx, y-dx));
 	c += texture2D(texture, vec2(x, y-dx));
