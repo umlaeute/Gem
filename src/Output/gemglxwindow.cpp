@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 
-#ifdef HAVE_GL_GLX_H
 #include "gemglxwindow.h"
 #include "Gem/GemGL.h"
 
@@ -23,7 +22,7 @@
 #include "Gem/Exception.h"
 
 #ifdef HAVE_LIBXXF86VM
-#  include <X11/extensions/xf86vmode.h>
+# include <X11/extensions/xf86vmode.h>
 #endif
 #include <X11/cursorfont.h>
 
@@ -120,10 +119,10 @@ namespace {
     FBconfig(int colorBits, int accumBits)
       : dpy(0), fb(0)
       , redBits(colorBits), greenBits(colorBits), blueBits(colorBits), alphaBits(colorBits)
-      , depthBits(0), stencilBits(0)
+      , depthBits(-1), stencilBits(-1)
       , accumRedBits(accumBits), accumGreenBits(accumBits), accumBlueBits(accumBits), accumAlphaBits(accumBits)
-      , auxBuffers(0)
-      , samples(0), depth(0)
+      , auxBuffers(-1)
+      , samples(-1), depth(-1)
       , stereo(false), sRGB(false), doublebuffer(true), transparency(false)
       , colormode(TrueColor)
       , renderType(GLX_RGBA_BIT), drawableType(GLX_WINDOW_BIT)
@@ -338,7 +337,6 @@ struct gemglxwindow::PIMPL {
               int&x, int&y, unsigned int&w, unsigned int&h, bool transparent,
               int msaa)
   {
-    GETGLXFUN(PFNGLXCHOOSEFBCONFIGPROC, glXChooseFBConfig);
     GETGLXFUN(PFNGLXGETFBCONFIGSPROC, glXGetFBConfigs);
     GETGLXFUN(PFNGLXGETVISUALFROMFBCONFIGPROC, glXGetVisualFromFBConfig);
 
@@ -352,8 +350,8 @@ struct gemglxwindow::PIMPL {
       break;
     }
 
-    int modeNum=4;
 #ifdef HAVE_LIBXXF86VM
+    int modeNum=4;
     XF86VidModeModeInfo **modes;
 #endif
 
@@ -411,6 +409,8 @@ struct gemglxwindow::PIMPL {
         /* too shallow */
         continue;
       }
+
+      //std::cerr << fb << std::endl;
 
       fbconfs.push_back(fb);
     }
@@ -712,8 +712,6 @@ void gemglxwindow::dispatch(void)
   XEvent event;
   XButtonEvent* eb = (XButtonEvent*)&event;
   XKeyEvent* kb  = (XKeyEvent*)&event;
-  char keystring[2];
-  KeySym keysym_return;
   unsigned long devID=0;
 
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
@@ -738,7 +736,8 @@ void gemglxwindow::dispatch(void)
       if(!m_pimpl->have_border) {
         int err=XSetInputFocus(m_pimpl->dpy, m_pimpl->win, RevertToParent,
                                CurrentTime);
-        err=0;
+        if(err)
+          err=0;
       }
       break;
     case KeyPress:
@@ -871,17 +870,14 @@ bool gemglxwindow :: create(void)
     /* creation of gem::Context is deferred until *after* window creation */
   }
 
-  int modeNum=4;
-#ifdef HAVE_LIBXXF86VM
-  XF86VidModeModeInfo **modes;
-#endif
-  char svalue[3];
-  snprintf(svalue, 3, "%d", m_fsaa);
-  svalue[2]=0;
-  if (m_fsaa!=0) {
-    setenv("__GL_FSAA_MODE", svalue, 1);  // this works only for NVIDIA-cards
+  if(m_fsaa>=0 && m_fsaa<100) {
+    char svalue[3];
+    snprintf(svalue, 3, "%d", m_fsaa);
+    svalue[2]=0;
+    if (m_fsaa!=0) {
+      setenv("__GL_FSAA_MODE", svalue, 1);  // this works only for NVIDIA-cards
+    }
   }
-
 
   try {
     success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border,
@@ -1037,5 +1033,3 @@ void gemglxwindow :: cursorMess(bool state)
 void gemglxwindow :: obj_setupCallback(t_class *classPtr)
 {
 }
-
-#endif /* HAVE_GL_GLX_H */
