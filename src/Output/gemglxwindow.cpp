@@ -574,7 +574,8 @@ struct gemglxwindow::PIMPL {
   }
 
   bool create(std::string display, int buffer, bool fullscreen, bool border,
-              int&x, int&y, unsigned int&w, unsigned int&h, bool transparent)
+              int&x, int&y, unsigned int&w, unsigned int&h, bool transparent,
+              int msaa)
   {
     GETGLXFUN(PFNGLXCHOOSEFBCONFIGPROC, glXChooseFBConfig);
     GETGLXFUN(PFNGLXGETFBCONFIGSPROC, glXGetFBConfigs);
@@ -659,6 +660,7 @@ struct gemglxwindow::PIMPL {
     desired.depthBits = 16;
     desired.stencilBits = 8;
     desired.transparency = transparent;
+    desired.samples = msaa;
 
     unsigned int leastBufferDiff = UINT_MAX;
     unsigned int leastColorDiff = UINT_MAX;
@@ -1088,7 +1090,7 @@ bool gemglxwindow :: create(void)
         int x=0, y=0;
         unsigned int w=1, h=1;
         success=sharedPimpl->create(m_display, 2, false, false, x, y, w, h,
-                                    m_transparent);
+                                    m_transparent, m_fsaa);
       } catch (GemException&ex) {
         error("creation of shared glxcontext failed: %s", ex.what());
         verbose(0, "continuing at your own risk!");
@@ -1122,7 +1124,7 @@ bool gemglxwindow :: create(void)
 
   try {
     success=m_pimpl->create(m_display, m_buffer, m_fullscreen, m_border,
-                            m_xoffset, m_yoffset, m_width, m_height, m_transparent);
+                            m_xoffset, m_yoffset, m_width, m_height, m_transparent, m_fsaa);
   } catch (GemException&x) {
     x.report();
     success=false;
