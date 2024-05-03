@@ -240,6 +240,7 @@ namespace {
     if(fb.doublebuffer) out << ",doublebuffer";
     if(fb.stereo) out << ",stereo";
     if(fb.sRGB) out << ",sRGB";
+    if(fb.transparency) out << ",transparency";
     switch(fb.colormode) {
     case StaticGray:  out << ",StaticGray"  ; break;
     case GrayScale:   out << ",GrayScale"   ; break;
