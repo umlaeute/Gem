@@ -170,8 +170,7 @@ stages:
     - .build
   tags:
     - libvirt:windows
-  image:
-    - windows:latest
+  image: windows:latest
   variables:
     IEMCI_CONFIGURATIONS: mingw64
     pd_downloadsuffix: .msw.zip
