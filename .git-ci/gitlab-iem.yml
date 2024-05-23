@@ -187,7 +187,7 @@ stages:
     - rm -f "${PDDIR}"/bin/msvcr*.dll
     - export PD="${PDDIR}/bin/pd.com"
     - result=0
-    - pacman --noconfirm -S --needed $(cat .git-ci/msys2.pacman  | sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|") || result=$?
+    - pacman --noconfirm -S --needed $(sed -e 's|#.*||' -e "s|@MINGW@|${MINGW_PACKAGE_PREFIX}-|" -e '/^\s*$/d' .git-ci/msys2.pacman | while read -r pkg _; do ! pacman -Sp "${pkg}" >/dev/null || echo "${pkg}"; done)
     # if pacman failed, try to continue (but do not mark the run as 'success')
     - echo "pacman returned ${result}"
     - test "${result}" = "0" || result="skip"
