@@ -6,7 +6,9 @@ SUBDIRS+=help doc examples
 SUBDIRS+=tools
 
 ## plugins
+if PLUGINS
 SUBDIRS+=plugins
+endif
 
 ## window objects
 SUBDIRS+=src/Output

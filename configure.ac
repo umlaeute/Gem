@@ -22,50 +22,54 @@ AC_CONFIG_FILES([src/Output/Makefile ])
 AC_CONFIG_FILES([src/deprecated/Makefile ])
 
 ## plugins that use this autoconf instance for configuration
-AC_CONFIG_FILES([plugins/Makefile])
+AS_IF([test "$enable_plugins" != "no" ], [
+  AC_CONFIG_FILES([plugins/Makefile])
 
-AC_CONFIG_FILES([plugins/ASSIMP2/Makefile])
-AC_CONFIG_FILES([plugins/ASSIMP3/Makefile])
-AC_CONFIG_FILES([plugins/AVI/Makefile])
-AC_CONFIG_FILES([plugins/AVIPLAY/Makefile])
-AC_CONFIG_FILES([plugins/DC1394/Makefile])
-AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
-AC_CONFIG_FILES([plugins/DV4L/Makefile])
-AC_CONFIG_FILES([plugins/FFMPEG/Makefile])
-AC_CONFIG_FILES([plugins/GMERLIN/Makefile])
-AC_CONFIG_FILES([plugins/imageIO/Makefile])
-AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
-AC_CONFIG_FILES([plugins/JPEG/Makefile])
-AC_CONFIG_FILES([plugins/MPEG1/Makefile])
-AC_CONFIG_FILES([plugins/MPEG3/Makefile])
-AC_CONFIG_FILES([plugins/NDI/Makefile])
-AC_CONFIG_FILES([plugins/OBJ/Makefile])
-AC_CONFIG_FILES([plugins/OptiTrack/Makefile])
-AC_CONFIG_FILES([plugins/PNM/Makefile])
-AC_CONFIG_FILES([plugins/PIPEWIRE/Makefile])
-AC_CONFIG_FILES([plugins/QT4L/Makefile])
-AC_CONFIG_FILES([plugins/QuickTime/Makefile])
-AC_CONFIG_FILES([plugins/SGI/Makefile])
-AC_CONFIG_FILES([plugins/STB/Makefile])
-AC_CONFIG_FILES([plugins/TEST/Makefile])
-AC_CONFIG_FILES([plugins/TIFF/Makefile])
-AC_CONFIG_FILES([plugins/UNICAP/Makefile])
-AC_CONFIG_FILES([plugins/V4L/Makefile])
-AC_CONFIG_FILES([plugins/V4L2/Makefile])
-AC_CONFIG_FILES([plugins/VFW/Makefile])
-AC_CONFIG_FILES([plugins/VIDS/Makefile])
-AC_CONFIG_FILES([plugins/VLC/Makefile])
-AC_CONFIG_FILES([plugins/VNC/Makefile])
+  AC_CONFIG_FILES([plugins/ASSIMP2/Makefile])
+  AC_CONFIG_FILES([plugins/ASSIMP3/Makefile])
+  AC_CONFIG_FILES([plugins/AVI/Makefile])
+  AC_CONFIG_FILES([plugins/AVIPLAY/Makefile])
+  AC_CONFIG_FILES([plugins/DC1394/Makefile])
+  AC_CONFIG_FILES([plugins/DECKLINK/Makefile])
+  AC_CONFIG_FILES([plugins/DV4L/Makefile])
+  AC_CONFIG_FILES([plugins/FFMPEG/Makefile])
+  AC_CONFIG_FILES([plugins/GMERLIN/Makefile])
+  AC_CONFIG_FILES([plugins/imageIO/Makefile])
+  AC_CONFIG_FILES([plugins/imageMAGICK/Makefile])
+  AC_CONFIG_FILES([plugins/JPEG/Makefile])
+  AC_CONFIG_FILES([plugins/MPEG1/Makefile])
+  AC_CONFIG_FILES([plugins/MPEG3/Makefile])
+  AC_CONFIG_FILES([plugins/NDI/Makefile])
+  AC_CONFIG_FILES([plugins/OBJ/Makefile])
+  AC_CONFIG_FILES([plugins/OptiTrack/Makefile])
+  AC_CONFIG_FILES([plugins/PNM/Makefile])
+  AC_CONFIG_FILES([plugins/PIPEWIRE/Makefile])
+  AC_CONFIG_FILES([plugins/QT4L/Makefile])
+  AC_CONFIG_FILES([plugins/QuickTime/Makefile])
+  AC_CONFIG_FILES([plugins/SGI/Makefile])
+  AC_CONFIG_FILES([plugins/STB/Makefile])
+  AC_CONFIG_FILES([plugins/TEST/Makefile])
+  AC_CONFIG_FILES([plugins/TIFF/Makefile])
+  AC_CONFIG_FILES([plugins/UNICAP/Makefile])
+  AC_CONFIG_FILES([plugins/V4L/Makefile])
+  AC_CONFIG_FILES([plugins/V4L2/Makefile])
+  AC_CONFIG_FILES([plugins/VFW/Makefile])
+  AC_CONFIG_FILES([plugins/VIDS/Makefile])
+  AC_CONFIG_FILES([plugins/VLC/Makefile])
+  AC_CONFIG_FILES([plugins/VNC/Makefile])
 
-AC_CONFIG_FILES([plugins/filmAVF/Makefile])
-AC_CONFIG_FILES([plugins/filmDS/Makefile])
-AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
-AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
+  AC_CONFIG_FILES([plugins/filmAVF/Makefile])
+  AC_CONFIG_FILES([plugins/filmDS/Makefile])
+  AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
+  AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
 
-AC_CONFIG_FILES([plugins/videoAVF/Makefile])
-AC_CONFIG_FILES([plugins/videoDS/Makefile])
-AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
-AC_CONFIG_FILES([plugins/videoSGI/Makefile])
+  AC_CONFIG_FILES([plugins/videoAVF/Makefile])
+  AC_CONFIG_FILES([plugins/videoDS/Makefile])
+  AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
+  AC_CONFIG_FILES([plugins/videoSGI/Makefile])
+])
+AM_CONDITIONAL([PLUGINS], [test "${enable_plugins}" != "no"])
+
 
 
 ## extra holds additional objects/libraries
@@ -92,10 +96,11 @@ AC_CONFIG_HEADERS([src/Gem/GemGLconfig.h])
 AC_CONFIG_SRCDIR([src/Base/GemBase.h])
 
 AC_CONFIG_SUBDIRS([extra])
-
-AS_IF([test -d "$srcdir/plugins/AVT"], [AC_CONFIG_SUBDIRS([plugins/AVT])])
-AS_IF([test -d "$srcdir/plugins/HALCON"], [AC_CONFIG_SUBDIRS([plugins/HALCON])])
-AS_IF([test -d "$srcdir/plugins/PYLON"], [AC_CONFIG_SUBDIRS([plugins/PYLON])])
+AS_IF([test "$enable_plugins" != "no" ], [
+  AS_IF([test -d "$srcdir/plugins/AVT"], [AC_CONFIG_SUBDIRS([plugins/AVT])])
+  AS_IF([test -d "$srcdir/plugins/HALCON"], [AC_CONFIG_SUBDIRS([plugins/HALCON])])
+  AS_IF([test -d "$srcdir/plugins/PYLON"], [AC_CONFIG_SUBDIRS([plugins/PYLON])])
+])
 
 AC_LANG(C++)
 
@@ -203,9 +208,11 @@ GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
+GEM_ARG_ENABLE([plugins], [configure/build/install optional parts])
 
 AC_ARG_ENABLE([experimental], AC_HELP_STRING([--enable-experimental], [enable experimental objects (if any)]))
 AM_CONDITIONAL(EXPERIMENTAL, [test "x$enable_experimental" = "xyes"])
+
 
 # checks for default headers
 IEM_CHECK_INCLUDES_DEFAULT([windows.h])
@@ -826,7 +833,11 @@ Configuration:
 
   font-rendering         : ${have_font}
      default font        : ${GEM_DEFAULT_FONT}
-
+])
+AS_IF([test "$enable_plugins" != "no" ], [
+ AC_MSG_RESULT([
+PLUGINS
+=======
   image-support
     use ImageIO          : ${have_imageio_framework}
     use JPEG             : ${have_jpeg}
@@ -871,6 +882,12 @@ Configuration:
     use OBJ              : YES (local)
     use ASSIMP2          : ${have_assimp2}
     use ASSIMP3          : ${have_assimp3}
+ ])],[
+ AC_MSG_RESULT([
+PLUGINS
+=======
+  NONE
+ ])
 ])
 
 AS_IF([test "x$have_pd" = "xno"], [
