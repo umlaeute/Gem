@@ -87,9 +87,9 @@ stages:
     - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - make install DESTDIR="${DESTDIR}" libdir=/ extradir=/Gem includedir=/Gem/include
     # make Gem-plugins co-installable
-    - gnuptriplet="$(g++ -dumpmachine)"
-    - depdir="${CI_JOB_NAME%-[0-9][0-9]}
-    - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${depdir}" {} "+"
+    # - gnuptriplet="$(g++ -dumpmachine)"
+    - gnutriplet="${CI_JOB_NAME%-[0-9][0-9]}"
+    - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${gnutriplet}" {} "+"
     # finally split the binaries from the debug information
     - base_dir_ci=$(pwd)
     - cd "$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}/Gem"
@@ -181,7 +181,8 @@ stages:
   after_script:
     - *script_zsh_compat
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" {} +
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" -F -v -d ".${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - !reference [.script:codesign:macos]
 
@@ -213,7 +214,8 @@ stages:
     - test "${result}" = "0" || result="skip"
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" {} +
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
 
 .build:w32:
   extends:
