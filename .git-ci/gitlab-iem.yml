@@ -217,7 +217,7 @@ stages:
     - test "${result}" = "0" || result="skip"
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - depdir="${CI_JOB_NAME%-[0-9][0-9]}
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
 
 .build:w32:
