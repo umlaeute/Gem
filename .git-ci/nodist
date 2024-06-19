@@ -21,4 +21,4 @@ doc/notes/keynames.org
 **/*.vsprops
 **/* *
 tests/
-.github/
+.git*
