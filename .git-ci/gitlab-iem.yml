@@ -55,8 +55,8 @@ stages:
 
 .image:windows:
   tags:
-    - libvirt:windows
-  image: windows:latest
+    - sardinecake
+  image: registry.git.iem.at/devtools/sardinecake/windows:latest
 
 .image:macos:
   tags:
