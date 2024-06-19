@@ -272,6 +272,16 @@ windows-amd64-32:
     - .artifacts
     - .run-selected
 
+# Pd64
+linux-amd64-64:
+  extends: linux-amd64-32
+darwin-fat-64:
+  extends: darwin-fat-32
+windows-i386-64:
+  extends: windows-i386-32
+windows-amd64-64:
+  extends: windows-amd64-32
+
 distcheck:
   extends:
     - .build:linux
