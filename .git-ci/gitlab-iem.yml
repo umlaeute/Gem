@@ -72,6 +72,7 @@ stages:
     - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
     - tools/systeminfo.sh || true
     - date
+    - which autoreconf aclocal glibtoolize libtoolize autoconf autoheader automake g++ || true
     - autoreconf --version || true
     - aclocal --version || true
     - glibtoolize --version || libtoolize --version || true
