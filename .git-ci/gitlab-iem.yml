@@ -24,7 +24,8 @@ variables:
   gem_defaultwindow:
     value: "gemglfw3window"
     description: "default window backend"
-
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_DEPTH: 1
 
 stages:
   - build
