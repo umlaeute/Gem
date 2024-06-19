@@ -307,7 +307,7 @@ nodist:
   script:
     ## pre-cleanup
     # get rid of gitignores
-    - find . -name .gitignore -delete
+    - git ls-tree -r HEAD --name-only -z | grep --null-data "\.gitignore" | xargs -0 rm
     - git commit -a -m "Drop .gitignore files"
     ## create 'make dist' package
     - autoreconf -fiv || ./autogen.sh
