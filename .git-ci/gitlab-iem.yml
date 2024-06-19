@@ -70,9 +70,17 @@ stages:
     localdeps: ".git-ci/iem-ci/localdeps/localdeps"
   script:
     - *script_zsh_compat
+    # handle Pd64 jobs
+    - if test "${OS}" = "Windows_NT"; then defaultext="dll"; else defaultext="so"; fi
     # - gnutriplet="$(g++ -dumpmachine)"
     - arch="${CI_JOB_NAME%-[0-9][0-9]}"
-    - gnutriplet=$(echo "$arch" | tr "[:upper:]" "[:lower:]")
+    - floatsize="${CI_JOB_NAME#arch}"
+    - floatsize="${floatsize#-}"
+    - test "${floatsize}" != 32 || floatsize=""
+    - arch=$(echo "${arch}" | tr "[:upper:]" "[:lower:]")
+    - test -z "${floatsize}" || pd_extension="{arch}-${floatsize}.${defaultext}"
+    - gnutriplet="${arch}"
+    - echo "arch=${arch} pd_extension=${pd_extension} floatsize=${floatsize}"
     # print some system information
     - echo building against Pd-${PDVERSION}
     - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
@@ -84,7 +92,7 @@ stages:
     # the actual build
     - mkdir -pv "${ARTIFACTSDIR}"
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
+    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${floatsize:+--with-floatsize=${floatsize}} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
     - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
     - make check -j"${NUMBER_OF_PROCESSORS}"
     - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
