@@ -136,6 +136,7 @@ stages:
     - date
     # cleanup brew (tart is broken)
     - brew uninstall -f android-ndk android-sdk temurin8 libimobiledevice ideviceinstaller ios-deploy fastlane libusb libusbmuxd || true
+    - brew uninstall -f imagemagick graphicsmagick || true
     - brew unlink libpng || true
     - brew list --full-name || true
     - brew update || true
