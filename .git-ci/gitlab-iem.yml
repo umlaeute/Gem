@@ -70,6 +70,9 @@ stages:
     localdeps: ".git-ci/iem-ci/localdeps/localdeps"
   script:
     - *script_zsh_compat
+    # - gnutriplet="$(g++ -dumpmachine)"
+    - arch="${CI_JOB_NAME%-[0-9][0-9]}"
+    - gnutriplet=$(echo "$arch" | tr "[:upper:]" "[:lower:]")
     # print some system information
     - echo building against Pd-${PDVERSION}
     - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
@@ -87,8 +90,6 @@ stages:
     - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - make install DESTDIR="${DESTDIR}" libdir=/ extradir=/Gem includedir=/Gem/include
     # make Gem-plugins co-installable
-    # - gnuptriplet="$(g++ -dumpmachine)"
-    - gnutriplet="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${gnutriplet}" {} "+"
     # finally split the binaries from the debug information
     - base_dir_ci=$(pwd)
