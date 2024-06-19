@@ -53,6 +53,16 @@ stages:
     set -o shwordsplit || true     # zsh doesn't do wordsplitting by default...
     set -o nonomatch   || true     # zsh bails out if globbing patterns do not expand
 
+.image:windows:
+  tags:
+    - libvirt:windows
+  image: windows:latest
+
+.image:macos:
+  tags:
+    - tart
+  image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
+
 .build:
   stage: build
   script:
@@ -97,10 +107,8 @@ stages:
 
 .build:macos:
   extends:
+    - .image:macos
     - .build
-  tags:
-    - tart
-  image: ghcr.io/cirruslabs/macos-monterey-xcode:latest
   retry:
     max: 1
     when:
@@ -167,10 +175,8 @@ stages:
 
 .build:w64:
   extends:
+    - .image:windows
     - .build
-  tags:
-    - libvirt:windows
-  image: windows:latest
   variables:
     IEMCI_CONFIGURATIONS: mingw64
     pd_downloadsuffix: .msw.zip
