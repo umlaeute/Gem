@@ -146,7 +146,7 @@ stages:
     - test ! -f "${IEM_CI_TMPDIR}"/Pd.zip || unzip "${IEM_CI_TMPDIR}"/Pd.zip -d "${IEM_CI_TMPDIR}"
     # the ZIP-file shoud contain a .dmg containing Pd
     - |
-      for dmg in "${IEM_CI_TMPDIR}"/Pd*.dmg; do break; done
+      for dmg in "${IEM_CI_TMPDIR}"/Pd*.dmg ; do break; done
     - pddisk=""
     - test ! -f "${dmg}" || pddisk=$(hdiutil attach "${dmg}" 2>/dev/null | egrep "^/.*/Volumes/" | tail -1 | awk '{print $NF}')
     - rm -rf "${dmg}"
@@ -154,7 +154,7 @@ stages:
       for app in "${pddisk}"/Pd*.app "${IEM_CI_TMPDIR}"/Pd*.app; do if test -d "${app}"; then cp -r "${app}" /Applications/; break; fi; done
     - test ! -d "${pddisk}" || umount "${pddisk}"
     - |
-      rm -rf "${IEM_CI_TMPDIR}"
+      rm -rf "${IEM_CI_TMPDIR}" | true
       dmg=""
       pddisk=""
       app=""
