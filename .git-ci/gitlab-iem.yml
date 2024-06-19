@@ -67,11 +67,19 @@ stages:
   stage: build
   script:
     - *script_zsh_compat
+    # print some system information
     - echo building against Pd-${PDVERSION}
     - echo building with ${NUMBER_OF_PROCESSORS:=$(nproc || sysctl -n hw.ncpu || echo 1)} CPUs
     - tools/systeminfo.sh || true
     - date
+    - autoreconf --version || true
+    - aclocal --version || true
+    - glibtoolize --version || libtoolize --version || true
+    - autoconf --version || true
+    - autoheader --version || true
+    - automake --version || true
     - g++ -v
+    # the actual build
     - mkdir -pv "${ARTIFACTSDIR}"
     - autoreconf -fiv || ./autogen.sh
     - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
