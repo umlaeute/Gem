@@ -186,7 +186,8 @@ stages:
   after_script:
     - *script_zsh_compat
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" {} +
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" -F -v -d ".${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - !reference [.script:codesign:macos]
 
@@ -216,7 +217,8 @@ stages:
     - test "${result}" = "0" || result="skip"
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" {} +
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}
+    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
 
 .build:w32:
   extends:
