@@ -77,7 +77,6 @@ stages:
     - floatsize="${CI_JOB_NAME#arch}"
     - floatsize="${floatsize#-}"
     - test "${floatsize}" != 32 || floatsize=""
-    - arch=$(echo "${arch}" | tr "[:upper:]" "[:lower:]")
     - test -z "${floatsize}" || pd_extension="{arch}-${floatsize}.${defaultext}"
     - gnutriplet="${arch}"
     - echo "arch=${arch} pd_extension=${pd_extension} floatsize=${floatsize}"
@@ -195,7 +194,7 @@ stages:
   after_script:
     - *script_zsh_compat
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - depdir="$(echo ${CI_JOB_NAME%-[0-9][0-9]} | tr "[:upper:]" "[:lower:]")"
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" -F -v -d ".${depdir}" {} +
     - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
     - !reference [.script:codesign:macos]
@@ -226,7 +225,7 @@ stages:
     - test "${result}" = "0" || result="skip"
   after_script:
     - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
-    - depdir="$(echo ${CI_JOB_NAME%-[0-9][0-9]} | tr "[:upper:]" "[:lower:]")"
+    - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
     - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
 
 .build:w32:
@@ -252,22 +251,22 @@ Source:
     # create a source package
     - git archive --format=tar --prefix="${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/" HEAD | tar xf -
 
-Linux-amd64-32:
+linux-amd64-32:
   extends:
     - .build:linux
     - .artifacts
     - .run-selected
-Darwin-fat-32:
+darwin-fat-32:
   extends:
     - .build:macos
     - .artifacts
     - .run-selected
-Windows-i386-32:
+windows-i386-32:
   extends:
     - .build:w32
     - .artifacts
     - .run-selected
-Windows-amd64-32:
+windows-amd64-32:
   extends:
     - .build:w64
     - .artifacts
