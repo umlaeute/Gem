@@ -501,7 +501,6 @@ ARCH=$(uname -m)
 KERN=$(uname -s)
 IEM_OPERATING_SYSTEM
 
-AC_SUBST(GEM_RTE_CPPFLAGS)
 AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
 AC_SUBST(GEM_RTE)
@@ -532,7 +531,7 @@ AS_CASE([$with_floatsize],
  [64], [floatsize=64],
  [""], [floatsize=""],
  [AC_MSG_ERROR([invalid floatsize: only 32 and 64 are currently allowed])])
-AS_IF([test "x$floatsize" != "x"],[GEM_RTE_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
+AS_IF([test "x$floatsize" != "x"],[GEM_RTE_CFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
 AC_MSG_RESULT([${floatsize:-default (32)}])
 
 have_pd=no
@@ -552,9 +551,7 @@ AS_IF([ test "x${with_pd}" = "x" ],[
 
 AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
    PKG_CHECK_MODULES([PD], [pd], [have_pd="yes"])
-   GEM_RTE_CPPFLAGS="${GEM_RTE_CPPFLAGS} ${PD_CFLAGS}"
    GEM_RTE_CFLAGS="${GEM_RTE_CFLAGS} ${PD_CFLAGS}"
-   GEM_RTE_CXXFLAGS="${GEM_RTE_CXXFLAGS} ${PD_CFLAGS}"
    GEM_RTE_LIBS="${GEM_RTE_LIBS} ${PD_LIBS}"
    with_pd=""
 ])
