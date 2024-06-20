@@ -174,7 +174,7 @@ AC_SUBST(GEM_CXXFLAGS)
 AC_SUBST(GEM_LIBS)
 
 GEM_CHECK_WERROR
-GEM_CPPFLAGS="${GEM_RTE_CPPFLAGS}"
+GEM_CPPFLAGS=""
 GEM_CHECK_EXTERNAL
 
 # additional debugging
@@ -825,9 +825,7 @@ Configuration:
  RTE (${GEM_RTE}):
   executable             : ${GEM_RTE_EXE}
   external-extension     : ${GEM_RTE_EXTENSION}
-  CPPFLAGS               : ${GEM_RTE_CPPFLAGS}
   CFLAGS                 : ${GEM_RTE_CFLAGS}
-  CXXFLAGS               : ${GEM_RTE_CXXFLAGS}
   LIBS                   : ${GEM_RTE_LIBS}
 
  used optional libraries:
