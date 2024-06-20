@@ -685,6 +685,6 @@ AC_DEFUN([GEM_CHECK_EXTERNAL],
   AC_SUBST(GEM_EXTERNAL_CFLAGS)
   AC_SUBST(GEM_EXTERNAL_LIBS)
 
-  AS_IF([test "x$have_pddll" = "xyes" ], [ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.dll" ])
+  AS_IF([test "x$have_pddll" = "xyes" ], [ GEM_EXTERNAL_LIBS="${GEM_EXTERNAL_LIBS}${GEM_EXTERNAL_LIBS:+ }-Xlinker -l:Gem.${GEM_RTE_EXTENSION:-dll}" ])
   AS_IF([test "x$WINDOWS" = "xyes" ], [GEM_CHECK_CXXFLAGS([-mms-bitfields], [GEM_EXTERNAL_CFLAGS+="-mms-bitfields"])])
 ])
