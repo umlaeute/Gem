@@ -823,6 +823,7 @@ Configuration:
   Install path           : ${prefix}
 
  RTE (${GEM_RTE}):
+  executable             : ${GEM_RTE_EXE}
   external-extension     : ${GEM_RTE_EXTENSION}
   CPPFLAGS               : ${GEM_RTE_CPPFLAGS}
   CFLAGS                 : ${GEM_RTE_CFLAGS}
