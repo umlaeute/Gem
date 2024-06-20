@@ -238,21 +238,29 @@ linux-amd64-32:
     - .build:linux
     - .artifacts
     - .run-selected
+  variables:
+    pd_extension: "pd_linux"
 darwin-fat-32:
   extends:
     - .build:macos
     - .artifacts
     - .run-selected
+  variables:
+    pd_extension: "d_fat"
 windows-i386-32:
   extends:
     - .build:w32
     - .artifacts
     - .run-selected
+  variables:
+    pd_extension: "dll"
 windows-amd64-32:
   extends:
     - .build:w64
     - .artifacts
     - .run-selected
+  variables:
+    pd_extension: "m_amd64"
 
 distcheck:
   extends:
