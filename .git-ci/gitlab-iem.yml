@@ -209,9 +209,11 @@ stages:
   before_script:
     - tools/systeminfo.sh || true
     - export PDDIR="$(pwd)/_pd"
-    - downloadfile="pd-${PDVERSION}${pd_downloadsuffix}"
-    - echo wget -q -O "${downloadfile}" "http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"
-    - wget -q -O "${downloadfile}" "http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"
+    - |
+      : ${pd_download_url:="http://msp.ucsd.edu/Software/pd-${PDVERSION}${pd_downloadsuffix}"}
+    - downloadfile="${pd_download_url##*/}"
+    - echo wget -q -O "${downloadfile}" "${pd_download_url}"
+    - wget -q -O "${downloadfile}" "${pd_download_url}"
     - mkdir -p "${PDDIR}"
     - test "x${downloadfile}" = "x${downloadfile%.zip}" || unzip -q "${downloadfile}" -d "${PDDIR}"
     - mv -v "${PDDIR}"/*/* "${PDDIR}"
