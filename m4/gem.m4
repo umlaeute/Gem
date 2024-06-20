@@ -617,6 +617,8 @@ AC_CHECK_HEADERS([m_imp.h], [], [],
 ])
 
 AC_PATH_PROGS([PD_EXE], [${tmp_rte_pd}.com ${tmp_rte_pd}], [${tmp_rte_pd}], [${with_pd}/bin:${with_pd}/src:${with_pd}])
+GEM_RTE_EXE="${PD_EXE}"
+AC_SUBST(GEM_RTE_EXE)
 
 ### this should only be set if Pd has been found
 # the extension
