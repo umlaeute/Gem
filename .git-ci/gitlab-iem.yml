@@ -91,7 +91,7 @@ stages:
     # the actual build
     - mkdir -pv "${ARTIFACTSDIR}"
     - autoreconf -fiv || ./autogen.sh
-    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${floatsize:+--with-floatsize=${floatsize}} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
+    - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${floatsize:+--with-floatsize=${floatsize} --disable-plugins} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
     - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
     - make check -j"${NUMBER_OF_PROCESSORS}"
     - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
