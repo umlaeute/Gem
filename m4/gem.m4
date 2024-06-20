@@ -501,6 +501,7 @@ ARCH=$(uname -m)
 KERN=$(uname -s)
 IEM_OPERATING_SYSTEM
 
+AC_SUBST(GEM_RTE_CPPFLAGS)
 AC_SUBST(GEM_RTE_CFLAGS)
 AC_SUBST(GEM_RTE_LIBS)
 AC_SUBST(GEM_RTE)
@@ -518,6 +519,19 @@ tmp_rte_libs="$LIBS"
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
 GEM_RTE="Pure Data"
+
+
+AC_ARG_WITH([floatsize],
+  AC_HELP_STRING([--with-floatsize=<floatsize>],
+                 [use a given floatsize (32, 64)]))
+AC_MSG_CHECKING([floatsize])
+AS_CASE([$with_floatsize],
+ [32], [floatsize=32],
+ [64], [floatsize=64],
+ [""], [floatsize=""],
+ [AC_MSG_ERROR([invalid floatsize: only 32 and 64 are currently allowed])])
+AS_IF([test "x$floatsize" != "x"],[GEM_RTE_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
+AC_MSG_RESULT([${floatsize:-default}])
 
 have_pd=no
 AC_ARG_WITH([pd], 
@@ -627,20 +641,6 @@ AS_IF([ test "x$with_extension" != "x" ],[
 ])
 GEM_RTE_EXTENSION=$EXT
 AC_SUBST(GEM_RTE_EXTENSION)
-
-AC_SUBST(GEM_RTE_CPPFLAGS)
-AC_ARG_WITH([floatsize],
-  AC_HELP_STRING([--with-floatsize=<floatsize>],
-                 [use a given floatsize (32, 64)]))
-AC_MSG_CHECKING([floatsize])
-AS_CASE([$with_floatsize],
- [32], [floatsize=32],
- [64], [floatsize=64],
- [""], [floatsize=""],
- [AC_MSG_ERROR([invalid floatsize: only 32 and 64 are currently allowed])])
-AS_IF([test "x$floatsize" != "x"],[GEM_RTE_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
-AC_MSG_RESULT([${floatsize:-default}])
-
 
 CPPFLAGS="$tmp_rte_cppflags"
 CFLAGS="$tmp_rte_cflags"
