@@ -284,6 +284,8 @@ darwin-fat-64:
   extends: darwin-fat-32
 windows-amd64-64:
   extends: windows-amd64-32
+  variables:
+    pd_download_url: "https://get.puredata.info/pure-data/releases/${PDVERSION}-pd64/Pd64-${PDVERSION}.msw.zip"
 
 distcheck:
   extends:
