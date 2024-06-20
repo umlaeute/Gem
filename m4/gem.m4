@@ -515,6 +515,7 @@ tmp_rte_cflags="$CFLAGS"
 tmp_rte_cxxflags="$CXXFLAGS"
 tmp_rte_ldflags="$LDFLAGS"
 tmp_rte_libs="$LIBS"
+tmp_rte_pd="pd"
 
 GEM_RTE_CFLAGS="-DPD"
 GEM_RTE_LIBS=""
@@ -525,13 +526,14 @@ AC_ARG_WITH([floatsize],
   AC_HELP_STRING([--with-floatsize=<floatsize>],
                  [use a given floatsize (32, 64)]))
 AC_MSG_CHECKING([floatsize])
+tmp_rte_pd="pd${with_floatsize}"
 AS_CASE([$with_floatsize],
- [32], [floatsize=32],
+ [32], [floatsize=32; tmp_rte_pd="pd"],
  [64], [floatsize=64],
  [""], [floatsize=""],
  [AC_MSG_ERROR([invalid floatsize: only 32 and 64 are currently allowed])])
 AS_IF([test "x$floatsize" != "x"],[GEM_RTE_CPPFLAGS+=" -DPD_FLOATSIZE=${floatsize}"])
-AC_MSG_RESULT([${floatsize:-default}])
+AC_MSG_RESULT([${floatsize:-default (32)}])
 
 have_pd=no
 AC_ARG_WITH([pd], 
@@ -541,11 +543,11 @@ AS_IF([ test "x${with_pd}" = "x" ],[
  AS_CASE([$host_os],
  [*-darwin*], [
     # get the latest and greatest Pd installed in /Applications
-    with_pd_=$(ls -S /Applications/Pd*.app/Contents/Resources/bin/pd 2>/dev/null | sort | tail -1 | sed "s/\/bin\/pd$//")
+    with_pd_=$(ls -S "/Applications/Pd*.app/Contents/Resources/bin/${tmp_rte_pd}" 2>/dev/null | sort | tail -1 | sed "s/\/bin\/${tmp_rte_pd}$//")
     AS_IF([ test -d "${with_pd_}" ], [ with_pd="${with_pd_}" ])
     ],
  [*mingw* | *cygwin*], [
-    dnl AS_IF([ test -d "${PROGRAMFILES}/pd" ], [ with_pd="${PROGRAMFILES}/pd" ])
+    dnl AS_IF([ test -d "${PROGRAMFILES}/${tmp_rte_pd}" ], [ with_pd="${PROGRAMFILES}/${tmp_rte_pd}" ])
 ],)])
 
 AS_IF([ test "x${with_pd}" = "x" || test "x${with_pd}" = "yes" ], [
@@ -591,11 +593,11 @@ AS_IF([ test "x${have_pd}" = "xyes" ],[
  LIBS="$LIBS ${GEM_RTE_LIBS}"
 ])
 
-AC_CHECK_LIB([:pd.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
+AC_CHECK_LIB([:${tmp_rte_pd}.dll], [nullfn], [have_pddll="yes"], [have_pddll="no"])
 AS_IF([ test "x$have_pddll" = "xyes" ], [
- GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-Xlinker -l:pd.dll"
+ GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-Xlinker -l:${tmp_rte_pd}.dll"
 ],[
- AC_CHECK_LIB([pd], [nullfn], [GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-lpd"])
+ AC_CHECK_LIB([${tmp_rte_pd}], [nullfn], [GEM_RTE_LIBS="${GEM_RTE_LIBS}${GEM_RTE_LIBS:+ }-l${tmp_rte_pd}"])
 ])
 
 AC_CHECK_HEADERS([m_pd.h], [have_pd="yes"], [have_pd="no"])
@@ -614,7 +616,7 @@ AC_CHECK_HEADERS([m_imp.h], [], [],
 #endif
 ])
 
-AC_PATH_PROGS([PD_EXE], [pd.com pd], [pd], [${with_pd}/bin:${with_pd}/src:${with_pd}])
+AC_PATH_PROGS([PD_EXE], [${tmp_rte_pd}.com ${tmp_rte_pd}], [${tmp_rte_pd}], [${with_pd}/bin:${with_pd}/src:${with_pd}])
 
 ### this should only be set if Pd has been found
 # the extension
