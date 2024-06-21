@@ -83,9 +83,8 @@ stages:
     - test "${floatsize}" != 32 || floatsize=""
     - test -z "${floatsize}" || pd_extension="${arch}-${floatsize}.${defaultext}"
     - if test "${OS}" = "Windows_NT"; then gnutriplet="${CI_JOB_NAME}"; else gnutriplet="${arch}"; fi
-    - configure_floatsize=""
-    - test -z "${floatsize}" || configure_floatsize="${configure_floatsize} --floatsize=${floatsize}"
-    # on Windows, plugins link against Gem, so we cannot share them between floatsizes
+    - configure_floatsize="${floatsize:+--with-floatsize=${floatsize}}"
+    # on Windows, plugins link against Gem, so we cannot share them between floatsizes; other platforms are fine
     - test -z "${floatsize}" || test "${OS}" = "Windows_NT" || configure_floatsize="${configure_floatsize} --disable-plugins"
     - echo "arch=${arch} pd_extension=${pd_extension} floatsize=${floatsize}"
     # print some system information
