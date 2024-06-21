@@ -90,12 +90,7 @@ stages:
     - tools/systeminfo.sh || true
     - date
     - which autoreconf aclocal glibtoolize libtoolize autoconf autoheader automake g++ || true
-    - autoreconf --version || true
-    - aclocal --version || true
-    - glibtoolize --version || libtoolize --version || true
-    - autoconf --version || true
-    - autoheader --version || true
-    - automake --version || true
+    - for tool in autoreconf aclocal libtoolize glibtoolize autoconf autoheader automake; do "${tool}" --version | grep "^${tool}" || true; done || true
     - g++ -v
     # the actual build
     - mkdir -pv "${ARTIFACTSDIR}"
