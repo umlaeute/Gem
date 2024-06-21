@@ -245,7 +245,7 @@ stages:
 ###################################################
 ### the actual jobs: (linux,macos,windows)*(release,snapshot)
 
-Source:
+source:
   extends:
     - .artifacts
     - .run-selected
@@ -255,7 +255,7 @@ Source:
     - apt-get update && apt-get --no-install-recommends -y install git
   script:
     # create a source package
-    - git archive --format=tar --prefix="${ARTIFACTSDIR}/Source/${CI_PROJECT_NAME}/" HEAD | tar xf -
+    - git archive --format=tar --prefix="${ARTIFACTSDIR}/${CI_JOB_NAME}}/${CI_PROJECT_NAME}/" HEAD | tar xf -
 
 linux-amd64-32:
   extends:
