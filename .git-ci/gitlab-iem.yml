@@ -108,7 +108,7 @@ stages:
     - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${gnutriplet}" {} "+"
     # finally split the binaries from the debug information
     - base_dir_ci=$(pwd)
-    - cd "$(DESTDIR}"
+    - cd "${DESTDIR}"
     - du -sh
     - |
       "${base_dir_ci}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
