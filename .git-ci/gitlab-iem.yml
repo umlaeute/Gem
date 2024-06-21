@@ -102,12 +102,13 @@ stages:
     - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
     - make check -j"${NUMBER_OF_PROCESSORS}"
     - *script_set_destdir
+    # "
     - make install DESTDIR="${DESTDIR}" libdir=/ extradir=/Gem includedir=/Gem/include
     # make Gem-plugins co-installable
     - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${gnutriplet}" {} "+"
     # finally split the binaries from the debug information
     - base_dir_ci=$(pwd)
-    - cd "${DESTDIR}"
+    - cd "${DESTDIR}/Gem"
     - du -sh
     - |
       "${base_dir_ci}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
