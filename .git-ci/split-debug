@@ -51,6 +51,15 @@ list_files() {
 }
 
 
+if ! list_files "$@" | grep -q .; then
+  cat >/dev/stderr <<EOF
+no matching files in '$(pwd)'!
+searched for:
+        $*
+EOF
+  exit 1
+fi
+
 list_files "$@" | while read f; do
   echo "splitting debug information for $f"
   strip_and_attach "$f"
