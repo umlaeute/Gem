@@ -54,6 +54,10 @@ stages:
     set -o shwordsplit || true     # zsh doesn't do wordsplitting by default...
     set -o nonomatch   || true     # zsh bails out if globbing patterns do not expand
 
+.script:set_destdir: &script_set_destdir
+  - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%%-*}"
+
+
 .image:windows:
   tags:
     - sardinecake
@@ -94,13 +98,14 @@ stages:
     - ./configure --disable-dependency-tracking ${TARGETARCH:+--host=}${TARGETARCH} ${fat_binary:+--enable-fat-binary=}${fat_binary} ${PDDIR:+--with-pd=}${PDDIR} ${pd_extension:+--with-extension=}${pd_extension} ${floatsize:+--with-floatsize=${floatsize} --disable-plugins} ${gem_defaultwindow:+--with-defaultwindow=}${gem_defaultwindow} --with-DeckLink=local || true
     - test -n "${CI_COMMIT_TAG}" || cp -v config.log "${ARTIFACTSDIR}"
     - make check -j"${NUMBER_OF_PROCESSORS}"
-    - DESTDIR="$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - *script_set_destdir
+    # "
     - make install DESTDIR="${DESTDIR}" libdir=/ extradir=/Gem includedir=/Gem/include
     # make Gem-plugins co-installable
     - find "${DESTDIR}" "(" -name "gem_*.so" -or -name "gem_*.dll" ")" -exec .git-ci/rename-gnutriplet.sh -a "${gnutriplet}" {} "+"
     # finally split the binaries from the debug information
     - base_dir_ci=$(pwd)
-    - cd "$(pwd)/${ARTIFACTSDIR}/${CI_JOB_NAME%_*}/Gem"
+    - cd "${DESTDIR}/Gem"
     - du -sh
     - |
       "${base_dir_ci}/.git-ci/split-debug" ${pd_extension:+*.${pd_extension}} *.pd_* *.?_* *.dll *.so || echo "ignoring problems when splitting debug info"
@@ -188,10 +193,11 @@ stages:
     - echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
   after_script:
     - *script_zsh_compat
-    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - *script_set_destdir
+    - mkdir -p "${DESTDIR}"
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" -F -v -d ".${depdir}" {} +
-    - IEM_SIGN_SRCDIR="${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - find "${DESTDIR}" -type f "(" -name "*.${pd_extension:-d_*}" -o -name "*.pd_darwin" -o -name "*.so" ")" -exec "${localdeps}.macos.sh" -F -v -d ".${depdir}" {} +
+    - IEM_SIGN_SRCDIR="${DESTDIR}"
     - !reference [.script:codesign:macos]
 
 .build:w64:
@@ -221,9 +227,10 @@ stages:
     - echo "pacman returned ${result}"
     - test "${result}" = "0" || result="skip"
   after_script:
-    - mkdir -p "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}"
+    - *script_set_destdir
+    - mkdir -p "${DESTDIR}"
     - depdir="${CI_JOB_NAME%-[0-9][0-9]}"
-    - find "${ARTIFACTSDIR}/${CI_JOB_NAME%_*}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
+    - find "${DESTDIR}" -type f "(" -name "*.${pd_extension:-m_*}" -o -name "*.dll" -o -name "*.exe" -o -name "*.com" ")" -exec "${localdeps}.win.sh" -v -d ".${depdir}" {} +
 
 .build:w32:
   extends:
