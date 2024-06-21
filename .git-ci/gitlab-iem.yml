@@ -82,7 +82,7 @@ stages:
     - floatsize="${floatsize#-}"
     - test "${floatsize}" != 32 || floatsize=""
     - test -z "${floatsize}" || pd_extension="${arch}-${floatsize}.${defaultext}"
-    - gnutriplet="${arch}"
+    - if test "${OS}" = "Windows_NT"; then gnutriplet="${CI_JOB_NAME}"; else gnutriplet="${arch}"; fi
     - echo "arch=${arch} pd_extension=${pd_extension} floatsize=${floatsize}"
     # print some system information
     - echo building against Pd-${PDVERSION}
