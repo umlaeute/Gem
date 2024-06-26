@@ -367,8 +367,10 @@ macOS:notarize:
   image: python:alpine
   dependencies:
     - darwin-fat-32
+    - darwin-fat-64
   needs:
     - darwin-fat-32
+    - darwin-fat-64
   variables:
     IEM_NOTARIZE_SRCDIR: artifacts
     IEM_NOTARIZE_ARCHIVE: Gem.zip
