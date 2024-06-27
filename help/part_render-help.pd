@@ -1,11 +1,11 @@
 #N canvas 503 464 695 398 10;
 #X declare -lib Gem;
-#X obj 539 -2 declare -lib Gem;
+#X obj 539 8 declare -lib Gem;
 #X obj 7 55 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 468 54 cnv 15 170 250 empty empty empty 20 12 0 14 #dce4fc #404040 0;
 #X obj 472 223 cnv 15 150 40 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 8 166 cnv 15 450 30 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
-#X text 464 -2 GEM object;
+#X text 464 8 GEM object;
 #X text 467 35 Example:;
 #X obj 7 205 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 39 28 Class: Particle System;
