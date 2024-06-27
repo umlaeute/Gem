@@ -28,7 +28,17 @@
 #X text 65 181 default: 1 1;
 #X text 27 260 Inlet 2: float: width (dimX);
 #X obj 513 209 slideSquares 1 1;
-#X obj 568 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders sliding rectangles.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 float;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 568 8 pd META;
 #X obj 571 261 _gemwin;
 #X connect 15 0 27 0;
 #X connect 16 0 27 1;

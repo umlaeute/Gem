@@ -63,7 +63,15 @@
 #X text 21 453 Inlet 2..N (if applicable): <type>: depending on the settable parameter;
 #X text 22 419 Inlet 1: #<num> <value>: set parameter #<num> (starting from 1);
 #X text 22 441 Inlet 1: <name> <value>: set parameter given by <name>;
-#X obj 548 18 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION run a Frei0r effect;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist load list <name>;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 548 18 pd META;
 #X text 22 406 Inlet 1: load <symbol>: load another plugin (if applicable);
 #X obj 521 350 _gemwin;
 #X obj 451 320 _pix2rectangle 3;

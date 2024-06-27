@@ -155,7 +155,16 @@
 #X text 752 59 default;
 #X text 11 153 NOTE: the default view-point of [gemframebuffer] is at the origin 0/0/0 \, unlike [gemwin] where it is at 0/0/4. You might want to manually insert a [translateXYZ 0 0 -4]., f 72;
 #X text 31 587 Outlet 2: texture info : <id> <width> <height> <type> <0.>;
-#X obj 778 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a scene in a texture \, for later use.;
+#X text 10 65 KEYWORDS Gem framebuffer;
+#X text 20 85 INLET_0 gemlist type format dimen color rectangle texunit perspec;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 texture;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 778 8 pd META;
 #X text 22 512 Inlet 1: message: perspec <left><right><bottom><top><near><far>, f 66;
 #X msg 685 270 format RGBA32F;
 #X text 27 310 Inlet 1: message: format [RGB|RGBA|RGB32|RGBA32F|YUV];

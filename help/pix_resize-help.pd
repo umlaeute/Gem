@@ -20,7 +20,15 @@
 #X text 63 186 <xsize> <ysize>;
 #X text 63 245 Inlet 1: dimen <xsize> <ysize>;
 #X msg 463 152 dimen 32 9;
-#X obj 519 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION resize an image;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist dimen;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 519 8 pd META;
 #X text 12 79 if you don't specify any dimensions \, the image will be automatically resized to the next power of 2 (eg. 320x240 will be resized to 512x256). You can change the re-size with the "dimen"-message \; a value of "0" defaults to the next power-of-2 of the original image;
 #X obj 522 268 _gemwin;
 #X obj 451 186 pix_resize;

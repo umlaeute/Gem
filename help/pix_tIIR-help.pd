@@ -94,7 +94,15 @@
 #X text 11 161 The output y() will calculate from the input x() at a time n as follows;
 #X msg 517 183 set 0;
 #X text 11 79 [pix_tIIR] is a time-based filter like [pix_motionblur] \, [pix_biquad] or Pd's [biquad~]. The filter has a feedback- and a feedforward-section \, the length of each can be specified as arguments. The objects will have an inlet for each feedback-coefficient and an inlet for each feedforward-coefficient.;
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION timebased IIR-filter;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist set;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 451 270 _pix2rectangle 3;
 #X obj 519 295 _gemwin;
 #X connect 11 0 15 0;

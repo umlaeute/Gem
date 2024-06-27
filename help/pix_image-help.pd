@@ -47,7 +47,15 @@
 #X obj 521 177 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 15 138 [pix_image] loads in TIFFs \, JPEGs and probably more (depending on your platform and how Gem was compiled);
 #X obj 451 226 pix_image examples/data/fractal.JPG;
-#X obj 578 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION loads in an image file;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist open thread;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 578 8 pd META;
 #X text 14 202 The image can be either drawn directly using [pix_draw] (VERY slow) or applied as a texture onto a Geo ([pix_texture]), f 68;
 #X obj 569 257 _gemwin;
 #X connect 11 0 30 0;

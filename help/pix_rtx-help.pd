@@ -49,7 +49,15 @@
 #X text 87 240 <none>;
 #X text 23 299 Inlet 1: set : sets the whole internal buffer to the next incoming frame;
 #X text 23 329 Inlet 1: mode 1|0 : clamp the discontinuity to the edge or not. (default:1);
-#X obj 538 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION RealTime vs. X transformation;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist set mode;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 538 8 pd META;
 #X obj 554 296 _gemwin;
 #X obj 451 270 _pix2rectangle 3;
 #X connect 11 0 15 0;

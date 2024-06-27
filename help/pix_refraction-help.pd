@@ -60,7 +60,15 @@
 #X text 63 421 Inlet 1: refract <float>;
 #X text 63 392 Inlet 1: height <float>;
 #X text 49 12 Synopsis: [pix_refraction];
-#X obj 519 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION display a pix through glass bricks;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist bool width height mag refract;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 519 8 pd META;
 #X obj 489 288 _gemwin;
 #X connect 11 0 14 0;
 #X connect 13 0 14 1;

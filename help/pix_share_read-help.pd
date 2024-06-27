@@ -38,7 +38,16 @@
 #X text 543 121 arguments are optional;
 #X msg 666 103 set memory_name 256 256 RGBA;
 #X text 669 86 also work with symbol :;
-#X obj 778 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION read pixels from a shared memory region;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 error;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 778 8 pd META;
 #X obj 451 154 _pix2rectangle;
 #X obj 490 211 _gemwin;
 #X connect 11 0 34 0;

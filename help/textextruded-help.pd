@@ -49,7 +49,16 @@
 #X obj 545 418 text2d;
 #X obj 592 418 text3d;
 #X text 27 457 Inlet 2: float: size (in points). (default:20);
-#X obj 531 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a line of text;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist font text list depth justify;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 531 8 pd META;
 #X obj 20 527 cnv 15 400 40 empty empty empty 20 12 0 14 #fce0c0 #404040 0;
 #X text 33 531 Note: changing the fontsize will re-generate the glyphs \, which can be slow. [scale] is much faster.;
 #X obj 472 344 _gemwin;

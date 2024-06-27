@@ -28,7 +28,17 @@
 #X text 27 294 Inlet 3: float: height (default to 1);
 #X text 16 86 The [rectangle] object renders a rectangle at the current position with current color. The width and height of the rectangle can be set by the arguments and changed via the second and third inlet., f 72;
 #X text 19 133 note for the nitpickers: the rectangle will span from (-width|-height) to (+width|+height) so the actual size is really double the specified size., f 71;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a rectangle;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 float;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 562 262 _gemwin;
 #X connect 14 0 23 0;
 #X connect 15 0 23 0;

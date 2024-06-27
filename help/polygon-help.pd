@@ -43,7 +43,17 @@
 #X obj 537 299 polygon 5;
 #X msg 603 246 width \$1;
 #X floatatom 619 226 5 0 10 0 - - - 0;
-#X obj 568 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a polygon.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw width;
+#X text 20 105 INLET_1 list;
+#X text 20 125 INLET_N list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 568 8 pd META;
 #X obj 514 340 _gemwin;
 #X connect 13 0 40 0;
 #X connect 14 0 40 0;

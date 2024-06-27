@@ -25,7 +25,17 @@
 #X msg 528 188 0 0.4 0.8 1;
 #X text 10 93 pix_gain applies a gain multiplier to each pixel in a pix. The float is a constant modifier applied to all color components. If you use just R G B \, it assumes an alpha of 1.0.;
 #X text 13 152 NOTE: while you can use this \, remember that you can often achieve the very same thing using the [color]-object for coloring the Geo onto which the image data is textured \, which could be done on the gfx-card (very efficient!) \, while [pix_gain] is always(!) done on the CPU!!!;
-#X obj 518 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION multiply pixel-values;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist saturate;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 518 8 pd META;
 #X obj 523 280 _gemwin;
 #X obj 451 113 pix_test;
 #X msg 480 216 saturate \$1;

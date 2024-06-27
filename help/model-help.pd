@@ -59,7 +59,15 @@
 #X obj 558 346 t a;
 #X text 567 424 query backends;
 #X obj 490 424 t a;
-#X obj 558 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders an Alias/Wavefront-Model.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist open rescale smooth revert material texture group backend;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 558 8 pd META;
 #X obj 494 451 r \$0-ctl;
 #N canvas 6 49 515 369 print 0;
 #X obj 102 176 inlet;

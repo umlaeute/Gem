@@ -61,7 +61,17 @@
 #X text 506 171 drawn but before the square;
 #X obj 474 164 bng 25 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X text 504 158 SNAP! after the sphere is;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION take a screenshot and texture it;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist bang bool quality;
+#X text 20 105 INLET_1 list;
+#X text 20 125 INLET_2 list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 519 309 _gemwin;
 #X connect 15 0 40 0;
 #X connect 17 0 38 0;

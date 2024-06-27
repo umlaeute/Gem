@@ -25,7 +25,15 @@
 #X msg 542 98 GL_LINES;
 #X obj 534 142 GLdefine GL_ADD;
 #X msg 553 119 symbol GL_ACCUM;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION gets the value of a OpenGL constant;
+#X text 10 65 KEYWORDS Gem openGL;
+#X text 20 85 INLET_0 bang message;
+#X text 20 105 OUTLET_0 float;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 568 228 _gemwin;
 #X connect 10 0 23 0;
 #X connect 22 0 23 0;

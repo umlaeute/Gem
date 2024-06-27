@@ -43,7 +43,15 @@
 #X text 29 302 Inlet 1: message: clump <#clumps> <clumpOffset> <clumpScale>;
 #X text 29 317 Inlet 1: message: pq <xWinding> <yWinding>;
 #X text 29 332 Inlet 1: message: ivScale <uScale> <vScale>: for texturing;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a 3d knot;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw steps facets thick clump pq ivScale;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 475 277 _gemwin;
 #X connect 13 0 34 0;
 #X connect 14 0 34 0;

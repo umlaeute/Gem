@@ -1565,7 +1565,15 @@
 #X text 53 349 This message can be use to set the position of a control point. (Mx \, My : position of the point in the matrix. X \, Y \, Z : position of this control point;
 #X text 21 447 examples :;
 #X text 29 87 The curve3d object renders a curve at the current position with current color or texture. The shape of the curve is controlled from a matrix. Note that control points are not necessarily part of the curve.;
-#X obj 848 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a 3d bezier curve.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw res grid set;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 848 8 pd META;
 #X obj 863 486 _gemwin \; 0 \; 0 \; lighting 1;
 #X obj 871 416 gemhead;
 #X obj 871 439 world_light;

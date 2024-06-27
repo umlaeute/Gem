@@ -37,7 +37,16 @@
 #X text 27 274 Inlet 1: list: gridX float : change the X grid resolution;
 #X text 27 288 Inlet 1: list: gridY float : change the Y grid resolution;
 #X text 16 86 The [mesh_square] object renders a mesh in a square at the current position with current color. The size of the square can be changed via the second inlet. This object is useful when working with vertex_shader;
-#X obj 578 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a mesh;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw list;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 578 8 pd META;
 #X obj 603 402 _gemwin;
 #X connect 14 0 29 0;
 #X connect 15 0 29 0;

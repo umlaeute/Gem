@@ -33,7 +33,15 @@
 #X obj 265 338 pix_rgba;
 #X text 63 276 Inlet 1: color <symbol> :: colorspace to convert to;
 #X text 19 159 You can use [pix_convert] to convert images of any format into a format you can choose.;
-#X obj 518 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION convert the colorspace of an image;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist color;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 518 8 pd META;
 #X obj 451 233 _pix2rectangle 3;
 #X obj 451 113 pix_test;
 #X obj 521 260 _gemwin;

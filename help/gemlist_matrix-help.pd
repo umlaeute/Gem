@@ -58,7 +58,16 @@
 #X text 50 12 Synopsis: [gemlist_matrix];
 #X text 42 94 [gemlist_matrix] accepts a gemList and output the transformation matrix.;
 #X text 62 265 Outlet 2: transformation matrix (16 floats);
-#X obj 538 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION get current transformation matrix of a gemlist;
+#X text 10 65 KEYWORDS Gem information;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 transformation;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 538 8 pd META;
 #X obj 342 391 gemhead;
 #X obj 342 414 world_light;
 #X obj 22 383 _gemwin \; 0 \; 0 \; lighting 1;

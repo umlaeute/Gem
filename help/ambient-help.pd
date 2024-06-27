@@ -29,7 +29,16 @@
 #X floatatom 549 193 5 0 0 0 - - - 0;
 #X obj 84 332 ambientRGB;
 #X text 21 332 see also:;
-#X obj 519 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION ambient colouring;
+#X text 10 65 KEYWORDS Gem openGL transformation;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 INLET_1 list;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 519 8 pd META;
 #X obj 461 256 _gemwin \; 0 \; 0 \; lighting 1;
 #X connect 13 0 23 0;
 #X connect 16 0 18 0;

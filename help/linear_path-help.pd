@@ -60,7 +60,14 @@ its values in n-tuples like: "<r1> <g1> <b1> <r2> <g2> <b2>..." Therefore
 #X text 50 240 name of the table;
 #X obj 516 168 linear_path 3 array;
 #X msg 543 140 open array;
-#X obj 568 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION reads out a table;
+#X text 10 65 KEYWORDS Gem;
+#X text 20 85 INLET_0 float;
+#X text 10 105 AUTHOR IOhannes m zmölnig;
+#X text 10 125 LICENSE GPL v2;
+#X restore 568 8 pd META;
 #X connect 12 0 13 0;
 #X connect 12 1 14 0;
 #X connect 12 2 15 0;

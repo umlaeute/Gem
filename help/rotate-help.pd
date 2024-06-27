@@ -30,7 +30,17 @@
 #X text 38 332 see also:;
 #X obj 101 332 rotateXYZ;
 #X obj 169 332 accumrotate;
-#X obj 508 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION rotation;
+#X text 10 65 KEYWORDS Gem openGL transformation;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 508 8 pd META;
 #X obj 521 271 _gemwin;
 #X connect 13 0 18 0;
 #X connect 18 0 14 0;

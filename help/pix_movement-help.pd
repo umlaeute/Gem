@@ -51,7 +51,16 @@
 #X obj 451 172 pix_rgba;
 #X text 457 370 see also:;
 #X obj 519 370 pix_movement2;
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION timebased IIR-filter;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 451 330 _pix2rectangle 3;
 #X obj 541 267 _gemwin;
 #X connect 11 0 15 0;

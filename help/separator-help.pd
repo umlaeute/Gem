@@ -57,7 +57,15 @@
 #X obj 520 293 circle;
 #X obj 446 293 cone;
 #X text 464 364 With the [separator] \, both objects will by translated \, but the rotation in one branch will not effect the other branch.;
-#X obj 768 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION separate render chains;
+#X text 10 65 KEYWORDS Gem openGL transformation;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 768 8 pd META;
 #X obj 608 450 _gemwin;
 #X connect 27 0 53 0;
 #X connect 28 0 45 0;

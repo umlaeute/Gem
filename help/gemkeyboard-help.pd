@@ -24,6 +24,14 @@
 #X floatatom 508 153 5 0 0 1 keyCode - - 0;
 #X text 488 274 see also:;
 #X obj 489 299 gemkeyname;
-#X obj 556 30 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION output keyboard events in the GEM window;
+#X text 10 65 KEYWORDS Gem control;
+#X text 20 85 INLET_0 non;
+#X text 20 105 OUTLET_0 keyCode;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 556 30 pd META;
 #X obj 548 201 _gemwin;
 #X connect 20 0 21 0;

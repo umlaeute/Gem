@@ -28,7 +28,16 @@
 #X obj 556 158 bng 15 250 50 0 empty empty pre 20 8 0 8 #fcfcfc #000000 #000000;
 #X obj 510 227 bng 15 250 50 0 empty empty post 20 8 0 8 #fcfcfc #000000 #000000;
 #X obj 554 208 bng 15 250 50 0 empty empty pre 20 8 0 8 #fcfcfc #000000 #000000;
-#X obj 558 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION triggers on rendering;
+#X text 10 65 KEYWORDS Gem control;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 bang;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 558 8 pd META;
 #X obj 519 294 _gemwin 2;
 #X connect 13 0 14 0;
 #X connect 14 0 15 0;

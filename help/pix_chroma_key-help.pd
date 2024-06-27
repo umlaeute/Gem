@@ -75,7 +75,16 @@
 #X connect 9 0 5 0;
 #X connect 10 0 9 0;
 #X restore 580 139 pd image;
-#X obj 508 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION mix 2 images based on their color;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist value range direction;
+#X text 20 105 INLET_1 gemlist;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 508 8 pd META;
 #X obj 451 161 pix_rgba;
 #X obj 580 162 pix_rgba;
 #X text 511 155 or [pix_yuv], f 9;

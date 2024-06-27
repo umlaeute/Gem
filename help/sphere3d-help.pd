@@ -44,7 +44,17 @@
 #X obj 553 229 sphere3d;
 #X text 14 139 Unlike [sphere] \, you can modify (dislocate) each point at the sphere via the setCartesian and setSpherical messages (for cartesian and spherical (in deg) coordinates resp.);
 #X text 27 292 Inlet 1: message: print;
-#X obj 578 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a sphere3d.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw setCartesian setSpherical print;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 int;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 578 8 pd META;
 #X obj 550 270 _gemwin;
 #X connect 16 0 30 0;
 #X connect 17 0 30 0;

@@ -64,7 +64,15 @@
 #X text 22 406 Inlet 1: open <symbol>: load another plugin (if applicable);
 #X text 22 419 Inlet 1: #<num> <value>: set parameter #<num> (starting from 1);
 #X text 22 441 Inlet 1: <name> <value>: set parameter given by <name>;
-#X obj 538 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION run a FreeFrame effect;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist open list <name>;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 538 8 pd META;
 #X obj 451 320 _pix2rectangle 3;
 #X obj 521 356 _gemwin;
 #X connect 15 0 16 0;

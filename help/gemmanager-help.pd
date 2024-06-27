@@ -18,4 +18,10 @@ window-dimensions (important for a few objects like [ortho] or [pix_snap2tex])
 #X text 15 195 This is object is probably of little use for the end-user
 (e.g.: you);
 #X obj 63 401 gemmanager;
-#X obj 338 28 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION interact with the global GemState;
+#X text 10 65 KEYWORDS Gem control;
+#X text 10 85 AUTHOR IOhannes m zmölnig;
+#X text 10 105 LICENSE GPL v2;
+#X restore 338 28 pd META;

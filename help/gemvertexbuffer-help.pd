@@ -770,7 +770,15 @@
 #X text 14 646 see examples/10.glsl/16.vertexbuffer_attributes.pd on how to;
 #X text 15 661 use attribute tables with the vertex buffer.;
 #X text 57 190 number of vertices to be used. if this is a power of two (2^n) \, you might have some performance gain.;
-#X obj 868 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a vertexbuffer.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist position color texture normal resize position_enable draw_range program attribute reset_attributes print_attributes;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 868 8 pd META;
 #N canvas 735 418 450 300 startDSP 0;
 #X obj 46 30 inlet;
 #X obj 46 97 select 1;

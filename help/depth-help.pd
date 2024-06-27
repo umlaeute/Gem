@@ -31,7 +31,15 @@
 #X msg 607 229 lighting \$1;
 #X text 630 210 lighting;
 #X text 516 113 turn depth test on/off;
-#X obj 608 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Activate / Deactivate depth test;
+#X text 10 65 KEYWORDS Gem openGL transformation;
+#X text 20 85 INLET_0 gemlist float;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 608 8 pd META;
 #X obj 607 326 _gemwin;
 #X obj 622 274 gemhead;
 #X obj 622 297 world_light;

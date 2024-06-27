@@ -29,7 +29,15 @@
 #X obj 563 412 pix_multiimage;
 #X text 7 69 Description: load multiple an Alias/Wavefront-Model and renders one of them;
 #X text 18 386 for other messages to [multimodel] see [model];
-#X obj 558 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION load multiple an Alias/Wavefront-Model and renders one of them;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist open;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 558 8 pd META;
 #X obj 483 301 _gemwin \; 0 \; 0 \; lighting 1;
 #X connect 15 0 16 0;
 #X connect 17 0 23 0;

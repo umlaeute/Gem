@@ -28,7 +28,16 @@
 #X text 11 79 [pix_buffer_read] reads an image from the named buffer provided by [pix_buffer]. Specify the frame of the buffer you want to read via the second inlet. If no frame is stored at the specified index \, you will get no image. (eg: no texture will be applied). You can change the buffer to read from on the fly via the [set( message.;
 #X msg 464 138 set depot3;
 #X obj 508 362 pix_buffer depot3 1;
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION read from a [pix_buffer];
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist set;
+#X text 20 105 INLET_1 int;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 548 295 _gemwin;
 #X obj 451 242 _pix2rectangle 1.9;
 #X connect 11 0 21 0;

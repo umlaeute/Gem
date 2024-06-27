@@ -352,7 +352,16 @@
 #X obj 657 374 r \$0-ctl;
 #X text 54 600 you can use [pix_buffer] to distribute the same pix to different parts of your render-chain;
 #X msg 625 235 device /dev/fw1;
-#X obj 738 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION open a camera and get input;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist device backend colorspace dimen enumerate dialog enumProps get set clearProps setProps applyProps;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 info;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 738 8 pd META;
 #X obj 156 103 _backendinfo \$0 video;
 #X obj 724 466 _gemwin;
 #X obj 567 502 _pix2rectangle 3;

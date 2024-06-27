@@ -55,7 +55,15 @@
 #X text 63 435 Inlet 1: set <table> : table to store grey-histogram;
 #X text 63 449 Inlet 1: set <table1><table2><table3> : tables to store RGB-histograms;
 #X text 63 474 Inlet 1: set <table1><table2><table3><table4> : tables to store RGBA-histograms;
-#X obj 528 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION excerpt histograms of an image;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist set;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 528 8 pd META;
 #X obj 522 271 _gemwin;
 #X connect 11 0 14 0;
 #X connect 13 0 14 1;

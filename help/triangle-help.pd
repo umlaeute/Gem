@@ -27,7 +27,16 @@
 #X obj 563 168 triangle 2;
 #X text 7 69 Description: Renders an isosceles triangle;
 #X text 16 86 The [triangle] object renders an equal-sided (where the height equals the base) triangle at the current position with current color. The size of the triangle can be changed via the second inlet.;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders an isosceles triangle;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 561 241 _gemwin;
 #X connect 16 0 24 0;
 #X connect 17 0 24 0;

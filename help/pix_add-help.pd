@@ -53,7 +53,16 @@
 #X text 29 91 [pix_add] simply adds two pixes together. It clamps the images so that they remain in the range of the image. (In other words \, it is easy to get a white out).;
 #X obj 451 218 pix_add;
 #X text 33 137 The 2 images have to be of the same size.;
-#X obj 527 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION add 2 images;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 INLET_1 gemlist;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 527 8 pd META;
 #X obj 451 276 _pix2rectangle 3;
 #X obj 520 310 _gemwin;
 #X connect 11 0 13 0;

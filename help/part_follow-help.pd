@@ -1,7 +1,13 @@
 #N canvas 589 385 718 449 10;
 #X declare -lib Gem;
 #X text 34 1 Synopsis: [part_follow];
-#X obj 546 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Particle follow each other;
+#X text 10 65 KEYWORDS Gem particles;
+#X text 10 85 AUTHOR IOhannes m zmölnig;
+#X text 10 105 LICENSE GPL v2;
+#X restore 546 8 pd META;
 #X obj 14 65 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X text 66 25 Class: particle object;
 #X obj 475 64 cnv 15 220 275 empty empty empty 20 12 0 14 #dce4fc #404040 0;

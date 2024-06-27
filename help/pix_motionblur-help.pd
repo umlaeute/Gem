@@ -44,7 +44,16 @@
 #X text 64 195 <blur-factor>;
 #X text 24 254 Inlet 2: float: blur-factor (0..no blurring \, 1..only blurring);
 #X text 14 73 [pix_motionblur] applies a very simple and fast motion blur to an image stream. the method used involves blending the current image with a 'history' image and saving the result back to the 'history'. the blending is the same as pix_mix output = (stream * gain) + (history * 1 - gain) applying a higher blur factor will mix in more of the history image and thus more of the history will be saved resulting in heavier blurring.;
-#X obj 518 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION apply motionbluring on a series of images;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 518 8 pd META;
 #X obj 518 295 _gemwin;
 #X obj 451 267 _pix2rectangle 3;
 #X connect 11 0 15 0;

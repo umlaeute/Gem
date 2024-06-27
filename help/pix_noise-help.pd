@@ -39,7 +39,13 @@
 #X text 41 163 Each time you send a bang \, a new noise is generated. You can send an [auto 1( message to generate a noise for each render frame.;
 #X text 42 447 seed <int> : change the initialization of the random function, f 62;
 #X text 42 425 set <width> <height> : change size of the image (default : 64*64), f 66;
-#X obj 518 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION generate a noise image;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 10 85 AUTHOR IOhannes m zmölnig;
+#X text 10 105 LICENSE GPL v2;
+#X restore 518 8 pd META;
 #X text 457 474 see also:;
 #X obj 525 473 pix_test;
 #X obj 529 360 _gemwin \; 0 \; 0 \;;

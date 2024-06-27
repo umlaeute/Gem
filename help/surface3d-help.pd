@@ -1555,7 +1555,15 @@
 #X obj 812 455 s curve3d_render;
 #X text 33 146 This object is related to curve3d;
 #X text 271 4 Create a 3d bicubic curve \, using a matrix of control points;
-#X obj 848 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a 3d bicubic curve.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw res grid set normal;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 848 8 pd META;
 #X obj 821 582 gemhead;
 #X obj 821 602 world_light;
 #X obj 815 515 _gemwin \; 0 \; 0 \; lighting 1;

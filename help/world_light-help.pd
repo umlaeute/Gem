@@ -41,7 +41,16 @@
 #X obj 145 425 spot_light;
 #X obj 103 425 light;
 #X text 44 347 Inlet 1: float: turn light on/off (default:1);
-#X obj 528 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION adds a point-light to the scene;
+#X text 10 65 KEYWORDS Gem non-geometric;
+#X text 20 85 INLET_0 gemlist float debug;
+#X text 20 105 INLET_1 list;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 528 8 pd META;
 #X obj 481 338 _gemwin;
 #X connect 13 0 24 0;
 #X connect 18 0 32 1;

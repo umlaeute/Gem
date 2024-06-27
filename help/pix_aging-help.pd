@@ -37,7 +37,15 @@
 #X text 63 290 Inlet 1: pits 0|1: add "pits";
 #X text 63 324 Inlet 1: scratch <int> : add a maximum of # scratches;
 #X text 63 306 Inlet 1: coloraging 0|1: color-bleaching;
-#X obj 538 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION apply a super8-like aging effect;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist dust pits coloraging scratch;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 538 8 pd META;
 #X obj 520 262 _gemwin;
 #X obj 451 113 pix_test;
 #X connect 11 0 39 0;

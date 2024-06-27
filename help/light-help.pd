@@ -39,7 +39,16 @@
 #X text 63 307 light-number;
 #X obj 492 175 tgl 20 0 empty \$0-onoff empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 27 362 Inlet 1: float: turn light on/off (default:1);
-#X obj 538 9 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION adds a point-light to the scene;
+#X text 10 65 KEYWORDS Gem non-geometric;
+#X text 20 85 INLET_0 gemlist float debug;
+#X text 20 105 INLET_1 list;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 538 9 pd META;
 #X obj 551 337 _gemwin;
 #X connect 12 0 27 0;
 #X connect 20 0 19 1;

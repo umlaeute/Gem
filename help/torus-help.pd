@@ -33,7 +33,17 @@
 #X text 63 199 # of slices;
 #X text 62 214 thickness (R-r);
 #X text 29 307 Inlet 3: float: thickness of the torus (R-r);
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a torus.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 float;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 561 261 _gemwin;
 #X connect 15 0 29 0;
 #X connect 16 0 29 0;

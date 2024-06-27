@@ -50,7 +50,17 @@
 #X floatatom 600 274 5 0 100 0 - - - 0;
 #X msg 600 291 res \$1;
 #X msg 605 213 \$1 \$1 \$1;
-#X obj 569 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a bezier-curve;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw width res;
+#X text 20 105 INLET_1 list;
+#X text 20 125 INLET_N list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 569 8 pd META;
 #X obj 571 357 _gemwin;
 #X connect 26 0 43 0;
 #X connect 27 0 43 0;

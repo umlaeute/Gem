@@ -50,7 +50,15 @@
 #X obj 630 138 gemhead 50;
 #X obj 791 183 translateXYZ 2 0 0;
 #X text 42 520 Inlet 1: context <name> : change rendering context (for multiple windows).;
-#X obj 818 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION start a rendering chain;
+#X text 10 65 KEYWORDS Gem control;
+#X text 20 85 INLET_0 float bang set context;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 818 8 pd META;
 #X obj 690 421 _gemwin 2;
 #X connect 22 0 26 0;
 #X connect 23 0 44 0;

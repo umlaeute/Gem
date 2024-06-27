@@ -41,7 +41,15 @@
 #X text 443 406 see also;
 #X obj 508 406 vertex_program;
 #X obj 451 226 fragment_program random.fp;
-#X obj 538 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION load and apply an ARB fragment shader;
+#X text 10 65 KEYWORDS Gem openGL shader;
+#X text 20 85 INLET_0 gemlist open;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 538 8 pd META;
 #X obj 547 330 _gemwin;
 #X connect 10 0 29 0;
 #X connect 16 0 17 0;

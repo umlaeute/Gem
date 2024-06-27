@@ -56,7 +56,16 @@
 #X text 70 498 19=GL_ONE_MINUS_SRC1_ALPHA;
 #X obj 477 210 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X floatatom 501 210 2 0 19 0 - - - 0;
-#X obj 588 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION enable alpha blending;
+#X text 10 65 KEYWORDS Gem openGL transformation;
+#X text 20 85 INLET_0 gemlist float message;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 588 8 pd META;
 #X obj 588 271 _gemwin;
 #X connect 12 0 23 0;
 #X connect 17 0 16 0;

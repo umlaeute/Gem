@@ -47,7 +47,15 @@
 #X msg 506 212 save /tmp/out.jpg 2;
 #X text 23 414 Inlet 1: message: copy <src> <target>: copy a pix from slot <src> to slot <target>;
 #X text 23 444 Inlet 1: message: save <filename> <index>: save image in given slot to harddisk.;
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION a storage place for a number of images;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 bang open allocate resize copy save;
+#X text 20 105 OUTLET_0 int;
+#X text 10 125 AUTHOR IOhannes m zmölnig;
+#X text 10 145 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 464 277 route float;
 #X obj 587 240 r \$0-ctl;
 #N canvas 6 49 515 369 print 0;

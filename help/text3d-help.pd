@@ -47,7 +47,16 @@
 #X obj 541 532 textextruded;
 #X obj 541 555 textoutline;
 #X text 27 514 Inlet 2: float: size (in points) (default:20);
-#X obj 528 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a line of text;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist font text list string justify alias;
+#X text 20 105 INLET_1 float;
+#X text 20 125 OUTLET_0 gemlist;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 528 8 pd META;
 #X msg 506 273 string 20320 10 22909 10 19990 10 30028, f 17;
 #X msg 503 327 text مرحبا بالعالم;
 #X text 15 204 Note that text is rendered using only the given font. Therefore \, your font must have the glyphs you want to display (or you will only see placeholders);

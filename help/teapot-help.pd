@@ -30,7 +30,17 @@
 #X text 15 88 The teapot object renders a teapot at the current position with current color. The size of the teapot can be changed via the second inlet.;
 #X obj 563 189 teapot 2 14;
 #X text 63 200 number of slices;
-#X obj 578 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Renders a teapot.;
+#X text 10 65 KEYWORDS Gem openGL shape;
+#X text 20 85 INLET_0 gemlist draw;
+#X text 20 105 INLET_1 float;
+#X text 20 125 INLET_2 float;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 578 8 pd META;
 #X obj 559 257 _gemwin;
 #X connect 18 0 28 0;
 #X connect 19 0 28 0;

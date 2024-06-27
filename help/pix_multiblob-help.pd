@@ -143,7 +143,16 @@
 #X text 17 439 Outlet 2: (k \, 9) matrix: describing k detected blobs (with 0<=k<N);
 #X text 461 464 * angle converted to degrees but is originally in radians, f 30;
 #X text 18 154 the output is a matrix following the conventions of the mtx-objects from zexy/iemmatrix. each row describes one detected blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted) \, minX \, minY \, maxX \, maxY \, size \, angle. "weighted" here means each pixel is weighted by its luminance value during the calculation. "angle" is the (weighted) orientation of the principal axis of the blob in the [-pi/2 \, pi/2] range.;
-#X obj 548 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION blob detector (for multiple blobs);
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist threshold blobSize;
+#X text 20 105 OUTLET_0 gemlist;
+#X text 20 125 OUTLET_1 (k;
+#X text 10 145 AUTHOR IOhannes m zmölnig;
+#X text 10 165 LICENSE GPL v2;
+#X restore 548 8 pd META;
 #X obj 460 363 _gemwin;
 #X connect 23 0 25 0;
 #X connect 24 0 36 0;

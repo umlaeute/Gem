@@ -49,7 +49,17 @@
 #X text 71 394 list: [offsetX offsetY [dimX dimY [color_format]]];
 #X text 26 99 When banged [pix_write] will take a snapshot of the current frame buffer and saves it to a file. When a "bang" message is sent to [pix_write] \, that is the moment that something is captured from the current frame buffer. When grabbing \, be sure that something is in the rendering-buffer \, else you will get a black texture. color_mode let you grab 1 (only red channel) \, 3 (RGB) or 4 (RGBA) byte per pixel. RGBA mode is useful with framebuffer.;
 #X msg 480 162 color_format 4;
-#X obj 608 8 declare -lib Gem;
+#N canvas 484 243 450 300 META 0;
+#X obj 10 25 declare -lib Gem;
+#X text 10 45 DESCRIPTION Make a snapshot of the frame-buffer and write it to a file;
+#X text 10 65 KEYWORDS Gem pix image;
+#X text 20 85 INLET_0 gemlist file;
+#X text 20 105 INLET_1 list;
+#X text 20 125 INLET_2 list;
+#X text 20 145 OUTLET_0 gemlist;
+#X text 10 165 AUTHOR IOhannes m zmölnig;
+#X text 10 185 LICENSE GPL v2;
+#X restore 608 8 pd META;
 #X obj 609 389 _gemwin;
 #X connect 16 0 45 2;
 #X connect 19 0 45 1;
