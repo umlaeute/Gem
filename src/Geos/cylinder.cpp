@@ -65,6 +65,43 @@ void cylinder :: renderShape(GemState *state)
     m_drawType=GL_FILL;
   }
 
+
+  GLenum type = m_drawType;
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+    type=GL_LINE;
+    break;
+  case GL_POINTS   :
+    type=GL_POINT;
+    break;
+  case GL_DEFAULT_GEM: // default
+  case GL_POLYGON  :
+    type=GL_FILL;
+    break;
+  }
+#ifdef GLU_TRUE
+  switch(m_drawType) {
+  case GLU_LINE :
+    type=GL_LINE;
+    break;
+  case GLU_POINT:
+    type=GL_POINT;
+    break;
+  case GLU_FILL :
+    type=GL_FILL;
+    break;
+  }
+#endif
+  switch(type) {
+  case GL_FILL:
+  case GL_LINE:
+  case GL_POINT:
+    break;
+  default:
+    error("invalid draw type %d (%d), switching to default %d", m_drawType, type, GL_FILL);
+    m_drawType = type = GL_FILL;
+  }
+
   GLdouble da, r, dr, dz;
   GLfloat x, y, z, nz;
   GLint i, j;
@@ -94,6 +131,9 @@ void cylinder :: renderShape(GemState *state)
   glPushMatrix();
   glTranslatef(0.f, 0.f, -m_size);
 
+  glPushAttrib(GL_POLYGON_BIT);
+  glPolygonMode(GL_FRONT_AND_BACK, type);
+
   // gluCylinder(m_thing, m_size, m_size, m_size * 2, m_numSlices, m_numSlices);
   da = 2.0 * M_PI / slices;
   dr = (topRadius - baseRadius) / stacks;
@@ -101,107 +141,42 @@ void cylinder :: renderShape(GemState *state)
   nz = (baseRadius - topRadius) /
        height;       /* Z component of normal vectors */
 
-  if (m_drawType == GL_POINT) {
-    glBegin(GL_POINTS);
-    for (i = 0; i < slices; i++) {
-      x = cos(i * da);
-      y = sin(i * da);
+  GLfloat ds = 1.0 / slices;
+  GLfloat dt = 1.0 / stacks;
+  GLfloat t = 0.0;
+  z = 0.0;
+  r = baseRadius;
+  for (j = 0; j < stacks; j++) {
+    GLfloat s = 0.0;
+    glBegin(GL_QUAD_STRIP);
+    for (i = 0; i <= slices; i++) {
+      GLfloat x, y;
+      if (i == slices) {
+	x = sin(0.0);
+	y = cos(0.0);
+      } else {
+	x = sin(i * da);
+	y = cos(i * da);
+      }
       normal3f(x * nsign, y * nsign, nz * nsign);
-
-      z = 0.0;
-      r = baseRadius;
-      for (j = 0; j <= stacks; j++) {
-        glVertex3f(x * r, y * r, z);
-        z += dz;
-        r += dr;
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
-    }
-    glEnd();
-  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-    /* Draw rings */
-    if (m_drawType == GL_LINE) {
-      z = 0.0;
-      r = baseRadius;
-      for (j = 0; j <= stacks; j++) {
-        glBegin(GL_LINE_LOOP);
-        for (i = 0; i < slices; i++) {
-          x = cos(i * da);
-          y = sin(i * da);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          glVertex3f(x * r, y * r, z);
-        }
-        glEnd();
-        z += dz;
-        r += dr;
-      }
-    } else {
-      /* draw one ring at each end */
-      if (baseRadius != 0.0) {
-        glBegin(GL_LINE_LOOP);
-        for (i = 0; i < slices; i++) {
-          x = cos(i * da);
-          y = sin(i * da);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          glVertex3f(x * baseRadius, y * baseRadius, 0.0);
-        }
-        glEnd();
-        glBegin(GL_LINE_LOOP);
-        for (i = 0; i < slices; i++) {
-          x = cos(i * da);
-          y = sin(i * da);
-          normal3f(x * nsign, y * nsign, nz * nsign);
-          glVertex3f(x * topRadius, y * topRadius, height);
-        }
-        glEnd();
-      }
-    }
-    /* draw length lines */
-    glBegin(GL_LINES);
-    for (i = 0; i < slices; i++) {
-      x = cos(i * da);
-      y = sin(i * da);
+      glVertex3f(x * r, y * r, z);
       normal3f(x * nsign, y * nsign, nz * nsign);
-      glVertex3f(x * baseRadius, y * baseRadius, 0.0);
-      glVertex3f(x * topRadius, y * topRadius, height);
-    }
-    glEnd();
-  } else if (m_drawType == GL_FILL) {
-    GLfloat ds = 1.0 / slices;
-    GLfloat dt = 1.0 / stacks;
-    GLfloat t = 0.0;
-    z = 0.0;
-    r = baseRadius;
-    for (j = 0; j < stacks; j++) {
-      GLfloat s = 0.0;
-      glBegin(GL_QUAD_STRIP);
-      for (i = 0; i <= slices; i++) {
-        GLfloat x, y;
-        if (i == slices) {
-          x = sin(0.0);
-          y = cos(0.0);
-        } else {
-          x = sin(i * da);
-          y = cos(i * da);
-        }
-        normal3f(x * nsign, y * nsign, nz * nsign);
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-        }
-        glVertex3f(x * r, y * r, z);
-        normal3f(x * nsign, y * nsign, nz * nsign);
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
-        }
-        glVertex3f(x * (r + dr), y * (r + dr), z + dz);
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
+      }
+      glVertex3f(x * (r + dr), y * (r + dr), z + dz);
 
-        s += ds;
-      }                 /* for slices */
-      glEnd();
-      r += dr;
-      t += dt;
-      z += dz;
-    }                           /* for stacks */
-  }
+      s += ds;
+    }                 /* for slices */
+    glEnd();
+    r += dr;
+    t += dt;
+    z += dz;
+  }                           /* for stacks */
+  glPopAttrib();
   glPopMatrix();
 }
 

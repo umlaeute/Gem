@@ -92,6 +92,43 @@ void disk :: renderShape(GemState *state)
     m_drawType=GL_FILL;
   }
 
+
+  GLenum type = m_drawType;
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+    type=GL_LINE;
+    break;
+  case GL_POINTS   :
+    type=GL_POINT;
+    break;
+  case GL_DEFAULT_GEM: // default
+  case GL_POLYGON  :
+    type=GL_FILL;
+    break;
+  }
+#ifdef GLU_TRUE
+  switch(m_drawType) {
+  case GLU_LINE :
+    type=GL_LINE;
+    break;
+  case GLU_POINT:
+    type=GL_POINT;
+    break;
+  case GLU_FILL :
+    type=GL_FILL;
+    break;
+  }
+#endif
+  switch(type) {
+  case GL_FILL:
+  case GL_LINE:
+  case GL_POINT:
+    break;
+  default:
+    error("invalid draw type %d (%d), switching to default %d", m_drawType, type, GL_FILL);
+    m_drawType = type = GL_FILL;
+  }
+
   GLfloat da, dr;
 
   /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
@@ -138,135 +175,58 @@ void disk :: renderShape(GemState *state)
   GLfloat sa, ca;
   GLfloat r1 = m_innerRadius;
 
-  switch (m_drawType) {
-  default:
-  case GL_FILL: {
-    /* texture of a gluDisk is a cut out of the texture unit square
-     * x, y in [-m_size, +m_size]; s, t in [0, 1]
-     * (linear mapping)
-     */
-    GLint l;
-    for (l = 0; l < loops; l++) {
-      GLfloat r2 = r1 + dr;
-      if (!orientation) {
-        GLint s;
-        glBegin(GL_QUAD_STRIP);
-        for (s = 0; s <= m_numSlices; s++) {
-          GLfloat a=(s == m_numSlices)?0.0:(s * da);
-          sa = sin(a);
-          ca = cos(a);
-          if(texType) {
-            glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0,
-                         (0.5 + ca * r2 / dtc)*ysize+ysize0);
-          }
-          glVertex2f(r2 * sa, r2 * ca);
-          if(texType) {
-            glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0,
-                         (0.5 + ca * r1 / dtc)*ysize+ysize0);
-          }
-          glVertex2f(r1 * sa, r1 * ca);
-        }
-        glEnd();
-      } else {
-        GLint s;
-        glBegin(GL_QUAD_STRIP);
-        for (s = m_numSlices; s >= 0; s--) {
-          GLfloat a=(s==m_numSlices)?0.0:s * da;
-          sa = sin(a);
-          ca = cos(a);
-          if(texType) {
-            glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0,
-                         (0.5 + ca * r2 / dtc)*ysize+ysize0);
-          }
-          glVertex2f(r2 * sa, r2 * ca);
-          if(texType) {
-            glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0,
-                         (0.5 + ca * r1 / dtc)*ysize+ysize0);
-          }
-          glVertex2f(r1 * sa, r1 * ca);
-        }
-        glEnd();
+  glPushAttrib(GL_POLYGON_BIT);
+  glPolygonMode(GL_FRONT_AND_BACK, type);
+
+  /* texture of a gluDisk is a cut out of the texture unit square
+   * x, y in [-m_size, +m_size]; s, t in [0, 1]
+   * (linear mapping)
+   */
+  GLint l;
+  for (l = 0; l < loops; l++) {
+    GLfloat r2 = r1 + dr;
+    if (!orientation) {
+      GLint s;
+      glBegin(GL_QUAD_STRIP);
+      for (s = 0; s <= m_numSlices; s++) {
+	GLfloat a=(s == m_numSlices)?0.0:(s * da);
+	sa = sin(a);
+	ca = cos(a);
+	if(texType) {
+	  glTexCoord2f((0.5 + sa * r2 / dtc)*xsize+xsize0,
+		       (0.5 + ca * r2 / dtc)*ysize+ysize0);
+	}
+	glVertex2f(r2 * sa, r2 * ca);
+	if(texType) {
+	  glTexCoord2f((0.5 + sa * r1 / dtc)*xsize+xsize0,
+		       (0.5 + ca * r1 / dtc)*ysize+ysize0);
+	}
+	glVertex2f(r1 * sa, r1 * ca);
       }
-      r1 = r2;
-    }
-    break;
-  }
-  case GL_LINE: {
-    GLint l, s;
-    /* draw loops */
-    for (l = 0; l <= loops; l++) {
-      GLfloat r = m_innerRadius + l * dr;
-      glBegin(GL_LINE_LOOP);
-      for (s = 0; s < m_numSlices; s++) {
-        GLfloat a = s * da;
-        if(texType) {
-          glTexCoord2f((0.5+r*sin(a)/dtc)*xsize+xsize0,
-                       (0.5+r*cos(a)/dtc)*ysize+ysize0);
-        }
-        glVertex2f(r * sin(a), r * cos(a));
+      glEnd();
+    } else {
+      GLint s;
+      glBegin(GL_QUAD_STRIP);
+      for (s = m_numSlices; s >= 0; s--) {
+	GLfloat a=(s==m_numSlices)?0.0:s * da;
+	sa = sin(a);
+	ca = cos(a);
+	if(texType) {
+	  glTexCoord2f((0.5 - sa * r2 / dtc)*xsize+xsize0,
+		       (0.5 + ca * r2 / dtc)*ysize+ysize0);
+	}
+	glVertex2f(r2 * sa, r2 * ca);
+	if(texType) {
+	  glTexCoord2f((0.5 - sa * r1 / dtc)*xsize+xsize0,
+		       (0.5 + ca * r1 / dtc)*ysize+ysize0);
+	}
+	glVertex2f(r1 * sa, r1 * ca);
       }
       glEnd();
     }
-    /* draw spokes */
-    for (s = 0; s < m_numSlices; s++) {
-      GLfloat a = s * da;
-      GLfloat x = sin(a);
-      GLfloat y = cos(a);
-      glBegin(GL_LINE_STRIP);
-      for (l = 0; l <= loops; l++) {
-        GLfloat r = m_innerRadius + l * dr;
-        if(texType) {
-          glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
-        }
-        glVertex2f(r * x, r * y);
-      }
-      glEnd();
-    }
-    break;
+    r1 = r2;
   }
-  case GL_POINT: {
-    GLint s;
-    glBegin(GL_POINTS);
-    for (s = 0; s < m_numSlices; s++) {
-      GLfloat a = s * da;
-      GLfloat x = sin(a);
-      GLfloat y = cos(a);
-      GLint l;
-      for (l = 0; l <= loops; l++) {
-        GLfloat r = m_innerRadius * l * dr;
-        glVertex2f(r * x, r * y);
-        if(texType) {
-          glTexCoord2f((0.5+r*x/dtc)*xsize+xsize0, (0.5+r*y/dtc)*ysize+ysize0);
-        }
-      }
-    }
-    glEnd();
-    break;
-  }
-  case GLU_SILHOUETTE: {
-    if (m_innerRadius != 0.0) {
-      GLfloat a;
-      glBegin(GL_LINE_LOOP);
-      for (a = 0.0; a < 2.0 * M_PI; a += da) {
-        GLfloat x = m_innerRadius * sin(a);
-        GLfloat y = m_innerRadius * cos(a);
-        glVertex2f(x, y);
-      }
-      glEnd();
-    }
-    {
-      GLfloat a;
-      glBegin(GL_LINE_LOOP);
-      for (a = 0; a < 2.0 * M_PI; a += da) {
-        GLfloat x = m_size * sin(a);
-        GLfloat y = m_size * cos(a);
-        glVertex2f(x, y);
-      }
-      glEnd();
-    }
-    break;
-  }
-  }
+  glPopAttrib();
 }
 
 /////////////////////////////////////////////////////////
