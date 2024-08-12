@@ -58,10 +58,6 @@ void sphere3d :: createSphere3d(void)
 
   //  post("creating sphere %d %d", slices, stacks);
 
-  if(m_drawType==GL_DEFAULT_GEM) {
-    m_drawType=GL_FILL;
-  }
-
   drho = 180. / static_cast<GLfloat>(stacks);
   dtheta = 360. / static_cast<GLfloat>(slices);
 
@@ -197,6 +193,48 @@ void sphere3d :: renderShape(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
   state->get(GemState::_GL_LIGHTING, lighting);
 
+  GLenum type;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_FILL;
+  }
+  type = m_drawType;
+
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+    type=GL_LINE;
+    break;
+  case GL_POINTS   :
+    type=GL_POINT;
+    break;
+  case GL_DEFAULT_GEM: // default
+  case GL_POLYGON  :
+    type=GL_FILL;
+    break;
+  }
+#ifdef GLU_TRUE
+  switch(m_drawType) {
+  case GLU_LINE :
+    type=GL_LINE;
+    break;
+  case GLU_POINT:
+    type=GL_POINT;
+    break;
+  case GLU_FILL :
+    type=GL_FILL;
+    break;
+  }
+#endif
+
+  switch(type) {
+  case GL_FILL:
+  case GL_LINE:
+  case GL_POINT:
+    break;
+  default:
+    error("invalid draw type %d, switching to default", m_drawType);
+    m_drawType = type = GL_FILL;
+  }
+
   glPushMatrix();
   glScalef(m_size, m_size, m_size);
 
@@ -239,6 +277,8 @@ void sphere3d :: renderShape(GemState *state)
   if(!m_displayList) {
     m_modified=true;
   }
+  glPushAttrib(GL_POLYGON_BIT);
+  glPolygonMode(GL_FRONT_AND_BACK, type);
 
   if(m_modified) {
 
@@ -249,227 +289,158 @@ void sphere3d :: renderShape(GemState *state)
     m_displayList=glGenLists(1);
     glNewList(m_displayList, GL_COMPILE_AND_EXECUTE);
 
-    if (m_drawType == GL_FILL) {
-      int src;
-      t = 1.0;
-      s = 0.0;
-      ds = 1.0 / slices;
-      dt = 1.0 / stacks;
+    int src;
+    t = 1.0;
+    s = 0.0;
+    ds = 1.0 / slices;
+    dt = 1.0 / stacks;
 
-      /* draw +Z end as a quad strip */
-      glBegin(GL_QUAD_STRIP);
+    /* draw +Z end as a quad strip */
+    glBegin(GL_QUAD_STRIP);
 
-      src=1;
-      for (int j = 0; j < slices; j++) {
-        if(normals) {
-          glNormal3f(m_x[0], m_y[0], m_z[0]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-        }
-        glVertex3f(m_x[0], m_y[0], m_z[0]);
-
-        if(normals) {
-          glNormal3f(m_x[src], m_y[src], m_z[src]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
-        }
-        glVertex3f(m_x[src], m_y[src], m_z[src]);
-
-        src++;
-        s += ds;
-      }
-      src=1;
+    src=1;
+    for (int j = 0; j < slices; j++) {
       if(normals) {
-        glNormal3f(m_x[0], m_y[0], m_z[0]);
+	glNormal3f(m_x[0], m_y[0], m_z[0]);
       }
       if(texType) {
-        glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
+	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(m_x[0], m_y[0], m_z[0]);
 
       if(normals) {
-        glNormal3f(m_x[src], m_y[src], m_z[src]);
+	glNormal3f(m_x[src], m_y[src], m_z[src]);
       }
       if(texType) {
-        glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+	glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
       }
       glVertex3f(m_x[src], m_y[src], m_z[src]);
 
-      glEnd();
-      t-=dt;
+      src++;
+      s += ds;
+    }
+    src=1;
+    if(normals) {
+      glNormal3f(m_x[0], m_y[0], m_z[0]);
+    }
+    if(texType) {
+      glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
+    }
+    glVertex3f(m_x[0], m_y[0], m_z[0]);
 
-      /* draw intermediate stacks as quad strips */
-      src=1;
-      for (int i = 0; i < stacks-2; i++) {
-        int src2=0;
-        s = 0.0;
-        glBegin(GL_QUAD_STRIP);
-        for (int j = 0; j < slices; j++) {
-          src2=src+slices;
+    if(normals) {
+      glNormal3f(m_x[src], m_y[src], m_z[src]);
+    }
+    if(texType) {
+      glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+    }
+    glVertex3f(m_x[src], m_y[src], m_z[src]);
 
-          if(normals) {
-            glNormal3f(m_x[src], m_y[src], m_z[src]);
-          }
-          if(texType) {
-            glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-          }
-          glVertex3f(m_x[src], m_y[src], m_z[src]);
-          src++;
+    glEnd();
+    t-=dt;
 
-          if(normals) {
-            glNormal3f(m_x[src2], m_y[src2], m_z[src2]);
-          }
-          if(texType) {
-            glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-          }
-          glVertex3f(m_x[src2], m_y[src2], m_z[src2]);
-          src2++;
-
-          s += ds;
-        }
-
-        if(normals) {
-          glNormal3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-        }
-        glVertex3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
-
-        if(normals) {
-          glNormal3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-        }
-        glVertex3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
-
-        glEnd();
-        t -= dt;
-      }
-
-      /* draw -Z end as a quad strip */
+    /* draw intermediate stacks as quad strips */
+    src=1;
+    for (int i = 0; i < stacks-2; i++) {
+      int src2=0;
+      s = 0.0;
       glBegin(GL_QUAD_STRIP);
-
-      src=(slices*(stacks-2)+1);
-      const int last=slices*(stacks-1)+1;
-      s=0.0;
       for (int j = 0; j < slices; j++) {
-        if(normals) {
-          glNormal3f(m_x[src], m_y[src], m_z[src]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-        }
-        glVertex3f(m_x[src], m_y[src], m_z[src]);
-        src++;
+	src2=src+slices;
 
-        if(normals) {
-          glNormal3f(m_x[last], m_y[last], m_z[last]);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
-        }
-        glVertex3f(m_x[last], m_y[last], m_z[last]);
+	if(normals) {
+	  glNormal3f(m_x[src], m_y[src], m_z[src]);
+	}
+	if(texType) {
+	  glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+	}
+	glVertex3f(m_x[src], m_y[src], m_z[src]);
+	src++;
 
-        s+=ds;
+	if(normals) {
+	  glNormal3f(m_x[src2], m_y[src2], m_z[src2]);
+	}
+	if(texType) {
+	  glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+	}
+	glVertex3f(m_x[src2], m_y[src2], m_z[src2]);
+	src2++;
+
+	s += ds;
       }
-      src=(slices*(stacks-2)+1);
-      if(normals) {
-        glNormal3f(m_x[src], m_y[src], m_z[src]);
-      }
-      if(texType) {
-        glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
-      }
-      glVertex3f(m_x[src], m_y[src], m_z[src]);
 
       if(normals) {
-        glNormal3f(m_x[last], m_y[last], m_z[last]);
+	glNormal3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
       }
       if(texType) {
-        glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
-      glVertex3f(m_x[last], m_y[last], m_z[last]);
+      glVertex3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
+
+      if(normals) {
+	glNormal3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
+      }
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+      }
+      glVertex3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
 
       glEnd();
-
-    } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-
-      int src = 1;
-      for (int i = 1; i < stacks;
-           i++) {        // stack line at i==stacks-1 was missing here
-        glBegin(GL_LINE_LOOP);
-        for (int j = 0; j < slices; j++) {
-
-          if (normals) {
-            glNormal3f(m_x[src], m_y[src], m_z[src]);
-          }
-          glVertex3f(m_x[src], m_y[src], m_z[src]);
-          src++;
-        }
-        glEnd();
-      }
-      for (int j = 0; j < slices; j++) {
-        glBegin(GL_LINE_STRIP);
-
-        if (normals) {
-          glNormal3f(m_x[0], m_y[0], m_z[0]);
-        }
-        glVertex3f(m_x[0], m_y[0], m_z[0]);
-
-        for (int i = 0; i < stacks-1; i++) {
-          src=i*slices+1+j;
-          if (normals) {
-            glNormal3f(m_x[src], m_y[src], m_z[src]);
-          }
-          glVertex3f(m_x[src], m_y[src], m_z[src]);
-        }
-        src=slices*(stacks-1)+1;
-        if (normals) {
-          glNormal3f(m_x[src], m_y[src], m_z[src]);
-        }
-        glVertex3f(m_x[src], m_y[src], m_z[src]);
-
-        glEnd();
-      }
+      t -= dt;
     }
 
-    else if (m_drawType == GL_POINT) {
-      /* top and bottom-most points */
-      int src=0;
+    /* draw -Z end as a quad strip */
+    glBegin(GL_QUAD_STRIP);
 
-      glBegin(GL_POINTS);
-
+    src=(slices*(stacks-2)+1);
+    const int last=slices*(stacks-1)+1;
+    s=0.0;
+    for (int j = 0; j < slices; j++) {
       if(normals) {
-        glNormal3f(m_x[src], m_y[src], m_z[src]);
+	glNormal3f(m_x[src], m_y[src], m_z[src]);
+      }
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(m_x[src], m_y[src], m_z[src]);
       src++;
 
-      for (int i = 0; i < stacks-1; i++) {
-        for (int j = 0; j < slices; j++) {
-          if (normals) {
-            glNormal3f(m_x[src], m_y[src], m_z[src]);
-          }
-          glVertex3f(m_x[src], m_y[src], m_z[src]);
-          src++;
-        }
-      }
       if(normals) {
-        glNormal3f(m_x[src], m_y[src], m_z[src]);
+	glNormal3f(m_x[last], m_y[last], m_z[last]);
       }
-      glVertex3f(m_x[src], m_y[src], m_z[src]);
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
+      }
+      glVertex3f(m_x[last], m_y[last], m_z[last]);
 
-      glEnd();
+      s+=ds;
     }
+    src=(slices*(stacks-2)+1);
+    if(normals) {
+      glNormal3f(m_x[src], m_y[src], m_z[src]);
+    }
+    if(texType) {
+      glTexCoord2f(1.f*xsize+xsize0, t*ysize+ysize0);
+    }
+    glVertex3f(m_x[src], m_y[src], m_z[src]);
+
+    if(normals) {
+      glNormal3f(m_x[last], m_y[last], m_z[last]);
+    }
+    if(texType) {
+      glTexCoord2f(1.f*xsize+xsize0, (t-dt)*ysize+ysize0);
+    }
+    glVertex3f(m_x[last], m_y[last], m_z[last]);
+
+    glEnd();
+
     glEndList();
   } /* rebuild list */
   else {
     glCallList(m_displayList);
   }
 
+  glPopAttrib();
   glPopMatrix();
   m_modified=false;
 }

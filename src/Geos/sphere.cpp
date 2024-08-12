@@ -66,14 +66,10 @@ void sphere :: createSphere(GemState *state)
   GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
   GLfloat rho, drho, theta, dtheta;
-  GLfloat s, t, ds, dt;
   GLint i, j, imin, imax;
   GLenum orientation = true; /* GLU_INSIDE; */
   /* coverity[dead_error_condition] we might want to play with orientation (FIXME) */
   GLfloat nsign = (orientation)?-1.0:1.0;
-
-  GLfloat xsize = 1.0, xsize0 = 0.0;
-  GLfloat ysize = 1.0, ysize0 = 0.0;
 
   TexCoord*texCoords=NULL;
   int texNum=0;
@@ -81,11 +77,6 @@ void sphere :: createSphere(GemState *state)
   state->get(GemState::_GL_TEX_COORDS, texCoords);
   state->get(GemState::_GL_TEX_TYPE, texType);
   state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
-
-
-  if(m_drawType==GL_DEFAULT_GEM) {
-    m_drawType=GL_FILL;
-  }
 
   if(m_x) {
     delete[]m_x;
@@ -100,139 +91,67 @@ void sphere :: createSphere(GemState *state)
   }
   m_z=NULL;
 
-  if(texType && texNum>=3) {
-    xsize0 = texCoords[0].s;
-    xsize  = texCoords[1].s-xsize0;
-    ysize0 = texCoords[1].t;
-    ysize  = texCoords[2].t-ysize0;
-  }
-
   drho = M_PI / static_cast<GLfloat>(stacks);
   dtheta = 2.0 * M_PI / static_cast<GLfloat>(slices);
 
   int src;
 
-  if (m_drawType == GL_FILL) {
 
-    m_x = new float[slices * stacks * 3];
-    m_y = new float[slices * stacks * 3];
-    m_z = new float[slices * stacks * 3];
+  m_x = new float[slices * stacks * 3];
+  m_y = new float[slices * stacks * 3];
+  m_z = new float[slices * stacks * 3];
 
-    src = 0;
+  src = 0;
 
-    if (!texType) {
-      /* draw +Z end as a triangle fan */
+  if (!texType) {
+    /* draw +Z end as a triangle fan */
 
-      for (j = 0; j <= slices; j++) {
-        theta = (j == slices) ? 0.0 : j * dtheta;
-        m_x[src] = -sin(theta) * sin(drho);
-        m_y[src] = cos(theta) * sin(drho);
-        m_z[src] = nsign * cos(drho);
-        src++;
-      }
-    }
-
-    ds = 1.0 / slices;
-    dt = 1.0 / stacks;
-    t = 1.0;                        /* because loop now runs from 0 */
-    if (texType) {
-      imin = 0;
-      imax = stacks;
-    } else {
-      imin = 1;
-      imax = stacks - 1;
-    }
-
-    /* draw intermediate stacks as quad strips */
-    for (i = imin; i < imax; i++) {
-      rho = i * drho;
-      s = 0.0;
-      for (j = 0; j <= slices; j++) {
-        theta = (j == slices) ? 0.0 : j * dtheta;
-        m_x[src] = -sin(theta) * sin(rho);
-        m_y[src] = cos(theta) * sin(rho);
-        m_z[src] = nsign * cos(rho);
-        src++;
-        m_x[src] = -sin(theta) * sin(rho + drho);
-        m_y[src] = cos(theta) * sin(rho + drho);
-        m_z[src] = nsign * cos(rho + drho);
-        src++;
-
-      }
-    }
-
-    if (!texType) {
-      /* draw -Z end as a triangle fan */
-
-      rho = M_PI - drho;
-      s = 1.0;
-      t = dt;
-      for (j = slices; j >= 0; j--) {
-        theta = (j == slices) ? 0.0 : j * dtheta;
-        m_x[src] = -sin(theta) * sin(rho);
-        m_y[src] = cos(theta) * sin(rho);
-        m_z[src] = nsign * cos(rho);
-        src++;
-      }
-    }
-
-  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-
-    //allocate memory - this has twice the vertices as GL_POINT
-    m_x = new float[slices * stacks * 2];
-    m_y = new float[slices * stacks * 2];
-    m_z = new float[slices * stacks * 2];
-
-    src = 0;
-
-    /* draw stack lines */
-    for (i = 1; i < stacks;
-         i++) {  /* stack line at i==stacks-1 was missing here */
-      rho = i * drho;
-      for (j = 0; j < slices; j++) {
-        theta = j * dtheta;
-        m_x[src] = cos(theta) * sin(rho);
-        m_y[src] = sin(theta) * sin(rho);
-        m_z[src] = cos(rho);
-        src++;
-      }
-    }
-    /* draw slice lines */
-    for (j = 0; j < slices; j++) {
-      theta = j * dtheta;
-      for (i = 0; i <= stacks; i++) {
-        rho = i * drho;
-        m_x[src] = cos(theta) * sin(rho);
-        m_y[src] = sin(theta) * sin(rho);
-        m_z[src] = cos(rho);
-        src++;
-      }
+    for (j = 0; j <= slices; j++) {
+      theta = (j == slices) ? 0.0 : j * dtheta;
+      m_x[src] = -sin(theta) * sin(drho);
+      m_y[src] = cos(theta) * sin(drho);
+      m_z[src] = nsign * cos(drho);
+      src++;
     }
   }
 
-  else if (m_drawType == GL_POINT) {
-
-    //allocate memory - each style has a different number of vertices
-    m_x = new float[slices * stacks];
-    m_y = new float[slices * stacks];
-    m_z = new float[slices * stacks];
-    src = 0;
-
-    /* loop over stacks and fill the arrays */
-    for (i = 1; i < stacks - 1; i++) {
-      rho = i * drho;
-      for (j = 0; j < slices; j++) {
-        theta = j * dtheta;
-        m_x[src] = cos(theta) * sin(rho);
-        m_y[src] = sin(theta) * sin(rho);
-        m_z[src] = cos(rho);
-        src++;
-      }
-    }
-
+  if (texType) {
+    imin = 0;
+    imax = stacks;
+  } else {
+    imin = 1;
+    imax = stacks - 1;
   }
 
+  /* draw intermediate stacks as quad strips */
+  for (i = imin; i < imax; i++) {
+    rho = i * drho;
+    for (j = 0; j <= slices; j++) {
+      theta = (j == slices) ? 0.0 : j * dtheta;
+      m_x[src] = -sin(theta) * sin(rho);
+      m_y[src] = cos(theta) * sin(rho);
+      m_z[src] = nsign * cos(rho);
+      src++;
+      m_x[src] = -sin(theta) * sin(rho + drho);
+      m_y[src] = cos(theta) * sin(rho + drho);
+      m_z[src] = nsign * cos(rho + drho);
+      src++;
 
+    }
+  }
+
+  if (!texType) {
+    /* draw -Z end as a triangle fan */
+
+    rho = M_PI - drho;
+    for (j = slices; j >= 0; j--) {
+      theta = (j == slices) ? 0.0 : j * dtheta;
+      m_x[src] = -sin(theta) * sin(rho);
+      m_y[src] = cos(theta) * sin(rho);
+      m_z[src] = nsign * cos(rho);
+      src++;
+    }
+  }
 }
 /////////////////////////////////////////////////////////
 // render
@@ -244,7 +163,6 @@ void sphere :: renderShape(GemState *state)
   GLint slices=(m_numSlices>0)?m_numSlices:10;
   GLint stacks=(m_numStacks>0)?m_numStacks:10;
 
-  GLfloat rho, drho, dtheta;
   GLfloat s, t, ds, dt;
   GLint i, j, imin, imax;
   GLenum orientation = true; /* GLU_INSIDE; */
@@ -262,6 +180,39 @@ void sphere :: renderShape(GemState *state)
   state->get(GemState::_GL_TEX_NUMCOORDS, texNum);
   state->get(GemState::_GL_LIGHTING, lighting);
 
+  GLenum type;
+  if(m_drawType==GL_DEFAULT_GEM) {
+    m_drawType=GL_FILL;
+  }
+  type = m_drawType;
+
+
+  switch(m_drawType) {
+  case GL_LINE_LOOP:
+    type=GL_LINE;
+    break;
+  case GL_POINTS   :
+    type=GL_POINT;
+    break;
+  case GL_DEFAULT_GEM: // default
+  case GL_POLYGON  :
+    type=GL_FILL;
+    break;
+  }
+#ifdef GLU_TRUE
+  switch(m_drawType) {
+  case GLU_LINE :
+    type=GL_LINE;
+    break;
+  case GLU_POINT:
+    type=GL_POINT;
+    break;
+  case GLU_FILL :
+    type=GL_FILL;
+    break;
+  }
+#endif
+
   GLfloat xsize = 1.0, xsize0 = 0.0;
   GLfloat ysize = 1.0, ysize0 = 0.0;
   if(texType && texNum>=3) {
@@ -271,8 +222,8 @@ void sphere :: renderShape(GemState *state)
     ysize  = texCoords[2].t-ysize0;
   }
 
-  drho = M_PI / static_cast<GLfloat>(stacks);
-  dtheta = 2.0 * M_PI / static_cast<GLfloat>(slices);
+  ds = 1.0 / slices;
+  dt = 1.0 / stacks;
 
   /* texturing: s goes from 0.0/0.25/0.5/0.75/1.0 at +y/+x/-y/-x/+y axis */
   /* t goes from -1.0/+1.0 at z = -radius/+radius (linear along longitudes) */
@@ -291,137 +242,82 @@ void sphere :: renderShape(GemState *state)
     oldTexture = texType;
   }
 
-  if (m_drawType == GL_FILL) {
-    src = 0;
-    if (!texType) {
-      /* draw +Z end as a triangle fan */
-      glBegin(GL_TRIANGLE_FAN);
-      glNormal3f(0.0, 0.0, 1.0);
-      glVertex3f(0.0, 0.0, nsign * radius);
-      for (j = 0; j <= slices; j++) {
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
+  src = 0;
+  if (!texType) {
+    /* draw +Z end as a triangle fan */
+    glBegin(GL_TRIANGLE_FAN);
+    glNormal3f(0.0, 0.0, 1.0);
+    glVertex3f(0.0, 0.0, nsign * radius);
+    for (j = 0; j <= slices; j++) {
+      if (lighting) {
+	glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
       }
-      glEnd();
-    }
-
-    ds = 1.0 / slices;
-    dt = 1.0 / stacks;
-    t = 1.0;                    /* because loop now runs from 0 */
-    if (texType) {
-      imin = 0;
-      imax = stacks;
-    } else {
-      imin = 1;
-      imax = stacks - 1;
-    }
-
-    /* draw intermediate stacks as quad strips */
-    for (i = imin; i < imax; i++) {
-      glBegin(GL_QUAD_STRIP);
-      s = 0.0;
-      for (j = 0; j <= slices; j++) {
-
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-        }
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        if(texType) {
-          glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-        }
-        s += ds;
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-      }
-      glEnd();
-      t -= dt;
-    }
-
-    if (!texType) {
-      /* draw -Z end as a triangle fan */
-      glBegin(GL_TRIANGLE_FAN);
-      glNormal3f(0.0, 0.0, -1.0);
-      glVertex3f(0.0, 0.0, -radius * nsign);
-      s = 1.0;
-      t = dt;
-      for (j = slices; j >= 0; j--) {
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        s -= ds;
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-      }
-      glEnd();
-    }
-  } else if (m_drawType == GL_LINE || m_drawType == GLU_SILHOUETTE) {
-
-    src = 0;
-
-    for (i = 1; i < stacks;
-         i++) {    // stack line at i==stacks-1 was missing here
-      glBegin(GL_LINE_LOOP);
-      for (j = 0; j < slices; j++) {
-
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-      }
-      glEnd();
-    }
-
-    for (j = 0; j < slices; j++) {
-      glBegin(GL_LINE_STRIP);
-      for (i = 0; i <= stacks; i++) {
-
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-      }
-      glEnd();
-    }
-  }
-
-  else if (m_drawType == GL_POINT) {
-    /* top and bottom-most points */
-    glBegin(GL_POINTS);
-    if (lighting) {
-      glNormal3f(0.0, 0.0, nsign);
-    }
-    glVertex3d(0.0, 0.0, radius);
-    if (lighting) {
-      glNormal3f(0.0, 0.0, -nsign);
-    }
-    glVertex3d(0.0, 0.0, -radius);
-
-    src = 0;
-
-    for (i = 1; i < stacks - 1; i++) {
-      rho = i * drho;
-      for (j = 0; j < slices; j++) {
-        if (lighting) {
-          glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
-        }
-        glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
-        src++;
-      }
+      glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+      src++;
     }
     glEnd();
   }
+
+  ds = 1.0 / slices;
+  dt = 1.0 / stacks;
+  t = 1.0;                    /* because loop now runs from 0 */
+  if (texType) {
+    imin = 0;
+    imax = stacks;
+  } else {
+    imin = 1;
+    imax = stacks - 1;
+  }
+
+  glPushAttrib(GL_POLYGON_BIT);
+  glPolygonMode(GL_FRONT_AND_BACK, type);
+
+  /* draw intermediate stacks as quad strips */
+  for (i = imin; i < imax; i++) {
+    glBegin(GL_QUAD_STRIP);
+    s = 0.0;
+    for (j = 0; j <= slices; j++) {
+
+      if (lighting) {
+	glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+      }
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+      }
+      glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+      src++;
+      if (lighting) {
+	glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+      }
+      if(texType) {
+	glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+      }
+      s += ds;
+      glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+      src++;
+    }
+    glEnd();
+    t -= dt;
+  }
+
+  if (!texType) {
+    /* draw -Z end as a triangle fan */
+    glBegin(GL_TRIANGLE_FAN);
+    glNormal3f(0.0, 0.0, -1.0);
+    glVertex3f(0.0, 0.0, -radius * nsign);
+    s = 1.0;
+    t = dt;
+    for (j = slices; j >= 0; j--) {
+      if (lighting) {
+	glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
+      }
+      s -= ds;
+      glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
+      src++;
+    }
+    glEnd();
+  }
+  glPopAttrib();
 }
 /////////////////////////////////////////////////////////
 // static member function
