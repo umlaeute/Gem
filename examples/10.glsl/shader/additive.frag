@@ -8,7 +8,7 @@ uniform float t; // current time, in order to adjust the phase of signals from 1
 varying vec2 texcoord0; // pixel coordinate in the image
 
 float oscilator(float phase, float amplitude) { 
-	return (0.5 + 0.5*amplitude*cos(radians(360*phase)));
+	return (0.5 + 0.5*amplitude*cos(radians(360.*phase)));
 }
 
 float mtof(float midi) { // midi value to frequency value

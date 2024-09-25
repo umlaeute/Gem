@@ -1,7 +1,6 @@
-#N canvas 169 446 486 397 10;
+#N canvas 159 554 487 279 10;
 #X declare -lib Gem;
-#X obj 26 342 dac~;
-#X obj 60 228 oscillo~;
+#X obj 26 222 dac~;
 #X obj 26 187 *~ 5;
 #N canvas 671 180 972 717 audio_GPU 0;
 #X obj 39 332 declare -lib Gem;
@@ -366,8 +365,7 @@
 #X obj 26 14 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 51 15 <- start;
 #X text 48 166 Pd sould be configured at 48KHz;
-#X connect 2 0 0 0;
+#X connect 1 0 0 0;
+#X connect 1 0 0 1;
 #X connect 2 0 1 0;
-#X connect 2 0 0 1;
-#X connect 3 0 2 0;
-#X connect 6 0 3 0;
+#X connect 5 0 2 0;
