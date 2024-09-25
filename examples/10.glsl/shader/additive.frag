@@ -1,4 +1,3 @@
-#version 130
 #extension GL_ARB_texture_rectangle : enable
 // Cyrille Henry 2024
 
@@ -50,7 +49,7 @@ void main (void)
 
     // output color are 3 int value
     // conversion to color channels
-    outcolor = clamp (outcolor,-1.,1.);
+    outcolor = clamp (outcolor,0.,1.);
     float r = floor(outcolor*255.)/255.; // crop to 8 bits
     float g_float = 256.*(outcolor - r);
     float g = floor(g_float*255.)/255.; // crop to 8 bits
