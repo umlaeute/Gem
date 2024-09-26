@@ -359,7 +359,7 @@
 #X connect 8 0 4 1;
 #X restore 25 190 pd no_pop;
 #X text 86 167 Pd samplerate should be set to 48KHz;
-#X text 86 117 Rendering must be synced to audio dsp and a large buffer should be used \, so we need to clock everything with a block~ 4096 Latency is highly noticable!;
+#X text 86 117 Rendering must be synced to audio dsp and a large buffer should be used \, so we need to clock everything with a block~ 4096 Latency is highly noticeable!;
 #X text 85 69 This patch uses an image buffer to control the amplitude of 200 audio oscillators. Everything is computed inside the GPU.;
 #X connect 1 0 9 0;
 #X connect 2 0 1 0;
