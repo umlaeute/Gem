@@ -56,6 +56,6 @@ void main (void)
     //float b = floor(b_float*255.)/255.; // crop to 8 bits so the 24th bit is correct. it's maybe overkill...
 
 	// Float output
-    gl_FragColor = vec4(outcolor, 0. , 0., 1.0);
+    gl_FragColor = vec4(outcolor, outcolor, outcolor, 1.0);
 
 }
