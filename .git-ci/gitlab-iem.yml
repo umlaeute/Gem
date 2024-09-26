@@ -189,6 +189,7 @@ stages:
     - echo "PDDIR=${PDDIR}"
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew || true
     - brew list --full-name || true
+    - libtoolize --version || glibtoolize --version || brew install libtool || true
     # older versions of assimp are broken with clang>=14
     - sed -e 's|^\([[:space:]]*mTextureCoordsNames = new aiString \*\[AI_MAX_NUMBER_OF_TEXTURECOORDS\]\) {};[[:space:]]*$|\1; for (size_t i=0; i<AI_MAX_NUMBER_OF_TEXTURECOORDS; ++i) {mTextureCoordsNames[i] = nullptr;}|' -i.bak "$(brew --cellar)"/assimp-fat/5.2*/include/assimp/mesh.h || true
     - /usr/local/opt/gettext/bin/gettextize || true
