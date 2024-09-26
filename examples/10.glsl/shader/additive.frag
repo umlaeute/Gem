@@ -47,15 +47,15 @@ void main (void)
     }
     outcolor /= i; // normalisation
 
-    // output color are 3 int value
-    // conversion to color channels
     outcolor = clamp (outcolor,0.,1.);
-    float r = floor(outcolor*255.)/255.; // crop to 8 bits
-    float g_float = 256.*(outcolor - r);
-    float g = floor(g_float*255.)/255.; // crop to 8 bits
-    float b_float = 256.*(g_float - g);
-    float b = floor(b_float*255.)/255.; // crop to 8 bits so the 24th bit is correct. it's maybe overkill...
+    // output to 3 int value 
+    //float r = floor(outcolor*255.)/255.; // crop to 8 bits
+    //float g_float = 256.*(outcolor - r);
+    //float g = floor(g_float*255.)/255.; // crop to 8 bits
+    //float b_float = 256.*(g_float - g);
+    //float b = floor(b_float*255.)/255.; // crop to 8 bits so the 24th bit is correct. it's maybe overkill...
 
-    gl_FragColor = vec4(r, g , b, 1.0);
+	// Float output
+    gl_FragColor = vec4(outcolor, 0. , 0., 1.0);
 
 }
