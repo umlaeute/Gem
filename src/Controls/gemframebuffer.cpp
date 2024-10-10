@@ -469,6 +469,7 @@ void gemframebuffer :: initFBO()
 /////////////////////////////////////////////////////////
 void gemframebuffer :: destroyFBO()
 {
+  if(!m_haveinit) return;
   //if(!GLEW_EXT_framebuffer_object)return;
 
   // Release all resources.
