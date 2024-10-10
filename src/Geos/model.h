@@ -100,6 +100,7 @@ protected:
   //////////
   virtual void  render(GemState *state);
   virtual void  startRendering();
+  virtual void  stopRendering();
 
   gem::plugins::modelloader*m_loader;
   gem::modelGL*m_loaded;
