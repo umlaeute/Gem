@@ -35,7 +35,8 @@ namespace gem
     modelGL(gem::plugins::modelloader&loader);
     virtual ~modelGL(void);
 
-
+    /* destroy VBOs */
+    void destroy(void);
     /* update data */
     bool update(void);
     /* render the model in the current openGL context */

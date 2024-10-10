@@ -521,6 +521,14 @@ void model :: startRendering()
   if(m_loaded)
     m_loaded->update();
 }
+
+void model :: stopRendering()
+{
+  if(m_loaded)
+    m_loaded->destroy();
+}
+
+
 /////////////////////////////////////////////////////////
 // render
 //
