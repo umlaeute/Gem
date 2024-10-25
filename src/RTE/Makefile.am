@@ -23,6 +23,7 @@ libRTE_la_includedir = $(includedir)/Gem/RTE
 libRTE_la_include_HEADERS = \
 	RTE.h \
 	Array.h \
+        Atom.h \
 	MessageCallbacks.h
 
 
