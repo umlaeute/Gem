@@ -513,6 +513,7 @@ struct gemglxwindow::PIMPL {
     swa.border_pixel = 0;
     // event_mask creates signal that window has been created
     swa.event_mask = EVENT_MASK;
+    swa.override_redirect = False;
 
     int flags;
 #ifdef HAVE_LIBXXF86VM
