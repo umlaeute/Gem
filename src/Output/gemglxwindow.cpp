@@ -713,6 +713,10 @@ void gemglxwindow::dispatch(void)
   XKeyEvent* kb  = (XKeyEvent*)&event;
   unsigned long devID=0;
 
+  if(m_pimpl->fs)
+    XGrabKeyboard(m_pimpl->dpy, m_pimpl->win, True, GrabModeAsync, GrabModeAsync, CurrentTime);
+
+
   while (XCheckWindowEvent(m_pimpl->dpy,m_pimpl->win,
                            StructureNotifyMask |
                            KeyPressMask | KeyReleaseMask |
