@@ -533,19 +533,17 @@ struct gemglxwindow::PIMPL {
       XFree(modes);
 
       swa.override_redirect = True;
-      flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     } else
 #endif
     {
       // !fullscren
       if (border) {
         swa.override_redirect = False;
-        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
       } else {
         swa.override_redirect = True;
-        flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
       }
     }
+    flags=CWBorderPixel|CWColormap|CWEventMask|CWOverrideRedirect;
     fs = fullscreen;
     win = XCreateWindow(dpy, RootWindow(dpy, vi->screen),
                         x, y, w, h,
