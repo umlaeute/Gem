@@ -97,7 +97,7 @@ namespace {
       for(size_t i=0; i<4; i++) {
         int ch = channels[i];
         if(ch<0)continue;
-        t_float v = static_cast<t_float>(src[channels[ch]]) * scale;
+        t_float v = static_cast<t_float>(src[ch]) * scale;
         SETFLOAT(dest, v);
         dest++;
         count++;
@@ -114,7 +114,7 @@ namespace {
       for(size_t i=0; i<3; i++) {
         int ch = channels[i];
         //if(ch<0)continue;
-        t_float v = static_cast<t_float>(src[channels[ch]]) * scale;
+        t_float v = static_cast<t_float>(src[ch]) * scale;
         SETFLOAT(dest, v);
         dest++;
         count++;
