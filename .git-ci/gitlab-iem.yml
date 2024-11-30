@@ -75,7 +75,7 @@ stages:
   script:
     - *script_zsh_compat
     # set SOURCE_DATE_EPOCH for reproducible builds
-    - export SOURCE_DATE_EPOCH="$(date --date="${CI_COMMIT_TIMESTAMP}" +%s 2>/dev/null || date -j -f %Y-%m-%dT%H:%M:%SZ "${CI_COMMIT_TIMESTAMP}" +%s || echo ${SOURCE_DATE_EPOCH})"
+    - export SOURCE_DATE_EPOCH="$(date --date="${CI_COMMIT_TIMESTAMP}" +%s 2>/dev/null || date -j -f %Y-%m-%dT%H:%M:%SZ "$(echo ${CI_COMMIT_TIMESTAMP} | sed -e 's|\([+-][0-9][0-9]\):\([0-9][0-9]\)$|\1\2|')" +%s || echo ${SOURCE_DATE_EPOCH})"
     - echo "${CI_COMMIT_TIMESTAMP} -> ${SOURCE_DATE_EPOCH}"
     # handle Pd64 jobs
     - if test "${OS}" = "Windows_NT"; then defaultext="dll"; else defaultext="so"; fi
