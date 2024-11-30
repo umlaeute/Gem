@@ -131,6 +131,7 @@ stages:
     - apt-get update
     - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
     - apt-get build-dep ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
+    - apt-get install git
     - g++ -v
 
 .build:macos:
