@@ -1,6 +1,7 @@
 
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
 AM_CPPFLAGS = -I$(top_srcdir)/src $(GEM_EXTERNAL_CPPFLAGS)
+AM_LIBTOOLFLAGS = --tag=CXX
 
 EXTRA_DIST =
 
