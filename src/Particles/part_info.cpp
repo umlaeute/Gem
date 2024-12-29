@@ -87,9 +87,9 @@ part_info :: ~part_info()
 /////////////////////////////////////////////////////////
 void part_info :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)    {
-    pMove();
-  }
+//  if (m_tickTime > 0.f)    {
+//    pMove();
+//  }
   //    pDrawGroupp();
   int cnt = pGetGroupCount();
   if(cnt < 1) {
