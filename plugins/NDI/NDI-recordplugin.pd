@@ -5,11 +5,11 @@
 #X text 89 47 recordNDI - send NDI video streams;
 #X text 89 57 ==================================;
 #X msg 261 102 codec ndi;
-#X msg 261 162 filename TestStream;
+#X msg 261 162 file TestStream;
 #X msg 261 212 record 1;
 #X text 75 161 2- name the NDI-stream;
 #X text 75 211 3- start sending out stream;
-#X msg 260 362 filename Waiting\ Man;
+#X msg 260 362 file Waiting\ Man;
 #X text 74 332 If your streamname should contain spaces \, escape them with backspace., f 74;
 #X connect 5 0 1 0;
 #X connect 6 0 1 0;

@@ -6,7 +6,7 @@
 #X text 89 47 recordV4L2 - output pixes with the video4linux2 framework;
 #X text 89 57 =========================================================;
 #X msg 261 102 codec v4l2;
-#X msg 261 162 filename /dev/video1;
+#X msg 261 162 file /dev/video1;
 #X text 75 161 2- select a V4L2 output device;
 #X msg 135 369 https://github.com/umlaeute/v4l2loopback;
 #N canvas 0 0 204 175 URL 0;
