@@ -401,7 +401,11 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
 
   if(bgav_can_seek(m_file)) {
     if(0) {
-#if USE_FRAMETABLE
+#if HAVE_BGAV_SEEK_TO_VIDEO_FRAME
+    } else if (1) {
+      bgav_seek_to_video_frame(m_file, m_track, imgNum);
+      return film::SUCCESS;
+#elif USE_FRAMETABLE
     } else if(m_frametable) {
       //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum,
