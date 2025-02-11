@@ -24,7 +24,7 @@ extern "C" {
 # include <gmerlin/avdec.h>
 
 # include <gmerlin/bgav_version.h>
-# if BGAV_BUILD >= BGAV_MAKE_BUILD(1,0,2)
+# if BGAV_BUILD >= BGAV_MAKE_BUILD(1,0,2) && !HAVE_BGAV_SEEK_TO_VIDEO_FRAME
 #  define USE_FRAMETABLE 1
 # else
 #  define USE_FRAMETABLE 0
