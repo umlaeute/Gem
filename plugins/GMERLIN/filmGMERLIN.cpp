@@ -66,7 +66,7 @@ filmGMERLIN :: filmGMERLIN(void) :
   m_gconverter(NULL),
   m_fps(0.), m_fps_num(1), m_fps_denum(1),
   m_next_timestamp(0),
-#ifdef USE_FRAMETABLE
+#if USE_FRAMETABLE
   m_frametable(NULL),
 #endif
   m_doConvert(false)
@@ -93,7 +93,7 @@ void filmGMERLIN :: close(void)
     bgav_close(m_file);
   }
   m_file=NULL;
-#ifdef USE_FRAMETABLE
+#if USE_FRAMETABLE
   if(m_frametable) {
     gavl_frame_table_destroy(m_frametable);
   }
@@ -312,7 +312,8 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   m_fps_denum=gformat->frame_duration;
 
   m_numFrames=-1;
-#ifdef USE_FRAMETABLE
+
+#if USE_FRAMETABLE
   m_frametable=bgav_get_frame_table(m_file, m_track);
   if(m_frametable) {
     m_numFrames=gavl_frame_table_num_frames (m_frametable);
@@ -381,7 +382,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
               numvstreams);
       if(numvstreams) {
         bgav_select_track(m_file, m_track);
-#ifdef USE_FRAMETABLE
+#if USE_FRAMETABLE
         if(m_frametable) {
           gavl_frame_table_destroy(m_frametable);
           m_frametable=bgav_get_frame_table(m_file, m_track);
@@ -400,7 +401,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
 
   if(bgav_can_seek(m_file)) {
     if(0) {
-#ifdef USE_FRAMETABLE
+#if USE_FRAMETABLE
     } else if(m_frametable) {
       //  no assumptions about fixed framerate
       int64_t seekpos = gavl_frame_table_frame_to_time(m_frametable, imgNum,

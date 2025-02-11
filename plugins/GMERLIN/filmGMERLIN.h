@@ -25,9 +25,9 @@ extern "C" {
 
 # include <gmerlin/bgav_version.h>
 # if BGAV_BUILD >= BGAV_MAKE_BUILD(1,0,2)
-#  define USE_FRAMETABLE
+#  define USE_FRAMETABLE 1
 # else
-#  undef USE_FRAMETABLE
+#  define USE_FRAMETABLE 0
 # endif
 
 # ifdef HAVE_GAVL_LOG_H
