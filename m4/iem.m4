@@ -33,7 +33,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 15
+#serial 16
 
 
 
@@ -68,4 +68,33 @@ AC_DEFUN([IEM_CHECK_INCLUDES_DEFAULT], [
 [#] include <${__iem_check_includes_default_hdr}>
 [#]endif"
    done
+])
+
+#
+# SYNOPSIS
+#
+#   IEM_CHECK_FUNCS(function..., [action-if-found], [action-if-not-found], [additional-cflags], [additional-libs])
+#
+# DESCRIPTION
+#
+#    check for functions
+#
+#    For each function enumerated in the blank-or-newline-separated argument list,
+#    define HAVE_function (in all capitals) if it is available.
+#    if additional-cflags is given, it is temporarily appended to the CFLAGS.
+#    if additional-libs is given, it is temporarily appended to the LIBS
+#
+#   Example:
+#
+#   IEM_CHECK_FUNCS([foo bar], [], [], [-DHAVE_FOO=1], [-lfoo])
+#
+AC_DEFUN([IEM_CHECK_FUNCS], [
+ tmp_iemcheckfuncs_cflags="$CFLAGS"
+ tmp_iemcheckfuncs_libs="$LIBS"
+ CFLAGS="$CFLAGS $4"
+ LIBS="$LIBS $5"
+ AC_CHECK_FUNCS([$1], [$2], [$3])
+
+ CFLAGS="${tmp_iemcheckfuncs_cflags}"
+ LIBS="${tmp_iemcheckfuncs_libs}"
 ])
