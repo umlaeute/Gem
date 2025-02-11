@@ -398,6 +398,10 @@ GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie l
 GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec],[gmerlin/avdec.h], [gavl_start],,,,[movie loader])
 AS_IF([test "x$have_gmerlin_avdec" = "xyes"], [
   AC_CHECK_HEADERS([gavl/log.h])
+  IEM_CHECK_FUNCS([bgav_seek_to_video_frame bgav_num_video_frames],[],[],
+                  [$GEM_LIB_GMERLIN_AVDEC_CFLAGS],
+                  [$GEM_LIB_GMERLIN_AVDEC_LIBS],
+                 )
 ])
 GEM_CHECK_LIB([mpeg], [mpeg],[mpeg.h], [OpenMPEG],,,,[movie loader])
 GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie loader])
