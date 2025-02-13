@@ -15,8 +15,7 @@
 \.libs
 
 # out-of-tree builds
-/build-*/
-/build/
+/_*/
 # autotools byproducts
 Makefile\.in
 /aclocal\.m4
