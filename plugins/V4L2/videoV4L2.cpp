@@ -433,9 +433,9 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
     int i=0;
     for(i=0; i<alldev.size(); i++) {
       std::string dev=alldev[i];
-      verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
+      logpost(0, 3+1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
       int fd=v4l2_open(dev.c_str(), O_RDWR);
-      verbose(1, "[GEM:videoV4L2] v4l2_open returned %d", fd);
+      logpost(0, 3+1, "[GEM:videoV4L2] v4l2_open returned %d", fd);
       if(fd<0) {
         continue;
       }
@@ -448,12 +448,12 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
           break;
         }
       } else {
-        verbose(1, "[GEM:videoV4L2] %s is no v4l2 device\n", dev.c_str());
+        logpost(0, 3+1, "[GEM:videoV4L2] %s is no v4l2 device\n", dev.c_str());
       }
       v4l2_close(fd);
     }
     if ( i >= alldev.size() ) {
-      verbose(0, "[GEM:videoV4L2] no v4l2 input device on bus %s\n",
+      logpost(0, 3+0, "[GEM:videoV4L2] no v4l2 input device on bus %s\n",
               devname.c_str());
       devname = "";
     }
@@ -467,7 +467,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
 
   if (-1 == m_tvfd) {
-    verbose(0, "[GEM:videoV4L2] Cannot open '%s': %d, %s", dev_name, errno,
+    logpost(0, 3+0, "[GEM:videoV4L2] Cannot open '%s': %d, %s", dev_name, errno,
             strerror (errno));
     closeDevice();
     return false;
@@ -475,14 +475,14 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
 
   struct stat st;
   if (-1 == fstat (m_tvfd, &st)) {
-    verbose(0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno,
+    logpost(0, 3+0, "[GEM:videoV4L2] Cannot identify '%s': %d, %s", dev_name, errno,
             strerror (errno));
     closeDevice();
     return false;
   }
 
   if (!S_ISCHR (st.st_mode)) {
-    verbose(0, "[GEM:videoV4L2] %s is no device", dev_name);
+    logpost(0, 3+0, "[GEM:videoV4L2] %s is no device", dev_name);
     closeDevice();
     return false;
   }
@@ -492,7 +492,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
   struct v4l2_capability cap;
   if (-1 == xioctl (m_tvfd, VIDIOC_QUERYCAP, &cap)) {
     if (EINVAL == errno) {
-      verbose(0, "[GEM:videoV4L2] %s is no V4L2 device",  dev_name);
+      logpost(0, 3+0, "[GEM:videoV4L2] %s is no V4L2 device",  dev_name);
       closeDevice();
       return false;
     } else {
@@ -503,26 +503,26 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
   }
 
   if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
-    verbose(0, "[GEM:videoV4L2] %s is no video capture device", dev_name);
+    logpost(0, 3+0, "[GEM:videoV4L2] %s is no video capture device", dev_name);
     closeDevice();
     return false;
   }
 
   if (!(cap.capabilities & V4L2_CAP_STREAMING)) {
-    verbose(0, "[GEM:videoV4L2] %s does not support streaming i/o", dev_name);
+    logpost(0, 3+0, "[GEM:videoV4L2] %s does not support streaming i/o", dev_name);
     closeDevice();
     return false;
   }
 
 #if defined V4L2_CAP_DEVICE_CAPS && defined V4L2_CAP_META_CAPTURE
   if (cap.capabilities & V4L2_CAP_DEVICE_CAPS && V4L2_CAP_META_CAPTURE & cap.device_caps) {
-    verbose(0, "[GEM:videoV4L2] %s is a metadata device", dev_name);
+    logpost(0, 3+0, "[GEM:videoV4L2] %s is a metadata device", dev_name);
     closeDevice();
     return false;
   }
 #endif
 
-  verbose(1, "[GEM:videoV4L2] successfully opened %s", dev_name);
+  logpost(0, 3+1, "[GEM:videoV4L2] successfully opened %s", dev_name);
 
   setProperties(props);
 
@@ -530,7 +530,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
 }
 void videoV4L2 :: closeDevice()
 {
-  verbose(1, "[GEM:videoV4L2] closing device %d", m_tvfd);
+  logpost(0, 3+1, "[GEM:videoV4L2] closing device %d", m_tvfd);
   if (m_tvfd>=0) {
     v4l2_close(m_tvfd);
   }
@@ -574,7 +574,7 @@ bool videoV4L2 :: startTransfer()
   debugPost("v4l2: start transfer");
   m_stopTransfer=false;
   m_rendering=true;
-  verbose(1, "[GEM:videoV4L2] starting transfer");
+  logpost(0, 3+1, "[GEM:videoV4L2] starting transfer");
   int i;
 
   __u32 pixelformat=0;
@@ -613,7 +613,7 @@ bool videoV4L2 :: startTransfer()
   if(fmt.fmt.pix.pixelformat != pixelformat) {
     fmt.fmt.pix.pixelformat = pixelformat;
 
-    verbose(1, "[GEM:videoV4L2] want 0x%X == '%c%c%c%c' ", m_reqFormat,
+    logpost(0, 3+1, "[GEM:videoV4L2] want 0x%X == '%c%c%c%c' ", m_reqFormat,
             (char)(fmt.fmt.pix.pixelformat),
             (char)(fmt.fmt.pix.pixelformat>>8),
             (char)(fmt.fmt.pix.pixelformat>>16),
@@ -693,7 +693,7 @@ bool videoV4L2 :: startTransfer()
     /* we should really return here! */
   }
 
-  verbose(1, "[GEM:videoV4L2] got '%c%c%c%c'",
+  logpost(0, 3+1, "[GEM:videoV4L2] got '%c%c%c%c'",
           (char)(m_gotFormat),
           (char)(m_gotFormat>>8),
           (char)(m_gotFormat>>16),
@@ -768,7 +768,7 @@ bool videoV4L2 :: startTransfer()
     debugPost("v4l2: waiting for thread to come up");
   }
 
-  verbose(1, "[GEM:videoV4L2] Opened video connection 0x%X", m_tvfd);
+  logpost(0, 3+1, "[GEM:videoV4L2] Opened video connection 0x%X", m_tvfd);
 
   return(1);
 
@@ -857,9 +857,9 @@ std::vector<std::string> videoV4L2::enumerate()
 
   for(int i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
-    verbose(1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
+    logpost(0, 3+1, "[GEM:videoV4L2] found possible device %s", dev.c_str());
     int fd=v4l2_open(dev.c_str(), O_RDWR);
-    verbose(1, "[GEM:videoV4L2]  v4l2_open returned %d", fd);
+    logpost(0, 3+1, "[GEM:videoV4L2]  v4l2_open returned %d", fd);
     if(fd<0) {
       continue;
     }
@@ -867,16 +867,16 @@ std::vector<std::string> videoV4L2::enumerate()
     memset (&cap, 0, sizeof (cap));
     if (-1 != xioctl (fd, VIDIOC_QUERYCAP, &cap)) {
       if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
-        verbose(1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
+        logpost(0, 3+1, "[GEM:videoV4L2] %s is v4l2 but cannot capture", dev.c_str());
 #if defined V4L2_CAP_DEVICE_CAPS && defined V4L2_CAP_META_CAPTURE
       } else if (cap.capabilities & V4L2_CAP_DEVICE_CAPS && V4L2_CAP_META_CAPTURE & cap.device_caps) {
-        verbose(1, "[GEM:videoV4L2] %s is a v4l2 meta device", dev.c_str());
+        logpost(0, 3+1, "[GEM:videoV4L2] %s is a v4l2 meta device", dev.c_str());
 #endif
       } else {
         result.push_back(dev);
       }
     } else {
-      verbose(1, "[GEM:videoV4L2] %s is no v4l2 device", dev.c_str());
+      logpost(0, 3+1, "[GEM:videoV4L2] %s is no v4l2 device", dev.c_str());
     }
     v4l2_close(fd);
   }

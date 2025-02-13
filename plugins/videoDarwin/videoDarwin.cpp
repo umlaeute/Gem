@@ -82,13 +82,13 @@ videoDarwin :: ~videoDarwin()
   close();
   if (m_vc) {
     if (::SGDisposeChannel(m_sg, m_vc)) {
-      verbose(0, "[GEM:videoDarwin] Unable to dispose a video channel");
+      logpost(0, 3+0, "[GEM:videoDarwin] Unable to dispose a video channel");
     }
     m_vc = NULL;
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      verbose(0,
+      logpost(0, 3+0,
               "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
@@ -142,7 +142,7 @@ bool videoDarwin :: grabFrame()
     m_newFrame = true;
   }
   if (!m_haveVideo) {
-    verbose(0, "[GEM:videoDarwin] no video yet");
+    logpost(0, 3+0, "[GEM:videoDarwin] no video yet");
     return true;
   }
   m_img.copy2Image(&m_image.image);
@@ -191,23 +191,23 @@ bool videoDarwin :: initSeqGrabber()
 
   m_sg = OpenDefaultComponent(SeqGrabComponentType, 0);
   if(m_sg==NULL) {
-    verbose(0, "[GEM:videoDarwin] could not open default component");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not open default component");
     return false;
   }
   anErr = SGInitialize(m_sg);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not initialize SG error %d",anErr);
+    logpost(0, 3+0, "[GEM:videoDarwin] could not initialize SG error %d",anErr);
     return false;
   }
 
   anErr = SGSetDataRef(m_sg, 0, 0, seqGrabDontMakeMovie);
   if (anErr != noErr) {
-    verbose(0, "[GEM:videoDarwin] dataref failed with error %d",anErr);
+    logpost(0, 3+0, "[GEM:videoDarwin] dataref failed with error %d",anErr);
   }
 
   anErr = SGNewChannel(m_sg, VideoMediaType, &m_vc);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not make new SG channel error %d",
+    logpost(0, 3+0, "[GEM:videoDarwin] could not make new SG channel error %d",
             anErr);
     return false;
   }
@@ -215,7 +215,7 @@ bool videoDarwin :: initSeqGrabber()
   enumerate();
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not get SG channel Device List");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not get SG channel Device List");
   } else {
     deviceCount = (*devices)->count;
     m_inputDevice = (*devices)->selectedIndex;
@@ -239,17 +239,17 @@ bool videoDarwin :: initSeqGrabber()
   if (m_inputDevice >= 0
       && m_inputDevice < deviceCount) {//check that the device is not out of bounds
     std::string devname=pascal2str((*devices)->entry[m_inputDevice].name);
-    verbose(1, "[GEM:videoDarwin] SGSetChannelDevice trying[%d] %s",
+    logpost(0, 3+1, "[GEM:videoDarwin] SGSetChannelDevice trying[%d] %s",
             m_inputDevice, devname.c_str());
   }
   anErr = SGSetChannelDevice(m_vc, (*devices)->entry[m_inputDevice].name);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] SGSetChannelDevice returned error %d",anErr);
+    logpost(0, 3+0, "[GEM:videoDarwin] SGSetChannelDevice returned error %d",anErr);
   }
 
   anErr = SGSetChannelDeviceInput(m_vc,m_inputDeviceChannel);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] SGSetChannelDeviceInput returned error %d",
+    logpost(0, 3+0, "[GEM:videoDarwin] SGSetChannelDeviceInput returned error %d",
             anErr);
   }
 
@@ -261,33 +261,33 @@ bool videoDarwin :: initSeqGrabber()
   Str255    vdigName;
   memset(vdigName,0,255);
   vdigErr = VDGetInputName(m_vdig,m_inputDevice,vdigName);
-  verbose(1, "[GEM:videoDarwin] vdigName is %s",
+  logpost(0, 3+1, "[GEM:videoDarwin] vdigName is %s",
           pascal2str(vdigName).c_str());
 
   Rect vdRect;
   vdigErr = VDGetDigitizerRect(m_vdig,&vdRect);
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:videoDarwin] digitizer rect is top %d bottom %d left %d right %d",
           vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   vdigErr = VDGetActiveSrcRect(m_vdig,0,&vdRect);
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:videoDarwin] active src rect is top %d bottom %d left %d right %d",
           vdRect.top,vdRect.bottom,vdRect.left,vdRect.right);
 
   anErr = SGSetChannelBounds(m_vc, &srcRect);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not set SG ChannelBounds ");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not set SG ChannelBounds ");
   }
 
   anErr = SGSetVideoRect(m_vc, &srcRect);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not set SG Rect ");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not set SG Rect ");
   }
 
   anErr = SGSetChannelUsage(m_vc, seqGrabPreview);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not set SG ChannelUsage ");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not set SG ChannelUsage ");
   }
   SGSetChannelPlayFlags(m_vc, m_quality);
   OSType pixelFormat=0;
@@ -298,12 +298,12 @@ bool videoDarwin :: initSeqGrabber()
     m_img.setFormat(m_colorspace);
     m_rowBytes = m_width*m_img.csize;
     pixelFormat=k32ARGBPixelFormat;
-    verbose(1, "[GEM:videoDarwin] using RGB");
+    logpost(0, 3+1, "[GEM:videoDarwin] using RGB");
   } else {
     m_img.setFormat(GEM_YUV);
     m_rowBytes = m_width*2;
     pixelFormat=k422YpCbCr8PixelFormat;
-    verbose(1, "[GEM:videoDarwin] using YUV");
+    logpost(0, 3+1, "[GEM:videoDarwin] using YUV");
   }
   m_img.reallocate();
   anErr = QTNewGWorldFromPtr (&m_srcGWorld,
@@ -316,11 +316,11 @@ bool videoDarwin :: initSeqGrabber()
                               m_rowBytes);
 
   if (anErr!= noErr) {
-    verbose(0, "[GEM:videoDarwin] %d error at QTNewGWorldFromPtr", anErr);
+    logpost(0, 3+0, "[GEM:videoDarwin] %d error at QTNewGWorldFromPtr", anErr);
     return false;
   }
   if (NULL == m_srcGWorld) {
-    verbose(0, "[GEM:videoDarwin] could not allocate off screen");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not allocate off screen");
     return false;
   }
   SGSetGWorld(m_sg,(CGrafPtr)m_srcGWorld, NULL);
@@ -343,13 +343,13 @@ void videoDarwin :: destroySeqGrabber()
 {
   if (m_vc) {
     if (::SGDisposeChannel(m_sg, m_vc)) {
-      verbose(0, "[GEM:videoDarwin] Unable to dispose a video channel");
+      logpost(0, 3+0, "[GEM:videoDarwin] Unable to dispose a video channel");
     }
     m_vc = NULL;
   }
   if (m_sg) {
     if (::CloseComponent(m_sg)) {
-      verbose(0,
+      logpost(0, 3+0,
               "[GEM:videoDarwin] Unable to dispose a sequence grabber component");
     }
     m_sg = NULL;
@@ -363,7 +363,7 @@ void videoDarwin :: destroySeqGrabber()
 void videoDarwin :: resetSeqGrabber()
 {
   OSErr anErr;
-  verbose(1, "[GEM:videoDarwin] starting reset");
+  logpost(0, 3+1, "[GEM:videoDarwin] starting reset");
 
   destroySeqGrabber();
   initSeqGrabber();
@@ -696,17 +696,17 @@ std::vector<std::string> videoDarwin::enumerate()
 
   anErr = SGGetChannelDeviceList(m_vc, sgDeviceListIncludeInputs, &devices);
   if(anErr!=noErr) {
-    verbose(0, "[GEM:videoDarwin] could not get SG channel Device List");
+    logpost(0, 3+0, "[GEM:videoDarwin] could not get SG channel Device List");
   } else {
     short deviceCount = (*devices)->count;
     short deviceIndex = (*devices)->selectedIndex;
     short inputIndex;
-    verbose(1, "[GEM:videoDarwin] SG channel Device List count %d index %d",
+    logpost(0, 3+1, "[GEM:videoDarwin] SG channel Device List count %d index %d",
             deviceCount,deviceIndex);
     m_devices.clear();
     for (int i = 0; i < deviceCount; i++) {
       m_devices.push_back(pascal2str((*devices)->entry[i].name));
-      verbose(1, "[GEM:videoDarwin] SG channel Device List[%d]  %s", i,
+      logpost(0, 3+1, "[GEM:videoDarwin] SG channel Device List[%d]  %s", i,
               m_devices[i].c_str());
     }
     SGGetChannelDeviceAndInputNames(m_vc, NULL, NULL, &inputIndex);
@@ -721,7 +721,7 @@ std::vector<std::string> videoDarwin::enumerate()
     //walk through the list
     for (int i = 0; i < inputIndex; i++) {
       std::string input=pascal2str((*theSGInputList)->entry[i].name);
-      verbose(1, "[GEM:videoDarwin] SG channel Input Device List %d %s",
+      logpost(0, 3+1, "[GEM:videoDarwin] SG channel Input Device List %d %s",
               i, input.c_str());
     }
   }

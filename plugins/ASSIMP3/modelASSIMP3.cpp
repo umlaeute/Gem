@@ -367,7 +367,7 @@ void modelASSIMP3 :: setProperties(gem::Properties&props)
     std::string s;
     double d;
 #if 0
-    verbose(1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(),
+    logpost(0, 3+1, "[GEM:modelASSIMP3] key[%d]=%s ... %d", i, keys[i].c_str(),
             props.type(keys[i]));
 #endif
     if("textype" == key) {

@@ -78,9 +78,9 @@ static bool showException(ExceptionInfo*exception,
   }
 
   if(iswarning) {
-    verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
+    logpost(0, 3+0, "[GEM:imageMAGICK] %s", message.c_str());
   } else {
-    verbose(0, "[GEM:imageMAGICK] %s", message.c_str());
+    logpost(0, 3+0, "[GEM:imageMAGICK] %s", message.c_str());
   }
   return (!iswarning);
 }

@@ -250,7 +250,7 @@ bool videoV4L :: openDevice(gem::Properties&props)
 
   for (int i = 0; i < vcap.channels; i++) {
     vchannel.channel = i;
-    verbose(1, "[GEM:videoV4L] getting channel info for #%d", i);
+    logpost(0, 3+1, "[GEM:videoV4L] getting channel info for #%d", i);
     if (v4l1_ioctl(tvfd, VIDIOCGCHAN, &vchannel) < 0)  {
       perror("[GEM:videoV4L] VIDIOCGCHAN");
       goto closit;
@@ -426,7 +426,7 @@ bool videoV4L :: startTransfer()
 
   m_haveVideo = 1;
 
-  verbose(1, "[GEM:videoV4L] startTransfer opened video connection %X",
+  logpost(0, 3+1, "[GEM:videoV4L] startTransfer opened video connection %X",
           tvfd);
   return true;
 }
@@ -471,9 +471,9 @@ std::vector<std::string> videoV4L::enumerate()
 
   for(int i=0; i<allglob.size(); i++) {
     std::string dev=allglob[i];
-    verbose(1, "[GEM:videoV4L] found possible device %s", dev.c_str());
+    logpost(0, 3+1, "[GEM:videoV4L] found possible device %s", dev.c_str());
     int fd=v4l1_open(dev.c_str(), O_RDONLY | O_NONBLOCK);
-    verbose(1, "[GEM:videoV4L] v4l1_open returned %d", fd);
+    logpost(0, 3+1, "[GEM:videoV4L] v4l1_open returned %d", fd);
     if(fd<0) {
       continue;
     }
@@ -481,10 +481,10 @@ std::vector<std::string> videoV4L::enumerate()
       if (vcap.type & VID_TYPE_CAPTURE) {
         result.push_back(dev);
       } else {
-        verbose(1, "[GEM:videoV4L] %s is v4l1 but cannot capture", dev.c_str());
+        logpost(0, 3+1, "[GEM:videoV4L] %s is v4l1 but cannot capture", dev.c_str());
       }
     } else {
-      verbose(1, "[GEM:videoV4L] %s is no v4l1 device", dev.c_str());
+      logpost(0, 3+1, "[GEM:videoV4L] %s is no v4l1 device", dev.c_str());
     }
 
     v4l1_close(fd);
@@ -662,13 +662,13 @@ void videoV4L::setProperties(gem::Properties&props)
 
   /* do compound settings */
   if(do_s_chan) {
-    verbose(2, "[GEM:videoV4L] calling VIDIOCSCHAN");
+    logpost(0, 3+2, "[GEM:videoV4L] calling VIDIOCSCHAN");
     if (v4l1_ioctl(tvfd, VIDIOCSCHAN, &vchannel) < 0) {
       perror("[GEM:videoV4L] VDIOCSCHAN");
     }
   }
   if(do_s_pict) {
-    verbose(2, "[GEM:videoV4L] calling VIDIOCSPICT");
+    logpost(0, 3+2, "[GEM:videoV4L] calling VIDIOCSPICT");
     if (v4l1_ioctl(tvfd, VIDIOCSPICT, &vpicture) < 0) {
       perror("[GEM:videoV4L] VIDIOCSPICT");
     }

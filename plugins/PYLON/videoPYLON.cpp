@@ -213,7 +213,7 @@ gem::any node2any(GenApi::INode*node)
       break;
     }
   } catch (GenICam::GenericException &e) {
-    verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+    logpost(0, 3+0, "[GEM:videoPYLON] %s", e.GetDescription());
     result.reset();
   }
   return result;
@@ -285,7 +285,7 @@ bool any2node(GenApi::INode*node, const gem::any&value)
       break;
     }
   } catch (GenICam::GenericException &e) {
-    verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+    logpost(0, 3+0, "[GEM:videoPYLON] %s", e.GetDescription());
     return false;
   }
   return true;
@@ -425,7 +425,7 @@ std::vector<std::string> videoPYLON::enumerate()
 
   Pylon::DeviceInfoList_t devices;
   if (!m_factory->EnumerateDevices(devices))  {
-    verbose(1, "[GEM:videoPYLON] could not enumerate %d", devices.size());
+    logpost(0, 3+1, "[GEM:videoPYLON] could not enumerate %d", devices.size());
     return result;
   }
 
@@ -433,7 +433,7 @@ std::vector<std::string> videoPYLON::enumerate()
     std::string name;
     bool added=false;
 #if 0
-#define SHOWNAME(x, s) if(!s.empty())verbose(1, "[GEM::videoPYLON] device#%d['%s']\t%s", device - devices.begin(), x, s.c_str())
+#define SHOWNAME(x, s) if(!s.empty())logpost(0, 3+1, "[GEM::videoPYLON] device#%d['%s']\t%s", device - devices.begin(), x, s.c_str())
 #else
 #define SHOWNAME(x, s)
 #endif
@@ -514,14 +514,14 @@ bool videoPYLON :: open(gem::Properties&props)
       }
     }
   } catch (GenICam::GenericException &e) {
-    verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+    logpost(0, 3+0, "[GEM:videoPYLON] %s", e.GetDescription());
     return false;
   }
 
   if(device) {
-    verbose(0, "[GEM:videoPYLON] found device '%s'", device->GetDeviceInfo().GetFullName().c_str());
+    logpost(0, 3+0, "[GEM:videoPYLON] found device '%s'", device->GetDeviceInfo().GetFullName().c_str());
   } else {
-    verbose(1, "[GEM:videoPYLON] creating device failed!");
+    logpost(0, 3+1, "[GEM:videoPYLON] creating device failed!");
     return false;
   }
 
@@ -529,11 +529,11 @@ bool videoPYLON :: open(gem::Properties&props)
     m_camera.Attach(device);
     m_camera.Open();
   } catch (GenICam::GenericException &e) {
-    verbose(0, "[GEM:videoPYLON] %s", e.GetDescription());
+    logpost(0, 3+0, "[GEM:videoPYLON] %s", e.GetDescription());
     close();
     return false;
   } catch (std::exception &e) {
-    verbose(0, "[GEM:videoPYLON] %s", e.what());
+    logpost(0, 3+0, "[GEM:videoPYLON] %s", e.what());
     close();
     return false;
   }
@@ -597,7 +597,7 @@ bool videoPYLON :: stop()
 bool videoPYLON :: reset()
 {
   MARK();
-  verbose(0, "[GEM:videoPYLON] 'reset' not implemented");
+  logpost(0, 3+0, "[GEM:videoPYLON] 'reset' not implemented");
   return false;
 }
 

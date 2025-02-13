@@ -80,7 +80,7 @@ static int guess_channels(const std::string&filename)
   unsigned int i=0;
 
   if(!extension) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:recordPNM] no extension given: encoding will be PPM");
     return 3;
   }
@@ -94,7 +94,7 @@ static int guess_channels(const std::string&filename)
     return 3;
   }
 
-  verbose(0,
+  logpost(0, 3+0,
           "[GEM:recordPNM] unknown extension: encoding will be PPM");
   return 3;
 }

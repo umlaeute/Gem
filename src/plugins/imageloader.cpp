@@ -77,7 +77,7 @@ public:
         id.push_back(ID);
       } else {
         // request for an unavailable ID
-        verbose(2, "backend '%s' unavailable", ID.c_str());
+        logpost(0, 3+2, "backend '%s' unavailable", ID.c_str());
         return false;
       }
     } else {
@@ -87,7 +87,7 @@ public:
 
     for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
-      verbose(2, "trying to add '%s' as backend", key.c_str());
+      logpost(0, 3+2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
         // not yet added, do so now!
         gem::plugins::imageloader*loader=NULL;
@@ -95,7 +95,7 @@ public:
           loader=gem::PluginFactory<gem::plugins::imageloader>::getInstance(key);
         } catch(GemException&x) {
           loader=NULL;
-          verbose(1, "cannot use image loader plugin '%s': %s", key.c_str(),
+          logpost(0, 3+1, "cannot use image loader plugin '%s': %s", key.c_str(),
                   x.what());
         }
         if(NULL==loader) {
@@ -104,7 +104,7 @@ public:
         m_ids.push_back(key);
         m_loaders.push_back(loader);
         count++;
-        verbose(2, "added backend#%d '%s' @ %p", (int)(m_loaders.size()-1),
+        logpost(0, 3+2, "added backend#%d '%s' @ %p", (int)(m_loaders.size()-1),
                 key.c_str(), loader);
       }
     }

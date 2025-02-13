@@ -112,13 +112,13 @@ void filmGMERLIN::log(gavl_log_level_t level, const char *log_domain,
 {
   switch(level) {
   case GAVL_LOG_DEBUG:
-    verbose(1, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
+    logpost(0, 3+1, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
   case GAVL_LOG_INFO:
-    verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
+    logpost(0, 3+0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
   case GAVL_LOG_WARNING:
-    verbose(0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
+    logpost(0, 3+0, "[GEM:filmGMERLIN:%s] %s", log_domain, message);
     break;
   case GAVL_LOG_ERROR:
     pd_error(0, "[GEM:filmGMERLIN:%s!] %s", log_domain, message);
@@ -199,23 +199,23 @@ bool filmGMERLIN :: open(const std::string&sfilename,
 
   if(!strncmp(filename, "vcd://", 6)) {
     if(!bgav_open_vcd(m_file, filename + 5)) {
-      verbose(0, "[GEM:filmGMERLIN] Could not open VCD Device %s",
+      logpost(0, 3+0, "[GEM:filmGMERLIN] Could not open VCD Device %s",
               filename + 5);
       return false;
     }
   } else if(!strncmp(filename, "dvd://", 6)) {
     if(!bgav_open_dvd(m_file, filename + 5)) {
-      verbose(0, "[GEM:filmGMERLIN] Could not open DVD Device %s", filename + 5);
+      logpost(0, 3+0, "[GEM:filmGMERLIN] Could not open DVD Device %s", filename + 5);
       return false;
     }
   } else if(!strncmp(filename, "dvb://", 6)) {
     if(!bgav_open_dvb(m_file, filename + 6)) {
-      verbose(0, "[GEM:filmGMERLIN] Could not open DVB Device %s", filename + 6);
+      logpost(0, 3+0, "[GEM:filmGMERLIN] Could not open DVB Device %s", filename + 6);
       return false;
     }
   } else {
     if(!bgav_open(m_file, filename)) {
-      verbose(0, "[GEM:filmGMERLIN] Could not open file %s", filename);
+      logpost(0, 3+0, "[GEM:filmGMERLIN] Could not open file %s", filename);
       close();
 
       return false;
@@ -223,9 +223,9 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   }
   if(bgav_is_redirector(m_file)) {
     int num_urls=bgav_redirector_get_num_urls(m_file);
-    verbose(1, "[GEM:filmGMERLIN] Found redirector:");
+    logpost(0, 3+1, "[GEM:filmGMERLIN] Found redirector:");
     for(int i = 0; i < num_urls; i++) {
-      verbose(1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i,
+      logpost(0, 3+1, "[GEM:filmGMERLIN] #%d: '%s' -> %s", i,
               bgav_redirector_get_name(m_file, i), bgav_redirector_get_url(m_file, i));
     }
     for(int i = 0; i < num_urls; i++) {
@@ -249,7 +249,7 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   if(numvstreams) {
     bgav_select_track(m_file, m_track);
   } else {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:filmGMERLIN] track %d does not contain a video-stream: skipping",
             m_track);
   }
@@ -378,7 +378,7 @@ film::errCode filmGMERLIN :: changeImage(int imgNum, int trackNum)
                m_numTracks);
     } else {
       int numvstreams=bgav_num_video_streams (m_file, m_track);
-      verbose(1, "[GEM:filmGMERLIN] track %d contains %d video streams", m_track,
+      logpost(0, 3+1, "[GEM:filmGMERLIN] track %d contains %d video streams", m_track,
               numvstreams);
       if(numvstreams) {
         bgav_select_track(m_file, m_track);

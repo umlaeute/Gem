@@ -401,7 +401,7 @@ void modelASSIMP2 :: setProperties(gem::Properties&props)
 #if 0
   std::vector<std::string>keys=props.keys();
   for(unsigned int i=0; i<keys.size(); i++) {
-    verbose(1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(),
+    logpost(0, 3+1, "[GEM:modelASSIMP2] key[%d]=%s ... %d", i, keys[i].c_str(),
             props.type(keys[i]));
   }
 #endif

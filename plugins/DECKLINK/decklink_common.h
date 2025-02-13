@@ -123,7 +123,7 @@ BMDVideoConnection string2connection(std::string Name)
     s_connectionstrings["svideo"] = bmdVideoConnectionSVideo;
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #else
-    verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires connections to be lower-case");
+    logpost(0, 3+0, "[GEM:videoDECKLINK] lacking C++11 support requires connections to be lower-case");
 #endif
   }
   done=true;
@@ -213,7 +213,7 @@ BMDPixelFormat string2pixformat(std::string Name)
     s_pixformatstrings["rgba8"] = (BMDPixelFormat)((int)bmdFormat8BitYUV);
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #else
-    verbose(0, "[GEM:videoDECKLINK] lacking C++11 support requires pixformats to be lower-case");
+    logpost(0, 3+0, "[GEM:videoDECKLINK] lacking C++11 support requires pixformats to be lower-case");
 #endif
   }
   done=true;

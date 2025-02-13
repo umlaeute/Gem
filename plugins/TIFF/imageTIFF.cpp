@@ -58,7 +58,7 @@ static void imageTIFF_verbosehandler(const int verbosity,
   vsnprintf(buf, MAXPDSTRING, fmt, ap);
   buf[MAXPDSTRING-1]=0;
   result+=buf;
-  verbose(verbosity, "%s", result.c_str());
+  logpost(0, 3+verbosity, "%s", result.c_str());
 }
 static void imageTIFF_errorhandler(const char*module, const char*fmt,
                                    va_list ap)
@@ -178,7 +178,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     for (uint32_t row = 0; row < height; row++) {
       unsigned char *pixels = dstLine;
       if (TIFFReadScanline(tif, buf, row, 0) < 0) {
-        verbose(1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row,
+        logpost(0, 3+1, "[GEM:imageTIFF] bad image data read on line: %d: %s", row,
                 filename.c_str());
         TIFFClose(tif);
         return false;
@@ -216,7 +216,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     char emsg[1024];
     TIFFRGBAImage img;
     if (TIFFRGBAImageBegin(&img, tif, 0, emsg) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error reading in image file '%s': %s",
+      logpost(0, 3+0, "[GEM:imageTIFF] Error reading in image file '%s': %s",
               filename.c_str(), emsg);
       TIFFClose(tif);
       tiffhandlers_cleanup();
@@ -234,7 +234,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     }
 
     if (TIFFRGBAImageGet(&img, raster, width, height) == 0) {
-      verbose(0, "[GEM:imageTIFF] Error getting image data in file '%s': %s",
+      logpost(0, 3+0, "[GEM:imageTIFF] Error getting image data in file '%s': %s",
               filename.c_str(), emsg);
       _TIFFfree(raster);
       TIFFClose(tif);
@@ -327,7 +327,7 @@ bool imageTIFF :: load(std::string filename, imageStruct&result,
     orient = "unknown"; break;
   }
   if(orient) {
-    verbose(0, "[GEM:imageTIFF] unhandled orientation '%s' (%d)", orient, orientation);
+    logpost(0, 3+0, "[GEM:imageTIFF] unhandled orientation '%s' (%d)", orient, orientation);
   }
   return true;
 }
@@ -405,7 +405,7 @@ bool imageTIFF::save(const imageStruct&constimage,
 
   for (uint32_t row = 0; row < height; row++) {
     if (TIFFWriteScanline(tif, srcLine, row, 0) < 0) {
-      verbose(0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
+      logpost(0, 3+0, "[GEM:imageTIFF] could not write line %d to image '%s'", row,
               filename.c_str());
       TIFFClose(tif);
       tiffhandlers_cleanup();

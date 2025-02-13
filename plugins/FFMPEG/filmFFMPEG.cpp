@@ -37,7 +37,7 @@ namespace {
   /* the default prefix aligns with '[GEM:filmFFMPEG] ' */
   static void show_error(int errcode, const char*prefix="                 ") {
     char errbuf[MAXPDSTRING];
-    verbose(0, "%s%s", prefix, av_make_error_string(errbuf, sizeof(errbuf), errcode));
+    logpost(0, 3+0, "%s%s", prefix, av_make_error_string(errbuf, sizeof(errbuf), errcode));
   }
 };
 
@@ -117,7 +117,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   }
   m_avformat->seek2any = 1;
   if ((ret = avformat_find_stream_info(m_avformat, NULL)) < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Unable to find stream information in %s", filename);
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Unable to find stream information in %s", filename);
     show_error(ret);
     close();
     return false;
@@ -129,7 +129,7 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   ret = av_find_best_stream(m_avformat, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
   int stream_index = ret;
   if(ret < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Could not find video stream in %s", filename);
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Could not find video stream in %s", filename);
     show_error(ret);
     close();
     return false;
@@ -147,27 +147,27 @@ bool filmFFMPEG :: open(const std::string&sfilename,
   if(!dec)
     dec = avcodec_find_decoder(st->codecpar->codec_id);
   if(!dec) {
-    verbose(0, "[GEM:filmFFMPEG] Failed to find video codec for %s", filename);
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Failed to find video codec for %s", filename);
     close();
     return false;
   }
   m_avdecoder = avcodec_alloc_context3(dec);
   if(!m_avdecoder) {
-    verbose(0, "[GEM:filmFFMPEG] Failed to allocate the video codec context");
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Failed to allocate the video codec context");
     close();
     return false;
   }
 
   /* Copy codec parameters from input stream to output codec context */
   if ((ret = avcodec_parameters_to_context(m_avdecoder, st->codecpar)) < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Failed to copy video codec parameters to decoder context");
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Failed to copy video codec parameters to decoder context");
     show_error(ret);
     close();
     return false;
   }
   /* Init the decoders */
   if ((ret = avcodec_open2(m_avdecoder, dec, NULL)) < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Failed to open codec");
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Failed to open codec");
     show_error(ret);
     close();
     return false;
@@ -307,7 +307,7 @@ int filmFFMPEG :: decodePacket(void)
   // submit the packet to the decoder
   int ret = avcodec_send_packet(m_avdecoder, m_avpacket);
   if (ret < 0) {
-    verbose(0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Error submitting packet for decoding (%d)", ret);
     show_error(ret);
     return ret;
   }
@@ -321,7 +321,7 @@ int filmFFMPEG :: decodePacket(void)
     if (ret == AVERROR_EOF || ret == AVERROR(EAGAIN))
       return 0;
 
-    verbose(0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
+    logpost(0, 3+0, "[GEM:filmFFMPEG] Error during decoding (%d)", ret);
     show_error(ret);
     return ret;
   }
@@ -331,7 +331,7 @@ int filmFFMPEG :: decodePacket(void)
 #if 0
     if(1) {
       enum AVPixelFormat pix_fmt = (AVPixelFormat)m_avframe->format;
-      verbose(0, "[GEM:filmFFMPEG] decoded VIDEO for %lu/%lu: %dx%d@%s!"
+      logpost(0, 3+0, "[GEM:filmFFMPEG] decoded VIDEO for %lu/%lu: %dx%d@%s!"
               , (unsigned long)m_avframe->pts, (unsigned long)m_avframe->pkt_dts
               , m_avframe->width, m_avframe->height, av_get_pix_fmt_name(pix_fmt)
               );
@@ -339,7 +339,7 @@ int filmFFMPEG :: decodePacket(void)
 #endif
     ret = convertFrame();
   } else {
-    verbose(0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
+    logpost(0, 3+0, "[GEM:filmFFMPEG] ouch. unexpected type %s", av_get_media_type_string(m_avdecoder->codec->type));
   }
 
   av_frame_unref(m_avframe);

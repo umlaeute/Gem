@@ -478,7 +478,7 @@ struct gemglxwindow::PIMPL {
     }
 
     if(vi->depth<24) {
-      ::verbose(0, "Only using %d color bits", vi->depth);
+      ::logpost(0, 3+0, "Only using %d color bits", vi->depth);
     }
     if (vi->c_class != TrueColor && vi->c_class != DirectColor) {
       pd_error(parent, "TrueColor visual required for this program (got %d)",
@@ -856,7 +856,7 @@ bool gemglxwindow :: create(void)
                                     m_transparent, m_fsaa);
       } catch (GemException&ex) {
         error("creation of shared glxcontext failed: %s", ex.what());
-        verbose(0, "continuing at your own risk!");
+        logpost(0, 3+0, "continuing at your own risk!");
       }
       if(!sharedPimpl->gemcontext) {
         try {
@@ -965,21 +965,21 @@ void gemglxwindow :: destroy(void)
       XUnmapWindow      (m_pimpl->dpy, m_pimpl->win);
       err=XDestroyWindow(m_pimpl->dpy, m_pimpl->win);
       if(err) {
-        verbose(1, "XDestroyWindow returned %d", err);
+        logpost(0, 3+1, "XDestroyWindow returned %d", err);
       }
     }
 
     if (m_pimpl->cmap) {
       err=XFreeColormap(m_pimpl->dpy, m_pimpl->cmap);
       if(err) {
-        verbose(1, "XFreeColormap returned %d", err);
+        logpost(0, 3+1, "XFreeColormap returned %d", err);
       }
     }
 
     XFlush( m_pimpl->dpy );
     err=XCloseDisplay(m_pimpl->dpy); /* this crashes if no window is there */
     if(err) {
-      verbose(1, "XCloseDisplay returned %d", err);
+      logpost(0, 3+1, "XCloseDisplay returned %d", err);
     }
   }
   m_pimpl->dpy = NULL;

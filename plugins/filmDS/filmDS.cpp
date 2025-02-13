@@ -561,7 +561,7 @@ public:
       mt.subtype = MEDIASUBTYPE_RGB32;
       break;
     default:
-      verbose(1,
+      logpost(0, 3+1,
               "[GEM:videoDS] Trying to set unsupported format this is an internal bug, using default RGBA");
       mt.subtype = MEDIASUBTYPE_RGB32;
     }
@@ -586,7 +586,7 @@ public:
       //Set Params - One Shot should be false unless you want to capture just one buffer
       hr = m_pGrabber->SetOneShot(FALSE);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] unable to set one shot");
+        logpost(0, 3+1, "[GEM:videoDS] unable to set one shot");
         tearDown();
         return false;
       }
@@ -594,7 +594,7 @@ public:
       //apparently setting to TRUE causes a small memory leak
       hr = m_pGrabber->SetBufferSamples(FALSE);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] unable to set buffer samples");
+        logpost(0, 3+1, "[GEM:videoDS] unable to set buffer samples");
         tearDown();
         return false;
       }
@@ -604,14 +604,14 @@ public:
       hr = CoCreateInstance(CLSID_NullRenderer, NULL, CLSCTX_INPROC_SERVER,
                             IID_IBaseFilter, (void**)(&m_pNullRenderer));
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] null renderer error");
+        logpost(0, 3+1, "[GEM:videoDS] null renderer error");
         tearDown();
         return false;
       }
 
       hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] unable to add null renderer");
+        logpost(0, 3+1, "[GEM:videoDS] unable to add null renderer");
         tearDown();
         return false;
       }
@@ -621,7 +621,7 @@ public:
 
       hr = m_pGrabber->GetConnectedMediaType(&mt);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] unable to call GetConnectedMediaType");
+        logpost(0, 3+1, "[GEM:videoDS] unable to call GetConnectedMediaType");
         tearDown();
         return false;
       }
@@ -642,7 +642,7 @@ public:
 
       hr = m_pGraph->FindFilterByName(L"Video Renderer", &m_pVideoRenderer);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] failed to find the video renderer");
+        logpost(0, 3+1, "[GEM:videoDS] failed to find the video renderer");
         tearDown();
         return false;
       }
@@ -650,14 +650,14 @@ public:
       //we disconnect the video renderer window by finding the output pin of the sample grabber
       hr = m_pGrabberF->FindPin(L"Out", &pinOut);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] failed to find the sample grabber output pin");
+        logpost(0, 3+1, "[GEM:videoDS] failed to find the sample grabber output pin");
         tearDown();
         return false;
       }
 
       hr = pinOut->Disconnect();
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] failed to disconnect grabber output pin");
+        logpost(0, 3+1, "[GEM:videoDS] failed to disconnect grabber output pin");
         tearDown();
         return false;
       }
@@ -665,7 +665,7 @@ public:
       //we have to remove it as well otherwise the graph builder will reconnect it
       hr = m_pGraph->RemoveFilter(m_pVideoRenderer);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] failed to remove the default renderer");
+        logpost(0, 3+1, "[GEM:videoDS] failed to remove the default renderer");
         tearDown();
         return false;
       } else {
@@ -675,7 +675,7 @@ public:
       //now connect the null renderer to the grabber output, if we don't do this not frames will be captured
       hr = m_pNullRenderer->FindPin(L"In", &pinIn);
       if (FAILED(hr)) {
-        verbose(1,
+        logpost(0, 3+1,
                 "[GEM:videoDS] failed to find the input pin of the null renderer");
         tearDown();
         return false;
@@ -683,7 +683,7 @@ public:
 
       hr = pinOut->Connect(pinIn, NULL);
       if (FAILED(hr)) {
-        verbose(1, "[GEM:videoDS] failed to connect the null renderer");
+        logpost(0, 3+1, "[GEM:videoDS] failed to connect the null renderer");
         tearDown();
         return false;
       }
@@ -703,13 +703,13 @@ public:
 
       if( FAILED(hr) || width == 0 || height == 0 ) {
         tearDown();
-        verbose(1,
+        logpost(0, 3+1,
                 "[GEM:videoDS] Error occurred while playing or pausing or opening the file");
         return false;
       }
     } else {
       tearDown();
-      verbose(1,
+      logpost(0, 3+1,
               "[GEM:videoDS] Error occurred while playing or pausing or opening the file");
       return false;
     }

@@ -154,40 +154,20 @@ void CPPExtern :: endpost(void) const
   ::endpost();
   pimpl->endpost=true;
 }
-typedef void (*verbose_t)(int level, const char *fmt, ...);
 
 void CPPExtern :: verbose(const int level, const char*fmt,...) const
 {
+  const int verbose2logpost_level = 3;
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
-  static verbose_t rte_verbose=NULL;
-  static bool rte_verbose_checked=false;
-  if(false==rte_verbose_checked) {
-    gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
-    if(rte) {
-      rte_verbose=(verbose_t)rte->getFunction("verbose");
-    }
-  }
-  rte_verbose_checked=true;
-
-  /* only pd>=0.39(?) supports ::verbose() */
-  if(rte_verbose) {
-    if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-        && &s_ != pimpl->objectname) {
-      rte_verbose(level, "[%s]: %s", pimpl->objectname->s_name, buf);
-    } else {
-      rte_verbose(level, "%s", buf);
-    }
+  if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
+     && &s_ != pimpl->objectname) {
+    ::logpost(x_obj, verbose2logpost_level + level, "[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
-    if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-        && &s_ != pimpl->objectname) {
-      ::post("[%s]: %s", pimpl->objectname->s_name, buf);
-    } else {
-      ::post("%s", buf);
-    }
+    ::logpost(x_obj, verbose2logpost_level + level, "%s", buf);
   }
 }
 

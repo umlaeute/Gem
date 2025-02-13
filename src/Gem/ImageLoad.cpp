@@ -127,7 +127,7 @@ struct PixImageThreadLoader : public gem::thread::SynchedWorkerThread {
         i=0;
         static bool dunnit=false;
         if(!dunnit) {
-          verbose(1, "threaded ImageLoading not supported!");
+          logpost(0, 3+1, "threaded ImageLoading not supported!");
         }
         dunnit=true;
       }

@@ -19,7 +19,7 @@
 
 #include "recordDECKLINK.h"
 
-// for verbose():
+// for logpost(0, 3+):
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 
@@ -315,7 +315,7 @@ IDeckLinkDisplayMode*getDisplayMode(IDeckLinkOutput*dlo,
         if (S_OK == displayMode->GetName(&dmn)) {
           std::string dmns = deckstring2string(dmn);
           bool found=(formatname == dmns);
-          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
+          logpost(0, 3+1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
           free_deckstring(dmn);
           if(found) {
             break;

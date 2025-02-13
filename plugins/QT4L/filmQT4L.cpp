@@ -94,7 +94,7 @@ bool filmQT4L :: open(const std::string&filename,
   char*cfilename=const_cast<char*>(filename.c_str());
   if (quicktime_check_sig(cfilename)) { /* ok, this is quicktime */
     if (!(m_quickfile = quicktime_open(filename.c_str(), 1, 0))) {
-      verbose(0, "[GEM:filmQT4L] Unable to open file: %s", filename.c_str());
+      logpost(0, 3+0, "[GEM:filmQT4L] Unable to open file: %s", filename.c_str());
       return false;
     }
     m_curFrame = -1;
@@ -111,7 +111,7 @@ bool filmQT4L :: open(const std::string&filename,
     m_image.image.ysize = quicktime_video_height(m_quickfile, m_curTrack);
     if (!quicktime_supported_video(m_quickfile, m_curTrack)) {
       char *codec = quicktime_video_compressor(m_quickfile, m_curTrack);
-      verbose(0, "[GEM:filmQT4L] unsupported CODEC '%s'!", codec);
+      logpost(0, 3+0, "[GEM:filmQT4L] unsupported CODEC '%s'!", codec);
       quicktime_close(m_quickfile);
       m_quickfile=0;
       return false;

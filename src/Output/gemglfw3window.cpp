@@ -708,10 +708,10 @@ void gemglfw3window :: fullscreenMess(int on)
     if(on) {
       if (on<0 || on>count) {
         monitor = glfwGetPrimaryMonitor();
-        verbose(0, "switching to fullscreen on primary monitor: %s", glfwGetMonitorName(monitor));
+        logpost(0, 3+0, "switching to fullscreen on primary monitor: %s", glfwGetMonitorName(monitor));
       } else {
         monitor = monitors[on-1];
-        verbose(0, "switching to fullscreen on monitor #%d: %s", on, glfwGetMonitorName(monitor));
+        logpost(0, 3+0, "switching to fullscreen on monitor #%d: %s", on, glfwGetMonitorName(monitor));
       }
     }
     if(monitor) {
@@ -1019,7 +1019,7 @@ void gemglfw3window :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG2(classPtr, "glprofile", glprofileMess, int, int);
   CPPEXTERN_MSG1(classPtr, "gles", glesMess, bool);
-  ::verbose(0, "[gemglfw3window]\n\tGLFW compile version: %d.%d.%d\n\tGLFW runtime version: %s"
+  ::logpost(0, 3+0, "[gemglfw3window]\n\tGLFW compile version: %d.%d.%d\n\tGLFW runtime version: %s"
             , GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION
             , glfwGetVersionString()
     );

@@ -66,7 +66,7 @@
 #undef CONVERTER_MARK
 #if GEM_DEBUG_PIXCONVERT
 # include "m_pd.h"
-# define CONVERTER_MARK() verbose(1, "%s(%ux%u)", __FUNCTION__, (unsigned int)width, (unsigned int)height)
+# define CONVERTER_MARK() logpost(0, 3+1, "%s(%ux%u)", __FUNCTION__, (unsigned int)width, (unsigned int)height)
 #else
 # define CONVERTER_MARK() 0
 #endif

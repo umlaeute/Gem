@@ -33,7 +33,7 @@ static bool filmQT_initQT(void)
   OSErr         err = noErr;
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+    logpost(0, 3+0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
             err);
     return false;
   }
@@ -128,14 +128,14 @@ bool filmDarwin :: open(const std::string&filename,
     err = ::FSGetCatalogInfo(&ref, kFSCatInfoNone, NULL, NULL, &theFSSpec,
                              NULL);
     if (err) {
-      verbose(0, "[GEM:filmDarwin] Unable to find file: %s", filename.c_str());
+      logpost(0, 3+0, "[GEM:filmDarwin] Unable to find file: %s", filename.c_str());
       goto unsupported;
     }
   }
 
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    verbose(0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)",
+    logpost(0, 3+0, "[GEM:filmDarwin] Couldn't open the movie file: %#s (%d)",
             filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
@@ -154,14 +154,14 @@ bool filmDarwin :: open(const std::string&filename,
   }
   m_lastFrame=-1;
   m_numTracks = (int)GetMovieTrackCount(m_movie);
-  verbose(1, "[GEM:filmDarwin] %d tracks", (int)m_numTracks);
+  logpost(0, 3+1, "[GEM:filmDarwin] %d tracks", (int)m_numTracks);
 
   // Get the length of the movie
   long  movieDur, movieScale;
   movieDur = (long)GetMovieDuration(m_movie);
   movieScale = (long)GetMovieTimeScale(m_movie);
 
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:filmDarwin] duration = %d timescale = %d timebase = %d",
           movieDur, movieScale, (long)GetMovieTimeBase(m_movie));
 
@@ -181,7 +181,7 @@ bool filmDarwin :: open(const std::string&filename,
     m_fps=30.f;
     m_durationf=static_cast<double>(movieScale)/m_fps;
   }
-  verbose(1, "[GEM:filmDarwin] %d frames @ %f", (int)m_numFrames,
+  logpost(0, 3+1, "[GEM:filmDarwin] %d frames @ %f", (int)m_numFrames,
           (float)m_durationf);
 
   // Get the bounds for the movie
@@ -190,11 +190,11 @@ bool filmDarwin :: open(const std::string&filename,
   SetMovieBox(m_movie, &m_srcRect);
   m_image.image.xsize = m_srcRect.right - m_srcRect.left;
   m_image.image.ysize = m_srcRect.bottom - m_srcRect.top;
-  verbose(1, "[GEM:filmDarwin] rect rt:%d lt:%d", m_srcRect.right,
+  logpost(0, 3+1, "[GEM:filmDarwin] rect rt:%d lt:%d", m_srcRect.right,
           m_srcRect.left);
-  verbose(1, "[GEM:filmDarwin] rect top:%d bottom:%d", m_srcRect.top,
+  logpost(0, 3+1, "[GEM:filmDarwin] rect top:%d bottom:%d", m_srcRect.top,
           m_srcRect.bottom);
-  verbose(1, "[GEM:filmDarwin] movie size x:%d y:%d", m_image.image.xsize,
+  logpost(0, 3+1, "[GEM:filmDarwin] movie size x:%d y:%d", m_image.image.xsize,
           m_image.image.ysize);
 
   switch(m_wantedFormat) {
@@ -225,7 +225,7 @@ bool filmDarwin :: open(const std::string&filename,
                                 m_image.image.data,
                                 m_rowBytes);
   if (err) {
-    verbose(0, "[GEM:filmDarwin] Couldn't make QTNewGWorldFromPtr %d", err);
+    logpost(0, 3+0, "[GEM:filmDarwin] Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
   m_movieTime = 0;

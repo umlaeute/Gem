@@ -105,25 +105,25 @@ const NDIlib_gem* init_ndi_library(const char*prefix)
     }
 #endif
     if(firsttime) {
-      verbose(1, "[GEM::%s] loading NewTek NDI Runtime from '%s'", prefix, ndi_path.c_str());
+      logpost(0, 3+1, "[GEM::%s] loading NewTek NDI Runtime from '%s'", prefix, ndi_path.c_str());
     }
     // Lets get all of the DLL entry points
     if(1) {
       result = NDIlib__load();
       if(result) {
-        verbose(1, "[GEM::%s] %s", prefix, result->version());
+        logpost(0, 3+1, "[GEM::%s] %s", prefix, result->version());
       }
       return result;
     }
   notfound:
     if(firsttime) {
-      verbose(1, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
-      verbose(1, "        need to find the library '%s'", NDILIB_LIBRARY_NAME);
+      logpost(0, 3+1, "[GEM:%s] Please (re)install the NewTek NDI Runtimes to use this plugin.", prefix);
+      logpost(0, 3+1, "        need to find the library '%s'", NDILIB_LIBRARY_NAME);
       if (std::string("") != NDILIB_REDIST_URL)
-        verbose(1, "        get the NewTek Runtimes from %s", NDILIB_REDIST_URL);
-      verbose(1, "        use the '%s' environment variable to set the path to the library.", NDILIB_REDIST_FOLDER);
+        logpost(0, 3+1, "        get the NewTek Runtimes from %s", NDILIB_REDIST_URL);
+      logpost(0, 3+1, "        use the '%s' environment variable to set the path to the library.", NDILIB_REDIST_FOLDER);
       if(p_NDI_runtime_folder)
-        verbose(1, "        (currently set to '%s').", p_NDI_runtime_folder);
+        logpost(0, 3+1, "        (currently set to '%s').", p_NDI_runtime_folder);
     }
     return 0;
   }

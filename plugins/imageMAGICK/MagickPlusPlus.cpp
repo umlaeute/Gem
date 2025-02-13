@@ -43,7 +43,7 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
       image.read( filename );
       image.autoOrient();
     } catch (Magick::Warning&e) {
-      verbose(0, "[GEM:imageMAGICK] loading problem: %s", e.what());
+      logpost(0, 3+0, "[GEM:imageMAGICK] loading problem: %s", e.what());
     }
 
     result.xsize=static_cast<int>(image.columns());
@@ -63,10 +63,10 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
                   Magick::CharPixel,
                   reinterpret_cast<void*>(result.data));
     } catch (Magick::Warning&e) {
-      verbose(0, "[GEM:imageMAGICK] decoding problem: %s", e.what());
+      logpost(0, 3+0, "[GEM:imageMAGICK] decoding problem: %s", e.what());
     }
   } catch (Magick::Exception&e)  {
-    verbose(0, "[GEM:imageMAGICK] loading image failed with: %s", e.what());
+    logpost(0, 3+0, "[GEM:imageMAGICK] loading image failed with: %s", e.what());
     return false;
   }
   return true;
@@ -123,18 +123,18 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
       // finally convert and export
       mimage.write(filename);
     } catch (Magick::Warning&e) {
-      verbose(0, "[GEM:imageMAGICK] saving problem: %s", e.what());
+      logpost(0, 3+0, "[GEM:imageMAGICK] saving problem: %s", e.what());
     }
 
   } catch (Magick::Exception&e) {
-    verbose(0, "[GEM:imageMAGICK] %s", e.what());
+    logpost(0, 3+0, "[GEM:imageMAGICK] %s", e.what());
     if(pImage!=&image) {
       delete pImage;
     }
     pImage=NULL;
     return false;
   } catch (...) {
-    verbose(0, "[GEM:imageMAGICK] uncaught exception!");
+    logpost(0, 3+0, "[GEM:imageMAGICK] uncaught exception!");
     return false;
   }
   if(pImage!=&image) {

@@ -19,7 +19,7 @@
 
 #include "recordNDI.h"
 
-// for verbose():
+// for logpost(0, 3+):
 #include "Gem/RTE.h"
 #include "Gem/Exception.h"
 

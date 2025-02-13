@@ -36,7 +36,7 @@ static bool filmQT_initQT(void)
   OSErr         err = noErr;
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+    logpost(0, 3+0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
             err);
     return false;
   }
@@ -62,14 +62,14 @@ static bool filmQT_initQT(void)
   // Initialize QuickTime Media Layer
   OSErr         err = noErr;
   if ((err = InitializeQTML(0))) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+    logpost(0, 3+0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
             err);
     return false;
   }
 
   // Initialize QuickTime
   if (err = EnterMovies()) {
-    verbose(0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
+    logpost(0, 3+0, "[GEM:filmQT]] Could not initialize quicktime: error %d\n",
             err);
     return false;
   }
@@ -164,7 +164,7 @@ bool filmQT :: open(const std::string&filename_,
     return false;
   }
   if (!m_bInit) {
-    verbose(0, "[GEM:filmQT] QT object not correctly initialized\n");
+    logpost(0, 3+0, "[GEM:filmQT] QT object not correctly initialized\n");
     return false;
   }
   std::string filename = gem::string::utf8string_to_nativestring(filename_);
@@ -189,13 +189,13 @@ bool filmQT :: open(const std::string&filename_,
 #endif
 
   if (err != noErr) {
-    verbose(0, "[GEM:filmQT] Unable to find file: %s (%d)", filename.c_str(),
+    logpost(0, 3+0, "[GEM:filmQT] Unable to find file: %s (%d)", filename.c_str(),
             err);
     //goto unsupported;
   }
   err = ::OpenMovieFile(&theFSSpec, &refnum, fsRdPerm);
   if (err) {
-    verbose(0, "[GEM:filmQT] Couldn't open the movie file: %s (%d)",
+    logpost(0, 3+0, "[GEM:filmQT] Couldn't open the movie file: %s (%d)",
             filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
@@ -205,7 +205,7 @@ bool filmQT :: open(const std::string&filename_,
   err = ::NewMovieFromFile(&m_movie, refnum, NULL, NULL, newMovieActive,
                            NULL);
   if (err) {
-    verbose(0, "[GEM:filmQT] Couldn't make a movie from file: %s (%d)",
+    logpost(0, 3+0, "[GEM:filmQT] Couldn't make a movie from file: %s (%d)",
             filename.c_str(), err);
     if (refnum) {
       ::CloseMovieFile(refnum);
@@ -282,7 +282,7 @@ bool filmQT :: open(const std::string&filename_,
   SetMoviePlayHints(m_movie, hints, hints);
   err = SetMovieAudioMute(m_movie, true, 0);
   if(noErr!=err) {
-    verbose(0, "[GEM:filmQT] unable to mute movie...");
+    logpost(0, 3+0, "[GEM:filmQT] unable to mute movie...");
   }
 
   err = QTNewGWorldFromPtr(     &m_srcGWorld,
@@ -294,7 +294,7 @@ bool filmQT :: open(const std::string&filename_,
                                 m_image.image.data,
                                 m_rowBytes);
   if (err) {
-    verbose(0, "[GEM:filmQT] Couldn't make QTNewGWorldFromPtr %d", err);
+    logpost(0, 3+0, "[GEM:filmQT] Couldn't make QTNewGWorldFromPtr %d", err);
     goto unsupported;
   }
 

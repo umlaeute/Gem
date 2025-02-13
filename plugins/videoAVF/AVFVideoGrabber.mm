@@ -141,14 +141,14 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
         }
 
 
-        verbose(1, "[GEM:videoAVF] supported dimensions are: %dx%d",
+        logpost(0, 3+1, "[GEM:videoAVF] supported dimensions are: %dx%d",
                 dimensions.width, dimensions.height);
       }
 
       // Set the new dimensions and format
       if( bestFormat != nullptr && bestW != 0 && bestH != 0 ) {
         if( bestW != width || bestH != height ) {
-          verbose(1,
+          logpost(0, 3+1,
                   "[GEM:videoAVF] dimension %dx%d not supported. using %dx%d instead", width,
                   height, bestW, bestH);
         }
@@ -170,7 +170,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
 
           if( (floor(range.minFrameRate) <= framerate
                && ceil(range.maxFrameRate) >= framerate) ) {
-            verbose(1,
+            logpost(0, 3+1,
                     "[GEM:videoAVF] found good framerate range %f .. %f for request %d",
                     range.minFrameRate, range.maxFrameRate, framerate);
             desiredRange = range;
@@ -183,10 +183,10 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
           device.activeVideoMinFrameDuration = desiredRange.minFrameDuration;
           device.activeVideoMaxFrameDuration = desiredRange.maxFrameDuration;
         } else {
-          verbose(1, "[GEM:videoAVF] could not set framerate to %d. Device supports",
+          logpost(0, 3+1, "[GEM:videoAVF] could not set framerate to %d. Device supports",
                   framerate);
           for(AVFrameRateRange * range in supportedFrameRates) {
-            verbose(1, "\t%f .. %f", range.minFrameRate, range.maxFrameRate);
+            logpost(0, 3+1, "\t%f .. %f", range.minFrameRate, range.maxFrameRate);
           }
         }
       }
@@ -315,7 +315,7 @@ void printSampleBuffer(CMSampleBufferRef sampleBuffer)
   int i=0;
   for (AVCaptureDevice * captureDevice in devices) {
     deviceNames.push_back([captureDevice.localizedName UTF8String]);
-    verbose(0, "[GEM:videoAVF] device #%d: %s", i, deviceNames.back().c_str());
+    logpost(0, 3+0, "[GEM:videoAVF] device #%d: %s", i, deviceNames.back().c_str());
     i++;
   }
   return deviceNames;

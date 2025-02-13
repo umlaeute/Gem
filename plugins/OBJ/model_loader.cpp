@@ -326,7 +326,7 @@ _glmFindMaterial(const GLMmodel* model, const std::string&name)
 
   /* didn't find the name, so print a warning and return the default
      material (0). */
-  verbose(0,
+  logpost(0, 3+0,
           "[GEM:modelOBJ] _glmFindMaterial():  can't find material \"%s\".",
           name.c_str());
   i = 0;
@@ -375,7 +375,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
 
   file = fopen(filename.c_str(), "r");
   if (!file) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:modelOBJ] _glmReadMTL() failed: can't open material file \"%s\".",
             filename.c_str());
     return -1;
@@ -389,25 +389,25 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmReadMTL() failed reading comment");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmReadMTL() failed reading comment");
         continue;
       }
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading new material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmReadMTL() failed reading new material");
         goto mtlread_failed;
       }
       nummaterials++;
       if(EOF == sscanf(buf, "%s %s", buf, buf)) {
-        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
         goto mtlread_failed;
       }
       break;
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmReadMTL() failed reading");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmReadMTL() failed reading");
         continue;
       }
       break;
@@ -446,13 +446,13 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading comment");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmReadMTL() really failed reading comment");
         continue;
       }
       break;
     case 'n':               /* newmtl */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0,
+        logpost(0, 3+0,
                 "[GEM:modelOBJ] _glmReadMTL() really failed reading new material");
         goto mtlread_failed;
       }
@@ -460,7 +460,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
         nummaterials++;
         model->materials[nummaterials].name = std::string(buf);
       } else {
-        verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmReadMTL() failed reading material");
       }
       break;
     case 'N':
@@ -469,7 +469,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
         model->materials[nummaterials].shininess /= 1000.0;
         model->materials[nummaterials].shininess *= 128.0;
       } else {
-        verbose(0,
+        logpost(0, 3+0,
                 "[GEM:modelOBJ] _glmReadMTL() failed reading material shininess");
       }
       break;
@@ -481,7 +481,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
                          &model->materials[nummaterials].diffuse[1],
                          &model->materials[nummaterials].diffuse[2])) {
         } else {
-          verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading diffuse material");
+          logpost(0, 3+0, "[GEM:modelOBJ] _glmReadMTL() failed reading diffuse material");
         }
         break;
       case 's':
@@ -490,7 +490,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
                          &model->materials[nummaterials].specular[1],
                          &model->materials[nummaterials].specular[2])) {
         } else {
-          verbose(0,
+          logpost(0, 3+0,
                   "[GEM:modelOBJ] _glmReadMTL() failed reading specular material");
         }
         break;
@@ -500,13 +500,13 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
                          &model->materials[nummaterials].ambient[1],
                          &model->materials[nummaterials].ambient[2])) {
         } else {
-          verbose(0, "[GEM:modelOBJ] _glmReadMTL() failed reading ambient material");
+          logpost(0, 3+0, "[GEM:modelOBJ] _glmReadMTL() failed reading ambient material");
         }
         break;
       default:
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading K");
+          logpost(0, 3+1, "[GEM:modelOBJ] _glmReadMTL() really failed reading K");
           continue;
         }
         break;
@@ -515,7 +515,7 @@ _glmReadMTL(GLMmodel* model, const std::string&name)
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmReadMTL() really failed reading");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmReadMTL() really failed reading");
         continue;
       }
       break;
@@ -551,7 +551,7 @@ _glmWriteMTL(const GLMmodel* model, const char* modelpath,
   /* open the file */
   file = fopen(filename.c_str(), "w");
   if (!file) {
-    verbose(0, "[GEM:modelOBJ] _glmWriteMTL() failed: can't open file \"%s\".",
+    logpost(0, 3+0, "[GEM:modelOBJ] _glmWriteMTL() failed: can't open file \"%s\".",
             filename.c_str());
     return GL_FALSE;
   }
@@ -608,7 +608,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading comment");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass failed reading comment");
         continue;
       }
       break;
@@ -617,7 +617,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case '\0':          /* vertex */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading vertex");
+          logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass failed reading vertex");
           return GL_FALSE;
         }
         numvertices++;
@@ -625,7 +625,7 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case 'n':           /* normal */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading normals");
+          logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass failed reading normals");
           return GL_FALSE;
         }
         numnormals++;
@@ -633,45 +633,45 @@ _glmFirstPass(GLMmodel* model, FILE* file)
       case 't':           /* texcoord */
         /* eat up rest of line */
         if(NULL==fgets(buf, sizeof(buf), file)) {
-          verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading texcoords");
+          logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass failed reading texcoords");
           return GL_FALSE;
         }
         numtexcoords++;
         break;
       default:
-        verbose(0, "[GEM:modelOBJ] _glmFirstPass: Unknown token \"%s\".", buf);
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass: Unknown token \"%s\".", buf);
         return GL_FALSE;
       }
       break;
     case 'm':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass failed reading material");
         return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
         model->mtllibname = buf;
         _glmReadMTL(model, buf);
       } else {
-        verbose(0, "[GEM:modelOBJ] glmFirstPass failed reading material lib");
+        logpost(0, 3+0, "[GEM:modelOBJ] glmFirstPass failed reading material lib");
       }
       break;
     case 'u':
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading u");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass failed reading u");
         continue;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmFirstPass failed reading groups");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmFirstPass failed reading groups");
         return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF != sscanf(buf, "%s", buf)) {
       } else {
-        verbose(0,
+        logpost(0, 3+0,
                 "[GEM:modelOBJ] _glmFirstPass failed reading single-string group name");
         return GL_FALSE;
       }
@@ -688,13 +688,13 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         if (strstr(buf, "//")) {
           /* v//n */
           if(EOF == sscanf(buf, "%d//%d", &v, &n)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n.");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n.");
           }
           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n..");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n..");
           }
           if(EOF == fscanf(file, "%d//%d", &v, &n)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n...");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/n...");
           }
           numtriangles++;
           group->numtriangles++;
@@ -705,10 +705,10 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
           /* v/t/n */
           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n.");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n.");
           }
           if(EOF == fscanf(file, "%d/%d/%d", &v, &t, &n)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n..");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t/n..");
           }
           numtriangles++;
           group->numtriangles++;
@@ -719,10 +719,10 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
           /* v/t */
           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t.");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t.");
           }
           if(EOF == fscanf(file, "%d/%d", &v, &t)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t..");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v/t..");
           }
           numtriangles++;
           group->numtriangles++;
@@ -733,10 +733,10 @@ _glmFirstPass(GLMmodel* model, FILE* file)
         } else {
           /* v */
           if(EOF == fscanf(file, "%d", &v)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v.");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v.");
           }
           if(EOF == fscanf(file, "%d", &v)) {
-            verbose(1, "[GEM:modelOBJ] _glmFirstPass: failed reading v..");
+            logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass: failed reading v..");
           }
           numtriangles++;
           group->numtriangles++;
@@ -746,14 +746,14 @@ _glmFirstPass(GLMmodel* model, FILE* file)
           }
         }
       } else {
-        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading facet...");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass failed reading facet...");
       }
       break;
 
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmFirstPass failed reading");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmFirstPass failed reading");
         continue;
       }
       break;
@@ -793,7 +793,7 @@ static GLuint fixIndex(GLint current, GLuint baseindex)
   if(idx>0) {
     return (GLuint)idx;
   } else {
-    verbose(1, "[GEM:modelOBJ] unable to fix negative index %d @ %d", current,
+    logpost(0, 3+1, "[GEM:modelOBJ] unable to fix negative index %d @ %d", current,
             baseindex);
     return baseindex;
   }
@@ -837,7 +837,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     case '#':               /* comment */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
         continue;
       }
       break;
@@ -850,7 +850,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &vertices[3 * numvertices + 2])) {
           numvertices++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading vertex %d",
+          logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass failed reading vertex %d",
                   numvertices);
         }
         break;
@@ -861,7 +861,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &normals[3 * numnormals + 2])) {
           numnormals++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading normal %d",
+          logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass failed reading normal %d",
                   numnormals);
         }
         break;
@@ -871,7 +871,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
                          &texcoords[2 * numtexcoords + 1])) {
           numtexcoords++;
         } else {
-          verbose(1, "[GEM:modelOBJ] _glmSecondPass failed reading texcoord %d",
+          logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass failed reading texcoord %d",
                   numtexcoords);
         }
         break;
@@ -879,25 +879,25 @@ _glmSecondPass(GLMmodel* model, FILE* file)
       break;
     case 'u':
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading material");
         return GL_FALSE;
       }
       if(EOF != sscanf(buf, "%s %s", buf, buf)) {
         group->material = material = _glmFindMaterial(model, buf);
       } else {
-        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed finding material");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed finding material");
         return GL_FALSE;
       }
       break;
     case 'g':               /* group */
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading group");
+        logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading group");
         return GL_FALSE;
       }
 #if SINGLE_STRING_GROUP_NAMES
       if(EOF == sscanf(buf, "%s", buf)) {
-        verbose(0,
+        logpost(0, 3+0,
                 "[GEM:modelOBJ] _glmSecondPass() failed reading single-string group name");
         return GL_FALSE;
       }
@@ -918,19 +918,19 @@ _glmSecondPass(GLMmodel* model, FILE* file)
             T(numtriangles).vindices[0] = fixIndex(v,numvertices);
             T(numtriangles).nindices[0] = fixIndex(n,numnormals);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n.");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n.");
           }
           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
             T(numtriangles).vindices[1] = fixIndex(v,numvertices);
             T(numtriangles).nindices[1] = fixIndex(n, numnormals);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n..");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n..");
           }
           if(EOF != fscanf(file, "%d//%d", &v, &n)) {
             T(numtriangles).vindices[2] = fixIndex(v,numvertices);
             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n...");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/n...");
           }
           group->triangles[group->numtriangles++] = numtriangles;
           numtriangles++;
@@ -954,14 +954,14 @@ _glmSecondPass(GLMmodel* model, FILE* file)
             T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
             T(numtriangles).nindices[1] = fixIndex(n, numnormals);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n.");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n.");
           }
           if(EOF != fscanf(file, "%d/%d/%d", &v, &t, &n)) {
             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
             T(numtriangles).nindices[2] = fixIndex(n, numnormals);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n..");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t/n..");
           }
           group->triangles[group->numtriangles++] = numtriangles;
           numtriangles++;
@@ -986,13 +986,13 @@ _glmSecondPass(GLMmodel* model, FILE* file)
             T(numtriangles).vindices[1] = fixIndex(v, numvertices);
             T(numtriangles).uvtindices[1] = fixIndex(t, numtexcoords);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t.");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t.");
           }
           if(EOF != fscanf(file, "%d/%d", &v, &t)) {
             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
             T(numtriangles).uvtindices[2] = fixIndex(t, numtexcoords);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t..");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v/t..");
           }
           group->triangles[group->numtriangles++] = numtriangles;
           numtriangles++;
@@ -1011,17 +1011,17 @@ _glmSecondPass(GLMmodel* model, FILE* file)
           if(EOF != sscanf(buf, "%d", &v)) {
             T(numtriangles).vindices[0] = fixIndex(v, numvertices);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v.");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v.");
           }
           if(EOF != fscanf(file, "%d", &v)) {
             T(numtriangles).vindices[1] = fixIndex(v, numvertices);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v..");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v..");
           }
           if(EOF != fscanf(file, "%d", &v)) {
             T(numtriangles).vindices[2] = fixIndex(v, numvertices);
           } else {
-            verbose(0, "[GEM:modelOBJ] _glmSecondPass() failed reading v...");
+            logpost(0, 3+0, "[GEM:modelOBJ] _glmSecondPass() failed reading v...");
           }
           group->triangles[group->numtriangles++] = numtriangles;
           numtriangles++;
@@ -1034,7 +1034,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
           }
         }
       } else {
-        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading...");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass() failed reading...");
         continue;
       }
       break;
@@ -1042,7 +1042,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
     default:
       /* eat up rest of line */
       if(NULL==fgets(buf, sizeof(buf), file)) {
-        verbose(1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
+        logpost(0, 3+1, "[GEM:modelOBJ] _glmSecondPass() failed reading");
         continue;
       }
       break;
@@ -1050,7 +1050,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
   }
 
   /* announce the memory requirements */
-  verbose(1, "[GEM:modelOBJ]  Memory: %d bytes", (int)(
+  logpost(0, 3+1, "[GEM:modelOBJ]  Memory: %d bytes", (int)(
             numvertices  * 3*sizeof(GLfloat) +
             numnormals   * 3*sizeof(GLfloat) +
             numtexcoords * 3*sizeof(GLfloat) +
@@ -1386,7 +1386,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
        facet normal of every triangle this vertex is in */
     node = members[i];
     if (!node) {
-      verbose(0, "[GEM:modelOBJ] glmVertexNormals(): vertex w/o a triangle");
+      logpost(0, 3+0, "[GEM:modelOBJ] glmVertexNormals(): vertex w/o a triangle");
     }
     average[0] = 0.0;
     average[1] = 0.0;
@@ -1524,7 +1524,7 @@ glmUVTexture(GLMmodel* model, float h, float w)
     }
     group = group->next;
   }
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:modelOBJ] glmUVTexture(): generated %d UV texture coordinates",
           model->numtexcoords);
 }
@@ -1576,7 +1576,7 @@ glmLinearTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:modelOBJ] glmLinearTexture(): generated %d linear texture coordinates",
           model->numtexcoords);
 }
@@ -1651,7 +1651,7 @@ glmSpheremapTexture(GLMmodel* model, float h, float w)
     group = group->next;
   }
 
-  verbose(1,
+  logpost(0, 3+1,
           "[GEM:modelOBJ] glmSpheremapTexture(): generated %d spheremap texture coordinates",
           model->numtexcoords);
 }
@@ -1805,7 +1805,7 @@ glmReadOBJ(const char* filename)
   /* open the file */
   file = fopen(filename, "r");
   if (!file) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:modelOBJ] glmReadOBJ() failed: can't open data file \"%s\".",
             filename);
     return NULL;
@@ -1838,7 +1838,7 @@ glmReadOBJ(const char* filename)
   /* make a first pass through the file to get a count of the number
      of vertices, normals, texcoords & triangles */
   if(GL_FALSE==_glmFirstPass(model, file)) {
-    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+    logpost(0, 3+0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
             filename);
     goto readobj_failed;
   }
@@ -1857,7 +1857,7 @@ glmReadOBJ(const char* filename)
   rewind(file);
 
   if(GL_FALSE==_glmSecondPass(model, file)) {
-    verbose(0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
+    logpost(0, 3+0, "[GEM:modelOBJ] glmReadOBJ() failed: can't parse file \"%s\".",
             filename);
     goto readobj_failed;
   }
@@ -1905,42 +1905,42 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 
   /* do a bit of warning */
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: smooth normal output requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: texture coordinate output requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: flat normal output requested "
             "and smooth normal output requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_COLOR && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmWriteOBJ() warning: color output requested "
+    logpost(0, 3+1, "[GEM:modelOBJ] glmWriteOBJ() warning: color output requested "
             "with no colors (materials) defined.");
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: material output requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmWriteOBJ() warning: color and material output requested "
             "outputting only materials.");
     mode &= ~GLM_COLOR;
@@ -1950,7 +1950,7 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
   /* open the file */
   file = fopen(filename, "w");
   if (!file) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:modelOBJ] glmWriteOBJ() failed: can't open file \"%s\" to write.",
             filename);
     return -1;
@@ -2088,40 +2088,40 @@ glmWriteOBJ(const GLMmodel* model, const char* filename, GLuint mode)
 static GLuint checkMode(const GLMmodel* model, GLuint mode)
 {
   if (mode & GLM_FLAT && !model->facetnorms) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
+    logpost(0, 3+1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "with no facet normals defined.");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_SMOOTH && !model->normals) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmDraw() warning: smooth render mode requested "
             "with no normals defined.");
     mode &= ~GLM_SMOOTH;
   }
   if (mode & GLM_TEXTURE && !model->texcoords) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmDraw() warning: texture render mode requested "
             "with no texture coordinates defined.");
     mode &= ~GLM_TEXTURE;
   }
   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
+    logpost(0, 3+1, "[GEM:modelOBJ] glmDraw() warning: flat render mode requested "
             "and smooth render mode requested (using smooth).");
     mode &= ~GLM_FLAT;
   }
   if (mode & GLM_COLOR && !model->materials) {
-    verbose(1, "[GEM:modelOBJ] glmDraw() warning: color render mode requested "
+    logpost(0, 3+1, "[GEM:modelOBJ] glmDraw() warning: color render mode requested "
             "with no materials defined.");
     mode &= ~GLM_COLOR;
   }
   if (mode & GLM_MATERIAL && !model->materials) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmDraw() warning: material render mode requested "
             "with no materials defined.");
     mode &= ~GLM_MATERIAL;
   }
   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:modelOBJ] glmDraw() warning: color and material render mode requested "
             "using only material mode.");
     mode &= ~GLM_COLOR;
@@ -2256,7 +2256,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
   vectors  = model->vertices;
   copies = _glmWeldVectors(vectors, &numvectors, epsilon);
 
-  verbose(1, "[GEM:modelOBJ] glmWeld(): %d redundant vertices.",
+  logpost(0, 3+1, "[GEM:modelOBJ] glmWeld(): %d redundant vertices.",
           model->numvertices - numvectors - 1);
 
   for (i = 0; i < model->numtriangles; i++) {
@@ -2328,12 +2328,12 @@ glmReadPPM(const char* filename, int* width, int* height)
   /* grab first two chars of the file and make sure that it has the
      correct magic cookie for a raw PPM file. */
   if(NULL==fgets(head, 70, fp)) {
-    verbose(0, "[GEM:modelOBJ] _glmReadPPM() failed reading header");
+    logpost(0, 3+0, "[GEM:modelOBJ] _glmReadPPM() failed reading header");
     fclose(fp);
     return NULL;
   }
   if (strncmp(head, "P6", 2)) {
-    verbose(0, "[GEM:modelOBJ] %s: Not a raw PPM file", filename);
+    logpost(0, 3+0, "[GEM:modelOBJ] %s: Not a raw PPM file", filename);
     fclose(fp);
     return NULL;
   }
@@ -2342,7 +2342,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   i = 0;
   while(i < 3) {
     if(NULL==fgets(head, 70, fp)) {
-      verbose(0, "[GEM:modelOBJ] _glmReadPPM() failed header info");
+      logpost(0, 3+0, "[GEM:modelOBJ] _glmReadPPM() failed header info");
       fclose(fp);
       return NULL;
     }
@@ -2370,7 +2370,7 @@ glmReadPPM(const char* filename, int* width, int* height)
   size_t count = fread(image, sizeof(unsigned char), imagesize, fp);
   fclose(fp);
   if(count!=imagesize) {
-    verbose(0, "[GEM:modelOBJ] _glmReadPPM failed to read all bytes");
+    logpost(0, 3+0, "[GEM:modelOBJ] _glmReadPPM failed to read all bytes");
     *width=*height=0;
     delete[]image;
     image=NULL;

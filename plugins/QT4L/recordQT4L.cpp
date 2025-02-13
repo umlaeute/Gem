@@ -62,7 +62,7 @@ recordQT4L :: recordQT4L(void) :
   std::vector<std::string>codecs=getCodecs();
   if(codecs.size()>0) {
     setCodec(codecs[0]);
-    verbose(1, "[GEM:recordQT4L] default codec is: '%s'", m_codecname.c_str());
+    logpost(0, 3+1, "[GEM:recordQT4L] default codec is: '%s'", m_codecname.c_str());
   }
 }
 #else
@@ -116,12 +116,12 @@ static lqt_file_type_t get_qtformat(const char*name)
 {
   for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(*qtformats); i++) {
     if(!strcasecmp(name, qtformats[i].name)) {
-      verbose(1, "[GEM:recordQT4L] using format '%s'", qtformats[i].description);
+      logpost(0, 3+1, "[GEM:recordQT4L] using format '%s'", qtformats[i].description);
       return qtformats[i].type;
     }
   }
 
-  verbose(0,
+  logpost(0, 3+0,
           "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
@@ -131,7 +131,7 @@ static lqt_file_type_t guess_qtformat(const std::string&filename)
   const char * extension = strrchr(filename.c_str(), '.');
 
   if(!extension) {
-    verbose(0, "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
+    logpost(0, 3+0, "[GEM:recordQT4L] no extension given: encoding will be QuickTime");
     return LQT_FILE_QT;
   }
 
@@ -139,12 +139,12 @@ static lqt_file_type_t guess_qtformat(const std::string&filename)
 
   for(unsigned int i = 0; i < sizeof(qtformats)/sizeof(*qtformats); i++) {
     if(!strcasecmp(extension, qtformats[i].extension)) {
-      verbose(1, "[GEM:recordQT4L] detected format '%s'", qtformats[i].description);
+      logpost(0, 3+1, "[GEM:recordQT4L] detected format '%s'", qtformats[i].description);
       return qtformats[i].type;
     }
   }
 
-  verbose(0,
+  logpost(0, 3+0,
           "[GEM:recordQT4L] unknown extension: encoding will be QuickTime");
   return LQT_FILE_QT; /* should be save for now */
 }
@@ -485,7 +485,7 @@ bool recordQT4L :: setCodec(const std::string&name)
       }
     }
     if(codecname.empty()) {
-      verbose(0, "[GEM:recordQT4L] couldn't find default codec for this format");
+      logpost(0, 3+0, "[GEM:recordQT4L] couldn't find default codec for this format");
       return false;
     }
   }

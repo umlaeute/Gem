@@ -139,7 +139,7 @@ static inline void getVideoFilter(videoInput&vi, int device,
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotFilterSetting '%s' to %f (%d in %d..%d)",
+  logpost(0, 3+1, "[GEM::videoVIDS] gotFilterSetting '%s' to %f (%d in %d..%d)",
           propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
@@ -164,7 +164,7 @@ static inline void getVideoCamera(videoInput&vi, int device,
     return;
   }
   double d=((double)(cur-min))/((double)(max-min));
-  verbose(1, "[GEM::videoVIDS] gotCameraSetting '%s' to %f (%d in %d..%d)\n",
+  logpost(0, 3+1, "[GEM::videoVIDS] gotCameraSetting '%s' to %f (%d in %d..%d)\n",
           propName.c_str(), d, (int)cur, (int)min, (int)max);
   props.set(propName, d);
 }
@@ -226,7 +226,7 @@ bool videoVIDS::enumProperties(gem::Properties&readable,
 void videoVIDS::setProperties(gem::Properties&props)
 {
   if(trySetProperties(props, true)) {
-    verbose(1, "[GEM::videoVIDS] needs restart");
+    logpost(0, 3+1, "[GEM::videoVIDS] needs restart");
     if(m_vi) {
       stop();
       start();

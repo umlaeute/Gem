@@ -22,7 +22,7 @@
 #include "Gem/Manager.h"
 #include "Gem/Exception.h"
 
-// for verbose():
+// for logpost(0, 3+):
 #include "Gem/RTE.h"
 
 #include "plugins/PluginFactory.h"
@@ -153,7 +153,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur)
   vid_format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
 
   int format= vid_format.fmt.pix.pixelformat;
-  verbose(1, "[GEM:recordV4L2] v4l2-output requested %dx%d @ '%c%c%c%c'",
+  logpost(0, 3+1, "[GEM:recordV4L2] v4l2-output requested %dx%d @ '%c%c%c%c'",
           vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),
@@ -165,7 +165,7 @@ bool recordV4L2::init(const imageStruct* dummyImage, const int framedur)
     return false;
   }
 
-  verbose(1, "[GEM:recordV4L2] v4l2-output returned %dx%d @ '%c%c%c%c'",
+  logpost(0, 3+1, "[GEM:recordV4L2] v4l2-output returned %dx%d @ '%c%c%c%c'",
           vid_format.fmt.pix.width, vid_format.fmt.pix.height,
           (char)(format),
           (char)(format>>8),

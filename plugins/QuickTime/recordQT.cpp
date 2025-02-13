@@ -108,7 +108,7 @@ recordQT :: recordQT(void)
     if (err = EnterMovies()) {
       throw(GemException("unable to initialize QuickTime/Movies"));
     }
-    verbose(1, "[GEM:recordQT] QT init done");
+    logpost(0, 3+1, "[GEM:recordQT] QT init done");
     firsttime=false;
   }
 
@@ -120,7 +120,7 @@ recordQT :: recordQT(void)
   GetCodecNameList(&codecList,1);
   count=codecList->count;
   codecContainer.clear();
-  verbose(0, "[GEM:recordQT] %i codecs installed",codecList->count);
+  logpost(0, 3+0, "[GEM:recordQT] %i codecs installed",codecList->count);
   for (int i = 0; i < count; i++) {
     codecName = codecList->list[i];
     std::string typeName = std::string((char*)codecName.typeName + 1, ((char*)codecName.typeName)[0]);
@@ -137,7 +137,7 @@ recordQT :: recordQT(void)
   for(int i = 0; i < count; i++) {
     if (codecContainer[i].ctype == kJPEGCodecType) {
       m_codec = codecContainer[i].codec;
-      verbose(1, "[GEM:recordQT] found pjpeg codec %i %lu %p ctype",
+      logpost(0, 3+1, "[GEM:recordQT] found pjpeg codec %i %lu %p ctype",
               i, m_codecType, m_codec);
       break;
     }
@@ -146,7 +146,7 @@ recordQT :: recordQT(void)
   stdComponent = OpenDefaultComponent(StandardCompressionType,
                                       StandardCompressionSubType);
   if (stdComponent == NULL) {
-    verbose(0, "[GEM:recordQT] failed to open compressor component");
+    logpost(0, 3+0, "[GEM:recordQT] failed to open compressor component");
   }
 }
 
@@ -160,7 +160,7 @@ recordQT :: ~recordQT(void)
   if (stdComponent != NULL) {
     compErr = CloseComponent(stdComponent);
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
+      logpost(0, 3+0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
     }
   }
 }
@@ -262,11 +262,11 @@ void recordQT :: setupQT(
   m_srcRect.right = m_width;
 
   if (m_compressImage->format == GEM_YUV) {
-    verbose(0, "[GEM:recordQT] using YUV");
+    logpost(0, 3+0, "[GEM:recordQT] using YUV");
     colorspace = k422YpCbCr8CodecType;
   }
   if (m_compressImage->format == GEM_RGBA) {
-    verbose(0, "[GEM:recordQT] using BGRA");
+    logpost(0, 3+0, "[GEM:recordQT] using BGRA");
     colorspace = k32ARGBPixelFormat;
   }
 #ifdef _WIN32
@@ -313,7 +313,7 @@ void recordQT :: setupQT(
   if (m_compressImage->upsidedown && m_compressImage->format == GEM_RGBA) {
     MatrixRecord        aMatrix;
     GetMovieMatrix(m_movie,&aMatrix);
-    verbose(1, "[GEM:recordQT] upside down");
+    logpost(0, 3+1, "[GEM:recordQT] upside down");
     ScaleMatrix(&aMatrix,Long2Fix(1),Long2Fix(-1),0,0);
     SetMovieMatrix(m_movie,&aMatrix);
   }
@@ -418,7 +418,7 @@ void recordQT :: stop(void)
   m_recordSetup = false;
   m_firstRun = 1;
 
-  verbose(0, "[GEM:recordQT] movie written to %s",m_filename.c_str());
+  logpost(0, 3+0, "[GEM:recordQT] movie written to %s",m_filename.c_str());
   m_filename.clear();
 }
 
@@ -463,7 +463,7 @@ void recordQT :: compressFrame(void)
                                            startTime.QuadPart)/countFreq * 1000.f);
     seconds = (static_cast<float>(endTime.QuadPart -
                                   startTime.QuadPart)/countFreq * 1.f);
-    verbose(1,
+    logpost(0, 3+1,
             "[GEM:recordQT] freq %f countFreq %f startTime %d endTime %d fps %f seconds %f",
             freq, countFreq, static_cast<int>(startTime.QuadPart),
             static_cast<int>(endTime.QuadPart), fps, seconds);
@@ -576,7 +576,7 @@ bool recordQT :: dialog(void)
       compErr = CloseComponent(stdComponent);
     }
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
+      logpost(0, 3+0, "[GEM:recordQT] CloseComponent failed with error %ld", compErr);
     }
 
     //open a new component from scratch
@@ -591,7 +591,7 @@ bool recordQT :: dialog(void)
     compErr = SCRequestSequenceSettings(stdComponent);
 
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] SCRequestSequenceSettings failed with error %ld",
+      logpost(0, 3+0, "[GEM:recordQT] SCRequestSequenceSettings failed with error %ld",
               compErr);
     }
 
@@ -600,7 +600,7 @@ bool recordQT :: dialog(void)
     compErr = SCGetInfo(stdComponent, scSpatialSettingsType, &SpatialSettings);
 
     if (compErr != noErr) {
-      verbose(0, "[GEM:recordQT] SCGetInfo failed with error %ld", compErr);
+      logpost(0, 3+0, "[GEM:recordQT] SCGetInfo failed with error %ld", compErr);
     }
 
     m_codecType = SpatialSettings.codecType;
@@ -610,14 +610,14 @@ bool recordQT :: dialog(void)
     m_frameRate = TemporalSettings.frameRate;
     m_keyFrameRate = TemporalSettings.keyFrameRate;
 
-    verbose(1, "[GEM:recordQT] Dialog returned SpatialSettings\n"
+    logpost(0, 3+1, "[GEM:recordQT] Dialog returned SpatialSettings\n"
             "\tcodecType %lX\n"
             "\tcodec %p\n"
             "\tdepth %d\n"
             "\tspatialQuality %ld",
             SpatialSettings.codecType, SpatialSettings.codec, SpatialSettings.depth,
             SpatialSettings.spatialQuality);
-    verbose(1, "[GEM:recordQT] Dialog returned TemporalSettings\n"
+    logpost(0, 3+1, "[GEM:recordQT] Dialog returned TemporalSettings\n"
             "\ttemporalQualitye %ld\n"
             "\tframeRate %ld\n"
             "\tkeyFrameRate %ld",
@@ -698,7 +698,7 @@ bool recordQT :: setCodec(const std::string&codecName)
     switch(requestedCodec) {
     case 1: /* PJPEG */
       if (codecContainer[i].ctype == kJPEGCodecType) {
-        verbose(0, "[GEM:recordQT] found Photo Jpeg");
+        logpost(0, 3+0, "[GEM:recordQT] found Photo Jpeg");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -707,7 +707,7 @@ bool recordQT :: setCodec(const std::string&codecName)
       break;
     case 2: /* AIC */
       if (static_cast<int>(codecContainer[i].ctype) == 'icod') {
-        verbose(0, "[GEM:recordQT] found Apple Intermediate Codec");
+        logpost(0, 3+0, "[GEM:recordQT] found Apple Intermediate Codec");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -716,7 +716,7 @@ bool recordQT :: setCodec(const std::string&codecName)
       break;
     case 3: /* Animation */
       if (codecContainer[i].ctype == kAnimationCodecType) {
-        verbose(0, "[GEM:recordQT] found Animation");
+        logpost(0, 3+0, "[GEM:recordQT] found Animation");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -725,7 +725,7 @@ bool recordQT :: setCodec(const std::string&codecName)
       break;
     case 4: /* DV NTSC */
       if (codecContainer[i].ctype == kDVCNTSCCodecType) {
-        verbose(0, "[GEM:recordQT] found DV NTSC");
+        logpost(0, 3+0, "[GEM:recordQT] found DV NTSC");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -734,7 +734,7 @@ bool recordQT :: setCodec(const std::string&codecName)
       break;
     case 5: /* DV PAL */
       if (codecContainer[i].ctype == kDVCPALCodecType) {
-        verbose(0, "[GEM:recordQT] found DV PAL");
+        logpost(0, 3+0, "[GEM:recordQT] found DV PAL");
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;
@@ -744,7 +744,7 @@ bool recordQT :: setCodec(const std::string&codecName)
     default:
       /* hmmm... */
       if(gensym(codecName.c_str())==gensym(codecContainer[i].name.c_str())) {
-        verbose(0, "[GEM:recordQT] found '%s'", codecName.c_str());
+        logpost(0, 3+0, "[GEM:recordQT] found '%s'", codecName.c_str());
         resetCodecSettings();
         m_codecType = codecContainer[i].ctype;
         m_codec     = codecContainer[i].codec;

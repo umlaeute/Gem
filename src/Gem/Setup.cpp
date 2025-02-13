@@ -154,11 +154,11 @@ static bool checkVersion(const char*dirname, const char*filename,
   if(!result) {
     pd_error(0, "GEM: binary/abstractions version mismatch!");
     pd_error(0, "GEM:   continue at your own risk...");
-    verbose(0, "GEM: binary is %d.%d, but Gem abstractions are %s",
+    logpost(0, 3+0, "GEM: binary is %d.%d, but Gem abstractions are %s",
             GEM_VERSION_MAJOR, GEM_VERSION_MINOR, gotversion.c_str());
-    verbose(0,
+    logpost(0, 3+0,
             "GEM: This usually means that you have a path to another version of Gem stored in your startup preferences");
-    verbose(0, "GEM: Consider removing the wrong path!");
+    logpost(0, 3+0, "GEM: Consider removing the wrong path!");
   }
 
   return result;
@@ -199,7 +199,7 @@ static void addownpath(const char*filename)
     buf[MAXPDSTRING-1]=0;
     if ((fd=_open(buf, flags))>=0) {
       _close(fd);
-      verbose(1, "GEM: trying to add Gem path '%s' to search-paths", mypath);
+      logpost(0, 3+1, "GEM: trying to add Gem path '%s' to search-paths", mypath);
       gem::RTE::RTE*rte=gem::RTE::RTE::getRuntimeEnvironment();
       if(rte) {
         success = rte->addSearchPath(mypath, 0);
@@ -251,23 +251,23 @@ void setup()
   firsttime = false;
   // startup GEM
   post("GEM: Graphics Environment for Multimedia");
-  verbose(-1, "GEM: ver: %s", GemVersion::versionString());
-  verbose(-1, "GEM: compiled " BUILD_DATE );
-  verbose(-1, "GEM: maintained by %s", GEM_MAINTAINER);
-  verbose(-1, "GEM: Authors :\tMark Danks (original version)");
+  logpost(0, 3-1, "GEM: ver: %s", GemVersion::versionString());
+  logpost(0, 3-1, "GEM: compiled " BUILD_DATE );
+  logpost(0, 3-1, "GEM: maintained by %s", GEM_MAINTAINER);
+  logpost(0, 3-1, "GEM: Authors :\tMark Danks (original version)");
   for(unsigned int i=0; i<sizeof(GEM_AUTHORS)/sizeof(*GEM_AUTHORS); i++) {
-    verbose(-1, "GEM:\t\t%s", GEM_AUTHORS[i]);
+    logpost(0, 3-1, "GEM:\t\t%s", GEM_AUTHORS[i]);
   }
-  verbose(-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
-  verbose(-1, "GEM: found a bug? miss a feature? please report it:");
-  verbose(-1, "GEM: \thomepage https://gem.iem.at/");
-  verbose(-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
-  verbose(-1,
+  logpost(0, 3-1, "GEM: with help by %s", GEM_OTHERAUTHORS);
+  logpost(0, 3-1, "GEM: found a bug? miss a feature? please report it:");
+  logpost(0, 3-1, "GEM: \thomepage https://gem.iem.at/");
+  logpost(0, 3-1, "GEM: \tbug-tracker https://bugs.gem.iem.at/");
+  logpost(0, 3-1,
           "GEM: \tmailing-list https://lists.puredata.info/listinfo/gem-dev/");
 
   for(class_setup_list_t *l = register_class_setup_list; l;) {
     class_setup_list_t*next = l->next;
-    verbose(4, "registering Gem object: %s", l->name);
+    logpost(0, 3+4, "registering Gem object: %s", l->name);
     l->setup();
     delete l;
     l = next;

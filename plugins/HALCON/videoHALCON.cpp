@@ -82,7 +82,7 @@ static std::vector<std::string>getBackends(void)
           s_backends.push_back(backend);
         }
       } catch (Halcon::HException &except) {
-        verbose(1,
+        logpost(0, 3+1,
                 "[GEM::videoHALCON] trying to get framegraber info returned: %s",
                 except.message);
       }
@@ -194,7 +194,7 @@ bool videoHALCON :: grabFrame()
     unlock();
 
   } catch (Halcon::HException& except) {
-    verbose(1, "[GEM:videoHALCON] HTuple exception: '%s'", except.message);
+    logpost(0, 3+1, "[GEM:videoHALCON] HTuple exception: '%s'", except.message);
   }
   return true;
 }
@@ -230,7 +230,7 @@ static std::string parsedevicename(std::string devicename,
   std::vector<std::string> parsed = split(devicename, ':');
   switch(parsed.size()) {
   default:
-    verbose(0, "[GEM:videoHALCON] could not parse '%s'", devicename.c_str());
+    logpost(0, 3+0, "[GEM:videoHALCON] could not parse '%s'", devicename.c_str());
     return name;
   case 3:
     if(parsed[2].size()>0) {
@@ -243,9 +243,9 @@ static std::string parsedevicename(std::string devicename,
   case 1:
     name=parsed[0];
   }
-  verbose(1, "[GEM:videoHALCON] name  ='%s'", name.c_str());
-  verbose(1, "[GEM:videoHALCON] camera='%s'", cameratype.c_str());
-  verbose(1, "[GEM:videoHALCON] device='%s'", device.c_str());
+  logpost(0, 3+1, "[GEM:videoHALCON] name  ='%s'", name.c_str());
+  logpost(0, 3+1, "[GEM:videoHALCON] camera='%s'", cameratype.c_str());
+  logpost(0, 3+1, "[GEM:videoHALCON] device='%s'", device.c_str());
   return name;
 }
 
@@ -295,7 +295,7 @@ static void printinfo(std::string name, std::string value)
     printtuple(ValueList);
     std::cerr << std::endl;
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] printinfo['%s'] %s", name.c_str(),
+    logpost(0, 3+0, "[GEM:videoHALCON] printinfo['%s'] %s", name.c_str(),
             except.message);
   }
 }
@@ -308,7 +308,7 @@ static void getparam(Halcon::HFramegrabber*grabber, std::string name)
     std::cerr << "got parm for "<<name<<std::endl;
     printtuple(result);
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] getparam['%s']: %s", name.c_str(),
+    logpost(0, 3+0, "[GEM:videoHALCON] getparam['%s']: %s", name.c_str(),
             except.message);
   }
 }
@@ -401,7 +401,7 @@ bool videoHALCON :: openDevice(gem::Properties&props)
       /* const HTuple &LineIn = -1 */
     );
   } catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] open:: %s", except.message);
+    logpost(0, 3+0, "[GEM:videoHALCON] open:: %s", except.message);
     m_grabber=NULL;
     return false;
   }
@@ -539,7 +539,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] enumProperties %s", except.message);
+    logpost(0, 3+0, "[GEM:videoHALCON] enumProperties %s", except.message);
   }
 
   try {
@@ -564,7 +564,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] enumProperties[R/O] %s", except.message);
+    logpost(0, 3+0, "[GEM:videoHALCON] enumProperties[R/O] %s", except.message);
   }
 
   try {
@@ -589,7 +589,7 @@ bool videoHALCON::enumProperties(gem::Properties&readable,
       }
     }
   }  catch (Halcon::HException &except) {
-    verbose(0, "[GEM:videoHALCON] enumProperties[W/O] %s", except.message);
+    logpost(0, 3+0, "[GEM:videoHALCON] enumProperties[W/O] %s", except.message);
   }
 
   return true;

@@ -89,13 +89,13 @@ bool filmMPEG3 :: open(const std::string&filename,
     mpeg_file= mpeg3_open(cfilename);
 #endif
     if(!mpeg_file) {
-      verbose(0,
+      logpost(0, 3+0,
               "[GEM:filmMPEG3] this file %s does not seem to hold any video data",
               filename.c_str());
       goto unsupported;
     }
     if (!mpeg3_has_video(mpeg_file)) {
-      verbose(0,
+      logpost(0, 3+0,
               "[GEM:filmMPEG3] this file %s does not seem to hold any video data",
               filename.c_str());
       goto unsupported;

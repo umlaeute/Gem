@@ -1068,11 +1068,11 @@ static const int offset_pix_=strlen("pix_");
 static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
 {
   if(!s) {
-    ::verbose(2, "freeframe_loader: no name given");
+    ::logpost(0, 3+2, "freeframe_loader: no name given");
     return 0;
   }
 
-  ::verbose(2, "freeframe_loader: %s",s->s_name);
+  ::logpost(0, 3+2, "freeframe_loader: %s",s->s_name);
   try {
     \
     const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
@@ -1084,7 +1084,7 @@ static void*freeframe_loader_new(t_symbol*s, int argc, t_atom*argv)
     proxy.setObject(new pix_freeframe(gensym(realname)));
     return proxy.initialize();
   } catch (GemException&e) {
-    ::verbose(2, "freeframe_loader: failed! (%s)", e.what());
+    ::logpost(0, 3+2, "freeframe_loader: failed! (%s)", e.what());
     return 0;
   }
   return 0;

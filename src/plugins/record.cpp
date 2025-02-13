@@ -118,7 +118,7 @@ public:
         id.push_back(ID);
       } else {
         // request for an unavailable ID
-        verbose(2, "backend '%s' unavailable", ID.c_str());
+        logpost(0, 3+2, "backend '%s' unavailable", ID.c_str());
         return false;
       }
     } else {
@@ -128,7 +128,7 @@ public:
 
     for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
-      verbose(2, "trying to add '%s' as backend", key.c_str());
+      logpost(0, 3+2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
         // not yet added, do so now!
         gem::plugins::record*handle=NULL;
@@ -136,7 +136,7 @@ public:
           handle=gem::PluginFactory<gem::plugins::record>::getInstance(key);
         } catch(GemException&x) {
           handle=NULL;
-          verbose(1, "cannot use record plugin '%s': %s", key.c_str(), x.what());
+          logpost(0, 3+1, "cannot use record plugin '%s': %s", key.c_str(), x.what());
         }
         if(NULL==handle) {
           continue;
@@ -144,7 +144,7 @@ public:
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        verbose(2, "added backend#%d '%s'", (int)(m_handles.size()-1),
+        logpost(0, 3+2, "added backend#%d '%s'", (int)(m_handles.size()-1),
                 key.c_str());
       }
     }
@@ -320,7 +320,7 @@ public:
     }
     if(!tried) {
       if(!backends.empty() && !m_selectedHandles.empty()) {
-        verbose(2, "no available backend selected, fall back to valid ones");
+        logpost(0, 3+2, "no available backend selected, fall back to valid ones");
       }
       for(unsigned int i=0; i<m_selectedHandles.size(); i++) {
         if(m_selectedHandles[i]->start(filename, props)) {

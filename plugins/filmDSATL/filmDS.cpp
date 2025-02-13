@@ -245,7 +245,7 @@ bool filmDS :: open(const std::string&filename,
   BOOL                  bFrameTime      = TRUE;
   GUID                  Guid;
 
-  verbose(1, "Trying DirectShow");
+  logpost(0, 3+1, "Trying DirectShow");
 
   // Convert c-string to Wide string.
   memset(&WideFileName, 0, MAXPDSTRING * 2);
@@ -253,7 +253,7 @@ bool filmDS :: open(const std::string&filename,
   if (0 == MultiByteToWideChar(CP_ACP, 0, filename.c_str(),
                                filename.length(), WideFileName,
                                MAXPDSTRING)) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to load %s", filename.c_str());
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to load %s", filename.c_str());
     return false;
   }
 
@@ -262,7 +262,7 @@ bool filmDS :: open(const std::string&filename,
                   &VideoFilter);
 
   if (RetVal != S_OK || NULL == VideoFilter) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to render %s", filename.c_str());
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to render %s", filename.c_str());
     return false;
   }
 
@@ -273,7 +273,7 @@ bool filmDS :: open(const std::string&filename,
                                    IID_IBaseFilter, (void**)&SampleFilter);
 
   if (RetVal != S_OK || NULL == SampleFilter) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to create SampleFilter interface %d",
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to create SampleFilter interface %d",
             RetVal);
     return false;
   }
@@ -282,7 +282,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = FilterGraph->AddFilter(SampleFilter, L"Sample Grabber");
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to add SampleFilter %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to add SampleFilter %d", RetVal);
     return false;
   }
 
@@ -294,7 +294,7 @@ bool filmDS :: open(const std::string&filename,
                   (void **)&SampleGrabber);
 
   if (RetVal != S_OK || NULL == SampleGrabber) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:filmDS:legacy]Unable to create SampleGrabber interface %d", RetVal);
     return false;
   }
@@ -316,7 +316,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = SampleGrabber->SetOneShot(FALSE);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
     return false;
   }
 
@@ -325,7 +325,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = SampleGrabber->SetBufferSamples(TRUE);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to setup sample grabber %d", RetVal);
     return false;
   }
 
@@ -336,7 +336,7 @@ bool filmDS :: open(const std::string&filename,
                                    IID_IBaseFilter, (void**)&NullFilter);
 
   if (RetVal != S_OK || NULL == NullFilter) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to create NullFilter interface %d",
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to create NullFilter interface %d",
             RetVal);
     return false;
   }
@@ -345,7 +345,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = FilterGraph->AddFilter(NullFilter, L"NullRenderer");
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to add NullFilter %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to add NullFilter %d", RetVal);
     return false;
   }
 
@@ -357,7 +357,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = filmConnectFilters(FilterGraph, VideoFilter, SampleFilter);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
     return false;
   }
 
@@ -365,7 +365,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = filmConnectFilters(FilterGraph, SampleFilter, NullFilter);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to connect filters %d", RetVal);
     return false;
   }
 
@@ -383,7 +383,7 @@ bool filmDS :: open(const std::string&filename,
     RetVal    = MediaSeeking->SetTimeFormat(&Guid);
 
     if (RetVal != S_OK) {
-      verbose(0, "[GEM:filmDS:legacy]Unable to set video time format %d",
+      logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to set video time format %d",
               RetVal);
       return false;
     }
@@ -394,7 +394,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = MediaSeeking->GetDuration(&m_Duration);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to get video duration %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to get video duration %d", RetVal);
     return false;
   }
 
@@ -420,7 +420,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = SampleGrabber->GetConnectedMediaType(&MediaType);
 
   if (RetVal != S_OK) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to get media type %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to get media type %d", RetVal);
     return false;
   }
 
@@ -438,7 +438,7 @@ bool filmDS :: open(const std::string&filename,
   }
 
   else {
-    verbose(0, "[GEM:filmDS:legacy]Invalid media type returned %s",
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Invalid media type returned %s",
             filename.c_str());
     return false;
   }
@@ -452,7 +452,7 @@ bool filmDS :: open(const std::string&filename,
     m_frame           = new BYTE[m_xsize * m_ysize * m_csize];
 
     if (NULL == m_frame) {
-      verbose(0,
+      logpost(0, 3+0,
               "[GEM:filmDS:legacy]Unable to allocate memory for the video buffer %s",
               filename.c_str());
       return false;
@@ -497,7 +497,7 @@ bool filmDS :: open(const std::string&filename,
   RetVal        = MediaControl->Run();
 
   if (RetVal != S_OK && RetVal != S_FALSE) {
-    verbose(0, "[GEM:filmDS:legacy]Unable to start video %d", RetVal);
+    logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to start video %d", RetVal);
     return false;
   }
 
@@ -509,7 +509,7 @@ bool filmDS :: open(const std::string&filename,
     RetVal    = MediaControl->GetState(0, &FilterState);
 
     if (RetVal != S_OK && RetVal != VFW_S_STATE_INTERMEDIATE) {
-      verbose(0, "[GEM:filmDS:legacy]Unable to run video %d", RetVal);
+      logpost(0, 3+0, "[GEM:filmDS:legacy]Unable to run video %d", RetVal);
       return false;
     }
 
@@ -529,7 +529,7 @@ bool filmDS :: open(const std::string&filename,
 
 #ifdef REGISTER_FILTERGRAPH
   if (FAILED(RetVal = filmAddGraphToRot(FilterGraph, &m_GraphRegister))) {
-    verbose(0,
+    logpost(0, 3+0,
             "[GEM:filmDS:legacy]failed to register filter graph with ROT!  hr=0x%X",
             RetVal);
     m_GraphRegister = 0;

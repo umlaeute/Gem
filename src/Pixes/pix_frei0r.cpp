@@ -694,10 +694,10 @@ static const int offset_pix_=strlen("pix_");
 static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
 {
   if(!s) {
-    ::verbose(2, "frei0r_loader: no name given");
+    ::logpost(0, 3+2, "frei0r_loader: no name given");
     return 0;
   }
-  ::verbose(2, "frei0r_loader: %s",s->s_name);
+  ::logpost(0, 3+2, "frei0r_loader: %s",s->s_name);
   try {
     const char*realname=s->s_name+offset_pix_; /* strip of the leading 'pix_' */
     const int typespecs[] = {};
@@ -708,7 +708,7 @@ static void*frei0r_loader_new(t_symbol*s, int argc, t_atom*argv)
     proxy.setObject(new pix_frei0r(gensym(realname)));
     return proxy.initialize();
   } catch (GemException&e) {
-    ::verbose(2, "frei0r_loader: failed! (%s)", e.what());
+    ::logpost(0, 3+2, "frei0r_loader: failed! (%s)", e.what());
     return 0;
   }
   return 0;
@@ -745,7 +745,7 @@ bool pix_frei0r :: loader(const t_canvas*canvas,
   try {
     plugin=new F0RPlugin(filename);
   } catch (GemException&e) {
-    ::verbose(2, "frei0r_loader: failed!! (%s)", e.what());
+    ::logpost(0, 3+2, "frei0r_loader: failed!! (%s)", e.what());
     return false;
   }
 

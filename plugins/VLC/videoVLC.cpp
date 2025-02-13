@@ -372,10 +372,10 @@ unsigned videoVLC::setFormat(char chroma[4], unsigned &width,
                              unsigned &height, unsigned &pitches, unsigned &lines)
 {
 #if 0
-  verbose(1, "[GEM:videoVLC] chroma: %s", chroma);
-  verbose(1, "[GEM:videoVLC] dimen : %dx%d", width, height);
-  verbose(1, "[GEM:videoVLC] pitches: %d", pitches);
-  verbose(1, "[GEM:videoVLC] lines: %d", lines);
+  logpost(0, 3+1, "[GEM:videoVLC] chroma: %s", chroma);
+  logpost(0, 3+1, "[GEM:videoVLC] dimen : %dx%d", width, height);
+  logpost(0, 3+1, "[GEM:videoVLC] pitches: %d", pitches);
+  logpost(0, 3+1, "[GEM:videoVLC] lines: %d", lines);
 #endif
   memcpy(chroma, format_string, 4);
 

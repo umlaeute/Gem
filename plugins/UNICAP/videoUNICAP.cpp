@@ -315,7 +315,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
   fourcc_t format=fourcc2fmt(fmt->fourcc);
 
   if(ILLEGAL==format) {
-    verbose(1, "[GEM:videoUNICAP] unsupported format '%s'", fmt->identifier);
+    logpost(0, 3+1, "[GEM:videoUNICAP] unsupported format '%s'", fmt->identifier);
     return;
   }
 
@@ -373,7 +373,7 @@ void videoUNICAP::newFrame (unicap_handle_t handle,
     m_pix.image.fromYU12(data);
     break;
   default:
-    verbose(1, "[GEM:videoUNICAP] cannot convert from given format");
+    logpost(0, 3+1, "[GEM:videoUNICAP] cannot convert from given format");
     break;
   }
   m_pix.newimage=1;
@@ -442,7 +442,7 @@ bool videoUNICAP :: start(void)
       int format_index=formatid[formatid_index];
       if( !SUCCESS( unicap_enumerate_formats( m_handle, &format_spec, &format,
                                               format_index) ) )  {
-        verbose(1, "[GEM:videoUNICAP] Failed to get video format %d",
+        logpost(0, 3+1, "[GEM:videoUNICAP] Failed to get video format %d",
                 format_index);
         continue;
       }
@@ -587,7 +587,7 @@ std::vector<std::string> videoUNICAP::enumerate(void)
     if(SUCCESS(status)) {
       const unsigned int cur=m_devices.size();
 #if 0
-      verbose(1,
+      logpost(0, 3+1,
               "[GEM:videoUNICAP] ID='%s'\tmodel='%s'\tvendor='%s'\tdevice='%s'\tCPI='%s'",
               device.identifier,
               device.model_name,
@@ -865,10 +865,10 @@ void videoUNICAP :: setProperties(gem::Properties&props)
       }
 
       if(!SUCCESS(status)) {
-        verbose(1, "[GEM:videoUNICAP] could not set property '%s'", key.c_str());
+        logpost(0, 3+1, "[GEM:videoUNICAP] could not set property '%s'", key.c_str());
 #if 0
       } else {
-        verbose(1, "[GEM:videoUNICAP] successfully set property '%s'",
+        logpost(0, 3+1, "[GEM:videoUNICAP] successfully set property '%s'",
                 key.c_str());
 #endif
       }

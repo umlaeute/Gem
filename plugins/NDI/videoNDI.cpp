@@ -156,7 +156,7 @@ std::vector<std::string> videoNDI::enumerate()
 
   for(uint32_t i=0; i<no_srcs; i++) {
     result.push_back(p_senders[i].p_ndi_name);
-    verbose(1, "[GEM:videoNDI] device#%d\t%s\t%s", i, p_senders[i].p_ndi_name, p_senders[i].p_url_address);
+    logpost(0, 3+1, "[GEM:videoNDI] device#%d\t%s\t%s", i, p_senders[i].p_ndi_name, p_senders[i].p_url_address);
     //result.push_back(p_senders[i].p_url_address);
   }
   return result;
@@ -210,11 +210,11 @@ bool videoNDI :: open(gem::Properties&props)
       }
     }
     if(src_num >= no_srcs) {
-      verbose(1, "[GEM:videoNDI] device '%s' does not exist, skipping", m_devicename.c_str());
+      logpost(0, 3+1, "[GEM:videoNDI] device '%s' does not exist, skipping", m_devicename.c_str());
       return false;
     }
   }
-  verbose(1, "[GEM:videoNDI] opening device '%s'", m_devicename.c_str());
+  logpost(0, 3+1, "[GEM:videoNDI] opening device '%s'", m_devicename.c_str());
 
   m_ndi_recv = NDI->recv_create_v3(NULL);
 
@@ -266,7 +266,7 @@ bool videoNDI :: stop()
 bool videoNDI :: reset()
 {
   MARK();
-  verbose(0, "[GEM:videoNDI] 'reset' not implemented");
+  logpost(0, 3+0, "[GEM:videoNDI] 'reset' not implemented");
   return false;
 }
 
@@ -293,15 +293,15 @@ pixBlock*videoNDI::getFrame(void)
       break;
     case NDIlib_FourCC_video_type_P216:
     case NDIlib_FourCC_video_type_PA16:
-      verbose(1, "[GEM:videoNDI] unknown format P...");
+      logpost(0, 3+1, "[GEM:videoNDI] unknown format P...");
       return NULL;
     case NDIlib_FourCC_video_type_YV12:
     case NDIlib_FourCC_video_type_I420:
     case NDIlib_FourCC_video_type_NV12:
-      verbose(1, "[GEM:videoNDI] unknown format Y...");
+      logpost(0, 3+1, "[GEM:videoNDI] unknown format Y...");
       return NULL;
     default:
-      verbose(1, "[GEM:videoNDI] unknown format...");
+      logpost(0, 3+1, "[GEM:videoNDI] unknown format...");
       return NULL;
     }
     m_pixBlock.image.setFormat();
@@ -316,7 +316,7 @@ pixBlock*videoNDI::getFrame(void)
     pd_error(0, "[GEM:videoNDI] lost connection");
     return NULL;
   case NDIlib_frame_type_audio:
-    verbose(2, "[GEM:videoNDI] got audio frame");
+    logpost(0, 3+2, "[GEM:videoNDI] got audio frame");
     break;
   case NDIlib_frame_type_none:
   default:

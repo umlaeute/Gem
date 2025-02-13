@@ -216,7 +216,7 @@ IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
         if (S_OK == displayMode->GetName(&dmn)) {
           std::string dmns = deckstring2string(dmn);
           bool found=(formatname == dmns);
-          verbose(1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
+          logpost(0, 3+1, "[GEM:videoDECKLINK] checking format '%s'", dmns.c_str());
           free_deckstring(dmn);
           if(found) {
             break;
@@ -557,7 +557,7 @@ bool videoDECKLINK::enumProperties(gem::Properties&readable,
 void videoDECKLINK::setProperties(gem::Properties&props)
 {
   if(trySetProperties(props, true)) {
-    verbose(1, "[GEM::videoDECKLINK] needs restart");
+    logpost(0, 3+1, "[GEM::videoDECKLINK] needs restart");
     if(m_dlInput) {
       stop();
       start();

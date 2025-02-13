@@ -231,7 +231,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
   tPvCameraInfo*cameraList=new tPvCameraInfo[cameraNum];
 
   if(m_devicenum>=0) {
-    verbose(0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum,
+    logpost(0, 3+0, "[GEM:videoAVT] trying to open #%d of %d devices", m_devicenum,
             cameraNum);
     if(cameraNum>m_devicenum
         && (cameraList[m_devicenum].PermittedAccess == ePvAccessMaster)) {
@@ -241,7 +241,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
       }
     }
   } else {
-    verbose(0, "[GEM:videoAVT] trying to open device '%s'",
+    logpost(0, 3+0, "[GEM:videoAVT] trying to open device '%s'",
             m_devicename.c_str());
     /*
       cameraList[i].SerialString,
@@ -253,7 +253,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     const unsigned long uid=strtoul(m_devicename.c_str(), NULL, 0);
 
     if(NULL==m_grabber && 0==errno) {
-      verbose(1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
+      logpost(0, 3+1, "[GEM:videoAVT] checking UniqueID: 0x% 8x", uid);
       for(unsigned long i=0; i<cameraNum; i++) {
         if(uid==cameraList[i].UniqueId
             && PvCameraOpen(cameraList[i].UniqueId, ePvAccessMaster,
@@ -264,7 +264,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
     }
 
     if(NULL==m_grabber) {
-      verbose(1, "[GEM:videoAVT] checking SerialString: %s",
+      logpost(0, 3+1, "[GEM:videoAVT] checking SerialString: %s",
               m_devicename.c_str());
       for(unsigned long i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].SerialString
@@ -275,7 +275,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
       }
     }
     if(NULL==m_grabber) {
-      verbose(1, "[GEM:videoAVT] checking DisplayName: %s",
+      logpost(0, 3+1, "[GEM:videoAVT] checking DisplayName: %s",
               m_devicename.c_str());
       for(unsigned long i=0; i<cameraNum; i++) {
         if(m_devicename==cameraList[i].DisplayName
@@ -300,7 +300,7 @@ bool videoAVT :: openDevice(gem::Properties&props)
             continue;
           }
           OldAddr=IpAddr;
-          verbose(0, "[GEM:videoAVT] trying to connect to %3d.%3d.%3d.%3d",
+          logpost(0, 3+0, "[GEM:videoAVT] trying to connect to %3d.%3d.%3d.%3d",
                   (IpAddr & 0x0FF),
                   (IpAddr & 0x0FF00)>>8,
                   (IpAddr & 0x0FF0000)>>16,

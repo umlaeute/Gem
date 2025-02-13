@@ -176,7 +176,7 @@ bool videoDV4L :: openDevice(gem::Properties&props)
   // http://www.dennedy.org/libraw1394/API-raw1394-new-handle.html
   m_raw=raw1394_new_handle();
   if(!m_raw) {
-    verbose(0, "[GEM:videoDV4L] unable to get raw1394 handle");
+    logpost(0, 3+0, "[GEM:videoDV4L] unable to get raw1394 handle");
     return false;
   }
 
@@ -184,7 +184,7 @@ bool videoDV4L :: openDevice(gem::Properties&props)
   struct raw1394_portinfo*pinf=new struct raw1394_portinfo[num_pinf];
 
   int ports = raw1394_get_port_info(m_raw, pinf, num_pinf);
-  verbose(1, "[GEM:videoDV4L] got %d ports", ports);
+  logpost(0, 3+1, "[GEM:videoDV4L] got %d ports", ports);
 
   int devnum=m_devicenum;
   if (!m_devicename.empty()) {
@@ -192,7 +192,7 @@ bool videoDV4L :: openDevice(gem::Properties&props)
   }
 
   for(int i=0; i<ports; i++) {
-    verbose(1, "[GEM:videoDV4L] port#%02d: %.*s", i, 32, pinf[i].name);
+    logpost(0, 3+1, "[GEM:videoDV4L] port#%02d: %.*s", i, 32, pinf[i].name);
     if (devnum<0 && m_devicename==pinf[i].name) {
       devnum=i;
       /* we don't "break" for the nice verbose listing of ports */
@@ -202,7 +202,7 @@ bool videoDV4L :: openDevice(gem::Properties&props)
   delete[]pinf;
 
   int nodes=raw1394_get_nodecount(m_raw);
-  verbose(1, "[GEM:videoDV4L] got %d nodes", nodes);
+  logpost(0, 3+1, "[GEM:videoDV4L] got %d nodes", nodes);
 
   if(devnum>=ports) {
     closeDevice();
@@ -228,12 +228,12 @@ bool videoDV4L :: openDevice(gem::Properties&props)
 
   m_dvfd = raw1394_get_fd(m_raw);
   if(m_dvfd<0) {
-    verbose(0, "[GEM:videoDV4L] illegal filedescriptor");
+    logpost(0, 3+0, "[GEM:videoDV4L] illegal filedescriptor");
     closeDevice();
     return false;
   }
 
-  verbose(1, "[GEM:videoDV4L] successfully opened device %d", devnum);
+  logpost(0, 3+1, "[GEM:videoDV4L] successfully opened device %d", devnum);
 
   setProperties(props);
 
@@ -288,7 +288,7 @@ bool videoDV4L :: startTransfer()
   }
 
   m_decoder->quality=m_quality;
-  verbose(1, "[GEM:videoDV4L] DV decoding quality %d ", m_decoder->quality);
+  logpost(0, 3+1, "[GEM:videoDV4L] DV decoding quality %d ", m_decoder->quality);
 
   m_iec = iec61883_dv_fb_init(m_raw, iec_frame, this);
   if(NULL==m_iec) {
