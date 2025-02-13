@@ -48,15 +48,13 @@ protected:
   virtual ~part_information();
 
   // How the object should be drawn
-  float        *m_pos;
-  float        *m_colors;
-  float        *m_sizes;
-  float        *m_velo;
-  float        *m_ages;
+  std::vector<float>m_position;
+  std::vector<float>m_color;
+  std::vector<float>m_size;
+  std::vector<float>m_velocity;
+  std::vector<float>m_age;
 
-  int           m_number;
-
-  t_outlet *out_num, *out_pos, *out_col, *out_vel, *out_siz, *out_age;
+  t_outlet *out_num, *out_position, *out_color, *out_velocity, *out_size, *out_age;
   t_atom m_alist[13];
 };
 
