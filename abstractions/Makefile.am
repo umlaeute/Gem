@@ -22,6 +22,7 @@ dist_gemabs_DATA = \
 	gemwin.pd \
 	hsv2rgb-help.pd \
 	hsv2rgb.pd \
+	part_info.pd \
 	pix_blobtracker-help.pd \
 	pix_blobtracker.pd \
 	pix_buffer_filmopen-help.pd \
@@ -33,5 +34,6 @@ dist_gemabs_DATA = \
 	rgb2yuv-help.pd \
 	rgb2yuv.pd \
 	yuv2rgb-help.pd \
-	yuv2rgb.pd
+	yuv2rgb.pd \
+	$(empty)
 
