@@ -57,6 +57,8 @@ libParticles_la_SOURCES=  \
     part_killold.h \
     part_killslow.cpp \
     part_killslow.h \
+    part_move.cpp \
+    part_move.h \
     part_orbitpoint.cpp \
     part_orbitpoint.h \
     part_render.cpp \
