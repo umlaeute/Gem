@@ -20,7 +20,7 @@
 #X floatatom 463 357 5 0 0 0 - - - 0;
 #X obj 451 332 + 1;
 #X msg 451 264 0;
-#X obj 361 126 s rendered_sound;
+#X obj 361 136 s rendered_sound;
 #X obj 654 130 s input_image;
 #X obj 567 40 gemhead 10;
 #X obj 274 322 pix_texture \; rectangle 1 \; quality 0;
@@ -252,7 +252,7 @@
 #X connect 31 0 26 0;
 #X restore 274 223 pd shader;
 #X obj 284 198 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
-#X obj 274 63 gemframebuffer \; dimen 4096 1 \; rectangle 1 \; type FLOAT;
+#X obj 274 63 gemframebuffer \; dimen 4096 1 \; rectangle 1 \; type FLOAT \; format RGBA32F;
 #X obj 301 458 pix_snap 0 0 4096 1 \; type FLOAT;
 #X msg 123 197 render;
 #X obj 40 245 gemwin \; color 0.3 0.3 0.3;
