@@ -80,8 +80,10 @@ dist_gemhelp_DATA += \
 	part_gravity-help.pd \
 	part_head-help.pd \
 	part_info-help.pd \
+	part_information-help.pd \
 	part_killold-help.pd \
 	part_killslow-help.pd \
+	part_move-help.pd \
 	part_orbitpoint-help.pd \
 	part_render-help.pd \
 	part_sink-help.pd \
