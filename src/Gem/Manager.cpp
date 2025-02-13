@@ -590,7 +590,7 @@ void GemMan :: render(void *)
 
   currentState.set(GemState::_TIMING_TICK, tickTime);
 
-  m_lastRenderTime = clock_getsystime();
+  m_lastRenderTime = clock_getlogicaltime();
 
   //test to see if stereo is supported
   //XXX maybe there is a better place to do this?
@@ -922,7 +922,7 @@ void GemMan :: startRendering()
     return;
   }
 
-  m_lastRenderTime = clock_getsystime();
+  m_lastRenderTime = clock_getlogicaltime();
   render(NULL);
 }
 
