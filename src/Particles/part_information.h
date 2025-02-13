@@ -2,7 +2,7 @@
 LOG
     GEM - Graphics Environment for Multimedia
 
-        Draw a part_info group
+        Draw a part_information group
 
     Copyright (c) 1997-1999 Mark Danks. mark@danks.org
     Copyright (c) Günther Geiger. geiger@epy.co.at
@@ -12,8 +12,8 @@ LOG
 
 -----------------------------------------------------------------*/
 
-#ifndef _INCLUDE__GEM_PARTICLES_PART_INFO_H_
-#define _INCLUDE__GEM_PARTICLES_PART_INFO_H_
+#ifndef _INCLUDE__GEM_PARTICLES_PART_INFORMATION_H_
+#define _INCLUDE__GEM_PARTICLES_PART_INFORMATION_H_
 
 #include "Particles/partlib_base.h"
 
@@ -21,22 +21,22 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_info
+        part_information
 
-        Draw a part_info group
+        Draw a part_information group
 
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN part_info : public partlib_base
+class GEM_EXTERN part_information : public partlib_base
 {
-  CPPEXTERN_HEADER(part_info, partlib_base);
+  CPPEXTERN_HEADER(part_information, partlib_base);
 
 public:
 
   //////////
   // Constructor
-  part_info();
+  part_information();
 
   //////////
   virtual void  renderParticles(GemState *state);
@@ -45,7 +45,7 @@ protected:
 
   //////////
   // Destructor
-  virtual ~part_info();
+  virtual ~part_information();
 
   // How the object should be drawn
   float        *m_pos;

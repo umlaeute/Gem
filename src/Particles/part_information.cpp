@@ -12,24 +12,24 @@
 //
 /////////////////////////////////////////////////////////
 
-#include "part_info.h"
+#include "part_information.h"
 
 #include <string.h>
 
 
 #include "papi/papi.h"
 
-CPPEXTERN_NEW(part_info);
+CPPEXTERN_NEW(part_information);
 
 /////////////////////////////////////////////////////////
 //
-// part_info
+// part_information
 //
 /////////////////////////////////////////////////////////
 // Constructor
 //
 /////////////////////////////////////////////////////////
-part_info :: part_info()
+part_information :: part_information()
 {
   m_number=1000;
   m_pos    = new float[m_number*3];
@@ -56,7 +56,7 @@ part_info :: part_info()
 // Destructor
 //
 /////////////////////////////////////////////////////////
-part_info :: ~part_info()
+part_information :: ~part_information()
 {
   outlet_free(out_num);
   outlet_free(out_pos);
@@ -85,12 +85,8 @@ part_info :: ~part_info()
 // renderParticles
 //
 /////////////////////////////////////////////////////////
-void part_info :: renderParticles(GemState *state)
+void part_information :: renderParticles(GemState *state)
 {
-  if (m_tickTime > 0.f)    {
-    pMove();
-  }
-  //    pDrawGroupp();
   int cnt = pGetGroupCount();
   if(cnt < 1) {
     return;
@@ -157,5 +153,5 @@ void part_info :: renderParticles(GemState *state)
 // static member functions
 //
 /////////////////////////////////////////////////////////
-void part_info :: obj_setupCallback(t_class *classPtr)
+void part_information :: obj_setupCallback(t_class *classPtr)
 {}
