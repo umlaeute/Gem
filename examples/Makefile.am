@@ -106,6 +106,7 @@ nobase_dist_gemexamples_DATA = \
 	07.texture/09.sharedTextures.pd \
 	07.texture/10.framebuffer.pd \
 	07.texture/11.multiples_gemhead_in_a_framebuffer.pd \
+	07.texture/12.floatingpoint_framebuffer.pd \
 	08.io/01.Mouse.pd \
 	08.io/02.Tablet.pd \
 	08.io/03.Orb.pd \
