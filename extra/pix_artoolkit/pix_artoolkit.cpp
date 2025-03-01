@@ -287,7 +287,7 @@ void pix_artoolkit :: processRGBAImage(imageStruct &image)
   m_image.ysize = image.ysize;
   m_image.fromGray(image.data);
   image.data   = m_image.data;
-  image.notowned = 0;
+  image.not_owned = 0;
   image.setFormat(m_image.format);
 }
 
@@ -303,7 +303,7 @@ void pix_artoolkit :: processYUVImage(imageStruct &image)
   m_image.ysize = image.ysize;
   m_image.fromUYVY(image.data);
   image.data   = m_image.data;
-  image.notowned = 0;
+  image.not_owned = 0;
   image.setFormat(m_image.format);
 }
 
