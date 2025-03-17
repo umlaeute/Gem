@@ -655,7 +655,8 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
     try {
       ui=m_shadermapper.get(f);
     } catch(GemException&x) {
-      error("unable to get shaderID for %f...skipping!", f);
+      if(f)
+        error("unable to get shaderID for %f...skipping!", f);
       continue;
     }
     m_shaderObj[m_numShaders]    = ui;
