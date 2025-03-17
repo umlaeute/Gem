@@ -720,6 +720,7 @@ bool videoV4L2 :: startTransfer()
   type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   if (-1 == xioctl (m_tvfd, VIDIOC_STREAMON, &type)) {
     perror("[GEM:videoV4L2] VIDIOC_STREAMON");//exit
+    goto closit;
   }
 
   m_frameSize=fmt.fmt.pix.sizeimage;
