@@ -247,4 +247,6 @@ dist_gemhelp_DATA += \
 	_backendinfo.pd \
 	_gemwin.pd \
 	_pix2rectangle.pd \
+	_textbbox.pd \
+	_textbbox-help.pd \
 	$(empty)
