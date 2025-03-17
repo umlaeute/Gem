@@ -960,11 +960,24 @@ bool videoV4L2 :: enumProperties(gem::Properties&readable,
   }
 
   for (__u32 id = V4L2_CID_PRIVATE_BASE;;id++) {
+    int ret = 0;
     queryctrl.id = id;
-    if (0 == xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl)) {
+    ret = xioctl (m_tvfd, VIDIOC_QUERYCTRL, &queryctrl);
+    if (0 == ret) {
       addProperties(queryctrl, readable, writeable);
     } else {
-      if (errno == EINVAL) {
+      /* we practically always fail here and could just 'break'
+       * https://github.com/gjasny/v4l-utils/blob/371537d1bcf03146682005a858af1b3e02900cc1/utils/v4l2-compliance/v4l2-test-controls.cpp#L344-L350
+       */
+      if (errno == ENOTTY) {
+        break;
+      }
+      if (errno && errno != EINVAL) {
+        /* invalid return code */
+        break;
+      }
+      if (errno) {
+        /* EINVAL */
         break;
       }
     }
