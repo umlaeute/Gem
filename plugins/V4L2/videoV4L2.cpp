@@ -42,14 +42,14 @@ using namespace gem::plugins;
 #undef debugIOCTL
 
 #if 0
-# define debugPost ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugPost ::startpost("%s:%s[%d] v4l2@%p/%d:", __FILE__, __FUNCTION__, __LINE__, this, this->m_tvfd); ::post
 #else
 # include "Utils/nop.h"
 # define debugPost nop_post
 #endif
 
 #if 0
-# define debugThread ::startpost("%s:%s[%d]", __FILE__, __FUNCTION__, __LINE__); ::post
+# define debugThread ::startpost("%s:%s[%d] v4l2@%p/%d: ", __FILE__, __FUNCTION__, __LINE__, this, this->m_tvfd); ::post
 #else
 # include "Utils/nop.h"
 # define debugThread nop_post
@@ -192,7 +192,7 @@ int videoV4L2::init_mmap (void)
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
     buf.index       = m_nbuffers;
-    debugPost("v4l2: buf.index==%d", buf.index);
+    debugPost("buf.index==%d", buf.index);
 
     if (-1 == xioctl (m_tvfd, VIDIOC_QUERYBUF, &buf)) {
       perror("[GEM:videoV4L2] VIDIOC_QUERYBUF");
@@ -244,7 +244,7 @@ void *videoV4L2 :: capturing(void)
 
   m_capturing=true;
 
-  debugThread("V4L2: memset");
+  debugThread("memset", this);
   memset(&(buf), 0, sizeof (buf));
 
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -255,7 +255,7 @@ void *videoV4L2 :: capturing(void)
     FD_ZERO (&fds);
     FD_SET (m_tvfd, &fds);
 
-    debugThread("V4L2: grab");
+    debugThread("grab", this);
 
     m_frame++;
     m_frame%=nbuf;
@@ -265,7 +265,7 @@ void *videoV4L2 :: capturing(void)
     tv.tv_sec = 0;
     tv.tv_usec = 100;
     int r = select(0,0,0,0,&tv);
-    debugThread("V4L2: waited...");
+    debugThread("waited...", this);
 
 
     if (-1 == r) {
@@ -276,7 +276,7 @@ void *videoV4L2 :: capturing(void)
     }
 
     memset(&(buf), 0, sizeof (buf));
-    debugThread("V4L2: memset...");
+    debugThread("memset...", this);
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
@@ -298,7 +298,7 @@ void *videoV4L2 :: capturing(void)
       }
     }
 
-    debugThread("V4L2: grabbed %d", buf.index);
+    debugThread("grabbed %d", this, buf.index);
 
     gotSize=buf.bytesused;
     currentBuffer=buffers[buf.index].start;
@@ -309,7 +309,7 @@ void *videoV4L2 :: capturing(void)
       captureerror=true;
     }
 
-    debugThread("V4L2: dequeueued");
+    debugThread("dequeueued", this);
 
     if(expectedSize<=gotSize) {
       m_frame_ready = 1;
@@ -336,7 +336,7 @@ void *videoV4L2 :: capturing(void)
 
   // stop capturing
   m_capturing=false;
-  debugThread("V4L2: thread finished");
+  debugThread("thread finished");
   return NULL;
 }
 
@@ -353,7 +353,7 @@ pixBlock *videoV4L2 :: getFrame()
     m_rendering=rendering;
     return NULL;
   }
-  //debugPost("v4l2: getting frame %d", m_frame_ready);
+  //debugPost("getting frame %d", m_frame_ready);
   m_image.newfilm=0;
   if (!m_frame_ready) {
     m_image.newimage = 0;
@@ -461,7 +461,7 @@ bool videoV4L2 :: openDevice(gem::Properties&props)
 
 
   const char*dev_name=devname.c_str();
-  debugPost("v4l2: device: %s", dev_name);
+  debugPost("device: %s", dev_name);
 
   // try to open the device
   m_tvfd = v4l2_open (dev_name, O_RDWR /* required */, 0);
@@ -545,15 +545,15 @@ void videoV4L2 :: closeDevice()
 bool videoV4L2 :: restartTransfer()
 {
   bool rendering=m_rendering;
-  debugPost("v4l2: restart transfer");
+  debugPost("restart transfer");
   if(m_capturing) {
     stopTransfer();
   }
-  debugPost("v4l2: restart stopped");
+  debugPost("restart stopped");
   if (rendering) {
     startTransfer();
   }
-  debugPost("v4l2: restart started");
+  debugPost("restart started");
 
   return true;
 }
@@ -567,11 +567,11 @@ bool videoV4L2 :: startTransfer()
   if(m_tvfd<0) {
     return false;
   }
-  debugPost("v4l2: startTransfer: %d", m_capturing);
+  debugPost("startTransfer: %d", m_capturing);
   if(m_capturing) {
     stopTransfer();  // just in case we are already running!
   }
-  debugPost("v4l2: start transfer");
+  debugPost("start transfer");
   m_stopTransfer=false;
   m_rendering=true;
   logpost(0, 3+1, "[GEM:videoV4L2] starting transfer");
@@ -637,19 +637,19 @@ bool videoV4L2 :: startTransfer()
   m_gotFormat=fmt.fmt.pix.pixelformat;
   switch(m_gotFormat) {
   case V4L2_PIX_FMT_RGB32:
-    debugPost("v4l2: ARGB");
+    debugPost("ARGB");
     break;
   case V4L2_PIX_FMT_RGB24:
-    debugPost("v4l2: RGB");
+    debugPost("RGB");
     break;
   case V4L2_PIX_FMT_UYVY:
-    debugPost("v4l2: YUV ");
+    debugPost("YUV ");
     break;
   case V4L2_PIX_FMT_GREY:
-    debugPost("v4l2: gray");
+    debugPost("gray");
     break;
   case V4L2_PIX_FMT_YUV420:
-    debugPost("v4l2: YUV 4:2:0");
+    debugPost("YUV 4:2:0");
     break;
   default:
     /* hmm, we don't know how to handle this
@@ -732,7 +732,7 @@ bool videoV4L2 :: startTransfer()
   m_image.image.setFormat(m_reqFormat);
   m_image.image.reallocate();
 
-  debugPost("v4l2: format: %c%c%c%c -> 0x%X",
+  debugPost("format: %c%c%c%c -> 0x%X",
             (char)(m_gotFormat),
             (char)(m_gotFormat>>8),
             (char)(m_gotFormat>>16),
@@ -758,7 +758,7 @@ bool videoV4L2 :: startTransfer()
     m_colorConvert=true;
   }
 
-  debugPost("v4l2: colorconvert=%d", m_colorConvert);
+  debugPost("colorconvert=%d", m_colorConvert);
 
   /* create thread */
   m_continue_thread = 1;
@@ -766,17 +766,18 @@ bool videoV4L2 :: startTransfer()
   pthread_create(&m_thread_id, 0, capturing_, this);
   while(!m_capturing) {
     usleep(10);
-    debugPost("v4l2: waiting for thread to come up");
+    debugPost("waiting for thread to come up");
   }
+  debugPost("thread running");
 
   logpost(0, 3+1, "[GEM:videoV4L2] Opened video connection 0x%X", m_tvfd);
 
   return(1);
 
 closit:
-  debugPost("v4l2: closing it!");
+  debugPost("closing it!");
   stopTransfer();
-  debugPost("v4l2: closed it");
+  debugPost("closed it");
   return(0);
 }
 
@@ -786,7 +787,7 @@ closit:
 /////////////////////////////////////////////////////////
 bool videoV4L2 :: stopTransfer()
 {
-  debugPost("v4l2: stoptransfer");
+  debugPost("stoptransfer: %d/%d", m_capturing, m_continue_thread);
   if(!m_capturing) {
     return false;
   }
@@ -797,23 +798,24 @@ bool videoV4L2 :: stopTransfer()
     m_continue_thread = 0;
     pthread_join (m_thread_id, &dummy);
   }
+  debugPost("thread wait %d", m_capturing);
   while(m_capturing) {
     usleep(10);
-    debugPost("v4l2: waiting for thread to finish");
+    debugPost("waiting for thread to finish");
   }
 
   // unmap the mmap
-  debugPost("v4l2: unmapping %d buffers: %x", m_nbuffers, m_buffers);
+  debugPost("unmapping %d buffers: %x", m_nbuffers, m_buffers);
   if(m_buffers) {
     for (int i = 0; i < m_nbuffers; ++i)
       if (-1 == v4l2_munmap (m_buffers[i].start, m_buffers[i].length)) {
         // oops: couldn't unmap the memory
       }
-    debugPost("v4l2: freeing buffers: %x", m_buffers);
+    debugPost("freeing buffers: %x", m_buffers);
     free (m_buffers);
   }
   m_buffers=NULL;
-  debugPost("v4l2: freed");
+  debugPost("freed");
 
   // stop streaming
   if(m_tvfd) {
@@ -823,12 +825,12 @@ bool videoV4L2 :: stopTransfer()
     }
   }
 
-  debugPost("v4l2: de-requesting buffers");
+  debugPost("de-requesting buffers");
   reqbufs(m_tvfd, 0);
 
   m_frame_ready = 0;
   m_rendering=false;
-  debugPost("v4l2: stoppedTransfer");
+  debugPost("stoppedTransfer");
   return true;
 }
 
