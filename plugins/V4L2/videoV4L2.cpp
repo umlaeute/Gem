@@ -691,6 +691,7 @@ bool videoV4L2 :: startTransfer()
              (char)(m_gotFormat>>16),
              (char)(m_gotFormat>>24));
     /* we should really return here! */
+    goto closit;
   }
 
   logpost(0, 3+1, "[GEM:videoV4L2] got '%c%c%c%c'",
