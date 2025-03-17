@@ -11,6 +11,9 @@
 #ifndef _INCLUDE__GEM_BASE_GEMGLBASE_H_
 #define _INCLUDE__GEM_BASE_GEMGLBASE_H_
 
+#define HELPSYMBOL "GEMgl"
+
+
 #include "Utils/GLUtil.h"
 #include "Base/GemBase.h"
 
