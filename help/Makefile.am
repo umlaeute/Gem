@@ -35,7 +35,7 @@ dist_gemhelp_DATA += \
 	cubemaptosphere.frag \
 	cubemaptocube.vert \
 	cubemaptocube.frag \
-	GEMglBegin-help.pd \
+	GEMgl-help.pd \
 	gemhead-help.pd \
 	gemkeyboard-help.pd \
 	gemkeyname-help.pd \
