@@ -83,7 +83,7 @@ REGISTER_VIDEOFACTORY("v4l2", videoV4L2);
 
 videoV4L2 :: videoV4L2() : videoBase("v4l2", 0)
   , m_gotFormat(0), m_colorConvert(0),
-  m_tvfd(0),
+  m_tvfd(-1),
   m_buffers(NULL), m_nbuffers(0),
   m_currentBuffer(NULL),
   m_frame(0), m_last_frame(0),
