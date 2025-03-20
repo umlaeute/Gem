@@ -12,9 +12,9 @@ AC_DEFUN([GEM_CHECK_HALCON],
 AC_ARG_VAR([HALCONROOT], [root-directory where you installed HALCON (override this with '--with-halcon=${HALCONROOT}'])dnl
 AC_ARG_VAR([HALCONARCH], [architecture for you HALCON-installation (e.g. 'x86-linux2.4-gcc40'])dnl
 AC_ARG_WITH([halcon],
-             AC_HELP_STRING([--with-halcon], [enable HALCON video capturing (overrides $HALCONROOT)]))
+             AS_HELP_STRING([--with-halcon], [enable HALCON video capturing (overrides $HALCONROOT)]))
 AC_ARG_WITH([halconarch],
-             AC_HELP_STRING([--with-halconarch], [set halcon-arch (overrides $HALCONARCH]))
+             AS_HELP_STRING([--with-halconarch], [set halcon-arch (overrides $HALCONARCH]))
 
 have_halcon="no"
 if test "x$with_halcon" != "xno"; then

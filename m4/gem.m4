@@ -9,7 +9,7 @@ dnl with or without modifications, as long as this notice is preserved.
 AC_DEFUN([GEM_ARG_WITH],
 [
   AC_ARG_WITH([$1],
-             AC_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
+             AS_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
                 AS_IF([ test "x$3" != "x" ], [ with_$1="yes" ])
            ])
   AS_IF([ test "x${with_$1}" = "x" ], [ with_$1="${with_ALL}" ])
@@ -18,7 +18,7 @@ AC_DEFUN([GEM_ARG_WITH],
 # inverse of GEM_ARG_WITH
 AC_DEFUN([GEM_ARG_WITHOUT],
 [AC_ARG_WITH([$1],
-             AC_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,[
+             AS_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,[
                 AS_IF([ test "x$3" = "xforce" ], [ with_$1="no" ])
            ])
 ])# GEM_ARG_WITHOUT
@@ -26,7 +26,7 @@ AC_DEFUN([GEM_ARG_WITHOUT],
 # same as GEM_ARG_WITH but with "enable"
 AC_DEFUN([GEM_ARG_ENABLE],
 [AC_ARG_ENABLE([$1],
-               AC_HELP_STRING([--disable-$1], [disable $1 ($2)]),
+               AS_HELP_STRING([--disable-$1], [disable $1 ($2)]),
                ,
                [enable_$1="yes"])
 ])# GEM_ARG_ENABLE
@@ -34,7 +34,7 @@ AC_DEFUN([GEM_ARG_ENABLE],
 # inverse of GEM_ARG_ENABLE
 AC_DEFUN([GEM_ARG_DISABLE],
 [AC_ARG_ENABLE([$1],
-               AC_HELP_STRING([--enable-$1], [enable $1 ($2)]),
+               AS_HELP_STRING([--enable-$1], [enable $1 ($2)]),
                ,
                [enable_$1="no"])
 ])# GEM_ARG_DISABLE
@@ -46,7 +46,7 @@ define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
 AC_CONFIG_FILES([src/$1/Makefile])
 
 AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--disable-$1], [disable $1-objects]),
+             AS_HELP_STRING([--disable-$1], [disable $1-objects]),
              [
                 AS_IF([ test "x$enableval" != "xno" ], [
                   AC_MSG_RESULT([building Gem with $1-objects])
@@ -70,7 +70,7 @@ define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./+-],
 
 AC_CONFIG_FILES([src/$1/Makefile])
 AC_ARG_ENABLE([$1],
-             AC_HELP_STRING([--enable-$1], [enable $1-objects]),
+             AS_HELP_STRING([--enable-$1], [enable $1-objects]),
              [
                 AS_IF([ test "x$enableval" != "xyes" ], [
                    AC_MSG_RESULT([building Gem without $1-objects])
@@ -110,15 +110,19 @@ AC_DEFUN([GEM_CHECK_LIB],
 AC_SUBST(GEM_LIB_[]NAME[]_CFLAGS)
 AC_SUBST(GEM_LIB_[]NAME[]_LIBS)
 
-AC_ARG_WITH([Name],
-             AC_HELP_STRING([--without-[]Name], [disable Name ($8)]))
+AS_IF([ test "$9" = "no"],
+[AC_ARG_WITH([Name],
+             AS_HELP_STRING([--with-[]Name], [disable Name ($8)]))],
+[AC_ARG_WITH([Name],
+             AS_HELP_STRING([--without-[]Name], [disable Name ($8)]))]
+)
 AC_ARG_WITH([]Name-CFLAGS,
-             AC_HELP_STRING([--with-[]Name-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name]))
+             AS_HELP_STRING([--with-[]Name-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name]))
 AC_ARG_WITH([]Name-LIBS,
-             AC_HELP_STRING([--with-[]Name-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
+             AS_HELP_STRING([--with-[]Name-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name]))
 
-  AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
-  AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
+AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$with_ALL" ])
+AS_IF([ test "x$with_[]Name" = "x" ], [ with_[]Name="$9" ])
 
 tmp_gem_check_lib_cppflags="$CPPFLAGS"
 tmp_gem_check_lib_cflags="$CFLAGS"
@@ -354,11 +358,11 @@ AC_DEFUN([GEM_CHECK_FRAMEWORK],
   AC_SUBST(GEM_FRAMEWORK_[]NAME[]_LIBS)
 
   AC_ARG_WITH([]Name[]-framework,
-             AC_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
+             AS_HELP_STRING([--without-[]Name[]-framework], [disable Name-framework]))
   AC_ARG_WITH([]Name[]-framework-CFLAGS,
-             AC_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
+             AS_HELP_STRING([--with-[]Name[]-framework-CFLAGS="-I/path/to/[]Name/include/"], [compiler flags for Name-framework]))
   AC_ARG_WITH([]Name[]-framework-LIBS,
-             AC_HELP_STRING([--with-[]Name[]-framework-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name-framework]))
+             AS_HELP_STRING([--with-[]Name[]-framework-LIBS="-L/path/to/[]Name/lib/ -l$2"], [linker flags for Name-framework]))
   AS_IF([ test "x$with_[]Name[]_framework" = "x" ], [ with_[]Name="$with_ALL" ])
 
 
@@ -522,7 +526,7 @@ GEM_RTE="Pure Data"
 
 
 AC_ARG_WITH([floatsize],
-  AC_HELP_STRING([--with-floatsize=<floatsize>],
+  AS_HELP_STRING([--with-floatsize=<floatsize>],
                  [use a given floatsize (32, 64)]))
 AC_MSG_CHECKING([floatsize])
 tmp_rte_pd="pd${with_floatsize}"

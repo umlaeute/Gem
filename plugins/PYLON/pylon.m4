@@ -11,7 +11,7 @@ AC_DEFUN([GEM_CHECK_PYLON],
 [
 AC_ARG_VAR([PYLON_ROOT], [root-directory where you installed PYLON (override this with '--with-pylon=${PYLON_ROOT}'])dnl
 AC_ARG_WITH([pylon],
-             AC_HELP_STRING([--with-pylon], [enable PYLON video capturing (overrides $PYLON_ROOT)]))
+             AS_HELP_STRING([--with-pylon], [enable PYLON video capturing (overrides $PYLON_ROOT)]))
 
 tmp_pylon_rpath=""
 have_pylon="no"

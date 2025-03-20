@@ -187,7 +187,7 @@ AS_CASE([$enable_debug],
         ])
 
 
-AC_ARG_WITH([GLU], AC_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
+AC_ARG_WITH([GLU], AS_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
 GEM_ARG_ENABLE([mmx],     [MMX-support])
 dnl disabled SSE2 by default, since there are still few chips around that fully support it
 dnl unlike MMX or SSE
@@ -210,7 +210,7 @@ GEM_TARGET(openGL)
 GEM_TARGET_DISABLED(Vertex)
 GEM_ARG_ENABLE([plugins], [configure/build/install optional parts])
 
-AC_ARG_ENABLE([experimental], AC_HELP_STRING([--enable-experimental], [enable experimental objects (if any)]))
+AC_ARG_ENABLE([experimental], AS_HELP_STRING([--enable-experimental], [enable experimental objects (if any)]))
 AM_CONDITIONAL(EXPERIMENTAL, [test "x$enable_experimental" = "xyes"])
 
 
@@ -601,7 +601,7 @@ AC_SUBST([GEM_DECKLINK_USE_DLOPEN])
 
 # NDI-support
 AC_ARG_WITH([ndi],
-            AC_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
+            AS_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
                [enable NDI video capturing (use 'local' to use an embedded copy of the SDK)]))
 
 have_ndi="no"
@@ -735,7 +735,7 @@ AC_CONFIG_FILES([abstractions/gemdefaultwindow.pd])
 
 ## allow us to override the build date string
 AC_ARG_WITH([build-date],
-            AC_HELP_STRING([--with-build-date=<str>],
+            AS_HELP_STRING([--with-build-date=<str>],
                            [alternative date string]))
 AC_MSG_CHECKING([build-date])
 AS_IF([test "x$with_build_date"  = "xyes" ],[with_build_date=""])
