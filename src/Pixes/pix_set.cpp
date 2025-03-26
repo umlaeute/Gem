@@ -106,7 +106,7 @@ void pix_set :: startRendering()
 void pix_set :: postrender(GemState *state)
 {
   m_pixBlock.newimage = false;
-  state->set(GemState::_PIX,&m_pixels);
+  state->set(GemState::_PIX, m_pixels);
 }
 
 
