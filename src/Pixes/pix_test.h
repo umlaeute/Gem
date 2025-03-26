@@ -57,7 +57,7 @@ protected:
   virtual void  render(GemState*);
   virtual void  postrender(GemState*);
 
-  pixBlock    m_pix;
+  pixBlock    m_pixBlock;
 
   void dimenMess(unsigned int, unsigned int);
   void csMess(std::string);

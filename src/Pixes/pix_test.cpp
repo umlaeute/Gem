@@ -259,13 +259,13 @@ void makeSMPTE_Grey(unsigned int cols, unsigned int rows,
 pix_test :: pix_test(int argc, t_atom*argv)
   : m_noise(true)
 {
-  m_pix.image.xsize=m_pix.image.ysize=128;
+  m_pixBlock.image.xsize=m_pixBlock.image.ysize=128;
   switch(argc) {
   case 0:
     break;
   case 1:
     if(A_FLOAT == argv->a_type && ((int)atom_getfloat(argv))>0) {
-      m_pix.image.xsize=m_pix.image.ysize=atom_getfloat(argv);
+      m_pixBlock.image.xsize=m_pixBlock.image.ysize=atom_getfloat(argv);
     } else {
       error("usage: pix_test <width=height>]");
     }
@@ -274,11 +274,11 @@ pix_test :: pix_test(int argc, t_atom*argv)
     if(A_FLOAT == argv[0].a_type && A_FLOAT == argv[1].a_type) {
       int i = atom_getfloat(argv);
       if(i>0) {
-        m_pix.image.xsize = i;
+        m_pixBlock.image.xsize = i;
       }
       i = atom_getfloat(argv+1);
       if(i>0) {
-        m_pix.image.ysize = i;
+        m_pixBlock.image.ysize = i;
       }
     } else {
       error("usage: pix_test [<width> <height>]");
@@ -289,14 +289,14 @@ pix_test :: pix_test(int argc, t_atom*argv)
     break;
   }
 
-  m_pix.image.setFormat(GEM_RGBA);
-  m_pix.image.reallocate();
+  m_pixBlock.image.setFormat(GEM_RGBA);
+  m_pixBlock.image.reallocate();
 }
 pix_test :: pix_test()
 {
-  m_pix.image.xsize=m_pix.image.ysize=128;
-  m_pix.image.setFormat(GEM_RGBA);
-  m_pix.image.reallocate();
+  m_pixBlock.image.xsize=m_pixBlock.image.ysize=128;
+  m_pixBlock.image.setFormat(GEM_RGBA);
+  m_pixBlock.image.reallocate();
 }
 
 /////////////////////////////////////////////////////////
@@ -314,31 +314,31 @@ void pix_test :: render(GemState*state)
 {
   bool noise = m_noise;
   float scale=1.;
-  int rows=m_pix.image.xsize;
-  int cols=m_pix.image.ysize;
+  int rows=m_pixBlock.image.xsize;
+  int cols=m_pixBlock.image.ysize;
   int datasize;
-  unsigned char* data=m_pix.image.data;
-  switch (m_pix.image.format) {
+  unsigned char* data=m_pixBlock.image.data;
+  switch (m_pixBlock.image.format) {
   case GEM_RGBA:
-    makeSMPTE_RGBA(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
+    makeSMPTE_RGBA(m_pixBlock.image.xsize, m_pixBlock.image.ysize, m_pixBlock.image.data,
                    scale, noise);
     break;
   case GEM_RGB:
-    makeSMPTE_RGB(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
+    makeSMPTE_RGB(m_pixBlock.image.xsize, m_pixBlock.image.ysize, m_pixBlock.image.data,
                   scale, noise);
     break;
   case GEM_YUV:
-    makeSMPTE_YUV(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
+    makeSMPTE_YUV(m_pixBlock.image.xsize, m_pixBlock.image.ysize, m_pixBlock.image.data,
                   scale, noise);
     break;
   case GEM_GRAY:
-    makeSMPTE_Grey(m_pix.image.xsize, m_pix.image.ysize, m_pix.image.data,
+    makeSMPTE_Grey(m_pixBlock.image.xsize, m_pixBlock.image.ysize, m_pixBlock.image.data,
                    scale, noise);
     break;
   }
-  //post("image=%d\tfilm=%d", m_pix.newimage,m_pix.newfilm);
-  m_pix.newimage=true;
-  state->set(GemState::_PIX, &m_pix);
+  //post("image=%d\tfilm=%d", m_pixBlock.newimage,m_pixBlock.newfilm);
+  m_pixBlock.newimage=true;
+  state->set(GemState::_PIX, &m_pixBlock);
 }
 
 
@@ -373,25 +373,25 @@ void pix_test :: csMess(std::string cs)
           cs.c_str());
     return;
   }
-  m_pix.image.setFormat(fmt);
-  dimenMess(m_pix.image.xsize, m_pix.image.ysize);
+  m_pixBlock.image.setFormat(fmt);
+  dimenMess(m_pixBlock.image.xsize, m_pixBlock.image.ysize);
 
 }
 void pix_test :: postrender(GemState *state)
 {
-  m_pix.newimage = false;
-  m_pix.newfilm  = false;
+  m_pixBlock.newimage = false;
+  m_pixBlock.newfilm  = false;
   state->set(GemState::_PIX, static_cast<pixBlock*>(0));
 }
 
 void pix_test :: dimenMess(unsigned int w, unsigned int h)
 {
-  m_pix.image.xsize=w;
-  m_pix.image.ysize=h;
-  if(GEM_YUV == m_pix.image.format && m_pix.image.xsize%2)
-    m_pix.image.xsize+=1;
-  m_pix.image.reallocate();
-  m_pix.newfilm=true;
+  m_pixBlock.image.xsize=w;
+  m_pixBlock.image.ysize=h;
+  if(GEM_YUV == m_pixBlock.image.format && m_pixBlock.image.xsize%2)
+    m_pixBlock.image.xsize+=1;
+  m_pixBlock.image.reallocate();
+  m_pixBlock.newfilm=true;
 }
 void pix_test :: noiseMess(bool noise) {
   m_noise = noise;
