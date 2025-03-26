@@ -68,7 +68,7 @@ public:
     int                 refCount;
     multiImageCache     *next;
     imageStruct         **images;
-    unsigned int            *textBind;
+    unsigned int        *textBind;
     int                 numImages;
     char                *imageName;
     int                 baseImage;
