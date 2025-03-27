@@ -36,7 +36,16 @@ namespace utils
 {
 namespace gl
 {
+  /* returns a string representation for the given error.
+   * no error (GL_NO_ERROR) might return a string saying so
+   */
+  GEM_EXTERN const char*          glErrorString(GLenum err);
+  /* checks if there's a pending openGL error, and returns the error description if fo
+   * returns NULL if there's no error
+   */
+  GEM_EXTERN const char*          glErrorString(void);
   GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
+
   GEM_EXTERN extern int           getGLdefine(const char *name);
   GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
   GEM_EXTERN extern int           getGLdefine(const struct _atom *name);

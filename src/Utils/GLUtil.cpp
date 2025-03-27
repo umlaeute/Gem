@@ -71,18 +71,29 @@ static const char* _gemglErrorString(GLenum err) {
 }
 
 };
+const char* gem::utils::gl::glErrorString(GLenum err) {
+#ifdef GEM_HAVE_GLU
+  return (const char*)gluErrorString(err);
+#else
+  return _gemglErrorString(err));
+#endif
+}
+
+
+const char* gem::utils::gl::glErrorString(void) {
+  GLenum err = glGetError();
+  if(err != GL_NO_ERROR)
+    return gem::utils::gl::glErrorString(err);
+  return 0;
+}
 
 // if error dump gl errors to debugger string, return error
 GLenum gem::utils::gl::glReportError (bool verbose)
 {
   GLenum err = glGetError();
   if (verbose && GL_NO_ERROR != err) {
-#ifdef GEM_HAVE_GLU
-    post("GL[0x%X]: %s", err, (char*)gluErrorString(err));
-#else
-    post("GL[0x%X]: %s", err, _gemglErrorString(err));
-#endif
-
+    const char *errStr = gem::utils::gl::glErrorString(err);
+    post("GL[0x%X]: %s", err, errStr);
   }
   // ensure we are returning an OSStatus noErr if no error condition
   if (err == GL_NO_ERROR) {
