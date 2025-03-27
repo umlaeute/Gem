@@ -43,7 +43,11 @@ GEMglReportError :: ~GEMglReportError ()
 //
 void GEMglReportError :: render(GemState *state)
 {
-  GLenum err=glReportError();
+  GLenum err=glReportError(false);
+  if(err) {
+    const char*errStr = glErrorString(err);
+    error("GL[0x%X]: %s", err, errStr?errStr:"generic error");
+  }
   outlet_float(m_outlet, static_cast<t_float>(err));
 }
 
