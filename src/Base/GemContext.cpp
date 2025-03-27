@@ -53,6 +53,7 @@ struct Context::PIMPL
     , xcontext(new GemGlewXContext)
 #endif /* GemGlewXContext */
     , contextid(makeID())
+    , oldTexture(0)
   {
     /* check the stack-sizes */
     initMaxDepth(GemMan::STACKMODELVIEW);
@@ -73,6 +74,7 @@ struct Context::PIMPL
     , xcontext(new GemGlewXContext(*p.xcontext))
 #endif /* GemGlewXContext */
     , contextid(makeID())
+    , oldTexture(0)
   {
     /* check the stack-sizes */
     initMaxDepth(GemMan::STACKMODELVIEW);
@@ -106,6 +108,7 @@ struct Context::PIMPL
 #endif /* GemGlewXContext */
 
   unsigned int contextid;
+  GLint oldTexture;
 
   // LATER: reusing IDs prevents a memleak in gem::ContextData
   // LATER: reusing IDs might make us re-use invalid gem::ContextData!
@@ -161,9 +164,15 @@ Context::Context(void)
       errstring="failed to init GLEW";
     }
   } else {
-    if(GLEW_ARB_imaging) {
-      pimpl->initMaxDepth(GemMan::STACKCOLOR);
+    m_pimpl->initialized = true;
+    if(GLEW_VERSION_1_3) {
+      glGetIntegerv(GL_ACTIVE_TEXTURE, &m_pimpl->oldTexture);
+      glActiveTexture(GL_TEXTURE0_ARB);
     }
+    m_pimpl->initMaxDepth(GemMan::STACKTEXTURE);
+
+    if(GLEW_ARB_imaging) {
+      m_pimpl->initMaxDepth(GemMan::STACKCOLOR);
     }
   }
 
@@ -232,6 +241,11 @@ bool Context::push(void)
 #endif /* GemGlewXContext */
   m_pimpl->s_contextid=m_pimpl->contextid;
 
+  if(m_pimpl->initialized && GLEW_VERSION_1_3) {
+    glGetIntegerv(GL_ACTIVE_TEXTURE, &m_pimpl->oldTexture);
+    glActiveTexture(GL_TEXTURE0_ARB);
+  }
+
   return true;
 }
 
@@ -242,6 +256,9 @@ bool Context::isActive(void)
 
 bool Context::pop(void)
 {
+  if(m_pimpl->oldTexture && GLEW_VERSION_1_3) {
+    glActiveTexture(m_pimpl->oldTexture);
+  }
   return true;
 }
 
