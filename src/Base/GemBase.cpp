@@ -65,14 +65,17 @@ struct GemBase::PIMPL {
   /* whether the object is internally disabled or not
    * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
    */
+  GemBase *parent;
   gem::ContextData<bool>enabled;
   gem::ContextData<enum RenderState>state;
-  PIMPL(void)
-    : enabled(true)
+  PIMPL(GemBase *_parent)
+    : parent(_parent)
+    , enabled(true)
     , state(INIT)
   { }
   PIMPL(PIMPL *p)
-    : enabled(p->enabled)
+    : parent(p->parent)
+    , enabled(p->enabled)
     , state(p->state)
   { }
 };
@@ -88,7 +91,7 @@ struct GemBase::PIMPL {
 GemBase :: GemBase(void)
   : gem_amRendering(false), m_cache(NULL), m_modified(true)
   , m_out1(NULL)
-  , m_pimpl(new PIMPL())
+  , m_pimpl(new PIMPL(this))
 {
   m_out1 = outlet_new(this->x_obj, 0);
   pd_bind(&this->x_obj->ob_pd, gensym("__gemBase"));
