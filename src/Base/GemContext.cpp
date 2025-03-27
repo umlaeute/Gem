@@ -29,6 +29,18 @@ using namespace gem;
 
 class Context::PIMPL
 {
+  void initMaxDepth(int id) {
+    GLenum pname = 0;
+    switch (id) {
+    case GemMan::STACKMODELVIEW: pname = GL_MAX_MODELVIEW_STACK_DEPTH; break;
+    case GemMan::STACKTEXTURE: pname = GL_MAX_TEXTURE_STACK_DEPTH; break;
+    case GemMan::STACKPROJECTION: pname = GL_MAX_PROJECTION_STACK_DEPTH; break;
+    case GemMan::STACKCOLOR: pname = GL_MAX_COLOR_MATRIX_STACK_DEPTH; break;
+    default:
+      return;
+    }
+    glGetIntegerv(pname, maxStackDepth+id);
+  }
 public:
   PIMPL(void) :
 #ifdef GEM_MULTICONTEXT
@@ -42,12 +54,9 @@ public:
     contextid(makeID())
   {
     /* check the stack-sizes */
-    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKTEXTURE);
-    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKPROJECTION);
+    initMaxDepth(GemMan::STACKMODELVIEW);
+    initMaxDepth(GemMan::STACKTEXTURE);
+    initMaxDepth(GemMan::STACKPROJECTION);
 
     maxStackDepth[GemMan::STACKCOLOR]=0;
   }
@@ -64,14 +73,10 @@ public:
     contextid(makeID())
   {
     /* check the stack-sizes */
-    glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKMODELVIEW);
-    glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKCOLOR);
-    glGetIntegerv(GL_MAX_TEXTURE_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKTEXTURE);
-    glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH,
-                  maxStackDepth+GemMan::STACKPROJECTION);
+    initMaxDepth(GemMan::STACKMODELVIEW);
+    initMaxDepth(GemMan::STACKCOLOR);
+    initMaxDepth(GemMan::STACKTEXTURE);
+    initMaxDepth(GemMan::STACKPROJECTION);
   }
 
   ~PIMPL(void)
@@ -154,12 +159,10 @@ Context::Context(void)
       errstring="failed to init GLEW";
     }
   } else {
-    GLint colorstack = 0;
     if(GLEW_ARB_imaging) {
-      glGetIntegerv(GL_MAX_COLOR_MATRIX_STACK_DEPTH, &colorstack);
+      pimpl->initMaxDepth(GemMan::STACKCOLOR);
     }
-
-    m_pimpl->maxStackDepth[GemMan::STACKCOLOR]=colorstack;
+    }
   }
 
   pop();
@@ -226,6 +229,7 @@ bool Context::push(void)
   m_pimpl->s_xcontext=m_pimpl->xcontext;
 #endif /* GemGlewXContext */
   m_pimpl->s_contextid=m_pimpl->contextid;
+
   return true;
 }
 
