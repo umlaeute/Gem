@@ -126,7 +126,6 @@ private:
 
   friend class    gemhead;
   static void   obj_setupCallback(t_class *classPtr);
-  static void   gem_MessCallback(void *, t_symbol*,int, t_atom*);
 
   class PIMPL;
   PIMPL*m_pimpl;

@@ -263,9 +263,29 @@ void GemBase::beforeDeletion(void)
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
-  class_addmethod(classPtr,
-                  reinterpret_cast<t_method>(&GemBase::gem_MessCallback),
-                  gensym("gem_state"), A_GIMME, A_NULL);
+  struct _CallbackClass_gemState {
+    static void callback(void *data, t_symbol* s, int argc, t_atom *argv)
+    {
+      if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
+        GetMyClass(data)->gem_renderMess(
+            reinterpret_cast<GemCache *>(argv->a_w.w_gpointer),
+            reinterpret_cast<GemState *>((argv+1)->a_w.w_gpointer));
+#if 1
+      } else if (argc==1 && argv->a_type==A_FLOAT) {
+        GetMyClass(data)->gem_startstopMess(atom_getint(argv));  // start rendering (forget this !?)
+#endif
+      } else {
+        GetMyClass(data)->error("wrong arguments in GemTrigger...");
+      }
+    }
+    explicit _CallbackClass_gemState (struct _class*c)
+    {
+      class_addmethod(c, reinterpret_cast<t_method>(callback),
+                      gensym("gem_state"), A_GIMME, A_NULL);
+    }
+  };
+  _CallbackClass_gemState _CallbackClassInstance_gemState (classPtr);
+
   struct _CallbackClass_gemContext {
     static void callback(void*data, t_float v0)
     {
@@ -288,20 +308,4 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
   };
   _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
 
-}
-void GemBase :: gem_MessCallback(void *data, t_symbol* s, int argc,
-                                 t_atom *argv)
-{
-  if (argc==2 && argv->a_type==A_POINTER && (argv+1)->a_type==A_POINTER) {
-    GetMyClass(data)->gem_renderMess(
-      reinterpret_cast<GemCache *>(argv->a_w.w_gpointer),
-      reinterpret_cast<GemState *>((argv+1)->a_w.w_gpointer));
-#if 1
-  } else if (argc==1 && argv->a_type==A_FLOAT) {
-    GetMyClass(data)->gem_startstopMess(atom_getint(
-                                          argv));  // start rendering (forget this !?)
-#endif
-  } else {
-    GetMyClass(data)->error("wrong arguments in GemTrigger...");
-  }
 }
