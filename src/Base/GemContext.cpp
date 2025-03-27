@@ -27,7 +27,7 @@
 
 using namespace gem;
 
-class Context::PIMPL
+struct Context::PIMPL
 {
   void initMaxDepth(int id) {
     GLenum pname = 0;
@@ -41,17 +41,18 @@ class Context::PIMPL
     }
     glGetIntegerv(pname, maxStackDepth+id);
   }
-public:
-  PIMPL(void) :
+  bool initialized; /* just a dummy variable at the beginning... */
+  PIMPL(void)
+    : initialized(false)
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext),
+    , context(new GLEWContext)
 #else
-    context(NULL),
+    , context(NULL)
 #endif
 #ifdef GemGlewXContext
-    xcontext(new GemGlewXContext),
+    , xcontext(new GemGlewXContext)
 #endif /* GemGlewXContext */
-    contextid(makeID())
+    , contextid(makeID())
   {
     /* check the stack-sizes */
     initMaxDepth(GemMan::STACKMODELVIEW);
@@ -61,16 +62,17 @@ public:
     maxStackDepth[GemMan::STACKCOLOR]=0;
   }
 
-  PIMPL(const PIMPL&p) :
+  PIMPL(const PIMPL&p)
+    : initialized(p.initialized)
 #ifdef GEM_MULTICONTEXT
-    context(new GLEWContext(*p.context)),
+    , context(new GLEWContext(*p.context))
 #else
-    context(NULL),
+    , context(NULL)
 #endif
 #ifdef GemGlewXContext
-    xcontext(new GemGlewXContext(*p.xcontext)),
+    , xcontext(new GemGlewXContext(*p.xcontext))
 #endif /* GemGlewXContext */
-    contextid(makeID())
+    , contextid(makeID())
   {
     /* check the stack-sizes */
     initMaxDepth(GemMan::STACKMODELVIEW);
