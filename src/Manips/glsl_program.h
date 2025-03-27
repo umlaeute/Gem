@@ -60,6 +60,7 @@ protected:
   // check openGL-extensions
   virtual bool  isRunnable(void);
   virtual void  startRendering(void);
+  virtual void  stopRendering(void);
 
   //////////
   // Do the rendering
@@ -89,6 +90,7 @@ protected:
   virtual bool  LinkGL2(void);
   virtual bool  LinkARB(void);
   virtual void  LinkProgram(void);
+  virtual void  UnlinkProgram(void);
 
   //////////
   // What can we play with?

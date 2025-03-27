@@ -450,17 +450,7 @@ glsl_program :: glsl_program()
 /////////////////////////////////////////////////////////
 glsl_program :: ~glsl_program()
 {
-  m_programmapper.del(m_programmapped);
-  m_programmapped=0.;
-
-  if(m_program) {
-    glDeleteProgram( m_program );
-  }
-  m_program=0;
-  if(m_programARB) {
-    glDeleteObjectARB( m_programARB );
-  }
-  m_programARB=0;
+  UnlinkProgram();
 }
 
 
@@ -505,7 +495,10 @@ void glsl_program :: startRendering()
 {
   LinkProgram();
 }
-
+void glsl_program :: stopRendering()
+{
+  UnlinkProgram();
+}
 
 void glsl_program :: render(GemState *state)
 {
@@ -682,8 +675,9 @@ bool glsl_program :: LinkGL2()
   int numGeometryShaders = 0;
   int numFragmentShaders = 0;
 
-  if(m_program) {
-    glDeleteProgram( m_program );
+  GLuint program = m_program;
+  if(program) {
+    glDeleteProgram( program );
     m_programmapper.del(m_programmapped);
     m_programmapped=0.;
     m_program = 0;
@@ -857,12 +851,13 @@ void glsl_program :: LinkProgram()
     return;
   }
 
+  UnlinkProgram();
+
   if(GLEW_VERSION_2_0) {
     success=LinkGL2();
   } else {
     success=LinkARB();
   }
-
 
   if(!success) {
     return;
@@ -907,7 +902,20 @@ void glsl_program :: LinkProgram()
   }
   SETFLOAT(&a, m_programmapped);
   outlet_list(m_outProgramID, 0, 1, &a);
+}
+void glsl_program :: UnlinkProgram()
+{
+  m_programmapper.del(m_programmapped);
+  m_programmapped=0.;
 
+  if(m_program) {
+    glDeleteProgram( m_program );
+  }
+  m_program=0;
+  if(m_programARB) {
+    glDeleteObjectARB( m_programARB );
+  }
+  m_programARB=0;
 }
 
 /////////////////////////////////////////////////////////
