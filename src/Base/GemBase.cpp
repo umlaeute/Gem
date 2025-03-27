@@ -60,6 +60,23 @@
 #include "GemBase.h"
 #include "Gem/Cache.h"
 
+struct GemBase::PIMPL {
+
+  /* whether the object is internally disabled or not
+   * objects are to be disabled, if the system cannot make use of them, e.g. because of unsupported openGL features
+   */
+  gem::ContextData<bool>enabled;
+  gem::ContextData<enum RenderState>state;
+  PIMPL(void)
+    : enabled(true)
+    , state(INIT)
+  { }
+  PIMPL(PIMPL *p)
+    : enabled(p->enabled)
+    , state(p->state)
+  { }
+};
+
 /////////////////////////////////////////////////////////
 //
 // GemBase
@@ -69,9 +86,9 @@
 //
 /////////////////////////////////////////////////////////
 GemBase :: GemBase(void)
-  : gem_amRendering(false), m_cache(NULL), m_modified(true),
-    m_out1(NULL),
-    m_enabled(true), m_state(INIT)
+  : gem_amRendering(false), m_cache(NULL), m_modified(true)
+  , m_out1(NULL)
+  , m_pimpl(new PIMPL())
 {
   m_out1 = outlet_new(this->x_obj, 0);
   pd_bind(&this->x_obj->ob_pd, gensym("__gemBase"));
@@ -103,15 +120,15 @@ void GemBase :: gem_startstopMess(int state)
   // for now, this is important, as it is the only way to call the stopRendering
 #if 1
   if (state && !gem_amRendering) {
-    m_enabled = isRunnable();
-    if(m_enabled) {
+    m_pimpl->enabled = isRunnable();
+    if(m_pimpl->enabled) {
       startRendering();
-      m_state=RENDERING;
+      m_pimpl->state=RENDERING;
     }
   } else if (!state && gem_amRendering) {
-    if(m_enabled) {
+    if(m_pimpl->enabled) {
       stopRendering();
-      m_state=ENABLED;
+      m_pimpl->state=ENABLED;
     }
   }
 
@@ -138,22 +155,22 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   if(m_cache && m_cache->m_magic!=GEMCACHE_MAGIC) {
     m_cache=NULL;
   }
-  if(INIT==m_state) {
+  if(INIT==m_pimpl->state) {
     if(isRunnable()) {
-      m_state=ENABLED;
+      m_pimpl->state=ENABLED;
     } else {
-      m_state=DISABLED;
+      m_pimpl->state=DISABLED;
     }
   }
-  if(MODIFIED==m_state) {
+  if(MODIFIED==m_pimpl->state) {
     stopRendering();
-    m_state=ENABLED;
+    m_pimpl->state=ENABLED;
   }
-  if(ENABLED==m_state) {
+  if(ENABLED==m_pimpl->state) {
     startRendering();
-    m_state=RENDERING;
+    m_pimpl->state=RENDERING;
   }
-  if(RENDERING==m_state) {
+  if(RENDERING==m_pimpl->state) {
     gem_amRendering=true;
     if(state) {
       render(state);
@@ -191,12 +208,12 @@ void GemBase :: setModified(void)
     m_cache->dirty = true;
   }
   m_modified=true;
-  switch(m_state) {
+  switch(m_pimpl->state) {
   case DISABLED:
   case INIT:
     break;
   default:
-    m_state=MODIFIED;
+    m_pimpl->state=MODIFIED;
   }
 }
 
@@ -210,7 +227,7 @@ void GemBase :: realStopRendering(void)
   post("realStopRendering() called...please report this to the upstream developers");
   stopRendering();
   m_cache = NULL;
-  m_state=ENABLED;
+  m_pimpl->state=ENABLED;
 }
 
 
@@ -226,7 +243,7 @@ bool GemBase :: isRunnable(void)
 
 enum GemBase::RenderState GemBase::getState(void)
 {
-  return m_state;
+  return m_pimpl->state;
 }
 
 #include "Base/GemWindow.h"
@@ -255,10 +272,10 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
       GemBase*obj=GetMyClass(data);
       bool state=(bool)v0;
       if(!state && obj->gem_amRendering) {
-        if(obj->m_enabled) {
+        if(obj->m_pimpl->enabled) {
           //obj->post("stop rendering");
           obj->stopRendering();
-          obj->m_state=obj->ENABLED;
+          obj->m_pimpl->state=obj->ENABLED;
         }
       }
       obj->gem_amRendering=(!state);
