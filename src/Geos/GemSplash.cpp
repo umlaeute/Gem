@@ -66,17 +66,16 @@ void GemSplash :: obj_setupCallback(t_class *classPtr)
     static void callback(void*data, t_float v0)
     {
       static bool sending = false;
-      if(!sending) {
-        sending = true;
-        t_symbol*s = gensym("__gemBase");
-        if(s->s_thing) {
-          t_atom a[1];
-          SETFLOAT(a+0, v0);
-          pd_typedmess(s->s_thing, gensym("debugGL"), 1, a);
-        }
+      if(sending)
+        return;
+      sending = true;
+      t_symbol*s = gensym("__gemBase");
+      if(s->s_thing) {
+        t_atom a[1];
+        SETFLOAT(a+0, v0);
+        pd_typedmess(s->s_thing, gensym("debugGL"), 1, a);
       }
       sending = false;
-
     }
     explicit _CallbackClass_debugGL (struct _class*c)
     {
