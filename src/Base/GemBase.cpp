@@ -59,6 +59,7 @@
 
 #include "GemBase.h"
 #include "Gem/Cache.h"
+#include "Utils/GLUtil.h"
 
 struct GemBase::PIMPL {
 
@@ -68,16 +69,26 @@ struct GemBase::PIMPL {
   GemBase *parent;
   gem::ContextData<bool>enabled;
   gem::ContextData<enum RenderState>state;
+  bool debugGL;
   PIMPL(GemBase *_parent)
     : parent(_parent)
     , enabled(true)
     , state(INIT)
+    , debugGL(false)
   { }
   PIMPL(PIMPL *p)
     : parent(p->parent)
     , enabled(p->enabled)
     , state(p->state)
+    , debugGL(p->debugGL)
   { }
+  void debugGLerror(const char*prefix=0) {
+    if(debugGL) {
+      const char*errStr = gem::utils::gl::glErrorString();
+      if(errStr)
+        parent->error("%s%s", prefix?prefix:"", errStr);
+    }
+  }
 };
 
 /////////////////////////////////////////////////////////
@@ -126,11 +137,13 @@ void GemBase :: gem_startstopMess(int state)
     m_pimpl->enabled = isRunnable();
     if(m_pimpl->enabled) {
       startRendering();
+      m_pimpl->debugGLerror("start() ");
       m_pimpl->state=RENDERING;
     }
   } else if (!state && gem_amRendering) {
     if(m_pimpl->enabled) {
       stopRendering();
+      m_pimpl->debugGLerror("stop() ");
       m_pimpl->state=ENABLED;
     }
   }
@@ -167,20 +180,24 @@ void GemBase :: gem_renderMess(GemCache* cache, GemState*state)
   }
   if(MODIFIED==m_pimpl->state) {
     stopRendering();
+    m_pimpl->debugGLerror("autostop() ");
     m_pimpl->state=ENABLED;
   }
   if(ENABLED==m_pimpl->state) {
     startRendering();
+    m_pimpl->debugGLerror("autostart() ");
     m_pimpl->state=RENDERING;
   }
   if(RENDERING==m_pimpl->state) {
     gem_amRendering=true;
     if(state) {
       render(state);
+      m_pimpl->debugGLerror();
     }
     continueRender(state);
     if(state) {
       postrender(state);
+      m_pimpl->debugGLerror("post() ");
     }
   }
   m_modified=false;
@@ -266,6 +283,11 @@ void GemBase::beforeDeletion(void)
 /////////////////////////////////////////////////////////
 void GemBase :: obj_setupCallback(t_class *classPtr)
 {
+  /* callback for the generic 'gem_state' message:
+     - startRender()
+     - render()
+     - stopRender()
+  */
   struct _CallbackClass_gemState {
     static void callback(void *data, t_symbol* s, int argc, t_atom *argv)
     {
@@ -289,6 +311,9 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
   };
   _CallbackClass_gemState _CallbackClassInstance_gemState (classPtr);
 
+  /* callback for multicontext
+     (mostly: clean up if a context gets destroyed)
+   */
   struct _CallbackClass_gemContext {
     static void callback(void*data, t_float v0)
     {
@@ -310,5 +335,24 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
     }
   };
   _CallbackClass_gemContext _CallbackClassInstance_gemContext (classPtr);
+
+  /* debugging GL errors */
+  struct _CallbackClass_debugGL {
+    static void callback(void*data, t_float v0)
+    {
+      bool b = (bool)v0;
+      GemBase*obj=GetMyClass(data);
+      if(obj) {
+        obj->m_pimpl->debugGL = b;
+      }
+    }
+    explicit _CallbackClass_debugGL (struct _class*c)
+    {
+      class_addmethod(c, reinterpret_cast<t_method>(callback),
+                      gensym("debugGL"), A_FLOAT, A_NULL);
+    }
+  };
+  _CallbackClass_debugGL _CallbackClassInstance_debugGL (classPtr);
+
 
 }
