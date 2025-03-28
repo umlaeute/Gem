@@ -36,35 +36,35 @@ namespace {
 static const char* _gemglErrorString(GLenum err) {
   switch(err) {
   default: break;
-  case GL_NO_ERROR: return "no error";
-  case GL_INVALID_ENUM: return "invalid enumerant";
-  case GL_INVALID_VALUE: return "invalid value";
-  case GL_INVALID_OPERATION: return "invalid operation";
-  case GL_STACK_OVERFLOW: return "stack overflow";
-  case GL_STACK_UNDERFLOW: return "stack underflow";
-  case GL_OUT_OF_MEMORY: return "out of memory";
-  case GL_TABLE_TOO_LARGE: return "table too large";
-  case GL_INVALID_FRAMEBUFFER_OPERATION: return "invalid framebuffer operation";
+  case GL_NO_ERROR: return "no error (GL)";
+  case GL_INVALID_ENUM: return "invalid enumerant (GL)";
+  case GL_INVALID_VALUE: return "invalid value (GL)";
+  case GL_INVALID_OPERATION: return "invalid operation (GL)";
+  case GL_STACK_OVERFLOW: return "stack overflow (GL)";
+  case GL_STACK_UNDERFLOW: return "stack underflow (GL)";
+  case GL_OUT_OF_MEMORY: return "out of memory (GL)";
+  case GL_TABLE_TOO_LARGE: return "table too large (GL)";
+  case GL_INVALID_FRAMEBUFFER_OPERATION: return "invalid framebuffer operation (GL)";
     //case GL_INVALID_FRAMEBUFFER_OPERATION_EXT: return "invalid framebuffer operation";
 
-  case GL_CONTEXT_LOST: return "context lost";
-  case GL_RELATIVE_LINE_TO_NV: return "relative line to nv";
+  case GL_CONTEXT_LOST: return "context lost (GL)";
+  case GL_RELATIVE_LINE_TO_NV: return "relative line to nv (GL)";
 
     /* GLU */
 #ifdef GLU_INVALID_ENUM
-  case GLU_INVALID_ENUM: return "invalid enumerant";
+  case GLU_INVALID_ENUM: return "invalid enumerant (GLU)";
 #endif
 #ifdef GLU_INVALID_VALUE
-  case GLU_INVALID_VALUE: return "invalid value";
+  case GLU_INVALID_VALUE: return "invalid value (GLU)";
 #endif
 #ifdef GLU_OUT_OF_MEMORY
-  case GLU_OUT_OF_MEMORY: return "out of memory";
+  case GLU_OUT_OF_MEMORY: return "out of memory (GLU)";
 #endif
 #ifdef GLU_INCOMPATIBLE_GL_VERSION
-  case GLU_INCOMPATIBLE_GL_VERSION: return "incompatible gl version";
+  case GLU_INCOMPATIBLE_GL_VERSION: return "incompatible gl version (GLU)";
 #endif
 #ifdef GLU_INVALID_OPERATION
-  case GLU_INVALID_OPERATION: return "invalid operation";
+  case GLU_INVALID_OPERATION: return "invalid operation (GLU)";
 #endif /* GLU */
   }
   return "unknown error";
