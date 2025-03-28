@@ -19,12 +19,32 @@
 #include "GemContext.h"
 #include "Gem/Exception.h"
 #include "GemBase.h"
+#include "Utils/GLUtil.h"
 
 #include <set>
 #include <sstream>
 
 namespace
 {
+void reportGLerrors(GemWindow*obj)
+{
+  GLenum errNum;
+  while ((errNum = gem::utils::gl::glReportError(false))) {
+    const char*errStr = gem::utils::gl::glErrorString(errNum);
+    if(obj) {
+      if(errStr)
+        obj->error("%s [%d]", errStr, errNum);
+      else
+        obj->error("openGL error 0x%X", errNum);
+    } else {
+      if(errStr)
+        pd_error(0, "%s [%d]", errStr, errNum);
+      else
+        pd_error(0, "openGL error 0x%X", errNum);
+
+    }
+  }
+}
 bool sendContextDestroyedMsg(t_pd*x)
 {
   if(!x) {
@@ -34,6 +54,9 @@ bool sendContextDestroyedMsg(t_pd*x)
   t_atom a[1];
   SETFLOAT(a+0, 0);
   pd_typedmess(x, s, 1, a);
+
+  /* clear all openGL errors */
+  reportGLerrors(NULL);
   return true;
 }
 };
@@ -196,6 +219,9 @@ public:
       parent->error("unable to switch to current context, cannot render!");
       goto fail;
     }
+
+    /* check for openGL errors */
+    reportGLerrors(parent);
 
     if(dispatch)
       parent->dispatch();
