@@ -7,9 +7,9 @@ uniform sampler2DRect tex0;
 uniform float style;
 uniform float mix_factor;
 varying vec2 texcoord0;
-ivec2 size1 = textureSize2DRect(Ttex1);
-ivec2 size2 = textureSize2DRect(Ttex2);
-ivec2 size0 = textureSize2DRect(tex0);
+ivec2 size1 = textureSize2DRect(Ttex1,0);
+ivec2 size2 = textureSize2DRect(Ttex2,0);
+ivec2 size0 = textureSize2DRect(tex0,0);
 
 void main (void)
 {
