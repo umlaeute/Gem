@@ -20,6 +20,8 @@ dist_gemabs_DATA = \
 	gemrepeat.pd \
 	gemtablet.pd \
 	gemwin.pd \
+	glsl.pd \
+	_glsl.compile.pd \
 	hsv2rgb-help.pd \
 	hsv2rgb.pd \
 	part_info.pd \
