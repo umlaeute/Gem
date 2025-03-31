@@ -85,13 +85,7 @@ struct GemBase::PIMPL {
   void debugGLerror(const char*prefix=0) {
     if(debugGL) {
       GLenum errNum;
-      while ((errNum = gem::utils::gl::glReportError(false))) {
-        const char*errStr = gem::utils::gl::glErrorString(errNum);
-        if(errStr)
-          parent->error("%s%s [%d]", prefix?prefix:"", errStr, errNum);
-        else
-          parent->error("%sopenGL error 0x%X", prefix?prefix:"", errNum);
-      }
+      gem::utils::gl::glReportError(parent, prefix);
     }
   }
 };
