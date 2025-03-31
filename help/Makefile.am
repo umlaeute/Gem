@@ -60,6 +60,9 @@ dist_gemhelp_DATA += \
 	gemsdl2window-help.pd \
 	gemw32window-help.pd \
 	GLdefine-help.pd \
+	glsl-help.pd \
+	glsl_test.frag \
+	glsl_test.vert \
 	glsl_fragment-help.pd \
 	glsl_geometry-help.pd \
 	glsl_program-help.pd \
