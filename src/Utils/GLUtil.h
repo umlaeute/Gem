@@ -29,7 +29,7 @@ struct _symbol;
 #include "Gem/GemGL.h"
 #include "Gem/Exception.h"
 
-
+struct CPPExtern;
 namespace gem
 {
 namespace utils
@@ -45,6 +45,7 @@ namespace gl
    */
   GEM_EXTERN const char*          glErrorString(void);
   GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
+  GEM_EXTERN extern GLenum        glReportError (struct CPPExtern*, const char*prefix=0);
 
   GEM_EXTERN extern int           getGLdefine(const char *name);
   GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
