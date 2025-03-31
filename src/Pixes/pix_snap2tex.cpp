@@ -157,6 +157,8 @@ void pix_snap2tex :: snapMess(void)
   if(!GLEW_VERSION_1_1 && !GLEW_EXT_texture_object) {
     return;
   }
+  if (!m_textureObj)
+    return;
 
   int width  = m_width;
   int height = m_height;
