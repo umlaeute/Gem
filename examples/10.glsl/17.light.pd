@@ -99,7 +99,7 @@
 #X floatatom 398 152 5 0 0 0 - - - 0;
 #X floatatom 443 152 5 0 0 0 - - - 0;
 #X floatatom 485 153 5 0 0 0 - - - 0;
-#X obj 181 151 _glsl shader/light \; LightPosition 5 3 1 1 \; LightL 1 1 1 \; LightLa 1 1 1 \; MaterialKa 0.1 0.1 0.5 \; MaterialKd 0.8 0.1 0.1 \; MaterialKs 0.1 0.3 0.1 \; MaterialShininess 30;
+#X obj 181 151 glsl shader/light \; LightPosition 5 3 1 1 \; LightL 1 1 1 \; LightLa 1 1 1 \; MaterialKa 0.1 0.1 0.5 \; MaterialKd 0.8 0.1 0.1 \; MaterialKs 0.1 0.3 0.1 \; MaterialShininess 30;
 #X connect 0 0 1 0;
 #X connect 2 0 14 0;
 #X connect 5 0 6 0;

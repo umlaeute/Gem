@@ -20,7 +20,7 @@
 #X obj 441 65 * \$2;
 #X obj 441 41 unpack f f;
 #X obj 508 65 * \$2;
-#X obj 26 195 _glsl shader/blur;
+#X obj 26 195 glsl shader/blur;
 #X obj 26 285 pix_texture \; quality 1 \; rectangle 0;
 #X connect 0 0 22 1;
 #X connect 1 0 21 0;

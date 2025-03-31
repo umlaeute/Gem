@@ -1,4 +1,4 @@
-#N canvas 10 61 552 547 10;
+#N canvas 495 82 552 547 10;
 #X declare -lib Gem;
 #X obj 74 189 gemhead;
 #X obj 74 214 alpha;
@@ -59,7 +59,7 @@
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 354 58 pd gemwin;
 #X obj 384 23 declare -lib Gem;
-#X obj 74 257 _glsl shader/T_distord;
+#X obj 74 257 glsl shader/T_distord;
 #X obj 203 119 loadbang;
 #X obj 74 391 pix_texture \; rectangle 0;
 #X text 431 480 ch 2007;

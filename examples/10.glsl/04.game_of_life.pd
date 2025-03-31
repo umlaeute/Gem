@@ -68,7 +68,7 @@
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 52 117 pd gemwin;
 #X obj 484 13 declare -lib Gem;
-#X obj 316 106 _glsl shader/game;
+#X obj 316 106 glsl shader/game;
 #X obj 316 298 pix_snap2tex 500 500;
 #X connect 0 0 6 0;
 #X connect 2 0 22 0;

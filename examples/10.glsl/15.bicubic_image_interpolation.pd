@@ -31,7 +31,7 @@
 #X obj 358 349 r sel_interpolation;
 #X text 46 16 This example use shader in order to compute a bicubic image interpolation. Bicubic interpolation offer a smoother surface than obtain with bilinear interpolation. But since it need 16 sample to compute the interpolation \, it is quite slow.;
 #X obj 563 7 declare -lib Gem;
-#X obj 232 243 _glsl shader/bicubic_interpolation;
+#X obj 232 243 glsl shader/bicubic_interpolation;
 #X connect 0 0 31 0;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;

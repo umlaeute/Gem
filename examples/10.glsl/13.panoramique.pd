@@ -76,12 +76,12 @@
 #X msg 18 403 1.62;
 #X msg 199 137 1.38;
 #X obj 964 623 declare -lib Gem;
-#X obj 160 243 _glsl shader/panoramique;
+#X obj 160 243 glsl shader/panoramique;
 #X obj 19 312 loadbang;
 #X obj 19 335 s init_shader;
-#X obj 353 243 _glsl shader/panoramique;
-#X obj 552 244 _glsl shader/panoramique;
-#X obj 747 245 _glsl shader/panoramique;
+#X obj 353 243 glsl shader/panoramique;
+#X obj 552 244 glsl shader/panoramique;
+#X obj 747 245 glsl shader/panoramique;
 #N canvas 735 461 450 300 getdimen 0;
 #X obj 49 37 inlet;
 #X obj 49 60 pix_info -m;

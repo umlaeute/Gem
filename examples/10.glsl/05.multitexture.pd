@@ -85,7 +85,7 @@
 #X msg 698 403 texunit \$1;
 #X obj 698 380 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 76 414 pix_texture \; rectangle 0 \; texunit 2;
-#X obj 76 179 _glsl shader/multitexture \; MyTex 0 \; MyTex1 1;
+#X obj 76 179 glsl shader/multitexture \; MyTex 0 \; MyTex1 1;
 #X msg 143 82 0;
 #X msg 143 105 1;
 #X msg 143 128 2;

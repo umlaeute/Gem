@@ -62,7 +62,7 @@
 #X obj 450 378 t f f;
 #X msg 452 425 force \$1 \$2 0.3;
 #X obj 574 13 declare -lib Gem;
-#X obj 61 245 _glsl_vgf shader/tri2fan;
+#X obj 61 245 glsl shader/tri2fan;
 #X obj 61 151 alpha \; auto 1;
 #X obj 61 494 newWave 25 25 \; D1 0.01 \; D2 0.1;
 #X obj 322 169 gemwin \; perspec -0.1 0.1 -0.1 0.1 1 110 \; lighting 1;

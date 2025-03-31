@@ -128,7 +128,7 @@
 #X obj 194 647 print vb;
 #X msg 183 420 bang;
 #X obj 563 7 declare -lib Gem;
-#X obj 154 172 _glsl shader/brick;
+#X obj 154 172 glsl shader/brick;
 #X msg 165 152 bang;
 #X floatatom 278 204 5 0 0 0 - - - 0;
 #X obj 154 673 gemvertexbuffer \; resize 16 \; draw quad;

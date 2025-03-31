@@ -196,7 +196,7 @@
 #X text 737 297 change input to be converted to sound here, f 24;
 #X obj 567 66 gemframebuffer \; dimen 4096 2 \; rectangle 1 \; texunit 0;
 #X obj 705 451 gemframebuffer \; dimen 4096 1 \; rectangle 1;
-#X obj 274 223 _glsl shader/additive;
+#X obj 274 223 glsl shader/additive;
 #X connect 1 0 55 0;
 #X connect 1 1 54 0;
 #X connect 2 0 1 0;

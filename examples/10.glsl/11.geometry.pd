@@ -59,7 +59,7 @@
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 336 264 pd gemwin;
 #X obj 444 13 declare -lib Gem;
-#X obj 44 236 _glsl_vgf shader/geo;
+#X obj 44 236 glsl shader/geo;
 #X text 51 47 Here is an example where 40 circles are drawn with 1 single primitive.;
 #X text 49 87 Be aware that the geometry shader is computed after the vertex shader. coordinates are in 2d.;
 #X connect 0 0 1 0;

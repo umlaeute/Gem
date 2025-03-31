@@ -63,7 +63,7 @@
 #X coords 0 -1 1 1 85 40 1 100 100;
 #X restore 26 94 pd gemwin;
 #X obj 563 7 declare -lib Gem;
-#X obj 504 292 _glsl shader/fetching;
+#X obj 504 292 glsl shader/fetching;
 #X obj 28 310 gemframebuffer \; rectangle 0 \; type BYTE \; format RGB32 \; dimen 1024 1024;
 #X obj 28 545 pix_texture \; rectangle 0 \; quality 0;
 #X obj 504 450 pix_texture \; quality 0;

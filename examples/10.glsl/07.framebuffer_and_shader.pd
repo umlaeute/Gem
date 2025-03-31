@@ -153,7 +153,7 @@
 #X obj 867 189 loadbang;
 #X obj 9 315 gemframebuffer \; type FLOAT \; dimen 512 512 \; rectangle 1;
 #X obj 218 344 gemframebuffer \; type FLOAT \; dimen 512 512 \; rectangle 1;
-#X obj 774 326 _glsl_f shader/vague;
+#X obj 774 326 glsl shader/vague;
 #X floatatom 90 109 5 0 0 0 - \$0-K1 - 0;
 #X floatatom 192 109 5 0 0 0 - \$0-D1 - 0;
 #X floatatom 141 109 5 0 0 0 - \$0-K3 - 0;
@@ -168,7 +168,7 @@
 #X connect 2 0 0 0;
 #X restore 990 483 pd init;
 #X obj 990 456 loadbang;
-#X obj 9 269 _glsl_f shader/wave;
+#X obj 9 269 glsl shader/wave;
 #X msg 182 216 quality \$1;
 #X obj 182 192 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 9 494 pix_texture \; rectangle 1 \; quality 1;
