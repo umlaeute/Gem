@@ -237,6 +237,7 @@ void gemcubeframebuffer :: postrender(GemState *state)
     SETFLOAT(ap+4, static_cast<t_float>(0.));
     outlet_list(m_outTexInfo, 0, 5, ap);
   }
+  glActiveTexture(GL_TEXTURE0_ARB);
 }
 
 namespace
