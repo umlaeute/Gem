@@ -38,6 +38,7 @@ class GLStack::Data
 {
 public:
   Data(void)
+    : numTexUnits(0)
   {
     int i=0;
     for(i=0; i<4; i++) {
@@ -49,6 +50,7 @@ public:
   int stackDepth[4];
   int maxDepth[4];
   int orgDepth[4];
+  int numTexUnits;
 };
 };
 
@@ -116,8 +118,18 @@ bool GLStack::push(enum GemStackId id)
   }
   if(data->stackDepth[id]<data->maxDepth[id]) {
     glMatrixMode(mode);
-    glPushMatrix();
+    if(id == TEXTURE && data->numTexUnits) {
+      int curUnit;
+      glGetIntegerv(GL_ACTIVE_TEXTURE, &curUnit);
+      for (int i=0; i<data->numTexUnits; i++) {
+        glActiveTexture(GL_TEXTURE0_ARB + i);
+        glPushMatrix();
+      }
+      glActiveTexture(curUnit);
+    } else
+      glPushMatrix();
     data->stackDepth[id]++;
+    if(gem::utils::gl::glReportError(NULL, "push "))post("stack=%d", id);
     return true;
   }
 
@@ -148,7 +160,17 @@ bool GLStack::pop(enum GemStackId id)
   data->stackDepth[id]--;
   if(data->stackDepth[id]<data->maxDepth[id]) {
     glMatrixMode(mode);
-    glPopMatrix();
+    if(id == TEXTURE && data->numTexUnits) {
+      int curUnit;
+      glGetIntegerv(GL_ACTIVE_TEXTURE, &curUnit);
+      for (int i=0; i<data->numTexUnits; i++) {
+        glActiveTexture(GL_TEXTURE0_ARB + i);
+        glPopMatrix();
+      }
+      glActiveTexture(curUnit);
+    } else
+      glPopMatrix();
+    if(gem::utils::gl::glReportError(NULL, "pop "))post("stack=%d", id);
     return true;
   }
   return false;
@@ -187,6 +209,12 @@ int GLStack::reset(enum GemStackId id)
       s_id2maxdepth[id]=0;
       s_id2depth[id]=0;
     }
+
+    data->numTexUnits = 0;
+    if(TEXTURE == id && GLEW_ARB_multitexture) {
+      glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &data->numTexUnits);
+    }
+
     glReportError(); // clear any errors so far
   }
 
