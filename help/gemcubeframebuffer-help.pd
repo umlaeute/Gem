@@ -102,7 +102,7 @@
 #N canvas 620 313 360 553 shader 0;
 #X obj 72 166 glsl_vertex;
 #X obj 72 269 glsl_fragment;
-#X obj 72 449 glsl_program;
+#X obj 72 449 glsl_program \; alpha 1;
 #X obj 147 387 pack 0 0;
 #X msg 147 409 link \$1 \$2;
 #X floatatom 147 324 2 0 0 0 ID - - 0;
