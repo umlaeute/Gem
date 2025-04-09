@@ -123,6 +123,22 @@ void pix_write :: doWrite(void)
   int width  = m_width;
   int height = m_height;
 
+  int format = GEM_RGBA;
+  switch(m_color) {
+  case 1:
+    format = GEM_GRAY;
+    break;
+  case 3:
+    format = GEM_RGB;
+    break;
+  case 4:
+    format = GEM_RGBA;
+    break;
+  default:
+    error("unknown format 0x%X", format);
+    return;
+  }
+
   GemMan::getDimen(((m_width >0)?NULL:&width ),
                    ((m_height>0)?NULL:&height));
 
@@ -130,7 +146,7 @@ void pix_write :: doWrite(void)
   m_originalImage->ysize = height;
 
 #ifndef __APPLE__
-  m_originalImage->setFormat(m_color);
+  m_originalImage->setFormat(format);
 #else
   m_originalImage->setFormat(GEM_RGBA);
 #endif /* APPLE */
