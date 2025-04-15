@@ -48,7 +48,7 @@ glsl_geometry :: ~glsl_geometry()
 /////////////////////////////////////////////////////////
 bool glsl_geometry :: isRunnable()
 {
-  if(GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1 ??
+  if(GLEW_VERSION_2_0 || GLEW_EXT_geometry_shader4) { // GLEW_VERSION_2_1 ??
     m_shaderTarget = GL_GEOMETRY_SHADER_EXT;
     m_shaderType = GL2;
     return true;
