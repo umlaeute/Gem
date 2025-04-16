@@ -475,7 +475,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
   t_word *vec;
   const bool interleaved = (0==dimen);
 
-  if(offset>vb.size) {
+  if(offset>vb.size*vb.dimen) {
     error("offset %d is bigger than vertexbuffer size (%d) for %s", offset, vb.size, tab_name.c_str());
     return;
   }
