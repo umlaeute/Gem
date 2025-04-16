@@ -1,4 +1,4 @@
-#N canvas 151 363 1140 558 10;
+#N canvas 229 344 1140 558 10;
 #X declare -lib Gem;
 #N canvas 640 443 450 300 fps 0;
 #X obj 60 28 gemhead;
@@ -114,6 +114,21 @@
 #X msg 37 194 0 -0.8 -0.8 0 -0.8 0.8 0 0.8 -0.8 0 0.8 0.8 0, f 37;
 #X obj 333 486 gemvertexbuffer \; resize 4 \; draw tristrip;
 #X obj 333 226 glsl shader/05.geometry;
+#N canvas 125 216 972 620 drawing_type 0;
+#X text 40 50 VBO draw type : same as all openGL primitive;
+#X text 46 433 geometry shader out type :;
+#X text 70 345 points (pour GL_POINTS) \; lines (for GL_LINES \, GL_LINE_STRIP \, GL_LINE_LOOP) \; triangles (for GL_TRIANGLES \, GL_TRIANGLE_STRIP \, GL_TRIANGLE_FAN \; lines_adjacency (for GL_LINES_ADJACENCY) \; triangles_adjacency (for GL_TRIANGLES_ADJACENCY), f 66;
+#X text 50 329 geometry shader in type :;
+#X text 69 451 points line_strip triangle_strip, f 17;
+#X text 78 71 point for GL_POINTS \; points for GL_POINTS \; line for GL_LINE_LOOP \; lineloop for GL_LINE_LOOP \; lines for GL_LINES \; linestrip for GL_LINE_STRIP \; linesadj for GL_LINES_ADJACENCY \; linestripadj for GL_LINE_STRIP_ADJACENCY \; tri for GL_TRIANGLES \; triangle for GL_TRIANGLES \; tristrip for GL_TRIANGLE_STRIP \; trifan for GL_TRIANGLE_FAN \; triadj for GL_TRIANGLES_ADJACENCY \; tristripadj for GL_TRIANGLE_STRIP_ADJACENCY \; quad for GL_QUADS \; quads for GL_QUADS \; quadstrip for GL_QUAD_STRIP \; strip for GL_TRIANGLE_STRIP \; fill for GL_POLYGON \;;
+#X text 41 17 version >= 150;
+#X text 529 13 version >=410;
+#X text 501 370 GL_PATCHES for teselarisation;
+#X text 754 9 version >=420;
+#X obj 714 5 cnv 18 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
+#X obj 474 7 cnv 18 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
+#X text 744 461 add invocations;
+#X restore 37 499 pd drawing_type;
 #X connect 0 0 1 0;
 #X connect 2 0 35 0;
 #X connect 3 0 8 0;
