@@ -1,6 +1,7 @@
 #version 150
 
 layout(triangles) in;
+    // the triangle_strip is split in multiples triangles before this shader
 layout(triangle_strip, max_vertices = 3) out;
 
 // from vertex shader
