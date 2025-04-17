@@ -22,7 +22,7 @@ out vec4 Position;
 void main()
 {
 	Color = vec4(colorR, colorG, colorB, 1.);
-	Normal = vec3(normal_X, normal_Y, normal_Z);
+	Normal = (transformation_matrix * vec4(normal_X, normal_Y, normal_Z, 1.)).xyz;
 	vec3 pos = vec3(positionX, positionY, positionZ);
 	Position = transformation_matrix * vec4(pos,1.0);
 	gl_Position = Position;
