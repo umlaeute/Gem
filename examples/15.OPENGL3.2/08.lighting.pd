@@ -150,6 +150,11 @@
 #X msg 726 303 LightPosition \$1 \$2 \$3 \$4;
 #X msg 448 407 LightPosition 5 3 1 1 \, LightL 1 1 1 \, LightLa 1 1 1 \, MaterialKa 0.3 0.3 0.3 \, MaterialKd 0.1 0.1 0.1 \, MaterialKs 0.3 0.3 0.3 \, MaterialShininess 0.1;
 #X obj 288 333 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
+#X obj 59 447 text define;
+#X obj 59 502 text define;
+#X obj 39 399 loadbang;
+#X msg 59 423 read shader/08.light.vert;
+#X msg 59 479 read shader/08.light.frag;
 #X connect 0 0 1 0;
 #X connect 2 0 28 0;
 #X connect 3 0 10 0;
@@ -180,3 +185,7 @@
 #X connect 32 0 28 1;
 #X connect 33 0 28 1;
 #X connect 34 0 28 0;
+#X connect 37 0 38 0;
+#X connect 37 0 39 0;
+#X connect 38 0 35 0;
+#X connect 39 0 36 0;
