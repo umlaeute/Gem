@@ -1,4 +1,4 @@
-#N canvas 493 260 713 709 10;
+#N canvas 145 232 1078 659 10;
 #X declare -lib Gem;
 #N canvas 640 443 450 300 fps 0;
 #X obj 60 28 gemhead;
@@ -45,7 +45,7 @@
 #X text 447 454 <----- essential for lookup functions;
 #X obj 374 320 print linking;
 #X obj 347 297 t a a;
-#X obj 330 610 print vb;
+#X obj 330 560 print vb;
 #X msg 385 341 bang;
 #X obj 44 9 declare -lib Gem;
 #X obj 347 255 pack f f;
@@ -93,7 +93,7 @@
 #X obj 281 104 t a a;
 #X msg 312 130 open shader/\$1.vert;
 #X msg 315 159 open shader/\$1.frag;
-#X obj 303 586 t a a;
+#X obj 303 536 t a a;
 #X obj 40 175 table \$0_position 9;
 #X obj 40 196 table \$0_color 9;
 #X obj 41 235 loadbang;
@@ -103,7 +103,11 @@
 #X msg 41 260 0 -0.8 -0.8 0 0 0.8 0 0.8 -0.8 0;
 #X obj 40 317 loadbang;
 #X msg 281 72 symbol 01.basic;
-#X obj 267 638 gemvertexbuffer \; resize 9 \; draw tri;
+#X obj 267 588 gemvertexbuffer \; resize 9 \; draw tri;
+#X text 490 119 OpenGL 3.2 deprecated the fixed-function pipeline \, which was less flexible and harder to optimize \, in favor of the programmable pipeline using shaders \, allowing for more customizable and efficient rendering techniques., f 88;
+#X text 491 14 OpenGL 3.2 introduced deprecation of immediate mode rendering \, encouraging the use of Vertex Buffer Objects (VBOs) and Vertex Array Objects (VAOs) for more efficient and modern graphics programming. This shift was made to improve performance and flexibility \, aligning OpenGL with contemporary GPU capabilities and programming practices., f 88;
+#X text 491 80 VBOs are crucial because they represent the modern and efficient way to manage vertex data in OpenGL \, replacing the older and less performant immediate mode., f 88;
+#X text 490 173 With the deprecation of the fixed-function pipeline in OpenGL 3.2 \, users must now manually handle many aspects that were previously automated \, such as matrix transformations and lighting calculations \, by writing their own shaders and managing buffers \, which offers greater control but requires more effort and understanding of the rendering process., f 88;
 #X connect 0 0 1 0;
 #X connect 2 0 14 0;
 #X connect 3 0 4 0;

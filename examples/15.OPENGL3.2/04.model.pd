@@ -159,6 +159,7 @@
 #X obj 267 349 glsl_program \; LightPosition 5 3 1 1 \; LightL 1 1 1 \; LightLa 1 1 1 \; MaterialKa 0.5 0.5 0.5 \; MaterialKd 0.1 0.1 0.1 \; MaterialKs 0.3 0.3 0.3 \; MaterialShininess 30;
 #X msg 402 492 attribute positionX table_posX \, attribute positionY table_posY \, attribute positionZ table_posZ \, attribute normal_X table_normalX \, attribute normal_Y table_normalY \, attribute normal_Z table_normalZ \, attribute colorR table_colorR \, attribute colorG table_colorG \, attribute colorB table_colorB, f 67;
 #X obj 267 718 gemvertexbuffer \; draw tri;
+#X text 23 253 modelfiler load a 3d object into tables. So the pipeline is unchange regarding previous examples, f 36;
 #X connect 0 0 1 0;
 #X connect 2 0 12 0;
 #X connect 3 0 4 0;

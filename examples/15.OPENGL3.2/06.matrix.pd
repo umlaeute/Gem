@@ -1,4 +1,4 @@
-#N canvas 161 221 1450 697 12;
+#N canvas 294 257 1450 697 12;
 #X obj 21 209 GEMglLoadIdentity;
 #X obj 21 174 gemhead;
 #X obj 21 255 translateXYZ;
@@ -174,7 +174,6 @@
 #X obj 814 670 s shader_matrix;
 #X text 27 35 The model matrix combine the geometry transformation. It can be computed with specific library \, or with standard openGL object., f 30;
 #X text 1286 485 45° fov (this is a very wild angle), f 21;
-#X text 535 34 Since the shader need only the multiplication of the model matrix and the view matrix \, you can get this combination directly :, f 35;
 #N canvas 234 350 511 439 build_perspective 0;
 #X obj 37 24 inlet;
 #X obj 37 108 * 0.5;
@@ -234,7 +233,8 @@
 #X restore 843 484 pd build_perspective;
 #X text 274 38 The view matrix represent the camera position and orientation. It can be set via message to the gemwin object, f 31;
 #X text 834 28 The projection matrix The projection matrix transforms 3D coordinates from view space to clip space \, defining what is visible to the camera. It determines how objects are projected onto the 2D screen \, either with perspective effects (objects appear smaller with distance) or orthographically (maintaining consistent size regardless of distance).represent the camera;
-#X text 27 8 This patch create transformation matrix to be use with previous patch., f 71;
+#X text 27 8 This patch create transformation matrix to be use with previous patch (keep the previous patch open)., f 103;
+#X text 535 34 Since the shader need only the multiplication of the model matrix and the view matrix \, you can get this combination directly : (not used in this example), f 35;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 2 0 3 0;
@@ -304,7 +304,7 @@
 #X connect 78 0 79 0;
 #X connect 79 0 80 0;
 #X connect 80 0 92 0;
-#X connect 83 0 106 0;
+#X connect 83 0 105 0;
 #X connect 84 0 88 0;
 #X connect 84 1 85 0;
 #X connect 85 0 89 0;
@@ -318,5 +318,5 @@
 #X connect 97 0 100 0;
 #X connect 98 0 101 0;
 #X connect 99 0 102 0;
-#X connect 106 0 84 0;
-#X connect 106 0 96 0;
+#X connect 105 0 84 0;
+#X connect 105 0 96 0;

@@ -110,6 +110,7 @@
 #X msg 542 323 bang;
 #X obj 427 678 gemvertexbuffer \; draw quad;
 #X obj 427 424 glsl_program \; Texture2 1;
+#X text 46 430 Using textures did not change;
 #X connect 0 0 1 0;
 #X connect 2 0 13 0;
 #X connect 3 0 4 0;
