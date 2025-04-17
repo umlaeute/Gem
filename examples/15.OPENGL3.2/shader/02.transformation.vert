@@ -17,7 +17,6 @@ uniform mat4 transformation_matrix;
 // In this example, we use gemlist_matrix in the patch to get the transformation matrix.
 // The perspective matrix (set with the perspec message to gemwin) is not used.
 
-
 out vec3 Color_to_frag;
 // the output of this shader is only a color.
 // This variable will be interpolated between all vertices
