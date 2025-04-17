@@ -1,24 +1,24 @@
 #version 460
-// Cyrille Henry 2024
-
-// light description
+// Cyrille Henry 2024;
+;
+// light description;
 uniform vec4 LightPosition;  // Light position in eye coords.
 uniform vec3 LightLa;        // Ambient light intensity
 uniform vec3 LightL;         // Diffuse and specular light intensity
-
-// material definition
+;
+// material definition;
 uniform vec3 MaterialKa;            // Ambient reflectivity
 uniform vec3 MaterialKd;            // Diffuse reflectivity
 uniform vec3 MaterialKs;            // Specular reflectivity
 uniform float MaterialShininess;    // Specular shininess factor
-
+;
 in vec4 Color;
 in vec3 Normal;
 in vec4 Position;
-
+;
 out vec4 FragColor;
 // The only output of this shader : the color of the pixel
-
+;
 vec3 blinnPhong( vec3 position, vec3 n) {
   vec3 ambient = LightLa * MaterialKa;
   vec3 s = normalize( LightPosition.xyz - position );
@@ -32,7 +32,7 @@ vec3 blinnPhong( vec3 position, vec3 n) {
   }
   return ambient + LightL * (diffuse + spec);
 }
-
+;
 void main() {
 	FragColor = Color * vec4(blinnPhong(Position.xyz, normalize(Normal)), 1.);
 }
