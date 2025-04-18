@@ -1,4 +1,4 @@
-#N canvas 919 206 989 704 10;
+#N canvas 418 184 989 704 10;
 #X declare -lib Gem;
 #N canvas 640 443 450 300 fps 0;
 #X obj 60 28 gemhead;
@@ -33,10 +33,10 @@
 #X restore 44 104 pd fps;
 #X floatatom 44 127 5 0 0 1 fps - - 0;
 #X obj 287 14 gemhead;
-#X msg 482 493 program \$1;
+#X msg 485 493 program \$1;
 #X obj 492 523 cnv 15 120 30 empty empty empty 20 12 0 14 #c4fcc4 #404040 0;
 #X msg 500 529 print_attributes;
-#X text 566 493 <----- essential for lookup functions;
+#X text 569 493 <----- essential for lookup functions;
 #X obj 350 610 print vb;
 #X obj 44 9 declare -lib Gem;
 #X obj 458 437 f \$0;
@@ -136,11 +136,11 @@
 #X text 586 402 Z translation have no effect since the perspective is not yet implemented;
 #X obj 458 408 t b f;
 #X obj 287 377 glsl shader/02.transformation;
-#X obj 59 447 text define;
-#X obj 59 502 text define;
 #X obj 39 399 loadbang;
-#X msg 59 423 read shader/02.transformation.frag;
-#X msg 59 479 read shader/02.transformation.vert;
+#X obj 59 447 textfile;
+#X msg 59 423 read shader/02.transformation.frag cr;
+#X obj 59 502 textfile;
+#X msg 59 479 read shader/02.transformation.vert cr;
 #X connect 0 0 1 0;
 #X connect 2 0 43 0;
 #X connect 3 0 12 0;
@@ -179,7 +179,7 @@
 #X connect 47 1 3 0;
 #X connect 48 0 42 0;
 #X connect 48 1 47 0;
-#X connect 51 0 52 0;
-#X connect 51 0 53 0;
-#X connect 52 0 49 0;
-#X connect 53 0 50 0;
+#X connect 49 0 51 0;
+#X connect 49 0 53 0;
+#X connect 51 0 50 0;
+#X connect 53 0 52 0;
