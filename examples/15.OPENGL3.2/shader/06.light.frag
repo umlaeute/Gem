@@ -1,39 +1,53 @@
 #version 460
-// Cyrille Henry 2024
+// Cyrille Henry 2025
 
-// light description
-uniform vec4 LightPosition;  // Light position in eye coords.
-uniform vec3 LightLa;        // Ambient light intensity
-uniform vec3 LightL;         // Diffuse and specular light intensity
+// Light in world space
+uniform vec4 LightPosition;    // Light position in world space
+uniform vec3 LightLa;          // Ambient intensity
+uniform vec3 LightL;           // Diffuse/specular intensity
+uniform vec3 CameraPosition;   // Camera position in world space
 
-// material definition;
-uniform vec3 MaterialKa;            // Ambient reflectivity
-uniform vec3 MaterialKd;            // Diffuse reflectivity
-uniform vec3 MaterialKs;            // Specular reflectivity
-uniform float MaterialShininess;    // Specular shininess factor
+// Material
+uniform vec3 MaterialKa;       // Ambient reflectivity
+uniform vec3 MaterialKd;       // Diffuse reflectivity
+uniform vec3 MaterialKs;       // Specular reflectivity
+uniform float MaterialShininess; // Shininess
 
 in vec4 Color;
 in vec3 Normal;
-in vec4 Position;
+in vec3 FragPos;    // Fragment position in world space
+in vec3 ViewPos;    // Position in view space (for debugging)
 
-out vec4 FragColor;
-// The only output of this shader : the color of the pixel
+out vec4 FragColor; // Final color
 
-vec3 blinnPhong( vec3 position, vec3 n) {
-  vec3 ambient = LightLa * MaterialKa;
-  vec3 s = normalize( LightPosition.xyz - position );
-  float sDotN = max( dot(s,n), 0.0 );
-  vec3 diffuse = MaterialKd * sDotN;
-  vec3 spec = vec3(0.0);
-  if( sDotN > 0.0 ) {
-    vec3 v = normalize(-position.xyz);
-    vec3 h = normalize( v + s );
-    spec = MaterialKs * pow( max( dot(h,n), 0.0 ), MaterialShininess );
-  }
-  return ambient + LightL * (diffuse + spec);
+vec3 blinnPhong(vec3 position, vec3 n) {
+
+    // Ambient component
+    vec3 ambient = LightLa * MaterialKa;
+
+    // Vector to the light
+    vec3 lightDir = normalize(LightPosition.xyz - position);
+
+    // Diffuse component
+    float diff = max(dot(n, lightDir), 0.0);
+    vec3 diffuse = MaterialKd * diff;
+
+    // Vector to the viewer (camera)
+    vec3 viewDir = normalize(CameraPosition - position);
+
+    // Specular component
+    vec3 specular = vec3(0.0);
+    if (diff > 0.0) {
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        float spec = pow(max(dot(n, halfwayDir), 0.0), MaterialShininess);
+        specular = MaterialKs * spec;
+    }
+
+    return ambient + LightL * (diffuse + specular);
 }
 
 void main() {
-    mat3 normalMatrix = mat3(transpose(inverse(viewMatrix * modelMatrix)));
-	FragColor = Color * vec4(blinnPhong(Position.xyz, normalize(Normal)), 1.);
+    vec3 lighting = blinnPhong(FragPos, normalize(Normal));
+    FragColor = Color * vec4(lighting, 1.0);
 }
+
