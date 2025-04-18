@@ -95,15 +95,17 @@
 #X obj 267 276 glsl shader/01.basic;
 #X obj 384 343 \$0;
 #X text 445 259 This example demonstrates how to use Vertex Buffer Objects (VBOs) in conjunction with shaders in OpenGL. It illustrates the process of creating and binding a VBO to store vertex data \, and then using a vertex shader and fragment shader to render that data., f 88;
-#X text 60 527 click to see the shaders;
+#X text 47 522 click to see the shaders;
 #X obj 39 399 loadbang;
 #X obj 267 588 gemvertexbuffer \; resize 3 \; draw tri;
 #X text 421 393 We are using attribute here \, since it's the way the shader will have access to the VBO data;
 #X obj 384 321 t b f;
-#X obj 59 502 textfile;
-#X obj 59 447 textfile;
-#X msg 59 423 read shader/01.basic.frag cr;
-#X msg 59 479 read shader/01.basic.vert cr;
+#X obj 55 449 textfile;
+#X obj 39 498 textfile;
+#X msg 39 474 read shader/01.basic.frag cr;
+#X msg 55 426 read shader/01.basic.vert cr;
+#X msg 121 450 print;
+#X msg 106 497 print;
 #X connect 0 0 1 0;
 #X connect 2 0 24 0;
 #X connect 3 0 11 0;
@@ -124,3 +126,5 @@
 #X connect 31 1 3 0;
 #X connect 34 0 33 0;
 #X connect 35 0 32 0;
+#X connect 36 0 32 0;
+#X connect 37 0 33 0;

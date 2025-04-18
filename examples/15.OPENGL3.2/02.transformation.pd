@@ -137,10 +137,12 @@
 #X obj 458 408 t b f;
 #X obj 287 377 glsl shader/02.transformation;
 #X obj 39 399 loadbang;
-#X obj 59 447 textfile;
-#X msg 59 423 read shader/02.transformation.frag cr;
-#X obj 59 502 textfile;
-#X msg 59 479 read shader/02.transformation.vert cr;
+#X obj 39 499 textfile;
+#X msg 39 475 read shader/02.transformation.frag cr;
+#X obj 59 452 textfile;
+#X msg 59 429 read shader/02.transformation.vert cr;
+#X msg 101 500 print;
+#X msg 121 452 print;
 #X connect 0 0 1 0;
 #X connect 2 0 43 0;
 #X connect 3 0 12 0;
@@ -183,3 +185,5 @@
 #X connect 49 0 53 0;
 #X connect 51 0 50 0;
 #X connect 53 0 52 0;
+#X connect 54 0 50 0;
+#X connect 55 0 52 0;

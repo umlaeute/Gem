@@ -1,4 +1,4 @@
-#N canvas 774 83 967 800 10;
+#N canvas 753 73 967 800 10;
 #X declare -lib Gem;
 #N canvas 640 443 450 300 fps 0;
 #X obj 60 28 gemhead;
@@ -145,11 +145,13 @@
 #X obj 287 369 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
 #X text 259 19 modelfiler load a 3d object into tables. The pipeline is unchange regarding previous examples, f 93;
 #X msg 384 472 attribute positionX table_posX \, attribute positionY table_posY \, attribute positionZ table_posZ \, attribute colorR table_colorR \, attribute colorG table_colorG \, attribute colorB table_colorB, f 67;
-#X obj 39 399 loadbang;
-#X obj 55 506 textfile;
-#X obj 56 454 textfile;
-#X msg 55 482 read shader/04.model.frag cr;
-#X msg 56 431 read shader/04.model.vert cr;
+#X obj 31 461 loadbang;
+#X obj 31 561 textfile;
+#X obj 51 514 textfile;
+#X msg 93 562 print;
+#X msg 113 514 print;
+#X msg 51 491 read shader/04.model.vert cr;
+#X msg 31 537 read shader/04.model.frag cr;
 #X connect 0 0 1 0;
 #X connect 2 0 26 0;
 #X connect 3 0 10 0;
@@ -174,7 +176,9 @@
 #X connect 26 1 6 0;
 #X connect 27 0 26 0;
 #X connect 29 0 10 0;
-#X connect 30 0 33 0;
-#X connect 30 0 34 0;
+#X connect 30 0 36 0;
+#X connect 30 0 35 0;
 #X connect 33 0 31 0;
 #X connect 34 0 32 0;
+#X connect 35 0 32 0;
+#X connect 36 0 31 0;

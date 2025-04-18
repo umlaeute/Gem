@@ -262,6 +262,13 @@
 #X obj 53 189 glsl shader/03.matrix;
 #X msg 221 380 print_attributes;
 #X msg 197 336 attribute position \$1_position \, attribute normal \$1_normal \, attribute color \$1_color;
+#X obj 329 465 loadbang;
+#X obj 329 565 textfile;
+#X obj 349 518 textfile;
+#X msg 391 566 print;
+#X msg 411 518 print;
+#X msg 349 495 read shader/03.matrix.vert cr;
+#X msg 329 541 read shader/03.matrix.frag cr;
 #X connect 0 0 6 0;
 #X connect 1 0 29 0;
 #X connect 2 0 3 0;
@@ -291,6 +298,12 @@
 #X connect 29 1 24 0;
 #X connect 30 0 12 0;
 #X connect 31 0 12 0;
+#X connect 32 0 38 0;
+#X connect 32 0 37 0;
+#X connect 35 0 33 0;
+#X connect 36 0 34 0;
+#X connect 37 0 34 0;
+#X connect 38 0 33 0;
 #X restore 1228 514 pd shader;
 #X obj 1228 550 _gemwin;
 #X text 27 8 This patch create the various matrix used by the rendering pipeline, f 103;
