@@ -1,4 +1,4 @@
-#N canvas 116 169 1450 697 12;
+#N canvas 506 110 1450 697 12;
 #X obj 21 209 GEMglLoadIdentity;
 #X obj 21 174 gemhead;
 #X obj 21 255 translateXYZ;
@@ -306,7 +306,6 @@
 #X text 834 28 The projection matrix transforms 3D coordinates from view space to clip space \, defining what is visible to the camera. It determines how objects are projected onto the 2D screen \, either with perspective effects (objects appear smaller with distance) or orthographically (maintaining consistent size regardless of distance).represent the camera;
 #X msg 843 427 1.57 1 0 20;
 #X text 948 429 Gem wild angle;
-#X text 959 460 smaller angle vision;
 #X text 1264 321 real gemwin aspect ratio;
 #X msg 870 457 0.5 1 0 20;
 #X msg 1233 385 3.14159 4;
@@ -314,6 +313,7 @@
 #X floatatom 1139 586 5 0 0 0 - - - 0;
 #X msg 1138 617 \$1 1 1 100;
 #X msg 1169 481 1.57 1 1 100;
+#X text 959 460 smaller vision angle;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 2 0 3 0;
@@ -398,8 +398,8 @@
 #X connect 101 0 81 0;
 #X connect 101 0 93 0;
 #X connect 108 0 101 0;
-#X connect 112 0 101 0;
-#X connect 113 0 76 0;
-#X connect 115 0 116 0;
+#X connect 111 0 101 0;
+#X connect 112 0 76 0;
+#X connect 114 0 115 0;
+#X connect 115 0 101 0;
 #X connect 116 0 101 0;
-#X connect 117 0 101 0;
