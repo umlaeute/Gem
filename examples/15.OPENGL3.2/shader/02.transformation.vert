@@ -1,5 +1,5 @@
 #version 460
-
+;
 //simple test shader
 // Cyrille Henry 2024
 // based on "OpenGL 4 Shading Language Cookbook" by David Wolff
@@ -13,10 +13,10 @@ layout (location=1) in vec3 color;
 
 uniform mat4 transformation_matrix;
 // The transformation matrix we want to apply to the vertex.
-// The shader did not receive the transformation matrix from the pipeline, so we need to creater one and pass it as an argument.
+// The shader did not receive the transformation matrix from the pipeline, 
+// so we need to creater one and pass it as an argument.
 // In this example, we use gemlist_matrix in the patch to get the transformation matrix.
 // The perspective matrix (set with the perspec message to gemwin) is not used.
-
 
 out vec3 Color_to_frag;
 // the output of this shader is only a color.

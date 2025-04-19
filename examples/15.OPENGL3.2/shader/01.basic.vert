@@ -20,6 +20,6 @@ void main()
 	Color_to_frag = color;
 	// initialise the variable to pass to the frag shader with data comming from the VBO
 
-	gl_Position = vec4(position,1.0); // update vertex position from the VBO
+	gl_Position = vec4(position,1.0); // update vertex position from the VBO;
 	// No perspective is apply in this example
 }
