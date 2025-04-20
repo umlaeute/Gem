@@ -66,6 +66,10 @@ static void initialize_drawtypes(std::map<std::string, GLenum>&drawtypes)
 
   drawtypes["strip"]=GL_TRIANGLE_STRIP;
   drawtypes["fill"]=GL_POLYGON;
+  
+  drawtypes["patch"]=GL_PATCHES;
+  drawtypes["patches"]=GL_PATCHES;
+  
 }
 
 }
