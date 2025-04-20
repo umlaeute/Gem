@@ -1,4 +1,5 @@
 #version 150
+// Cyrille Henry 2025
 
 // from VBO
 in vec3 position;
@@ -9,6 +10,7 @@ in vec3 color;
 out vec3 vertNormal;
 out vec3 vertColor;
 
+// the model view projection matrix used for transformation
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;

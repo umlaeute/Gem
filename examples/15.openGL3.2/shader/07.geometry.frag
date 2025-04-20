@@ -1,4 +1,5 @@
 #version 150
+// Cyrille Henry 2025
 
 // from geometry shader
 in vec3 geomPosition;

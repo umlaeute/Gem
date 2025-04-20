@@ -1,4 +1,5 @@
 #version 400
+// Cyrille Henry 2025
 
 in VS_OUT {
     vec3 pos;

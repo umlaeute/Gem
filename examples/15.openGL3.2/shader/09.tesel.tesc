@@ -1,6 +1,7 @@
 #version 400
+// Cyrille Henry 2025
 
-layout(vertices = 3) out;
+layout(vertices = 3) out; // traw triangle
 
 in VS_OUT {
     vec3 pos;

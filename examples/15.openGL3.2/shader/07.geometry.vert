@@ -1,4 +1,5 @@
 #version 150
+// Cyrille Henry 2025
 
 // from VBO
 in vec3 position;
@@ -10,6 +11,7 @@ out vec3 vertPosition;
 out vec3 vertNormal;
 out vec2 vertTexCoord;
 
+// transformation matrices
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
@@ -19,6 +21,5 @@ void main() {
     vertPosition = vec3(modelMatrix * vec4(position, 1.0));
     vertNormal = normalMatrix * normal;
     vertTexCoord = texCoord;
-
     gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(position, 1.0); 
 }

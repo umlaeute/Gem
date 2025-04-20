@@ -1,4 +1,7 @@
 #version 150
+// Cyrille Henry 2025
+
+// simple shader that compute very simple light
 
 // from geometry shader
 in vec3 vertNormal;

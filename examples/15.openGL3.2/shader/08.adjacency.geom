@@ -1,4 +1,8 @@
 #version 150
+// Cyrille Henry 2025
+
+// this shader add vertices between 2 vertices of the original geometry.
+// It use 4 vertices input, in order to do a cubix interpolation, for smooth rendering.
 
 layout(lines_adjacency) in;
 layout(line_strip, max_vertices = 256) out;

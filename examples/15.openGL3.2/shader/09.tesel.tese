@@ -1,4 +1,5 @@
 #version 400
+// Cyrille Henry 2025
 
 layout(triangles, equal_spacing, cw) in;
 
@@ -30,7 +31,7 @@ void main() {
     vs_out.pos = pos;
     vs_out.norm = norm;
     gl_Position = vec4(pos, 1.0);
-    vec3 mycolor; // custom color at each vertices after subdivision
+    vec3 mycolor; // custom pseudo random color at each vertices after subdivision
     mycolor.rg = cos(1.+12.12*pos.xy);
     mycolor.b = cos(1.+12.12*pos.x*pos.y);    
     vs_out.color = vec3(0.5)+0.5*mycolor;

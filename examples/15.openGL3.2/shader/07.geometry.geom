@@ -1,4 +1,5 @@
 #version 150
+// Cyrille Henry 2025
 
 layout(triangles) in;
 // the triangle_strip is split in multiples triangles before this shader
