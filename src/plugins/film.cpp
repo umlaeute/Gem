@@ -54,6 +54,11 @@ public:
                     const gem::Properties&requestprops)
   {
     gem::Properties props=requestprops;
+    if(props.type("_backends")!=gem::Properties::UNSET) {
+      /* backends might be 'image' (which is a valid for film,
+       * but not for imageloader), so remove it */
+      props.erase("_backends");
+    }
     m_image.newfilm=true;
     return m_handle->load(name, m_image.image, props);
   }
