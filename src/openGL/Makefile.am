@@ -626,5 +626,7 @@ libopenGL_la_SOURCES=  \
     GEMglViewport.cpp \
     GEMglViewport.h \
     GLdefine.cpp \
-    GLdefine.h
+    GLdefine.h \
+    GEMglPatchParameteri.cpp \
+    GEMglPatchParameteri.h    
 

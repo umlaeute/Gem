@@ -475,11 +475,13 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
   t_word *vec;
   const bool interleaved = (0==dimen);
 
-  if(offset>vb.size) {
+/*
+  if(offset>vb.size*vb.dimen) { // should this test be diferent for interleaved or not copy? 
     error("offset %d is bigger than vertexbuffer size (%d) for %s", offset, vb.size, tab_name.c_str());
     return;
   }
-
+  // ch 2025 : since the vb is resized before copying the element, this test look useless to me
+*/
   t_symbol*s=gensym(tab_name.c_str());
   pd_findbyclass(s, garray_class);
   if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) {

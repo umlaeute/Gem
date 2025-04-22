@@ -5,8 +5,8 @@
 
 in vec2 TexCoord;
 
-uniform sampler2D Texture1;
-uniform sampler2D Texture2;
+uniform sampler2D Texture1; // Texture 1 with using the textunit 0
+uniform sampler2D Texture2; // Texture 2 need to be set to 1 to use the correct texture
 uniform float mix_factor;
 
 out vec4 FragColor;
