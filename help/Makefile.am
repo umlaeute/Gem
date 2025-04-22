@@ -73,6 +73,7 @@ dist_gemhelp_DATA += \
 	mesh_line-help.pd \
 	mesh_square-help.pd \
 	model-help.pd \
+	modelfiler-help.pd \
 	multimodel-help.pd \
 	newWave-help.pd \
 	ortho-help.pd \
