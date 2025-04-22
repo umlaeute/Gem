@@ -11,7 +11,7 @@
 #X obj 37 246 GEMglGetIntegerv GL_MAX_VERTEX_ATTRIBS;
 #X obj 37 272 GEMglGetIntegerv GL_MAX_VERTEX_UNIFORM_COMPONENTS;
 #X obj 37 297 GEMglGetIntegerv GL_MAX_VARYING_FLOATS;
-#X msg 453 193 \$1 \$2;
+#X msg 453 193 \$1;
 #X listbox 510 193 20 0 0 0 - - - 0;
 #X listbox 510 220 20 0 0 0 - - - 0;
 #X listbox 510 243 20 0 0 0 - - - 0;
@@ -39,8 +39,8 @@
 #X obj 37 422 GEMglGetIntegerv GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS;
 #X obj 37 447 GEMglGetIntegerv GL_MAX_UNIFORM_BLOCK_SIZE;
 #X msg 453 320 \$1;
-#X text 190 21 This patch querry your GPU for it's limitation;
-#X text 191 51 All GPU have diferent hardware limitations.;
+#X text 190 21 This patch queries your GPU for its limitations.;
+#X text 191 51 All GPUs have different hardware limitations.;
 #X connect 1 0 7 0;
 #X connect 1 1 5 0;
 #X connect 2 0 1 0;
