@@ -242,6 +242,9 @@ void sphere :: renderShape(GemState *state)
     oldTexture = texType;
   }
 
+  glPushAttrib(GL_POLYGON_BIT);
+  glPolygonMode(GL_FRONT_AND_BACK, type);
+
   src = 0;
   if (!texType) {
     /* draw +Z end as a triangle fan */
@@ -268,9 +271,6 @@ void sphere :: renderShape(GemState *state)
     imin = 1;
     imax = stacks - 1;
   }
-
-  glPushAttrib(GL_POLYGON_BIT);
-  glPolygonMode(GL_FRONT_AND_BACK, type);
 
   /* draw intermediate stacks as quad strips */
   for (i = imin; i < imax; i++) {
