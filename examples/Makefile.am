@@ -223,18 +223,37 @@ nobase_dist_gemexamples_DATA = \
 	14.multiple_windows/01.basic_example.pd \
 	14.multiple_windows/02.switch_context.pd \
 	14.multiple_windows/03.texture_sharing.pd \
-	15.GLSL4/01.basic.pd \
-	15.GLSL4/02.transformation.pd \
-	15.GLSL4/03.texture.pd \
-	15.GLSL4/shader/01.basic.frag \
-	15.GLSL4/shader/01.basic.vert \
-	15.GLSL4/shader/02.transformation.frag \
-	15.GLSL4/shader/02.transformation.vert \
-	15.GLSL4/shader/03.texture.frag \
-	15.GLSL4/shader/03.texture.vert \
-	15.GLSL4/04.model.pd \
-	15.GLSL4/shader/04.model.vert \
-	15.GLSL4/shader/04.model.frag \
+	15.openGL3.2/01.basic.pd \
+	15.openGL3.2/02.transformation.pd \
+	15.openGL3.2/03.matrix.pd \
+	15.openGL3.2/04.model.pd \
+	15.openGL3.2/05.texture.pd \
+	15.openGL3.2/06.lighting.pd \
+	15.openGL3.2/07.geometry.pd \
+	15.openGL3.2/08.adjacency.pd \
+	15.openGL3.2/09.tessellation.pd \
+	15.openGL3.2/shader/01.basic.frag \
+	15.openGL3.2/shader/01.basic.vert \
+	15.openGL3.2/shader/02.transformation.frag \
+	15.openGL3.2/shader/02.transformation.vert \
+	15.openGL3.2/shader/03.matrix.frag \
+	15.openGL3.2/shader/03.matrix.vert \
+	15.openGL3.2/shader/04.model.frag \
+	15.openGL3.2/shader/04.model.vert \
+	15.openGL3.2/shader/05.texture.frag \
+	15.openGL3.2/shader/05.texture.vert \
+	15.openGL3.2/shader/06.light.frag \
+	15.openGL3.2/shader/06.light.vert \
+	15.openGL3.2/shader/07.geometry.frag \
+	15.openGL3.2/shader/07.geometry.geom \
+	15.openGL3.2/shader/07.geometry.vert \
+	15.openGL3.2/shader/08.adjacency.frag \
+	15.openGL3.2/shader/08.adjacency.geom \
+	15.openGL3.2/shader/08.adjacency.vert \
+	15.openGL3.2/shader/09.tessellation.frag \
+	15.openGL3.2/shader/09.tessellation.tesc \
+	15.openGL3.2/shader/09.tessellation.tese \
+	15.openGL3.2/shader/09.tessellation.vert \
 	99.games/puzzle.pd \
 	data/img1.jpg \
 	data/img2.jpg \
