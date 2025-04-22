@@ -266,6 +266,12 @@ bool filmGMERLIN :: open(const std::string&sfilename,
   m_gframe = gavl_video_frame_create_nopad(gformat);
 
 
+  /* check if we have a valid dimension */
+  if(!gformat->frame_width || !gformat->frame_height) {
+    close();
+    return false;
+  }
+
   gavl_video_format_t finalformat[1];
   finalformat->frame_width = gformat->frame_width;
   finalformat->frame_height = gformat->frame_height;
