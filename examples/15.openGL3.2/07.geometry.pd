@@ -119,15 +119,15 @@
 #X text 529 13 version >=410;
 #X text 501 370 GL_PATCHES for teselarisation;
 #X text 754 9 version >=420;
-#X obj 714 5 cnv 18 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
-#X obj 474 7 cnv 18 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
+#X obj 714 5 cnv 2 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
+#X obj 474 7 cnv 2 2 600 empty empty empty 20 12 0 10 #202020 #404040 0;
 #X text 744 461 invocations;
 #X restore 981 576 pd drawing_type;
 #X obj 40 462 loadbang;
 #X obj 60 510 textfile;
 #X obj 60 565 textfile;
 #X obj 60 615 textfile;
-#X text 449 12 This example introduce a simple geometry shader;
+#X text 449 12 This example introduces a simple geometry shader;
 #X obj 167 53 table \$0_position 12;
 #X obj 167 74 table \$0_color 12;
 #X obj 167 95 table \$0_normal 12;
@@ -139,7 +139,7 @@
 #X msg 60 542 read shader/07.geometry.geom cr;
 #X msg 60 592 read shader/07.geometry.vert cr;
 #X obj 333 266 glsl shader/07.geometry;
-#X text 422 39 A geometry shader sits between the vertex and fragment shaders in the graphics pipeline \, allowing for the creation \, modification \, or removal of primitives to dynamically generate new geometry based on the input vertices., f 80;
+#X text 422 39 A geometry shader sits between the vertex and fragment shaders in the graphics pipeline \, allowing for the creation \, modification \, or removal of primitives to dynamically generate new geometries based on the input vertices., f 80;
 #X connect 0 0 1 0;
 #X connect 2 0 31 0;
 #X connect 3 0 8 0;

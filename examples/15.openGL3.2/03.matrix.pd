@@ -144,7 +144,7 @@
 #X msg 843 193 -4 4 -4 4 0 20;
 #X text 853 399 fovY (field of view) \, aspect ratio \, nearZ \, farZ;
 #X text 840 378 perspective projection :;
-#X text 838 162 orthographique projection :;
+#X text 838 162 orthographic projection :;
 #X obj 1233 413 /;
 #X obj 1232 272 r __gem;
 #X obj 1232 297 route dimen;
@@ -169,7 +169,7 @@
 #X obj 27 598 s shader_matrix;
 #X obj 287 596 s shader_matrix;
 #X obj 814 670 s shader_matrix;
-#X text 27 35 The model matrix combine the geometry transformation. It can be computed with specific library \, or with standard openGL object., f 30;
+#X text 27 35 The model matrix combines the geometry transformations. It can be computed with a specific library \, or with standard openGL objects., f 30;
 #N canvas 234 350 511 439 build_perspective 0;
 #X obj 37 24 inlet;
 #X obj 37 108 * 0.5;
@@ -223,8 +223,8 @@
 #X connect 21 0 16 3;
 #X connect 22 0 6 0;
 #X restore 843 484 pd build_perspective;
-#X text 274 38 The view matrix represent the camera position and orientation. It can be set via message to the gemwin object, f 31;
-#X text 535 34 Since the shader need only the multiplication of the model matrix and the view matrix \, you can get this combination directly : (not used in this example), f 35;
+#X text 274 38 The view matrix represents the camera position and orientation. It can be set via a message to the gemwin object, f 31;
+#X text 535 34 Since the shader needs only the multiplication of the model matrix and the view matrix \, you can get this combination directly : (not used in this example), f 35;
 #N canvas 130 82 1016 644 shader 0;
 #X obj 53 27 gemhead;
 #X obj 65 164 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
@@ -235,7 +235,7 @@
 #X obj 53 79 translateXYZ;
 #X floatatom 76 53 5 0 0 0 - - - 0;
 #X obj 133 150 r shader_matrix;
-#X text 119 52 <- this is useless since the shader can't access to the transformation matrix. See next patch for more explanations, f 117;
+#X text 119 52 <- this is useless since the shader can't access the transformation matrix. See next patch for more explanations, f 117;
 #X msg 229 283 program \$1;
 #X obj 229 432 print vb;
 #X obj 197 408 t a a;
@@ -302,8 +302,8 @@
 #X connect 38 0 33 0;
 #X restore 1228 514 pd shader;
 #X obj 1228 550 _gemwin;
-#X text 27 8 This patch create the various matrix used by the rendering pipeline, f 103;
-#X text 834 28 The projection matrix transforms 3D coordinates from view space to clip space \, defining what is visible to the camera. It determines how objects are projected onto the 2D screen \, either with perspective effects (objects appear smaller with distance) or orthographically (maintaining consistent size regardless of distance).represent the camera;
+#X text 27 8 This patch creates the various matrices used by the rendering pipeline, f 103;
+#X text 834 28 The projection matrix transforms 3D coordinates from view space to clip space \, defining what is visible to the camera. It determines how objects are projected onto the 2D screen \, either with perspective effects (objects appear smaller with distance) or orthographically (maintaining consistent size regardless of distance). it represents the camera;
 #X msg 843 427 1.57 1 0 20;
 #X text 948 429 Gem wild angle;
 #X text 1264 321 real gemwin aspect ratio;

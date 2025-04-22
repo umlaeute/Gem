@@ -128,12 +128,12 @@
 #X obj 614 271 list prepend transformation_matrix;
 #X obj 614 293 list trim;
 #X obj 533 78 translateXYZ 0 0 4;
-#X text 583 350 The transformation matrix is not send to the shader \, we need to create one and pass it (like a standard variable) to the shader;
+#X text 583 350 The transformation matrix is not sent to the shader \, we need to create one and pass it (like a standard variable) to the shader;
 #X obj 287 638 gemvertexbuffer \; resize 9 \; draw tri;
 #X obj 287 162 translateXYZ;
 #X floatatom 310 117 5 0 0 0 - - - 0;
 #X text 349 116 this transformation is ignored..., f 19;
-#X text 586 402 Z translation have no effect since the perspective is not yet implemented;
+#X text 586 402 Z translation has no effect since the perspective is not yet implemented;
 #X obj 458 408 t b f;
 #X obj 287 377 glsl shader/02.transformation;
 #X obj 39 399 loadbang;

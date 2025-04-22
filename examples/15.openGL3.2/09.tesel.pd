@@ -90,7 +90,7 @@
 #X msg 119 451 print;
 #X msg 122 506 print;
 #X msg 123 554 print;
-#X text 453 11 This example introduce teselarisation shader;
+#X text 453 11 This example introduces tessellation shaders;
 #X obj 302 328 glsl shader/09.tesel;
 #X obj 302 277 GEMglPatchParameteri 3;
 #X obj 37 218 s \$0_position;

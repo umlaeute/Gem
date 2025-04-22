@@ -105,9 +105,9 @@
 #X obj 35 270 table \$0_positionX 10;
 #X obj 328 569 gemvertexbuffer \; resize 10 \; draw linestripadj;
 #X obj 455 488 metro 50;
-#X text 480 465 <- switch on to update the positoin \, and play with the tab ->, f 64;
-#X text 449 12 This example introduce adjacency;
-#X text 323 32 This shader demonstrates cubic interpolation using adjacency information in a geometry shader. It takes a sequence of points and creates a smooth curved line passing through them \, using neighboring points to calculate the curve's trajectory., f 94;
+#X text 480 465 <- switch on to update the position \, and play with the tab ->, f 64;
+#X text 449 12 This example introduces adjacency;
+#X text 323 32 This shader demonstrates cubic interpolation using adjacency information in a geometry shader. It takes a sequence of points and creates a smooth curved line passing through them \, using neighbouring points to calculate the curve's trajectory., f 94;
 #X text 321 85 The vertex shader passes the input points to the geometry shader \, which uses the GL_LINES_ADJACENCY primitive type to access four consecutive vertices at once. For each set of four points \, it performs cubic interpolation to generate a smooth curve segment between the middle two points \, while using the outer points to influence the curvature., f 94;
 #X obj 328 209 glsl shader/08.adjacency;
 #X msg 60 486 read shader/08.adjacency.frag cr;
