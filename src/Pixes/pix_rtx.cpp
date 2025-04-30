@@ -47,7 +47,7 @@ bool refresh_buffer(const imageStruct&reference, imageStruct&buffer)
   // only 1 channel !!, to keep data-size handy
   unsigned char*data = buffer.data;
   size_t imagesize = reference.xsize * reference.ysize * reference.csize  * sizeof(unsigned char);
-  size_t dataSize = imagesize * reference.ysize;
+  size_t dataSize = imagesize * reference.xsize;
   bool refresh=
     (reference.xsize != buffer.xsize) ||
     (reference.ysize != buffer.ysize) ||
