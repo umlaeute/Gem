@@ -191,6 +191,8 @@ stages:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
+    # urgh: these are provided as fat variants, but must be uninstalled manually, for whatever reason.
+    - brew --force --ignore-dependencies zstd xz lz4
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew || true
     - brew list --full-name || true
     - libtoolize --version || glibtoolize --version || brew install libtool || true
