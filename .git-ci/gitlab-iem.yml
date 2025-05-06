@@ -163,7 +163,17 @@ stages:
     - brew list --full-name || true
     - brew update || true
     # make sure we have a good gitlab runner
+    - mkdir -p /usr/local/bin/
+    - |
+      : "${GITLAB_ARCH:=$(uname -m | sed -e 's|^x86_64$|amd64|' -e 's|^aarch64$|arm64|')}"
+    - |
+      : "${GITLAB_OS:=$(uname -s | tr '[:upper:]' '[:lower:]')}"
+    - |
+      : "${GITLAB_VERSION:=latest}"
+    - |
+      echo "fallback gitlab-runner ${GITLAB_VERSION} ${GITLAB_OS}-${GITLAB_ARCH}"
     - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
+    - (which gitlab-runner; gitlab-runner --version) || curl -o /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/${GITLAB_VERSION}/binaries/gitlab-runner-${GITLAB_OS}-${GITLAB_ARCH}" && chmod +x /usr/local/bin/gitlab-runner || true
     - (which gitlab-runner; gitlab-runner --version) || true
 
     # download Pd
