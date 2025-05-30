@@ -25,7 +25,7 @@ variables:
     value: "gemglfw3window"
     description: "default window backend"
   GIT_SUBMODULE_STRATEGY: recursive
-  GIT_SUBMODULE_DEPTH: 1
+  #GIT_SUBMODULE_DEPTH: 1
 
 stages:
   - build
@@ -163,7 +163,17 @@ stages:
     - brew list --full-name || true
     - brew update || true
     # make sure we have a good gitlab runner
+    - mkdir -p /usr/local/bin/
+    - |
+      : "${GITLAB_ARCH:=$(uname -m | sed -e 's|^x86_64$|amd64|' -e 's|^aarch64$|arm64|')}"
+    - |
+      : "${GITLAB_OS:=$(uname -s | tr '[:upper:]' '[:lower:]')}"
+    - |
+      : "${GITLAB_VERSION:=latest}"
+    - |
+      echo "fallback gitlab-runner ${GITLAB_VERSION} ${GITLAB_OS}-${GITLAB_ARCH}"
     - (which gitlab-runner; gitlab-runner --version) || brew install gitlab-runner || true
+    - (which gitlab-runner; gitlab-runner --version) || curl -o /usr/local/bin/gitlab-runner "https://gitlab-runner-downloads.s3.amazonaws.com/${GITLAB_VERSION}/binaries/gitlab-runner-${GITLAB_OS}-${GITLAB_ARCH}" && chmod +x /usr/local/bin/gitlab-runner || true
     - (which gitlab-runner; gitlab-runner --version) || true
 
     # download Pd
@@ -191,6 +201,8 @@ stages:
     - export PDDIR=$(find /Applications/Pd*.app/Contents/Resources -maxdepth 1 -type d -print -quit)
     - echo "PD=${PD}"
     - echo "PDDIR=${PDDIR}"
+    # urgh: these are provided as fat variants, but must be uninstalled manually, for whatever reason.
+    - brew uninstall --force --ignore-dependencies zstd xz lz4
     - brew bundle --no-upgrade --file=.git-ci/macOS.brew || true
     - brew list --full-name || true
     - libtoolize --version || glibtoolize --version || brew install libtool || true
