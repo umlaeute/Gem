@@ -72,13 +72,13 @@
 #X obj 882 481 square 4;
 #X obj 882 433 pix_texture \; rectangle 0;
 #X obj 882 311 gemhead 30;
-#X text 43 129 This is the same as previous example \, but it use framebuffer to avoid the slow snap2text object, f 50;
-#X text 45 178 Rendering is made in a framebuffer that is used as texture to render in an other frambuffer \, that is used as a texture for next frame (it is not possible to use the rendering frambuffer as a texture to the render because it is cleared befor the rendering), f 52;
+#X text 43 129 This is the same as previous example \, but it uses a framebuffer to avoid the slow snap2text object, f 50;
+#X text 45 178 Rendering is made in a framebuffer that is used as texture to render in an other framebuffer \, that is used as a texture for next frame (it is not possible to use the rendering framebuffer as a texture to the render because it is cleared before the rendering), f 52;
 #X obj 411 120 t a a;
-#X text 483 390 <- render any prmitive to initialize the process;
+#X text 483 390 <- render any primitive to initialize the process;
 #X text 816 96 feedback;
 #X text 958 310 rendering in the Gem window;
-#X text 462 124 The triger allow to detach the texture for the 2nd part of the rendering, f 39;
+#X text 462 124 The trigger allows us to detach the texture for the 2nd part of the rendering, f 39;
 #X connect 0 0 3 0;
 #X connect 2 0 13 0;
 #X connect 3 0 1 0;
