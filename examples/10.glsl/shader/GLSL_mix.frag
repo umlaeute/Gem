@@ -1,4 +1,5 @@
 //jack/RYBN 2010
+#version 130
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_ARB_texture_rectangle : enable
 uniform sampler2DRect Ttex1;
@@ -7,9 +8,9 @@ uniform sampler2DRect tex0;
 uniform float style;
 uniform float mix_factor;
 varying vec2 texcoord0;
-ivec2 size1 = textureSize2DRect(Ttex1,0);
-ivec2 size2 = textureSize2DRect(Ttex2,0);
-ivec2 size0 = textureSize2DRect(tex0,0);
+ivec2 size1 = textureSize(Ttex1);
+ivec2 size2 = textureSize(Ttex2);
+ivec2 size0 = textureSize(tex0);
 
 void main (void)
 {
