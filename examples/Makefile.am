@@ -39,6 +39,7 @@ nobase_dist_gemexamples_DATA = \
 	02.advanced/22.double-iterative.pd \
 	02.advanced/23.SplitScreen.pd \
 	02.advanced/24.query_GPU.pd \
+	02.advanced/25.feedback.pd \
 	02.advanced/snapshotHD.pd \
 	03.lighting/01.world_light.pd \
 	03.lighting/02.light.pd \
