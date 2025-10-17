@@ -48,7 +48,7 @@ gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
     m_rectangle(false), m_canRectangle(0),
     m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
     m_type(GL_UNSIGNED_BYTE),
-    m_outTexInfo(NULL)
+    m_outTexInfo(NULL), m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
 {
   // create an outlet to send out texture info:
   //  - ID
@@ -220,7 +220,7 @@ void gemframebuffer :: render(GemState *state)
   glClearColor( m_FBOcolor[0], m_FBOcolor[1], m_FBOcolor[2], m_FBOcolor[3] );
 
   // Clear the buffers and reset the model view matrix.
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if(m_clear) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // We need a one-to-one mapping of pixels to texels in order to
   // ensure every element of our texture is processed. By setting our
@@ -379,6 +379,8 @@ void gemframebuffer :: printInfo()
           m_format, m_internalformat);
   verbose(0, "type: %s [%d]", type.c_str(), m_type);
   verbose(0, "texunit: %d", m_texunit);
+  verbose(0, "repeat: %d", (m_repeat == GL_REPEAT));
+  verbose(0, "quality: %d", (m_quality == GL_LINEAR));
 }
 
 /////////////////////////////////////////////////////////
@@ -409,10 +411,12 @@ void gemframebuffer :: initFBO()
   // 2.13.2006
   // GL_LINEAR causes fallback to software shader
   // so switching back to GL_NEAREST
-  glTexParameteri(m_texTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  // 2025 : it's ok now to have nearest or linear
+  glTexParameteri(m_texTarget, GL_TEXTURE_MIN_FILTER, m_quality);
+  glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, m_quality);
 
-  GLuint wrapmode = (GLEW_EXT_texture_edge_clamp)?GL_CLAMP_TO_EDGE:GL_CLAMP;
+  GLuint wrapmode = m_repeat;
+  if (wrapmode == GL_CLAMP_TO_EDGE) (GLEW_EXT_texture_edge_clamp)?GL_CLAMP_TO_EDGE:GL_CLAMP;
 
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_S, wrapmode);
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_T, wrapmode);
@@ -666,7 +670,29 @@ void gemframebuffer :: texunitMess(int unit)
   m_texunit=static_cast<GLuint>(unit);
 }
 
+void gemframebuffer :: qualityMess(int quality)
+{
+  if(quality)
+    m_quality=GL_LINEAR;
+  else 
+    m_quality=GL_NEAREST;  
+  setModified();
+}
 
+void gemframebuffer :: repeatMess(int repeat)
+{
+  if(repeat) 
+    m_repeat=GL_REPEAT;
+  else
+	m_repeat=GL_CLAMP_TO_EDGE;
+
+  setModified();
+}
+
+void gemframebuffer :: clearMess(bool clear)
+{
+  m_clear = clear;
+}
 
 ////////////////////////////////////////////////////////
 // static member function
@@ -682,6 +708,9 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "type",   typeMess, std::string);
   CPPEXTERN_MSG1(classPtr, "rectangle", rectangleMess, bool);
   CPPEXTERN_MSG1(classPtr, "texunit",   texunitMess, int);
+  CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
+  CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
+  CPPEXTERN_MSG1(classPtr, "clear", clearMess, bool);
 
   /* legacy */
   CPPEXTERN_MSG2(classPtr, "dim",    dimMess, int, int);

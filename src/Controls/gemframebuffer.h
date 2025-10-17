@@ -78,6 +78,10 @@ protected:
 
   virtual void rectangleMess(bool mode);
   virtual void texunitMess(int mode);
+  virtual void qualityMess(int mode);
+  virtual void repeatMess(int mode);
+  virtual void clearMess(bool mode);
+
 
   virtual void fixFormat(GLenum wantedFormat);
   virtual void printInfo(void);
@@ -101,6 +105,9 @@ private:
   GLfloat     m_FBOcolor[4];
   t_outlet   *m_outTexInfo;
   GLfloat     m_perspect[6];
+  GLint       m_quality;
+  GLint       m_repeat;
+  bool        m_clear;
 
   void        bangMess(void);
 };
