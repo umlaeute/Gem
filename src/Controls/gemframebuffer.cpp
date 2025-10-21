@@ -41,15 +41,15 @@ CPPEXTERN_NEW_WITH_GIMME(gemframebuffer);
 
  */
 gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
-  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0),
-    m_depthBufferIndex(0),
-    m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0),
-    m_width(256), m_height(256),
-    m_rectangle(false), m_canRectangle(0),
-    m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
-    m_type(GL_UNSIGNED_BYTE),
-    m_outTexInfo(NULL),
-    m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
+  : m_haveinit(false), m_wantinit(false), m_frameBufferIndex(0)
+  , m_depthBufferIndex(0)
+  , m_offScreenID(0), m_texTarget(GL_TEXTURE_2D), m_texunit(0)
+  , m_width(256), m_height(256)
+  , m_rectangle(false), m_canRectangle(0)
+  , m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB)
+  , m_type(GL_UNSIGNED_BYTE)
+  , m_outTexInfo(NULL)
+  , m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
 {
   // create an outlet to send out texture info:
   //  - ID
