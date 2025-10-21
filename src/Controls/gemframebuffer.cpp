@@ -382,6 +382,7 @@ void gemframebuffer :: printInfo()
   verbose(0, "texunit: %d", m_texunit);
   verbose(0, "repeat: %d", (m_repeat == GL_REPEAT));
   verbose(0, "quality: %d", (m_quality == GL_LINEAR));
+  verbose(0, "clear: %d", m_clear);
 }
 
 /////////////////////////////////////////////////////////
