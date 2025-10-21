@@ -48,7 +48,8 @@ gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
     m_rectangle(false), m_canRectangle(0),
     m_internalformat(GL_RGB8), m_format(GL_RGB), m_wantFormat(GL_RGB),
     m_type(GL_UNSIGNED_BYTE),
-    m_outTexInfo(NULL), m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
+    m_outTexInfo(NULL),
+    m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
 {
   // create an outlet to send out texture info:
   //  - ID
@@ -674,17 +675,17 @@ void gemframebuffer :: qualityMess(int quality)
 {
   if(quality)
     m_quality=GL_LINEAR;
-  else 
-    m_quality=GL_NEAREST;  
+  else
+    m_quality=GL_NEAREST;
   setModified();
 }
 
 void gemframebuffer :: repeatMess(int repeat)
 {
-  if(repeat) 
+  if(repeat)
     m_repeat=GL_REPEAT;
   else
-	m_repeat=GL_CLAMP_TO_EDGE;
+    m_repeat=GL_CLAMP_TO_EDGE;
 
   setModified();
 }
