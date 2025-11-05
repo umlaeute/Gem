@@ -81,6 +81,7 @@ protected:
   virtual void qualityMess(int mode);
   virtual void repeatMess(int mode);
   virtual void clearMess(bool mode);
+  virtual void verboseMess(bool mode);
 
 
   virtual void fixFormat(GLenum wantedFormat);
@@ -108,6 +109,8 @@ private:
   GLint       m_quality;
   GLint       m_repeat;
   bool        m_clear;
+
+  bool        m_verbose; // print debugging info when changing parametres
 
   void        bangMess(void);
 };

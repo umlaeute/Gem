@@ -50,6 +50,7 @@ gemframebuffer :: gemframebuffer(int argc, t_atom*argv)
   , m_type(GL_UNSIGNED_BYTE)
   , m_outTexInfo(NULL)
   , m_quality(GL_NEAREST), m_repeat(GL_CLAMP_TO_EDGE), m_clear(true)
+  , m_verbose(false)
 {
   // create an outlet to send out texture info:
   //  - ID
@@ -468,7 +469,8 @@ void gemframebuffer :: initFBO()
   m_haveinit = true;
   m_wantinit = false;
 
-  printInfo();
+  if (m_verbose)
+    printInfo();
 }
 
 ////////////////////////////////////////////////////////
@@ -696,6 +698,13 @@ void gemframebuffer :: clearMess(bool clear)
   m_clear = clear;
 }
 
+void gemframebuffer :: verboseMess(bool verbose)
+{
+  m_verbose = verbose;
+  if (m_verbose)
+    printInfo();
+}
+
 ////////////////////////////////////////////////////////
 // static member function
 //
@@ -713,6 +722,7 @@ void gemframebuffer :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "quality", qualityMess, int);
   CPPEXTERN_MSG1(classPtr, "repeat", repeatMess, int);
   CPPEXTERN_MSG1(classPtr, "clear", clearMess, bool);
+  CPPEXTERN_MSG1(classPtr, "verbose", verboseMess, bool);
 
   /* legacy */
   CPPEXTERN_MSG2(classPtr, "dim",    dimMess, int, int);
