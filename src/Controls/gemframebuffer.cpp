@@ -33,7 +33,7 @@ CPPEXTERN_NEW_WITH_GIMME(gemframebuffer);
 /* args:
  *      : width(256), height(256), format(RGB), type(uchar)
  * s    <s:format>: width(), height(), format(format), type()
- * f    <f:dimen>: width()dimen, height(dimen), format(), type()
+ * f    <f:dimen>: width(dimen), height(dimen), format(), type()
  * ss   <s:format> <s:type>: width(), height(), format(format), type(type)
  * ff   <f:width> <f:height>: width(width), height(height), format(), type()
  * ffs  <f:width> <f:height> <s:format>: width(width), height(height), format(format), type()
@@ -292,13 +292,13 @@ void gemframebuffer :: postrender(GemState *state)
   glViewport( m_vp[0], m_vp[1], m_vp[2], m_vp[3] );
   // now that the render is done,
 
-  // send textureID, w, h, textureTarget to outlet
+  // send textureID, w, h, textureType and upside_down to outlet
   t_atom ap[5];
   SETFLOAT(ap+0, static_cast<t_float>(m_offScreenID));
   SETFLOAT(ap+1, w);
   SETFLOAT(ap+2, h);
   SETFLOAT(ap+3, m_texTarget);
-  SETFLOAT(ap+4, static_cast<t_float>(0.));
+  SETFLOAT(ap+4, static_cast<t_float>(0.)); // always correct
   outlet_list(m_outTexInfo, 0, 5, ap);
 
   glActiveTexture(GL_TEXTURE0_ARB);
