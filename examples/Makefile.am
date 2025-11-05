@@ -118,6 +118,7 @@ nobase_dist_gemexamples_DATA = \
 	09.openGL/03.stencilBuffer.pd \
 	09.openGL/04.clearZ.pd \
 	09.openGL/05.load_identity_matrix.pd \
+	09.openGL/06.clear_framebuffer.pd \
 	10.glsl/01.simple_texture.pd \
 	10.glsl/02.primitive_distortion.pd \
 	10.glsl/03.texture_distortion.pd \
