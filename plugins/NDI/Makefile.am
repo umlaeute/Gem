@@ -22,6 +22,8 @@ EXTRA_DIST += \
 	NDI/Processing.NDI.FrameSync.h \
 	NDI/Processing.NDI.Find.h \
 	NDI/Processing.NDI.DynamicLoad.h \
+	NDI/Processing.NDI.RecvAdvertiser.h \
+	NDI/Processing.NDI.RecvListener.h \
 	$(empty)
 
 if HAVE_NDI
