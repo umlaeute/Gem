@@ -142,8 +142,8 @@ namespace {
   {
     size_t count = 0;
     const T*pixels = static_cast<const T*>(static_cast<const void*>(image.data));
-    size_t width = image.ysize;
-    size_t height = image.xsize;
+    size_t width = image.xsize;
+    size_t height = image.ysize;
 
     const int extrachannel = (GEM_RGBA==mode)?1:0;
     const int channelsRGBA[] = {chRed, chGreen, chBlue, extrachannel?chAlpha:-1};
@@ -225,15 +225,15 @@ void pix_dump :: trigger()
   switch(m_image.type) {
   case GL_FLOAT:
     count = pix2atoms<GLfloat>(m_buffer, m_mode, 1., m_image,
-                               roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+                               roi_x1, roi_y1, roi_x2-roi_x1, roi_y2-roi_y1);
     break;
   case GL_DOUBLE:
     count = pix2atoms<GLdouble>(m_buffer, m_mode, 1., m_image,
-                                roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+                                roi_x1, roi_y1, roi_x2-roi_x1, roi_y2-roi_y1);
     break;
   default:
     count = pix2atoms<unsigned char>(m_buffer, m_mode, scale, m_image,
-                                     roi_x1, roi_y1, roi_x2-roi_x1, roi_x2-roi_x1);
+                                     roi_x1, roi_y1, roi_x2-roi_x1, roi_y2-roi_y1);
   }
   outlet_list(m_dataOut, gensym("list"), count, m_buffer);
 
