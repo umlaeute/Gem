@@ -153,8 +153,9 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CGRect rect = {{0,0},{w,h}};
 
   CGColorSpaceRef colorSpace;
-  CGContextRef context;
-  void*data;
+  CGContextRef context = 0;
+  void*data = 0;
+
   colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
   if(!colorSpace) {
     goto done;
