@@ -156,14 +156,13 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CGContextRef context = 0;
   void*data = 0;
 
-  colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-  if(!colorSpace) {
+  if(!(colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB)))
     goto done;
   }
-  context = CGBitmapContextCreate(result.data,
-                                  result.xsize, result.ysize, 8, result.xsize * result.csize,
-                                  colorSpace, kCGImageAlphaPremultipliedFirst);
-  if(!context) {
+
+  if(!(context = CGBitmapContextCreate(result.data,
+                                       result.xsize, result.ysize, 8, result.xsize * result.csize,
+                                       colorSpace, kCGImageAlphaPremultipliedFirst)))
     goto done;
   }
 
