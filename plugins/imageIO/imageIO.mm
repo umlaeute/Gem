@@ -156,7 +156,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   CGContextRef context = 0;
   void*data = 0;
 
-  if(!(colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB)))
+  if(!(colorSpace = CGColorSpaceCreateDeviceRGB()))
     goto done;
   }
 
