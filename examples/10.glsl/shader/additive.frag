@@ -21,9 +21,9 @@ float ftof(float f) { // real frequency value to f value
 
 void main (void)
 {
-	float outcolor, i; 
+	float outcolor, i;
     float time = texcoord0.s /4096. ; // use X coordinate as time
-	
+
 	outcolor = 0.;
 	for(i=0.; i<200.; i++) { // 200 oscillators
 		float f_i = i/199.;
@@ -32,23 +32,23 @@ void main (void)
 		float amplitude2 = texture2DRect(texture0, vec2(f_i*4095.,-1)).r; // current frame amplitude
 		float amplitude = mix(amplitude1, amplitude2, time); // interpolation between this 2 vectors
 		amplitude *= amplitude; // pow(2) curve
-		
+
 		float f = ftof(mtof( mix(20.,110.,f_i) )); // uniform mapping between midi note 20 to 110
-		
+
 		float phase;
 		//phase = fract((time+t) * f); // not accurate enough when t is high
-		// so we split the computation of the phase to small value in order to keep precision 
-		phase = fract(time*fract(f)) + fract(time*floor(f))  + fract(t*fract(f)); 
-			// we can skip some operations since : 
+		// so we split the computation of the phase to small value in order to keep precision
+		phase = fract(time*fract(f)) + fract(time*floor(f))  + fract(t*fract(f));
+			// we can skip some operations since :
 				// time is < 1.; so floor(time)=0.; and fract(time) = time;
 				// fract(t) = 0.; so floor(t) = t;
-		
+
 		outcolor += oscillator(phase, amplitude);
     }
     outcolor /= i; // normalisation
 
     outcolor = clamp (outcolor,0.,1.);
-    // output to 3 int value 
+    // output to 3 int value
     //float r = floor(outcolor*255.)/255.; // crop to 8 bits
     //float g_float = 256.*(outcolor - r);
     //float g = floor(g_float*255.)/255.; // crop to 8 bits
