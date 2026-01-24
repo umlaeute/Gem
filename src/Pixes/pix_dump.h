@@ -67,6 +67,7 @@ protected:
   //////////
   void trigger();
   void bytemodeMess(bool);
+  void modeMess(std::string);
 
   //////////
   // Set to RGBA-mode

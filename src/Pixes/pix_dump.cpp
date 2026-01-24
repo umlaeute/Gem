@@ -260,6 +260,31 @@ void pix_dump :: RGBMess(void)
 // bytemode message
 //
 /////////////////////////////////////////////////////////
+void pix_dump :: modeMess(std::string m)
+{
+  std::string mode;
+  if(!m.empty()) {
+    char ms[5];
+    for(size_t i=0; i<sizeof(ms); i++) {
+      ms[i] = tolower(m[i]);
+    }
+    ms[sizeof(ms)-1] = 0;
+    mode = ms;
+  }
+  if (0) {
+  } else if("rgba" == mode) {
+    m_mode = GEM_RGBA;
+  } else if("rgb" == mode) {
+    m_mode = GEM_RGB;
+  } else {
+    error("unknown mode '%s'", mode.c_str());
+  }
+}
+
+/////////////////////////////////////////////////////////
+// bytemode message
+//
+/////////////////////////////////////////////////////////
 void pix_dump :: bytemodeMess(bool v)
 {
   m_bytemode=v;
@@ -273,6 +298,7 @@ void pix_dump :: obj_setupCallback(t_class *classPtr)
 {
   CPPEXTERN_MSG0(classPtr, "bang", trigger);
   CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, bool);
+  CPPEXTERN_MSG1(classPtr, "mode", modeMess, std::string);
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "RGB", RGBMess);
