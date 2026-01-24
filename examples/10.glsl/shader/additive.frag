@@ -6,7 +6,7 @@ uniform float t; // current time, in order to adjust the phase of signals from 1
 
 varying vec2 texcoord0; // pixel coordinate in the image
 
-float oscilator(float phase, float amplitude) { 
+float oscillator(float phase, float amplitude) {
 	return (0.5 + 0.5*amplitude*cos(radians(360.*phase)));
 }
 
@@ -43,7 +43,7 @@ void main (void)
 				// time is < 1.; so floor(time)=0.; and fract(time) = time;
 				// fract(t) = 0.; so floor(t) = t;
 		
-		outcolor += oscilator(phase, amplitude);
+		outcolor += oscillator(phase, amplitude);
     }
     outcolor /= i; // normalisation
 

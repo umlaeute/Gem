@@ -85,7 +85,7 @@
 #X text 168 490 <----- 2;
 #X text 105 395 "Clear the Z buffer in order to enforce the render on top of the feedback texture", f 25;
 #X text 156 332 feedback texture;
-#X text 104 548 render somthing simple;
+#X text 104 548 render something simple;
 #X text 460 342 A shader can be inserted here for more complex feedback loop, f 21;
 #X text 608 426 change the color of the feedback loop for a simple effect, f 33;
 #X text 581 541 <----- 3;

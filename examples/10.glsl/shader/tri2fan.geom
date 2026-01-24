@@ -17,7 +17,7 @@ void main(void)
 		pos4 = (pos1 + pos2 + pos3) / 3.; // center of the triangle
 
 		high = 10.*cross(pos2.xyz-pos1.xyz,pos3.xyz-pos2.xyz);
-			// hight and orientation of the piramide
+			// height and orientation of the pyramid
 
 		high = normalize(high);
 		high *= length(pos2-pos1);

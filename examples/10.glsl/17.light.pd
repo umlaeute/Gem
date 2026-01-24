@@ -76,7 +76,7 @@
 #X restore 42 51 pd gemwin;
 #X obj 181 347 rotateXYZ -40 10 0;
 #X obj 181 374 torus 2 30 0.8;
-#X text 350 21 Since shader remplace the standard pipeline \, light are not automatically computed. Lighting effect have to be manually computed in the shader.;
+#X text 350 21 Since shaders replace the standard pipeline \, lights are not automatically computed. Lighting effect have to be manually computed in the shader.;
 #X floatatom 216 324 5 0 0 0 - - - 0;
 #N canvas 1921 61 450 300 pak 0;
 #X obj 74 46 inlet;
