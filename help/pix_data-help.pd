@@ -31,7 +31,7 @@
 #X text 34 299 Inlet 1: list <xpos> <ypos>, f 51;
 #X text 34 336 Inlet 1: normalize 0|1: normalization mode (0=none \, 1=normalized. default=1), f 66;
 #X text 34 318 Inlet 1: quality 0|1: interpolation mode (0=none \, 1=2D. default=0), f 66;
-#X text 17 94 Use the "normalize"-message to swith off/on position normalization. If it is on (default) \, the coordinates within the image range from (0.0f \, 0.0f) (left-bottom) to (1.0f \, 1.0f) (right-top). If it is off \, the coordinates are in the range of 0..(width-1) and 0..(height-1)., f 70;
+#X text 17 94 Use the "normalize"-message to switch off/on position normalization. If it is on (default) \, the coordinates within the image range from (0.0f \, 0.0f) (left-bottom) to (1.0f \, 1.0f) (right-top). If it is off \, the coordinates are in the range of 0..(width-1) and 0..(height-1)., f 70;
 #X text 17 152 Use the "quality"-message to switch on/off pixel-interpolation., f 70;
 #X text 17 169 After the first inlet is triggered with a "bang" \, the color of the specified pixels is output both as gray-value and as RGB-triplet. Send a list of two floats to the first inlet to set both positions and trigger the output with a single message., f 70;
 #X obj 582 247 tgl 18 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000 0 1;

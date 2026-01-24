@@ -60,8 +60,8 @@
 #X text 21 425 Inlet 1: "bang": reload, f 67;
 #X msg 505 120 bang;
 #X text 189 177 (compute shader: *.comp);
-#X text 189 162 (tesselation evaluation shader: *.tese);
-#X text 189 147 (tesselation control shader: *.tesc);
+#X text 189 162 (tessellation evaluation shader: *.tese);
+#X text 189 147 (tessellation control shader: *.tesc);
 #X obj 451 228 glsl glsl_test \; shininess 50;
 #X connect 23 0 52 0;
 #X connect 24 0 52 0;

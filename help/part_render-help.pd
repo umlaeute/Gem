@@ -14,8 +14,8 @@
 #X obj 481 58 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 481 121 part_source 10;
 #X text 20 61 [part_render] finally draws a particle system that was set up with [part_head] and other [part_]-objects. The particles are normal gemLists (for instance a [sphere]);
-#X text 21 106 you can turn on/off colouring of paticles (via [part_color]);
-#X text 21 126 you can turn on/off sizing of paticles (via [part_size]);
+#X text 21 106 you can turn on/off colouring of particles (via [part_color]);
+#X text 21 126 you can turn on/off sizing of particles (via [part_size]);
 #X obj 481 237 part_render;
 #X obj 481 268 cube 0.1 \; draw line;
 #X text 41 5 Synopsis [part_render];

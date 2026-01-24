@@ -23,7 +23,7 @@
 #X text 72 225 (none);
 #X text 21 316 Outlet 2: bang : pre-render;
 #X text 21 330 Outlet 2: bang : post-render;
-#X text 9 172 !THIS IS OBOLETE AS YOU CAN NOW USE THE [trigger] OBJECT FOR THE SAME PURPOSE!;
+#X text 9 172 !THIS IS OBSOLETE AS YOU CAN NOW USE THE [trigger] OBJECT FOR THE SAME PURPOSE!;
 #X obj 602 158 bng 15 250 50 0 empty empty post 20 8 0 8 #fcfcfc #000000 #000000;
 #X obj 556 158 bng 15 250 50 0 empty empty pre 20 8 0 8 #fcfcfc #000000 #000000;
 #X obj 510 227 bng 15 250 50 0 empty empty post 20 8 0 8 #fcfcfc #000000 #000000;

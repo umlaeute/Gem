@@ -22,7 +22,7 @@
 #X text 537 192 threshold;
 #X text 29 77 Description: separate an objects from background;
 #X text 33 309 Inlet 1: bang: alias for reset;
-#X text 9 92 [pix_background] 'removes' the background of an image by comparing a static image in memory to an incoming video stream. all values withing a given range are turned black. for best effect \, place a camera on a static scene like a blank wall and hit 'reset'. then set the range control to cover any variance in the background. when a new object enters the scene it will be the only thing draw against a black background. use pix_chroma_key or pix_compare to add in images in place of the black.;
+#X text 9 92 [pix_background] 'removes' the background of an image by comparing a static image in memory to an incoming video stream. all values within a given range are turned black. for best effect \, place a camera on a static scene like a blank wall and hit 'reset'. then set the range control to cover any variance in the background. when a new object enters the scene it will be the only thing draw against a black background. use pix_chroma_key or pix_compare to add in images in place of the black.;
 #X text 33 284 Inlet 1: message: reset : reset the background and capture a new image;
 #X text 34 375 Inlet 2: float: range (<f> == <f> <f> <f>);
 #X text 34 322 Inlet 2: list: range \; in RGBA mode this is <+-red> <+-green> <+-blue> \; in YUV-mode this is <+-luma> <+-Cb> <+-Cr> \; in Gray-mode only the first value is important <+-gray>;
