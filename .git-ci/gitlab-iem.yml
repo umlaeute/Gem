@@ -137,7 +137,7 @@ stages:
     - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
     - apt-get build-dep ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
     - apt-get install git
-    - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} libavformat-dev || true
+    - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} libavformat-dev libavutil-dev libavcodec-dev libswscale-dev || true
     - g++ -v
 
 .build:macos:
