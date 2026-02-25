@@ -130,7 +130,8 @@ stages:
     - tools/systeminfo.sh || true
     - date
     - mkdir -p /etc/apt/sources.list.d/
-    - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec egrep "^deb " {} ";" | sed -e 's|^deb |deb-src |' > /etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list
+    - find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec grep -h "^deb " {} ";" || true | sed -e 's|^deb |deb-src |' > "/etc/apt/sources.list.d/${CI_COMMIT_REF_SLUG}.list"
+    - find /etc/apt/sources.list.d -name "*.sources" -type f -exec sed -e 's|^Types: deb$|Types: deb deb-src|' -i {} + || true
     - apt-get update
     - apt-get install ${TARGETDEBARCH:+-a}${TARGETDEBARCH} puredata-dev puredata-core
     - apt-get build-dep ${TARGETDEBARCH:+-a}${TARGETDEBARCH} gem || true
