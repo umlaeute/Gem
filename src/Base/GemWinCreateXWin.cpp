@@ -149,10 +149,10 @@ int createGemWindow(WindowInfo &info, WindowHints &hints)
   int modeNum=4;
   int fullscreen=hints.fullscreen;
 
-  char svalue[3];
   int fsaa=(int)hints.fsaa;
-  sprintf(svalue, "%d", fsaa);
   if (fsaa!=0) {
+    char svalue[3];
+    sprintf(svalue, "%d", fsaa);
     setenv("__GL_FSAA_MODE", svalue, 1);  // this works only for NVIDIA-cards
   }
 
