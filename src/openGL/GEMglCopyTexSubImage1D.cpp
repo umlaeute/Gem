@@ -23,13 +23,13 @@ CPPEXTERN_NEW_WITH_GIMME ( GEMglCopyTexSubImage1D );
 /////////////////////////////////////////////////////////
 // Constructor
 //
-GEMglCopyTexSubImage1D :: GEMglCopyTexSubImage1D        (int argc,
-    t_atom* argv)
+GEMglCopyTexSubImage1D :: GEMglCopyTexSubImage1D (int argc, t_atom* argv)
+  : target(0)
+  , level(0)
+  , xoffset(0)
+  , x(0), y(0)
+  , width(0)
 {
-  target=0;
-  level=0;
-  xoffset=0;
-  x=y=width=0;
   if (argc>0) {
     target        =atom_getint(argv+0);
   }
