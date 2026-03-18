@@ -150,7 +150,7 @@ bool imageIO :: load(std::string filename, imageStruct&result,
   result.upsidedown = !fixUpDown;
   result.reallocate();
   result.setBlack();
-  CGRect rect = {{0,0},{w,h}};
+  CGRect rect = {{0,0},{static_cast<CGFloat>(w), static_cast<CGFloat>(h)}};
 
   CGColorSpaceRef colorSpace;
   CGContextRef context = 0;
