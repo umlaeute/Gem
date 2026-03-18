@@ -54,6 +54,8 @@ protected:
   //////////
   // Do the rendering
   virtual void renderShape(GemState *state);
+  // Reset GL resources on context teardown
+  virtual void stopRendering(void);
   //virtual void        runKernel();
   void tabMess(unsigned int argc, t_atom *argv, gem::VertexBuffer&array,
                unsigned int offset);
