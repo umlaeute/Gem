@@ -36,8 +36,6 @@ bool sendContextDestroyedMsg(t_pd*x)
   SETFLOAT(a+0, 0);
   pd_typedmess(x, s, 1, a);
 
-  /* clear all openGL errors */
-  gem::utils::gl::glReportError((CPPExtern*)NULL);
   return true;
 }
 };
