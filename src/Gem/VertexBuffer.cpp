@@ -132,7 +132,7 @@ bool gem::VertexBuffer:: render (void)
 void gem::VertexBuffer:: destroy (void)
 {
   if ( vbo ) {
-    glBindBuffer(1, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glDeleteBuffers(1, &vbo);
   }
   vbo=0;
