@@ -498,20 +498,16 @@ void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv)
     return;
   }
 
-  if((argc != 1) && (argc != ncomponents)) {
-    error("'%s' requires 1 or %d array names", s->s_name, ncomponents);
+  if (argc > 1 && argc != ncomponents) {
+    error("'%s' requires 0, 1 or %d array names", s->s_name, ncomponents);
     return;
   }
-  if(argc == ncomponents) {
-    for(int i = 0; i < ncomponents; i++) {
-      names[i] = atom_getsymbol(argv + i)->s_name;
-    }
-  } else {
-    /* argc == 1: single table, interleaved (names[1] empty signals this) */
-    names[0] = atom_getsymbol(argv)->s_name;
-    for(int i = 1; i < ncomponents; i++) {
+  for (int i = 0; i < ncomponents; i++) {
+    /* clear unused table names */
+    if (argc == 0 || (argc == 1 && i > 0))
       names[i].clear();
-    }
+    else
+      names[i] = atom_getsymbol(argv + (argc == 1 ? 0 : i))->s_name;
   }
 }
 
