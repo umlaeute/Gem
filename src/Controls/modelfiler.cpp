@@ -19,7 +19,7 @@
 #include <algorithm> // std::min
 #include "RTE/Array.h"
 
-CPPEXTERN_NEW_WITH_GIMME(modelfiler);
+CPPEXTERN_NEW(modelfiler);
 
 
 namespace
@@ -44,7 +44,7 @@ std::string checkArrays(const std::string*tablenames, size_t count)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-modelfiler :: modelfiler(int argc, t_atom*argv)
+modelfiler :: modelfiler(void)
   : m_loader(gem::plugins::modelloader::getInstance())
   , m_infoOut(gem::RTE::Outlet(this))
 {

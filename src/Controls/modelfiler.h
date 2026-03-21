@@ -49,7 +49,7 @@ public:
 
   //////////
   // Constructor
-  modelfiler(int argc, t_atom*argv);
+  modelfiler(void);
 
 protected:
 
