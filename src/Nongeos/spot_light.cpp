@@ -114,7 +114,7 @@ void spot_light :: render(GemState *state)
     return;
   }
 
-  if (m_change) {
+  if (m_change || !glIsEnabled(m_light)) {
     m_change = 0;
     if ( !m_on ) {
       glDisable(m_light);
