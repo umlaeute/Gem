@@ -30,7 +30,7 @@
 
   Inlet for a list - "model"
 
-  "open" - the RGB model to set the object to
+  "read" - load a model file into tables
 
   -----------------------------------------------------------------*/
 namespace gem
@@ -59,7 +59,7 @@ protected:
 
   //////////
   // When an open is received
-  virtual void openMess(const std::string&filename);
+  virtual void readMess(const std::string&filename);
 
 
   /////////

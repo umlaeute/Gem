@@ -13,8 +13,8 @@
 #X obj 474 533 cnv 15 80 30 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X obj 477 103 bng 15 250 50 0 empty empty empty 0 -6 0 8 #fcfcfc #000000 #000000;
 #X obj 477 121 openpanel;
-#X msg 477 142 open \$1;
-#X text 27 268 Inlet 1: message: open <filename.obj>;
+#X msg 477 142 read \$1;
+#X text 27 268 Inlet 1: message: read <filename.obj>;
 #X msg 511 429 backend OBJ;
 #X msg 520 449 backend ASSIMP3;
 #X msg 565 474 backend;
@@ -94,8 +94,8 @@
 #X text 633 247 separate tables, f 8;
 #X text 612 211 interleaved values, f 11;
 #X obj 116 548 table table_normalZ;
-#X msg 495 168 open examples/data/venus.obj;
-#X text 16 96 The [modelfiler] object loads the data from a 3D model into tables \, so they can be used e.g. with VBOs (e.g. [gemvertexbuffer]). Set tables first \, data is written when opening a file. Single table arg yields interleaved values (e.g. x y z x y z... per vertex) \, multiple args write to separate tables., f 67;
+#X msg 495 168 read examples/data/venus.obj;
+#X text 16 96 The [modelfiler] object loads the data from a 3D model into tables \, so they can be used e.g. with VBOs (e.g. [gemvertexbuffer]). Set tables first \, data is written when reading a file. Single table arg yields interleaved values (e.g. x y z x y z... per vertex) \, multiple args write to separate tables., f 67;
 #X text 63 192 <none>;
 #X obj 477 539 modelfiler;
 #X text 29 430 Outlet 1: vertices float: number of vertices copied to tables, f 63;

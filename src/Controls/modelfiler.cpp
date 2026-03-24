@@ -339,10 +339,10 @@ void modelfiler :: backendMess(t_symbol*s, int argc, t_atom*argv)
 }
 
 /////////////////////////////////////////////////////////
-// openMess
+// readMess
 //
 /////////////////////////////////////////////////////////
-void modelfiler :: openMess(const std::string&filename)
+void modelfiler :: readMess(const std::string&filename)
 {
   gem::Properties wantProps = m_readprops;
 
@@ -519,7 +519,8 @@ void modelfiler :: tableMess(t_symbol*s, int argc, t_atom*argv)
 /////////////////////////////////////////////////////////
 void modelfiler :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "open", openMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "read", readMess, std::string);
+  CPPEXTERN_MSG1(classPtr, "open", readMess, std::string); /* legacy alias */
   CPPEXTERN_MSG (classPtr, "backend", backendMess);
   CPPEXTERN_MSG (classPtr, "loader", backendMess);
 
