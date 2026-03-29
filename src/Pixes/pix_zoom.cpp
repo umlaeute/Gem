@@ -30,6 +30,8 @@ CPPEXTERN_NEW_WITH_GIMME(pix_zoom);
 /////////////////////////////////////////////////////////
 pix_zoom :: pix_zoom(int argc, t_atom*argv)
 {
+  post("this object is deprecated; use [pix_coordinate] or shaders instead.");
+
   t_float x = 1., y=1.;
   switch(argc) {
   case 0:
