@@ -274,6 +274,7 @@
 #X obj 282 389 t a;
 #X obj 282 425 route bang float;
 #X obj 282 602 t a b;
+#X obj 202 361 r \$0-msg2win;
 #X connect 15 0 21 0;
 #X connect 16 0 21 0;
 #X connect 17 0 21 0;
@@ -298,6 +299,7 @@
 #X connect 40 2 29 0;
 #X connect 41 0 0 0;
 #X connect 41 1 31 0;
+#X connect 42 0 27 0;
 #X restore 131 312 pd window;
 #X text 55 19 meant as a modular replacement for the internal [gemwin];
 #X text 53 38 TODO: quite everything;
@@ -903,11 +905,11 @@
 #X connect 12 0 11 0;
 #X connect 13 0 11 0;
 #X restore 118 241 pd clearmask;
-#X text 291 333 misc:;
-#X text 285 405 multiple:;
-#X text 325 425 buffer reset print;
-#X text 290 470 unused:;
-#X text 331 485 blur;
+#X text 291 53 misc:;
+#X text 285 125 multiple:;
+#X text 325 145 buffer reset print;
+#X text 290 190 unused:;
+#X text 331 205 blur;
 #N canvas 569 322 450 300 color 0;
 #X obj 67 38 inlet;
 #X obj 211 41 outlet;
@@ -965,7 +967,9 @@
 #X connect 16 5 4 0;
 #X connect 16 6 1 0;
 #X restore 118 301 pd render;
-#X text 299 352 blur print profile frame fps;
+#X text 299 72 blur print profile frame fps;
+#X obj 118 324 s \$0-msg2win;
+#X text 203 328 the rest goes directly to the [gemdefaultwindow];
 #X connect 0 0 2 0;
 #X connect 1 0 3 0;
 #X connect 2 0 4 0;
@@ -976,6 +980,7 @@
 #X connect 7 0 8 0;
 #X connect 8 0 14 0;
 #X connect 14 0 15 0;
+#X connect 15 0 17 0;
 #X restore 126 127 pd callbacks;
 #N canvas 524 589 450 333 resetValues 0;
 #N canvas 252 532 377 366 viewpoint 0;
