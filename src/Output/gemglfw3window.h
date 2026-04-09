@@ -59,7 +59,7 @@ public:
 
   //////////
   // Constructor
-  gemglfw3window(void);
+  gemglfw3window(t_symbol*s);
 
 private:
 

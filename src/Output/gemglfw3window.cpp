@@ -23,6 +23,7 @@
 #include "RTE/MessageCallbacks.h"
 #include "Gem/Exception.h"
 #include <map>
+#include <cctype>
 
 #define DEBUG ::startpost("%s:%d [%s]:: ", __FILE__, __LINE__, __FUNCTION__), ::post
 
@@ -38,7 +39,7 @@ static void error_callback(int err, const char* description)
   pd_error(0, "[glfw3window]: %s", description);
 }
 
-CPPEXTERN_NEW(gemglfw3window);
+CPPEXTERN_NEW_WITH_ONE_ARG(gemglfw3window, t_symbol*, A_DEFSYMBOL);
 
 /* starting with GLFW-3.2, we can use glfwGetKeyName() */
 #define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
@@ -582,13 +583,42 @@ static std::string get_keyname(int key, int scancode)
 // Constructor
 //
 /////////////////////////////////////////////////////////
-gemglfw3window :: gemglfw3window(void) :
+gemglfw3window :: gemglfw3window(t_symbol*s) :
   m_profile_major(0), m_profile_minor(0),
   m_window(0),
   m_gles(false)
 {
+  int platform = GLFW_ANY_PLATFORM;
+  std::string plat = std::string(s->s_name);
+  const int length = plat.length();
+  for(int i=0; i < length; ++i)  {
+    plat[i] = std::tolower(plat[i]);
+  }
+  if(plat.empty()) {
+  } else if("any" == plat) {
+    platform = GLFW_ANY_PLATFORM;
+  } else if("win32" == plat) {
+    platform = GLFW_PLATFORM_WIN32;
+  } else if("cocoa" == plat) {
+    platform = GLFW_PLATFORM_COCOA;
+  } else if("wayland" == plat) {
+    platform = GLFW_PLATFORM_WAYLAND;
+  } else if("x11" == plat) {
+    platform = GLFW_PLATFORM_X11;
+  } else if("null" == plat) {
+    platform = GLFW_PLATFORM_NULL;
+  } else {
+    error("unknown platform '%s'", plat.c_str());
+  }
+
   m_width = m_height = 0;
   if(s_instances==0) {
+    if (GLFW_ANY_PLATFORM == platform || glfwPlatformSupported(platform)) {
+      glfwInitHint(GLFW_PLATFORM, platform);
+    } else {
+      error("unsupported platform: '%s' [%d]", plat.c_str(), platform);
+    }
+
     glfwSetErrorCallback(error_callback);
     if(!glfwInit()) {
       throw(GemException("could not initialize GLFW infrastructure"));
