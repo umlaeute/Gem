@@ -74,13 +74,26 @@ bool imageMAGICK :: load(std::string filename, imageStruct&result,
 bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
                        const std::string&mimetype, const gem::Properties&props)
 {
-  imageStruct*img=const_cast<imageStruct*>(&image);
-  imageStruct*pImage=img;
+  const imageStruct*img=const_cast<imageStruct*>(&image);
+  const imageStruct*cImage=img;
+  imageStruct pImage;
 
   std::string cs;
   switch(img->format) {
   case GEM_RAW_GRAY:
     cs="K";
+    /* for whatever reasons, we need to invert the greyscale colors... */
+    img->copy2Image(&pImage);
+    do {
+      unsigned char*data = pImage.data;
+      for(int row=0; row<pImage.ysize; row++) {
+        for(int col=0; col<pImage.xsize; col++) {
+          *data = 255 - *data;
+          data++;
+        }
+      }
+    } while(0);
+    cImage = &pImage;
     break;
   case GEM_RAW_RGBA:
 #ifdef __APPLE__
@@ -91,8 +104,8 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
     break;
   /* coverity[unterminated_default] */
   default:
-    pImage=new imageStruct();
-    pImage->convertFrom(img, GEM_RAW_RGB);
+    pImage.convertFrom(img, GEM_RAW_RGB);
+    cImage = &pImage;
   case GEM_RAW_RGB:
     cs="RGB";
     break;
@@ -105,12 +118,15 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
     break;
   }
   try {
-    Magick::Image mimage(pImage->xsize, pImage->ysize, cs, Magick::CharPixel,
-                         pImage->data);
+    Magick::Image mimage(cImage->xsize, cImage->ysize, cs, Magick::CharPixel,
+                         cImage->data);
     // since openGL is upside down
-    if(!pImage->upsidedown) {
+    if(!cImage->upsidedown) {
       mimage.flip();
     }
+    if(GEM_RAW_GRAY == img->format)
+      mimage.colorSpace(Magick::GRAYColorspace);
+
     // 8 bits per channel are enough!
     // LATER make this dependent on the image->type
     mimage.depth(8);
@@ -128,18 +144,10 @@ bool imageMAGICK::save(const imageStruct&image, const std::string&filename,
 
   } catch (Magick::Exception&e) {
     logpost(0, 3+0, "[GEM:imageMAGICK] %s", e.what());
-    if(pImage!=&image) {
-      delete pImage;
-    }
-    pImage=NULL;
     return false;
   } catch (...) {
     logpost(0, 3+0, "[GEM:imageMAGICK] uncaught exception!");
     return false;
   }
-  if(pImage!=&image) {
-    delete pImage;
-  }
-  pImage=NULL;
   return true;
 }
