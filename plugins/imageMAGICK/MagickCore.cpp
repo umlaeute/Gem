@@ -78,9 +78,9 @@ static bool showException(ExceptionInfo*exception,
   }
 
   if(iswarning) {
-    logpost(0, 3+0, "[GEM:imageMAGICK] %s", message.c_str());
+    fprintf(stderr, "[GEM:imageMAGICK] %s\n", message.c_str());
   } else {
-    logpost(0, 3+0, "[GEM:imageMAGICK] %s", message.c_str());
+    fprintf(stderr, "[GEM:imageMAGICK] %s\n", message.c_str());
   }
   return (!iswarning);
 }
