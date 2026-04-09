@@ -93,8 +93,9 @@ protected:
   void            cleanImage(void);
 
   //////////
-  // The original pix_write
-  imageStruct     *m_originalImage;
+  // The image read from openGL
+  imageStruct      m_originalImage;
+  imageStruct      m_convertedImage;
 
 
   //////////

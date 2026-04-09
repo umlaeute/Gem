@@ -43,7 +43,9 @@ CPPEXTERN_NEW_WITH_GIMME(pix_write);
 //
 /////////////////////////////////////////////////////////
 pix_write :: pix_write(int argc, t_atom *argv)
-  : m_originalImage(NULL), m_color(3)
+  : m_originalImage(imageStruct())
+  , m_convertedImage(imageStruct())
+  , m_color(3)
 {
   m_xoff = m_yoff = 0;
   m_width = m_height = 0;
@@ -81,11 +83,11 @@ pix_write :: pix_write(int argc, t_atom *argv)
 
   m_banged = false;
 
-  m_originalImage = new imageStruct();
-  m_originalImage->xsize=m_width;
-  m_originalImage->ysize=m_height;
-  m_originalImage->setFormat(m_color);
-  m_originalImage->allocate();
+  //m_originalImage = new imageStruct();
+  m_originalImage.xsize=m_width;
+  m_originalImage.ysize=m_height;
+  m_originalImage.setFormat(m_color);
+  m_originalImage.allocate();
 
 }
 
@@ -120,6 +122,7 @@ bool pix_write :: isRunnable(void)
 /////////////////////////////////////////////////////////
 void pix_write :: doWrite(void)
 {
+  imageStruct *img = &m_originalImage;
   int width  = m_width;
   int height = m_height;
 
@@ -142,25 +145,19 @@ void pix_write :: doWrite(void)
   GemMan::getDimen(((m_width >0)?NULL:&width ),
                    ((m_height>0)?NULL:&height));
 
-  m_originalImage->xsize = width;
-  m_originalImage->ysize = height;
+  m_originalImage.xsize = width;
+  m_originalImage.ysize = height;
 
-#ifndef __APPLE__
-  m_originalImage->setFormat(format);
-#else
-  m_originalImage->setFormat(GEM_RGBA);
-#endif /* APPLE */
+  m_originalImage.setFormat(GEM_RGBA);
 
-  m_originalImage->reallocate();
+  m_originalImage.reallocate();
 
   /* the orientation is always correct, since we get it from openGL */
   /* if we do need flipping, this must be handled in mem2image() */
   // FIXXXME: upsidedown should default be 'true'
-  m_originalImage->upsidedown=false;
-
-
+  m_originalImage.upsidedown=false;
   glReadPixels(m_xoff, m_yoff, width, height,
-               m_originalImage->format, m_originalImage->type, m_originalImage->data);
+               m_originalImage.format, m_originalImage.type, m_originalImage.data);
 
 #if 0 // asynchronous texture fetching idea sketch
   /* Enable AGP storage hints */
@@ -179,8 +176,13 @@ void pix_write :: doWrite(void)
   glGetTexImage(...);
 #endif
 
+  if(format != m_originalImage.format) {
+    m_convertedImage.convertFrom(&m_originalImage, format);
+    img = &m_convertedImage;
+  }
 
-  mem2image(m_originalImage, m_filename, m_filetype);
+
+  mem2image(img, m_filename, m_filetype);
 }
 
 /////////////////////////////////////////////////////////
@@ -256,10 +258,6 @@ void pix_write :: fileMess(t_symbol*s, int argc, t_atom *argv)
 void pix_write :: cleanImage(void)
 {
   // release previous data
-  if (m_originalImage) {
-    delete m_originalImage;
-    m_originalImage = NULL;
-  }
 }
 
 /////////////////////////////////////////////////////////
