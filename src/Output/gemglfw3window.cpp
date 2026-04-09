@@ -574,7 +574,16 @@ static std::string get_keyname(int key, int scancode)
 }
 #endif
 
-
+#if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,4,0)
+/* GLFW_PLATFORM is functional */
+#else
+# define GLFW_ANY_PLATFORM           0x00060000
+# define GLFW_PLATFORM_WIN32         0x00060001
+# define GLFW_PLATFORM_COCOA         0x00060002
+# define GLFW_PLATFORM_WAYLAND       0x00060003
+# define GLFW_PLATFORM_X11           0x00060004
+# define GLFW_PLATFORM_NULL          0x00060005
+#endif
 /////////////////////////////////////////////////////////
 //
 // gemglfw3window
@@ -613,11 +622,13 @@ gemglfw3window :: gemglfw3window(t_symbol*s) :
 
   m_width = m_height = 0;
   if(s_instances==0) {
+#if KERNEL_VERSION(GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION) >= KERNEL_VERSION(3,4,0)
     if (GLFW_ANY_PLATFORM == platform || glfwPlatformSupported(platform)) {
       glfwInitHint(GLFW_PLATFORM, platform);
     } else {
       error("unsupported platform: '%s' [%d]", plat.c_str(), platform);
     }
+#endif
 
     glfwSetErrorCallback(error_callback);
     if(!glfwInit()) {
