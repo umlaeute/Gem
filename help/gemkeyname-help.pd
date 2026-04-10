@@ -1,4 +1,4 @@
-#N canvas 64 61 679 445 10;
+#N canvas 694 468 679 445 10;
 #X declare -lib Gem;
 #X obj 27 85 cnv 15 450 200 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
 #X obj 27 325 cnv 15 450 100 empty empty empty 20 12 0 14 #e0e0e0 #404040 0;
@@ -13,7 +13,6 @@
 #X obj 495 101 cnv 15 150 80 empty empty empty 20 12 0 14 #14e814 #404040 0;
 #X text 38 89 Description: output keyboard events in the GEM window;
 #X text 37 265 USE AT YOUR OWN RISK !!!;
-#X text 82 302 none;
 #X text 53 344 Inlet 1: non - used;
 #X text 488 274 see also:;
 #X text 53 34 Synopsis: [gemkeyname];
@@ -24,7 +23,7 @@
 #X text 53 390 Outlet 2: keyName;
 #X obj 489 299 gemkeyboard;
 #X floatatom 508 160 2 0 0 1 state - - 0;
-#X symbolatom 565 134 10 0 0 0 keyName - - 0;
+#X symbolatom 565 137 10 0 0 0 keyName - - 0;
 #X obj 508 115 gemkeyname;
 #N canvas 484 243 450 300 META 0;
 #X obj 10 25 declare -lib Gem;
@@ -37,5 +36,6 @@
 #X text 10 165 LICENSE GPL v2;
 #X restore 558 28 pd META;
 #X obj 552 203 _gemwin;
-#X connect 25 0 23 0;
-#X connect 25 1 24 0;
+#X text 52 304 optional: context_name symbol;
+#X connect 24 0 22 0;
+#X connect 24 1 23 0;

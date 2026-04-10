@@ -1,6 +1,6 @@
 #N canvas 386 27 917 872 10;
 #X obj 126 74 inlet;
-#X obj 546 678 outlet;
+#X obj 506 680 outlet;
 #N canvas 6 61 1083 500 argument 0;
 #X obj 299 33 inlet;
 #X text 839 39 [gemwin <float:fps>];
@@ -301,6 +301,7 @@
 #X connect 41 1 31 0;
 #X connect 42 0 27 0;
 #X restore 131 312 pd window;
+#X f 63;
 #X text 55 19 meant as a modular replacement for the internal [gemwin];
 #X text 53 38 TODO: quite everything;
 #X obj 390 50 r \$0-loadbang;
@@ -2881,7 +2882,7 @@
 #X connect 9 0 4 0;
 #X restore 184 407 pd startStopRendering;
 #X obj 131 177 t f f;
-#X obj 578 373 s __gem;
+#X obj 525 444 s __gem;
 #N canvas 1 51 450 300 fps 0;
 #X obj 101 60 inlet;
 #X obj 101 107 spigot;
@@ -2901,7 +2902,7 @@
 #X connect 5 0 7 0;
 #X connect 7 0 6 0;
 #X connect 8 0 1 1;
-#X restore 583 586 pd fps;
+#X restore 543 588 pd fps;
 #X obj 131 455 t b b;
 #N canvas 349 51 554 604 clear 0;
 #X obj 369 112 GEMglFlush;
@@ -3056,7 +3057,7 @@
 #X connect 5 0 2 1;
 #X connect 6 0 1 0;
 #X restore 174 97 pd loadbang;
-#X obj 546 347 t a a a;
+#X obj 506 349 t a a a;
 #N canvas 351 154 450 474 print 0;
 #X obj 180 153 list append 500 500;
 #X obj 336 111 r \$0-dimen;
@@ -3086,7 +3087,7 @@
 #X connect 10 0 0 0;
 #X connect 11 0 6 0;
 #X connect 13 0 12 0;
-#X restore 741 519 pd print;
+#X restore 701 521 pd print;
 #X obj 390 73 gemargs;
 #X text 621 140 © 2009 IOhannes m zmölnig \; part of GEM \; see LICENSE.txt for license information;
 #X obj 398 668 t a a;
@@ -3115,7 +3116,7 @@
 #X restore 236 428 pd makeCurrent;
 #X obj 184 452 t a;
 #X obj 398 448 t a;
-#N canvas 86 324 540 154 gemreceive 0;
+#N canvas 86 324 540 154 gemreceive 1;
 #X obj 110 63 r __gem_window;
 #X obj 110 86 route \ ;
 #X obj 208 63 r \$0-contextname;
@@ -3152,7 +3153,7 @@
 #X obj 505 157 select 0;
 #X msg 505 187 20;
 #X obj 638 917 bng 18 250 50 0 empty empty empty 0 -9 0 10 #fcfcfc #000000 #000000;
-#N canvas 0 0 420 210 store-window-dimen 0;
+#N canvas 0 0 420 237 store-window-dimen 1;
 #X obj 17 52 r \$0-realdimen;
 #X obj 32 102 r \$0-contextname;
 #X obj 17 197 v;
@@ -3170,7 +3171,10 @@
 #X connect 6 1 5 0;
 #X connect 8 0 3 0;
 #X connect 8 1 4 0;
-#X restore 740 475 pd store-window-dimen;
+#X restore 700 477 pd store-window-dimen;
+#X obj 666 354 r \$0-contextname;
+#X obj 525 413 list trim;
+#X obj 525 382 list prepend contextname;
 #X connect 0 0 37 0;
 #X connect 4 0 48 0;
 #X connect 4 1 39 0;
@@ -3213,7 +3217,7 @@
 #X connect 37 0 9 0;
 #X connect 37 1 38 0;
 #X connect 39 0 1 0;
-#X connect 39 1 31 0;
+#X connect 39 1 62 0;
 #X connect 41 0 9 0;
 #X connect 41 1 2 0;
 #X connect 43 0 24 0;
@@ -3239,3 +3243,6 @@
 #X connect 56 0 57 0;
 #X connect 56 1 17 0;
 #X connect 57 0 17 0;
+#X connect 60 0 62 1;
+#X connect 61 0 31 0;
+#X connect 62 0 61 0;
