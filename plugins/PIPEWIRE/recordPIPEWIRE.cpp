@@ -383,7 +383,7 @@ void recordPIPEWIRE::param_changed_cb(void*data, uint32_t id, const struct spa_p
 void recordPIPEWIRE::on_process(void)
 {
   //pw_thread_loop_signal (s_loop, false);
-  ::post("%s:%d@%s<", __FILE__, __LINE__, __FUNCTION__);
+  //  ::post("%s:%d@%s<", __FILE__, __LINE__, __FUNCTION__);
 
   struct pw_buffer *b = pw_stream_dequeue_buffer(m_stream);
   if (!b) {
@@ -400,9 +400,17 @@ void recordPIPEWIRE::on_process(void)
     return;
   }
 
-  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
+  //  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   uint32_t size = m_image.xsize * m_image.ysize * m_image.csize;
 
+#if 0
+  for(unsigned int i=0; i<buf->n_datas; i++) {
+    struct spa_data *data = buf->datas+i;
+    struct spa_chunk *chunk = buf->datas[i].chunk;
+    ::post("buffer[%u/%u] = type=%u flags=%u, fd=%ld, mapoffset=%u, maxsize=%u, data=%p, chunk=%p", i, buf->n_datas, data->type, data->flags, data->fd, data->mapoffset, data->maxsize, data->data, data->chunk);
+    ::post("\toffset=%u, size=%u, stride=%d, flags=%d", chunk->offset, chunk->size, chunk->stride, chunk->flags);
+  }
+#endif
 
   if(buf->datas[0].maxsize < size) {
     pw_log_warn("buffer too small (need %u, but got only %u)", size, buf->datas[0].maxsize);
@@ -414,13 +422,15 @@ void recordPIPEWIRE::on_process(void)
   buf->datas[0].chunk->offset = 0;
   buf->datas[0].chunk->size = size;
   memcpy(buf->datas[0].data, m_image.data, buf->datas[0].chunk->size);
+  //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
 
   m_mutex.unlock();
+  //  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
 
   //::post("%s", __FUNCTION__);
 
   pw_stream_queue_buffer(m_stream, b);
-  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
+  //  ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
 }
 
 void recordPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
