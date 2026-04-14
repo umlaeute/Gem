@@ -359,7 +359,7 @@ bool recordPIPEWIRE :: enumProperties(gem::Properties&props)
 {
   props.clear();
 
-  props.set("MediaRole", std::string("Capture"));
+  props.set("MediaRole", std::string("Source"));
   props.set("AppName", std::string("Pd"));
   props.set("NodeName", std::string("Gem"));
   props.set("autoconnect", 0);
