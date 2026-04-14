@@ -192,12 +192,12 @@ void init(void)
   gem::Settings::get("gem.plugins.startup", s0);
   using namespace gem::plugins;
 
-  PLUGIN_INIT(film);
   PLUGIN_INIT(imageloader);
   PLUGIN_INIT(imagesaver);
-  PLUGIN_INIT(modelloader);
-  PLUGIN_INIT(record);
+  PLUGIN_INIT(film);
   PLUGIN_INIT(video);
+  PLUGIN_INIT(record);
+  PLUGIN_INIT(modelloader);
 }
 };
 };
