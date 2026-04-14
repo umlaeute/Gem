@@ -390,18 +390,29 @@ void recordPIPEWIRE::on_process(void)
     pw_log_warn("out of buffers: %m");
     return;
   }
-
   struct spa_buffer *buf = b->buffer;
+  if(!buf->n_datas) {
+    pw_log_warn("no buffers");
+    return;
+  }
   if (!buf->datas[0].data) {
     pw_log_warn("NULL buffers: %m");
     return;
   }
 
   ::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
+  uint32_t size = m_image.xsize * m_image.ysize * m_image.csize;
+
+
+  if(buf->datas[0].maxsize < size) {
+    pw_log_warn("buffer too small (need %u, but got only %u)", size, buf->datas[0].maxsize);
+    return;
+  }
+
+
   m_mutex.lock();
   buf->datas[0].chunk->offset = 0;
-  buf->datas[0].chunk->size = m_image.xsize * m_image.ysize * m_image.csize;
-  buf->datas[0].chunk->offset = 0;
+  buf->datas[0].chunk->size = size;
   memcpy(buf->datas[0].data, m_image.data, buf->datas[0].chunk->size);
 
   m_mutex.unlock();
