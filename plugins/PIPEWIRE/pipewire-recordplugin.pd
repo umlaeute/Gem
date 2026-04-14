@@ -1,0 +1,17 @@
+#N canvas 280 321 727 574 10;
+#X text 75 101 1- select the backend;
+#X obj 232 283 s \$1-ctl;
+#X msg 261 242 record 1;
+#X text 75 241 3- start sending out stream;
+#X text 89 57 =========================================================;
+#X text 89 47 recordPIPEWIRE - output pixes with the pipewire framework;
+#X msg 261 102 codec pipewire;
+#X msg 261 162 file dummy;
+#X text 84 318 This is a highly EXPERIMENTAL output plugin. Currently it is likely to crash.;
+#X msg 262 199 set AppName foo \, set NodeName buzz;
+#X text 348 157 The actual filename set as the media-name of the pipewire stream.;
+#X text 75 161 2- select an output stream:;
+#X connect 2 0 1 0;
+#X connect 6 0 1 0;
+#X connect 7 0 1 0;
+#X connect 9 0 1 0;

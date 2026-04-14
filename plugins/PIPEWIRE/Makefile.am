@@ -16,6 +16,7 @@ if HAVE_PIPEWIRE
 pkglib_LTLIBRARIES += gem_videoPIPEWIRE.la
 pkglib_LTLIBRARIES += gem_recordPIPEWIRE.la
 dist_gemhelp_DATA  += pipewire-videoplugin.pd
+dist_gemhelp_DATA  += pipewire-recordplugin.pd
 endif
 
 if WINDOWS
