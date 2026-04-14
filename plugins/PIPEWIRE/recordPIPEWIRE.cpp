@@ -164,19 +164,40 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
   flags |= PW_STREAM_FLAG_INACTIVE;
   flags |= PW_STREAM_FLAG_MAP_BUFFERS;
 
+  struct pw_properties *pwprops = pw_properties_new(PW_KEY_MEDIA_CLASS, "Video/Source",
+                                  PW_KEY_APP_NAME, "Pd",
+                                  PW_KEY_APP_ID, "at.iem.gem",
+                                  PW_KEY_NODE_NAME, "Gem",
+                                  NULL);
+
+  std::vector<std::string>keys=props.keys();
+  for(int i=0; i<keys.size(); i++) {
+    const std::string key =keys[i];
+    std::string s;
+    double d;
+    if (0) ;
+    else if (("MediaRole" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_MEDIA_ROLE, s.c_str());
+    } else if (("AppName" == key) && (props.get(key, s))) {
+      pw_properties_set(pwprops, PW_KEY_APP_NAME, s.empty()?nullptr:s.c_str());
+    } else if (("NodeName" == key) && (props.get(key, s))) {
+      pw_properties_set(pwprops, PW_KEY_NODE_NAME, s.empty()?nullptr:s.c_str());
+#if 0
+    } else if (("PortName" == key) && (props.get(key, s)) && !s.empty()) {
+      pw_properties_set(pwprops, PW_KEY_PORT_NAME, s.c_str());
+#endif
+    } else if (("autoconnect" == key) && (props.get(key, d))) {
+      if((int)d) {
+        flags |= PW_STREAM_FLAG_AUTOCONNECT;
+      }
+    }
+  }
 
   pw_thread_loop_lock(s_loop);
   m_stream = pw_stream_new_simple(
                pw_thread_loop_get_loop(s_loop),
                m_filename.c_str(),
-               pw_properties_new(
-                 PW_KEY_MEDIA_CLASS, "Video/Source",
-                 PW_KEY_MEDIA_TYPE, "Video",
-                 PW_KEY_MEDIA_ROLE, "Camera",
-                 PW_KEY_APP_NAME, "Pd",
-                 PW_KEY_APP_ID, "at.iem.gem",
-                 PW_KEY_NODE_NAME, "Gem",
-                 NULL),
+               pwprops,
                &m_stream_events,
                this);
   if(!m_stream) {
@@ -337,6 +358,11 @@ const std::string recordPIPEWIRE :: getCodecDescription(const std::string&codecn
 bool recordPIPEWIRE :: enumProperties(gem::Properties&props)
 {
   props.clear();
+
+  props.set("MediaRole", std::string("Capture"));
+  props.set("AppName", std::string("Pd"));
+  props.set("NodeName", std::string("Gem"));
+  props.set("autoconnect", 0);
   return true;
 }
 
