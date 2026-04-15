@@ -30,6 +30,13 @@
 
 CPPEXTERN_NEW_WITH_ONE_ARG(gemvertexbuffer, t_floatarg, A_DEFFLOAT);
 
+namespace {
+  void recreateVBO(gem::VertexBuffer&vb, bool force) {
+    if(!vb.vbo || force)
+      vb.create();
+  }
+}
+
 /////////////////////////////////////////////////////////
 //
 // gemvertexbuffer
@@ -87,16 +94,16 @@ void gemvertexbuffer :: renderShape(GemState *state)
   }
   int attrib_vbos = 1;
   for(unsigned int i=0; i<m_attribute.size(); i++) {
-    if(!m_attribute[i].vbo) {
-      attrib_vbos = 0;
-      break;
-    }
+    recreateVBO(m_attribute[i], size_change_flag);
   }
-  if ( !m_position.vbo || !m_texture.vbo || !m_color.vbo || !m_normal.vbo
-       || !attrib_vbos || size_change_flag ) {
-    createVBO();
-    size_change_flag = false;
-  }
+
+  recreateVBO(m_position, size_change_flag);
+  recreateVBO(m_texture, size_change_flag);
+  recreateVBO(m_color, size_change_flag);
+  recreateVBO(m_normal, size_change_flag);
+
+  size_change_flag = false;
+
   // render from the VBO
   for(unsigned int i=0; i<m_attribute.size(); i++) {
     if(m_attribute[i].render()) {
@@ -465,19 +472,6 @@ void gemvertexbuffer :: partialDrawMess(unsigned int start,
   m_range[1] = end;
 }
 
-// Create VBO
-//*****************************************************************************
-void gemvertexbuffer :: createVBO(void)
-{
-  for(unsigned int i=0; i<m_attribute.size(); i++) {
-    m_attribute[i].create();
-  }
-  m_position.create();
-  m_texture .create();
-  m_color   .create();
-  m_normal  .create();
-}
-
 void gemvertexbuffer :: copyArray(const std::string&tab_name,
                                   gem::VertexBuffer&vb,
                                   unsigned int dimen, unsigned int offset,
@@ -491,7 +485,7 @@ void gemvertexbuffer :: copyArray(const std::string&tab_name,
   const bool interleaved = (0==dimen);
 
 /*
-  if(offset>vb.size*vb.dimen) { // should this test be diferent for interleaved or not copy? 
+  if(offset>vb.size*vb.dimen) { // should this test be diferent for interleaved or not copy?
     error("offset %d is bigger than vertexbuffer size (%d) for %s", offset, vb.size, tab_name.c_str());
     return;
   }

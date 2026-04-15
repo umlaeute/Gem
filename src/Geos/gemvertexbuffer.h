@@ -63,7 +63,6 @@ protected:
 
 private :
   // GL functionality
-  void createVBO(void);
   void copyArray(const std::string&tab_name, gem::VertexBuffer&array,
                  unsigned int stride, unsigned int offset, bool resize);
 
