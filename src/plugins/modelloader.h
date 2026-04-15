@@ -15,7 +15,6 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 #define _INCLUDE__GEM_PLUGINS_MODELLOADER_H_
 
 #include "Gem/ExportDef.h"
-#include "Gem/VertexBuffer.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
