@@ -107,16 +107,20 @@ GLenum gem::utils::gl::glReportError (bool verbose)
 GLenum gem::utils::gl::glReportError (struct CPPExtern*parent, const char*prefix)
 {
   GLenum errNum, finalErrNum=0;
-  if (!parent)
-    return glReportError(true);
-
   while ((errNum = glGetError()) != GL_NO_ERROR) {
     finalErrNum = errNum;
     const char*errStr = glErrorString(errNum);
-    if(errStr)
-      parent->error("%s%s [%d]", prefix?prefix:"", errStr, errNum);
-    else
-      parent->error("%sopenGL error 0x%X", prefix?prefix:"", errNum);
+    if(parent) {
+      if(errStr)
+        parent->error("%s%s [%d]", prefix?prefix:"", errStr, errNum);
+      else
+        parent->error("%sopenGL error 0x%X", prefix?prefix:"", errNum);
+      } else {
+      if(errStr)
+        post("%s%s [%d]", prefix?prefix:"", errStr, errNum);
+      else
+        post("%sopenGL error 0x%X", prefix?prefix:"", errNum);
+    }
   }
 
   return finalErrNum;
