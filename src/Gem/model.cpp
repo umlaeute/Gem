@@ -11,7 +11,7 @@
 //    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 //
 /////////////////////////////////////////////////////////
-
+#include "Gem/VertexBuffer.h"
 #include "model.h"
 #include <algorithm> // std::min
 #include "m_pd.h"
@@ -147,7 +147,7 @@ namespace
         vTexCoordsUV = vTexCoordsLinear;
       }
     }
-    
+
     void destroy()
     {
       vertices.destroy();
@@ -155,7 +155,7 @@ namespace
       colors.destroy();
       texcoords.destroy();
     }
-    
+
     void update(enum gem::modelGL::texturetype t, float texW, float texH)
     {
       vertices.update(size, vVertices.data());

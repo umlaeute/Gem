@@ -16,6 +16,7 @@
 #define _INCLUDE__GEM_GEOS_MULTIMODEL_H_
 
 #include "Base/GemBase.h"
+#include "Gem/GemGL.h"
 #include "Gem/Properties.h"
 #include "Gem/model.h"
 #include "RTE/Outlet.h"

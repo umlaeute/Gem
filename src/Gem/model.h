@@ -17,7 +17,6 @@
 #ifndef _INCLUDE__GEM_MODEL_H_
 #define _INCLUDE__GEM_MODEL_H_
 
-#include "Gem/VertexBuffer.h"
 #include <vector>
 
 

@@ -18,6 +18,7 @@
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
 #include "Gem/model.h"
+#include "Gem/GemGL.h"
 #include "RTE/Outlet.h"
 #include "plugins/modelloader.h"
 
