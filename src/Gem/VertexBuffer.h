@@ -16,6 +16,7 @@
 #define _INCLUDE__GEM_GEM_VERTEXBUFFER_H_
 
 #include "Gem/GemGL.h"
+#include "Gem/ContextData.h"
 #include <string>
 
 namespace gem
@@ -40,7 +41,7 @@ public:
   unsigned int size;
   unsigned int dimen;
 
-  GLuint vbo;
+  gem::ContextData<GLuint> vbo;
   float*array;
   bool dirty;
   bool enabled;

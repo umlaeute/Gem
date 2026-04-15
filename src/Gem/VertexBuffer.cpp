@@ -101,8 +101,10 @@ bool gem::VertexBuffer:: create (void)
   if(!(glGenBuffers && glBufferData && glBindBuffer)) {
     return false;
   }
-  if(!vbo) {
-    glGenBuffers(1, &vbo);
+  GLuint _v = vbo;
+  if(!_v) {
+    glGenBuffers(1, &_v);
+    vbo = _v;
   }
   if(vbo) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -132,8 +134,10 @@ bool gem::VertexBuffer:: render (void)
 void gem::VertexBuffer:: destroy (void)
 {
   if ( vbo ) {
+    GLuint _v = vbo;
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &_v);
+    vbo = _v;
   }
   vbo=0;
 }
