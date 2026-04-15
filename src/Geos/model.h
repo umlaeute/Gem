@@ -17,7 +17,6 @@
 
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
-#include "Gem/VertexBuffer.h"
 #include "Gem/model.h"
 #include "RTE/Outlet.h"
 #include "plugins/modelloader.h"

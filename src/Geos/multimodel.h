@@ -17,7 +17,6 @@
 
 #include "Base/GemBase.h"
 #include "Gem/Properties.h"
-#include "Gem/VertexBuffer.h"
 #include "Gem/model.h"
 #include "RTE/Outlet.h"
 
@@ -110,12 +109,6 @@ protected:
   //////////
   virtual void  render(GemState *state);
   virtual void  startRendering();
-
-  void copyArray(const std::vector<std::vector<float> >&tab,
-                 gem::VertexBuffer&vb);
-  void copyAllArrays();
-  void getVBOarray();
-  void createVBO(void);
 
   gem::plugins::modelloader*m_loader;
   std::vector<gem::modelGL>m_loaded;
