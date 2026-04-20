@@ -17,6 +17,7 @@
 
 #include "pix_data.h"
 #include "Utils/Functions.h"
+#include "Gem/GemGL.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_data, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
@@ -54,6 +55,52 @@ pix_data :: ~pix_data()
   outlet_free(m_colorOut);
   outlet_free(m_grayOut);
 }
+
+/////////////////////////////////////////////////////////
+// Template functions for reading different data types
+//
+/////////////////////////////////////////////////////////
+namespace {
+  template<typename T>
+  void getPixelData(imageStruct& image, int x, int y, t_float* r, t_float* g, t_float* b, t_float* a, t_float* G) {
+    switch(image.type) {
+    case GL_FLOAT:
+      {
+        GLfloat* data = reinterpret_cast<GLfloat*>(image.data);
+        int offset = ((image.ysize - 1 - y) * image.xsize + x) * image.csize;
+        *r = static_cast<t_float>(data[offset + chRed]);
+        *g = static_cast<t_float>(data[offset + chGreen]);
+        *b = static_cast<t_float>(data[offset + chBlue]);
+        *a = static_cast<t_float>(data[offset + chAlpha]);
+        *G = static_cast<t_float>((*r + *g + *b) / 3.0f);
+      }
+      break;
+    case GL_DOUBLE:
+      {
+        GLdouble* data = reinterpret_cast<GLdouble*>(image.data);
+        int offset = ((image.ysize - 1 - y) * image.xsize + x) * image.csize;
+        *r = static_cast<t_float>(data[offset + chRed]);
+        *g = static_cast<t_float>(data[offset + chGreen]);
+        *b = static_cast<t_float>(data[offset + chBlue]);
+        *a = static_cast<t_float>(data[offset + chAlpha]);
+        *G = static_cast<t_float>((*r + *g + *b) / 3.0);
+      }
+      break;
+    default:
+      {
+        unsigned char ur, ug, ub, ua, uG;
+        image.getRGB(x, y, &ur, &ug, &ub, &ua);
+        image.getGrey(x, y, &uG);
+        *r = static_cast<t_float>(ur / 255.0f);
+        *g = static_cast<t_float>(ug / 255.0f);
+        *b = static_cast<t_float>(ub / 255.0f);
+        *a = static_cast<t_float>(ua / 255.0f);
+        *G = static_cast<t_float>(uG / 255.0f);
+      }
+      break;
+    }
+  }
+};
 
 /////////////////////////////////////////////////////////
 // trigger
@@ -117,21 +164,12 @@ void pix_data :: trigger()
     t_float xFrac = fxPos - ixPos0;
     t_float yFrac = fyPos - iyPos0;
 
-    unsigned char r[2][2], g[2][2], b[2][2], a[2][2], G[2][2];
+    t_float r[2][2], g[2][2], b[2][2], a[2][2], G[2][2];
 
-    m_pixRight->image.getRGB(ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0],
-                             &a[0][0]);
-    m_pixRight->image.getRGB(ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0],
-                             &a[1][0]);
-    m_pixRight->image.getRGB(ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1],
-                             &a[0][1]);
-    m_pixRight->image.getRGB(ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1],
-                             &a[1][1]);
-
-    m_pixRight->image.getGrey(ixPos0, iyPos0, &G[0][0]);
-    m_pixRight->image.getGrey(ixPos1, iyPos0, &G[1][0]);
-    m_pixRight->image.getGrey(ixPos0, iyPos1, &G[0][1]);
-    m_pixRight->image.getGrey(ixPos1, iyPos1, &G[1][1]);
+    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0], &a[0][0], &G[0][0]);
+    getPixelData<unsigned char>(m_pixRight->image, ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0], &a[1][0], &G[1][0]);
+    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1], &a[0][1], &G[0][1]);
+    getPixelData<unsigned char>(m_pixRight->image, ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1], &a[1][1], &G[1][1]);
 
     t_float xy00=(1-xFrac)*(1-yFrac);
     t_float xy01=(1-xFrac)*   yFrac ;
@@ -139,24 +177,23 @@ void pix_data :: trigger()
     t_float xy11=   xFrac *   yFrac ;
 
 #define INTERPOLATE_LIN2D(x) (xy00*x[0][0] + xy01*x[0][1] + xy10*x[1][0] + xy11*x[1][1])
-    red   = INTERPOLATE_LIN2D(r) / 255.;
-    green = INTERPOLATE_LIN2D(g) / 255.;
-    blue  = INTERPOLATE_LIN2D(b) / 255.;
-    alpha = INTERPOLATE_LIN2D(a) / 255.;
-    grey  = INTERPOLATE_LIN2D(G) / 255.;
+    red   = INTERPOLATE_LIN2D(r);
+    green = INTERPOLATE_LIN2D(g);
+    blue  = INTERPOLATE_LIN2D(b);
+    alpha = INTERPOLATE_LIN2D(a);
+    grey  = INTERPOLATE_LIN2D(G);
   }
   break;
   case NONE: {
-    unsigned char r, g, b, a, G;
-    m_pixRight->image.getRGB(ixPos0, iyPos0, &r, &g, &b, &a);
-    m_pixRight->image.getGrey(ixPos0, iyPos0, &G);
+    t_float r, g, b, a, G;
+    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos0, &r, &g, &b, &a, &G);
 
 #define INTERPOLATE_NONE(x) (x)
-    red   = INTERPOLATE_NONE(r) / 255.;
-    green = INTERPOLATE_NONE(g) / 255.;
-    blue  = INTERPOLATE_NONE(b) / 255.;
-    alpha = INTERPOLATE_NONE(a) / 255.;
-    grey  = INTERPOLATE_NONE(G) / 255.;
+    red   = INTERPOLATE_NONE(r);
+    green = INTERPOLATE_NONE(g);
+    blue  = INTERPOLATE_NONE(b);
+    alpha = INTERPOLATE_NONE(a);
+    grey  = INTERPOLATE_NONE(G);
   }
   break;
   }
