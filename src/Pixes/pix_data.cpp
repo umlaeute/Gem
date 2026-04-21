@@ -68,22 +68,56 @@ namespace {
       {
         GLfloat* data = reinterpret_cast<GLfloat*>(image.data);
         int offset = ((image.ysize - 1 - y) * image.xsize + x) * image.csize;
-        *r = static_cast<t_float>(data[offset + chRed]);
-        *g = static_cast<t_float>(data[offset + chGreen]);
-        *b = static_cast<t_float>(data[offset + chBlue]);
-        *a = static_cast<t_float>(data[offset + chAlpha]);
-        *G = static_cast<t_float>((*r + *g + *b) / 3.0f);
+        if(image.csize == 1) {
+          // Grey format
+          *G = static_cast<t_float>(data[offset]);
+          *r = *g = *b = *G;
+          *a = 1.0f;
+        } else if(image.csize == 3) {
+          // RGB format (no alpha)
+          *r = static_cast<t_float>(data[offset + chRed]);
+          *g = static_cast<t_float>(data[offset + chGreen]);
+          *b = static_cast<t_float>(data[offset + chBlue]);
+          *a = 1.0f;
+          // Use weighted average for grey calculation (same as Image.cpp)
+          *G = static_cast<t_float>((*r * 77.0f + *g * 150.0f + *b * 29.0f) / 256.0f);
+        } else {
+          // RGBA format
+          *r = static_cast<t_float>(data[offset + chRed]);
+          *g = static_cast<t_float>(data[offset + chGreen]);
+          *b = static_cast<t_float>(data[offset + chBlue]);
+          *a = static_cast<t_float>(data[offset + chAlpha]);
+          // Use weighted average for grey calculation (same as Image.cpp)
+          *G = static_cast<t_float>((*r * 77.0f + *g * 150.0f + *b * 29.0f) / 256.0f);
+        }
       }
       break;
     case GL_DOUBLE:
       {
         GLdouble* data = reinterpret_cast<GLdouble*>(image.data);
         int offset = ((image.ysize - 1 - y) * image.xsize + x) * image.csize;
-        *r = static_cast<t_float>(data[offset + chRed]);
-        *g = static_cast<t_float>(data[offset + chGreen]);
-        *b = static_cast<t_float>(data[offset + chBlue]);
-        *a = static_cast<t_float>(data[offset + chAlpha]);
-        *G = static_cast<t_float>((*r + *g + *b) / 3.0);
+        if(image.csize == 1) {
+          // Grey format
+          *G = static_cast<t_float>(data[offset]);
+          *r = *g = *b = *G;
+          *a = 1.0;
+        } else if(image.csize == 3) {
+          // RGB format (no alpha)
+          *r = static_cast<t_float>(data[offset + chRed]);
+          *g = static_cast<t_float>(data[offset + chGreen]);
+          *b = static_cast<t_float>(data[offset + chBlue]);
+          *a = 1.0;
+          // Use weighted average for grey calculation (same as Image.cpp)
+          *G = static_cast<t_float>((*r * 77.0 + *g * 150.0 + *b * 29.0) / 256.0);
+        } else {
+          // RGBA format
+          *r = static_cast<t_float>(data[offset + chRed]);
+          *g = static_cast<t_float>(data[offset + chGreen]);
+          *b = static_cast<t_float>(data[offset + chBlue]);
+          *a = static_cast<t_float>(data[offset + chAlpha]);
+          // Use weighted average for grey calculation (same as Image.cpp)
+          *G = static_cast<t_float>((*r * 77.0 + *g * 150.0 + *b * 29.0) / 256.0);
+        }
       }
       break;
     default:
