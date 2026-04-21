@@ -357,12 +357,12 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
     break;
   case GL_FLOAT:
     setPixelData<GLfloat>(img, argc, argv,
-                           m_mode, m_inputScale,
+                           m_mode, 1.0,
                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_DOUBLE:
     setPixelData<GLdouble>(img, argc, argv,
-                            m_mode, m_inputScale,
+                            m_mode, 1.0,
                             roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   default:
@@ -521,12 +521,12 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
     break;
   case GL_FLOAT:
     fillPixelData<GLfloat>(img, argc, argv,
-                           m_mode, m_inputScale,
+                           m_mode, 1.0,
                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_DOUBLE:
     fillPixelData<GLdouble>(img, argc, argv,
-                            m_mode, m_inputScale,
+                            m_mode, 1.0,
                             roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   default:
