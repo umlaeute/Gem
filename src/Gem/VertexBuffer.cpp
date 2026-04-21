@@ -202,11 +202,15 @@ bool gem::VBO::update(size_t argc, const float* argv)
   if(!(glGenBuffers && glBindBuffer && glBufferData)) {
     return false;
   }
-  if(!m_vbo) {
-    glGenBuffers(1, &m_vbo);
+  GLuint vbo = m_vbo;
+
+  if(!vbo) {
+    glGenBuffers(1, &vbo);
     m_size = 0;
   }
-  if(!m_vbo) {
+  m_vbo = vbo;
+
+  if(!vbo) {
     return false;
   }
 
@@ -222,9 +226,10 @@ bool gem::VBO::update(size_t argc, const float* argv)
 }
 void gem::VBO::destroy(void)
 {
-  if(m_vbo) {
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glDeleteBuffers(1, &m_vbo);
+  GLuint vbo = m_vbo;
+  if(vbo) {
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glDeleteBuffers(1, &vbo);
   }
   m_vbo = 0;
   m_size = 0;

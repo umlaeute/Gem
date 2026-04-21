@@ -60,7 +60,7 @@ public:
 class VBO
 {
 private:
-  GLuint m_vbo;
+  gem::ContextData<GLuint> m_vbo;
   size_t m_size;
   unsigned char m_dimen;
   GLenum m_type;
