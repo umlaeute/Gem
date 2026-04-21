@@ -61,8 +61,7 @@ void pix_movie :: render(GemState *state)
   int frame=-1;
 
   /* get the current frame from the file */
-
-  if (!state || !m_handle) {
+  if (!state || !m_handle || m_haveMovie==0) {
     return;
   }
   // get the frame from the decoding-object: film[].cpp
