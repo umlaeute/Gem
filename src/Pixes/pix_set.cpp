@@ -43,11 +43,11 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
-  m_mode(GL_RGBA),
-  m_pixels(NULL),
-  m_inputScale(255),
-  m_reqType(GL_UNSIGNED_BYTE)
+pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
+  : m_mode(GL_RGBA)
+  , m_pixels(NULL)
+  , m_inputScale(255)
+  , m_reqType(GL_UNSIGNED_BYTE)
 {
   if (xsize < 1) {
     xsize = 256;
