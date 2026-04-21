@@ -317,6 +317,15 @@ namespace {
 void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
 {
   int i = 0;
+  bool setblack = false;
+
+  if(!m_pixels && m_mode != m_pixBlock.image.format && m_reqType != m_pixBlock.image.type)
+    setblack = True;
+
+  m_pixBlock.image.setFormat(m_mode);
+  m_pixBlock.image.type = m_reqType;
+  m_pixBlock.image.upsidedown = true; // Reset upsidedown for consistency
+  m_pixBlock.image.reallocate();
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   auto &img = pixels->image;
@@ -328,7 +337,7 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
 
   if (!m_doROI) {
     // if no ROI is set, set whole image black before setting pixels values
-    img.setBlack();
+    setblack = true;
   } else {
     roi_x1=m_roi.x1*(0.5+img.xsize);
     roi_x2=m_roi.x2*(0.5+img.xsize);
@@ -336,8 +345,11 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
     roi_y2=m_roi.y2*(0.5+img.ysize);
   }
 
+  if(setblack)
+    img.setBlack();
+
   // Handle different data types using template functions
-  switch(m_reqType) {
+  switch(img.type) {
   case GL_UNSIGNED_BYTE: // BYTE mode
     setPixelData<unsigned char>(img, argc, argv,
                                  m_mode, m_inputScale,
@@ -449,6 +461,11 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
   int i=0;
   void *buffer;
 
+  m_pixBlock.image.setFormat(m_mode);
+  m_pixBlock.image.type = m_reqType;
+  m_pixBlock.image.upsidedown = true; // Reset upsidedown for consistency
+  m_pixBlock.image.reallocate();
+
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   imageStruct&img = pixels->image;
 
@@ -496,7 +513,7 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
   }
 
   // Handle different data types using template functions
-  switch(m_reqType) {
+  switch(img.type) {
   case GL_UNSIGNED_BYTE: // BYTE mode
     fillPixelData<unsigned char>(img, argc, argv,
                                  m_mode, m_inputScale,
@@ -551,17 +568,7 @@ void pix_set :: typeMess(std::string type)
     m_reqType = GL_DOUBLE;
   } else {
     error("invalid type '%s': must be 'BYTE', 'FLOAT' or 'DOUBLE'", type.c_str());
-    m_reqType = 0;
     return;
-  }
-  if(m_reqType) {
-    // Reallocate the image with new type
-    if(GEM_RGBA == m_mode)
-      m_pixBlock.image.setFormat(GL_RGBA);
-    m_pixBlock.image.type = m_reqType;
-    m_pixBlock.image.upsidedown = true; // Reset upsidedown for consistency
-    m_pixBlock.image.reallocate();
-    m_pixBlock.image.setBlack();
   }
 }
 
