@@ -117,9 +117,19 @@ void pix_set :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 namespace {
   template<typename T>
-  void setPixelData(T* buffer, int argc, t_atom *argv, int mode, int csize, float inputScale, int& i, int roi_x1, int roi_x2, int roi_y1, int roi_y2, int xsize, bool m_doROI, pixBlock*pixels) {
-    int picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
+  void setPixelData(imageStruct&img, int argc, t_atom *argv, const int mode, const float inputScale, const int roi_x1, const int roi_x2, const int roi_y1, const int roi_y2, const bool doROI) {
+    const int csize = img.csize, xsize = img.xsize;
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+    const int picturesize = roi_dx*roi_dy;
+    void*_data=static_cast<void*>(img.data);
+    T*data = static_cast<T*>(_data);
+    T*buffer = data;
     int counter, n;
+    int i = 0;
+
+    if (doROI) {
+      buffer = data + csize*(roi_y1 * xsize + roi_x1);
+    }
 
     switch (mode) {
     case GL_RGB:
@@ -137,11 +147,9 @@ namespace {
         }
         buffer[chAlpha] = static_cast<T>(0);                                 // alpha
         argv+=3;
-        if (m_doROI) {
-          i++;
-          buffer = reinterpret_cast<T*>(pixels->image.data) + csize*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
+        i++;
+        if (doROI) {
+          buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
         } else {
           buffer+=4;
         }
@@ -151,19 +159,18 @@ namespace {
       counter=(picturesize<argc)?picturesize:argc;
       if (csize == 4) {
         while (counter--) {
+          T value;
           if (std::is_same<T, unsigned char>::value) {
-            buffer[chRed] = buffer[chGreen] = buffer[chBlue] = static_cast<T>(
-                                                inputScale*atom_getfloat(argv));   // rgb
+            value = static_cast<T>(inputScale*atom_getfloat(argv));   // rgb
           } else {
-            buffer[chRed] = buffer[chGreen] = buffer[chBlue] = static_cast<T>(atom_getfloat(argv));   // rgb
+            value = static_cast<T>(atom_getfloat(argv));   // rgb
           }
+          buffer[chRed] = buffer[chGreen] = buffer[chBlue] = value;
           buffer[chAlpha] = static_cast<T>(0);                                    // alpha
           argv++;
-          if (m_doROI) {
-            i++;
-            buffer = reinterpret_cast<T*>(pixels->image.data) + csize*(( i /
-                     (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                         (roi_x2-roi_x1)) + roi_x1) ;
+          i++;
+          if (doROI) {
+            buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
           } else {
             buffer+=4;
           }
@@ -176,11 +183,9 @@ namespace {
             buffer[0] = static_cast<T>(atom_getfloat(argv));
           }
           argv++;
-          if (m_doROI) {
-            i++;
-            buffer = reinterpret_cast<T*>(pixels->image.data) + csize*(( i /
-                     (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                         (roi_x2-roi_x1)) + roi_x1) ;
+          i++;
+          if (doROI) {
+            buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
           } else {
             buffer++;
           }
@@ -206,11 +211,9 @@ namespace {
           buffer[chAlpha] = static_cast<T>(atom_getfloat(&argv[3])); // alpha
         }
         argv+=4;
-        if (m_doROI) {
-          i++;
-          buffer = reinterpret_cast<T*>(pixels->image.data) + csize*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
+        i++;
+        if (doROI) {
+          buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
         } else {
           buffer+=4;
         }
@@ -229,48 +232,49 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
   void *buffer;
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
+  auto &img = pixels->image;
 
   int roi_x1=0;
-  int roi_x2=pixels->image.xsize;
+  int roi_x2=img.xsize;
   int roi_y1=0;
-  int roi_y2=pixels->image.ysize;
+  int roi_y2=img.ysize;
 
   if (!m_doROI) {
     // if no ROI is set, set whole image black before setting pixels values
-    pixels->image.setBlack();
-    buffer = pixels->image.data;
+    img.setBlack();
+    buffer = img.data;
   } else {
-    roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
-    roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
-    roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
-    roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
+    roi_x1=m_roi.x1*(0.5+img.xsize);
+    roi_x2=m_roi.x2*(0.5+img.xsize);
+    roi_y1=m_roi.y1*(0.5+img.ysize);
+    roi_y2=m_roi.y2*(0.5+img.ysize);
 
-    buffer = pixels->image.data + pixels->image.csize*(( i /
-             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
+    buffer = img.data + img.csize*(( i /
+             (roi_x2-roi_x1) + roi_y1 ) * img.xsize + (i %
                  (roi_x2-roi_x1)) + roi_x1) ;
   }
 
   // Handle different data types using template functions
   switch(m_reqType) {
   case GL_UNSIGNED_BYTE: // BYTE mode
-    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
-                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                                pixels->image.xsize, m_doROI, pixels);
+    setPixelData<unsigned char>(img, argc, argv,
+                                 m_mode, m_inputScale,
+                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_FLOAT:
-    setPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode,
-                          pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                          pixels->image.xsize, m_doROI, pixels);
+    setPixelData<GLfloat>(img, argc, argv,
+                           m_mode, m_inputScale,
+                           roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_DOUBLE:
-    setPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode,
-                           pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                           pixels->image.xsize, m_doROI, pixels);
+    setPixelData<GLdouble>(img, argc, argv,
+                            m_mode, m_inputScale,
+                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   default:
-    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
-                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                                pixels->image.xsize, m_doROI, pixels);
+    setPixelData<unsigned char>(img, argc, argv,
+                                 m_mode, m_inputScale,
+                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
   }
   pixels->newimage = true;
 }
@@ -325,9 +329,17 @@ void pix_set :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 namespace {
   template<typename T>
-  void fillPixelData(T* buffer, int argc, t_atom *argv, int mode, float inputScale, int& i, int roi_x1, int roi_x2, int roi_y1, int roi_y2, int xsize, bool m_doROI, pixBlock*pixels) {
-    int picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
-    int counter = picturesize;
+  void fillPixelData(imageStruct&img, int argc, t_atom *argv,
+                     int mode, float inputScale,
+                     int roi_x1, int roi_x2, int roi_y1, int roi_y2, bool doROI) {
+    const int csize = img.csize, xsize = img.xsize;
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+    const int picturesize = roi_dx*roi_dy;
+    void*_data=static_cast<void*>(img.data);
+    T*data = static_cast<T*>(_data);
+    T*buffer = data;
+
+    int counter = picturesize, i=0;
     T r,g,b,a;
 
     switch (mode) {
@@ -347,11 +359,9 @@ namespace {
         buffer[chGreen] = g; // green
         buffer[chBlue]  = b; // blue
         buffer[chAlpha] = a; // alpha
-        if (m_doROI) {
-          i++;
-          buffer = reinterpret_cast<T*>(pixels->image.data) + 4*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
         } else {
           buffer+=4;
         }
@@ -369,11 +379,9 @@ namespace {
         buffer[chGreen] = g;
         buffer[chBlue] = b;
         buffer[chAlpha] = a;
-        if (m_doROI) {
-          i++;
-          buffer = reinterpret_cast<T*>(pixels->image.data) + 4*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
         } else {
           buffer+=4;
         }
@@ -398,11 +406,9 @@ namespace {
         buffer[chGreen] = g; // green
         buffer[chBlue]  = b; // blue
         buffer[chAlpha] = a; // alpha
-        if (m_doROI) {
-          i++;
-          buffer = reinterpret_cast<T*>(pixels->image.data) + 4*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1) ;
         } else {
           buffer+=4;
         }
@@ -421,11 +427,12 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
   void *buffer;
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
+  imageStruct&img = pixels->image;
 
   int roi_x1=0;
-  int roi_x2=pixels->image.xsize;
+  int roi_x2=img.xsize;
   int roi_y1=0;
-  int roi_y2=pixels->image.ysize;
+  int roi_y2=img.ysize;
 
   // Validate arguments before calling template functions
   switch (m_mode) {
@@ -451,35 +458,36 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
 
   if (!m_doROI) {
     // if no ROI is set, set whole image black before setting pixels values
-    pixels->image.setBlack();
-    buffer = pixels->image.data;
+    img.setBlack();
+    buffer = img.data;
   } else {
-    roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
-    roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
-    roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
-    roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
+    roi_x1=m_roi.x1*(0.5+img.xsize);
+    roi_x2=m_roi.x2*(0.5+img.xsize);
+    roi_y1=m_roi.y1*(0.5+img.ysize);
+    roi_y2=m_roi.y2*(0.5+img.ysize);
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
 
-    buffer = pixels->image.data + pixels->image.csize*(( i /
-             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                 (roi_x2-roi_x1)) + roi_x1) ;
+    buffer = img.data + img.csize*(( i /
+             roi_dx + roi_y1 ) * img.xsize + (i %
+                 roi_dx) + roi_x1) ;
   }
 
   // Handle different data types using template functions
   switch(m_reqType) {
   case GL_UNSIGNED_BYTE: // BYTE mode
-    fillPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
-                                 m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                                 pixels->image.xsize, m_doROI, pixels);
+    fillPixelData<unsigned char>(img, argc, argv,
+                                 m_mode, m_inputScale,
+                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_FLOAT:
-    fillPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode,
-                           m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                           pixels->image.xsize, m_doROI, pixels);
+    fillPixelData<GLfloat>(img, argc, argv,
+                           m_mode, m_inputScale,
+                           roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   case GL_DOUBLE:
-    fillPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode,
-                            m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
-                            pixels->image.xsize, m_doROI, pixels);
+    fillPixelData<GLdouble>(img, argc, argv,
+                            m_mode, m_inputScale,
+                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   }
 }
