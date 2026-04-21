@@ -120,7 +120,7 @@ namespace {
   void setPixelData(T* buffer, int argc, t_atom *argv, int mode, int csize, float inputScale, int& i, int roi_x1, int roi_x2, int roi_y1, int roi_y2, int xsize, bool m_doROI, pixBlock*pixels) {
     int picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
     int counter, n;
-    
+
     switch (mode) {
     case GL_RGB:
       n = argc/3;
@@ -253,23 +253,23 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
   // Handle different data types using template functions
   switch(m_reqType) {
   case GL_UNSIGNED_BYTE: // BYTE mode
-    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode, 
-                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
+                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                                 pixels->image.xsize, m_doROI, pixels);
     break;
   case GL_FLOAT:
-    setPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode, 
-                          pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    setPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode,
+                          pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                           pixels->image.xsize, m_doROI, pixels);
     break;
   case GL_DOUBLE:
-    setPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode, 
-                           pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    setPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode,
+                           pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                            pixels->image.xsize, m_doROI, pixels);
     break;
   default:
-    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode, 
-                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    setPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
+                                pixels->image.csize, m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                                 pixels->image.xsize, m_doROI, pixels);
   }
   pixels->newimage = true;
@@ -467,18 +467,18 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
   // Handle different data types using template functions
   switch(m_reqType) {
   case GL_UNSIGNED_BYTE: // BYTE mode
-    fillPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode, 
-                                 m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    fillPixelData<unsigned char>(static_cast<unsigned char*>(buffer), argc, argv, m_mode,
+                                 m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                                  pixels->image.xsize, m_doROI, pixels);
     break;
   case GL_FLOAT:
-    fillPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode, 
-                           m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    fillPixelData<GLfloat>(static_cast<GLfloat*>(buffer), argc, argv, m_mode,
+                           m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                            pixels->image.xsize, m_doROI, pixels);
     break;
   case GL_DOUBLE:
-    fillPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode, 
-                            m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2, 
+    fillPixelData<GLdouble>(static_cast<GLdouble*>(buffer), argc, argv, m_mode,
+                            m_inputScale, i, roi_x1, roi_x2, roi_y1, roi_y2,
                             pixels->image.xsize, m_doROI, pixels);
     break;
   }
