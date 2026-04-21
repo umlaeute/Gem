@@ -316,17 +316,17 @@ namespace {
     if(GEM_RGB == reqformat)
       reqformat = GEM_RGBA;
     if(img.format != reqformat)
-      changed = True;
+      changed = true;
     img.setFormat(reqformat);
 
     if(img.type != reqtype)
-      changed = True;
+      changed = true;
     img.type = reqtype;
 
     void*data = img.data;
     img.reallocate();
     if(data != img.data)
-      changed =True;
+      changed = true;
 
     img.upsidedown = true; // Reset upsidedown for consistency
 
@@ -344,7 +344,7 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
   bool setblack = false;
 
   if(setFormat(m_pixBlock.image, m_mode, m_reqType) && !m_pixels)
-    setblack = True;
+    setblack = true;
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   auto &img = pixels->image;
