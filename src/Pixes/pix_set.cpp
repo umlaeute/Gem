@@ -310,6 +310,28 @@ namespace {
       }
     }
   }
+
+  bool setFormat(imageStruct&img, int reqformat, int reqtype) {
+    bool changed = false;
+    if(GEM_RGB == reqformat)
+      reqformat = GEM_RGBA;
+    if(img.format != reqformat)
+      changed = True;
+    img.setFormat(reqformat);
+
+    if(img.type != reqtype)
+      changed = True;
+    img.type = reqtype;
+
+    void*data = img.data;
+    img.reallocate();
+    if(data != img.data)
+      changed =True;
+
+    img.upsidedown = true; // Reset upsidedown for consistency
+
+    return changed;
+  }
 };
 
 /////////////////////////////////////////////////////////
@@ -321,13 +343,8 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
   int i = 0;
   bool setblack = false;
 
-  if(!m_pixels && m_mode != m_pixBlock.image.format && m_reqType != m_pixBlock.image.type)
+  if(setFormat(m_pixBlock.image, m_mode, m_reqType) && !m_pixels)
     setblack = True;
-
-  m_pixBlock.image.setFormat(m_mode);
-  m_pixBlock.image.type = m_reqType;
-  m_pixBlock.image.upsidedown = true; // Reset upsidedown for consistency
-  m_pixBlock.image.reallocate();
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   auto &img = pixels->image;
@@ -463,11 +480,7 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
   int i=0;
   void *buffer;
 
-  m_pixBlock.image.setFormat(m_mode);
-  m_pixBlock.image.type = m_reqType;
-  m_pixBlock.image.upsidedown = true; // Reset upsidedown for consistency
-  m_pixBlock.image.reallocate();
-
+  setFormat(m_pixBlock.image, m_mode, m_reqType);
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   imageStruct&img = pixels->image;
 
