@@ -220,6 +220,94 @@ namespace {
       }
     }
   }
+
+  template<typename T>
+  void fillPixelData(imageStruct&img, int argc, t_atom *argv,
+                     int mode, float inputScale,
+                     int roi_x1, int roi_x2, int roi_y1, int roi_y2, bool doROI) {
+    const int csize = img.csize, xsize = img.xsize;
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+    const int picturesize = roi_dx*roi_dy;
+    void*_data=static_cast<void*>(img.data);
+    T*data = static_cast<T*>(_data);
+    T*buffer = data;
+
+    int counter = picturesize, i=0;
+    T r,g,b,a;
+
+    switch (mode) {
+    case GL_RGB:
+      if ( argc==1 ) {
+        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+      } else if ( argc ==3 ) {
+        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
+        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
+        a=static_cast<T>(0);
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed]   = r; // red
+        buffer[chGreen] = g; // green
+        buffer[chBlue]  = b; // blue
+        buffer[chAlpha] = a; // alpha
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+      break;
+    case GEM_GRAY:
+      if ( argc>0 ) {
+        r=g=b=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        a=static_cast<T>(0);
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed] = r;
+        buffer[chGreen] = g;
+        buffer[chBlue] = b;
+        buffer[chAlpha] = a;
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+      break;
+    case GEM_YUV:
+      // ?
+      break;
+    default:
+      if ( argc==1 ) {
+        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+      } else if ( argc == 4 ) {
+        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
+        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
+        a=static_cast<T>(inputScale*atom_getfloat(&argv[3]));
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed]   = r; // red
+        buffer[chGreen] = g; // green
+        buffer[chBlue]  = b; // blue
+        buffer[chAlpha] = a; // alpha
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1) ;
+        } else {
+          buffer+=4;
+        }
+      }
+    }
+  }
 };
 
 /////////////////////////////////////////////////////////
@@ -322,100 +410,6 @@ void pix_set :: SETMess(int xsize, int ysize)
   m_pixBlock.image.reallocate();
   m_pixBlock.image.setBlack();
 }
-
-/////////////////////////////////////////////////////////
-// Template function for filling pixel data
-//
-/////////////////////////////////////////////////////////
-namespace {
-  template<typename T>
-  void fillPixelData(imageStruct&img, int argc, t_atom *argv,
-                     int mode, float inputScale,
-                     int roi_x1, int roi_x2, int roi_y1, int roi_y2, bool doROI) {
-    const int csize = img.csize, xsize = img.xsize;
-    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
-    const int picturesize = roi_dx*roi_dy;
-    void*_data=static_cast<void*>(img.data);
-    T*data = static_cast<T*>(_data);
-    T*buffer = data;
-
-    int counter = picturesize, i=0;
-    T r,g,b,a;
-
-    switch (mode) {
-    case GL_RGB:
-      if ( argc==1 ) {
-        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
-      } else if ( argc ==3 ) {
-        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
-        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
-        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
-        a=static_cast<T>(0);
-      } else {
-        return; // error handled outside
-      }
-      while (counter--) {
-        buffer[chRed]   = r; // red
-        buffer[chGreen] = g; // green
-        buffer[chBlue]  = b; // blue
-        buffer[chAlpha] = a; // alpha
-        i++;
-        if (doROI) {
-          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
-        } else {
-          buffer+=4;
-        }
-      }
-      break;
-    case GEM_GRAY:
-      if ( argc>0 ) {
-        r=g=b=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
-        a=static_cast<T>(0);
-      } else {
-        return; // error handled outside
-      }
-      while (counter--) {
-        buffer[chRed] = r;
-        buffer[chGreen] = g;
-        buffer[chBlue] = b;
-        buffer[chAlpha] = a;
-        i++;
-        if (doROI) {
-          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
-        } else {
-          buffer+=4;
-        }
-      }
-      break;
-    case GEM_YUV:
-      // ?
-      break;
-    default:
-      if ( argc==1 ) {
-        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
-      } else if ( argc == 4 ) {
-        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
-        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
-        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
-        a=static_cast<T>(inputScale*atom_getfloat(&argv[3]));
-      } else {
-        return; // error handled outside
-      }
-      while (counter--) {
-        buffer[chRed]   = r; // red
-        buffer[chGreen] = g; // green
-        buffer[chBlue]  = b; // blue
-        buffer[chAlpha] = a; // alpha
-        i++;
-        if (doROI) {
-          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1) ;
-        } else {
-          buffer+=4;
-        }
-      }
-    }
-  }
-};
 
 /////////////////////////////////////////////////////////
 // CLEARMess
