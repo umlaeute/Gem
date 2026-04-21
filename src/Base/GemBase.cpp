@@ -227,7 +227,8 @@ void GemBase :: setModified(void)
     m_cache->dirty = true;
   }
   m_modified=true;
-  switch(m_pimpl->state) {
+  const enum RenderState state = m_pimpl->state;
+  switch(state) {
   case DISABLED:
   case INIT:
     break;
