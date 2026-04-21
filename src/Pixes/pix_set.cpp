@@ -394,6 +394,42 @@ void pix_set :: GREYMess(void)
   m_mode = GEM_GRAY;
 }
 
+void pix_set :: csMess(std::string cs)
+{
+  std::string color;
+  unsigned int fmt=GEM_RGBA;
+  char c=0;
+  int len = cs.size();
+  if(len>0) {
+    char col[5];
+    int i;
+    if(len > 4) {
+      len = 4;
+    }
+    for(i=0; i<len; i++) {
+      col[i] = tolower(cs[i]);
+    }
+    col[len] = 0;
+    color = col;
+  }
+  if ("rgba" == color) {
+    RGBAMess();
+  } else if ("rgb" == color) {
+    RGBMess();
+#if 0
+  } else if ("yuv" == color) {
+    YUVMess();
+#endif
+  } else if (("grey" == color) || ("gray" == color)) {
+    GREYMess();
+  } else {
+    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",
+          cs.c_str());
+    return;
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // SETMess
 //
@@ -548,6 +584,9 @@ void pix_set :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_set :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, std::string);
+
+
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "RGB", RGBMess);

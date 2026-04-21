@@ -79,6 +79,10 @@ protected:
   void            cleanPixBlock(void);
 
   //////////
+  // set colorspace to RGBA, RGB or Grey
+  void            csMess(std::string type);
+
+  //////////
   // Set to RGBA-mode
   void            RGBAMess(void);
   //////////
