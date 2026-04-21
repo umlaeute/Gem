@@ -107,7 +107,7 @@ struct Context::PIMPL
   GemGlewXContext*xcontext;
 #endif /* GemGlewXContext */
 
-  unsigned int contextid;
+  const unsigned int contextid;
   GLint oldTexture;
 
   // LATER: reusing IDs prevents a memleak in gem::ContextData
@@ -249,7 +249,7 @@ bool Context::push(void)
   return true;
 }
 
-bool Context::isActive(void)
+bool Context::isActive(void) const
 {
   return (m_pimpl->s_contextid == m_pimpl->contextid);
 }

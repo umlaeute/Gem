@@ -22,7 +22,7 @@ using namespace gem;
  */
 const unsigned int ContextDataBase::INVALID_CONTEXT=0;
 
-unsigned int ContextDataBase::getCurContext(void)
+unsigned int ContextDataBase::getCurContext(void) const
 {
   /* this should get an integer-index of the current context from GemContext */
   unsigned int id=0;

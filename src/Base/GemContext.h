@@ -51,7 +51,7 @@ public:
 
 
   // check if this context is current
-  bool isActive(void);
+  bool isActive(void) const;
 
 public:
   static unsigned int getContextId(void);
