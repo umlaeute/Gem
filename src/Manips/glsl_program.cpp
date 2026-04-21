@@ -665,10 +665,6 @@ void glsl_program :: shaderMess(int argc, t_atom *argv)
 /////////////////////////////////////////////////////////
 bool glsl_program :: LinkGL2()
 {
-  GLint infoLength;
-  GLsizei length=0;
-  int i;
-
   int numVertexShaders = 0;
   int numTessEvalShaders = 0;
   int numTessControlShaders = 0;
@@ -680,10 +676,16 @@ bool glsl_program :: LinkGL2()
     glDeleteProgram( program );
     m_programmapper.del(m_programmapped);
     m_programmapped=0.;
-    m_program = 0;
   }
-  m_program = glCreateProgram();
-  for (i = 0; i < m_numShaders; i++) {
+  m_program = 0;
+
+  program = glCreateProgram();
+  if(!program) {
+    error("Couldn't create GLSL program!");
+    return false;
+  }
+  m_program = program;
+  for (int i = 0; i < m_numShaders; i++) {
     GLint type;
     glAttachShader( m_program, m_shaderObj[i] );
     glGetShaderiv ( m_shaderObj[i], GL_SHADER_TYPE, &type);
@@ -745,20 +747,24 @@ bool glsl_program :: LinkGL2()
   glGetProgramiv( m_program, GL_LINK_STATUS, &linkstatus );
   m_linked = linkstatus;
 
+  GLint infoLength = 0;
   glGetProgramiv( m_program, GL_INFO_LOG_LENGTH, &infoLength );
-  GLchar *infoLog = new GLchar[infoLength];
+  if(infoLength > 0) {
+    GLchar *infoLog = new GLchar[infoLength];
+    GLsizei length=0;
 
-  glGetProgramInfoLog( m_program, infoLength, &length, infoLog );
+    glGetProgramInfoLog( m_program, infoLength, &length, infoLog );
 
-  if (length) {
-    post("Info_log:");
-    post("%s", infoLog);
+    if (length) {
+      post("Info_log:");
+      post("%s", infoLog);
+    }
+
+    if(infoLog) {
+      delete[]infoLog;
+    }
+    infoLog=0;
   }
-
-  if(infoLog) {
-    delete[]infoLog;
-  }
-  infoLog=0;
 
   //
   // If all went well, make the ProgramObject part of the current state
@@ -768,7 +774,7 @@ bool glsl_program :: LinkGL2()
     glUseProgram( m_program );
   } else {
     glUseProgram( 0 );
-    post("Link failed!");
+    error("Link failed!");
     return false;
   }
   return true;
@@ -779,18 +785,21 @@ bool glsl_program :: LinkGL2()
 /////////////////////////////////////////////////////////
 bool glsl_program :: LinkARB()
 {
-  int i;
-  GLsizei length=0;
-  GLint infoLength;
-
   if(m_programARB) {
     glDeleteObjectARB( m_programARB );
     m_programmapper.del(m_programmapped);
     m_programmapped=0.;
     m_programARB = 0;
   }
-  m_programARB = glCreateProgramObjectARB();
-  for (i = 0; i < m_numShaders; i++) {
+  GLhandleARB program = glCreateProgramObjectARB();
+  m_programARB = program;
+
+  if(!program) {
+    error("Couldn't create(ARB) GLSL program!");
+    return false;
+  }
+
+  for (int i = 0; i < m_numShaders; i++) {
     glAttachObjectARB( m_programARB, m_shaderObjARB[i] );
   }
 
@@ -812,22 +821,25 @@ bool glsl_program :: LinkARB()
                              &linkstatus );
   m_linked = linkstatus;
 
+  GLint infoLength = 0;
   glGetObjectParameterivARB( m_programARB, GL_OBJECT_INFO_LOG_LENGTH_ARB,
                              &infoLength );
 
-  GLcharARB*infoLogARB = new GLcharARB[infoLength];
+  if(infoLength > 0) {
+    GLcharARB*infoLogARB = new GLcharARB[infoLength];
+    GLsizei length=0;
 
-  glGetInfoLogARB( m_programARB, infoLength, &length, infoLogARB );
+    glGetInfoLogARB( m_programARB, infoLength, &length, infoLogARB );
 
-  if (length) {
-    post("Info_log:");
-    post("%s", infoLogARB);
+    if (length) {
+      post("Info_log:");
+      post("%s", infoLogARB);
+    }
+    //post("freeing log");
+    if(infoLogARB) {
+      delete[]infoLogARB;
+    }
   }
-  //post("freeing log");
-  if(infoLogARB) {
-    delete[]infoLogARB;
-  }
-  infoLogARB=0;
 
   //
   // If all went well, make the ProgramObject part of the current state
