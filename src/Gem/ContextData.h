@@ -41,8 +41,8 @@ namespace gem
 class GEM_EXTERN ContextDataBase
 {
 protected:
-  static const int INVALID_CONTEXT;
-  virtual int getCurContext(void);
+  static const unsigned int INVALID_CONTEXT;
+  virtual unsigned int getCurContext(void);
   virtual ~ContextDataBase(void);
 };
 

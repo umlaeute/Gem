@@ -20,12 +20,12 @@ using namespace gem;
 
 /* LATER, when we have multiple contexts, this should really be "-1" or such
  */
-const int ContextDataBase::INVALID_CONTEXT=0;
+const unsigned int ContextDataBase::INVALID_CONTEXT=0;
 
-int ContextDataBase::getCurContext(void)
+unsigned int ContextDataBase::getCurContext(void)
 {
   /* this should get an integer-index of the current context from GemContext */
-  int id=0;
+  unsigned int id=0;
   id=gem::Context::getContextId();
   return id;
 }
