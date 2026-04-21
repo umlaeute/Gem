@@ -80,6 +80,13 @@ public:
     return (*getPtrToCur());
   }
 
+  virtual operator const ContextDataType() const
+  {
+    auto ptr = getPtrToCur();
+    if(ptr)return *ptr;
+    return ContextDataType();
+  }
+
   /**
    * assigns a value to the correct context
    *
@@ -140,6 +147,23 @@ private:
               +1);     // Make sure we are large enough (+1 since we have index)
 
     return m_ContextDataVector[context_id];
+  }
+
+  /**
+   * If the data element has been set for the current context, return a const pointer to it.
+   * otherwise, if a default value has been set, return a constptr to it.
+   * as a fallback, return a nullptr.
+   */
+  const ContextDataType* getPtrToCur(void) const
+  {
+    int context_id = getCurContext();
+    if(context_id < m_ContextDataVector.size()) {
+      return m_ContextDataVector[context_id];
+    }
+    if (m_haveDefaultValue) {
+      return &m_defaultValue;
+    }
+    return nullptr;
   }
 
   void doSetAll(ContextDataType v)
