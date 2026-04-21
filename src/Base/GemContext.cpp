@@ -117,6 +117,7 @@ struct Context::PIMPL
   {
     unsigned int id=0;
 #ifdef GEM_MULTICONTEXT
+    id = 1; /* 0 is the invalid context */
     while(s_takenIDs.find(id) != s_takenIDs.end()) {
       id++;
     }
