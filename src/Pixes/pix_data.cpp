@@ -61,7 +61,6 @@ pix_data :: ~pix_data()
 //
 /////////////////////////////////////////////////////////
 namespace {
-  template<typename T>
   void getPixelData(imageStruct& image, int x, int y, t_float* r, t_float* g, t_float* b, t_float* a, t_float* G) {
     switch(image.type) {
     case GL_FLOAT:
@@ -200,10 +199,10 @@ void pix_data :: trigger()
 
     t_float r[2][2], g[2][2], b[2][2], a[2][2], G[2][2];
 
-    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0], &a[0][0], &G[0][0]);
-    getPixelData<unsigned char>(m_pixRight->image, ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0], &a[1][0], &G[1][0]);
-    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1], &a[0][1], &G[0][1]);
-    getPixelData<unsigned char>(m_pixRight->image, ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1], &a[1][1], &G[1][1]);
+    getPixelData(m_pixRight->image, ixPos0, iyPos0, &r[0][0], &g[0][0], &b[0][0], &a[0][0], &G[0][0]);
+    getPixelData(m_pixRight->image, ixPos1, iyPos0, &r[1][0], &g[1][0], &b[1][0], &a[1][0], &G[1][0]);
+    getPixelData(m_pixRight->image, ixPos0, iyPos1, &r[0][1], &g[0][1], &b[0][1], &a[0][1], &G[0][1]);
+    getPixelData(m_pixRight->image, ixPos1, iyPos1, &r[1][1], &g[1][1], &b[1][1], &a[1][1], &G[1][1]);
 
     t_float xy00=(1-xFrac)*(1-yFrac);
     t_float xy01=(1-xFrac)*   yFrac ;
@@ -220,7 +219,7 @@ void pix_data :: trigger()
   break;
   case NONE: {
     t_float r, g, b, a, G;
-    getPixelData<unsigned char>(m_pixRight->image, ixPos0, iyPos0, &r, &g, &b, &a, &G);
+    getPixelData(m_pixRight->image, ixPos0, iyPos0, &r, &g, &b, &a, &G);
 
 #define INTERPOLATE_NONE(x) (x)
     red   = INTERPOLATE_NONE(r);
