@@ -561,7 +561,10 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "gray", GREYMess);
 
   CPPEXTERN_MSG (classPtr, "data", DATAMess);
+
+  CPPEXTERN_MSG2(classPtr, "dimen", SETMess, int, int);
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
+
   CPPEXTERN_MSG (classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
   CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, bool);
