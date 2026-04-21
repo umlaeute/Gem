@@ -79,6 +79,10 @@ protected:
   void            cleanPixBlock(void);
 
   //////////
+  // set colorspace to RGBA, RGB or Grey
+  void            csMess(std::string type);
+
+  //////////
   // Set to RGBA-mode
   void            RGBAMess(void);
   //////////
@@ -106,6 +110,9 @@ protected:
   //////////
   // set input data mode
   void bytemodeMess(bool);
+  //////////
+  // Set data type (BYTE, FLOAT, DOUBLE)
+  void            typeMess(std::string type);
 
 
   //-----------------------------------
@@ -118,6 +125,9 @@ protected:
   /////////
   // input data scaling
   float m_inputScale;
+  //////////
+  // data type
+  int             m_reqType;
 
   //////////
   // The pixBlock with the current image

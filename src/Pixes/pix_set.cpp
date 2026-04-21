@@ -43,10 +43,11 @@ CPPEXTERN_NEW_WITH_TWO_ARGS(pix_set, t_floatarg, A_DEFFLOAT, t_floatarg,
 // Constructor
 //
 /////////////////////////////////////////////////////////
-pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize) :
-  m_mode(GL_RGBA),
-  m_pixels(NULL),
-  m_inputScale(255)
+pix_set :: pix_set(t_floatarg xsize, t_floatarg ysize)
+  : m_mode(GL_RGBA)
+  , m_pixels(NULL)
+  , m_inputScale(255)
+  , m_reqType(GL_UNSIGNED_BYTE)
 {
   if (xsize < 1) {
     xsize = 256;
@@ -111,121 +112,281 @@ void pix_set :: postrender(GemState *state)
 
 
 /////////////////////////////////////////////////////////
+// Template functions for different data types
+//
+/////////////////////////////////////////////////////////
+namespace {
+  template<typename T>
+  void setPixelData(imageStruct&img, int argc, t_atom *argv,
+                    const int mode, const float inputScale,
+                    const int roi_x1, const int roi_x2, const int roi_y1, const int roi_y2, const bool doROI) {
+    const int csize = img.csize, xsize = img.xsize;
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+    const int picturesize = roi_dx*roi_dy;
+    void*_data=static_cast<void*>(img.data);
+    T*data = static_cast<T*>(_data);
+    T*buffer = data;
+    int counter, n;
+    int i = 0;
+
+    if (doROI) {
+      buffer = data + csize*(roi_y1 * xsize + roi_x1);
+    }
+
+    switch (mode) {
+    case GL_RGB:
+      n = argc/3;
+      counter=(picturesize<n)?picturesize:n;
+      while (counter--) {
+        if (std::is_same<T, unsigned char>::value) {
+          buffer[chRed]   = static_cast<T>(inputScale*atom_getfloat(&argv[0])); // red
+          buffer[chGreen] = static_cast<T>(inputScale*atom_getfloat(&argv[1])); // green
+          buffer[chBlue]  = static_cast<T>(inputScale*atom_getfloat(&argv[2])); // blue
+        } else {
+          buffer[chRed]   = static_cast<T>(atom_getfloat(&argv[0])); // red
+          buffer[chGreen] = static_cast<T>(atom_getfloat(&argv[1])); // green
+          buffer[chBlue]  = static_cast<T>(atom_getfloat(&argv[2])); // blue
+        }
+        buffer[chAlpha] = static_cast<T>(0);                                 // alpha
+        argv+=3;
+        i++;
+        if (doROI) {
+          buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+      break;
+    case GEM_GRAY:
+      counter=(picturesize<argc)?picturesize:argc;
+      if (csize == 4) {
+        while (counter--) {
+          T value;
+          if (std::is_same<T, unsigned char>::value) {
+            value = static_cast<T>(inputScale*atom_getfloat(argv));   // rgb
+          } else {
+            value = static_cast<T>(atom_getfloat(argv));   // rgb
+          }
+          buffer[chRed] = buffer[chGreen] = buffer[chBlue] = value;
+          buffer[chAlpha] = static_cast<T>(0);                                    // alpha
+          argv++;
+          i++;
+          if (doROI) {
+            buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+          } else {
+            buffer+=4;
+          }
+        }
+      } else if (csize == 1) {
+        while (counter--) {
+          if (std::is_same<T, unsigned char>::value) {
+            buffer[0] = static_cast<T>(inputScale*atom_getfloat(argv));
+          } else {
+            buffer[0] = static_cast<T>(atom_getfloat(argv));
+          }
+          argv++;
+          i++;
+          if (doROI) {
+            buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+          } else {
+            buffer++;
+          }
+        }
+      }
+      break;
+    case GEM_YUV:
+      // ?
+      break;
+    default:
+      n = argc/4;
+      counter=(picturesize<n)?picturesize:n;
+      while (counter--) {
+        if (std::is_same<T, unsigned char>::value) {
+          buffer[chRed]   = static_cast<T>(inputScale*atom_getfloat(&argv[0])); // red
+          buffer[chGreen] = static_cast<T>(inputScale*atom_getfloat(&argv[1])); // green
+          buffer[chBlue]  = static_cast<T>(inputScale*atom_getfloat(&argv[2])); // blue
+          buffer[chAlpha] = static_cast<T>(inputScale*atom_getfloat(&argv[3])); // alpha
+        } else {
+          buffer[chRed]   = static_cast<T>(atom_getfloat(&argv[0])); // red
+          buffer[chGreen] = static_cast<T>(atom_getfloat(&argv[1])); // green
+          buffer[chBlue]  = static_cast<T>(atom_getfloat(&argv[2])); // blue
+          buffer[chAlpha] = static_cast<T>(atom_getfloat(&argv[3])); // alpha
+        }
+        argv+=4;
+        i++;
+        if (doROI) {
+          buffer = data + csize*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+    }
+  }
+
+  template<typename T>
+  void fillPixelData(imageStruct&img, int argc, t_atom *argv,
+                     int mode, float inputScale,
+                     int roi_x1, int roi_x2, int roi_y1, int roi_y2, bool doROI) {
+    const int csize = img.csize, xsize = img.xsize;
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+    const int picturesize = roi_dx*roi_dy;
+    void*_data=static_cast<void*>(img.data);
+    T*data = static_cast<T*>(_data);
+    T*buffer = data;
+
+    int counter = picturesize, i=0;
+    T r,g,b,a;
+
+    switch (mode) {
+    case GL_RGB:
+      if ( argc==1 ) {
+        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+      } else if ( argc ==3 ) {
+        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
+        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
+        a=static_cast<T>(0);
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed]   = r; // red
+        buffer[chGreen] = g; // green
+        buffer[chBlue]  = b; // blue
+        buffer[chAlpha] = a; // alpha
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+      break;
+    case GEM_GRAY:
+      if ( argc>0 ) {
+        r=g=b=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        a=static_cast<T>(0);
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed] = r;
+        buffer[chGreen] = g;
+        buffer[chBlue] = b;
+        buffer[chAlpha] = a;
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1);
+        } else {
+          buffer+=4;
+        }
+      }
+      break;
+    case GEM_YUV:
+      // ?
+      break;
+    default:
+      if ( argc==1 ) {
+        r=g=b=a=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+      } else if ( argc == 4 ) {
+        r=static_cast<T>(inputScale*atom_getfloat(&argv[0]));
+        g=static_cast<T>(inputScale*atom_getfloat(&argv[1]));
+        b=static_cast<T>(inputScale*atom_getfloat(&argv[2]));
+        a=static_cast<T>(inputScale*atom_getfloat(&argv[3]));
+      } else {
+        return; // error handled outside
+      }
+      while (counter--) {
+        buffer[chRed]   = r; // red
+        buffer[chGreen] = g; // green
+        buffer[chBlue]  = b; // blue
+        buffer[chAlpha] = a; // alpha
+        i++;
+        if (doROI) {
+          buffer = data + 4*(( i / roi_dx + roi_y1 ) * xsize + (i % roi_dx) + roi_x1) ;
+        } else {
+          buffer+=4;
+        }
+      }
+    }
+  }
+
+  bool setFormat(imageStruct&img, int reqformat, int reqtype) {
+    bool changed = false;
+    if(GEM_RGB == reqformat)
+      reqformat = GEM_RGBA;
+    if(img.format != reqformat)
+      changed = True;
+    img.setFormat(reqformat);
+
+    if(img.type != reqtype)
+      changed = True;
+    img.type = reqtype;
+
+    void*data = img.data;
+    img.reallocate();
+    if(data != img.data)
+      changed =True;
+
+    img.upsidedown = true; // Reset upsidedown for consistency
+
+    return changed;
+  }
+};
+
+/////////////////////////////////////////////////////////
 // DATAMess
 //
 /////////////////////////////////////////////////////////
 void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
 {
-  int picturesize, counter, n;
   int i = 0;
-  unsigned char *buffer;
+  bool setblack = false;
+
+  if(setFormat(m_pixBlock.image, m_mode, m_reqType) && !m_pixels)
+    setblack = True;
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
+  auto &img = pixels->image;
 
   int roi_x1=0;
-  int roi_x2=pixels->image.xsize;
+  int roi_x2=img.xsize;
   int roi_y1=0;
-  int roi_y2=pixels->image.ysize;
+  int roi_y2=img.ysize;
 
   if (!m_doROI) {
     // if no ROI is set, set whole image black before setting pixels values
-    pixels->image.setBlack();
-    buffer = pixels->image.data;
-    picturesize = pixels->image.xsize * pixels->image.ysize;
-
+    setblack = true;
   } else {
-    roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
-    roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
-    roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
-    roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
-
-    buffer = pixels->image.data + pixels->image.csize*(( i /
-             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                 (roi_x2-roi_x1)) + roi_x1) ;
-    picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
+    roi_x1=m_roi.x1*(0.5+img.xsize);
+    roi_x2=m_roi.x2*(0.5+img.xsize);
+    roi_y1=m_roi.y1*(0.5+img.ysize);
+    roi_y2=m_roi.y2*(0.5+img.ysize);
   }
 
-  switch (m_mode) {
-  case GL_RGB:
-    n = argc/3;
-    counter=(picturesize<n)?picturesize:n;
-    while (counter--) {
-      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[0])); // red
-      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[2])); // blue
-      buffer[chAlpha] = 0;                                           // alpha
-      argv+=3;
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i /
-                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                     (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
-      }
-    }
+  if(setblack)
+    img.setBlack();
+
+  // Handle different data types using template functions
+  switch(img.type) {
+  case GL_UNSIGNED_BYTE: // BYTE mode
+    setPixelData<unsigned char>(img, argc, argv,
+                                 m_mode, m_inputScale,
+                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
-  case GEM_GRAY:
-    counter=(picturesize<argc)?picturesize:argc;
-    if ( pixels->image.csize == 4 ) {
-      while (counter--) {
-        buffer[chRed] = buffer[chGreen] = buffer[chBlue] = (unsigned char)(
-                                            m_inputScale*atom_getfloat(argv));   // rgb
-        buffer[chAlpha] =
-          0;                                                                    // alpha
-        argv++;
-        if (m_doROI) {
-          i++;
-          buffer = pixels->image.data + pixels->image.csize*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
-        } else {
-          buffer+=4;
-        }
-      }
-    } else if (pixels->image.csize == 1) {
-      while (counter--) {
-        buffer[0] = (unsigned char)(m_inputScale*atom_getfloat(argv));
-        argv++;
-        if (m_doROI) {
-          i++;
-          buffer = pixels->image.data + pixels->image.csize*(( i /
-                   (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                       (roi_x2-roi_x1)) + roi_x1) ;
-        } else {
-          buffer++;
-        }
-      }
-    }
+  case GL_FLOAT:
+    setPixelData<GLfloat>(img, argc, argv,
+                           m_mode, 1.0,
+                           roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
-  case GEM_YUV:
-    // ?
+  case GL_DOUBLE:
+    setPixelData<GLdouble>(img, argc, argv,
+                            m_mode, 1.0,
+                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   default:
-    n = argc/4;
-    counter=(picturesize<n)?picturesize:n;
-    while (counter--) {
-      buffer[chRed]   = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[0])); // red
-      buffer[chGreen] = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[1])); // green
-      buffer[chBlue]  = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[2])); // blue
-      buffer[chAlpha] = (unsigned char)(m_inputScale*atom_getfloat(
-                                          &argv[3])); // alpha
-      argv+=4;
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i /
-                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                     (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
-      }
-    }
+    error("unknown data type 0x%04X", img.type);
+    return;
   }
   pixels->newimage = true;
 }
@@ -257,6 +418,42 @@ void pix_set :: GREYMess(void)
   m_mode = GEM_GRAY;
 }
 
+void pix_set :: csMess(std::string cs)
+{
+  std::string color;
+  unsigned int fmt=GEM_RGBA;
+  char c=0;
+  int len = cs.size();
+  if(len>0) {
+    char col[5];
+    int i;
+    if(len > 4) {
+      len = 4;
+    }
+    for(i=0; i<len; i++) {
+      col[i] = tolower(cs[i]);
+    }
+    col[len] = 0;
+    color = col;
+  }
+  if ("rgba" == color) {
+    RGBAMess();
+  } else if ("rgb" == color) {
+    RGBMess();
+#if 0
+  } else if ("yuv" == color) {
+    YUVMess();
+#endif
+  } else if (("grey" == color) || ("gray" == color)) {
+    GREYMess();
+  } else {
+    error("invalid colorspace '%s'; must be 'rgba', 'yuv' or 'grey'",
+          cs.c_str());
+    return;
+  }
+}
+
+
 /////////////////////////////////////////////////////////
 // SETMess
 //
@@ -280,118 +477,78 @@ void pix_set :: SETMess(int xsize, int ysize)
 /////////////////////////////////////////////////////////
 void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
 {
-  unsigned char   *buffer;
-  unsigned char r,g,b,a;
-  int i=0, picturesize;
+  int i=0;
+  void *buffer;
 
+  setFormat(m_pixBlock.image, m_mode, m_reqType);
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
+  imageStruct&img = pixels->image;
 
   int roi_x1=0;
-  int roi_x2=pixels->image.xsize;
+  int roi_x2=img.xsize;
   int roi_y1=0;
-  int roi_y2=pixels->image.ysize;
+  int roi_y2=img.ysize;
 
-  if (!m_doROI) {
-    // if no ROI is set, set whole image black before setting pixels values
-    pixels->image.setBlack();
-    buffer = pixels->image.data;
-    picturesize = pixels->image.xsize * pixels->image.ysize;
-
-  } else {
-    roi_x1=m_roi.x1*(0.5+pixels->image.xsize);
-    roi_x2=m_roi.x2*(0.5+pixels->image.xsize);
-    roi_y1=m_roi.y1*(0.5+pixels->image.ysize);
-    roi_y2=m_roi.y2*(0.5+pixels->image.ysize);
-
-    buffer = pixels->image.data + pixels->image.csize*(( i /
-             (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                 (roi_x2-roi_x1)) + roi_x1) ;
-    picturesize = (roi_x2-roi_x1)*(roi_y2-roi_y1);
-  }
-
-  int counter = picturesize;
-
+  // Validate arguments before calling template functions
   switch (m_mode) {
   case GL_RGB:
-    if ( argc==1 ) {
-      r=g=b=a=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
-    } else if ( argc ==3 ) {
-      r=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
-      g=(unsigned char)(m_inputScale*atom_getfloat(&argv[1]));
-      b=(unsigned char)(m_inputScale*atom_getfloat(&argv[2]));
-      a=0;
-    } else {
+    if ( argc != 1 && argc != 3 ) {
       error("fill need 1 or 3 float arg in RGB mode");
       return;
     }
-    while (counter--) {
-      buffer[chRed]   = r; // red
-      buffer[chGreen] = g; // green
-      buffer[chBlue]  = b; // blue
-      buffer[chAlpha] = a; // alpha
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i /
-                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                     (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
-      }
-    }
     break;
   case GEM_GRAY:
-    if ( argc>0 ) {
-      r=g=b=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
-      a=0;
-    } else {
+    if ( argc <= 0 ) {
       error("fill need 1 float arg in GREY mode");
       return;
     }
-    while (counter--) {
-      buffer[chRed] = r;
-      buffer[chGreen] = g;
-      buffer[chBlue] = b;
-      buffer[chAlpha] = a;
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i /
-                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                     (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
-      }
-    }
-    break;
-  case GEM_YUV:
-    // ?
     break;
   default:
-    if ( argc==1 ) {
-      r=g=b=a=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
-    } else if ( argc == 4 ) {
-      r=(unsigned char)(m_inputScale*atom_getfloat(&argv[0]));
-      g=(unsigned char)(m_inputScale*atom_getfloat(&argv[1]));
-      b=(unsigned char)(m_inputScale*atom_getfloat(&argv[2]));
-      a=(unsigned char)(m_inputScale*atom_getfloat(&argv[3]));;
-    } else {
+    if ( argc != 1 && argc != 4 ) {
       error("fill need 1 or 4 float arg in RGBA mode");
       return;
     }
-    while (counter--) {
-      buffer[chRed]   = r; // red
-      buffer[chGreen] = g; // green
-      buffer[chBlue]  = b; // blue
-      buffer[chAlpha] = a; // alpha
-      if (m_doROI) {
-        i++;
-        buffer = pixels->image.data + pixels->image.csize*(( i /
-                 (roi_x2-roi_x1) + roi_y1 ) * pixels->image.xsize + (i %
-                     (roi_x2-roi_x1)) + roi_x1) ;
-      } else {
-        buffer+=4;
-      }
-    }
+    break;
   }
+
+  if (!m_doROI) {
+    // if no ROI is set, set whole image black before setting pixels values
+    img.setBlack();
+    buffer = img.data;
+  } else {
+    roi_x1=m_roi.x1*(0.5+img.xsize);
+    roi_x2=m_roi.x2*(0.5+img.xsize);
+    roi_y1=m_roi.y1*(0.5+img.ysize);
+    roi_y2=m_roi.y2*(0.5+img.ysize);
+    const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
+
+    buffer = img.data + img.csize*(( i /
+             roi_dx + roi_y1 ) * img.xsize + (i %
+                 roi_dx) + roi_x1) ;
+  }
+
+  // Handle different data types using template functions
+  switch(img.type) {
+  case GL_UNSIGNED_BYTE: // BYTE mode
+    fillPixelData<unsigned char>(img, argc, argv,
+                                 m_mode, m_inputScale,
+                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
+    break;
+  case GL_FLOAT:
+    fillPixelData<GLfloat>(img, argc, argv,
+                           m_mode, 1.0,
+                           roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
+    break;
+  case GL_DOUBLE:
+    fillPixelData<GLdouble>(img, argc, argv,
+                            m_mode, 1.0,
+                            roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
+    break;
+  default:
+    error("unknown data type 0x%04X", img.type);
+    return;
+  }
+  pixels->newimage = true;
 }
 
 /////////////////////////////////////////////////////////
@@ -413,6 +570,24 @@ void pix_set :: bytemodeMess(bool v)
 }
 
 /////////////////////////////////////////////////////////
+// typeMess
+//
+/////////////////////////////////////////////////////////
+void pix_set :: typeMess(std::string type)
+{
+  if("BYTE" == type) {
+    m_reqType = GL_UNSIGNED_BYTE;
+  } else if ("FLOAT" == type) {
+    m_reqType = GL_FLOAT;
+  } else if ("DOUBLE" == type) {
+    m_reqType = GL_DOUBLE;
+  } else {
+    error("invalid type '%s': must be 'BYTE', 'FLOAT' or 'DOUBLE'", type.c_str());
+    return;
+  }
+}
+
+/////////////////////////////////////////////////////////
 // cleanPixBlock -- free the pixel buffer memory
 //
 /////////////////////////////////////////////////////////
@@ -428,6 +603,9 @@ void pix_set :: cleanPixBlock()
 /////////////////////////////////////////////////////////
 void pix_set :: obj_setupCallback(t_class *classPtr)
 {
+  CPPEXTERN_MSG1(classPtr, "colorspace", csMess, std::string);
+
+
   CPPEXTERN_MSG0(classPtr, "RGBA", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "rgba", RGBAMess);
   CPPEXTERN_MSG0(classPtr, "RGB", RGBMess);
@@ -441,8 +619,12 @@ void pix_set :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG0(classPtr, "gray", GREYMess);
 
   CPPEXTERN_MSG (classPtr, "data", DATAMess);
+
+  CPPEXTERN_MSG2(classPtr, "dimen", SETMess, int, int);
   CPPEXTERN_MSG2(classPtr, "set", SETMess, int, int);
+
   CPPEXTERN_MSG (classPtr, "fill", FILLMess);
   CPPEXTERN_MSG0(classPtr, "bang", BANGMess);
   CPPEXTERN_MSG1(classPtr, "bytemode", bytemodeMess, bool);
+  CPPEXTERN_MSG1(classPtr, "type", typeMess, std::string);
 }
