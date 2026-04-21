@@ -360,9 +360,8 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
                             roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
   default:
-    setPixelData<unsigned char>(img, argc, argv,
-                                 m_mode, m_inputScale,
-                                 roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
+    error("unknown data type 0x%04X", img.type);
+    return;
   }
   pixels->newimage = true;
 }
@@ -519,7 +518,11 @@ void pix_set :: FILLMess(t_symbol* s, int argc, t_atom *argv)
                             m_mode, m_inputScale,
                             roi_x1, roi_x2, roi_y1, roi_y2, m_doROI);
     break;
+  default:
+    error("unknown data type 0x%04X", img.type);
+    return;
   }
+  pixels->newimage = true;
 }
 
 /////////////////////////////////////////////////////////
