@@ -18,8 +18,13 @@
 #include "pix_data.h"
 #include "Utils/Functions.h"
 #include "Gem/GemGL.h"
+#include "Gem/PixConvert.h"
 
 CPPEXTERN_NEW_WITH_TWO_ARGS(pix_data, t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+
+const t_float red2gray = (t_float)RGB2GRAY_RED / 256.;
+const t_float green2gray = (t_float)RGB2GRAY_GREEN / 256.;
+const t_float blue2gray = (t_float)RGB2GRAY_BLUE / 256.;
 
 /////////////////////////////////////////////////////////
 //
@@ -79,7 +84,7 @@ namespace {
           *b = static_cast<t_float>(data[offset + chBlue]);
           *a = 1.0f;
           // Use weighted average for grey calculation (same as Image.cpp)
-          *G = static_cast<t_float>((*r * 77.0f + *g * 150.0f + *b * 29.0f) / 256.0f);
+          *G = static_cast<t_float>(*r * red2gray + *g * green2gray + *b * blue2gray);
         } else {
           // RGBA format
           *r = static_cast<t_float>(data[offset + chRed]);
@@ -87,7 +92,7 @@ namespace {
           *b = static_cast<t_float>(data[offset + chBlue]);
           *a = static_cast<t_float>(data[offset + chAlpha]);
           // Use weighted average for grey calculation (same as Image.cpp)
-          *G = static_cast<t_float>((*r * 77.0f + *g * 150.0f + *b * 29.0f) / 256.0f);
+          *G = static_cast<t_float>(*r * red2gray + *g * green2gray + *b * blue2gray);
         }
       }
       break;
@@ -107,7 +112,7 @@ namespace {
           *b = static_cast<t_float>(data[offset + chBlue]);
           *a = 1.0;
           // Use weighted average for grey calculation (same as Image.cpp)
-          *G = static_cast<t_float>((*r * 77.0 + *g * 150.0 + *b * 29.0) / 256.0);
+          *G = static_cast<t_float>(*r * red2gray + *g * green2gray + *b * blue2gray);
         } else {
           // RGBA format
           *r = static_cast<t_float>(data[offset + chRed]);
@@ -115,7 +120,7 @@ namespace {
           *b = static_cast<t_float>(data[offset + chBlue]);
           *a = static_cast<t_float>(data[offset + chAlpha]);
           // Use weighted average for grey calculation (same as Image.cpp)
-          *G = static_cast<t_float>((*r * 77.0 + *g * 150.0 + *b * 29.0) / 256.0);
+          *G = static_cast<t_float>(*r * red2gray + *g * green2gray + *b * blue2gray);
         }
       }
       break;
