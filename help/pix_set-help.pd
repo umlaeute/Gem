@@ -30,10 +30,10 @@
 #X text 460 476 see also;
 #X obj 530 477 pix_dump;
 #X obj 451 236 pix_set 4 4;
-#X msg 512 166 1 0.25 0.5 0.75 1 0 0 0 1 1 1 0 1 0 1 0 1 1, f 12;
+#X msg 514 173 1 0.25 0.5 0.75 1 0 0 0 1 1 1 0 1 0 1 0 1 1, f 12;
 #X text 53 370 Inlet 1: bang send image (to update texture for example);
 #X text 53 385 Inlet 1: fill : set the whole image with value (value could be G \, RGB or RGBA);
-#X text 53 411 Inlet 1: set : set the size of the image;
+#X text 53 411 Inlet 1: dimen: set the size of the image;
 #X obj 502 142 r pix_set_in;
 #X text 447 511 and example/04.pix/27.bitmap_font.pd, f 32;
 #N canvas 484 243 450 300 META 0;
@@ -47,8 +47,8 @@
 #X text 10 165 LICENSE GPL v2;
 #X restore 518 8 pd META;
 #N canvas 447 128 725 362 advanced 0;
-#X msg 26 210 set 16 16;
-#X msg 57 238 set 4 4;
+#X msg 26 210 dimen 16 16;
+#X msg 57 238 dimen 4 4;
 #X msg 24 93 fill \$1 \, bang;
 #X floatatom 24 76 5 0 1 0 - - - 0;
 #X msg 186 114 fill \$1 \$2 \$3 \$4 \, bang;
@@ -73,8 +73,10 @@
 #X obj 446 92 pack 0 0 0;
 #X obj 26 315 s pix_set_in;
 #X text 105 210 set the size of the image;
-#X obj 154 272 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
-#X text 176 273 send the image;
+#X obj 154 292 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000 #000000;
+#X text 176 293 send the image;
+#X msg 63 264 set 4 4;
+#X text 129 267 deprecated alias for "dimen";
 #X connect 0 0 24 0;
 #X connect 1 0 24 0;
 #X connect 2 0 10 0;
@@ -101,6 +103,7 @@
 #X connect 22 0 10 0;
 #X connect 23 0 22 0;
 #X connect 26 0 24 0;
+#X connect 28 0 24 0;
 #X restore 503 121 pd advanced;
 #X obj 472 310 _gemwin \; 0 \; 0 \; color 0.5 0.5 0.5;
 #X obj 451 274 _pix2rectangle 3 \; quality 0;
