@@ -117,7 +117,9 @@ void pix_set :: postrender(GemState *state)
 /////////////////////////////////////////////////////////
 namespace {
   template<typename T>
-  void setPixelData(imageStruct&img, int argc, t_atom *argv, const int mode, const float inputScale, const int roi_x1, const int roi_x2, const int roi_y1, const int roi_y2, const bool doROI) {
+  void setPixelData(imageStruct&img, int argc, t_atom *argv,
+                    const int mode, const float inputScale,
+                    const int roi_x1, const int roi_x2, const int roi_y1, const int roi_y2, const bool doROI) {
     const int csize = img.csize, xsize = img.xsize;
     const int roi_dx = roi_x2 - roi_x1, roi_dy = roi_y2 - roi_y1;
     const int picturesize = roi_dx*roi_dy;
