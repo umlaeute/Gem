@@ -317,7 +317,6 @@ namespace {
 void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
 {
   int i = 0;
-  void *buffer;
 
   pixBlock*pixels=m_pixels?m_pixels:&m_pixBlock;
   auto &img = pixels->image;
@@ -330,16 +329,11 @@ void pix_set :: DATAMess(t_symbol* s, int argc, t_atom *argv)
   if (!m_doROI) {
     // if no ROI is set, set whole image black before setting pixels values
     img.setBlack();
-    buffer = img.data;
   } else {
     roi_x1=m_roi.x1*(0.5+img.xsize);
     roi_x2=m_roi.x2*(0.5+img.xsize);
     roi_y1=m_roi.y1*(0.5+img.ysize);
     roi_y2=m_roi.y2*(0.5+img.ysize);
-
-    buffer = img.data + img.csize*(( i /
-             (roi_x2-roi_x1) + roi_y1 ) * img.xsize + (i %
-                 (roi_x2-roi_x1)) + roi_x1) ;
   }
 
   // Handle different data types using template functions
