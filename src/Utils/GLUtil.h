@@ -47,6 +47,16 @@ namespace gl
   GEM_EXTERN extern GLenum        glReportError (bool verbose=true);
   GEM_EXTERN extern GLenum        glReportError (struct CPPExtern*, const char*prefix=0);
 
+  /* Set/get the current active object (e.g., gemhead) during rendering
+   * This is used for error tracking when no parent is available */
+  GEM_EXTERN void                setCurrentObject(struct CPPExtern* obj);
+  GEM_EXTERN struct CPPExtern*    getCurrentObject(void);
+
+  /* Set/get whether debugGL is enabled
+   * This is used to control when OpenGL errors are reported */
+  GEM_EXTERN void                setDebugGLEnabled(bool enabled);
+  GEM_EXTERN bool                isDebugGLEnabled(void);
+
   GEM_EXTERN extern int           getGLdefine(const char *name);
   GEM_EXTERN extern int           getGLdefine(const struct _symbol *name);
   GEM_EXTERN extern int           getGLdefine(const struct _atom *name);

@@ -24,6 +24,40 @@
 
 #include <math.h>
 
+// Global variable to store the current active object (e.g., gemhead) during rendering
+static struct CPPExtern* s_currentObject = NULL;
+
+// Global variable to store whether debugGL is enabled
+static bool s_debugGLEnabled = false;
+
+namespace gem {
+namespace utils {
+namespace gl {
+
+void setCurrentObject(struct CPPExtern* obj)
+{
+  s_currentObject = obj;
+}
+
+struct CPPExtern* getCurrentObject(void)
+{
+  return s_currentObject;
+}
+
+void setDebugGLEnabled(bool enabled)
+{
+  s_debugGLEnabled = enabled;
+}
+
+bool isDebugGLEnabled(void)
+{
+  return s_debugGLEnabled;
+}
+
+} // namespace gl
+} // namespace utils
+} // namespace gem
+
 // I hate Microsoft...I shouldn't have to do this!
 #ifdef _WIN32
 /* disable warnings about unknown pragmas */
@@ -117,9 +151,9 @@ GLenum gem::utils::gl::glReportError (struct CPPExtern*parent, const char*prefix
         parent->error("%sopenGL error 0x%X", prefix?prefix:"", errNum);
       } else {
       if(errStr)
-        post("%s%s [%d]", prefix?prefix:"", errStr, errNum);
+        pd_error(0, "[Gem]: %s%s [%d]", prefix?prefix:"", errStr, errNum);
       else
-        post("%sopenGL error 0x%X", prefix?prefix:"", errNum);
+        pd_error(0, "[Gem]: %sopenGL error 0x%X", prefix?prefix:"", errNum);
     }
   }
 

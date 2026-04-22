@@ -27,6 +27,7 @@
 
 #include "Gem/GLStack.h"
 #include "Gem/Exception.h"
+#include "Utils/GLUtil.h"
 
 #include <stdio.h>
 
@@ -137,6 +138,9 @@ void gemhead :: renderGL(GemState *state)
     return;
   }
 
+  // Set this gemhead as the current active object for error tracking
+  gem::utils::gl::setCurrentObject(this);
+
   // set the default color and transformation matrix
   glColor4f(1.f, 1.f, 1.f, 1.f);
 
@@ -179,6 +183,9 @@ void gemhead :: renderGL(GemState *state)
   if(stacks) {
     stacks->pop();
   }
+
+  // Clear the current active object after rendering
+  gem::utils::gl::setCurrentObject(NULL);
 }
 #ifdef __GNUC__
 # pragma GCC diagnostic pop

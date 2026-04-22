@@ -344,6 +344,7 @@ void GemBase :: obj_setupCallback(t_class *classPtr)
       GemBase*obj=GetMyClass(data);
       if(obj) {
         obj->m_pimpl->debugGL = b;
+        gem::utils::gl::setDebugGLEnabled(b);
       }
     }
     explicit _CallbackClass_debugGL (struct _class*c)
