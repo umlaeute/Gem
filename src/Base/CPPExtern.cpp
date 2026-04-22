@@ -31,7 +31,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
 void *Obj_header::operator new(size_t, void *location, void *)
 {
   return(location);
@@ -157,7 +156,8 @@ void CPPExtern :: endpost(void) const
 
 void CPPExtern :: verbose(const int level, const char*fmt,...) const
 {
-  const int verbose2logpost_level = 3;
+  void*obj = x_obj?x_obj:s_holder;
+  const int verbose2logpost_level = PD_DEBUG;
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
@@ -165,14 +165,15 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
   va_end(ap);
   if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
      && &s_ != pimpl->objectname) {
-    ::logpost(x_obj, verbose2logpost_level + level, "[%s]: %s", pimpl->objectname->s_name, buf);
+    ::logpost(obj, verbose2logpost_level + level, "[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
-    ::logpost(x_obj, verbose2logpost_level + level, "%s", buf);
+    ::logpost(obj, verbose2logpost_level + level, "%s", buf);
   }
 }
 
 void CPPExtern :: error(const char*fmt,...) const
 {
+  void*obj = x_obj?x_obj:s_holder;
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
@@ -181,21 +182,9 @@ void CPPExtern :: error(const char*fmt,...) const
   if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
       && &s_ != pimpl->objectname) {
     const char*objname=pimpl->objectname->s_name;
-    if(x_obj) {
-      pd_error(x_obj, "[%s]: %s", objname, buf);
-    } else if (s_holder) {
-      pd_error(s_holder, "[%s]: %s", objname, buf);
-    } else {
-      pd_error(0, "[%s]: %s", objname, buf);
-    }
+    pd_error(obj, "[%s]: %s", objname, buf);
   } else {
-    if(x_obj) {
-      pd_error(x_obj, "%s", buf);
-    } else if (s_holder) {
-      pd_error(s_holder, "%s", buf);
-    } else {
-      pd_error(0, "%s", buf);
-    }
+    pd_error(obj, "%s", buf);
   }
 }
 
