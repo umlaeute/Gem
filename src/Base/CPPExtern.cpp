@@ -120,6 +120,7 @@ CPPExtern :: ~CPPExtern()
 
 void CPPExtern :: post(const char*fmt,...) const
 {
+  void*obj = x_obj?x_obj:s_holder;
   char buf[MAXPDSTRING];
   va_list ap;
   va_start(ap, fmt);
@@ -127,9 +128,9 @@ void CPPExtern :: post(const char*fmt,...) const
   va_end(ap);
   if(pimpl->endpost && NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
       && &s_ != pimpl->objectname) {
-    ::post("[%s]: %s", pimpl->objectname->s_name, buf);
+    ::logpost(obj, PD_NORMAL, "[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
-    ::post("%s", buf);
+    ::logpost(obj, PD_NORMAL, "%s", buf);
   }
   pimpl->endpost=true;
 }
