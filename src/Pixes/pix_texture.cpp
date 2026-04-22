@@ -17,6 +17,8 @@
 
 #include "pix_texture.h"
 
+#define MAX_MULTITEX_ID 32
+
 #include "Gem/Settings.h"
 #include "Gem/Image.h"
 #include "Utils/Functions.h"
@@ -642,6 +644,17 @@ void pix_texture :: render(GemState *state)
   m_baseCoord.t=m_yRatio;
   state->set(GemState::_GL_TEX_BASECOORD, m_baseCoord);
   state->set(GemState::_GL_TEX_ORIENTATION, upsidedown);
+
+  // Store per-unit coordinates for multitexture support
+  static TexCoord s_perUnitCoords[MAX_MULTITEX_ID][4];
+  setTexCoords(s_perUnitCoords[m_texunit], m_xRatio, m_yRatio, upsidedown);
+  state->set(GemState::_GL_TEX_COORDS_PER_UNIT, reinterpret_cast<TexCoord*>(s_perUnitCoords));
+  // Set number of tex units to the maximum used so far
+  static int s_maxTexUnit = 0;
+  if(m_texunit >= s_maxTexUnit) {
+    s_maxTexUnit = m_texunit + 1;
+  }
+  state->set(GemState::_GL_TEX_UNITS, s_maxTexUnit);
 
   sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType,
                  upsidedown);

@@ -122,12 +122,13 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
                            float tx, float ty,int curCoord)
 {
   TexCoord*texcoords=NULL;
+  TexCoord*texcoordsPerUnit=NULL;
   int numCoords = 0;
   int numUnits = 0;
 
   state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
   state->get(GemState::_GL_TEX_UNITS, numUnits);
-
+  state->get(GemState::_GL_TEX_COORDS_PER_UNIT, texcoordsPerUnit);
 
   if (numCoords) {
     tx=state->texCoordX(curCoord);
@@ -136,7 +137,13 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 
   if (numUnits) {
     for(int i=0; i<numUnits; i++) {
-      glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
+      // Use per-unit coordinates if available, otherwise use default coordinates
+      if(texcoordsPerUnit && curCoord < 4) {
+        // Interpreted as 2D array: texcoordsPerUnit[i][curCoord]
+        glMultiTexCoord2fARB(GL_TEXTURE0+i, texcoordsPerUnit[i*4 + curCoord].s, texcoordsPerUnit[i*4 + curCoord].t);
+      } else {
+        glMultiTexCoord2fARB(GL_TEXTURE0+i, tx, ty);
+      }
     }
   } else { // no multitexturing!
     glTexCoord2f(tx, ty);
@@ -150,9 +157,11 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 {
   int numCoords = 0;
   int numUnits = 0;
+  TexCoord*texcoordsPerUnit=NULL;
 
   state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
   state->get(GemState::_GL_TEX_UNITS, numUnits);
+  state->get(GemState::_GL_TEX_COORDS_PER_UNIT, texcoordsPerUnit);
 
   if (numCoords) {
     s*=state->texCoordX(curCoord);
@@ -161,7 +170,13 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 
   if (numUnits) {
     for(int i=0; i<numUnits; i++) {
-      glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
+      // Use per-unit coordinates if available, otherwise use default coordinates
+      if(texcoordsPerUnit && curCoord < 4) {
+        // Interpreted as 2D array: texcoordsPerUnit[i][curCoord]
+        glMultiTexCoord4fARB(GL_TEXTURE0+i, texcoordsPerUnit[i*4 + curCoord].s, texcoordsPerUnit[i*4 + curCoord].t, r, q);
+      } else {
+        glMultiTexCoord4fARB(GL_TEXTURE0+i, s, t, r, q);
+      }
     }
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);
