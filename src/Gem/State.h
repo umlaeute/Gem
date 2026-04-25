@@ -74,10 +74,8 @@ public:
     _GL_TEX_UNITS,       /* "tex.units" <int> # of texUnits */
     _GL_TEX_ORIENTATION, /* "tex.orientation" <bool> false=bottomleft; true=topleft */
     _GL_TEX_BASECOORD,   /* "tex.basecoords" <TexCoord> width/height of texture  */
-
-
-
-
+    _GL_TEX_COORDS_PER_UNIT, /* "tex.coords.perunit" <TexCoord*> array of texcoords per unit */
+    _GL_TEX_MULTICOORD,  /* "tex.multicoord" <bool> whether to use per-unit coordinates */
     _LAST
   } key_t;
 
