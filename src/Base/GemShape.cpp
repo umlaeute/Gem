@@ -125,10 +125,12 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
   TexCoord*texcoordsPerUnit=NULL;
   int numCoords = 0;
   int numUnits = 0;
+  int texPerUnit = 0;
 
   state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
   state->get(GemState::_GL_TEX_UNITS, numUnits);
   state->get(GemState::_GL_TEX_COORDS_PER_UNIT, texcoordsPerUnit);
+  state->get(GemState::_GL_TEX_PER_UNIT, texPerUnit);
 
   if (numCoords) {
     tx=state->texCoordX(curCoord);
@@ -137,8 +139,8 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 
   if (numUnits) {
     for(int i=0; i<numUnits; i++) {
-      // Use per-unit coordinates if available, otherwise use default coordinates
-      if(texcoordsPerUnit && curCoord < 4) {
+      // Use per-unit coordinates if flag is set and available, otherwise use default coordinates
+      if(texPerUnit && texcoordsPerUnit && curCoord < 4) {
         // Interpreted as 2D array: texcoordsPerUnit[i][curCoord]
         glMultiTexCoord2fARB(GL_TEXTURE0+i, texcoordsPerUnit[i*4 + curCoord].s, texcoordsPerUnit[i*4 + curCoord].t);
       } else {
@@ -157,11 +159,13 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 {
   int numCoords = 0;
   int numUnits = 0;
+  int texPerUnit = 0;
   TexCoord*texcoordsPerUnit=NULL;
 
   state->get(GemState::_GL_TEX_NUMCOORDS, numCoords);
   state->get(GemState::_GL_TEX_UNITS, numUnits);
   state->get(GemState::_GL_TEX_COORDS_PER_UNIT, texcoordsPerUnit);
+  state->get(GemState::_GL_TEX_PER_UNIT, texPerUnit);
 
   if (numCoords) {
     s*=state->texCoordX(curCoord);
@@ -170,8 +174,8 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
 
   if (numUnits) {
     for(int i=0; i<numUnits; i++) {
-      // Use per-unit coordinates if available, otherwise use default coordinates
-      if(texcoordsPerUnit && curCoord < 4) {
+      // Use per-unit coordinates if flag is set and available, otherwise use default coordinates
+      if(texPerUnit && texcoordsPerUnit && curCoord < 4) {
         // Interpreted as 2D array: texcoordsPerUnit[i][curCoord]
         glMultiTexCoord4fARB(GL_TEXTURE0+i, texcoordsPerUnit[i*4 + curCoord].s, texcoordsPerUnit[i*4 + curCoord].t, r, q);
       } else {
@@ -181,7 +185,6 @@ void GemShape :: SetVertex(GemState* state,float x, float y, float z,
   } else { // no multitexturing!
     glTexCoord4f(s, t, r, q);
   }
-
   glVertex3f( x, y, z );
 }
 

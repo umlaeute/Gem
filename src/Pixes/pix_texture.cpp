@@ -65,6 +65,7 @@ pix_texture :: pix_texture()
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1),
     m_texunit(0),
+    m_texperunit(0),
     m_numTexUnits(0),
     m_numPbo(0), m_oldNumPbo(0), m_curPbo(0), m_pbo(NULL),
     m_upsidedown(false)
@@ -646,15 +647,19 @@ void pix_texture :: render(GemState *state)
   state->set(GemState::_GL_TEX_ORIENTATION, upsidedown);
 
   // Store per-unit coordinates for multitexture support
-  static TexCoord s_perUnitCoords[MAX_MULTITEX_ID][4];
-  setTexCoords(s_perUnitCoords[m_texunit], m_xRatio, m_yRatio, upsidedown);
-  state->set(GemState::_GL_TEX_COORDS_PER_UNIT, reinterpret_cast<TexCoord*>(s_perUnitCoords));
-  // Set number of tex units to the maximum used so far
-  static int s_maxTexUnit = 0;
-  if(m_texunit >= s_maxTexUnit) {
-    s_maxTexUnit = m_texunit + 1;
+  if(m_texperunit) {
+    static TexCoord s_perUnitCoords[MAX_MULTITEX_ID][4];
+    setTexCoords(s_perUnitCoords[m_texunit], m_xRatio, m_yRatio, upsidedown);
+    state->set(GemState::_GL_TEX_COORDS_PER_UNIT, reinterpret_cast<TexCoord*>(s_perUnitCoords));
+    // Set number of tex units to the maximum used so far
+    static int s_maxTexUnit = 0;
+    if(m_texunit >= s_maxTexUnit) {
+      s_maxTexUnit = m_texunit + 1;
+    }
+    state->set(GemState::_GL_TEX_UNITS, s_maxTexUnit);
+    // Set flag to enable per-unit coordinates in GemShape
+    state->set(GemState::_GL_TEX_PER_UNIT, 1);
   }
-  state->set(GemState::_GL_TEX_UNITS, s_maxTexUnit);
 
   sendExtTexture(m_textureObj, m_xRatio, m_yRatio, m_textureType,
                  upsidedown);
@@ -904,6 +909,11 @@ void pix_texture :: texunitMess(int unit)
   m_texunit=unit;
 }
 
+void pix_texture :: texperunitMess(int mode)
+{
+  m_texperunit = (mode != 0);
+}
+
 ////////////////////////////////////////////////////////
 // static member functions
 //
@@ -923,6 +933,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "pbo", pboMess, int);
 
   CPPEXTERN_MSG1(classPtr, "texunit", texunitMess, int);
+  CPPEXTERN_MSG1(classPtr, "texperunit", texperunitMess, int);
 
   CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 
