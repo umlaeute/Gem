@@ -102,6 +102,7 @@ public:
   void yuvMess(int mode);
 
   void texunitMess(int unit);
+  void multicoordMess(int mode);
 
   void extTextureMess(t_symbol*, int, t_atom*);
 
@@ -140,6 +141,7 @@ protected:
   m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
   GLint m_texunit; // which texture unit to use
+  int m_multicoord; // whether to use per-unit texture coordinates
 
   /* CAPABILITIES */
 

@@ -45,6 +45,8 @@ CPPEXTERN_NEW(pix_texture);
 // Constructor
 //
 /////////////////////////////////////////////////////////
+#define MAX_MULTITEX_ID 32
+
 pix_texture :: pix_texture()
   : m_textureOnOff(1),
     m_textureMinQuality(GL_LINEAR), m_textureMagQuality(GL_LINEAR),
@@ -63,6 +65,7 @@ pix_texture :: pix_texture()
     m_clientStorage(0), //have to do this due to texture corruption issues
     m_yuv(1),
     m_texunit(0),
+    m_multicoord(0),
     m_numTexUnits(0),
     m_numPbo(0), m_oldNumPbo(0), m_curPbo(0), m_pbo(NULL),
     m_upsidedown(false)
@@ -294,6 +297,10 @@ void pix_texture :: render(GemState *state)
   int newfilm = 0;
   pixBlock*img=NULL;
   GLint internalformat = GL_RGBA;
+
+  // Static variables for per-unit texture coordinates
+  static TexCoord s_perUnitCoords[MAX_MULTITEX_ID][4];
+  static int s_maxTexUnit = 0;
 
   if(m_pbo && (m_numPbo != m_oldNumPbo)) {
     /* the PBO settings have changed, invalidate the old PBO */
@@ -618,6 +625,20 @@ void pix_texture :: render(GemState *state)
 
   setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
 
+  // Store per-unit coordinates for multitexture support
+  if(m_multicoord) {
+    setTexCoords(s_perUnitCoords[m_texunit], m_xRatio, m_yRatio, m_upsidedown);
+    state->set(GemState::_GL_TEX_COORDS_PER_UNIT, reinterpret_cast<TexCoord*>(s_perUnitCoords));
+    state->set(GemState::_GL_TEX_MULTICOORD, true);
+    // Set number of tex units to the maximum used so far
+    if(m_texunit >= s_maxTexUnit) {
+      s_maxTexUnit = m_texunit + 1;
+    }
+  } else {
+    // Legacy behavior: ensure multicoord is disabled
+    state->set(GemState::_GL_TEX_MULTICOORD, false);
+  }
+
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 
   /* cleanup */
@@ -890,6 +911,10 @@ void pix_texture :: texunitMess(int unit)
 {
   m_texunit=unit;
 }
+void pix_texture :: multicoordMess(int mode)
+{
+  m_multicoord=mode;
+}
 
 ////////////////////////////////////////////////////////
 // static member functions
@@ -910,6 +935,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "pbo", pboMess, int);
 
   CPPEXTERN_MSG1(classPtr, "texunit", texunitMess, int);
+  CPPEXTERN_MSG1(classPtr, "multicoord", multicoordMess, int);
 
   CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 
