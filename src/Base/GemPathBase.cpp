@@ -30,10 +30,13 @@ GemPathBase :: GemPathBase(int argc, t_atom *argv)
 {
   m_out1 = outlet_new(this->x_obj, 0);
 
-  if (argc >= 2) {
+  switch(argc) {
+  case 0:
+    break;
+  default:
     openMess(atom_getsymbol(&argv[1]));
-  }
-  if (argc >= 1) {
+    /* fall throught */
+  case 1:
     m_numDimens = (int)atom_getfloat(&argv[0]);
     if (m_numDimens < 1) {
       m_numDimens = 1;
@@ -42,6 +45,7 @@ GemPathBase :: GemPathBase(int argc, t_atom *argv)
       error("too many dimensions, must be below 64");
       m_numDimens = 64;
     }
+    break;
   }
 }
 
@@ -60,27 +64,33 @@ GemPathBase :: ~GemPathBase()
 /////////////////////////////////////////////////////////
 void GemPathBase :: openMess(t_symbol* arrayname)
 {
-  m_array = (t_garray *)pd_findbyclass(arrayname, garray_class);
-  if (!m_array) {
-    error("unable to find array %s", arrayname->s_name);
-    return;
-  }
+  m_array = arrayname;
+  m_warnedNonExistent = false;
 }
 void GemPathBase :: floatMess(t_float val)
 {
-  if (!m_array) {
-    error("no array");
+  const char*arrayname = m_array?(m_array->s_name):0;
+  if(!arrayname)
+    return;
+
+  t_garray *a = (t_garray *)pd_findbyclass(m_array, garray_class);
+  if(!a) {
+    if(!m_warnedNonExistent)
+      error("no array '%s'", arrayname);
+    m_warnedNonExistent = true;
     return;
   }
+  m_warnedNonExistent = false;
 
   int size;
   t_word *vec;
-  if (!garray_getfloatwords(m_array, &size, &vec)) {
+  if (!garray_getfloatwords(a, &size, &vec)) {
+    error("bad template '%s'", arrayname);
     return;
   }
 
   if (size % m_numDimens) {
-    error("size is not a mod of dimensions");
+    error("size %d is not a multiple of dimensions %d", size, m_numDimens);
     return;
   }
 

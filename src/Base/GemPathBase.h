@@ -62,7 +62,8 @@ protected:
 
   //////////
   // The array
-  t_garray         *m_array;
+  t_symbol      *m_array;
+  bool           m_warnedNonExistent;
 
   //////////
   // The outlet
