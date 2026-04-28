@@ -1,7 +1,7 @@
 #N canvas 56 98 635 502 12;
 #X declare -lib Gem;
 #X obj 350 226 gemhead;
-#X floatatom 458 298 0 0 0 0 - - -;
+#X floatatom 458 298 0 0 0 0 - - - 0;
 #X obj 350 286 color;
 #X msg 452 231 1 1 1;
 #X text 438 159 change the color;
@@ -14,8 +14,7 @@
 #X text 449 277 rotate the teapot;
 #X msg 456 365 draw line;
 #X msg 453 395 draw fill;
-#X obj 31 73 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X obj 31 73 cnv 15 220 70 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 454 304 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -53,9 +52,9 @@
 #X text 32 261 this is the famous;
 #X text 52 294 utah teapot;
 #X obj 515 5 declare -lib Gem;
+#X obj 371 312 t a a;
 #X connect 0 0 2 0;
-#X connect 1 0 6 1;
-#X connect 1 0 6 2;
+#X connect 1 0 21 0;
 #X connect 2 0 6 0;
 #X connect 3 0 2 1;
 #X connect 6 0 5 0;
@@ -65,3 +64,5 @@
 #X connect 13 0 5 0;
 #X connect 15 0 16 0;
 #X connect 16 0 15 0;
+#X connect 21 0 6 1;
+#X connect 21 1 6 2;

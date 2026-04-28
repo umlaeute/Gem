@@ -1,7 +1,7 @@
 #N canvas 393 222 603 394 10;
 #X declare -lib Gem;
 #X obj 274 138 gemhead;
-#X floatatom 318 169 0 0 0 0 - - -;
+#X floatatom 307 159 0 0 0 0 - - - 0;
 #X obj 22 325 world_light;
 #X obj 22 283 gemhead 1;
 #X text 369 251 change the number of slices;
@@ -9,9 +9,8 @@
 #X msg 384 269 5;
 #X obj 274 356 cylinder;
 #X obj 274 207 rotateXYZ 26 26 0;
-#X floatatom 299 303 0 0 0 2 size - -;
-#X obj 31 53 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X floatatom 296 303 0 0 0 2 size - - 0;
+#X obj 31 53 cnv 15 220 70 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 454 304 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -50,9 +49,9 @@
 #X obj 94 283 gemhead 1;
 #X obj 94 302 rotateXYZ 12 54 20;
 #X obj 495 5 declare -lib Gem;
+#X obj 307 181 t a a;
 #X connect 0 0 8 0;
-#X connect 1 0 8 1;
-#X connect 1 0 8 2;
+#X connect 1 0 18 0;
 #X connect 3 0 2 0;
 #X connect 5 0 7 2;
 #X connect 6 0 7 2;
@@ -62,3 +61,5 @@
 #X connect 12 0 11 0;
 #X connect 15 0 16 0;
 #X connect 16 0 14 0;
+#X connect 18 0 8 1;
+#X connect 18 1 8 2;

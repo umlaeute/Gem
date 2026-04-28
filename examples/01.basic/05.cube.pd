@@ -1,11 +1,10 @@
 #N canvas 361 165 602 280 10;
 #X declare -lib Gem;
 #X obj 372 91 gemhead;
-#X floatatom 416 122 0 -4.5 4.5 0 - - -;
-#X obj 372 197 cube;
-#X obj 372 159 translateXYZ;
-#X obj 30 109 cnv 15 220 70 empty empty empty 20 12 0 14 -195568 -66577
-0;
+#X floatatom 406 122 0 -4.5 4.5 0 - - - 0;
+#X obj 372 217 cube;
+#X obj 372 179 translateXYZ;
+#X obj 30 109 cnv 15 220 70 empty empty empty 20 12 0 14 #bcbcbc #404040 0;
 #N canvas 0 22 454 304 gemwin 0;
 #X obj 132 136 gemwin;
 #X obj 67 89 outlet;
@@ -38,9 +37,11 @@
 #X msg 35 129 create;
 #X text 31 109 Create window and render;
 #X obj 495 5 declare -lib Gem;
+#X obj 406 144 t a a;
 #X connect 0 0 3 0;
-#X connect 1 0 3 1;
-#X connect 1 0 3 2;
+#X connect 1 0 9 0;
 #X connect 3 0 2 0;
 #X connect 5 0 6 0;
 #X connect 6 0 5 0;
+#X connect 9 0 3 1;
+#X connect 9 1 3 2;
