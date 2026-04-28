@@ -128,7 +128,7 @@ GLenum gem::utils::gl::glReportError (bool verbose)
   GLenum err = glGetError();
   if (verbose && GL_NO_ERROR != err) {
     const char *errStr = gem::utils::gl::glErrorString(err);
-    post("GL[0x%X]: %s", err, errStr);
+    post("GL[0x%04X]: %s", err, errStr);
   }
   // ensure we are returning an OSStatus noErr if no error condition
   if (err == GL_NO_ERROR) {
@@ -138,22 +138,23 @@ GLenum gem::utils::gl::glReportError (bool verbose)
   }
 }
 
-GLenum gem::utils::gl::glReportError (struct CPPExtern*parent, const char*prefix)
+GLenum gem::utils::gl::glReportError (struct CPPExtern*parent, const char*_prefix)
 {
   GLenum errNum, finalErrNum=0;
+  const char*prefix = _prefix?prefix:"";
   while ((errNum = glGetError()) != GL_NO_ERROR) {
     finalErrNum = errNum;
     const char*errStr = glErrorString(errNum);
     if(parent) {
       if(errStr)
-        parent->error("%s%s [%d]", prefix?prefix:"", errStr, errNum);
+        parent->error("%s%s [0x%04X]", prefix, errStr, errNum);
       else
-        parent->error("%sopenGL error 0x%X", prefix?prefix:"", errNum);
+        parent->error("%sopenGL error 0x%04X", prefix, errNum);
       } else {
       if(errStr)
-        pd_error(0, "[Gem]: %s%s [%d]", prefix?prefix:"", errStr, errNum);
+        pd_error(0, "[Gem]: %s%s [0x%04X]", prefix, errStr, errNum);
       else
-        pd_error(0, "[Gem]: %sopenGL error 0x%X", prefix?prefix:"", errNum);
+        pd_error(0, "[Gem]: %sopenGL error 0x%04X", prefix, errNum);
     }
   }
 

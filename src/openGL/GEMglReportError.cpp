@@ -46,7 +46,7 @@ void GEMglReportError :: render(GemState *state)
   GLenum result=0, err;
   while ((err = glReportError(false))) {
     const char*errStr = glErrorString(err);
-    error("GL[0x%X]: %s", err, errStr?errStr:"generic error");
+    error("GL[0x%04X]: %s", err, errStr?errStr:"generic error");
     if (err)
       result = err;
   }
