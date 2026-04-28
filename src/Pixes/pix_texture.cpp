@@ -299,7 +299,7 @@ void pix_texture :: render(GemState *state)
   GLint internalformat = GL_RGBA;
 
   // Static variables for per-unit texture coordinates
-  static TexCoord s_perUnitCoords[MAX_MULTITEX_ID][4];
+  static TexCoord s_perUnitCoords[MAX_MULTITEX_ID*4];
   static int s_maxTexUnit = 0;
 
   if(m_pbo && (m_numPbo != m_oldNumPbo)) {
@@ -627,8 +627,9 @@ void pix_texture :: render(GemState *state)
 
   // Store per-unit coordinates for multitexture support
   if(m_multicoord) {
-    setTexCoords(s_perUnitCoords[m_texunit], m_xRatio, m_yRatio, m_upsidedown);
-    state->set(GemState::_GL_TEX_COORDS_PER_UNIT, reinterpret_cast<TexCoord*>(s_perUnitCoords));
+    TexCoord*texcoords = s_perUnitCoords;
+    setTexCoords(s_perUnitCoords+m_texunit*4, m_xRatio, m_yRatio, m_upsidedown);
+    state->set(GemState::_GL_TEX_COORDS_PER_UNIT, texcoords);
     state->set(GemState::_GL_TEX_MULTICOORD, true);
     // Set number of tex units to the maximum used so far
     if(m_texunit >= s_maxTexUnit) {
