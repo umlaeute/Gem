@@ -53,7 +53,9 @@ class GemStateData
 {
   friend class GemState;
 public:
-  GemStateData(void) : stacks(new GLStack()) {}
+  GemStateData(void)
+    : stacks(new GLStack())
+  {}
 
   ~GemStateData(void)
   {
@@ -80,9 +82,10 @@ protected:
   std::auto_ptr<GLStack>stacks;
 
   static std::map <std::string, int> keys;
+  static bool valid;
 };
 std::map <std::string, int> GemStateData::keys;
-
+bool GemStateData::valid = false;
 /////////////////////////////////////////////////////////
 //
 // GemState
@@ -384,10 +387,21 @@ const GemState::key_t GemState::getKey(const std::string&s)
     GemStateData::keys["gl.tex.units"]=_GL_TEX_UNITS;
     GemStateData::keys["gl.tex.orientation"]=_GL_TEX_ORIENTATION;
     GemStateData::keys["gl.tex.basecoord"]=_GL_TEX_BASECOORD;
+
+    GemStateData::valid = true;
+    if (GemStateData::keys.size() != GemState::_LAST) {
+      ::pd_error(0, "GemState::getKey(\"%s\"): only %d of %d keys have been pre-registered!"
+                 , s.c_str(), GemStateData::keys.size(), GemState::_LAST
+                 );
+      GemStateData::valid = false;
+    }
   }
 
-  key_t result=_ILLEGAL;
+  if(false == GemStateData::valid)
+    return _ILLEGAL;
 
+
+  key_t result=_ILLEGAL;
   std::map<std::string, int>::iterator it =  GemStateData::keys.find(s);
 
   if(it != GemStateData::keys.end()) {
