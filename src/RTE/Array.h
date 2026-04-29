@@ -15,6 +15,7 @@
 
 #include "Gem/ExportDef.h"
 #include <string>
+#include "Gem/RTE.h"
 
 namespace gem
 {

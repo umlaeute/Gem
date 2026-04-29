@@ -187,5 +187,4 @@ void gem::RTE::Array :: set(const t_float f)
     wp->w_float=f;
     wp++;
   }
-
 }
