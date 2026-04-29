@@ -98,13 +98,12 @@ GEM_EXTERN float gainFunc(float x, float a)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Linear function
-//
-///////////////////////////////////////////////////////////////////////////////
-GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts,
-                           float *pnts)
+namespace {
+  template <typename T>
+  void linearFunction(T x, T *ret, int numDimen, const gem::RTE::Array&array)
 {
+  size_t size = array.size();
+  int npnts = size/numDimen;
   int nspans = npnts - 1;
   if (nspans < 1) {        // illegal
     return;
@@ -118,32 +117,8 @@ GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, int npnts,
     span = nspans;
   }
   x -= span;
-  pnts += (span * numDimen);
   for (int i = 0; i < numDimen; i++) {
-    ret[i] = pnts[0 * numDimen] * (1.f - x) + pnts[1 * numDimen] * x;
-    pnts++;     // advance to the next dimension
-  }
-}
-GEM_EXTERN void linearFunc(double x, double *ret, int numDimen, int npnts,
-                           double *pnts)
-{
-  int nspans = npnts - 1;
-  if (nspans < 1) {        // illegal
-    return;
-  }
-
-  x = FLOAT_CLAMP(x) * nspans;
-  int span = static_cast<int>(x);
-
-  // find the correct 2-point span of the linear list
-  if (span >= nspans) {
-    span = nspans;
-  }
-  x -= span;
-  pnts += (span * numDimen);
-  for (int i = 0; i < numDimen; i++) {
-    ret[i] = pnts[0 * numDimen] * (1.f - x) + pnts[1 * numDimen] * x;
-    pnts++;     // advance to the next dimension
+    ret[i] = array[(span + 0) * numDimen + i] * (1.f - x) + array[(span + 1) * numDimen + i]  * x;
   }
 }
 
@@ -168,9 +143,11 @@ const float CR31 =  1.0f;
 const float CR32 =  0.0f;
 const float CR33 =  0.0f;
 
-GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots,
-                           float *knot)
+  template <typename T>
+void splineFunction(T x, T *ret, int numDimen, const gem::RTE::Array&array)
 {
+  size_t size = array.size();
+  int nknots = size/numDimen;
   int nspans = nknots - 4;
   if (nspans < 0) {       // illegal case
     return;
@@ -180,74 +157,44 @@ GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, int nknots,
   x = FLOAT_CLAMP(x) * nspans;
   int span = static_cast<int>(x);
   x -= span;              // get decimal part of span
-  knot += (span * numDimen);
 
   // Evaluate the span cubic at x using Horner's rule
   for (int i = 0; i < numDimen; i++) {
-    float c0, c1, c2, c3;
-    c3 = CR00*knot[0 * numDimen]
-         + CR01*knot[1 * numDimen]
-         + CR02*knot[2 * numDimen]
-         + CR03*knot[3 * numDimen];
+    T x0, x1, x2, x3;
 
-    c2 = CR10*knot[0 * numDimen]
-         + CR11*knot[1 * numDimen]
-         + CR12*knot[2 * numDimen]
-         + CR13*knot[3 * numDimen];
+    x0 = array[(span + 0) * numDimen + i];
+    x1 = array[(span + 1) * numDimen + i];
+    x2 = array[(span + 2) * numDimen + i];
+    x3 = array[(span + 3) * numDimen + i];
 
-    c1 = CR20*knot[0 * numDimen]
-         + CR21*knot[1 * numDimen]
-         + CR22*knot[2 * numDimen]
-         + CR23*knot[3 * numDimen];
-
-    c0 = CR30*knot[0 * numDimen]
-         + CR31*knot[1 * numDimen]
-         + CR32*knot[2 * numDimen]
-         + CR33*knot[3 * numDimen];
+    T c0, c1, c2, c3;
+    c3 = CR00*x0 + CR01*x1 + CR02*x2 + CR03*x3;
+    c2 = CR10*x0 + CR11*x1 + CR12*x2 + CR13*x3;
+    c1 = CR20*x0 + CR21*x1 + CR22*x2 + CR23*x3;
+    c0 = CR30*x0 + CR31*x1 + CR32*x2 + CR33*x3;
 
     ret[i] = ((c3*x + c2)*x + c1)*x + c0;
-    knot++;     // advance to the next dimension
   }
 }
+};
 
-GEM_EXTERN void splineFunc(double x, double *ret, int numDimen, int nknots,
-                           double *knot)
+///////////////////////////////////////////////////////////////////////////////
+// Linear function
+//
+///////////////////////////////////////////////////////////////////////////////
+GEM_EXTERN void linearFunc(float x, float *ret, int numDimen, const gem::RTE::Array&array)
 {
-  int nspans = nknots - 4;
-  if (nspans < 0) {       // illegal case
-    return;
-  }
-
-  // find the correct 4-point span of the spline
-  x = FLOAT_CLAMP(x) * nspans;
-  int span = static_cast<int>(x);
-  x -= span;              // get decimal part of span
-  knot += (span * numDimen);
-
-  // Evaluate the span cubic at x using Horner's rule
-  for (int i = 0; i < numDimen; i++) {
-    double c0, c1, c2, c3;
-    c3 = CR00*knot[0 * numDimen]
-         + CR01*knot[1 * numDimen]
-         + CR02*knot[2 * numDimen]
-         + CR03*knot[3 * numDimen];
-
-    c2 = CR10*knot[0 * numDimen]
-         + CR11*knot[1 * numDimen]
-         + CR12*knot[2 * numDimen]
-         + CR13*knot[3 * numDimen];
-
-    c1 = CR20*knot[0 * numDimen]
-         + CR21*knot[1 * numDimen]
-         + CR22*knot[2 * numDimen]
-         + CR23*knot[3 * numDimen];
-
-    c0 = CR30*knot[0 * numDimen]
-         + CR31*knot[1 * numDimen]
-         + CR32*knot[2 * numDimen]
-         + CR33*knot[3 * numDimen];
-
-    ret[i] = ((c3*x + c2)*x + c1)*x + c0;
-    knot++;     // advance to the next dimension
-  }
+  linearFunction(x, ret, numDimen, array);
+}
+GEM_EXTERN void linearFunc(double x, double *ret, int numDimen, const gem::RTE::Array&array)
+{
+  linearFunction(x, ret, numDimen, array);
+}
+GEM_EXTERN void splineFunc(float x, float *ret, int numDimen, const gem::RTE::Array&array)
+{
+  splineFunction(x, ret, numDimen, array);
+}
+GEM_EXTERN void splineFunc(double x, double *ret, int numDimen, const gem::RTE::Array&array)
+{
+  splineFunction(x, ret, numDimen, array);
 }
