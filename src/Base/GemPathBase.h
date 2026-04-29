@@ -16,6 +16,7 @@ LOG
 #define _INCLUDE__GEM_BASE_GEMPATHBASE_H_
 
 #include "Base/CPPExtern.h"
+#include "RTE/Array.h"
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -53,8 +54,7 @@ protected:
 
   ///////////
   // do the actual interpolation
-  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
-                          t_float *pnts) = 0;
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, const gem::RTE::Array&array) = 0;
 
   //////////
   // The number of dimensions
@@ -62,8 +62,10 @@ protected:
 
   //////////
   // The array
-  t_symbol      *m_array;
+  t_symbol      *m_arrayname;
   bool           m_warnedNonExistent;
+
+  gem::RTE::Array m_array;
 
   //////////
   // The outlet

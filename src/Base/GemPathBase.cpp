@@ -25,7 +25,7 @@
 //
 /////////////////////////////////////////////////////////
 GemPathBase :: GemPathBase(int argc, t_atom *argv)
-  : m_numDimens(1), m_array(NULL),
+  : m_numDimens(1), m_arrayname(NULL),
     m_out1(NULL)
 {
   m_out1 = outlet_new(this->x_obj, 0);
@@ -64,17 +64,16 @@ GemPathBase :: ~GemPathBase()
 /////////////////////////////////////////////////////////
 void GemPathBase :: openMess(t_symbol* arrayname)
 {
-  m_array = arrayname;
+  m_arrayname = arrayname;
   m_warnedNonExistent = false;
 }
 void GemPathBase :: floatMess(t_float val)
 {
-  const char*arrayname = m_array?(m_array->s_name):0;
+  const char*arrayname = m_arrayname?(m_arrayname->s_name):0;
   if(!arrayname)
     return;
 
-  t_garray *a = (t_garray *)pd_findbyclass(m_array, garray_class);
-  if(!a) {
+  if(!m_array.name(arrayname)) {
     if(!m_warnedNonExistent)
       error("no array '%s'", arrayname);
     m_warnedNonExistent = true;
@@ -82,20 +81,13 @@ void GemPathBase :: floatMess(t_float val)
   }
   m_warnedNonExistent = false;
 
-  int size;
-  t_word *vec;
-  if (!garray_getfloatwords(a, &size, &vec)) {
-    error("bad template '%s'", arrayname);
-    return;
-  }
-
-  if (size % m_numDimens) {
-    error("size %d is not a multiple of dimensions %d", size, m_numDimens);
+  if (m_array.size() % m_numDimens) {
+    error("size %d is not a multiple of dimensions %d", m_array.size(), m_numDimens);
     return;
   }
 
   t_float output[64];
-  lookupFunc(val, output, m_numDimens, size / m_numDimens, &(vec->w_float));
+  lookupFunc(val, output, m_numDimens, m_array);
 
   t_atom argv[64];
   for (int i = 0; i < m_numDimens; i++) {
