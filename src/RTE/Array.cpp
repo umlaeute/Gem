@@ -124,7 +124,7 @@ bool gem::RTE::Array :: name(const std::string&s)
 {
   return m_pimpl->setName(s);
 }
-const std::string gem::RTE::Array :: name(void)
+const std::string&gem::RTE::Array :: name(void) const
 {
   return m_pimpl->name;
 }
@@ -164,13 +164,18 @@ bool gem::RTE::Array :: resize(const size_t newsize)
 
   return false;
 }
-size_t gem::RTE::Array :: size(void)
+size_t gem::RTE::Array :: size(void) const
 {
   m_pimpl->check();
   return m_pimpl->length;
 }
 
 t_float&gem::RTE::Array :: operator[](const unsigned int&index)
+{
+  return m_pimpl->get(index);
+}
+
+const t_float&gem::RTE::Array :: operator[](const unsigned int&index) const
 {
   return m_pimpl->get(index);
 }

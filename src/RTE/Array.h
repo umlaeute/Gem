@@ -39,12 +39,13 @@ public:
 
   /* reference another array */
   virtual bool name(const std::string&s);
-  virtual const std::string name(void);
+  virtual const std::string&name(void) const;
 
   virtual bool resize(const size_t newsize);
-  virtual size_t size(void);
+  virtual size_t size(void) const;
 
   virtual t_float&operator[](const unsigned int&index);
+  virtual const t_float&operator[](const unsigned int&index) const;
 
   virtual void set(const t_float f);
 
