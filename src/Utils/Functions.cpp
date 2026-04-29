@@ -114,7 +114,7 @@ namespace {
 
   // find the correct 2-point span of the linear list
   if (span >= nspans) {
-    span = nspans;
+    span = nspans - 1;
   }
   x -= span;
   for (int i = 0; i < numDimen; i++) {
@@ -148,14 +148,17 @@ void splineFunction(T x, T *ret, int numDimen, const gem::RTE::Array&array)
 {
   size_t size = array.size();
   int nknots = size/numDimen;
-  int nspans = nknots - 4;
-  if (nspans < 0) {       // illegal case
+  int nspans = nknots - 3;
+  if (nspans < 1) {       // illegal case
     return;
   }
 
   // find the correct 4-point span of the spline
   x = FLOAT_CLAMP(x) * nspans;
   int span = static_cast<int>(x);
+  if (span >= nspans) {
+    span = nspans - 1;
+  }
   x -= span;              // get decimal part of span
 
   // Evaluate the span cubic at x using Horner's rule
