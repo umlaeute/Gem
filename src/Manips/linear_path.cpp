@@ -31,9 +31,9 @@ linear_path :: ~linear_path()
 //
 /////////////////////////////////////////////////////////
 void linear_path :: lookupFunc(t_float x, t_float *ret, int numDimen,
-                               int npnts, t_float *pnts)
+                               const gem::RTE::Array&array)
 {
-  linearFunc(x, ret, numDimen, npnts, pnts);
+  linearFunc(x, ret, numDimen, array);
 }
 
 void linear_path :: obj_setupCallback(t_class *)

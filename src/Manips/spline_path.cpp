@@ -31,9 +31,9 @@ spline_path :: ~spline_path()
 //
 /////////////////////////////////////////////////////////
 void spline_path :: lookupFunc(t_float x, t_float *ret, int numDimen,
-                               int npnts, t_float *pnts)
+                               const gem::RTE::Array&array)
 {
-  splineFunc(x, ret, numDimen, npnts, pnts);
+  splineFunc(x, ret, numDimen, array);
 }
 
 void spline_path :: obj_setupCallback(t_class *)

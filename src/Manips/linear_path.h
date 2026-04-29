@@ -45,8 +45,7 @@ protected:
 
   //////////
   // When a float val is received
-  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, int npnts,
-                          t_float *pnts);
+  virtual void lookupFunc(t_float x, t_float *ret, int numDimen, const gem::RTE::Array&array);
 };
 
 #endif  // for header file
