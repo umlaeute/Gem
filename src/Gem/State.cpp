@@ -384,6 +384,7 @@ const GemState::key_t GemState::getKey(const std::string&s)
     GemStateData::keys["gl.tex.units"]=_GL_TEX_UNITS;
     GemStateData::keys["gl.tex.orientation"]=_GL_TEX_ORIENTATION;
     GemStateData::keys["gl.tex.basecoord"]=_GL_TEX_BASECOORD;
+    GemStateData::keys["gl.tex.unitsizes"]=_GL_TEX_UNIT_SIZES;
   }
 
   key_t result=_ILLEGAL;

@@ -74,7 +74,7 @@ public:
     _GL_TEX_UNITS,       /* "tex.units" <int> # of texUnits */
     _GL_TEX_ORIENTATION, /* "tex.orientation" <bool> false=bottomleft; true=topleft */
     _GL_TEX_BASECOORD,   /* "tex.basecoords" <TexCoord> width/height of texture  */
-
+    _GL_TEX_UNIT_SIZES,  /* "tex.unitsizes" <float[MAX_MULTITEX_ID][2]> sizeX,sizeY per texunit */
 
 
 
