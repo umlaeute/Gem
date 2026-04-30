@@ -103,6 +103,6 @@ void GemPathBase :: floatMess(t_float val)
 /////////////////////////////////////////////////////////
 void GemPathBase :: obj_setupCallback(t_class *classPtr)
 {
-  CPPEXTERN_MSG1(classPtr, "open", openMess, t_symbol*);
+  CPPEXTERN_MSG1(classPtr, "set", openMess, t_symbol*);
   CPPEXTERN_MSG1(classPtr, "float", floatMess, t_float);
 }
