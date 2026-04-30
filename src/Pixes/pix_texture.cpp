@@ -65,7 +65,8 @@ pix_texture :: pix_texture()
     m_texunit(0),
     m_numTexUnits(0),
     m_numPbo(0), m_oldNumPbo(0), m_curPbo(0), m_pbo(NULL),
-    m_upsidedown(false)
+    m_upsidedown(false),
+    m_matrixcoord(false)
 {
   m_dataSize[0] = m_dataSize[1] = m_dataSize[2] = -1;
   m_buffer.xsize = m_buffer.ysize = m_buffer.csize = -1;
@@ -618,6 +619,28 @@ void pix_texture :: render(GemState *state)
 
   setTexCoords(m_coords, m_xRatio, m_yRatio, m_upsidedown);
 
+  // Store per-texunit texture sizes and configure texture matrices
+  // Use TexUnitSizes struct with gem::any (copy-based, no pointer issues)
+  TexUnitSizes currentSizes;
+  state->get(GemState::_GL_TEX_UNIT_SIZES, currentSizes);
+  currentSizes.sizes[m_texunit][0] = m_xRatio;
+  currentSizes.sizes[m_texunit][1] = m_yRatio;
+  state->set(GemState::_GL_TEX_UNIT_SIZES, currentSizes);
+
+  if(m_matrixcoord) {
+    int numTexUnits=m_numTexUnits;
+    for(int i=0; i<numTexUnits; i++) {
+      glActiveTexture(GL_TEXTURE0 + i);
+      glMatrixMode(GL_TEXTURE);
+      glLoadIdentity();
+      if(i != m_texunit) {
+        glScalef(currentSizes.sizes[i][0] / m_xRatio, currentSizes.sizes[i][1] / m_yRatio, 1.0f);
+      }
+    }
+    glMatrixMode(GL_MODELVIEW);
+    glActiveTexture(GL_TEXTURE0 + m_texunit);
+  }
+
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, m_env);
 
   /* cleanup */
@@ -656,6 +679,17 @@ void pix_texture :: postrender(GemState *state)
   popTexCoords(state);
 
   if (m_didTexture) {
+    // Restore texture matrices to identity
+    if(m_matrixcoord) {
+      int numTexUnits=m_numTexUnits;
+      for(int i=0; i<numTexUnits; i++) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glMatrixMode(GL_TEXTURE);
+        glLoadIdentity();
+      }
+      glMatrixMode(GL_MODELVIEW);
+    }
+
     if(GLEW_VERSION_1_3) {
       glActiveTexture(GL_TEXTURE0_ARB + m_texunit);  //needed?
     }
@@ -890,6 +924,10 @@ void pix_texture :: texunitMess(int unit)
 {
   m_texunit=unit;
 }
+void pix_texture :: matrixCoordMess(float state)
+{
+  m_matrixcoord = (state != 0);
+}
 
 ////////////////////////////////////////////////////////
 // static member functions
@@ -910,6 +948,7 @@ void pix_texture :: obj_setupCallback(t_class *classPtr)
   CPPEXTERN_MSG1(classPtr, "pbo", pboMess, int);
 
   CPPEXTERN_MSG1(classPtr, "texunit", texunitMess, int);
+  CPPEXTERN_MSG1(classPtr, "matrixcoord", matrixCoordMess, float);
 
   CPPEXTERN_MSG (classPtr, "extTexture", extTextureMess);
 

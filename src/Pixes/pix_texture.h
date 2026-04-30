@@ -20,6 +20,20 @@
 #include "Gem/Image.h"
 #include "Gem/State.h"
 
+#ifndef MAX_MULTITEX_ID
+# define MAX_MULTITEX_ID 32
+#endif
+
+struct TexUnitSizes {
+  float sizes[MAX_MULTITEX_ID][2];
+  TexUnitSizes() {
+    for(int i=0; i<MAX_MULTITEX_ID; i++) {
+      sizes[i][0] = 1.0f;
+      sizes[i][1] = 1.0f;
+    }
+  }
+};
+
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
@@ -105,6 +119,8 @@ public:
 
   void extTextureMess(t_symbol*, int, t_atom*);
 
+  void matrixCoordMess(float state);
+
 
 protected:
   t_inlet    *m_inTexID;  /* inlet to receive external texture */
@@ -140,6 +156,8 @@ protected:
   m_yuv; // try to texture YUV-images directly when gfx-card says it is possible to do so
 
   GLint m_texunit; // which texture unit to use
+
+  bool m_matrixcoord; // whether to use per-texunit texture matrices
 
   /* CAPABILITIES */
 
