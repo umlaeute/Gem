@@ -18,7 +18,7 @@
 #X floatatom 585 235 0 0 0 0 - - - 0;
 #X floatatom 524 112 5 0 0 0 - - - 0;
 #X text 22 64 Description: reads out a table;
-#X text 48 120 You can set the table to be read with the "open" message or as the second creation-argument.;
+#X text 48 120 You can set the table to be read with the "set" message or as the second creation-argument.;
 #X text 89 197 [spline_path] is able to excerpt more than 1 dimension of a linear table. You can specify the dimension <D> of the table with the first creation-argument. (default 1);
 #X text 44 346 Outlet 1:;
 #X text 46 307 Inlet 1: reading point 0.0f...1.0f;
@@ -36,7 +36,7 @@
 #X text 102 346 a list of <D> floats. A multi-dimensional table stores its values in n-tuples like: "<r1> <g1> <b1> <r2> <g2> <b2>..." Therefore \, a table must have the size <D>*<n>;
 #X text 50 240 name of the table;
 #X obj 516 168 spline_path 3 array;
-#X msg 543 140 open array;
+#X msg 543 140 set \$0.array;
 #N canvas 484 243 450 300 META 0;
 #X obj 10 25 declare -lib Gem;
 #X text 10 45 DESCRIPTION reads out a table;
