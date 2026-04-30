@@ -46,6 +46,7 @@
 #X text 10 125 LICENSE GPL v2;
 #X restore 568 8 pd META;
 #X obj 115 429 spline_path;
+#X obj 228 429 tabread4;
 #X connect 11 0 12 0;
 #X connect 11 1 13 0;
 #X connect 11 2 14 0;

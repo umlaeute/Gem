@@ -46,6 +46,7 @@
 #X text 10 125 LICENSE GPL v2;
 #X restore 578 8 pd META;
 #X text 48 78 You can specify the reading-point by sending a float between 0.0f and 1.0f. Spline interpolation runs between indices 1 and n-2 (the first and last points are boundary control points)., f 65;
+#X obj 228 429 tabread4;
 #X connect 12 0 13 0;
 #X connect 12 1 14 0;
 #X connect 12 2 15 0;
