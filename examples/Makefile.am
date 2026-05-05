@@ -125,6 +125,7 @@ nobase_dist_gemexamples_DATA = \
 	10.glsl/04.game_of_life.pd \
 	10.glsl/04.game_of_life_bis.pd \
 	10.glsl/05.multitexture.pd \
+	10.glsl/05.multitexture_and_multiple_coordinate.pd \
 	10.glsl/05.multitexture_bis.pd \
 	10.glsl/05.multitexture_basic.pd \
 	10.glsl/06.rectangle_multitexture.pd \
