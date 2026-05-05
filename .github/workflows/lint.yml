@@ -1,0 +1,80 @@
+---
+name: code linting
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+      - master
+  push:
+
+
+jobs:
+  distcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo mkdir -p /etc/apt/sources.list.d/
+          sudo touch /etc/apt/sources.list "/etc/apt/sources.list.d/${GITHUB_REPOSITORY_ID}.list" "/etc/apt/sources.list.d/${GITHUB_REPOSITORY_ID}.sources"
+          find /etc/apt/sources.list /etc/apt/sources.list.d/ -name "*.list" -type f -exec grep -h "^deb " {} ";" | sed -e 's|^deb |deb-src |' | sudo tee "/etc/apt/sources.list.d/${GITHUB_REPOSITORY_ID}.list"
+          sudo find /etc/apt/sources.list.d -name "*.sources" -type f -exec sed -e "s|^\(Types[:] deb\)$|\1 deb-src|" -i {} +
+          sudo apt-get update -y
+          sudo apt-get -y --no-install-recommends install git puredata-dev puredata-core libavformat-dev libavutil-dev libavcodec-dev libswscale-dev
+          sudo apt-get build-dep gem
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: System info
+        run:
+          tools/systeminfo.sh || true
+          data || true
+          g++ -v || true
+      - name: Configure
+        run: |
+          autoreconf -fiv || ./autogen.sh
+          ./configure --disable-dependency-tracking --without-ALL
+      - name: Make distcheck
+        run: |
+          make distcheck -j2
+
+
+  nodist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get -y --no-install-recommends install git build-essential autoconf automake libtool pkg-config freeglut3-dev puredata-dev
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: git setup
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "${GITHUB_TRIGGERING_ACTOR}"
+          git config --global --list || true
+      - name: Pre-cleanup
+        run: |
+          git ls-tree -r HEAD --name-only -z | grep --null-data "\.gitignore" | xargs -0 rm
+          git commit -a -m "Drop .gitignore files"
+          mkdir -p .git-ci
+          rm -rf .git-ci/Gem .git-ci/Gem.*gz
+      - name: make dist
+        run: |
+          autoreconf -fiv || ./autogen.sh
+          ./configure --without-ALL
+          make dist distdir=.git-ci/Gem
+      - name: restore sources
+        run: |
+          ## restore the source dir from the 'make dist' package
+          find . -mindepth 1 -maxdepth 1 "(" -not -name ".git" -a -not -name ".git-ci" ")" -exec rm -rf {} +
+          tar -x -f .git-ci/Gem.*gz --strip-components=2
+          ## ensure that the restored folder contains only the changes we want to see
+          # drop files not tracked by git (e.g. generated autotools helpers)
+          git clean -fdx
+          # restore files that need not be distributed
+          git checkout --pathspec-from-file=.git-ci/nodist
+      - name: show differences
+        run: |
+          git status -s
+          git diff-index --quiet HEAD
