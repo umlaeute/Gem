@@ -216,8 +216,13 @@ void gemframebuffer :: render(GemState *state)
   if(m_msaaSamples > 0 && m_msaaFBO) {
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_msaaFBO);
   } else {
-    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
-  }
+  glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
+  // Bind the texture to the frame buffer (only for normal FBO)
+  glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                            m_texTarget, m_offScreenID, 0);
+  glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                               GL_RENDERBUFFER_EXT, m_depthBufferIndex);
+}
 
   // debug yellow color
   // glClearColor( 1,1,0,0);
