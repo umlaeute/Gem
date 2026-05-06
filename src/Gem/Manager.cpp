@@ -882,7 +882,7 @@ void GemMan :: render(void *)
       post("unable to annihiliate %f ms", spent);
     }
     if(deltime<0.) {
-      logpost(0, 3+1, "negative delay time: %f", deltime);
+      logpost(0, PD_DEBUG + 1, "negative delay time: %f", deltime);
       deltime=1.f;
     }
   }

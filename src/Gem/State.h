@@ -215,7 +215,7 @@ public:
       }
       return true;
     } catch (gem::bad_any_cast&x) {
-      ::logpost(0, 3+3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key,
+      ::logpost(0, PD_DEBUG + 3, "%s:%d [%s] %d :: %s", __FILE__, __LINE__, __FUNCTION__, key,
                 x.what());
       // type problem
     }

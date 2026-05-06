@@ -42,7 +42,7 @@ GemSIMD :: GemSIMD(void)
 #endif
 
   if(compiledarchs>0) {
-    logpost(0, 3-1, "GEM: compiled for %s architecture", compiledstr.c_str());
+    logpost(0, PD_NORMAL, "GEM: compiled for %s architecture", compiledstr.c_str());
   }
 
   if(cpuid) {
@@ -69,8 +69,8 @@ GemSIMD :: GemSIMD(void)
     case 0: /* this should never happen but is here for compilers who hate to "switch" with only one "case" */
       usingstr="invalid";
     }
-    logpost(0, 3-1, "GEM: using %s optimization", usingstr.c_str());
-    logpost(0, 3-1, "GEM: detected %d CPUs", gem::thread::getCPUCount());
+    logpost(0, PD_NORMAL, "GEM: using %s optimization", usingstr.c_str());
+    logpost(0, PD_NORMAL, "GEM: detected %d CPUs", gem::thread::getCPUCount());
   }
 }
 
