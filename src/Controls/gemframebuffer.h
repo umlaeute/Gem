@@ -53,6 +53,8 @@ protected:
   void         postrender(GemState *state);
   void         initFBO(void);
   void         destroyFBO(void);
+  void         initMSAAFBO(void);
+  void         destroyMSAAFBO(void);
 
   //////////
   // Set up the modifying flags
@@ -82,6 +84,7 @@ protected:
   virtual void repeatMess(int mode);
   virtual void clearMess(bool mode);
   virtual void verboseMess(bool mode);
+  virtual void msaaMess(int samples);
 
 
   virtual void fixFormat(GLenum wantedFormat);
@@ -111,6 +114,12 @@ private:
   bool        m_clear;
 
   bool        m_verbose; // print debugging info when changing parametres
+
+  // MSAA support
+  int         m_msaaSamples;
+  GLuint      m_msaaFBO;
+  GLuint      m_msaaColorBuffer;
+  GLuint      m_msaaDepthBuffer;
 
   void        bangMess(void);
 };
