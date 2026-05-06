@@ -66,7 +66,7 @@ public:
     }
   }
   bool addLoader( std::vector<std::string>available,
-                  std::string ID=std::string(""))
+                  const std::string&ID=std::string(""))
   {
     int count=0;
 
