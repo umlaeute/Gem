@@ -454,10 +454,13 @@ void gemframebuffer :: initFBO()
 
   // Bind the normal FBO and attach texture and depth buffer
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_frameBufferIndex);
-  glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                            m_texTarget, m_offScreenID, 0);
-  glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-                               GL_RENDERBUFFER_EXT, m_depthBufferIndex);
+  if(m_msaaSamples > 0) {
+    // Only attach permanently if MSAA is enabled (needed for blit)
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                              m_texTarget, m_offScreenID, 0);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                 GL_RENDERBUFFER_EXT, m_depthBufferIndex);
+  }
 
   // Make sure we have not errors.
   GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT) ;
