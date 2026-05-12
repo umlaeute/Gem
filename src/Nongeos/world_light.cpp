@@ -62,11 +62,6 @@ world_light :: world_light(t_floatarg lightNum)
 ////////////////////////////////////////////////////////
 world_light :: ~world_light()
 {
-  if(gem_amRendering) {
-    // this should be handled in ~GemBase
-    stopRendering();
-  }
-
   if (m_light) {
     GemMan::freeLight(m_light);
   }
