@@ -129,7 +129,7 @@ private:
   bool m_canThread;
 
   bool addPlugin( std::vector<std::string>available,
-                  std::string ID=std::string(""))
+                  const std::string&ID=std::string(""))
   {
     int count=0;
 
@@ -140,7 +140,7 @@ private:
         id.push_back(ID);
       } else {
         // request for an unavailable ID
-        logpost(0, 3+2, "backend '%s' unavailable", ID.c_str());
+        logpost(0, PD_DEBUG + 2, "backend '%s' unavailable", ID.c_str());
         return false;
       }
     } else {
@@ -150,7 +150,7 @@ private:
 
     for(unsigned int i=0; i<id.size(); i++) {
       std::string key=id[i];
-      logpost(0, 3+2, "trying to add '%s' as backend", key.c_str());
+      logpost(0, PD_DEBUG + 2, "trying to add '%s' as backend", key.c_str());
       if(std::find(m_ids.begin(), m_ids.end(), key)==m_ids.end()) {
         // not yet added, do so now!
         gem::plugins::film*handle=NULL;
@@ -158,7 +158,7 @@ private:
           handle=gem::PluginFactory<gem::plugins::film>::getInstance(key);
         } catch(GemException&x) {
           handle=NULL;
-          logpost(0, 3+1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
+          logpost(0, PD_DEBUG + 1, "cannot use film plugin '%s': %s", key.c_str(), x.what());
         }
         if(NULL==handle) {
           continue;
@@ -166,7 +166,7 @@ private:
         m_ids.push_back(key);
         m_handles.push_back(handle);
         count++;
-        logpost(0, 3+2, "added backend#%d '%s'", (int)(m_handles.size()-1),
+        logpost(0, PD_DEBUG + 2, "added backend#%d '%s'", (int)(m_handles.size()-1),
                 key.c_str());
       }
     }
@@ -259,7 +259,7 @@ public:
     }
     if(!tried) {
       if(!backends.empty() && !m_handles.empty()) {
-        logpost(0, 3+2, "no available backend selected, fall back to valid ones");
+        logpost(0, PD_DEBUG + 2, "no available backend selected, fall back to valid ones");
       }
       for(unsigned int i=0; i<m_handles.size(); i++) {
         if(m_handles[i] && m_handles[i]->open(name, requestprops)) {

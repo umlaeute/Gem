@@ -126,12 +126,12 @@ struct PIMPL {
       r=binbuf_read(bb, (char*)filename,
                     const_cast<char*>(gem::files::expandEnv(dirname, true).c_str()), 1);
       if(0==r) {
-        logpost(0, 3+1, "found Gem-settings '%s' in '%s'", filename, dirname);
+        logpost(0, PD_DEBUG + 1, "found Gem-settings '%s' in '%s'", filename, dirname);
       }
     } else {
       r=binbuf_read_via_path(bb, (char*)filename, (char*)".", 1);
       if(0==r) {
-        logpost(0, 3+1, "found Gem-settings '%s'", filename);
+        logpost(0, PD_DEBUG + 1, "found Gem-settings '%s'", filename);
       }
     }
 
