@@ -130,8 +130,8 @@ void cylinder :: renderShape(GemState *state)
     t0123 = t01 - texCoords[2].t + texCoords[3].t;
   }
 
-#define S(s, t) ((s0123*s - s03)*t - s01*s + s0)
-#define T(s, t) ((t0123*t - t01)*s - t12*t + t1)
+#define S(s, t) ((s0123*(s) - s03)*(t) - s01*(s) + s0)
+#define T(s, t) ((t0123*(t) - t01)*(s) - t12*(t) + t1)
 
 
 
