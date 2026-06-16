@@ -301,18 +301,18 @@ void sphere3d :: renderShape(GemState *state)
     src=1;
     for (int j = 0; j < slices; j++) {
       if(normals) {
-	glNormal3f(m_x[0], m_y[0], m_z[0]);
+        glNormal3f(m_x[0], m_y[0], m_z[0]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(m_x[0], m_y[0], m_z[0]);
 
       if(normals) {
-	glNormal3f(m_x[src], m_y[src], m_z[src]);
+        glNormal3f(m_x[src], m_y[src], m_z[src]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
       }
       glVertex3f(m_x[src], m_y[src], m_z[src]);
 
@@ -346,42 +346,42 @@ void sphere3d :: renderShape(GemState *state)
       s = 0.0;
       glBegin(GL_QUAD_STRIP);
       for (int j = 0; j < slices; j++) {
-	src2=src+slices;
+        src2=src+slices;
 
-	if(normals) {
-	  glNormal3f(m_x[src], m_y[src], m_z[src]);
-	}
-	if(texType) {
-	  glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
-	}
-	glVertex3f(m_x[src], m_y[src], m_z[src]);
-	src++;
+        if(normals) {
+          glNormal3f(m_x[src], m_y[src], m_z[src]);
+        }
+        if(texType) {
+          glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        }
+        glVertex3f(m_x[src], m_y[src], m_z[src]);
+        src++;
 
-	if(normals) {
-	  glNormal3f(m_x[src2], m_y[src2], m_z[src2]);
-	}
-	if(texType) {
-	  glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
-	}
-	glVertex3f(m_x[src2], m_y[src2], m_z[src2]);
-	src2++;
+        if(normals) {
+          glNormal3f(m_x[src2], m_y[src2], m_z[src2]);
+        }
+        if(texType) {
+          glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+        }
+        glVertex3f(m_x[src2], m_y[src2], m_z[src2]);
+        src2++;
 
-	s += ds;
+        s += ds;
       }
 
       if(normals) {
-	glNormal3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
+        glNormal3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(m_x[src-slices], m_y[src-slices], m_z[src-slices]);
 
       if(normals) {
-	glNormal3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
+        glNormal3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
       }
       glVertex3f(m_x[src2-slices], m_y[src2-slices], m_z[src2-slices]);
 
@@ -397,19 +397,19 @@ void sphere3d :: renderShape(GemState *state)
     s=0.0;
     for (int j = 0; j < slices; j++) {
       if(normals) {
-	glNormal3f(m_x[src], m_y[src], m_z[src]);
+        glNormal3f(m_x[src], m_y[src], m_z[src]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(m_x[src], m_y[src], m_z[src]);
       src++;
 
       if(normals) {
-	glNormal3f(m_x[last], m_y[last], m_z[last]);
+        glNormal3f(m_x[last], m_y[last], m_z[last]);
       }
       if(texType) {
-	glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
+        glTexCoord2f(s*xsize+xsize0, (t-dt)*ysize+ysize0);
       }
       glVertex3f(m_x[last], m_y[last], m_z[last]);
 
