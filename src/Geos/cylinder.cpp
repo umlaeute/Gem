@@ -20,8 +20,6 @@
 CPPEXTERN_NEW_WITH_TWO_ARGS(cylinder, t_floatarg, A_DEFFLOAT, t_floatarg,
                             A_DEFFLOAT);
 
-#define normal3f glNormal3f
-
 /////////////////////////////////////////////////////////
 //
 // cylinder
@@ -157,12 +155,12 @@ void cylinder :: renderShape(GemState *state)
         x = sin(i * da);
         y = cos(i * da);
       }
-      normal3f(x * nsign, y * nsign, nz * nsign);
+      glNormal3f(x * nsign, y * nsign, nz * nsign);
       if(texType) {
 	glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
       }
       glVertex3f(x * r, y * r, z);
-      normal3f(x * nsign, y * nsign, nz * nsign);
+      glNormal3f(x * nsign, y * nsign, nz * nsign);
       if(texType) {
 	glTexCoord2f(s*xsize+xsize0, (t + dt)*ysize+ysize0);
       }
