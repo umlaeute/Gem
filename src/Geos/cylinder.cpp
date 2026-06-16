@@ -65,7 +65,6 @@ void cylinder :: renderShape(GemState *state)
     m_drawType=GL_FILL;
   }
 
-
   GLenum type = m_drawType;
   switch(m_drawType) {
   case GL_LINE_LOOP:
@@ -139,7 +138,7 @@ void cylinder :: renderShape(GemState *state)
   dr = (topRadius - baseRadius) / stacks;
   dz = height / stacks;
   nz = (baseRadius - topRadius) /
-       height;       /* Z component of normal vectors */
+    height;       /* Z component of normal vectors */
 
   GLfloat ds = 1.0 / slices;
   GLfloat dt = 1.0 / stacks;
@@ -152,11 +151,11 @@ void cylinder :: renderShape(GemState *state)
     for (i = 0; i <= slices; i++) {
       GLfloat x, y;
       if (i == slices) {
-	x = sin(0.0);
-	y = cos(0.0);
+        x = sin(0.0);
+        y = cos(0.0);
       } else {
-	x = sin(i * da);
-	y = cos(i * da);
+        x = sin(i * da);
+        y = cos(i * da);
       }
       normal3f(x * nsign, y * nsign, nz * nsign);
       if(texType) {
