@@ -213,14 +213,24 @@ void sphere :: renderShape(GemState *state)
   }
 #endif
 
-  GLfloat xsize = 1.0, xsize0 = 0.0;
-  GLfloat ysize = 1.0, ysize0 = 0.0;
+
+  GLfloat s0 = 0., s01 = -1., s03 =  0., s0123 = 0.;
+  GLfloat t1 = 1., t01 =  0., t12 =  1., t0123 = 0.;
+
   if(texType && texNum>=3) {
-    xsize0 = texCoords[0].s;
-    xsize  = texCoords[1].s-xsize0;
-    ysize0 = texCoords[1].t;
-    ysize  = texCoords[2].t-ysize0;
+    s0 = texCoords[0].s;
+    s01 = s0 - texCoords[1].s;
+    s03 = s0 - texCoords[3].s;
+    s0123 = s01 + texCoords[2].s - texCoords[3].s;
+
+    t1 = texCoords[1].t;
+    t12 = t1 - texCoords[2].t;
+    t01 = t1 - texCoords[0].t;
+    t0123 = t01 - texCoords[2].t + texCoords[3].t;
   }
+
+#define S(s, t) ((s0123*(s) - s03)*(t) - s01*(s) + s0)
+#define T(s, t) ((t0123*(t) - t01)*(s) - t12*(t) + t1)
 
   ds = 1.0 / slices;
   dt = 1.0 / stacks;
@@ -282,7 +292,7 @@ void sphere :: renderShape(GemState *state)
         glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
       }
       if(texType) {
-        glTexCoord2f(s*xsize+xsize0, t*ysize+ysize0);
+        glTexCoord2f(S(s, t), T(s, t));
       }
       glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
       src++;
@@ -290,7 +300,7 @@ void sphere :: renderShape(GemState *state)
         glNormal3f(m_x[src] * nsign, m_y[src] * nsign, m_z[src] * nsign);
       }
       if(texType) {
-        glTexCoord2f(s*xsize+xsize0, (t - dt)*ysize+ysize0);
+        glTexCoord2f(S(s, t-dt), T(s, t-dt));
       }
       s += ds;
       glVertex3f(m_x[src] * radius, m_y[src] * radius, m_z[src] * radius);
