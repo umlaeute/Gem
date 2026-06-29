@@ -220,6 +220,16 @@ IEM_CHECK_INCLUDES_DEFAULT([windows.h])
 # threading
 GEM_CHECK_THREADS
 
+rte_instance_cppflags=""
+GEM_ARG_ENABLE([pd-instance],    AS_HELP_STRING([--disable-pd-instance], [do not compile with Pd multi-instance support]))
+AS_IF([test "x$enable_pd_instance" != "xno"], [
+  rte_instance_cppflags="-DPDINSTANCE=1 -DPDTHREADS=1"
+])
+GEM_RTE_CFLAGS+=" ${rte_instance_cppflags}"
+GEM_EXTERNAL_CPPFLAGS+=" ${rte_instance_cppflags}"
+
+
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
