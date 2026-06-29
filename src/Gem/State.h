@@ -37,7 +37,7 @@ class GEM_EXTERN TexCoord
 {
 public:
   TexCoord() : s(0.f), t(0.f) { }
-  TexCoord(float s_, float t_) : s(s_), t(t_) { }
+  TexCoord(float _s, float _t) : s(_s), t(_t) { }
   float         s;
   float         t;
 };
