@@ -6,37 +6,45 @@ dnl with or without modifications, as long as this notice is preserved.
 # enables the "--with-WITHARG" flag; if FORCE is non-empty and no value is
 # set by the user, the default value "yes" is assigned to with_WITHARG
 # --------------------------------------------------------------
-AC_DEFUN([GEM_ARG_WITH],
-[
+AC_DEFUN([GEM_ARG_WITH],[
+  define([NAME],[translit([$1],[ABCDEFGHIJKLMNOPQRSTUVWXYZ./+-],
+                             [abcdefghijklmnopqrstuvwxyz____])])
+
   AC_ARG_WITH([$1],
              AS_HELP_STRING([--without-$1], [disable $1-lib ($2)]),,[
-                AS_IF([ test "x$3" != "x" ], [ with_$1="yes" ])
+                AS_IF([ test "x$3" != "x" ], [ with_[]NAME="yes" ])
            ])
-  AS_IF([ test "x${with_$1}" = "x" ], [ with_$1="${with_ALL}" ])
+  AS_IF([ test "x${with_[]NAME}" = "x" ], [ with_[]NAME="${with_ALL}" ])
 
 ])# GEM_ARG_WITH
 # inverse of GEM_ARG_WITH
-AC_DEFUN([GEM_ARG_WITHOUT],
-[AC_ARG_WITH([$1],
+AC_DEFUN([GEM_ARG_WITHOUT],[
+define([NAME],[translit([$1],[ABCDEFGHIJKLMNOPQRSTUVWXYZ./+-],
+                             [abcdefghijklmnopqrstuvwxyz____])])
+AC_ARG_WITH([$1],
              AS_HELP_STRING([--with-$1], [enable $1-lib ($2)]),,[
-                AS_IF([ test "x$3" = "xforce" ], [ with_$1="no" ])
+                AS_IF([ test "x$3" = "xforce" ], [ with_[]NAME="no" ])
            ])
 ])# GEM_ARG_WITHOUT
 
 # same as GEM_ARG_WITH but with "enable"
-AC_DEFUN([GEM_ARG_ENABLE],
-[AC_ARG_ENABLE([$1],
+AC_DEFUN([GEM_ARG_ENABLE],[
+define([NAME],[translit([$1],[ABCDEFGHIJKLMNOPQRSTUVWXYZ./+-],
+                             [abcdefghijklmnopqrstuvwxyz____])])
+AC_ARG_ENABLE([$1],
                AS_HELP_STRING([--disable-$1], [disable $1 ($2)]),
                ,
-               [enable_$1="yes"])
+               [enable_[]NAME="yes"])
 ])# GEM_ARG_ENABLE
 
 # inverse of GEM_ARG_ENABLE
-AC_DEFUN([GEM_ARG_DISABLE],
-[AC_ARG_ENABLE([$1],
+AC_DEFUN([GEM_ARG_DISABLE],[
+define([NAME],[translit([$1],[ABCDEFGHIJKLMNOPQRSTUVWXYZ./+-],
+                             [abcdefghijklmnopqrstuvwxyz____])])
+AC_ARG_ENABLE([$1],
                AS_HELP_STRING([--enable-$1], [enable $1 ($2)]),
                ,
-               [enable_$1="no"])
+               [enable_[]NAME="no"])
 ])# GEM_ARG_DISABLE
 
 
