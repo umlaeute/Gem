@@ -27,7 +27,7 @@ CPPEXTERN_NEW_WITH_TWO_ARGS ( GEMglRasterPos2sv, t_floatarg, A_DEFFLOAT,
 GEMglRasterPos2sv :: GEMglRasterPos2sv  (t_floatarg arg0, t_floatarg arg1)
 {
   vMess(arg0, arg1);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("v"));
 }
 /////////////////////////////////////////////////////////

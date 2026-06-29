@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIsList, t_floatarg, A_DEFFLOAT);
 GEMglIsList :: GEMglIsList      (t_floatarg arg0) : list(
     static_cast<GLuint>(arg0))
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("gllist"));
   m_outlet=outlet_new(this->x_obj, 0);
 }

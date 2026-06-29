@@ -33,11 +33,11 @@ GEMglTexSubImage1D :: GEMglTexSubImage1D(t_floatarg arg0, t_floatarg arg1,
   xoffset(static_cast<GLint>(arg1)),
   width(static_cast<GLsizei>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("level"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("xoffset"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("width"));
 }
 /////////////////////////////////////////////////////////

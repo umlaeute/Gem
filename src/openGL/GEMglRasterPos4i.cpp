@@ -31,13 +31,13 @@ GEMglRasterPos4i :: GEMglRasterPos4i    (t_floatarg arg0, t_floatarg arg1,
   z(static_cast<GLint>(arg2)),
   w(static_cast<GLint>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("y"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("z"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("w"));
 }
 /////////////////////////////////////////////////////////

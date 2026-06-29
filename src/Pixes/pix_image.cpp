@@ -55,7 +55,7 @@ pix_image :: pix_image(t_symbol* filename) :
   gem::Settings::get("image.loading.thread", ival);
   m_wantThread=(ival!=0);
 
-  if(filename!=&s_) {
+  if(filename!=gensym("")) {
     openMess(filename->s_name);
   }
   gem::image::load::poll();

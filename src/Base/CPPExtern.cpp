@@ -48,17 +48,20 @@ struct CPPExtern::PIMPL {
   t_canvas*canvas;
   t_class*cls;
   mutable bool endpost; /* internal state for startpost/post/endpost */
+  t_symbol*empty;
   PIMPL(const char*name)
     : objectname(name?gensym(name):gensym("unknown Gem object"))
     , canvas(canvas_getcurrent())
     , cls(s_holdclass)
     , endpost(true)
+    , empty(gensym(""))
   {  }
   PIMPL(PIMPL*p)
     : objectname(p->objectname)
     , canvas(p->canvas)
     , cls(p->cls)
     , endpost(true)
+    , empty(gensym(""))
   {  }
 
 };
@@ -127,7 +130,7 @@ void CPPExtern :: post(const char*fmt,...) const
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
   if(pimpl->endpost && NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-      && &s_ != pimpl->objectname) {
+      && pimpl->empty != pimpl->objectname) {
     ::logpost(obj, PD_NORMAL, "[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
     ::logpost(obj, PD_NORMAL, "%s", buf);
@@ -142,7 +145,7 @@ void CPPExtern :: startpost(const char*fmt,...) const
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
   if(pimpl->endpost && NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-      && &s_ != pimpl->objectname) {
+      && pimpl->empty != pimpl->objectname) {
     ::startpost("[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
     ::startpost("%s", buf);
@@ -165,7 +168,7 @@ void CPPExtern :: verbose(const int level, const char*fmt,...) const
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
   if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-     && &s_ != pimpl->objectname) {
+     && pimpl->empty != pimpl->objectname) {
     ::logpost(obj, verbose2logpost_level + level, "[%s]: %s", pimpl->objectname->s_name, buf);
   } else {
     ::logpost(obj, verbose2logpost_level + level, "%s", buf);
@@ -181,7 +184,7 @@ void CPPExtern :: error(const char*fmt,...) const
   vsnprintf(buf, MAXPDSTRING-1, fmt, ap);
   va_end(ap);
   if(NULL!=pimpl->objectname && NULL!=pimpl->objectname->s_name
-      && &s_ != pimpl->objectname) {
+      && pimpl->empty != pimpl->objectname) {
     const char*objname=pimpl->objectname->s_name;
     pd_error(obj, "[%s]: %s", objname, buf);
   } else {

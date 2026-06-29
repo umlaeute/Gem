@@ -29,13 +29,13 @@ GEMgluPerspective :: GEMgluPerspective  (t_floatarg arg0, t_floatarg arg1,
   m_near(static_cast<GLdouble>(arg2)),
   m_far(static_cast<GLdouble>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("fovy"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("aspect"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("near"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("far"));
 }
 /////////////////////////////////////////////////////////

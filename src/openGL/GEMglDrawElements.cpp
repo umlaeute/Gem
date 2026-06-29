@@ -30,13 +30,13 @@ GEMglDrawElements :: GEMglDrawElements  (t_floatarg arg0, t_floatarg arg1,
   count(static_cast<GLsizei>(arg1)),
   type(static_cast<GLenum>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("mode"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("count"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("type"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
                          gensym("indices"));
 
   len=(count>0)?count:16;

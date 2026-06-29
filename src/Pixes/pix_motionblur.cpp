@@ -28,7 +28,7 @@ pix_motionblur :: pix_motionblur(int argc, t_atom*argv) :
   inletmotionblur(NULL)
 {
   inletmotionblur = inlet_new(this->x_obj, &this->x_obj->ob_pd,
-                              &s_float,
+                              gensym("float"),
                               gensym("motionblur"));
 
   m_savedImage.xsize=320;

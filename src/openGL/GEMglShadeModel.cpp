@@ -34,7 +34,7 @@ GEMglShadeModel :: GEMglShadeModel      (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("mode"));
 }
 /////////////////////////////////////////////////////////

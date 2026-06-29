@@ -46,7 +46,7 @@ pix_dump :: pix_dump() :
   m_mode(GEM_RGBA)
 {
   m_image.data = 0;
-  m_dataOut = outlet_new(this->x_obj, &s_list);
+  m_dataOut = outlet_new(this->x_obj, gensym("list"));
 }
 
 /////////////////////////////////////////////////////////

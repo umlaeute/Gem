@@ -35,9 +35,9 @@ GEMglHint :: GEMglHint (int argc, t_atom*argv) :
   } else if (argc) {
     throw(GemException("invalid number of arguments"));
   }
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("mode"));
 }
 /////////////////////////////////////////////////////////

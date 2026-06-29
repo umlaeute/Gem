@@ -42,7 +42,7 @@ pix_mix :: pix_mix(int argc, t_atom*argv)
     imageGain=CLAMP((float)255.*atom_getfloat(argv));
     rightGain=CLAMP((float)255.*atom_getfloat(argv+1));
   }
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gain"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("gain"));
 }
 
 /////////////////////////////////////////////////////////

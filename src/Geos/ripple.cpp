@@ -41,11 +41,11 @@ ripple :: ripple( t_floatarg gridX, t_floatarg gridY )
   m_gridY=(gridYi>0&&gridXi<GRID_MAX_Y)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("Ht"));
-  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                         gensym("cX"));
-  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                         gensym("cY"));
 
   m_drawType = GL_POLYGON;

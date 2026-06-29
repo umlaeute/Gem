@@ -23,9 +23,9 @@ pix_posterize :: pix_posterize(t_floatarg f) :
   inletF(0), inletL(0),
   factor(static_cast<int>(f*255.)), limit(0)
 {
-  inletF = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletF = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                      gensym("factor"));
-  inletL = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletL = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                      gensym("limit"));
 }
 

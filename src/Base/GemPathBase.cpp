@@ -94,7 +94,7 @@ void GemPathBase :: floatMess(t_float val)
     SETFLOAT((&argv[i]), output[i]);
   }
 
-  outlet_list(m_out1, &s_list, m_numDimens, argv);
+  outlet_list(m_out1, gensym("list"), m_numDimens, argv);
 }
 
 /////////////////////////////////////////////////////////

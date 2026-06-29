@@ -54,9 +54,9 @@ pix_blob :: pix_blob(int argc, t_atom *argv)
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
             gensym("gain"));
 
-  m_xOut = outlet_new(this->x_obj, &s_float);
-  m_yOut = outlet_new(this->x_obj, &s_float);
-  m_zOut = outlet_new(this->x_obj, &s_float);
+  m_xOut = outlet_new(this->x_obj, gensym("float"));
+  m_yOut = outlet_new(this->x_obj, gensym("float"));
+  m_zOut = outlet_new(this->x_obj, gensym("float"));
 }
 
 /////////////////////////////////////////////////////////

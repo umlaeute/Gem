@@ -45,7 +45,7 @@ emission :: emission(int argc, t_atom *argv)
   }
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("emission"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("emission"));
 }
 
 /////////////////////////////////////////////////////////

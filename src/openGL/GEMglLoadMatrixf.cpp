@@ -24,8 +24,8 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglLoadMatrixf, t_floatarg, A_DEFFLOAT );
 GEMglLoadMatrixf :: GEMglLoadMatrixf    (t_floatarg arg0) //:
 //matrix(static_cast<GLfloat>(arg0))
 {
-  //m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("matrix"));
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+  //m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("matrix"));
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
                       gensym("list"));
 }
 /////////////////////////////////////////////////////////

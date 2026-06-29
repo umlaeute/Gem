@@ -76,7 +76,7 @@ void gemlist_matrix :: render(GemState *state)
   for (i=0; i<16; i++) {
     SETFLOAT(alist+i, mi[i]);
   }
-  outlet_list (m_outletMatrice, &s_list, 16, alist);
+  outlet_list (m_outletMatrice, gensym("list"), 16, alist);
 }
 
 /////////////////////////////////////////////////////////

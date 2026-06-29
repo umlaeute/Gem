@@ -30,11 +30,11 @@ GEMglMapGrid1d :: GEMglMapGrid1d        (t_floatarg arg0, t_floatarg arg1,
   u1(static_cast<GLdouble>(arg1)),
   u2(static_cast<GLdouble>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("un"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("u1"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("u2"));
 }
 /////////////////////////////////////////////////////////

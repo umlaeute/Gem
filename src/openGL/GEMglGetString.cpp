@@ -27,7 +27,7 @@ using namespace gem::utils::gl;
 GEMglGetString :: GEMglGetString        (t_floatarg arg0) :
   name(static_cast<GLenum>(arg0))
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("name"));
   m_outlet=outlet_new(this->x_obj, 0);
 }

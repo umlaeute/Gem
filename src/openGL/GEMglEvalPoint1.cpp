@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalPoint1, t_floatarg, A_DEFFLOAT);
 GEMglEvalPoint1 :: GEMglEvalPoint1      (t_floatarg arg0) :
   i(static_cast<GLint>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("i"));
 }
 /////////////////////////////////////////////////////////

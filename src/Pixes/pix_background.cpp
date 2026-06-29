@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_GIMME(pix_background);
 pix_background :: pix_background(int argc, t_atom*argv) :
   m_Yrange(0), m_Urange(0), m_Vrange(0), m_Arange(0), m_reset(1)
 {
-  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletRange = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("range_n"));
 
   m_savedImage.xsize=320;

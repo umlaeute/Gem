@@ -149,7 +149,7 @@ echo "{"
 i=0
 while [ ${i} -lt ${fun_argcount} ]
 do
-  echo "	  m_inlet[${i}] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym(\"${fun_argnames[${i}]}\"));"
+  echo "	  m_inlet[${i}] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym(\"float\"), gensym(\"${fun_argnames[${i}]}\"));"
   i=$((i+1))
 done
 echo "}"

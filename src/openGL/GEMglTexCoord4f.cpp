@@ -31,13 +31,13 @@ GEMglTexCoord4f :: GEMglTexCoord4f      (t_floatarg arg0, t_floatarg arg1,
   r(static_cast<GLfloat>(arg2)),
   q(static_cast<GLfloat>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("s"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("t"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("r"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("q"));
 }
 /////////////////////////////////////////////////////////

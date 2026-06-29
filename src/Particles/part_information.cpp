@@ -101,10 +101,10 @@ void part_information :: renderParticles(GemState *state)
     size+=3;
 
     outlet_float(out_age, age[i]);
-    outlet_list (out_size, &s_list, 3, m_alist+10);
-    outlet_list (out_velocity, &s_list, 3, m_alist+7);
-    outlet_list (out_color, &s_list, 4, m_alist+3);
-    outlet_list (out_position, &s_list, 3, m_alist+0);
+    outlet_list (out_size, gensym("list"), 3, m_alist+10);
+    outlet_list (out_velocity, gensym("list"), 3, m_alist+7);
+    outlet_list (out_color, gensym("list"), 4, m_alist+3);
+    outlet_list (out_position, gensym("list"), 3, m_alist+0);
     outlet_float(out_num, i);
     continueRender(state);
   }

@@ -27,9 +27,9 @@ GEMglBindProgramARB :: GEMglBindProgramARB      (t_floatarg arg0,
   target(static_cast<GLenum>(arg0)),
   program(static_cast<GLuint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("program"));
 }
 /////////////////////////////////////////////////////////

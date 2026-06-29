@@ -87,7 +87,7 @@ GemShape :: GemShape(t_floatarg size)
   }
 
   // the size inlet
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("ft1"));
 
   initialize_drawtypes(m_drawTypes);

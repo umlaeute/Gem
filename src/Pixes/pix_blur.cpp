@@ -29,7 +29,7 @@ pix_blur :: pix_blur(void) :
 {
   long size,src,i;
 
-  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletBlur = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                         gensym("blur"));
 
   size = 320 * 240 * 4;

@@ -50,10 +50,10 @@ diffuseRGB :: diffuseRGB(int argc, t_atom *argv)
   }
 
   // create the new inlets
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("rVal"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("gVal"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("bVal"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("aVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("rVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("gVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("bVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("aVal"));
 }
 
 /////////////////////////////////////////////////////////

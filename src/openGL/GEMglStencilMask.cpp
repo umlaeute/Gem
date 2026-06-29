@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglStencilMask, t_floatarg, A_DEFFLOAT);
 GEMglStencilMask :: GEMglStencilMask    (t_floatarg arg0) :
   mask(static_cast<GLuint>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("mask"));
 }
 /////////////////////////////////////////////////////////

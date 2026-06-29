@@ -43,9 +43,9 @@ cuboid :: cuboid(t_floatarg sizex, t_floatarg sizey, t_floatarg sizez)
     m_sizez = 0.f;
   }
 
-  m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletY = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("ft2"));
-  m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletZ = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("ft3"));
 }
 

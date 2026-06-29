@@ -156,10 +156,10 @@ void gemlist_info :: render(GemState *state)
   SETFLOAT(alist+10, shearZX);
   SETFLOAT(alist+11, shearZY);
 
-  outlet_list (m_outletPosition, &s_list, 3, alist+6);
-  outlet_list (m_outletScale, &s_list, 3, alist+0);
-  outlet_list (m_outletShear, &s_list, 3, alist+9);
-  outlet_list (m_outletRotation, &s_list, 3, alist+3);
+  outlet_list (m_outletPosition, gensym("list"), 3, alist+6);
+  outlet_list (m_outletScale, gensym("list"), 3, alist+0);
+  outlet_list (m_outletShear, gensym("list"), 3, alist+9);
+  outlet_list (m_outletRotation, gensym("list"), 3, alist+3);
 }
 
 /////////////////////////////////////////////////////////

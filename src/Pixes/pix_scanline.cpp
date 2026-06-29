@@ -21,7 +21,7 @@ CPPEXTERN_NEW(pix_scanline);
 pix_scanline :: pix_scanline()
 {
 
-  inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletScanline = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                             gensym("interlace"));
 
   m_interlace = 0;

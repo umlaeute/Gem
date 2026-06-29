@@ -31,9 +31,9 @@ GEMglFeedbackBuffer :: GEMglFeedbackBuffer      (t_floatarg arg0,
   len=(size>0)?size:128;
   buffer = new float[len];
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("size"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("type"));
 }
 /////////////////////////////////////////////////////////

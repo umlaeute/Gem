@@ -910,7 +910,7 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
   throw(GemException("Gem has been compiled without FreeFrame-support!"));
 #else
   int can_rgba=0;
-  if(!s || s==&s_) {
+  if(!s || s==gensym("")) {
     m_canopen=true;
     return;
   }
@@ -931,13 +931,13 @@ pix_freeframe :: pix_freeframe(t_symbol*s)
     parmType=m_plugin->getParameterType(i);
     switch(parmType) {
     case FF_TYPE_EVENT:
-      s_inletType=&s_bang;
+      s_inletType=gensym("bang");
       break;
     case FF_TYPE_TEXT:
-      s_inletType=&s_symbol;
+      s_inletType=gensym("symbol");
       break;
     default:
-      s_inletType=&s_float;
+      s_inletType=gensym("float");
     }
     m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType,
                                 gensym(tempVt)));

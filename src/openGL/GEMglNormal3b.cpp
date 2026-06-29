@@ -30,11 +30,11 @@ GEMglNormal3b :: GEMglNormal3b  (t_floatarg arg0, t_floatarg arg1,
   ny(static_cast<GLbyte>(arg1)),
   nz(static_cast<GLbyte>(arg2))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("nx"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("ny"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("nz"));
 }
 /////////////////////////////////////////////////////////

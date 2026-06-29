@@ -38,8 +38,8 @@ pix_sig2pix :: pix_sig2pix(t_floatarg width, t_floatarg height)
 {
   dimenMess((int)width, (int)height);   //tigital
   for (int i=0; i<3; i++) {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal,
-              &s_signal);  /* channels inlet */
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("signal"),
+              gensym("signal"));  /* channels inlet */
   }
 }
 

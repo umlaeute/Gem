@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglIndexub, t_floatarg, A_DEFFLOAT);
 GEMglIndexub :: GEMglIndexub    (t_floatarg arg0) :
   c(static_cast<GLubyte>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("c"));
 }
 /////////////////////////////////////////////////////////

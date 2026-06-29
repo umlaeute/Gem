@@ -38,9 +38,9 @@ GEMglFogfv :: GEMglFogfv        (int argc, t_atom *argv)
     paramsMess(argc-1, argv+1);
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("pname"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
                          gensym("params"));
 }
 /////////////////////////////////////////////////////////

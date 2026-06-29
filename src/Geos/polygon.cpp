@@ -53,7 +53,7 @@ polygon :: polygon(t_floatarg numInputs)
     // create the proper number of inputs
     for (int i = 0; i < realNum; i++) {
       sprintf(tempVt, "%d", i+1);
-      m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+      m_inlet[i]=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
                            gensym(tempVt) );
     }
   } else {

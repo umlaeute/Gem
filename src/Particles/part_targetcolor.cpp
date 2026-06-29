@@ -49,8 +49,8 @@ part_targetcolor :: part_targetcolor(int argc, t_atom *argv)
   }
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
 }
 
 /////////////////////////////////////////////////////////

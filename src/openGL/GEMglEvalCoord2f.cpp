@@ -29,9 +29,9 @@ GEMglEvalCoord2f :: GEMglEvalCoord2f    (t_floatarg arg0,
   u(static_cast<GLfloat>(arg0)),
   v(static_cast<GLfloat>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("u"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("v"));
 }
 /////////////////////////////////////////////////////////

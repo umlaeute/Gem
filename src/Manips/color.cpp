@@ -42,7 +42,7 @@ color :: color(int argc, t_atom *argv)
   }
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("color"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("color"));
 }
 
 /////////////////////////////////////////////////////////

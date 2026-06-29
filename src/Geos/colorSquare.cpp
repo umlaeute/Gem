@@ -40,10 +40,10 @@ colorSquare :: colorSquare(t_floatarg size)
     }
   }
 
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vert0"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vert1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vert2"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vert3"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert0"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vert3"));
 }
 
 /////////////////////////////////////////////////////////

@@ -34,7 +34,7 @@ shearZX :: shearZX(int argc, t_atom *argv) :
     shear = atom_getfloat(&argv[0]);
   }
   // create the new inlets
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("shearVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("shearVal"));
 }
 
 /////////////////////////////////////////////////////////

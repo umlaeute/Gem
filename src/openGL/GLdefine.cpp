@@ -29,7 +29,7 @@ GLdefine :: GLdefine    (int argc, t_atom*argv) :
   m_outlet(NULL)
 {
   listMess(argc, argv);
-  m_outlet = outlet_new(this->x_obj, &s_float);
+  m_outlet = outlet_new(this->x_obj, gensym("float"));
 }
 /////////////////////////////////////////////////////////
 // Destructor

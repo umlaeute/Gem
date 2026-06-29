@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglClearIndex, t_floatarg, A_DEFFLOAT);
 GEMglClearIndex :: GEMglClearIndex      (t_floatarg arg0) :
   c(static_cast<GLfloat>(arg0))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("c"));
 }
 /////////////////////////////////////////////////////////

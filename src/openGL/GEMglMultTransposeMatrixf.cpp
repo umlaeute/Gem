@@ -24,7 +24,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglMultTransposeMatrixf, t_floatarg,
 //
 GEMglMultTransposeMatrixf :: GEMglMultTransposeMatrixf  (t_floatarg arg0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("matrix"));
 }
 /////////////////////////////////////////////////////////

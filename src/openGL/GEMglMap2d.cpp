@@ -60,25 +60,25 @@ GEMglMap2d :: GEMglMap2d        (int argc, t_atom *argv) :
   len=128;
   points = new GLdouble[len];
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("u1"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("u2"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("ustride"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("uorder"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("v1"));
-  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("v2"));
-  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("vstride"));
-  m_inlet[8] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[8] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("vorder"));
-  m_inlet[9] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[9] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("points"));
 }
 /////////////////////////////////////////////////////////

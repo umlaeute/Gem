@@ -41,13 +41,13 @@ GEMglProgramStringARB :: GEMglProgramStringARB  (int argc, t_atom*argv) :
     break;
   }
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("format"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("len"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_symbol,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("symbol"),
                          gensym("string"));
 }
 /////////////////////////////////////////////////////////

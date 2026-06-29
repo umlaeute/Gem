@@ -31,13 +31,13 @@ GEMglClearAccum :: GEMglClearAccum      (t_floatarg arg0, t_floatarg arg1,
   blue(static_cast<GLfloat>(arg2)),
   alpha(static_cast<GLfloat>(arg3))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("red"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("green"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("blue"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("alpha"));
 }
 /////////////////////////////////////////////////////////

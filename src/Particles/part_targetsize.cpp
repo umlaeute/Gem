@@ -43,8 +43,8 @@ part_targetsize :: part_targetsize(t_floatarg size, t_floatarg scale)
   }
 
   // create the new inlet
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft2"));
 }
 
 /////////////////////////////////////////////////////////

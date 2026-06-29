@@ -90,11 +90,11 @@ pix_texture :: pix_texture()
   gem::Settings::get("texture.pbo", m_numPbo);
 
   // create an inlet to receive external texture IDs
-  m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inTexID  = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("extTexture"));
 
   // create an outlet to send texture ID
-  m_outTexID = outlet_new(this->x_obj, &s_float);
+  m_outTexID = outlet_new(this->x_obj, gensym("float"));
 }
 
 ////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ void pix_texture :: sendExtTexture(GLuint texobj, GLfloat xRatio,
     SETFLOAT(ap+2, (t_float)yRatio);
     SETFLOAT(ap+3, (t_float)texType);
     SETFLOAT(ap+4, (t_float)upsidedown);
-    outlet_list(m_outTexID, &s_list, 5, ap);
+    outlet_list(m_outTexID, gensym("list"), 5, ap);
   }
 }
 

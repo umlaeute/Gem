@@ -37,7 +37,7 @@ rectangle :: rectangle(t_floatarg width, t_floatarg height)
   }
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("ft2"));
 
   m_drawTypes.clear();

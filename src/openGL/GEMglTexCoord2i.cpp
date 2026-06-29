@@ -29,9 +29,9 @@ GEMglTexCoord2i :: GEMglTexCoord2i      (t_floatarg arg0,
   s(static_cast<GLint>(arg0)),
   t(static_cast<GLint>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("s"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("t"));
 }
 /////////////////////////////////////////////////////////

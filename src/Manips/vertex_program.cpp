@@ -127,7 +127,7 @@ GLint vertex_program :: queryProgramtype(char*program)
 
 void vertex_program :: openMess(t_symbol* filename)
 {
-  if(NULL==filename || NULL==filename->s_name || &s_==filename
+  if(NULL==filename || NULL==filename->s_name || gensym("")==filename
       || 0==*filename->s_name) {
     return;
   }

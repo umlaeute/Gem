@@ -50,12 +50,12 @@ primTri :: primTri(t_floatarg size)
   mColors[0][3] = mColors[1][3] = mColors[2][3] = 1.f;
 
   // create the new inlets
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect2"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vect3"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col2"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("col3"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vect1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vect2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vect3"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("col1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("col2"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("col3"));
 
   m_drawTypes.clear();
   m_drawTypes["default"]=GL_TRIANGLES;

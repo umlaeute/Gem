@@ -32,7 +32,7 @@ alpha :: alpha(t_floatarg fun)
     m_depthtest(1)
 {
   funMess(static_cast<int>(fun));
-  m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet =  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("function"));
 }
 

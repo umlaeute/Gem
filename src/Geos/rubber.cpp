@@ -47,11 +47,11 @@ rubber :: rubber( t_floatarg gridX, t_floatarg gridY )
   m_grid_sizeY = (gridYi>0)?gridYi:GRID_SIZE_Y;
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("Ht"));
-  inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletcX = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("cX"));
-  inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  inletcY = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("cY"));
 
   m_drawType = GL_POLYGON;

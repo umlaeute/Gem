@@ -148,7 +148,7 @@ void gemwin :: createMess(t_symbol* s)
   /* just in case a "pleaseDestroy" is still pending... */
   GemMan::pleaseDestroy=false;
 
-  if (s != &s_) {
+  if (s != gensym("")) {
     disp = s->s_name;
   }
 

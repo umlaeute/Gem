@@ -46,8 +46,8 @@ translate :: translate(int argc, t_atom *argv)
   }
 
   // create the new inlets
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("ft1"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list, gensym("vector"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("ft1"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"), gensym("vector"));
 }
 
 /////////////////////////////////////////////////////////

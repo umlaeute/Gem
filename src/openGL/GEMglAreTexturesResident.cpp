@@ -32,7 +32,7 @@ GEMglAreTexturesResident :: GEMglAreTexturesResident    (int argc,
   m_buffer  =new t_atom   [len];
   texturesMess(argc, argv);
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_list,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("list"),
                       gensym("textures"));
   m_out1 = outlet_new(this->x_obj, 0);
   m_out2 = outlet_new(this->x_obj, 0);
@@ -67,7 +67,7 @@ void GEMglAreTexturesResident :: render(GemState *state)
     t_float f = residences[i]?1.0:0.0;
     SETFLOAT(m_buffer+i, f);
   }
-  outlet_list(m_out2, &s_list, n, m_buffer);
+  outlet_list(m_out2, gensym("list"), n, m_buffer);
   outlet_float(m_out1, (ok?1.0:0.0));
 }
 

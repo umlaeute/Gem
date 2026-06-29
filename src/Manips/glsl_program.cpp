@@ -440,7 +440,7 @@ glsl_program :: glsl_program()
   }
 
   // create an outlet to send texture ID
-  m_outProgramID = outlet_new(this->x_obj, &s_float);
+  m_outProgramID = outlet_new(this->x_obj, gensym("float"));
 }
 
 

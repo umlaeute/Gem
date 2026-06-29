@@ -125,7 +125,7 @@ pix_buffer :: pix_buffer(t_symbol* s,t_float f=100.0)
   , m_bindname(NULL)
   , m_pimpl(new PIMPL(this))
 {
-  if (s==&s_) {
+  if (s==gensym("")) {
     static int buffercounter=0;
     char cbuf[16];
     buffercounter++;

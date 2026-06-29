@@ -28,7 +28,7 @@ using namespace gem::utils::gl;
 //
 GEMglReportError :: GEMglReportError    (void)
 {
-  m_outlet = outlet_new(this->x_obj, &s_float);
+  m_outlet = outlet_new(this->x_obj, gensym("float"));
 }
 /////////////////////////////////////////////////////////
 // Destructor

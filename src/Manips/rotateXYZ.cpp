@@ -43,9 +43,9 @@ rotateXYZ :: rotateXYZ(int argc, t_atom *argv)
   }
 
   // create the new inlets
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("xVal"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("yVal"));
-  inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float, gensym("zVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("xVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("yVal"));
+  inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"), gensym("zVal"));
 }
 
 /////////////////////////////////////////////////////////

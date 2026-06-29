@@ -47,7 +47,7 @@ glsl_vertex :: glsl_vertex() :
   m_idmapped(0.)
 {
   // create an outlet to send shader object ID
-  m_outShaderID = outlet_new(this->x_obj, &s_float);
+  m_outShaderID = outlet_new(this->x_obj, gensym("float"));
 }
 glsl_vertex :: glsl_vertex(t_symbol* filename) :
   m_shaderTarget(0),
@@ -59,7 +59,7 @@ glsl_vertex :: glsl_vertex(t_symbol* filename) :
   openMess(filename);
 
   // create an outlet to send shader object ID
-  m_outShaderID = outlet_new(this->x_obj, &s_float);
+  m_outShaderID = outlet_new(this->x_obj, gensym("float"));
 }
 
 ////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ void glsl_vertex :: openMess(t_symbol* filename)
   if(NULL==filename || NULL==filename->s_name) {
     return;
   }
-  if(&s_==filename) {
+  if(gensym("")==filename) {
     return;
   }
 

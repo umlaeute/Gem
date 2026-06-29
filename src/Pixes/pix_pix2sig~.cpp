@@ -34,7 +34,7 @@ pix_pix2sig :: pix_pix2sig(void)
 {
   int i=4;
   while(i--) {
-    o_col[i]=outlet_new(this->x_obj, &s_signal);
+    o_col[i]=outlet_new(this->x_obj, gensym("signal"));
   }
 }
 

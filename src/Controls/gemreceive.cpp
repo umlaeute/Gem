@@ -224,7 +224,7 @@ gemreceive :: gemreceive(t_symbol*s,t_floatarg f) :
 {
   debug_post("hi, i am gemreceive %p", this);
 
-  m_fltin = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_fltin = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym(""));
   m_outlet = outlet_new(this->x_obj, 0);
 

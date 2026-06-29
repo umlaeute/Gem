@@ -26,17 +26,17 @@ GEMglProgramEnvParameter4dARB :: GEMglProgramEnvParameter4dARB  (int argc,
   target(0), index(0),
   m_x(0), m_y(0), m_z(0), m_w(0)
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("index"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("x"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("y"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("z"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("w"));
 }
 /////////////////////////////////////////////////////////

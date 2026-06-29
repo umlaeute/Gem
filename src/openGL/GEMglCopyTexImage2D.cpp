@@ -57,21 +57,21 @@ GEMglCopyTexImage2D :: GEMglCopyTexImage2D      (int argc,t_atom*argv) :
   }
 
 
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("target"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("level"));
-  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[2] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("internalFormat"));
-  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[3] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("x"));
-  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[4] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("y"));
-  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[5] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("width"));
-  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[6] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("height"));
-  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[7] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("border"));
 }
 /////////////////////////////////////////////////////////

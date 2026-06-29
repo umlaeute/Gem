@@ -125,7 +125,7 @@ pix_multiblob :: pix_multiblob(t_floatarg f) :
   m_image.allocate();
 
   // outlets
-  m_infoOut = outlet_new(this->x_obj, &s_list);
+  m_infoOut = outlet_new(this->x_obj, gensym("list"));
 
   m_blobNumber = static_cast<int>(f);
   if(m_blobNumber < 1) {

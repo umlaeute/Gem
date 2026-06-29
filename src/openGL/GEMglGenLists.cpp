@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglGenLists, t_floatarg, A_DEFFLOAT);
 GEMglGenLists :: GEMglGenLists  (t_floatarg arg0) :
   range(static_cast<GLsizei>(arg0))
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("range"));
   m_outlet= outlet_new(this->x_obj, 0);
 }

@@ -40,7 +40,7 @@ GEMglGetIntegerv :: GEMglGetIntegerv    (int argc, t_atom*argv) :
     throw(GemException("invalid number of arguments"));
   }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("pname"));
   m_outlet = outlet_new(this->x_obj, 0);
 

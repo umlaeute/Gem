@@ -443,7 +443,7 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
   m_image.setFormat(GEM_RGBA);
   m_converterImage.setFormat(GEM_RGBA);
 
-  if(!s || s==&s_) {
+  if(!s || s==gensym("")) {
     m_canopen=true;
     return;
   }
@@ -492,7 +492,7 @@ pix_frei0r :: pix_frei0r(t_symbol*s)
       s_inletType=gensym("symbol");
       break;
     default:
-      s_inletType=&s_;
+      s_inletType=gensym("");
     }
     m_inlet.push_back(inlet_new(this->x_obj, &this->x_obj->ob_pd, s_inletType,
                                 gensym(tempVt)));

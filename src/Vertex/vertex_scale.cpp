@@ -34,9 +34,9 @@ vertex_scale :: vertex_scale(int argc, t_atom*argv) : GemBase(),
   m_vertex(false), m_color(false),
   m_normal(false), m_texture(false)
 {
-  m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_vertIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                      gensym("vertex"));
-  m_parmIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_parmIn=inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                      gensym("param"));
 
   modeMess(argc, argv);

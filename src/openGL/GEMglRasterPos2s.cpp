@@ -29,9 +29,9 @@ GEMglRasterPos2s :: GEMglRasterPos2s    (t_floatarg arg0,
   x(static_cast<GLshort>(arg0)),
   y(static_cast<GLshort>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("x"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("y"));
 }
 /////////////////////////////////////////////////////////

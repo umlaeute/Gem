@@ -47,7 +47,7 @@ pix_buffer_read :: pix_buffer_read(t_symbol* s) :
   m_bindname(NULL),
   m_needsupdate(false)
 {
-  if ((s)&&(&s_!=s)) {
+  if ((s)&&(gensym("")!=s)) {
     setMess(s);
   }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -69,7 +69,7 @@ pix_buffer_read :: ~pix_buffer_read()
 /////////////////////////////////////////////////////////
 void pix_buffer_read :: setMess(t_symbol*s)
 {
-  if (s!=&s_) {
+  if (s!=gensym("")) {
     m_bindname = s;
   }
   m_needsupdate=true;

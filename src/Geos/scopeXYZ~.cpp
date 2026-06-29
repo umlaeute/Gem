@@ -40,7 +40,7 @@ scopeXYZ :: scopeXYZ(t_floatarg len)
   /* channels inlet */
   int i;
   for (i=0; i<3; i++) {
-    inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_signal, &s_signal);
+    inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("signal"), gensym("signal"));
   }
 
 }

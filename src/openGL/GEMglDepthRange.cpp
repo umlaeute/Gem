@@ -29,9 +29,9 @@ GEMglDepthRange :: GEMglDepthRange      (t_floatarg arg0,
   near_val(static_cast<GLclampd>(arg0)),
   far_val(static_cast<GLclampd>(arg1))
 {
-  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[0] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("near_val"));
-  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet[1] = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                          gensym("far_val"));
 }
 /////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG(pix_buffer_write, t_symbol*,A_DEFSYMBOL);
 pix_buffer_write :: pix_buffer_write(t_symbol* s) : m_frame(-2),
   m_lastframe(-1), m_bindname(NULL)
 {
-  if ((s)&&(&s_!=s)) {
+  if ((s)&&(gensym("")!=s)) {
     setMess(s);
   }
   inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
@@ -63,7 +63,7 @@ pix_buffer_write :: ~pix_buffer_write()
 /////////////////////////////////////////////////////////
 void pix_buffer_write :: setMess(t_symbol*s)
 {
-  if (s!=&s_) {
+  if (s!=gensym("")) {
     m_bindname = s;
   }
 }

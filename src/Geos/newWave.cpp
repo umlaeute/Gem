@@ -83,9 +83,9 @@ newWave :: newWave( int argc,
   gridY = MAX( 3,     gridY);
 
   // the height inlet
-  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletH = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("height"));
-  m_inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inletM = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                        gensym("mode"));
 
   m_drawTypes.clear();

@@ -80,14 +80,14 @@ tube :: tube(t_floatarg size, t_floatarg size2, t_floatarg height,
   slicesMess(static_cast<int>(order_in));
 
   // the 8 inlets
-  m_inlet2     = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("size2"));
-  m_inlethigh  = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("high"));
-  m_inletTX    = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("TX"));
-  m_inletTY    = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("TY"));
-  m_inletrotX1 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotX1"));
-  m_inletrotY1 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotY1"));
-  m_inletrotX2 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotX2"));
-  m_inletrotY2 = inlet_new(x_obj, &x_obj->ob_pd, &s_float, gensym("rotY2"));
+  m_inlet2     = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("size2"));
+  m_inlethigh  = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("high"));
+  m_inletTX    = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("TX"));
+  m_inletTY    = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("TY"));
+  m_inletrotX1 = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("rotX1"));
+  m_inletrotY1 = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("rotY1"));
+  m_inletrotX2 = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("rotX2"));
+  m_inletrotY2 = inlet_new(x_obj, &x_obj->ob_pd, gensym("float"), gensym("rotY2"));
 
   m_drawType = GL_TRIANGLE_STRIP;
 

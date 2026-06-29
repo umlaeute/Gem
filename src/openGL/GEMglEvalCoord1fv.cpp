@@ -26,7 +26,7 @@ CPPEXTERN_NEW_WITH_ONE_ARG ( GEMglEvalCoord1fv, t_floatarg, A_DEFFLOAT);
 GEMglEvalCoord1fv :: GEMglEvalCoord1fv  (t_floatarg arg0)
 {
   vMess(arg0);
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("v"));
 }
 /////////////////////////////////////////////////////////

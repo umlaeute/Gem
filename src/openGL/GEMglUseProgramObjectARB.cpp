@@ -24,7 +24,7 @@ CPPEXTERN_NEW ( GEMglUseProgramObjectARB );
 GEMglUseProgramObjectARB :: GEMglUseProgramObjectARB()
   : m_program(0)
 {
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("program"));
 }
 /////////////////////////////////////////////////////////

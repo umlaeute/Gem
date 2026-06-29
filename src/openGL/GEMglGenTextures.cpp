@@ -30,7 +30,7 @@ GEMglGenTextures :: GEMglGenTextures    (int argc, t_atom*argv) :
     texturesMess(argc, argv);
   }
 
-  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, &s_float,
+  m_inlet = inlet_new(this->x_obj, &this->x_obj->ob_pd, gensym("float"),
                       gensym("textures"));
 
 }
