@@ -221,7 +221,7 @@ IEM_CHECK_INCLUDES_DEFAULT([windows.h])
 GEM_CHECK_THREADS
 
 rte_instance_cppflags=""
-GEM_ARG_ENABLE([pd-instance],    AS_HELP_STRING([--disable-pd-instance], [do not compile with Pd multi-instance support]))
+GEM_ARG_DISABLE([pd-instance], [(do not) compile with Pd multi-instance support])
 AS_IF([test "x$enable_pd_instance" != "xno"], [
   rte_instance_cppflags="-DPDINSTANCE=1 -DPDTHREADS=1"
 ])
