@@ -442,7 +442,8 @@ void gemframebuffer :: initFBO()
   glTexParameteri(m_texTarget, GL_TEXTURE_MAG_FILTER, m_quality);
 
   GLuint wrapmode = m_repeat;
-  if (wrapmode == GL_CLAMP_TO_EDGE) (GLEW_EXT_texture_edge_clamp)?GL_CLAMP_TO_EDGE:GL_CLAMP;
+  if (wrapmode == GL_CLAMP_TO_EDGE)
+    wrapmode = (GLEW_EXT_texture_edge_clamp)?GL_CLAMP_TO_EDGE:GL_CLAMP;
 
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_S, wrapmode);
   glTexParameterf(m_texTarget, GL_TEXTURE_WRAP_T, wrapmode);
