@@ -228,22 +228,16 @@ AS_IF([test "x$enable_pd_instance" != "xno"], [
 GEM_RTE_CFLAGS+=" ${rte_instance_cppflags}"
 GEM_EXTERNAL_CPPFLAGS+=" ${rte_instance_cppflags}"
 
-
-
 # Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stddef.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([fcntl.h float.h memory.h string.h strings.h])
-AC_CHECK_HEADERS([sys/select.h sys/ioctl.h sys/time.h sys/ipc.h sys/shm.h])
-
-AC_CHECK_HEADERS([wordexp.h])
+AC_CHECK_HEADERS_ONCE([sys/select.h sys/time.h sys/types.h sys/ipc.h sys/shm.h])
+AC_CHECK_HEADERS_ONCE([unistd.h])
+AC_CHECK_HEADERS_ONCE([wordexp.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
 
 AC_CHECK_SIZEOF([unsigned int])
 AC_CHECK_SIZEOF([void *])
@@ -253,11 +247,13 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([bzero floor gettimeofday memset munmap pow sqrt strchr strdup strrchr strstr strnlen])
+AC_CHECK_FUNCS([bzero gettimeofday memset munmap strchr strdup strrchr strstr strnlen])
 
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[sin])
+AC_CHECK_FUNCS([floor pow sqrt])
+
 AC_CHECK_LIB([z],[zlibVersion])
 AC_CHECK_LIB([dl],[dlopen])
 
