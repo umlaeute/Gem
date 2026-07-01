@@ -93,7 +93,7 @@ void pix_buffer_write :: render(GemState*state)
   }
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
-  if (state && img && &img->image) {
+  if (state && img) {
     if (img->newimage || m_frame!=m_lastframe) {
       if(m_bindname==NULL || m_bindname->s_name==NULL) {
         error("cowardly refusing to write to no pix_buffer");

@@ -136,7 +136,7 @@ void GemPixDualObj :: processImage(imageStruct &image)
   }
 
   //if (!m_cacheRight || !&image || !&m_pixRight || !&m_pixRight->image) return;
-  if (!m_pixRightValid || !&image || !&m_pixRight || !&m_pixRight->image) {
+  if (!m_pixRightValid) {
     return;
   }
 

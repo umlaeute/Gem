@@ -65,7 +65,7 @@ void GEMglBitmap :: render(GemState *state)
   }
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
-  if(!img || !&img->image) {
+  if(!img) {
     return;
   }
 

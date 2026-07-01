@@ -89,7 +89,7 @@ void GEMglTexImage2D :: render(GemState *state)
   }
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
-  if(!img || !&img->image) {
+  if(!img) {
     return;
   }
   target=GL_TEXTURE_2D;

@@ -57,7 +57,7 @@ void pix_draw :: render(GemState *state)
   int orientation=1;
   pixBlock*img=NULL;
   state->get(GemState::_PIX, img);
-  if ( !img || !&img->image ) {
+  if ( !img ) {
     return;
   }
   glRasterPos2i(0, 0);

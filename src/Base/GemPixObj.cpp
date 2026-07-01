@@ -73,8 +73,7 @@ void GemPixObj :: render(GemState *state)
   } else {
     m_doROI=false;
   }
-  if(!image ||
-      !&image->image) {
+  if(!image) {
     return;
   }
   cachedPixBlock.newimage=image->newimage;
