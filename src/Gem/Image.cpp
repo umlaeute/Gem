@@ -82,7 +82,7 @@
  *   'START_TIMING;' at the beginning of the block and
  *   'STOP_TIMING("something");' at the end of the block
  */
-#ifdef __TIMING__
+#if _GEM_TIMING
 # ifdef __linux__
 #  include <sys/time.h>
 
@@ -104,10 +104,10 @@
 #  define START_TIMING
 #  define STOP_TIMING(x)
 # endif /* timing for OS */
-#else /* !__TIMING__ */
+#else /* !_GEM_TIMING */
 # define START_TIMING
 # define STOP_TIMING(x)
-#endif /* __TIMING__ */
+#endif /* _GEM_TIMING */
 
 #ifndef PERTHREAD
 # define PERTHREAD
