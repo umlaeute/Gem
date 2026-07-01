@@ -244,6 +244,9 @@ void pix_pix2sig :: perform(t_sample**out, size_t N)
   m_offsetY%=height;
 
   switch(m_fillType) {
+  case INVALID:
+    error("invalid fill type, using default 'clear'");
+    /* fallthrough */
   case CLEAR: /* flat (always from the beginning) */
     m_offsetX = m_offsetY = 0;
     /* fallthrough */
