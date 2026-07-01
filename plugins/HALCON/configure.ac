@@ -1,5 +1,6 @@
 AC_PREREQ([2.71])
 AC_INIT([videoHALCON],[0.1],[zmoelnig@iem.at],[],[http://gem.iem.at])
+LT_INIT([win32-dll])
 
 AC_CONFIG_AUX_DIR([.])
 AC_CONFIG_MACRO_DIR([../../m4])
@@ -11,7 +12,6 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile])
 
 AC_PROG_CXX
-AC_PROG_LIBTOOL
 #AM_SANITY_CHECK
 
 GEM_CHECK_FAT(GEM_ARCH)
