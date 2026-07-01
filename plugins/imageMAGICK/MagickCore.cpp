@@ -57,15 +57,15 @@ static bool showException(ExceptionInfo*exception,
     return false;
   }
 
-  bool iswarning=exception->severity < ErrorException;
+  bool is_severe=exception->severity >= ErrorException;
 
   std::string message=prefix;
   message+="[";
   message+= SetClientName(0);
   message+="]";
 
-  if(!iswarning) {
-    message+"!";
+  if(is_severe) {
+    message+="!";
   }
 
   message+=": ";
@@ -77,12 +77,12 @@ static bool showException(ExceptionInfo*exception,
     message += " (" + std::string(exception->description) + ")";
   }
 
-  if(iswarning) {
+  if(is_severe) {
     fprintf(stderr, "[GEM:imageMAGICK] %s\n", message.c_str());
   } else {
     fprintf(stderr, "[GEM:imageMAGICK] %s\n", message.c_str());
   }
-  return (!iswarning);
+  return (is_severe);
 }
 }
 
