@@ -1,4 +1,4 @@
-AC_PREREQ(2.60)
+AC_PREREQ([2.71])
 AC_INIT([pix_artoolkit],[0.1],[zmoelnig@iem.at])
 
 AM_INIT_AUTOMAKE([1.10 foreign])
@@ -16,6 +16,6 @@ AC_SUBST(GEM_ARCH_LDFLAGS)
 
 GEM_CHECK_LIB([artoolkit],[AR],[AR/ar.h], [arInitCparam],,,,[ARToolKit])
 
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
