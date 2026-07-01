@@ -419,7 +419,7 @@ videoDevice::~videoDevice()
     return;
   }
 
-  HRESULT HR = NULL;
+  HRESULT HR = 0;
 
   //Stop the callback and free it
   if( (sgCallback) && (pGrabber) ) {
@@ -1804,7 +1804,7 @@ videoInput::~videoInput()
 
 bool videoInput::comInit()
 {
-  HRESULT hr = NULL;
+  HRESULT hr = 0;
 
   //no need for us to start com more than once
   if(comInitCount == 0 ) {
@@ -2219,7 +2219,7 @@ static bool setSizeAndSubtype(videoDevice * VD, int attemptWidth,
 int videoInput::start(int deviceID, videoDevice *VD)
 {
 
-  HRESULT hr 			= NULL;
+  HRESULT hr 			= 0;
   VD->myID 			= deviceID;
   VD->setupStarted	= true;
   CAPTURE_MODE   		=

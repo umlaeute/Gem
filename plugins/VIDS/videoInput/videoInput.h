@@ -331,17 +331,17 @@ public:
   //Manual control over settings thanks.....
   //These are experimental for now.
   bool setVideoSettingFilter(int deviceID, long Property, long lValue,
-                             long Flags = NULL, bool useDefaultValue = false);
+                             long Flags = 0L, bool useDefaultValue = false);
   bool setVideoSettingFilterPct(int deviceID, long Property, float pctValue,
-                                long Flags = NULL);
+                                long Flags = 0L);
   bool getVideoSettingFilter(int deviceID, long Property, long &min,
                              long &max, long &SteppingDelta, long &currentValue, long &flags,
                              long &defaultValue);
 
   bool setVideoSettingCamera(int deviceID, long Property, long lValue,
-                             long Flags = NULL, bool useDefaultValue = false);
+                             long Flags = 0L, bool useDefaultValue = false);
   bool setVideoSettingCameraPct(int deviceID, long Property, float pctValue,
-                                long Flags = NULL);
+                                long Flags = 0L);
   bool getVideoSettingCamera(int deviceID, long Property, long &min,
                              long &max, long &SteppingDelta, long &currentValue, long &flags,
                              long &defaultValue);
