@@ -1,8 +1,8 @@
 #N canvas 464 190 1007 611 12;
 #X text 49 42 Gem: Graphics Environment for Multimedia;
 #X text 49 53 ========================================;
-#X text 71 79 version: @version@;
-#X text 50 99 build-date: @build-date@;
+#X text 71 79 version: @VERSION@;
+#X text 50 99 build-date: @BUILD_DATE@;
 #X text 71 119 license: Gnu GPL v2 or later;
 #X text 32 168 USAGE:;
 #X text 46 189 In order to use Gem \, add an object [declare -lib Gem] to your patches. Check the examples., f 70;

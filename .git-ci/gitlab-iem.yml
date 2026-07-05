@@ -421,7 +421,8 @@ deken:
     - test -n "${version}" || test "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" || version="$(git describe --abbrev=0)-snapshot"
     - version="${version#v}"
     - echo "${version}"
-    - test -n "${CI_COMMIT_TAG}" || test ! -e .git-ci/README.snapshot.pd.in || sed -e "s|@build-date@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@version@|${gitversion}|g" .git-ci/README.snapshot.pd.in > README.deken.pd
+    - test -n "${CI_COMMIT_TAG}" || test ! -e README.deken.pd.in ||
+      sed -e "s|@BUILD_DATE@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@VERSION@|${gitversion}|g" README.deken.pd.in > README.deken.pd
   script:
     - chmod -R u+rw,go-w ${ARTIFACTSDIR}/
     # remove ltlib leftovers
