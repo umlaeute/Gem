@@ -82,7 +82,7 @@ AC_CONFIG_FILES([extra/pix_hit/Makefile])
 
 # other stuff
 AC_CONFIG_FILES([tools/Makefile])
-AC_CONFIG_FILES([Gem.pc Gem-meta.pd])
+AC_CONFIG_FILES([Gem.pc Gem-meta.pd README.deken.pd])
 AC_CONFIG_FILES([devgem.sh], [chmod +x devgem.sh])
 AC_CONFIG_FILES([switch-gemwin.sh], [chmod +x switch-gemwin.sh])
 
@@ -745,17 +745,36 @@ AC_ARG_WITH([build-date],
 AC_MSG_CHECKING([build-date])
 AS_IF([test "x$with_build_date"  = "xyes" ],[with_build_date=""])
 AS_IF([test "x$with_build_date"  = "xno"  ],[with_build_date=""])
-AS_IF([test "x$with_build_date" != "x"    ],
-      [AC_DEFINE_UNQUOTED([BUILD_DATE], ["$with_build_date"], [user-defined build-date string])])
-## urgh, brackets need to be escaped with @<:@ and @:>@...
-AS_IF([test "x$with_build_date" != "x"  ],[ with_build_date="@<:@default@:>@" ])
-AC_MSG_RESULT([$with_build_date])
 
+AS_IF([test -z "$with_build_date" ],[
+## raw estimate of the build (well: configure) time:
+AS_IF([test -n "${SOURCE_DATE_EPOCH}"],
+      [with_build_date="$(date -u -d "@${SOURCE_DATE_EPOCH}" +%FT%R)"],
+      [with_build_date="$(date -u                            +%FT%R)"])
+
+
+])
+
+## urgh, brackets need to be escaped with @<:@ and @:>@...
+AS_IF([test -z "$with_build_date" ],[
+  with_build_date="@<:@default@:>@"
+  AC_SUBST([BUILD_DATE], [$(date -u +%FT%R)])
+],[
+  AC_SUBST([BUILD_DATE], [$with_build_date])
+]
+
+)
+AS_IF([test -n "$with_build_date" ],
+      [AC_DEFINE_UNQUOTED([BUILD_DATE], ["$with_build_date"], [user-defined build-date string])])
+
+AC_MSG_RESULT([$with_build_date])
 
 ## dummy conditionals that are always "true" (ENABLED) or "false" (DISABLED)
 enabled="yes"
 AM_CONDITIONAL([ENABLED], test "x${enabled}" = "xyes")
 AM_CONDITIONAL([DISABLED], test "x${enabled}" = "xno")
+
+configure_time="$(date -u -d "${configure_time}" "+%FT%R")"
 
 
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
