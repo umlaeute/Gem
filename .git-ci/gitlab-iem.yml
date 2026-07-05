@@ -423,6 +423,8 @@ deken:
     - echo "${version}"
     - test -n "${CI_COMMIT_TAG}" || test ! -e README.deken.pd.in ||
       sed -e "s|@BUILD_DATE@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@VERSION@|${gitversion}|g" README.deken.pd.in > README.deken.pd
+    - test -z "${CI_COMMIT_TAG}" || test ! -e .git-ci/README.release.pd.in ||
+      sed -e "s|@BUILD_DATE@|${CI_PIPELINE_CREATED_AT}|g" -e "s|@VERSION@|${gitversion}|g" .git-ci/README.release.pd.in > README.deken.pd
   script:
     - chmod -R u+rw,go-w ${ARTIFACTSDIR}/
     # remove ltlib leftovers
