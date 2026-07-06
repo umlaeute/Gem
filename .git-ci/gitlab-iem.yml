@@ -432,7 +432,7 @@ deken:
     # remove debug information
     - find ${ARTIFACTSDIR}/ -name "*.debug" -delete
     # inject any README.deken
-    - for f in README.deken.*; do [ -e "${f}" ] || continue; for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do cp "${f}" "${d}" || true; done; done
+    - find . -maxdepth 1 -type f -name "README.deken.*" -not -name "*.in" | while read f; do for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do cp "${f}" "${d}" || true; done; done
     # create deken packages
     - for d in ${ARTIFACTSDIR}/*/${CI_PROJECT_NAME}/; do deken package --version="${version}" "${d}"; done
     # upload deken packages
