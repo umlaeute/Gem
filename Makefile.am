@@ -27,6 +27,7 @@ dist_gem_DATA = \
 	ChangeLog \
 	COPYING.txt \
 	GnuGPL.LICENSE.txt \
+	README.deken.pd \
 	README.md \
 	examples/data/vera.ttf \
 	$(nil)
