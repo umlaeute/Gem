@@ -574,6 +574,14 @@ AS_CASE([${host}]
 )
 AC_SUBST([GEM_DECKLINK_SYSTEM])
 
+AS_IF([test -n "${with_DeckLink}"], [
+AS_IF([test -n "${with_decklink}"], [
+AC_MSG_WARN([both '--with-DeckLink' and '--with-decklink' are given. Using the former...])
+])])
+
+AS_IF([test -z "${with_DeckLink}"], [with_DeckLink="${with_decklink}"])
+AS_IF([test -z "${with_DeckLink}"], [with_DeckLink="${with_ALL}"])
+
 have_decklink="no"
 AS_IF([test "x$with_DeckLink" != "xno"], [
   tmp_decklink_includes=""
@@ -617,18 +625,27 @@ AC_SUBST([GEM_DECKLINK_USE_DLOPEN])
 
 
 # NDI-support
-AC_ARG_WITH([ndi],
-            AS_HELP_STRING([--with-ndi=</path/to/NDI/SDK>],
+AC_ARG_WITH([NDI],
+            AS_HELP_STRING([--with-NDI=</path/to/NDI/SDK>],
                [enable NDI video capturing (use 'local' to use an embedded copy of the SDK)]))
 
+
+AS_IF([test -n "${with_NDI}"], [
+AS_IF([test -n "${with_ndi}"], [
+AC_MSG_WARN([both '--with-NDI' and '--with-ndi' are given. Using the former...])
+])])
+
+AS_IF([test -z "${with_NDI}"], [with_NDI="${with_ndi}"])
+AS_IF([test -z "${with_NDI}"], [with_NDI="${with_ALL}"])
+
 have_ndi="no"
-AS_IF([test "x$with_ndi" != "xno"], [
+AS_IF([test "x$with_NDI" != "xno"], [
   tmp_ndi_includes=""
-  AS_IF([test "x${with_ndi}" = "xyes" ], [ with_ndi="local" ])
-  AS_IF([test "x${with_ndi}" = "x" ], [ with_ndi="local" ])
-  AS_IF([test "x${with_ndi}" = "xlocal" ], [ have_ndi="yes"], [
-        AS_IF([test -d "${with_ndi}/include"],
-              [tmp_ndi_includes="${tmp_ndi_includes} -I${with_ndi}/include"],
+  AS_IF([test "${with_NDI}" = "yes" ], [ with_NDI="local" ])
+  AS_IF([test -z "${with_NDI}" ], [ with_NDI="local" ])
+  AS_IF([test "${with_NDI}" = "local" ], [ have_ndi="yes"], [
+        AS_IF([test -d "${with_NDI}/include"],
+              [tmp_ndi_includes="${tmp_ndi_includes} -I${with_NDI}/include"],
              )
   CPPFLAGS="$CPPFLAGS $tmp_ndi_includes"
 
@@ -650,8 +667,8 @@ AS_IF([test "x$with_ndi" != "xno"], [
   AC_MSG_RESULT([$have_ndi])
 ])
 
-AM_CONDITIONAL(HAVE_NDI, [test "x$have_ndi" = "xyes"])
-AM_CONDITIONAL([GEM_NDI_LOCAL], [test "x${with_ndi}" = "xlocal"])
+AM_CONDITIONAL([HAVE_NDI], [test "$have_ndi" = "yes"])
+AM_CONDITIONAL([GEM_NDI_LOCAL], [test "${with_NDI}" = "local"])
 AC_SUBST(GEM_NDI_CXXFLAGS)
 AC_SUBST(GEM_NDI_LIBS)
 
@@ -835,7 +852,7 @@ AS_IF([test "x${have_vfw32}" = "x"], [have_vfw32="no"])
 AS_IF([test "x${have_stb}" = "xyes"], [have_stb="YES (library)"], [have_stb="YES (local)"])
 
 AS_IF([test "x${have_decklink}" = "xlocal"], [have_DeckLink="YES (local)"])
-AS_IF([test "x${with_ndi}" = "xlocal"], [have_ndi="YES (local)"])
+AS_IF([test "x${with_NDI}" = "xlocal"], [have_ndi="YES (local)"])
 # TODO: have_ds
 
 AC_MSG_RESULT([
