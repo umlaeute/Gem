@@ -473,13 +473,16 @@ AC_ARG_VAR([PKG_PIPEWIRE_LIBS], [linker flags for pipewire, overriding pkg-confi
 AC_ARG_VAR([PKG_LIBPIPEWIRE_0_3_CFLAGS],[(Use PKG_PIPEWIRE_CFLAGS instead)])
 AC_ARG_VAR([PKG_LIBPIPEWIRE_0_3_LIBS],[(Use PKG_PIPEWIRE_LIBS instead)])
 
-AS_IF([test "x${PKG_PIPEWIRE_CFLAGS}" != x],
+AS_IF([test -n "${PKG_PIPEWIRE_CFLAGS}"],
       [PKG_LIBPIPEWIRE_0_3_CFLAGS=${PKG_PIPEWIRE_CFLAGS}])
-AS_IF([test "x${PKG_PIPEWIRE_LIBS}" != x],
+AS_IF([test -n "${PKG_PIPEWIRE_LIBS}"],
       [PKG_LIBPIPEWIRE_0_3_LIBS=${PKG_PIPEWIRE_LIBS}])
+AS_IF([test -n "${with_pipewire}"],
+      [with_libpipewire_0_3=${with_pipewire}])
+
 GEM_ARG_WITH([pipewire], [video input/output], [force])
 GEM_CHECK_LIB([libpipewire-0.3], [pipewire-0.3], [pipewire/pipewire.h], [pw_get_library_version],
-              ,,, [video input/output], [$with_pipewire])
+              ,,, [video input/output (gets overriden by '--with-pipewire')], [$with_pipewire])
 GEM_LIB_PIPEWIRE_CFLAGS=${GEM_LIB_LIBPIPEWIRE_0_3_CFLAGS}
 GEM_LIB_PIPEWIRE_LIBS=${GEM_LIB_LIBPIPEWIRE_0_3_LIBS}
 AC_SUBST([GEM_LIB_PIPEWIRE_CFLAGS])
