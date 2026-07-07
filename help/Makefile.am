@@ -49,16 +49,6 @@ dist_gemhelp_DATA += \
 	gemtablet-help.pd \
 	gemvertexbuffer-help.pd \
 	gemwin-help.pd \
-	gemcocoawindow-help.pd \
-	gemglfw2window-help.pd \
-	gemglfw3window-help.pd \
-	gemglutwindow-help.pd \
-	gemglxwindow-help.pd \
-	gemmacoswindow-help.pd \
-	gemmacwindow-help.pd \
-	gemsdlwindow-help.pd \
-	gemsdl2window-help.pd \
-	gemw32window-help.pd \
 	GLdefine-help.pd \
 	glsl-help.pd \
 	glsl_test.frag \
@@ -246,6 +236,48 @@ dist_gemhelp_DATA += \
 	vertex_program-help.pd \
 	world_light-help.pd \
 	$(empty)
+
+if MACOSX
+dist_gemhelp_DATA += \
+	gemcocoawindow-help.pd \
+	gemmacoswindow-help.pd \
+	$(empty)
+endif
+
+if HAVE_FRAMEWORK_QUICKTIME
+if HAVE_FRAMEWORK_CARBON
+dist_gemhelp_DATA += gemmacwindow-help.pd
+endif
+endif
+
+if WINDOWS
+dist_gemhelp_DATA += gemw32window-help.pd
+endif
+
+if HAVE_LIB_LIBGLFW
+dist_gemhelp_DATA += gemglfw2window-help.pd
+endif
+
+if HAVE_LIB_GLFW3
+dist_gemhelp_DATA += gemglfw3window-help.pd
+endif
+
+if HAVE_GLUT
+dist_gemhelp_DATA += gemglutwindow-help.pd
+endif
+
+if HAVE_GLX
+dist_gemhelp_DATA += gemglxwindow-help.pd
+endif
+
+if HAVE_LIB_SDL
+dist_gemhelp_DATA += gemsdlwindow-help.pd
+endif
+
+if HAVE_LIB_SDL2
+dist_gemhelp_DATA += gemsdl2window-help.pd
+endif
+
 
 dist_gemhelp_DATA += \
 	_backendinfo.pd \
