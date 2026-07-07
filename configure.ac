@@ -9,6 +9,15 @@ AM_INIT_AUTOMAKE([1.10 foreign])
 PKG_INSTALLDIR(['${exec_prefix}/lib/pkgconfig'])
 
 
+
+package_version_split=$(echo ${PACKAGE_VERSION} | sed -e 's/[[^0-9]]/ /g' -e 's/  */ /g')
+package_version_major=$(echo ${package_version_split} | cut -d' ' -f1)
+package_version_minor=$(echo ${package_version_split} | cut -d' ' -f2)
+
+AC_DEFINE_UNQUOTED([PACKAGE_VERSION_MAJOR], [$package_version_major], [Define to the major version of this package])
+AC_DEFINE_UNQUOTED([PACKAGE_VERSION_MINOR], [$package_version_minor], [Define to the minor version of this package])
+
+
 #
 AC_CONFIG_FILES([Makefile abstractions/Makefile])
 

@@ -56,6 +56,13 @@
 # define _close close
 #endif
 
+#if defined(GEM_VERSION_MAJOR) && defined(PACKAGE_VERSION_MAJOR) && (GEM_VERSION_MAJOR != PACKAGE_VERSION_MAJOR)
+# error GEM_VERSION_MAJOR and PACKAGE_VERSION_MAJOR do not agree
+#endif
+#if defined(GEM_VERSION_MINOR) && defined(PACKAGE_VERSION_MINOR) && (GEM_VERSION_MINOR != PACKAGE_VERSION_MINOR)
+# error GEM_VERSION_MINOR and PACKAGE_VERSION_MINOR do not agree
+#endif
+
 
 static const char GEM_MAINTAINER[] = "IOhannes m zmoelnig";
 
