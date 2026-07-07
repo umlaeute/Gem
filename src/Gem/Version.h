@@ -4,7 +4,7 @@
 #include "Gem/ExportDef.h"
 
 #define GEM_VERSION_MAJOR 0
-#define GEM_VERSION_MINOR 94
+#define GEM_VERSION_MINOR 95
 
 namespace gem
 {
