@@ -710,18 +710,6 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 GEM_CHECK_FAT(GEM_ARCH)
 AC_MSG_RESULT($GEM_ARCH)
 
-# disable MMX/SSE2 on non-x86 CPUs
-AS_CASE([$host_cpu], [(x86*|i?86)], [], [
-  enable_mmx=no
-  enable_sse2=no
-])
-# disable AltiVec on non-x86 CPUs
-AS_CASE([$host_cpu], [(powerpc*|ppc*)], [], [
-  enable_altivec=no
-  enable_powerpc=no
-])
-
-
 AS_IF([test "x$enable_mmx" != "xno" ],[GEM_CHECK_CXXFLAGS([-mmmx])])
 AS_IF([test "x$enable_sse2" = "xyes" ],[GEM_CHECK_CXXFLAGS([-msse2])])
 AS_IF([test "x$enable_altivec" != "xno"], [GEM_CHECK_CXXFLAGS([-faltivec])])
