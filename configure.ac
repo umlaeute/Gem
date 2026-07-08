@@ -196,14 +196,6 @@ AS_CASE([$enable_debug],
 
 
 AC_ARG_WITH([GLU], AS_HELP_STRING([--without-GLU], [force building without GLU (*not* recommended!)]))
-GEM_ARG_ENABLE([mmx],     [MMX-support])
-dnl disabled SSE2 by default, since there are still few chips around that fully support it
-dnl unlike MMX or SSE
-GEM_ARG_DISABLE([sse2],    [SSE2-support])
-GEM_ARG_ENABLE([altivec], [AltiVec-support])
-GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
-
-GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 
 GEM_ARG_ENABLE([registerstruct], [use \"-freg-struct-return\" (needed for FreeFrame)], [force])
 
@@ -710,12 +702,20 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 GEM_CHECK_FAT(GEM_ARCH)
 AC_MSG_RESULT($GEM_ARCH)
 
+GEM_ARG_ENABLE([mmx], [MMX-support])
 AS_IF([test "x$enable_mmx" != "xno" ],[GEM_CHECK_CXXFLAGS([-mmmx])])
+
+GEM_ARG_ENABLE([sse2], [SSE2-support])
 AS_IF([test "x$enable_sse2" = "xyes" ],[GEM_CHECK_CXXFLAGS([-msse2])])
+
+GEM_ARG_ENABLE([altivec], [AltiVec-support])
 AS_IF([test "x$enable_altivec" != "xno"], [GEM_CHECK_CXXFLAGS([-faltivec])])
+
+GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
 AS_IF([test "x$enable_powerpc" = "xyes"], [GEM_CHECK_CXXFLAGS([-mpowerpc-gfxopt])])
 
 # on OSX we might come across "pascal strings" containing "\p"...
+GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
 AS_IF([test "x$enable_pascalstrings" != "xno"], [GEM_CHECK_CXXFLAGS([-fpascal-strings])])
 
 AC_ARG_WITH([defaultwindow],
