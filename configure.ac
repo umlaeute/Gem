@@ -702,17 +702,19 @@ GEM_CHECK_CXXFLAGS([-ffast-math])
 GEM_CHECK_FAT(GEM_ARCH)
 AC_MSG_RESULT($GEM_ARCH)
 
+have_simd=""
 GEM_ARG_ENABLE([mmx], [MMX-support])
-AS_IF([test "x$enable_mmx" != "xno" ],[GEM_CHECK_CXXFLAGS([-mmmx])])
+AS_IF([test "x$enable_mmx" != "xno" ],[GEM_CHECK_CXXFLAGS([-mmmx], [have_simd="${have_simd}/MMX"])])
 
 GEM_ARG_ENABLE([sse2], [SSE2-support])
-AS_IF([test "x$enable_sse2" = "xyes" ],[GEM_CHECK_CXXFLAGS([-msse2])])
+AS_IF([test "x$enable_sse2" = "xyes" ],[GEM_CHECK_CXXFLAGS([-msse2], [have_simd="${have_simd}/SSE2"])])
 
 GEM_ARG_ENABLE([altivec], [AltiVec-support])
-AS_IF([test "x$enable_altivec" != "xno"], [GEM_CHECK_CXXFLAGS([-faltivec])])
+AS_IF([test "x$enable_altivec" != "xno"], [GEM_CHECK_CXXFLAGS([-faltivec], [have_simd="${have_simd}/AltiVec"])])
 
 GEM_ARG_DISABLE([powerpc], [PowerPC specific optimizations])
-AS_IF([test "x$enable_powerpc" = "xyes"], [GEM_CHECK_CXXFLAGS([-mpowerpc-gfxopt])])
+AS_IF([test "x$enable_powerpc" = "xyes"], [GEM_CHECK_CXXFLAGS([-mpowerpc-gfxopt], [have_simd="${have_simd}/PowerPC"])])
+have_simd="${have_simd#/}"
 
 # on OSX we might come across "pascal strings" containing "\p"...
 GEM_ARG_ENABLE([pascalstrings], [containing '\p'])
@@ -788,6 +790,7 @@ dnl =======================================
 dnl
 dnl give some feedback about the configuration
 
+AS_IF([test -z "${have_simd}"], [have_śimd="no"])
 AS_IF([test "x$have_ftgl" = "xyes" ], [have_font=FTGL])
 AS_IF([test "x$have_ImageMagick" = "xyes"], [have_ImageMagick="yes (Magick++${magick7})"],
       [test "x$have_MagickCore" = "xyes"], [have_ImageMagick="yes (MagickCore${magick7})"])
@@ -842,6 +845,8 @@ Configuration:
                          : ${X_LIBS}
 
   Install path           : ${prefix}
+
+  SIMD                   : ${have_simd}
 
  RTE (${GEM_RTE}):
   executable             : ${GEM_RTE_EXE}
