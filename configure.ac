@@ -707,39 +707,20 @@ GEM_CHECK_CXXFLAGS([-falign-loops -falign-functions -falign-jumps -funroll-loops
 GEM_CHECK_CXXFLAGS([-ffast-math])
 
 ## SIMD support
-# naive approach is to just check, which SIMD-flags the compiler takes
-# and use these
-# drawback: while the compiler might support compilation for a specific
-# SIMD instruction set, the hardware you are compiling for might not
-
-# proposal:
-# by default the configure-task should only enable flags that are known
-# to work on the machine we are compiling.
-# the user can override this by explicitly stating that they want the
-# flag to be enabled (if possible)
-# e.g. "./configure --enable-sse2" on a pentium-3 should
-# produce a binary that will only run on machines with SSE2 registers
-# whereas "./configure" will make a binary with only MMX enabled.
-#
-# but how do we test for the CPU-caps? on linux we could just read /proc/cpuinfo
-# but on other OSs?
-
-# we make it a bit complicated in order to allow people to enforce the
-# compilation with a specific SIMD-instruction set, even on platforms
-# that don't support it
-# why? think cross-compilation
-
 GEM_CHECK_FAT(GEM_ARCH)
 AC_MSG_RESULT($GEM_ARCH)
 
-AS_IF([test "x${ARCH}" = "xi386" || test "x${ARCH}" = "xi686" || test "x${ARCH}" = "xx86_64"], [
- AS_IF([test "x$enable_altivec" != "xyes"], [enable_altivec="no"])
+# disable MMX/SSE2 on non-x86 CPUs
+AS_CASE([$host_cpu], [(x86*|i?86)], [], [
+  enable_mmx=no
+  enable_sse2=no
+])
+# disable AltiVec on non-x86 CPUs
+AS_CASE([$host_cpu], [(powerpc*|ppc*)], [], [
+  enable_altivec=no
+  enable_powerpc=no
 ])
 
-AS_IF([test "x${ARCH}" = "xPower Macintosh" || test "x${ARCH}" = "xpowerpc"], [
- AS_IF([test "x$enable_mmx"  != "xyes"], [enable_mmx="no"])
- AS_IF([test "x$enable_sse2" != "xyes"], [enable_sse2="no"])
-])
 
 AS_IF([test "x$enable_mmx" != "xno" ],[GEM_CHECK_CXXFLAGS([-mmmx])])
 AS_IF([test "x$enable_sse2" = "xyes" ],[GEM_CHECK_CXXFLAGS([-msse2])])
