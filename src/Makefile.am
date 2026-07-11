@@ -66,10 +66,6 @@ if TARGET_PIXES
 SUBDIRS+=Pixes
 sublibs += Pixes/libPixes.la
 endif
-if TARGET_VERTEX
-SUBDIRS+=Vertex
-sublibs += Vertex/libVertex.la
-endif
 
 Gem_la_LIBADD += $(sublibs)
 

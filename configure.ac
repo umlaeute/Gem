@@ -207,7 +207,6 @@ GEM_TARGET(Nongeos)
 GEM_TARGET(Particles)
 GEM_TARGET(Pixes)
 GEM_TARGET(openGL)
-GEM_TARGET_DISABLED(Vertex)
 GEM_ARG_ENABLE([plugins], [configure/build/install optional parts])
 
 AC_ARG_ENABLE([experimental], AS_HELP_STRING([--enable-experimental], [enable experimental objects (if any)]))

@@ -327,7 +327,6 @@ Section "Development" SEC_dev
  File ${BASE_INDIR}\src\Utils\Functions.h
  File ${BASE_INDIR}\src\Utils\any.h
  SetOutPath "$GEMDEV_OUTDIR\Base"
- File ${BASE_INDIR}\src\Base\GemVertex.h
  File ${BASE_INDIR}\src\Base\GemWinCreate.h
  File ${BASE_INDIR}\src\Base\GemContext.h
  File ${BASE_INDIR}\src\Base\GemWindow.h
