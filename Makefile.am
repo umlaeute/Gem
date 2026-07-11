@@ -24,6 +24,7 @@ gemdir=$(pkglibdir)
 
 dist_gem_DATA = \
 	Gem-meta.pd \
+	AUTHORS \
 	ChangeLog \
 	COPYING.txt \
 	GnuGPL.LICENSE.txt \
