@@ -2,25 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// tigital AT mac DOT com
-//
 // Implementation file
 //
-//  gemcubeframebuffer
-//  Antoine Rousseau (antoine AT metalu DOT net) september 2015
+// SPDX-FileCopyrightText: © 2015, Antoine Rousseau and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-//  derived from gemframebuffer:
-//    Copyright (c) 1997-1999 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    Copyright (c) 2005-2006 James Tittle II, tigital At mac DoT com
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-//
-//
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #include "gemcubeframebuffer.h"
 #include <string.h>

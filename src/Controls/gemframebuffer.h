@@ -1,16 +1,11 @@
-/*-----------------------------------------------------------------
-  LOG
-  GEM - Graphics Environment for Multimedia
-
-  render to offscreen buffer and make texture
-
-  created 11/27/2005
-
-  Copyright (c) 2005-2006 James Tittle II, tigital AT mac DOT com
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  -----------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2005, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_CONTROLS_GEMFRAMEBUFFER_H_
 #define _INCLUDE__GEM_CONTROLS_GEMFRAMEBUFFER_H_
