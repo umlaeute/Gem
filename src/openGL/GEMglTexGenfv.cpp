@@ -4,10 +4,8 @@
 //
 // Implementation file
 //
-// Copyright (c) 2006 james tittle, tigital@mac.com
-//
-//  For information on usage and redistribution, and for a DISCLAIMER
-//  *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+// SPDX-FileCopyrightText: © 2006, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
 ////////////////////////////////////////////////////////
 
