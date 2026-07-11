@@ -1,15 +1,10 @@
-/*
- *  GEM - Graphics Environment for Multimedia
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  rubber.h
- *  based on SGI opengl democode
- *  gem_darwin
+ * SPDX-FileCopyrightText: © 2003, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- *  Created by Jamie Tittle on Sun Jan 19 2003.
- *  Copyright (c) 2003-2006 tigital. All rights reserved.
- *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
- *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
- *
+ * ------------------------------------------------------------------
  */
 #ifndef _INCLUDE__GEM_GEOS_RUBBER_H_
 #define _INCLUDE__GEM_GEOS_RUBBER_H_

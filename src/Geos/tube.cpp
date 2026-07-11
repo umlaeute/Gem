@@ -2,26 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
-//    A tube.
-//
-// object by cyrille.henry@la-kitchen.fr
-// This primitive create a kind of cilender with paramettre :
-//              Diameter of the 1st circle (1st base of the object)
-//              Diameter of the 2nd circle
-//              X, Y, Z displacement between the 2 circle
-//              X, Y rotation of the 1st circle
-//              X, Y rotation of the 2nd circle
-//
 // Implementation file
 //
-//    Copyright (c) 2003 Cyrille Henry. La Kitchen, Paris
-//    Copyright (c) 2003-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2003, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #include "tube.h"
 

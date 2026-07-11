@@ -2,19 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
+// Implementation file
 //
-// surface3d : create a plan that can be distored.
-// used cubic interpolation
-// made by Cyrille Henry 2011
+// SPDX-FileCopyrightText: © 2011, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-//    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 struct t_float3 {
   float x,y,z;

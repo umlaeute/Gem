@@ -1,15 +1,13 @@
-/*
- *  GEM - Graphics Environment for Multimedia
- *
- *  ripple.cpp
- *  gem_darwin
- *
- *  Created by Jamie Tittle on Sun Jan 19 2003.
- *  Copyright (c) 2003 tigital. All rights reserved.
- *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
- *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2003, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 
 #include "ripple.h"
 #include "Gem/State.h"

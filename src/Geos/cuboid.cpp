@@ -2,20 +2,11 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// mark@danks.org
-//
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2001, Erich Berger and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-//
-// modified cube geos into cuboid by erich berger 2001 rat@telecoma.net
-//
-////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
 #include "cuboid.h"

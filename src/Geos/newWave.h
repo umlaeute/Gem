@@ -1,15 +1,12 @@
-/*
- *  GEM - Graphics Environment for Multimedia
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  newWave.h
- *  gem_darwin
+ * SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- *  Created by Jamie Tittle on Thu Oct 10 2002.
- *  Copyright (c) 2002 tigital. All rights reserved.
- *    For information on usage and redistribution, and for a DISCLAIMER OF ALL
- *    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
- *
+ * ------------------------------------------------------------------
  */
+
 #ifndef _INCLUDE__GEM_GEOS_NEWWAVE_H_
 #define _INCLUDE__GEM_GEOS_NEWWAVE_H_
 
