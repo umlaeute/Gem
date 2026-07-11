@@ -1,14 +1,11 @@
-/*-----------------------------------------------------------------
-  LOG
-  GEM - Graphics Environment for Multimedia
-
-  Interface for the window manager
-
-  Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  -----------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2011, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OUTPUT_GEMW__WINDOW_H_
 #define _INCLUDE__GEM_OUTPUT_GEMW__WINDOW_H_
@@ -20,7 +17,7 @@
   CLASS
   gemw32window
 
-  The window manager
+  The window manager (W32)
 
   DESCRIPTION
 

@@ -2,17 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// tigital@mac.com
-//
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) 2000-2004 Jamie Tittle
-//    Copyright (c) 2011-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #if !defined DISABLE_GEMMACWINDOW
 # if !defined __x86_64

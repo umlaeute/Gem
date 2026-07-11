@@ -1,14 +1,11 @@
-/*-----------------------------------------------------------------
-  LOG
-  GEM - Graphics Environment for Multimedia
-
-  Interface for the window manager: SDL1
-
-  Copyright (c) 2009-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  -----------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2009, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_OUTPUT_GEMSDLWINDOW_H_
 #define _INCLUDE__GEM_OUTPUT_GEMSDLWINDOW_H_
@@ -21,7 +18,7 @@
   CLASS
   gemsdlwindow
 
-  The window manager
+  The window manager (SDL-1.2)
 
   DESCRIPTION
 
