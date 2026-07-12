@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_follow
-
-        Have the particles follow each other
+  part_follow
 
 DESCRIPTION
+
+  Have the particles follow each other
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_follow : public partlib_base

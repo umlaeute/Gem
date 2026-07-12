@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_targetcolor
-
-        Set the target color for a particle system
+  part_targetcolor
 
 DESCRIPTION
+
+  Set the target color for a particle system
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_targetcolor : public partlib_base

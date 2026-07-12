@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_draw
-
-        Draw a particle group
+  part_draw
 
 DESCRIPTION
+
+  Draw a particle group
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_draw : public partlib_base

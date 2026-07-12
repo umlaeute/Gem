@@ -19,11 +19,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_size
-
-        Set the initial size
+  part_size
 
 DESCRIPTION
+
+  Set the initial size
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_size : public partlib_base

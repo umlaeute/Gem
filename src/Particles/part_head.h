@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_head
-
-        Starting point for a particle system
+  part_head
 
 DESCRIPTION
+
+  Starting point for a particle system
 
 -----------------------------------------------------------------*/
 struct _ParticleState;

@@ -24,9 +24,9 @@
 
   part_sink
 
-  Generate particles
-
   DESCRIPTION
+
+  Generate particles
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_sink : public partlib_base

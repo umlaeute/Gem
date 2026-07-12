@@ -23,11 +23,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_damp
-
-        Apply damping to particles
+  part_damp
 
 DESCRIPTION
+
+  Apply damping to particles
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_damp : public partlib_base

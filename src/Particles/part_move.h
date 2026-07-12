@@ -19,11 +19,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_move
-
-        Draw a part_move group
+  part_move
 
 DESCRIPTION
+
+  Advance particles
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_move : public partlib_base

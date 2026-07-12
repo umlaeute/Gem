@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_information
-
-        Draw a part_information group
+  part_information
 
 DESCRIPTION
+
+  Output particle information (position, color, size, velocity,...)
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_information : public partlib_base

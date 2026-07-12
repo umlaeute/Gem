@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_vertex
-
-        Generate particles
+  part_vertex
 
 DESCRIPTION
+
+  Generate particles
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_vertex : public partlib_base

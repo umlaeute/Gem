@@ -25,9 +25,9 @@
 
   part_velsphere
 
-  Set the velocity domain for particles
-
   DESCRIPTION
+
+  Set the velocity domain for particles
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_velsphere : public partlib_base

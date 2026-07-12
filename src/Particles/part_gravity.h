@@ -23,11 +23,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_gravity
-
-        Apply gravity to particles
+  part_gravity
 
 DESCRIPTION
+
+  Apply gravity to particles
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_gravity : public partlib_base

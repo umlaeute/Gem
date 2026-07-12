@@ -22,11 +22,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_render
-
-        Draw a part_render group
+  part_render
 
 DESCRIPTION
+
+  Draw a part_render group
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_render : public partlib_base

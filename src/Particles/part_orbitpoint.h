@@ -19,11 +19,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_orbitpoint
-
-        Orbit around a point
+  part_orbitpoint
 
 DESCRIPTION
+
+  Orbit around a point
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_orbitpoint : public partlib_base

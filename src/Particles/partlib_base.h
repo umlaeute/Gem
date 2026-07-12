@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        partlib_base
-
-        Base class of all the part_* objects
+  partlib_base
 
 DESCRIPTION
+
+  Base class of all the part_* objects
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN partlib_base : public GemBase

@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_killslow
-
-        Kill particles that are too slow
+  part_killslow
 
 DESCRIPTION
+
+  Kill particles that are too slow
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_killslow : public partlib_base

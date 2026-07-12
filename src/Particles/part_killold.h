@@ -21,11 +21,11 @@ LOG
 -------------------------------------------------------------------
 CLASS
 
-        part_killold
-
-        Kill particles that are past a certain time
+  part_killold
 
 DESCRIPTION
+
+  Kill particles that are past a certain time
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN part_killold : public partlib_base

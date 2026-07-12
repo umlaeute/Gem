@@ -24,9 +24,9 @@
 
   part_source
 
-  Generate particles
-
   DESCRIPTION
+
+  Generate particles
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN part_source : public partlib_base
