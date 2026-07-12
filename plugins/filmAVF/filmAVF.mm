@@ -1,16 +1,14 @@
 /*  -*- mode: ObjC; -*- */
-/*-----------------------------------------------------------------
-
-GEM - Graphics Environment for Multimedia
-
-Implementation file
-
-Copyright (c) 2016-2018 Dan Wilcox.
-
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2014, Dan Wilcox and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

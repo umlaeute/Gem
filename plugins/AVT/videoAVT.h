@@ -1,14 +1,15 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2010, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later WITH GPL-3.0-linking-exception
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 
-    GEM - Graphics Environment for Multimedia
-
-    video backend for Gem
-
-    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-    Linux version by Miller Puckette. msp@ucsd.edu
+    Prosilica video backend for Gem
 
 -----------------------------------------------------------------*/
 

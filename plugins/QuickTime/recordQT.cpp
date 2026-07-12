@@ -1,8 +1,13 @@
-/*
- *  recordQT.cpp
- *  GEM_darwin
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

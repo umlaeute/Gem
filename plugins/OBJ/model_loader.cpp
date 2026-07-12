@@ -1,3 +1,14 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1997,2000, Nate Robins (nate@pobox.com, http://www.pobox.com/~nate)
+// SPDX-FileCopyrightText: © 2003, Günther Geiger and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 /*
       glm.c
       Nate Robins, 1997, 2000

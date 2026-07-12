@@ -1,13 +1,15 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2014, Dan Wilcox and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 
-GEM - Graphics Environment for Multimedia
-
-Load a digital video (.mov, .mp4, etc) into a pix block on macOS 10.7+
-
-Copyright (c) 2016-2018 Dan Wilcox.
-
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  film loading backend for GEM using the AV Framework
 
 -----------------------------------------------------------------*/
 #ifndef _INCLUDE_GEMPLUGIN__FILMAVF_FILMAVF_H_

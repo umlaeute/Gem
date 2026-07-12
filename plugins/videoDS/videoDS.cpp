@@ -1,18 +1,13 @@
 ////////////////////////////////////////////////////////
 //
-// videoDS - Graphics Environment for Multimedia
-//
-// daniel@bogusfront.org
-// zmoelnig@iem.at
+// GEM - Graphics Environment for Multimedia
 //
 // Implementation file
 //
-//    Copyright (c) 2003 Daniel Heckenberg.
-//    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2003, Daniel Heckenberg and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

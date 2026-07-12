@@ -1,10 +1,18 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 1997-2001, Microsoft Corporation
+ * SPDX-License-Identifier: proprietary
+ *
+ * ------------------------------------------------------------------
+ */
+
 //------------------------------------------------------------------------------
 // File: Grabber.h
 //
 // Desc: DirectShow sample code - Header file for the SampleGrabber
 //       example filter
 //
-// Copyright (c) 1997-2001 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------

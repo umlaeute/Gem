@@ -1,10 +1,10 @@
-/*
- *  recordQT.h
- *  GEM_darwin
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  Created by chris clepper on 7/18/05.
- *  Copyright 2005. All rights reserved.
+ * SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
+ * ------------------------------------------------------------------
  */
 
 //this will record QT movies

@@ -1,20 +1,26 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2010, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later WITH GPL-3.0-linking-exception
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 
-    GEM - Graphics Environment for Multimedia
+  video capture backend for GEM using HALCON
 
-    grab images using HALCON
+  HALCON is a proprietary machine vision library by MVtec, that supports a wide range
+  of image acquisition devices (most notable: GigE-cameras)
 
-    HALCON is a proprietary machine vision library by MVtec, that supports a wide range
-    of image acquisition devices (most notable: GigE-cameras)
+  see http://halcon.de/
 
-    see http://halcon.de/
+  you will need to get a license key from your vendor
 
-    you will need to get a license key from your vendor
-
-
-    Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "LICENSE.txt" in this distribution.
+  Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+  For information on usage and redistribution, and for a DISCLAIMER OF ALL
+  WARRANTIES, see the file, "LICENSE.txt" in this distribution.
 
 -----------------------------------------------------------------*/
 

@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2011, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #include "videoTEST.h"
 #include "plugins/PluginFactory.h"
 using namespace gem::plugins;

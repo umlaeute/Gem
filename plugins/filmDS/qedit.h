@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © Microsoft Corporation
+ * SPDX-License-Identifier: proprietary
+ *
+ * ------------------------------------------------------------------
+ */
+
 // Antoine Villeret : I found this code here : http://social.msdn.microsoft.com/Forums/en/windowsdirectshowdevelopment/thread/2ab5c212-5824-419d-b5d9-7f5db82f57cd
 ///////////////////////////////////////////////////////////////////////////////////
 

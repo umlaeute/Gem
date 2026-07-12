@@ -1,3 +1,15 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1991, Paul Haeberli
+// SPDX-FileCopyrightText: © 1995, Masayuki Mastumoto
+// SPDX-FileCopyrightText: © 1998, Mark Danks and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 /*
  *      fastimg -
  *              Faster reading and writing of image files.

@@ -1,13 +1,15 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2022, Claude Heiland-Allen and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /* -----------------------------------------------------------------
 
-GEM - Graphics Environment for Multimedia
-
-Record a sequence of images to a single-file PNM stream.
-
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-Copyright (c) 2022 Claude Heiland-Allen. claude@mathr.co.uk
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+   video recording backend for GEM with PNM image sequences
 
 -----------------------------------------------------------------*/
 

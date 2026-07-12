@@ -1,10 +1,19 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1997-2001, Microsoft Corporation
+// SPDX-License-Identifier: proprietary
+//
+////////////////////////////////////////////////////////
 //------------------------------------------------------------------------------
 // File: Grabber.cpp
 //
 // Desc: DirectShow sample code - Implementation file for the SampleGrabber
 //       example filter
 //
-// Copyright (c) 1997-2001 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 #ifdef HAVE_CONFIG_H
 # include "config.h"

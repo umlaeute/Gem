@@ -1,17 +1,19 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2018, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * Adapted from the openFrameworks ofAVFoundationGrabber class:
+ * Jordan C. Parsons, Paul Gafton, Ryuichi Yamamoto, Seb Lee-Delisle,
+ * Arturo Castro & Theodore Watson 2016-2018
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 
-  GEM - Graphics Environment for Multimedia
-
-  capture live video into a pix block on macOS 10.7+
-
-  Copyright (c) 2018 IOhannes m zmölnig.
-
-  Adapted from the openFrameworks ofAVFoundationGrabber class:
-  Jordan C. Parsons, Paul Gafton, Ryuichi Yamamoto, Seb Lee-Delisle,
-  Arturo Castro & Theodore Watson 2016-2018
-
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  video backend for GEM on macOS 10.7+
 
   -----------------------------------------------------------------*/
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOAVF_VIDEOAVF_H_

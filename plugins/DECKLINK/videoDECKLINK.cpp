@@ -2,15 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 2015 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2015, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-3.0-or-later WITH GPL-3.0-linking-exception
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -27,6 +24,10 @@
 
 // for MARK()
 #include <stdio.h>
+
+// SPDX-SnippetBegin
+// SPDX-FileCopyrightText: © 2013, Blackmagic Design
+// SPDX-License-Identifier: BSL-1.0
 
 /* -LICENSE-START-
 ** Copyright (c) 2013 Blackmagic Design
@@ -194,6 +195,7 @@ bail:
 ** END of Blackmagic licensed code
 */
 
+// SPDX-SnippetEnd
 
 namespace {
 IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,

@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2011, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 #ifndef _INCLUDE_GEMPLUGIN__VIDEOVLC_VIDEOVLC_H_
 #define _INCLUDE_GEMPLUGIN__VIDEOVLC_VIDEOVLC_H_
 

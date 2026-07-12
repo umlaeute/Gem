@@ -1,15 +1,15 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 
-GEM - Graphics Environment for Multimedia
-
-Load an digital video (like AVI, Mpeg, Quicktime) into a pix block (Windus/Apple)
-
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) 2002 James Tittle.  tigital@mac.com
-Copyright (c) 2011-2014 IOhannes m zmölnig. zmoelnig@iem.at
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
+  film loading backend for GEM uwing QuickTime
 
 -----------------------------------------------------------------*/
 #ifndef _INCLUDE_GEMPLUGIN__FILMQT_FILMQT_H_

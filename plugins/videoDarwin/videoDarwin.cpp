@@ -1,12 +1,13 @@
-/*
- *  videoDarwin.cpp
- *  gem_darwin
- *
- *  Created by James Tittle on Fri Jul 12 2002.
- *  Copyright (c) 2002-2005 James Tittle & Chris Clepper
- *  Copyright (c) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
