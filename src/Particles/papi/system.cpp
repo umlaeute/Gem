@@ -1,6 +1,15 @@
-// system.cpp
+////////////////////////////////////////////////////////
 //
-// Copyright 1998 by David K. McAllister.
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1998, David K. McAllister
+// SPDX-FileContributor: IOhannes m zmölnig
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+// system.cpp
 //
 // This file implements the API calls that are not particle actions.
 //

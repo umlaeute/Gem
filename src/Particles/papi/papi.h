@@ -1,7 +1,14 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 1997, Jonathan P. Leech
+ * SPDX-FileContributor: IOhannes m zmölnig
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 // papi.h
-//
-// Copyright 1997-1998 by David K. McAllister
-// http://www.cs.unc.edu/~davemc/Particle
 //
 // Include this file in all applications that use the Particle System API.
 //

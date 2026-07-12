@@ -1,8 +1,18 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1997, Jonathan P. Leech
+// SPDX-FileCopyrightText: © 1998, David K. McAllister
+// SPDX-FileContributor: IOhannes m zmölnig
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 // actions.cpp
 //
-// Copyright 1997-1998 by David K. McAllister
-//
-// I used code Copyright 1997 by Jonathan P. Leech
+// I used code by Jonathan P. Leech
 // as an example in implenting this.
 //
 // This file implements the dynamics of particle actions.

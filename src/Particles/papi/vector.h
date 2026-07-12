@@ -1,8 +1,13 @@
-// p_vector.h - yet another vector class.
-//
-// Copyright 1997 by Jonathan P. Leech
-// Modifications Copyright 1997-1999 by David K. McAllister
-//
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 1997, Jonathan P. Leech
+ * SPDX-FileCopyrightText: © 1997-1999, David K. McAllister
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 // A simple 3D float vector class for internal use by the particle systems.
 
 #ifndef particle_vector_h

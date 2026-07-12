@@ -1,6 +1,13 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 1998, Jonathan P. Leech
+ * SPDX-FileContributor: IOhannes m zmölnig
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 // general.h
-//
-// Copyright 1998 by David K. McAllister.
 //
 // This file implements the API calls that are not particle actions.
 //

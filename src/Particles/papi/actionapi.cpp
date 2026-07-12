@@ -1,6 +1,15 @@
-// action_api.cpp
+////////////////////////////////////////////////////////
 //
-// Copyright 1997-1998 by David K. McAllister
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 1997-1998, David K. McAllister
+// SPDX-FileContributor: IOhannes m zmölnig
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+// action_api.cpp
 //
 // This file implements the action API calls by creating
 // action class instances, which are either executed or
