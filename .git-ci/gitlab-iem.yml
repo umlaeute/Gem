@@ -418,7 +418,7 @@ deken:
     - version="${CI_COMMIT_TAG}"
     - gitversion="$(git describe --always)"
     # if there is not tag (but we are on the default branch), publish a snapshot
-    - test -n "${version}" || test "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" || version="$(git describe --abbrev=0)-snapshot"
+    - test -n "${version}" || test "${CI_COMMIT_BRANCH}" != "${CI_DEFAULT_BRANCH}" || version="$(git describe --abbrev=0)~snapshot"
     - version="${version#v}"
     - echo "${version}"
     - test -n "${CI_COMMIT_TAG}" || test ! -e README.deken.pd.in ||
