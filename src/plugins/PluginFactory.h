@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2010, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 #ifndef _INCLUDE__GEM_PLUGINS_PLUGINFACTORY_H_
 #define _INCLUDE__GEM_PLUGINS_PLUGINFACTORY_H_
 
