@@ -2,20 +2,13 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2012, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-// a wrapper for accessing the RTE's arrays
-// currently only numeric arrays
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
-
 
 #include "RTE/RTE.h"
 #include <m_pd.h>
