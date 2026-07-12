@@ -1,18 +1,11 @@
-/*
-  -----------------------------------------------------------------
-
-  GEM - Graphics Environment for Multimedia
-
-  write a pix block into a digital video (like AVI, Mpeg, Quicktime)
-  (OS independent parent-class)
-
-  Copyright (c) 2005-2010 Chris Clepper
-  Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  ----------------------------------------------------------------
-*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #if 1
 // this will record movies

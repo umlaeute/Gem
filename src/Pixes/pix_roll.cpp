@@ -1,11 +1,13 @@
-/*
- *  pix_roll.cpp
- *  gem_darwin
- *
- *  Created by chris clepper on Mon Oct 07 2002.
- *  Copyright (c) 2002 __MyCompanyName__. All rights reserved.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2002, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 
 #include "pix_roll.h"
 

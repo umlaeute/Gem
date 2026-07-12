@@ -1,19 +1,11 @@
-/*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
-
-    age an image
-
-    Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-    this is based on EffecTV by Fukuchi Kentauro
-    * AgingTV - film-aging effect.
-    * Copyright (C) 2001 FUKUCHI Kentarou
-
------------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2003, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_CROP_H_
 #define _INCLUDE__GEM_PIXES_PIX_CROP_H_

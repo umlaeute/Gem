@@ -1,12 +1,11 @@
-/*
- *  pix_deinterlace.h
- *  GEM_darwin
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  Created by lincoln on 11/18/05.
- *  Copyright 2005 __MyCompanyName__. All rights reserved.
+ * SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
+ * ------------------------------------------------------------------
  */
-
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_DEINTERLACE_H_
 #define _INCLUDE__GEM_PIXES_PIX_DEINTERLACE_H_

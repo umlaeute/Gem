@@ -1,14 +1,12 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2011, Ricardo Fabbri and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
-Detects red, green, blue, yellow, white, black in an image
-
-Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
 #ifndef _INCLUDE__GEM_PIXES_PIX_COLOR_DETECT_H_
 #define _INCLUDE__GEM_PIXES_PIX_COLOR_DETECT_H_
 

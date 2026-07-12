@@ -1,12 +1,13 @@
-/*
- *  pix_posterize.cpp
- *  gem_darwin
- *  tigital@mac.com
- *
- *  Created by Jamie Tittle on Fri Oct 18 2002.
- *  Copyright (c) 2002 tigital. All rights reserved.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #include "pix_posterize.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(pix_posterize, t_floatarg, A_DEFFLOAT);

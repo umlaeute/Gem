@@ -2,19 +2,18 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// This object is an based on the DotTV effect from EffecTV
-// Originally written by Fukuchi Kentaro
-// Copyright (c) 2001 FUKUCHI Kentaro
-//
-// ported by tigital@mac.com
-//
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    Copyright (c) 2003 James Tittle
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2001, FUKUCHI Kentaro
+// SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+//
+// This object is an based on the DotTV effect from EffecTV
+// Originally written by Fukuchi Kentaro
+//
+// ported by tigital@mac.com
 //
 /////////////////////////////////////////////////////////
 

@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2004, Jakob Leiner, Theresa Rienmüller and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 #ifndef _INCLUDE__GEM_PIXES_PIX_MOVEMENT__H_
 #define _INCLUDE__GEM_PIXES_PIX_MOVEMENT__H_
 

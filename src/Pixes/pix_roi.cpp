@@ -2,18 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2012, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-// this is based on EffecTV by Fukuchi Kentarou
-// * Copyright (C) 2001 FUKUCHI Kentarou
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #include "pix_roi.h"
 #include "Gem/State.h"

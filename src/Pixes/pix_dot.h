@@ -1,3 +1,13 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2001, FUKUCHI Kentaro
+ * SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
 LOG
     GEM - Graphics Environment for Multimedia

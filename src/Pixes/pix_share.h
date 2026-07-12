@@ -1,10 +1,10 @@
-/*
- *  pix_share_write.h
- *  GEM_darwin
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  Created by cgc on 9/29/05.
- *  Copyright 2005 __MyCompanyName__. All rights reserved.
+ * SPDX-FileCopyrightText: © 2006, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
+ * ------------------------------------------------------------------
  */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_SHARE_H_

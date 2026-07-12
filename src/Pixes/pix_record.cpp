@@ -1,7 +1,13 @@
-/*
- *  pix_record.cpp
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 #include "pix_record.h"
 

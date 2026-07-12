@@ -1,11 +1,13 @@
-/*
- *  pix_compare.cpp
- *  gem_darwin
- *
- *  Created by chris clepper on Mon May 26 2003.
- *  Copyright (c) 2003.  All rights reserved.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2003, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 
 #include "pix_compare.h"
 #include "Utils/Functions.h"

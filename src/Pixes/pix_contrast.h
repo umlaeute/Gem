@@ -1,10 +1,10 @@
-/*
- *  pix_contrast.h
- *  GEM_darwin
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  Created by cgc on 8/23/05.
- *  Copyright 2005 cgc. All rights reserved.
+ * SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
+ * ------------------------------------------------------------------
  */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_CONTRAST_H_

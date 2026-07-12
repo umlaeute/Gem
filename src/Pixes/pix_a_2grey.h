@@ -1,28 +1,11 @@
-/*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
-
-    Change pix to greyscale with respect to alpha
-
-    Copyright (c) 1997-2000 Mark Danks. mark@danks.org
-    Copyright (c) Günther Geiger. geiger@epy.co.at
-    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    Copyright (c) 2002 James Tittle & Chris Clepper
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
-
-/////////////////////////////////////////////////////////
-//
-//  pix_a_2grey
-//
-//  2002:forum::für::umläute:2000
-//  iohannes m zmoelnig
-//  mailto:zmoelnig@iem.mhsg.ac.at
-//
-/////////////////////////////////////////////////////////
-
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2000, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_A__GREY_H_
 #define _INCLUDE__GEM_PIXES_PIX_A__GREY_H_

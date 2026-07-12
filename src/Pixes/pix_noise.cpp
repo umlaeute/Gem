@@ -2,29 +2,19 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    Copyright (c) 2011 Nicolas Montgermont nicolas_montgermont@yahoo.fr
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2011, Nicolas Montgermont and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
-
+////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 //
 //  pix_noise
 //  based on pix_set
 //  random function : lagged fibonacci generator
-//  2011
-//  Nicolas Montgermont
-//  mailto:nicolas_montgermont@yahoo.fr
 //
 /////////////////////////////////////////////////////////
-
-
 
 // generate a uniform noise texture
 

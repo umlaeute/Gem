@@ -1,21 +1,19 @@
-/*-----------------------------------------------------------------
-LOG
-GEM - Graphics Environment for Multimedia
-
-Calculate the center of gravity of a pixBlock.
-
-Copyright (c) 1997-1998 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-Copyright (c) 2011 Ricardo Fabbri. labmacambira.sf.net rfabbri@gmail.com
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2004, Jakob Leiner, Theresa Rienmüller and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 /*-----------------------------------------------------------------
 pix_multiblob
- tracks multiple blobs in one image
+
+Calculate the center of gravity of a pixBlock.
+
+
+tracks multiple blobs in one image
 
  LATER: split this object into 2 :
     - pix_multiblob (do the image-processing, unsorted!)

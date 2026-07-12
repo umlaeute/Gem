@@ -2,13 +2,14 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// ported by tigital@mac.com
-//      from "Pete's_Plugins"
-//
 // Implementation file
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2003, James Tittle II and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+//
+// from "Pete's_Plugins"
 //
 /////////////////////////////////////////////////////////
 

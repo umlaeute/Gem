@@ -1,10 +1,10 @@
-/*
- *  pix_posterize.h
- *  gem_darwin
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- *  Created by James Tittle on Fri Oct 18 2002.
- *  Copyright (c) 2002 tigital. All rights reserved.
+ * SPDX-FileCopyrightText: © 2002, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
+ * ------------------------------------------------------------------
  */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_POSTERIZE_H_

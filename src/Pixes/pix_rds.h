@@ -1,17 +1,19 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2002, FUKUCHI Kentaro
+ * SPDX-FileCopyrightText: © 2003, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
 
     random dot stereogram
     This object is an based on the RandomDotStereoTV effect from EffecTV
-    Originally written by Fukuchi Kentarou
-    Copyright (C) 2002 FUKUCHI Kentarou
-
+    Originally written by Fukuchi Kentaro
     ported by tigital@mac.com
-
-    Copyright (c) 2003 James Tittle tigital@mac.com
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 -----------------------------------------------------------------*/
 

@@ -1,15 +1,12 @@
-/*-----------------------------------------------------------------
-  LOG
-  GEM - Graphics Environment for Multimedia
-
-  Convert 4 signals (R~, G~, B~, A~) into a pixBuf
-
-  Copyright (c) 2000 Günther Geiger. geiger@epy.co.at
-  Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  -----------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2000, Günther Geiger
+ * SPDX-FileCopyrightText: © 2001, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_PIXES_PIX_SIG_PIX_H_
 #define _INCLUDE__GEM_PIXES_PIX_SIG_PIX_H_

@@ -1,11 +1,13 @@
-/*
- *  pix_share_read.cpp
- *  GEM_darwin
- *
- *  Created by lincoln on 9/29/05.
- *  Copyright 2005 __MyCompanyName__. All rights reserved.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2005, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 #include "Gem/Image.h"
 #include "pix_share_read.h"
 #include "Gem/State.h"

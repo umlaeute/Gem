@@ -1,14 +1,13 @@
-/////////////////////////////////////////////////////////
-//  pix_motionblur.cpp
-//  gem_darwin
+////////////////////////////////////////////////////////
 //
-//  Created by chris clepper on Mon Oct 07 2002.
-//  Copyright (c) 2002.  All rights reserved.
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// GEM - Graphics Environment for Multimedia
 //
-/////////////////////////////////////////////////////////
-
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2002, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 
 #include "pix_motionblur.h"
 #include "Utils/Functions.h"
