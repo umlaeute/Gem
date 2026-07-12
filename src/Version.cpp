@@ -1,11 +1,14 @@
-/*
- *  GemVersion.cpp
- *  Gem
- *
- *  Created by zmoelnig on 7/30/08.
- *  Copyright 2008 IEM @ KUG. All rights reserved.
- *
- */
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2008, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+
 #include "Gem/GemConfig.h"
 
 #define STRINGIFY2(x) #x
