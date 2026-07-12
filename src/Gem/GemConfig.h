@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 1997, Mark Danks and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /* configuration-file */
 #ifndef HAVE_BASE_GEMCONFIG_H_
 #define HAVE_BASE_GEMCONFIG_H_

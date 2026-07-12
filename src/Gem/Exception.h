@@ -1,16 +1,11 @@
-
-/*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
-
-    The base class for exceptions thrown by Gem
-
-    Copyright (c) 2009-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
-
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2009, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
@@ -23,8 +18,6 @@ DESCRIPTION
 
     this is a class, we can throw on creation,
     to make sure that the pd-object can not be created
-
-
 
 -----------------------------------------------------------------*/
 

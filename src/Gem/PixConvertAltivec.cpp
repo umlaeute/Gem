@@ -1,17 +1,11 @@
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file for AltiVec-optimized color-conversion routines
 //
-//    Copyright (c) 2005-2006 James Tittle
-//    Copyright (c) 2005-2006 Chris Clepper
-//    Copyright (c) 2006-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2005, James Tittle, Chris Clepper and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
 /////////////////////////////////////////////////////////
 

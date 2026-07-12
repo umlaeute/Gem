@@ -2,18 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+// SPDX-FileCopyrightText: © 1997, Mark Danks and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 /* OLDNAMES.lib pd.lib opengl32.lib glu32.lib freetype235mt.lib FTGL_static.lib libcpmt.lib msvcrt.lib msvcprt.lib ws2_32.lib pthreadVC.lib
  * pd.lib freetype235mt.lib FTGL_static.lib opengl32.lib glu32.lib ws2_32.lib pthreadVC.lib (?)

@@ -1,18 +1,18 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2006, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 /*-----------------------------------------------------------------
-LOG
-    GEM - Graphics Environment for Multimedia
 
-    GemPixConvertSIMD.h
-       - header-file for color conversion
-       - this is mainly for (SIMD-)optimized routines
-       - part of GEM
-
-    Copyright (c) 2006-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+  - header-file for color conversion
+  - this is mainly for (SIMD-)optimized routines
 
 -----------------------------------------------------------------*/
-
 
 #ifndef _INCLUDE__GEM_GEM_PIXCONVERT_H_
 #define _INCLUDE__GEM_GEM_PIXCONVERT_H_

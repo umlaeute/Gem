@@ -1,17 +1,13 @@
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file for SSE2-optimized color-conversion routines
 //
-//    Copyright (c) 2006-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+// SPDX-FileCopyrightText: © 2006, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #include "Utils/SIMD.h"
 #include "PixConvert.h"
