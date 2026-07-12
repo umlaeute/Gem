@@ -1,5 +1,14 @@
 ////////////////////////////////////////////////////////
 //
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2005, Davide Morelli and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
+//
 // pix_hit
 //
 // hit test over user defined hit_areas...
@@ -490,4 +499,3 @@ void pix_hit :: showCallback(void *data, t_float val)
 {
   GetMyClass(data)->set_show(static_cast<int>(val));
 }
-

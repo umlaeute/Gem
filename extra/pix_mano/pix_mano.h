@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2008, Jaime Oliver and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 ////////////////////////////////////////////////////////
 //
 // pix_mano - an object to track a hand and its fingers
@@ -7,20 +16,8 @@
 // jaime.oliver2@gmail.com
 // this is still a testing version, no guarantees...
 //
-// the license for this object is GNU
-//
 // for more information: www.jaimeoliver.pe
 // Silent Percussion Project
-//
-// GEM - Graphics Environment for Multimedia
-// zmoelnig@iem.at
-//
-// Implementation file
-//    Copyright (c) 1997-1998 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2002 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "LICENSE.txt" in this distribution.
 //
 /////////////////////////////////////////////////////////
 

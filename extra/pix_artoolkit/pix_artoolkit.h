@@ -1,14 +1,11 @@
-/*-----------------------------------------------------------------
-  LOG
-  GEM - Graphics Environment for Multimedia
-
-  Detect markers with 3D poses and positions using ARToolKit
-
-  Copyright (c) 2004 Shigeyuki Hirai. shigeyuki@pop01.odn.ne.jp
-  For information on usage and redistribution, and for a DISCLAIMER OF ALL
-  WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
-  -----------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2004, Shigeyuki Hirai <shigeyuki@pop01.odn.ne.jp> and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef INCLUDE_PIX_ARTOOLKIT_H_
 #define INCLUDE_PIX_ARTOOLKIT_H_

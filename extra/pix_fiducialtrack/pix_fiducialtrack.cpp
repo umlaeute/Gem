@@ -2,16 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// zmoelnig@iem.at
-//
 // Implementation file
 //
-//    Copyright (c) 2005-2012 IOhannes m zmoelnig. forum::für::umläute. IEM
-//    based on reacTIVision by M.Kaltenbrunner and R.Bencina
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2005, IOhannes m zmölnig and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 #include "pix_fiducialtrack.h"
 

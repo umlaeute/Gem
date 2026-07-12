@@ -2,15 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// shigeyuki@pop01.odn.ne.jp
-//
 // Implementation file
 //
-//    Copyright (c) 2005-2006 Shigeyuki Hirai.
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
+// SPDX-FileCopyrightText: © 2005, Shigeyuki Hirai <shigeyuki@pop01.odn.ne.jp> and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 #include "pix_artoolkit.h"
 #include <stdlib.h>
 #include <string.h>

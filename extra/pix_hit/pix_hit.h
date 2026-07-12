@@ -1,3 +1,12 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2005, Davide Morelli and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
+
 ////////////////////////////////////////////////////////
 //
 // pix_hit
