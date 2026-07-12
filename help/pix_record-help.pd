@@ -125,7 +125,8 @@
 #X msg 347 271 label \$1;
 #X msg 146 113 label;
 #X msg 54 292 set 0 \, number \$1;
-#X connect 0 0 21 0;
+#X obj 54 257 + 1;
+#X connect 0 0 22 0;
 #X connect 2 0 3 0;
 #X connect 3 0 0 1;
 #X connect 3 1 2 1;
@@ -149,6 +150,7 @@
 #X connect 19 0 18 0;
 #X connect 20 0 18 0;
 #X connect 21 0 17 0;
+#X connect 22 0 21 0;
 #X restore 77 210 pd codecs;
 #N canvas 1512 420 639 552 properties 0;
 #X obj 283 56 inlet info;
