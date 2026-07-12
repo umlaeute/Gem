@@ -2,19 +2,12 @@
 //
 // GEM - Graphics Environment for Multimedia
 //
-// claude@mathr.co.uk
-//
 // Implementation file
 //
-//    Copyright (c) 1997-2000 Mark Danks.
-//    Copyright (c) Günther Geiger.
-//    Copyright (c) 2001-2012 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-//    Copyright (c) 2019 Claude Heiland-Allen
+// SPDX-FileCopyrightText: © 2019, Claude Heiland-Allen
+// SPDX-License-Identifier: GPL-2.0-or-later
 //
-//    For information on usage and redistribution, and for a DISCLAIMER OF ALL
-//    WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-//
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 #include "Gem/GemConfig.h"
 
 #include "GemWinCreate.h"

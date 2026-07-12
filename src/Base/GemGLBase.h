@@ -1,13 +1,12 @@
 /* ------------------------------------------------------------------
  * GEM - Graphics Environment for Multimedia
  *
- *  Copyright (c) 2008 zmoelnig@iem.at
- *  For information on usage and redistribution, and for a DISCLAIMER
- *  OF ALL WARRANTIES, see the file, "GEM.LICENSE.TERMS"
+ * SPDX-FileCopyrightText: © 2008, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- *  this file has been generated...
  * ------------------------------------------------------------------
  */
+
 #ifndef _INCLUDE__GEM_BASE_GEMGLBASE_H_
 #define _INCLUDE__GEM_BASE_GEMGLBASE_H_
 
