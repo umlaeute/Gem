@@ -1,3 +1,13 @@
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2009, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * this file is generated
+ * ------------------------------------------------------------------
+ */
+
 return _GL_UNDEFINED;
 case 4:
 #ifdef GL_Q

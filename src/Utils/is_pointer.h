@@ -1,6 +1,11 @@
-/*
- * Copyright © 2010 fredoverflow https://stackoverflow.com/a/3177723/1169096
- * Copyright © 2019 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2010, fredoverflow <https://stackoverflow.com/a/3177723/1169096>
+ * SPDX-FileCopyrightText: © 2019, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
  */
 
 #ifndef GEM_IS_POINTER_H_

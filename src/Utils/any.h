@@ -1,15 +1,20 @@
-/*
- * (C) Copyright Christopher Diggins 2005
- * (C) Copyright Pablo Aguilar 2005
- * (C) Copyright Kevlin Henney 2001
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
  *
- * Copyright (C) 2010-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
+ * SPDX-FileCopyrightText: © 2001, Kevlin Henney
+ * SPDX-FileCopyrightText: © 2005, Pablo Aguilar
+ * SPDX-FileCopyrightText: © 2005, Christopher Diggins
+ * SPDX-FileCopyrightText: © 2010, IOhannes m zmölnig and the GEM contributors
+ * SPDX-License-Identifier: BSL-1.0
+ *
+ * ------------------------------------------------------------------
+ */
+
+/*
+ * LOG
  *       downloaded this code from http://www.codeproject.com/KB/cpp/dynamic_typing.aspx
  *         changed namespace/defines "cdiggins" to something "gem"
  *
- * Distributed under the Boost Software License, Version 1.0. (See
- * accompanying file LICENSE_1_0.txt or copy at
- * http://www.boost.org/LICENSE_1_0.txt)
  */
 
 #ifndef GEM_ANY_HPP

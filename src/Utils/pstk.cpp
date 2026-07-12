@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////
+//
+// GEM - Graphics Environment for Multimedia
+//
+// Implementation file
+//
+// SPDX-FileCopyrightText: © 2011, Ricardo Fabbri and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+////////////////////////////////////////////////////////
 /*
  * -------------------------------------------------------------------------
  * A lightweight (x,y) integer point stack
