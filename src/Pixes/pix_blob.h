@@ -28,17 +28,13 @@ pix_blob
 /*-----------------------------------------------------------------
 -------------------------------------------------------------------
 CLASS
+  pix_blob
 
- pix_blob
+KEYWORDS
+  pix
 
-  Get pixel information
-
-   KEYWORDS
-   pix
-
-        DESCRIPTION
-
-         dumps the pix-data as a float-package
+DESCRIPTION
+  Calculate the center of gravity of a pixBlock.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_blob : public GemPixObj

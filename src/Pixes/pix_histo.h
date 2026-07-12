@@ -37,6 +37,7 @@
   pix
 
   DESCRIPTION
+  calc the histogramm of the pixBuf and write it to table(s)
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_histo : public GemPixObj

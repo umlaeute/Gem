@@ -28,7 +28,7 @@
   CLASS
   pix_image
 
-  Loads in an image
+  Loads an an image into a pix block
 
   KEYWORDS
   pix

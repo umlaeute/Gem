@@ -23,12 +23,11 @@ LOG
 CLASS
     pix_diff
 
-    Subtract two images.
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Subtract two images.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_diff : public GemPixDualObj

@@ -20,14 +20,10 @@ LOG
 CLASS
     pix_metaimage
 
-
-
 KEYWORDS
     pix
 
 DESCRIPTION
-
-
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_metaimage : public GemPixObj

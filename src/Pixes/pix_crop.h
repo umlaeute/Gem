@@ -25,12 +25,11 @@ LOG
 CLASS
     pix_crop
 
-    Change pix from "any" color-space to GL_RGBA
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Extract a part of an image
 
 -----------------------------------------------------------------*/
 

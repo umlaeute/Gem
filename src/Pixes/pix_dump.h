@@ -34,12 +34,13 @@ CLASS
 
   Get pixel information
 
-   KEYWORDS
-   pix
+ KEYWORDS
 
-        DESCRIPTION
+  pix
 
-         dumps the pix-data as a float-package
+ DESCRIPTION
+
+  dumps the pix-data as a list of floats
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_dump : public GemPixObj

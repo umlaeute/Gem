@@ -23,18 +23,18 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #include "plugins/film.h"
 
-
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   pix_film
 
-  Loads in a movie
-
   KEYWORDS
   pix
 
   DESCRIPTION
+  Load an digital video (like AVI, Mpeg, Quicktime) into a pix block
+  (OS independent parent-class)
+
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_film : public GemBase

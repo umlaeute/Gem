@@ -24,7 +24,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   pix_movie
 
-  Loads in a movie
+  Load an digital video (like AVI, Mpeg, Quicktime) into a texture
 
   KEYWORDS
   pix

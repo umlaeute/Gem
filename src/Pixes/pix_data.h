@@ -24,12 +24,12 @@ CLASS
 
     pix_data
 
-        Get pixel information
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Get pixel information
 
     Inlet for a float - "xPos"
     Inlet for a float - "yPos"

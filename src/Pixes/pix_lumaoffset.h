@@ -18,13 +18,10 @@ LOG
 CLASS
     pix_lumaoffset
 
-
-
 KEYWORDS
     pix
 
 DESCRIPTION
-
 
 
 -----------------------------------------------------------------*/

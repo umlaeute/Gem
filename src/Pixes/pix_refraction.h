@@ -20,13 +20,14 @@ LOG
 CLASS
     pix_refraction
 
-    View pix thru glass blocks
 
 KEYWORDS
     pix
 
 DESCRIPTION
 
+    View pix thru glass blocks
+    ported from pete's_plugins (www.petewarden.com)
 
 
 -----------------------------------------------------------------*/

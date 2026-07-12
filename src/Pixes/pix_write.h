@@ -23,7 +23,7 @@ LOG
 CLASS
     pix_write
 
-    Writes a pix of the render buffer
+    Snap a pix of the render buffer and write it to a file
 
 KEYWORDS
     pix

@@ -23,12 +23,11 @@
   CLASS
   pix_buffer_read
 
-  reads from a pix_buffer
-
   KEYWORDS
   pix
 
   DESCRIPTION
+  reads from a pix_buffer
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_buffer_read : public GemPixObj

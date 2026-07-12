@@ -23,8 +23,6 @@ LOG
 CLASS
     pix_compare
 
-
-
 KEYWORDS
     pix
     yuv

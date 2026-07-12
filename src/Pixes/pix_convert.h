@@ -25,12 +25,11 @@ LOG
 CLASS
     pix_convert
 
-    Change pix from "any" color-space to GL_RGBA
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Change pix from "any" color-space to *any* other
 
 -----------------------------------------------------------------*/
 

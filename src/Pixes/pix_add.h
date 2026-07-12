@@ -23,12 +23,11 @@
 CLASS
     pix_add
 
-    Add two images together.
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Add two images together.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_add : public GemPixDualObj

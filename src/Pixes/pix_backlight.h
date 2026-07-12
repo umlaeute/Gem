@@ -20,8 +20,6 @@ LOG
 CLASS
     pix_backlight
 
-
-
 KEYWORDS
     pix
 

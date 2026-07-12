@@ -23,12 +23,12 @@ LOG
 CLASS
     pix_flip
 
-    Flip a pix
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Flip a pix
 
     "horizontal" - Flip horizontally
     "vertical" - Flip vertically

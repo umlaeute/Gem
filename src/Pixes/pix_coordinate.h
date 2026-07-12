@@ -24,12 +24,12 @@ class TexCoord;
 CLASS
     pix_coordinate
 
-    sets the texture coordinates
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    sets the texture coordinates
 
     Inlet for a list - "coords"
     "coords" - The texture coordinate list

@@ -22,12 +22,11 @@ LOG
 CLASS
     pix_bitmask
 
-    Change the overall gain of a pix
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Apply a bit mask to each color
 
     Inlet for a list - "vec_gain"
     Inlet for a float - "ft1"

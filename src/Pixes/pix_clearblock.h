@@ -25,10 +25,11 @@ class GemCache;
   CLASS
   pix_clearblock
 
-  Clear an image without destroying glTexture
-
   KEYWORDS
   pix
+
+  DESCRIPTION
+  Clear an image without destroying glTexture
 
   -----------------------------------------------------------------*/
 

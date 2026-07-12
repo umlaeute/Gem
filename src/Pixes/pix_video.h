@@ -25,7 +25,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   pix_video
 
-  Loads in an video
+  Grab a capture device to a pix
 
   KEYWORDS
   pix

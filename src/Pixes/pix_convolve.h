@@ -23,12 +23,12 @@ LOG
 CLASS
     pix_convolve
 
-    Apply a convolution kernel
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Apply a convolution kernel
 
     Inlet for a list - "matrix"
     Inlet for a float - "ft1"

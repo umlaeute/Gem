@@ -23,12 +23,12 @@ LOG
 CLASS
     pix_colormatrix
 
-    Apply a color matrix
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Apply a color matrix kernel
 
     Inlet for a list - "matrix"
 

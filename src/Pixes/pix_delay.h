@@ -23,13 +23,11 @@ LOG
   CLASS
   pix_delay
 
-  change the pixBuf into dots
-
   KEYWORDS
   pix
 
   DESCRIPTION
-
+  delay line for pixes
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_delay : public GemPixObj {
   CPPEXTERN_HEADER(pix_delay, GemPixObj);

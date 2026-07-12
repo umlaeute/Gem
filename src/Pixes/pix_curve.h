@@ -37,6 +37,7 @@
   pix
 
   DESCRIPTION
+  map colour values onto others (via tables)
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_curve : public GemPixObj

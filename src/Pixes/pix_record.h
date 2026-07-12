@@ -30,7 +30,8 @@
   CLASS
   pix_record
 
-  Writes a pix to disk
+  write a pix block into a digital video (like AVI, Mpeg, Quicktime)
+  (OS independent parent-class)
 
   KEYWORDS
   pix

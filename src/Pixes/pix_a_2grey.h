@@ -34,12 +34,11 @@ LOG
 CLASS
     pix_a_2grey
 
-    Change pix to greyscale with respect to alpha
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Change pix to greyscale with respect to alpha
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_a_2grey : public GemPixObj

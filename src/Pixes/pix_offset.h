@@ -23,7 +23,7 @@ LOG
 CLASS
     pix_offset
 
-    Change the overall gain of a pix
+    add offset-values to the RGBA-Channels (without clamping to 0..255)
 
 KEYWORDS
     pix

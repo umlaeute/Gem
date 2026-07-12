@@ -25,12 +25,12 @@ LOG
 CLASS
     pix_grey
 
-    Change pix from "any" color-space to GL_LUMINANCE
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    age an image
+    this is based on EffecTV by Fukuchi Kentauro
 
 -----------------------------------------------------------------*/
 

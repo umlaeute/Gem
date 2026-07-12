@@ -23,12 +23,11 @@ LOG
 CLASS
     pix_2grey
 
-    Change pix to greyscale
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Change pix to greyscale
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_2grey : public GemPixObj

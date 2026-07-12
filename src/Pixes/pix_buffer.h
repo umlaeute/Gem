@@ -22,18 +22,16 @@ LOG
 
 #define DEFAULT_NUM_FRAMES 100
 
-
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
   CLASS
   pix_buffer
 
-  this is a buffer object for storing frames of video
-
   KEYWORDS
   pix
 
   DESCRIPTION
+  this is a buffer object for storing frames of video
 
   -----------------------------------------------------------------*/
 namespace gem

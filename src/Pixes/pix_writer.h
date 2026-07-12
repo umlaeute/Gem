@@ -22,22 +22,16 @@ LOG
 CLASS
     pix_writer
 
-    Writes a pix of the render buffer
+    Write a pix to a file
 
 KEYWORDS
     pix
 
 DESCRIPTION
 
-    Inlet for a list - "vert_size"
-    Inlet for a list - "vert_pos"
-
     "file" - filename to write to
     "bang" - do write now
     "auto 0/1" - stop/start writing automatically
-
-    "vert_size" - Set the size of the pix
-    "vert_pos" - Set the position of the pix
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_writer : public GemPixObj

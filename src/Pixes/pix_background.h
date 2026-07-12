@@ -17,15 +17,12 @@
   CLASS
   pix_background
 
-
-
   KEYWORDS
   pix
   yuv
 
   DESCRIPTION
 
-  template for yuv_ objects
 
   -----------------------------------------------------------------*/
 

@@ -25,12 +25,12 @@ LOG
 CLASS
     pix_rgba
 
-    Change pix from "any" color-space to GL_RGBA
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Change pix from "any" color-space to GL_RGBA
 
 -----------------------------------------------------------------*/
 

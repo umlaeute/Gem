@@ -22,13 +22,12 @@ LOG
 CLASS
     pix_composite
 
-    Composite two pix images.  Puts the second image over the top using
-    alpha blending.
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Composite two pix images.
+    Puts the second image over the top using alpha blending.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_composite : public GemPixDualObj

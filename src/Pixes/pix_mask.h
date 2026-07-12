@@ -23,12 +23,11 @@ LOG
 CLASS
     pix_mask
 
-    Do a blue screen with pix images.
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Do a blue screen with pix images.
 
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_mask : public GemPixDualObj

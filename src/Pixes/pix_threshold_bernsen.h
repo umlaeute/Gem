@@ -23,7 +23,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 CLASS
     pix_threshold_bernsen
 
-    Clamp pixel values to a threshold_bernsen
+    binarizing adaptive tiled thresholder
 
 KEYWORDS
     pix

@@ -36,6 +36,7 @@
   pix
 
   DESCRIPTION
+  apply a 2p2z-filter on a sequence of pixBlocks
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_biquad : public GemPixObj

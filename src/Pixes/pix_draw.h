@@ -22,13 +22,11 @@ LOG
 CLASS
     pix_draw
 
-    Creates a pix_draw
-
 KEYWORDS
     pix
 
 DESCRIPTION
-
+    Draw a pix to a framebuffer
 -----------------------------------------------------------------*/
 class GEM_EXTERN pix_draw : public GemBase {
   CPPEXTERN_HEADER(pix_draw, GemBase);

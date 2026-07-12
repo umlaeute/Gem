@@ -15,8 +15,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 /*-----------------------------------------------------------------
 pix_movement
 
-  movement-transform a series of pictures (especially movies, videos,...)
-  you have to use pix_film instead of pix_movie to make this work with prerecorded videos
+  set the Alpha-channel of a pixBlock depending on the difference between the current and the last pixBlock
 
   2803:forum::für::umläute:2000
   0409:forum::für::umläute:2000

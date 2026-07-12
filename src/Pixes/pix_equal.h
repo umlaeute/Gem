@@ -20,12 +20,12 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 CLASS
     pix_equal
 
-    mark pixels nearly equal to a given color, within given bounds
-
 KEYWORDS
     pix, color
 
 DESCRIPTION
+
+    mark pixels nearly equal to a given color, within given bounds
 
     Inlet for a list - "vec_low"
     Inlet for a float  - "vec_up"

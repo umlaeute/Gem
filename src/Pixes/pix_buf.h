@@ -25,12 +25,12 @@ class GemCache;
 CLASS
     pix_buf
 
-    Creates a pix_buf
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    buffer a pixBlock
+
     This makes an assumption that the size of the image doesn't
         change once the rendering has started
 

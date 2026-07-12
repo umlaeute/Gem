@@ -19,12 +19,13 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 CLASS
     pix_colorclassify
 
-    Detects red, green, blue, yellow, white, black in an image
-
 KEYWORDS
     pix, color
 
 DESCRIPTION
+
+    Detects red, green, blue, yellow, white, black in an image
+
     This algorithm uses interval logic in the the HSV colorspace to detect
     colors in 6 clases: red, green, blue, yellow, white, and black, together
     with a 7th label 'not sure'. The 7th label can be useful for skin detection.

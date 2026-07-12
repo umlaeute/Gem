@@ -23,12 +23,12 @@ LOG
 CLASS
     pix_color
 
-    Change the overall color of a pix image
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Change the overall color of a pix image
 
     Inlet for a list - "vec_gain"
 

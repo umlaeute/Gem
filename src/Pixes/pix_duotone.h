@@ -23,12 +23,12 @@ LOG
 CLASS
     pix_duotone
 
-    Changes the pix to a two-tone image based on a threshold amount (< color1, > color2)
-
 KEYWORDS
     pix
 
 DESCRIPTION
+
+    Changes the pix to a two-tone image based on a threshold amount (< color1, > color2)
 
     Inlet for a list - "vec_offset"
     Inlet for a float - "ft1"

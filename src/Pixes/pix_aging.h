@@ -26,12 +26,14 @@ LOG
 CLASS
     pix_aging
 
-    Make pix look old
-
 KEYWORDS
     pix
 
 DESCRIPTION
+    Make pix look old
+
+    this is based on EffecTV by Fukuchi Kentauro
+    * AgingTV - film-aging effect.
 
 -----------------------------------------------------------------*/
 typedef struct _scratch {

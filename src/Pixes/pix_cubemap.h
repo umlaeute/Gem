@@ -25,12 +25,12 @@
   CLASS
   pix_cubemap
 
-  Turns on texture mapping
-
   KEYWORDS
   pix
 
   DESCRIPTION
+  texture map a pixBlock onto an openGL-Geo (cube)
+
 
   -----------------------------------------------------------------*/
 class GEM_EXTERN pix_cubemap : public GemBase
