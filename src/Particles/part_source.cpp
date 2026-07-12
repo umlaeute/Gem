@@ -14,7 +14,6 @@
 
 #include "part_source.h"
 
-
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_source, t_floatarg, A_DEFFLOAT);

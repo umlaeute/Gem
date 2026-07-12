@@ -16,7 +16,6 @@
 
 #include "part_velocity.h"
 
-
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_GIMME(part_velocity);

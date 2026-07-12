@@ -25,24 +25,24 @@
 
 #ifndef HAVE_DXTRANS_H
 // http://jaewon.mine.nu/jaewon/2009/06/17/a-workaround-for-a-missing-file-dxtrans-h-in-directx-sdk/
-# pragma include_alias( "dxtrans.h", "qedit.h" )
-# define __IDxtCompositor_INTERFACE_DEFINED__
-# define __IDxtAlphaSetter_INTERFACE_DEFINED__
-# define __IDxtJpeg_INTERFACE_DEFINED__
-# define __IDxtKey_INTERFACE_DEFINED__
-#endif
+#  pragma include_alias("dxtrans.h", "qedit.h")
+#  define __IDxtCompositor_INTERFACE_DEFINED__
+#  define __IDxtAlphaSetter_INTERFACE_DEFINED__
+#  define __IDxtJpeg_INTERFACE_DEFINED__
+#  define __IDxtKey_INTERFACE_DEFINED__
+# endif
 
-#include <atlbase.h>
-#include <atlconv.h>
-#include <streams.h>
-#include <dvdmedia.h>
-#define REGISTER_FILTERGRAPH 1
+# include <atlbase.h>
+# include <atlconv.h>
+# include <streams.h>
+# include <dvdmedia.h>
+# define REGISTER_FILTERGRAPH 1
 
-#include "filmDS.h"
-#include "plugins/PluginFactory.h"
-#include "Gem/RTE.h"
-#include "Gem/Properties.h"
-#include "Gem/Exception.h"
+# include "filmDS.h"
+# include "plugins/PluginFactory.h"
+# include "Gem/RTE.h"
+# include "Gem/Properties.h"
+# include "Gem/Exception.h"
 
 using namespace gem::plugins;
 

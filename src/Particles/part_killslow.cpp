@@ -13,8 +13,6 @@
 /////////////////////////////////////////////////////////
 
 #include "part_killslow.h"
-
-
 #include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_ONE_ARG(part_killslow, t_floatarg, A_DEFFLOAT);

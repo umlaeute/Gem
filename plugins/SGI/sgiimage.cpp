@@ -19,7 +19,6 @@
  *                              Mark Danks - 1998
  */
 
-
 // FIXXME: use C++ memory allocators
 
 #include <stdlib.h>

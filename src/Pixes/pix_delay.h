@@ -31,8 +31,7 @@ LOG
   DESCRIPTION
 
   -----------------------------------------------------------------*/
-class GEM_EXTERN pix_delay : public GemPixObj
-{
+class GEM_EXTERN pix_delay : public GemPixObj {
   CPPEXTERN_HEADER(pix_delay, GemPixObj);
 
 public:

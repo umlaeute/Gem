@@ -195,8 +195,7 @@ bail:
 */
 
 
-namespace
-{
+namespace {
 IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
                                     const std::string&formatname, int formatnum)
 {
@@ -236,10 +235,7 @@ IDeckLinkDisplayMode*getDisplayMode(IDeckLinkInput*dli,
   }
   return displayMode;
 }
-};
-
-
-
+}; // namespace
 
 using namespace gem::plugins;
 

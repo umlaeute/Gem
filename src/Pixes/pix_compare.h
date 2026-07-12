@@ -35,8 +35,7 @@ DESCRIPTION
 
 -----------------------------------------------------------------*/
 
-class GEM_EXTERN pix_compare : public GemPixDualObj
-{
+class GEM_EXTERN pix_compare : public GemPixDualObj {
   CPPEXTERN_HEADER(pix_compare, GemPixDualObj);
 
 public:
@@ -74,9 +73,7 @@ private:
 
   //////////
   // Static member functions
-  static void directionCallback       (void *data, t_float state);
-
-
+  static void directionCallback(void *data, t_float state);
 };
 
 #endif

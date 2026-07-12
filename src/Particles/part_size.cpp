@@ -13,8 +13,6 @@
 /////////////////////////////////////////////////////////
 
 #include "part_size.h"
-
-
 #include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_GIMME(part_size);

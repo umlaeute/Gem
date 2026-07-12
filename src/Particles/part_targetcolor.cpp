@@ -13,10 +13,9 @@
 /////////////////////////////////////////////////////////
 
 #include "part_targetcolor.h"
+#include "papi/papi.h"
 
 #include "Gem/Exception.h"
-
-#include "papi/papi.h"
 
 CPPEXTERN_NEW_WITH_GIMME(part_targetcolor);
 

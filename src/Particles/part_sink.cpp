@@ -13,8 +13,6 @@
 /////////////////////////////////////////////////////////
 
 #include "part_sink.h"
-
-
 #include <string.h>
 
 CPPEXTERN_NEW_WITH_GIMME(part_sink);

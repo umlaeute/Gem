@@ -15,8 +15,8 @@
 
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
-# pragma warning( push )
-# pragma warning( disable : 4091 )
+# pragma warning(push)
+# pragma warning(disable : 4091)
 #endif
 
 #include <m_pd.h>

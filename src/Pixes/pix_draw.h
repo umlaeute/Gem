@@ -30,8 +30,7 @@ KEYWORDS
 DESCRIPTION
 
 -----------------------------------------------------------------*/
-class GEM_EXTERN pix_draw : public GemBase
-{
+class GEM_EXTERN pix_draw : public GemBase {
   CPPEXTERN_HEADER(pix_draw, GemBase);
 
 public:

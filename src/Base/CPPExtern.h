@@ -215,13 +215,13 @@ static void obj_setupCallback(t_class *classPtr);
 //
 // GIMME ARGUMENT
 /////////////////////////////////////////////////
-#define CPPEXTERN_NEW_NAMED_WITH_GIMME(NEW_CLASS, CLASSNAME)            \
-  REAL_NEW__CLASS(NEW_CLASS);                                           \
-  const int typespecs[] = {};                                           \
-  REAL_NEW__CREATE0(NEW_CLASS, typespecs);                               \
-  REAL_NEW__CREATE1(NEW_CLASS);                                         \
-  REAL_NEW__SETOBJ(new NEW_CLASS(argc,argv));                           \
-  REAL_NEW__CREATE2(NEW_CLASS);                                         \
+#define CPPEXTERN_NEW_NAMED_WITH_GIMME(NEW_CLASS, CLASSNAME)                   \
+  REAL_NEW__CLASS(NEW_CLASS);                                                  \
+  const int typespecs[] = {};                                                  \
+  REAL_NEW__CREATE0(NEW_CLASS, typespecs);                                     \
+  REAL_NEW__CREATE1(NEW_CLASS);                                                \
+  REAL_NEW__SETOBJ(new NEW_CLASS(argc, argv));                                 \
+  REAL_NEW__CREATE2(NEW_CLASS);                                                \
   REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)
 #define CPPEXTERN_NEW_WITH_GIMME(NEW_CLASS) \
   CPPEXTERN_NEW_NAMED_WITH_GIMME(NEW_CLASS, #NEW_CLASS)
@@ -333,21 +333,21 @@ static void obj_setupCallback(t_class *classPtr);
   } catch (...) {gem::catchGemException(CPPExtern::s_holdname, CPPExtern::s_holder); return NULL;} \
   }
 
-#define REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)                           \
-  extern "C" {                                                          \
-  GEM_EXPORT void NEW_CLASS ## _setup(void)                             \
-  {                                                                     \
-  static int recalled=0; if(recalled)return; recalled=1;                \
-  NEW_CLASS ## _class = class_new(                                      \
-    gensym(CLASSNAME),                                                 \
-    (t_newmethod)create_ ## NEW_CLASS,                                  \
-    (t_method)&NEW_CLASS::obj_freeCallback,                             \
-    sizeof(Obj_header), GEM_CLASSFLAGS,                                 \
-    A_GIMME, A_NULL);                                                   \
-  SET_HELPSYMBOL(NEW_CLASS, CLASSNAME);                                 \
-  NEW_CLASS::real_obj_setupCallback(NEW_CLASS ## _class);               \
-  }                                                                     \
-   }                                                                    \
+#define REAL_NEW__SETUP(NEW_CLASS, CLASSNAME)                                  \
+  extern "C" {                                                                 \
+  GEM_EXPORT void NEW_CLASS##_setup(void) {                                    \
+    static int recalled = 0;                                                   \
+    if (recalled)                                                              \
+      return;                                                                  \
+    recalled = 1;                                                              \
+    NEW_CLASS##_class =                                                        \
+        class_new(gensym(CLASSNAME), (t_newmethod)create_##NEW_CLASS,          \
+                  (t_method) & NEW_CLASS::obj_freeCallback,                    \
+                  sizeof(Obj_header), GEM_CLASSFLAGS, A_GIMME, A_NULL);        \
+    SET_HELPSYMBOL(NEW_CLASS, CLASSNAME);                                      \
+    NEW_CLASS::real_obj_setupCallback(NEW_CLASS##_class);                      \
+  }                                                                            \
+  }                                                                            \
   AUTO_REGISTER_CLASS(NEW_CLASS)
 
 #define REAL_NEW__MAKEVAR(num, type)                                    \

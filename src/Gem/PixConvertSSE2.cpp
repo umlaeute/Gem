@@ -20,20 +20,19 @@
  * if somebody would want to have a look i'd be grateful
  */
 
-
 #ifdef __SSE2__
 
 #if defined _MSC_VER
 /* data conversion with possible loss of data */
-# pragma warning( disable : 4309 )
-#endif
+#  pragma warning(disable : 4309)
+# endif
 
-#define RGB2YUV_14 0
-#define RGB2YUV_24 0
-#define RGB2YUV_34 0
+# define RGB2YUV_14 0
+# define RGB2YUV_24 0
+# define RGB2YUV_34 0
 
-#define RGB 0,1,2
-#define BGR 2,1,0
+# define RGB 0, 1, 2
+# define BGR 2, 1, 0
 
 
 /* just some debugging stuff ... */

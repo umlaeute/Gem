@@ -25,7 +25,7 @@
 # define FLIPTEX(x) (x)
 #else
 // uv    : model->texcoords[2 * i + 1] = (1-model->uvtexcoords[2*i+1]) * h;
-# define FLIPTEX(x) (1-(x))
+# define FLIPTEX(x) (1 - (x))
 #endif
 
 /* GLMtriangle: Structure that defines a triangle in a model.

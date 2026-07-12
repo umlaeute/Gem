@@ -105,7 +105,7 @@ static bool has_loader(const std::vector<gem_loader_t>&loaders, const gem_loader
       if (l == loaders[i])
         return true;
     }
-    return false;  
+    return false;
 }
 
 void gem_register_loader(gem_loader_t loader)

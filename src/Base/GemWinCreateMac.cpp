@@ -14,7 +14,7 @@
 /////////////////////////////////////////////////////////
 #if defined __APPLE__
 # if defined __x86_64__
-#  undef  HAVE_CARBONQUICKTIME
+#  undef HAVE_CARBONQUICKTIME
 # else
 // with OSX10.6, apple has removed loads of Carbon functionality (in 64bit mode)
 // LATER make this a real check in configure

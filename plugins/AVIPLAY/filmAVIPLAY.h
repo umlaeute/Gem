@@ -20,7 +20,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
 
 #if defined (_WIN32) & defined (HAVE_LIBAVIPLAY)
 // un windows there are other ways...
-#undef HAVE_LIBAVIPLAY
+# undef HAVE_LIBAVIPLAY
 #endif
 
 #ifdef HAVE_LIBAVIPLAY

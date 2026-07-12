@@ -13,7 +13,6 @@
 /////////////////////////////////////////////////////////
 
 #include "part_color.h"
-
 #include "papi/papi.h"
 
 CPPEXTERN_NEW(part_color);

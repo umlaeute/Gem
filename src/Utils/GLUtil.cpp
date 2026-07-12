@@ -223,10 +223,7 @@ float GLuintMap::set(GLuint i, float f)
   m_pimpl->idmap[f]=i;
   return f;
 }
-void GLuintMap::del(float f)
-{
-  m_pimpl->del(f);
-}
+void GLuintMap::del(float f) { m_pimpl->del(f); }
 
 
 /*
@@ -349,7 +346,9 @@ void gem::utils::gl::gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNe
 }
 
 
-#define CASE2NAME(x) case x: return #x
+#define CASE2NAME(x)                                                           \
+  case x:                                                                      \
+    return #x
 
 namespace gem { namespace utils { namespace gl {
 const char*pixtype2name (GLenum type) {

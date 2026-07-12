@@ -16,9 +16,8 @@
 
 #include "part_damp.h"
 
-
-CPPEXTERN_NEW_WITH_THREE_ARGS(part_damp, t_floatarg, A_DEFFLOAT,
-                              t_floatarg, A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
+CPPEXTERN_NEW_WITH_THREE_ARGS(part_damp, t_floatarg, A_DEFFLOAT, t_floatarg,
+                              A_DEFFLOAT, t_floatarg, A_DEFFLOAT);
 
 /////////////////////////////////////////////////////////
 //

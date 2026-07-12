@@ -26,8 +26,6 @@
 
 // TODO add setroioffset and setroisize methods
 
-
-
 // this is to paint easily your own pictures by passing a package of floats that contain all necessary image data)
 
 #include "pix_set.h"

@@ -15,15 +15,15 @@
 */
 
 #if 1
-//this will record movies
-#ifndef _INCLUDE__GEM_PIXES_PIX_RECORD_H_
-#define _INCLUDE__GEM_PIXES_PIX_RECORD_H_
+// this will record movies
+# ifndef _INCLUDE__GEM_PIXES_PIX_RECORD_H_
+#  define _INCLUDE__GEM_PIXES_PIX_RECORD_H_
 
-#include "Base/GemBase.h"
-#include "Gem/Image.h"
-#include "RTE/Outlet.h"
+#  include "Base/GemBase.h"
+#  include "Gem/Image.h"
+#  include "RTE/Outlet.h"
 
-#include "plugins/record.h"
+#  include "plugins/record.h"
 
 /*-----------------------------------------------------------------
   -------------------------------------------------------------------
