@@ -1,19 +1,11 @@
-/*-----------------------------------------------------------------
-
-GEM - Graphics Environment for Multimedia
-
-Load an GLSL fragment shader
-
- *  Created by tigital on 11/13/2005.
- *  Copyright 2005 James Tittle.
-
-Copyright (c) 1997-1999 Mark Danks. mark@danks.org
-Copyright (c) Günther Geiger. geiger@epy.co.at
-Copyright (c) 2001-2011 IOhannes m zmölnig. forum::für::umläute. IEM. zmoelnig@iem.at
-For information on usage and redistribution, and for a DISCLAIMER OF ALL
-WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
-
------------------------------------------------------------------*/
+/* ------------------------------------------------------------------
+ * GEM - Graphics Environment for Multimedia
+ *
+ * SPDX-FileCopyrightText: © 2005, James Tittle II and the GEM contributors
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * ------------------------------------------------------------------
+ */
 
 #ifndef _INCLUDE__GEM_MANIPS_GLSL_FRAGMENT_H_
 #define _INCLUDE__GEM_MANIPS_GLSL_FRAGMENT_H_
@@ -25,7 +17,7 @@ WARRANTIES, see the file, "GEM.LICENSE.TERMS" in this distribution.
   CLASS
   glsl_fragment
 
-  Loads in a fragment shader
+  Loads in a GLSL fragment shader
 
   KEYWORDS
 
