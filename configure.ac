@@ -335,6 +335,22 @@ stdcxx_LIBS=$LIBS
 AC_CHECK_LIB([stdc++],[main],[predeps_CXX="$predeps_CXX -lstdc++"])
 LIBS=$stdcxx_LIBS
 
+
+# text rendering
+IEM_CHECK_FTGL()
+GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidirectional text rendering using FriBidi])
+
+AC_ARG_WITH([default-font],
+            AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
+           )
+AS_IF([test "x$with_default_font" != "x" && \
+       test "x$with_default_font" != "xno" &&
+       test "x$with_default_font" != "xyes"], [
+  AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
+  AC_MSG_RESULT([using "${with_default_font}" as default font])
+])
+
+
 dnl some checks for osX
 dnl AC_CHECK_HEADERS([Cocoa/Cocoa.h],[], [ with_Cocoa_framework="no" ])
 GEM_CHECK_FRAMEWORK([Cocoa],
@@ -361,6 +377,8 @@ GEM_CHECK_FRAMEWORK([QuickTime],
                         [have_quicktime_framework="no"])
 
 AM_CONDITIONAL(VIDEODARWIN, test "${have_carbon_framework}" = "yes" && test "${have_quicktime_framework}" = "yes")
+
+## image reading/writing
 
 #fallback to imagemagick if people are too lazy to type ImageMagick
 AS_IF([test -z "$with_ImageMagick"], [with_ImageMagick="$with_imagemagick"])
@@ -393,9 +411,6 @@ GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
 GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
 GEM_CHECK_LIB([stb], [stb],[stb/stb_image.h], [stbi_load],,,,[image loader])
 
-IEM_CHECK_FTGL()
-GEM_CHECK_LIB([fribidi], [fribidi],[fribidi.h], [fribidi_log2vis],,,, [bidirectional text rendering using FriBidi])
-
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie loader])
 GEM_CHECK_LIB([gmerlin_avdec], [gmerlin_avdec],[gmerlin/avdec.h], [gavl_start],,,,[movie loader])
@@ -410,6 +425,17 @@ GEM_CHECK_LIB([mpeg], [mpeg],[mpeg.h], [OpenMPEG],,,,[movie loader])
 GEM_CHECK_LIB([libmpeg3], [mpeg3],[libmpeg3.h], [mpeg3_check_sig],,,,[movie loader])
 GEM_CHECK_LIB([libquicktime], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
 GEM_CHECK_LIB([lqt], [quicktime],[quicktime.h], [quicktime_init],,,,[movie loader])
+
+
+# enabling recording with quicktime4linux
+gem_tmp_lqt_libs="$LIBS"
+LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
+AC_MSG_CHECKING(for lqt_open_write)
+AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
+        AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
+        AC_MSG_RESULT(yes),
+        AC_MSG_RESULT(no))
+LIBS="$gem_tmp_lqt_libs"
 
 ### ffmpeg is a bit complicated, as it depends on multiple libs
 ### for now, we only support pkg-config (or manual configuration)
@@ -510,48 +536,6 @@ GEM_CHECK_LIB([libvlc], [vlc],[vlc/vlc.h], [libvlc_video_set_callbacks],,,, [vid
 
 # VNC
 GEM_CHECK_LIB([libvncclient], [vncclient],[rfb/rfbclient.h], [rfbGetClient],,,, [video input])
-
-# assimp
-GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
-## check whether this is assimp2 or assimp3
-have_assimp2="no"
-have_assimp3="no"
-
-old_cflags=${CFLAGS}
-old_cxxflags=${CXXFLAGS}
-old_ldflags=${LDFLAGS}
-CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
-CXXFLAGS="${CXXFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
-LDFLAGS="${LDFLAGS} ${GEM_LIB_ASSIMP_LIBS}"
-AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
-AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
-CFLAGS=${old_cflags}
-CXXFLAGS=${old_cxxflags}
-LDFLAGS=${old_ldflags}
-
-AM_CONDITIONAL([HAVE_ASSIMP2], [test "${have_assimp2}" = "yes" ])
-AM_CONDITIONAL([HAVE_ASSIMP3], [test "${have_assimp3}" = "yes" ])
-
-## text support
-AC_ARG_WITH([default-font],
-            AS_HELP_STRING([--with-default-font=vera.ttf],[specify the default font for text-rendering])
-           )
-AS_IF([test "x$with_default_font" != "x" && \
-       test "x$with_default_font" != "xno" &&
-       test "x$with_default_font" != "xyes"], [
-  AC_DEFINE_UNQUOTED([GEM_DEFAULT_FONT], "${with_default_font}", [default font for text rendering])
-  AC_MSG_RESULT([using "${with_default_font}" as default font])
-])
-
-# enabling recording with quicktime4linux
-gem_tmp_lqt_libs="$LIBS"
-LIBS="$LIBS $GEM_CHECK_LIB_LIBS"
-AC_MSG_CHECKING(for lqt_open_write)
-AC_LINK_IFELSE([AC_LANG_CALL([], [lqt_open_write])],
-        AC_DEFINE([HAVE_LQT_OPEN_WRITE], [], [film recording using quicktime4linux])
-        AC_MSG_RESULT(yes),
-        AC_MSG_RESULT(no))
-LIBS="$gem_tmp_lqt_libs"
 
 
 # DECKLINK-support
@@ -661,6 +645,27 @@ AM_CONDITIONAL([GEM_NDI_LOCAL], [test "${with_NDI}" = "local"])
 AC_SUBST(GEM_NDI_CXXFLAGS)
 AC_SUBST(GEM_NDI_LIBS)
 
+## model loading
+# assimp
+GEM_CHECK_LIB([assimp], [assimp],[assimp.h], [aiDetachAllLogStreams],,,, [3D model loading])
+## check whether this is assimp2 or assimp3
+have_assimp2="no"
+have_assimp3="no"
+
+old_cflags=${CFLAGS}
+old_cxxflags=${CXXFLAGS}
+old_ldflags=${LDFLAGS}
+CFLAGS="${CFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+CXXFLAGS="${CXXFLAGS} ${GEM_LIB_ASSIMP_CFLAGS}"
+LDFLAGS="${LDFLAGS} ${GEM_LIB_ASSIMP_LIBS}"
+AC_CHECK_HEADERS([assimp.h], [have_assimp2="yes"])
+AC_CHECK_HEADERS([assimp/cimport.h], [have_assimp3="yes"])
+CFLAGS=${old_cflags}
+CXXFLAGS=${old_cxxflags}
+LDFLAGS=${old_ldflags}
+
+AM_CONDITIONAL([HAVE_ASSIMP2], [test "${have_assimp2}" = "yes" ])
+AM_CONDITIONAL([HAVE_ASSIMP3], [test "${have_assimp3}" = "yes" ])
 
 
 # enabling "-freg-struct-return" (for FreeFrame)
