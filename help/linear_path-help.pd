@@ -43,7 +43,7 @@
 #X text 10 65 KEYWORDS Gem;
 #X text 20 85 INLET_0 float;
 #X text 10 105 AUTHOR IOhannes m zmölnig;
-#X text 10 125 LICENSE GPL v2;
+#X text 10 125 LICENSE GPL-2.0-or-later;
 #X restore 568 8 pd META;
 #X obj 115 429 spline_path;
 #X obj 228 429 tabread4;

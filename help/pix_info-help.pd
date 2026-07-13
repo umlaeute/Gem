@@ -57,7 +57,7 @@
 #X text 20 225 OUTLET_6 list;
 #X text 20 245 OUTLET_7 pointer;
 #X text 10 265 AUTHOR IOhannes m zmölnig;
-#X text 10 285 LICENSE GPL v2;
+#X text 10 285 LICENSE GPL-2.0-or-later;
 #X restore 518 8 pd META;
 #X obj 451 265 pix_info -m, f 25;
 #X obj 451 162 pix_info, f 20;

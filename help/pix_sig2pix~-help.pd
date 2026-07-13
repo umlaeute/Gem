@@ -44,7 +44,7 @@
 #X text 20 145 INLET_3 signal;
 #X text 20 165 OUTLET_0 gemlist;
 #X text 10 185 AUTHOR IOhannes m zmölnig;
-#X text 10 205 LICENSE GPL v2;
+#X text 10 205 LICENSE GPL-2.0-or-later;
 #X restore 524 13 pd META;
 #X text 29 431 Inlet 1: message: type BYTE|FLOAT|DOUBLE;
 #X obj 457 168 t a;

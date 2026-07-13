@@ -79,7 +79,7 @@
 #X text 20 165 OUTLET_2 see;
 #X text 20 185 OUTLET_3 list;
 #X text 10 205 AUTHOR IOhannes m zmölnig;
-#X text 10 225 LICENSE GPL v2;
+#X text 10 225 LICENSE GPL-2.0-or-later;
 #X restore 578 8 pd META;
 #X obj 599 447 _gemwin;
 #X connect 11 0 33 0;

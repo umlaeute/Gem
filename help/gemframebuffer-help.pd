@@ -137,7 +137,7 @@
 #X text 20 105 OUTLET_0 gemlist;
 #X text 20 125 OUTLET_1 texture;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 778 8 pd META;
 #X text 30 562 Inlet 1: message: perspec <left><right><bottom><top><near><far>, f 66;
 #X msg 685 300 format RGBA32F;

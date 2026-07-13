@@ -32,7 +32,7 @@
 #X text 20 85 INLET_0 bang message;
 #X text 20 105 OUTLET_0 float;
 #X text 10 125 AUTHOR IOhannes m zmölnig;
-#X text 10 145 LICENSE GPL v2;
+#X text 10 145 LICENSE GPL-2.0-or-later;
 #X restore 588 8 pd META;
 #X obj 568 228 _gemwin;
 #X connect 10 0 23 0;

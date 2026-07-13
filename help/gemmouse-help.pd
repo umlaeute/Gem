@@ -79,7 +79,7 @@
 #X text 20 165 OUTLET_3 middle;
 #X text 20 185 OUTLET_4 right;
 #X text 10 205 AUTHOR IOhannes m zmölnig;
-#X text 10 225 LICENSE GPL v2;
+#X text 10 225 LICENSE GPL-2.0-or-later;
 #X restore 788 8 pd META;
 #X obj 464 299 _gemwin;
 #X text 24 258 [context_name] [x-normalization [y-normalization]];

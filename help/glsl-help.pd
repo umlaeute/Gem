@@ -34,7 +34,7 @@
 #X text 20 135 OUTLET_0 gemlist;
 #X text 20 155 OUTLET_1 float;
 #X text 10 175 AUTHOR IOhannes m zmölnig;
-#X text 10 195 LICENSE GPL v2;
+#X text 10 195 LICENSE GPL-2.0-or-later;
 #X text 20 85 INLET_0 gemlist open symbol bang;
 #X text 20 115 INLET_1 <uniformname>;
 #X restore 518 8 pd META;

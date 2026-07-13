@@ -37,7 +37,7 @@
 #X text 20 105 INLET_1 int;
 #X text 20 125 OUTLET_0 gemlist;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 518 8 pd META;
 #X text 14 221 The image can be either drawn directly using [pix_draw] (VERY slow) or applied as a texture onto a Geo ([pix_texture]), f 67;
 #X obj 451 233 _pix2rectangle 3;

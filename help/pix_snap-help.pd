@@ -67,7 +67,7 @@
 #X text 20 125 INLET_2 list;
 #X text 20 145 OUTLET_0 gemlist;
 #X text 10 165 AUTHOR IOhannes m zmölnig;
-#X text 10 185 LICENSE GPL v2;
+#X text 10 185 LICENSE GPL-2.0-or-later;
 #X restore 598 8 pd META;
 #X text 33 376 Inlet 2: list: offsetX offsetY (in pixels. default: 0 0), f 63;
 #X text 33 391 Inlet 3: list: dimenX dimenY (in pixels. default: window-size), f 63;

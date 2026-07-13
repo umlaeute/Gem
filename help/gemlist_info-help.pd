@@ -236,7 +236,7 @@
 #X text 20 165 OUTLET_3 3;
 #X text 20 185 OUTLET_4 3;
 #X text 10 205 AUTHOR IOhannes m zmölnig;
-#X text 10 225 LICENSE GPL v2;
+#X text 10 225 LICENSE GPL-2.0-or-later;
 #X restore 548 8 pd META;
 #X obj 222 422 gemhead;
 #X obj 222 445 world_light;

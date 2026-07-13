@@ -55,7 +55,7 @@
 #X text 20 105 INLET_1 float;
 #X text 20 125 OUTLET_0 gemlist;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 528 8 pd META;
 #X msg 522 316 string 20320 10 22909 10 19990 10 30028, f 17;
 #X msg 521 366 text مرحبا بالعالم;

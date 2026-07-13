@@ -46,7 +46,7 @@
 #X text 20 105 OUTLET_0 gemlist;
 #X text 20 125 OUTLET_1 error;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 778 8 pd META;
 #X obj 490 212 _gemwin;
 #X obj 451 113 pix_test;

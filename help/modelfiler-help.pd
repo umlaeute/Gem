@@ -23,7 +23,7 @@
 #N canvas 484 243 450 300 META 0;
 #X obj 10 25 declare -lib Gem;
 #X text 10 135 AUTHOR IOhannes m zmölnig;
-#X text 10 155 LICENSE GPL v2;
+#X text 10 155 LICENSE GPL-2.0-or-later;
 #X text 10 45 DESCRIPTION load an Alias/Wavefront-Model to various tables.;
 #X text 10 65 KEYWORDS Gem openGL;
 #X text 20 85 INLET_0 read position color normal texture backend ...;

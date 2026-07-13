@@ -642,7 +642,7 @@
 #X text 10 45 DESCRIPTION access to the window manager;
 #X text 10 65 KEYWORDS Gem window;
 #X text 10 85 AUTHOR IOhannes m zmölnig;
-#X text 10 105 LICENSE GPL v2;
+#X text 10 105 LICENSE GPL-2.0-or-later;
 #X restore 558 8 pd META;
 #X connect 11 0 10 0;
 #X connect 12 0 10 0;

@@ -44,7 +44,7 @@
 #X text 10 45 DESCRIPTION generate a noise image;
 #X text 10 65 KEYWORDS Gem pix image;
 #X text 10 85 AUTHOR IOhannes m zmölnig;
-#X text 10 105 LICENSE GPL v2;
+#X text 10 105 LICENSE GPL-2.0-or-later;
 #X restore 518 8 pd META;
 #X text 457 474 see also:;
 #X obj 525 473 pix_test;

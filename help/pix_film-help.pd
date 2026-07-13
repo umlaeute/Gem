@@ -95,7 +95,7 @@
 #X text 20 145 OUTLET_1 list;
 #X text 20 165 OUTLET_2 bang;
 #X text 10 185 AUTHOR IOhannes m zmölnig;
-#X text 10 205 LICENSE GPL v2;
+#X text 10 205 LICENSE GPL-2.0-or-later;
 #X restore 578 8 pd META;
 #N canvas 2 93 450 310 :: 0;
 #X text 35 220 If a specific colorspace is required \, it is strongly recommended to convert using [pix_rgba] \, [pix_yuv] \, [pix_grey] etc. This is the only way to guarantee a colorspace., f 60;

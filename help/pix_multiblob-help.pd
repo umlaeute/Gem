@@ -151,7 +151,7 @@
 #X text 20 105 OUTLET_0 gemlist;
 #X text 20 125 OUTLET_1 (k;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 548 8 pd META;
 #X obj 460 363 _gemwin;
 #X connect 23 0 25 0;

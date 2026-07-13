@@ -52,7 +52,7 @@
 #X text 20 85 INLET_0 gemlist draw;
 #X text 20 125 OUTLET_0 gemlist;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X text 10 45 DESCRIPTION Gem meta object;
 #X text 10 65 KEYWORDS Gem;
 #X text 20 105 INLET_0 debugGL <float>;

@@ -61,7 +61,7 @@
 #X text 20 105 INLET_1 gemlist;
 #X text 20 125 OUTLET_0 gemlist;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 508 8 pd META;
 #X obj 524 296 _gemwin;
 #X obj 451 253 _pix2rectangle 3;

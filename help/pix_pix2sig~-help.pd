@@ -43,7 +43,7 @@
 #X text 20 145 OUTLET_2 signal~;
 #X text 20 165 OUTLET_3 signal~;
 #X text 10 185 AUTHOR IOhannes m zmölnig;
-#X text 10 205 LICENSE GPL v2;
+#X text 10 205 LICENSE GPL-2.0-or-later;
 #X restore 528 8 pd META;
 #X text 25 124 In 'clear' mode (the default) \, each audio block will start reading at the beginning of the current image (so if you want to read the entire image \, you need large blocksizes). In 'fill' mode \, the object will remember where we stopped reading \, and continue there (so you can incrementally read the image). In 'line' mode only a single line is read (consecutively \, so the entire image is scanned) \, with zero-padding or data truncating as required. The similar 'waterfall' mode \, reads the same line for each signal block.;
 #X obj 576 92 block~ 4096;

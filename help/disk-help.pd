@@ -40,7 +40,7 @@
 #X text 20 145 INLET_3 float;
 #X text 20 165 OUTLET_0 gemlist;
 #X text 10 185 AUTHOR IOhannes m zmölnig;
-#X text 10 205 LICENSE GPL v2;
+#X text 10 205 LICENSE GPL-2.0-or-later;
 #X restore 548 8 pd META;
 #X obj 557 241 _gemwin;
 #X connect 13 0 25 0;

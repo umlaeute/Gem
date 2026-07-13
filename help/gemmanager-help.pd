@@ -23,5 +23,5 @@ window-dimensions (important for a few objects like [ortho] or [pix_snap2tex])
 #X text 10 45 DESCRIPTION interact with the global GemState;
 #X text 10 65 KEYWORDS Gem control;
 #X text 10 85 AUTHOR IOhannes m zmölnig;
-#X text 10 105 LICENSE GPL v2;
+#X text 10 105 LICENSE GPL-2.0-or-later;
 #X restore 338 28 pd META;

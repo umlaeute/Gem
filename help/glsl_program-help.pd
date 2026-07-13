@@ -56,7 +56,7 @@
 #X text 20 105 OUTLET_0 gemlist;
 #X text 20 125 OUTLET_1 float;
 #X text 10 145 AUTHOR IOhannes m zmölnig;
-#X text 10 165 LICENSE GPL v2;
+#X text 10 165 LICENSE GPL-2.0-or-later;
 #X restore 518 8 pd META;
 #X msg 476 175 keepuniforms 0;
 #X text 21 520 Inlet 1: "keepuniforms 1|0" enable(DEFAULT) or disable the caching of uniform variables across reload, f 67;

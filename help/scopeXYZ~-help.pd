@@ -80,7 +80,7 @@
 #X text 20 145 INLET_3 signal;
 #X text 20 165 OUTLET_0 gemlist;
 #X text 10 185 AUTHOR IOhannes m zmölnig;
-#X text 10 205 LICENSE GPL v2;
+#X text 10 205 LICENSE GPL-2.0-or-later;
 #X restore 568 8 pd META;
 #X obj 477 366 _gemwin;
 #X connect 16 0 35 0;
