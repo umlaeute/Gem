@@ -21,7 +21,7 @@
 #endif
 
 #ifndef GEM_VERSION_BUGFIX
-# define GEM_VERSION_BUGFIX CVS
+# define GEM_VERSION_BUGFIX git
 #endif
 
 #ifndef GEM_VERSION_CODENAME
@@ -40,4 +40,3 @@ bool gem::Version :: versionCheck(int major, int minor)
 {
   return ((GEM_VERSION_MAJOR==major) && (GEM_VERSION_MINOR==minor));
 }
-
