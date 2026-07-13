@@ -37,11 +37,17 @@ if HAVE_LIB_DECKLINK
 pkglib_LTLIBRARIES+= gem_videoDECKLINK.la gem_recordDECKLINK.la
 dist_gemhelp_DATA += decklink-videoplugin.pd
 dist_gemhelp_DATA += decklink-recordplugin.pd
+if GEM_DECKLINK_APISTUB
+noinst_LTLIBRARIES += libDeckLinkAPIDispatch.la
+endif
 else
 if GEM_DECKLINK_LOCAL
 pkglib_LTLIBRARIES+= gem_videoDECKLINK.la gem_recordDECKLINK.la
 dist_gemhelp_DATA += decklink-videoplugin.pd
 dist_gemhelp_DATA += decklink-recordplugin.pd
+if GEM_DECKLINK_APISTUB
+noinst_LTLIBRARIES += libDeckLinkAPIDispatch.la
+endif
 endif
 endif
 
@@ -90,7 +96,6 @@ gem_recordDECKLINK_la_LIBADD   += -lole32
 endif
 
 if GEM_DECKLINK_APISTUB
-noinst_LTLIBRARIES += libDeckLinkAPIDispatch.la
 gem_videoDECKLINK_la_LIBADD  += libDeckLinkAPIDispatch.la
 gem_recordDECKLINK_la_LIBADD += libDeckLinkAPIDispatch.la
 endif
