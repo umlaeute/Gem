@@ -751,10 +751,8 @@ AS_IF([test "x$with_build_date"  = "xno"  ],[with_build_date=""])
 AS_IF([test -z "$with_build_date" ],[
 ## raw estimate of the build (well: configure) time:
 AS_IF([test -n "${SOURCE_DATE_EPOCH}"],
-      [with_build_date="$(date -u -d "@${SOURCE_DATE_EPOCH}" +%FT%R)"],
-      [with_build_date="$(date -u                            +%FT%R)"])
-
-
+      [with_build_date="$(date -u -d "@$SOURCE_DATE_EPOCH" "+%FT%R" 2>/dev/null || date -u -r "$SOURCE_DATE_EPOCH" "+%FT%R" 2>/dev/null || date -u "+%FT%R")"],
+      [with_build_date="$(date -u +%FT%R)"])
 ])
 
 ## urgh, brackets need to be escaped with @<:@ and @:>@...
@@ -775,9 +773,6 @@ AC_MSG_RESULT([$with_build_date])
 enabled="yes"
 AM_CONDITIONAL([ENABLED], test "${enabled}" = "yes")
 AM_CONDITIONAL([DISABLED], test "${enabled}" = "no")
-
-configure_time="$(date -u -d "${configure_time}" "+%FT%R")"
-
 
 # damned: gcc on osX seems to report that it supports "-ip -ipo_obj" although they are only icc flags
 dnl  GEM_CHECK_CXXFLAGS([-ip -ipo_obj])
