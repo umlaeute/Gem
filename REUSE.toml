@@ -119,10 +119,39 @@ SPDX-FileCopyrightText = "© 2007, IOhannes m zmölnig and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
-path = ["plugins/**"]
+path = ["plugins/*", "plugins/*/*",
+ "plugins/*/win-*/*",
+ "plugins/*/*/*.props",
+ "plugins/*/*/*.vcxproj",
+ "plugins/*/*/*.vcxproj.filters",
+]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2010, IOhannes m zmölnig and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["plugins/DECKLINK/SDK/*/*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2019 Blackmagic Design"
+SPDX-License-Identifier = "BSL-1.0"
+
+[[annotations]]
+path = ["plugins/NDI/NDI/*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2023-2025 Vizrt NDI AB"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["plugins/STB/STB/*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2017 Sean Barrett"
+SPDX-License-Identifier = "MIT or Unlicense"
+
+[[annotations]]
+path = ["plugins/VIDS/videoInput/*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© Theodore Watson"
+SPDX-License-Identifier = "LicenseRef-VIDS"
 
 [[annotations]]
 path = ["extra/pix_drum/**", "extra/pix_mano/**"]
