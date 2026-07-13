@@ -73,7 +73,9 @@ jobs:
           # drop files not tracked by git (e.g. generated autotools helpers)
           git clean -fdx
           # restore files that need not be distributed
-          git checkout --pathspec-from-file=.git-ci/nodist
+          git restore --pathspec-from-file=.git-ci/nodist
+          # restore files whose type have changed (symlink -> file)
+          git status -s | grep "^ T[[:space:]]" | while read _ f; do git restore $f; done
       - name: show differences
         run: |
           git status -s
