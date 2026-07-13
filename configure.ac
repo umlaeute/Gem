@@ -407,9 +407,9 @@ AS_IF([test "x$magickpackage" != "x"], [
 ])
 
 
-GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loader])
-GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loader])
-GEM_CHECK_LIB([stb], [stb],[stb/stb_image.h], [stbi_load],,,,[image loader])
+GEM_CHECK_LIB([tiff], [tiff],[tiffio.h], [TIFFOpen],,,,[image loading/saving])
+GEM_CHECK_LIB([jpeg], [jpeg],[jpeglib.h], [jpeg_read_header],,,,[image loading/saving])
+GEM_CHECK_LIB([stb], [stb],[stb/stb_image.h], [stbi_load],,,,[image loading/saving])
 
 ## film en/decoders
 GEM_CHECK_LIB([avifile], [aviplay],[avifile.h], [CreateIAviReadFile],,,,[movie loader])
