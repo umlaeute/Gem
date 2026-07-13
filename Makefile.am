@@ -5,13 +5,13 @@ SUBDIRS =src abstractions
 SUBDIRS+=help doc examples
 SUBDIRS+=tools
 
+## window objects
+SUBDIRS+=src/Output
+
 ## plugins
 if PLUGINS
 SUBDIRS+=plugins
 endif
-
-## window objects
-SUBDIRS+=src/Output
 
 ## extra objects
 SUBDIRS+=extra
