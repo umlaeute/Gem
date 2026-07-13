@@ -35,13 +35,28 @@ pkgversion_svn () {
 }
 
 pkgversion_git () {
-  local version
-  if version=$(git describe --always 2>/dev/null); then
-    PKGVERSION_BUGFIX="git"
-    PKGVERSION_CODENAME="${version}"
-  else
-     return 1
-  fi
+    local version
+    local gitversion
+    local gittag
+    gittag="$(git describe --always 2>/dev/null)"
+    if [ -n "${gittag}" ]; then
+        # strip aways leading 'v' and Debian epochs
+        gitversion="${gittag#v}"
+        gitversion="${gitversion#*%}"
+        version="${gitversion%%-*}"
+
+        PKGVERSION_MAJOR="$(echo $version | cut -d. -f1)"
+        PKGVERSION_MINOR="$(echo $version | cut -d. -f2)"
+        if [ "${gittag}" = "$(git describe --always --abbrev=0)" ]; then
+            # we're on a tag
+            PKGVERSION_BUGFIX="$(echo ${version} | cut -d. -f3)"
+        else
+            PKGVERSION_BUGFIX="git"
+        fi
+        PKGVERSION_CODENAME="${gitversion}"
+    else
+        return 1
+    fi
 }
 
 
@@ -73,7 +88,7 @@ if test "x${PKGVERSION_BUGFIX}" = "x"; then
   pkgversion_git || pkgversion_svn || pkgversion_cvs
 fi
 
-if test "x$1" = "x"; then
+if test -z "$1"; then
   fullversion
 else
  case $1 in
