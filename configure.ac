@@ -792,7 +792,7 @@ dnl =======================================
 dnl
 dnl give some feedback about the configuration
 
-AS_IF([test -z "${have_simd}"], [have_śimd="no"])
+AS_IF([test -z "${have_simd}"], [have_simd="no"])
 AS_IF([test "$have_ftgl" = "yes" ], [have_font=FTGL])
 AS_IF([test "$have_ImageMagick" = "yes"], [have_ImageMagick="yes (Magick++${magick7})"],
       [test "$have_MagickCore" = "yes"], [have_ImageMagick="yes (MagickCore${magick7})"])
