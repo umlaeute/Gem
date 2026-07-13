@@ -1,0 +1,249 @@
+version = 1
+SPDX-PackageName = "Gem"
+SPDX-PackageDownloadLocation = "https://git.iem.at/pd/Gem"
+
+[[annotations]]
+path = ["src/Gem/glew.*", "src/Gem/glxew.*", "src/Gem/wglew.*"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+   "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
+   "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
+   "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
+   "© 2002, Lev Povalahev"
+]
+SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant"
+
+[[annotations]]
+path = ["src/Pixes/FreeFrame.h"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2002, 2003, 2004, 2005, 2006 www.freeframe.org"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["src/Pixes/frei0r.h"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2000, the frei0r team"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["**/*.pd", "**/*.pd.in"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2000, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["**/*.frag", "**/*.vert", "**/*.geom", "**/*.tesc", "**/*.tese"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2007, Cyrille Henry and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/Toon.*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2005, 3Dlabs Inc. Ltd."
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["examples/13.recursion/*" ]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2011, Claude Heiland-Allen"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/12.multi_screen_projection/*", "examples/data/cam*.jpg" ]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2011, Cyrille Henry and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/64shade.tif", "examples/data/blob*.tif"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2003, IOhannes m zmölnig"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/random.fp", "examples/data/toon.vp"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2003, IOhannes m zmölnig"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/bitmap_font_6x8.bmp" ]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2012, Antoine Villeret"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/ducks.png" ]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2009, Hans-Christoph Steiner"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/img*.jpg" ]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2007, Cyrille Henry"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = [
+  "examples/data/alea.mpg",
+  "examples/data/anim-1.mov",
+  "examples/data/dancer.JPG",
+  "examples/data/fractal*.*",
+  "examples/data/homer.avi",
+  "examples/data/temp*.JPG",
+  "examples/data/val*.tab",
+  "examples/data/venus.*",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 1997, Mark Danks"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/data/vera.ttf"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2003, Bitstream, Inc."
+SPDX-License-Identifier = "Bitstream-Vera"
+
+[[annotations]]
+path = ["doc/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 1997, Mark Danks and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["tools/**", "tests/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2007, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["plugins/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2010, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/pix_drum/**", "extra/pix_mano/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2008, Jaime Oliver and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2005, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/pix_hit/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2005, Davide Morelli and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/pix_artoolkit/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2005, Shigeyuki Hirai and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/pix_fiducialtrack/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2005, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["**/configure.ac", "**/Makefile.am", "**/Makefile.am.template", "autogen.sh", "src/**/*.h.in", "src/check-sources.mk"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2011, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["src/Gem/config*.h"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2003, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["**/*.sh.in", "**/*.sh", "Gem.pc.in"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2011, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["m4/iem*.m4", "m4/gem.m4"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2010, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
+
+[[annotations]]
+path = ["m4/ax_check_gl*.m4"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+   "© 2009 Braden McDaniel <braden@endoframe.com>",
+   "© 2012 Bastien Roucaries <roucaries.bastien+autoconf@gmail.com>"
+]
+SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
+
+[[annotations]]
+path = ["m4/ax_pthread.m4"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+   "© 2008 Steven G. Johnson <stevenj@alum.mit.edu>",
+   "© 2011 Daniel Richard G. <skunk@iSKUNK.ORG>",
+   "© 2019 Marc Stevens <marc.stevens@cwi.nl>"
+]
+SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
+
+
+[[annotations]]
+path = ["m4/pkg.m4"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+   "© 2004 Scott James Remnant <scott@netsplit.com>",
+   "© 2012-2015 Dan Nicholson <dbn.lists@gmail.com>"
+]
+SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-generic"
+
+[[annotations]]
+path = [
+  "AUTHORS",
+  "ChangeLog",
+  "README.md",
+  "src/Output/README.cocoa",
+  "src/README.glew",
+  "src/openGL/README",
+  "src/Output/messages.txt",
+  "src/mimetypes.txt",
+  "src/pkgversion.txt",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2004, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = [
+  ".gitattributes",
+  ".gitignore",
+  ".gitmodules",
+  ".git-ci/**", 
+  ".github/**",
+  ".travis.yml"
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2011, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = [
+  ".editorconfig",
+  ".yamllint",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2017, IOhannes m zmölnig and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+
+
