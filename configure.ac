@@ -69,7 +69,6 @@ AS_IF([test "$enable_plugins" != "no" ], [
 
   AC_CONFIG_FILES([plugins/filmAVF/Makefile])
   AC_CONFIG_FILES([plugins/filmDS/Makefile])
-  AC_CONFIG_FILES([plugins/filmDSATL/Makefile])
   AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
 
   AC_CONFIG_FILES([plugins/videoAVF/Makefile])
