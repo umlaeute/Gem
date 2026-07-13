@@ -184,11 +184,6 @@ SectionGroup "plugins" SEC_plugin
   SectionEnd
  SectionGroupEnd
  SectionGroup "video" SEC_plugin_video
-  Section "DirectShow capturing" SEC_plugin_videoDS
-   SetOverwrite ifnewer
-   SetOutPath "$GEM_OUTDIR"
-   File "${BUILD_INDIR}\gem_videoDS.dll"
-  SectionEnd
   Section /o "VFW capturing" SEC_plugin_videoVFW
    SetOverwrite ifnewer
    SetOutPath "$GEM_OUTDIR"
@@ -478,7 +473,6 @@ Section Uninstall
   Delete "$GEM_OUTDIR\gem_imageTIFF.dll"
   Delete "$GEM_OUTDIR\gem_recordQT.dll"
 ;  Delete "$GEM_OUTDIR\gem_videoAVT.dll"
-  Delete "$GEM_OUTDIR\gem_videoDS.dll"
   Delete "$GEM_OUTDIR\gem_videoHALCON.dll"
 ;  Delete "$GEM_OUTDIR\gem_videoPYLON.dll"
   Delete "$GEM_OUTDIR\gem_videoVFW.dll"
@@ -644,7 +638,6 @@ SectionEnd
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_imageTIFF} "allows to read/write TIFF images"
 
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_video} "plugins for live video capturing"
- !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoDS} "allows to capture live video sources using DirectShow filters"
  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoVFW} "allows to capture live video using Microsoft's old (and deprecated) Video-For-Windows method"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoAVT} "allows to capture live video from GigE-cameras using AVT (Allied Vision Technologies); supported cameras include the Prosilica family (http://www.alliedvisiontec.com) "
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC_plugin_videoHALCON} "allows to capture live video from a number of devices (including GigE-cameras and industry grade frame grabbers) using MVTec's HALCON library; you will need to purchase a license from MVTec in order to be able to use this plugin (http://www.mvtec.com) "

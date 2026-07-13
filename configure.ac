@@ -72,7 +72,6 @@ AS_IF([test "$enable_plugins" != "no" ], [
   AC_CONFIG_FILES([plugins/filmDarwin/Makefile])
 
   AC_CONFIG_FILES([plugins/videoAVF/Makefile])
-  AC_CONFIG_FILES([plugins/videoDS/Makefile])
   AC_CONFIG_FILES([plugins/videoDarwin/Makefile])
   AC_CONFIG_FILES([plugins/videoSGI/Makefile])
 ])
@@ -882,7 +881,6 @@ PLUGINS
   capture-support
     use AVfoundation     : ${have_avfoundation_framework}
     use DeckLink         : ${have_DeckLink}
-    use DirectShow       : NO
     use DV               : ${have_libdv}
     use ieee1394         : ${have_ieee1394}
     use NDI              : ${have_ndi}

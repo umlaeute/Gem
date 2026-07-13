@@ -47,7 +47,6 @@ SUBDIRS += filmAVF
 SUBDIRS += filmDS
 SUBDIRS += filmDarwin
 SUBDIRS += videoAVF
-SUBDIRS += videoDS
 SUBDIRS += videoDarwin
 SUBDIRS += videoSGI
 
