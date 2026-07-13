@@ -719,13 +719,8 @@ public:
   {
     if( bVideoOpened ) {
       long eventCode = 0;
-#ifdef _WIN64
-      long long ptrParam1 = 0;
-      long long ptrParam2 = 0;
-#else
-      long ptrParam1 = 0;
-      long ptrParam2 = 0;
-#endif
+      LONG_PTR ptrParam1 = 0;
+      LONG_PTR ptrParam2 = 0;
 
       while (S_OK == m_pEvent->GetEvent(&eventCode, &ptrParam1, &ptrParam2, 0)) {
         if (eventCode == EC_COMPLETE ) {
