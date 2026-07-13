@@ -3,6 +3,7 @@
  *
  * SPDX-FileCopyrightText: © 1997, Jonathan P. Leech
  * SPDX-FileCopyrightText: © 1997-1999, David K. McAllister
+// SPDX-FileContributor: IOhannes m zmölnig
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * ------------------------------------------------------------------

@@ -5,6 +5,7 @@
 // Implementation file
 //
 // SPDX-FileCopyrightText: © 2003-2004, Alexander Zaprjagaev <frustum@frustum.org>
+// SPDX-FileCopyrightText: © 2006, James Tittle II and the GEM contributors
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 ////////////////////////////////////////////////////////

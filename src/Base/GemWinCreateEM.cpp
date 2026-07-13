@@ -4,7 +4,7 @@
 //
 // Implementation file
 //
-// SPDX-FileCopyrightText: © 2019, Claude Heiland-Allen
+// SPDX-FileCopyrightText: © 2019, Claude Heiland-Allen and the GEM contributors
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 ////////////////////////////////////////////////////////
