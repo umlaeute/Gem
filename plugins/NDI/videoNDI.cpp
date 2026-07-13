@@ -5,7 +5,7 @@
 // Implementation file
 //
 // SPDX-FileCopyrightText: © 2020, IOhannes m zmölnig and the GEM contributors
-// SPDX-License-Identifier: GPL-3.0-or-later WITH GPL-3.0-linking-exception
+// SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-GPL3-linking-exception-NDI
 //
 ////////////////////////////////////////////////////////
 #ifdef HAVE_CONFIG_H
