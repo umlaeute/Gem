@@ -267,7 +267,7 @@ void setup()
 
   for(class_setup_list_t *l = register_class_setup_list; l;) {
     class_setup_list_t*next = l->next;
-    logpost(0, PD_DEBUG + 4, "registering Gem object: %s", l->name);
+    //logpost(0, PD_DEBUG + 4, "registering Gem object: %s", l->name);
     l->setup();
     delete l;
     l = next;
