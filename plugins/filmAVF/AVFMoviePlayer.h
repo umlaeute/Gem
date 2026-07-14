@@ -1,6 +1,7 @@
 /* ------------------------------------------------------------------
  * GEM - Graphics Environment for Multimedia
  *
+ * SPFX-FileCopyrightText: © 2014, openFrameworks Community
  * SPDX-FileCopyrightText: © 2014, Dan Wilcox and the GEM contributors
  * SPDX-License-Identifier: GPL-2.0-or-later
  *

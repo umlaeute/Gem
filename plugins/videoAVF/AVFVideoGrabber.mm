@@ -5,6 +5,7 @@
 //
 // Implementation file
 //
+// SPFX-FileCopyrightText: © 2016-2018, openFrameworks Community
 // SPDX-FileCopyrightText: © 2018, IOhannes m zmölnig and the GEM contributors
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
