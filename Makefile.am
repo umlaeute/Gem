@@ -37,7 +37,10 @@ licenses = \
 	LICENSES/LicenseRef-GPL3-linking-exception-HALCON.txt \
 	LICENSES/LicenseRef-GPL3-linking-exception-NDI.txt \
 	LICENSES/LicenseRef-GPL3-linking-exception-PYLON.txt \
+	LICENSES/LicenseRef-VIDS.txt \
+	LICENSES/MIT.txt \
 	LICENSES/SGI-B-2.0.txt \
+	LICENSES/Unlicense.txt \
 	$(nil)
 
 dist_gem_DATA = \
