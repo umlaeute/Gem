@@ -16,7 +16,7 @@ SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant"
 [[annotations]]
 path = ["src/Pixes/FreeFrame.h"]
 precedence = "closest"
-SPDX-FileCopyrightText = "© 2002, 2003, 2004, 2005, 2006 www.freeframe.org"
+SPDX-FileCopyrightText = "© 2002-2006, www.freeframe.org"
 SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
@@ -36,6 +36,17 @@ path = ["**/*.frag", "**/*.vert", "**/*.geom", "**/*.tesc", "**/*.tese"]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2007, Cyrille Henry and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["examples/10.glsl/10.GPGPU_Physical_model.pd"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+ "© 2010, Thomas Musil",
+ "© 2010, Frank Barknecht",
+ "© 2007, Cyrille Henry and the GEM contributors"
+}
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
 
 [[annotations]]
 path = ["examples/13.recursion/*" ]
@@ -144,7 +155,7 @@ SPDX-License-Identifier = "MIT or Unlicense"
 [[annotations]]
 path = ["plugins/VIDS/videoInput/*"]
 precedence = "closest"
-SPDX-FileCopyrightText = "© Theodore Watson"
+SPDX-FileCopyrightText = "© Theodore Watson <theo.watson@gmail.com>"
 SPDX-License-Identifier = "LicenseRef-VIDS"
 
 [[annotations]]
