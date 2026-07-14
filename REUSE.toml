@@ -2,16 +2,43 @@ version = 1
 SPDX-PackageName = "Gem"
 SPDX-PackageDownloadLocation = "https://git.iem.at/pd/Gem"
 
+
 [[annotations]]
-path = ["src/Gem/glew.*", "src/Gem/glxew.*", "src/Gem/wglew.*"]
+path = ["src/Gem/glew.c"]
 precedence = "closest"
 SPDX-FileCopyrightText = [
  "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
  "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
  "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
- "© 2002, Lev Povalahev"
+ "© 2002, Lev Povalahev",
 ]
 SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant"
+
+[[annotations]]
+path = ["src/Gem/glew.h", "src/Gem/glxew.h"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+ "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
+ "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
+ "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
+ "© 2002, Lev Povalahev",
+ "© 1999-2007, Brian Paul",
+ "© 2007, the Khronos Group Inc.",
+]
+SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant AND MIT"
+
+[[annotations]]
+path = ["src/Gem/wglew.h"]
+precedence = "closest"
+SPDX-FileCopyrightText = [
+ "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
+ "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
+ "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
+ "© 2002, Lev Povalahev",
+ "© 2007, the Khronos Group Inc.",
+]
+SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant AND MIT"
+
 
 [[annotations]]
 path = ["src/Pixes/FreeFrame.h"]
