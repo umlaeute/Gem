@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: © 2008, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #extension GL_ARB_texture_rectangle : enable
 
 uniform sampler2DRect MyTex0;

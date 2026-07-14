@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2014, jptrkz
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 attribute vec3 LightPosition;
 attribute vec3 BrickColor, MortarColor;
 attribute vec2 BrickSize, BrickPct;

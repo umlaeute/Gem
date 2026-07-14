@@ -1,4 +1,6 @@
-//jack/RYBN 2010
+// SPDX-FileCopyrightText: © 2010, jack/RYBN
+// SPDX-FileCopyrightText: © 2010, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 130
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_ARB_texture_rectangle : enable

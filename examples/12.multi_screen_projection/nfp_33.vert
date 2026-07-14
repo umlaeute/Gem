@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: © 2011, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 uniform vec2 Vtl,Vbl,Vtr,Vbr,Vtc,Vbc,Vcl,Vcr,Vcc; // Vertex position
 uniform vec2 Ttl,Tbl,Ttr,Tbr; // texture coordinate
 uniform vec2 center;

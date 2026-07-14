@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: © 2025, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 400
-// Cyrille Henry 2025
 
 layout(triangles, equal_spacing, cw) in;
 

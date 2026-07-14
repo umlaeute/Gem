@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #extension GL_ARB_texture_rectangle : enable
-// Cyrille Henry 2024
 
 uniform sampler2DRect texture0; // input texture
 uniform float t; // current time, in order to adjust the phase of signals from 1 frame to the other

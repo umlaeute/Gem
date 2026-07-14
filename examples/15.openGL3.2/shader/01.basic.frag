@@ -1,7 +1,8 @@
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
+// based on "OpenGL 4 Shading Language Cookbook" by David Wolff
 #version 460
 
-// Cyrille Henry 2024
-// based on "OpenGL 4 Shading Language Cookbook" by David Wolff
 
 // This is the fragment shader : it is executed for every pixel to display
 

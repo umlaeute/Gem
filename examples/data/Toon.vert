@@ -1,9 +1,9 @@
+// SPDX-FileCopyrightText: © 2005 3Dlabs Inc. Ltd.
+// SPDX-License-Identifier: BSD-3-Clause
 //
 // Vertex shader for cartoon-style shading
 //
 // Author: Philip Rideout
-//
-// Copyright (c) 2005 3Dlabs Inc. Ltd.
 //
 //
 //

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2014, jptrkz
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 varying vec3 BrickColor_f, MortarColor_f;
 varying vec2 BrickSize_f, BrickPct_f;
 

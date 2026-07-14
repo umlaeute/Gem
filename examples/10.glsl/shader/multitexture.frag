@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: © 2007, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 uniform sampler2D MyTex0;
 uniform sampler2D MyTex1;
 

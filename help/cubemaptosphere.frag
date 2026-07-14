@@ -1,4 +1,5 @@
-// Antoine Rousseau september 2015
+// SPDX-FileCopyrightText: © 2015, Antoine Rousseau and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 120
 
 uniform samplerCube envMap;

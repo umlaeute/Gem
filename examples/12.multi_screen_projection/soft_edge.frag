@@ -1,4 +1,5 @@
-// Cyrille Henry 2010
+// SPDX-FileCopyrightText: © 2010, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 //#extension GL_ARB_texture_rectangle : enable
 //uniform sampler2DRect MyTex;

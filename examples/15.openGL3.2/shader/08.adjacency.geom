@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: © 2025, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 150
-// Cyrille Henry 2025
 
 // this shader add vertices between 2 vertices of the original geometry.
 // It use 4 vertices input, in order to do a cubix interpolation, for smooth rendering.

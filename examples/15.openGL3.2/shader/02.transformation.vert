@@ -1,8 +1,8 @@
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 460
 ;
 //simple test shader
-// Cyrille Henry 2024
-// based on "OpenGL 4 Shading Language Cookbook" by David Wolff
 
 // This is the vertex shader, the 1st on the pipeline. It is executed for every vertex.
 

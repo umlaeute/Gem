@@ -1,4 +1,5 @@
-// Cyrille Henry 2007
+// SPDX-FileCopyrightText: © 2007, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 uniform float K1, seed;
 uniform sampler2D tex0;

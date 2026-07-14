@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: © 2011, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 uniform sampler2D tex0;
 uniform vec2 distance;
 uniform vec2 TX;

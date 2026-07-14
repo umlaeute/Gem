@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: © 2025, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 150
-// Cyrille Henry 2025
 
 layout(triangles) in;
 // the triangle_strip is split in multiples triangles before this shader

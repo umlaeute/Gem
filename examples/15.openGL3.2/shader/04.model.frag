@@ -1,5 +1,6 @@
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 460
-// Cyrille Henry 2024
 
 in vec4 Color;
 

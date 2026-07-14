@@ -1,6 +1,6 @@
+// SPDX-FileCopyrightText: © 2024, Cyrille Henry and the GEM contributors
+// SPDX-License-Identifier: GPL-2.0-or-later
 #version 460
-
-// Cyrille Henry 2024
 
 layout (location=0) in vec3 position;
 layout (location=1) in float colorR;

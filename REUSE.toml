@@ -38,12 +38,6 @@ SPDX-FileCopyrightText = "© 2007, Cyrille Henry and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
-path = ["examples/data/Toon.*"]
-precedence = "closest"
-SPDX-FileCopyrightText = "© 2005, 3Dlabs Inc. Ltd."
-SPDX-License-Identifier = "BSD-3-Clause"
-
-[[annotations]]
 path = ["examples/13.recursion/*" ]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2011, Claude Heiland-Allen"
