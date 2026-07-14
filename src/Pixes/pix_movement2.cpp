@@ -4,7 +4,8 @@
 //
 // Implementation file
 //
-// SPDX-FileCopyrightText: © 2004, Jakob Leiner, Theresa Rienmüller and the GEM contributors
+// SPDX-FileCopyrightText: © 2004, Jakob Leiner and Theresa Rienmüller
+// SPDX-FileCopyrightText: © 2005, IOhannes m zmölnig and the GEM contributors
 // SPDX-License-Identifier: GPL-2.0-or-later
 //
 ////////////////////////////////////////////////////////

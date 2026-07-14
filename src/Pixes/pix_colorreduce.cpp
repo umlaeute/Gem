@@ -4,6 +4,7 @@
 //
 // Implementation file
 //
+// SPDX-FileCopyrightText: © 2002 Pete Warden
 // SPDX-FileCopyrightText: © 2003, James Tittle II and the GEM contributors
 // SPDX-License-Identifier: GPL-2.0-or-later
 //

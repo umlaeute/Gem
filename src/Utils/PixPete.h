@@ -1,6 +1,7 @@
 /* ------------------------------------------------------------------
  * GEM - Graphics Environment for Multimedia
  *
+ * SPDX-FileCopyrightText: © 2002, Pete Warden
  * SPDX-FileCopyrightText: © 2004, IOhannes m zmölnig and the GEM contributors
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
