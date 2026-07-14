@@ -43,8 +43,8 @@ precedence = "closest"
 SPDX-FileCopyrightText = [
  "© 2010, Thomas Musil",
  "© 2010, Frank Barknecht",
- "© 2007, Cyrille Henry and the GEM contributors"
-}
+ "© 2007, Cyrille Henry and the GEM contributors",
+]
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 
