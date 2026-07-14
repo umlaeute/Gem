@@ -40,7 +40,7 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 [[annotations]]
 path = ["examples/13.recursion/*" ]
 precedence = "closest"
-SPDX-FileCopyrightText = "© 2011, Claude Heiland-Allen"
+SPDX-FileCopyrightText = "© 2007, Claude Heiland-Allen"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
@@ -126,7 +126,7 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 [[annotations]]
 path = ["plugins/DECKLINK/SDK/*/*"]
 precedence = "closest"
-SPDX-FileCopyrightText = "© 2019 Blackmagic Design"
+SPDX-FileCopyrightText = "© 2011-2019 Blackmagic Design"
 SPDX-License-Identifier = "BSL-1.0"
 
 [[annotations]]
