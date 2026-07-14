@@ -159,31 +159,31 @@ SPDX-FileCopyrightText = "© Theodore Watson <theo.watson@gmail.com>"
 SPDX-License-Identifier = "LicenseRef-VIDS"
 
 [[annotations]]
-path = ["extra/pix_drum/**", "extra/pix_mano/**"]
-precedence = "closest"
-SPDX-FileCopyrightText = "© 2008, Jaime Oliver and the GEM contributors"
-SPDX-License-Identifier = "GPL-2.0-or-later"
-
-[[annotations]]
 path = ["extra/**"]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2005, IOhannes m zmölnig and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
-path = ["extra/pix_hit/**"]
+path = ["extra/pix_drum/*.*", "extra/pix_mano/*.*"]
+precedence = "closest"
+SPDX-FileCopyrightText = "© 2008, Jaime Oliver and the GEM contributors"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["extra/pix_hit/*.*"]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2005, Davide Morelli and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
-path = ["extra/pix_artoolkit/**"]
+path = ["extra/pix_artoolkit/*.*"]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2005, Shigeyuki Hirai and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
-path = ["extra/pix_fiducialtrack/**"]
+path = ["extra/pix_fiducialtrack/*.*"]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2005, IOhannes m zmölnig and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
