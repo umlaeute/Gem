@@ -6,10 +6,10 @@ SPDX-PackageDownloadLocation = "https://git.iem.at/pd/Gem"
 path = ["src/Gem/glew.*", "src/Gem/glxew.*", "src/Gem/wglew.*"]
 precedence = "closest"
 SPDX-FileCopyrightText = [
-   "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
-   "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
-   "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
-   "© 2002, Lev Povalahev"
+ "© 2008-2015, Nigel Stewart <nigels[]users sourceforge net>",
+ "© 2002-2008, Milan Ikits <milan ikits[]ieee org>",
+ "© 2002-2008, Marcelo E. Magallon <mmagallo[]debian org>",
+ "© 2002, Lev Povalahev"
 ]
 SPDX-License-Identifier = "LicenseRef-BSD-3-Clause-endorsement-variant"
 
@@ -92,14 +92,14 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
 path = [
-  "examples/data/alea.mpg",
-  "examples/data/anim-1.mov",
-  "examples/data/dancer.JPG",
-  "examples/data/fractal*.*",
-  "examples/data/homer.avi",
-  "examples/data/temp*.JPG",
-  "examples/data/val*.tab",
-  "examples/data/venus.*",
+ "examples/data/alea.mpg",
+ "examples/data/anim-1.mov",
+ "examples/data/dancer.JPG",
+ "examples/data/fractal*.*",
+ "examples/data/homer.avi",
+ "examples/data/temp*.JPG",
+ "examples/data/val*.tab",
+ "examples/data/venus.*",
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 1997, Mark Danks"
@@ -216,8 +216,8 @@ SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
 path = ["m4/ax_check_gl*.m4"]
 precedence = "closest"
 SPDX-FileCopyrightText = [
-   "© 2009 Braden McDaniel <braden@endoframe.com>",
-   "© 2012 Bastien Roucaries <roucaries.bastien+autoconf@gmail.com>"
+ "© 2009 Braden McDaniel <braden@endoframe.com>",
+ "© 2012 Bastien Roucaries <roucaries.bastien+autoconf@gmail.com>"
 ]
 SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
 
@@ -225,9 +225,9 @@ SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
 path = ["m4/ax_pthread.m4"]
 precedence = "closest"
 SPDX-FileCopyrightText = [
-   "© 2008 Steven G. Johnson <stevenj@alum.mit.edu>",
-   "© 2011 Daniel Richard G. <skunk@iSKUNK.ORG>",
-   "© 2019 Marc Stevens <marc.stevens@cwi.nl>"
+ "© 2008 Steven G. Johnson <stevenj@alum.mit.edu>",
+ "© 2011 Daniel Richard G. <skunk@iSKUNK.ORG>",
+ "© 2019 Marc Stevens <marc.stevens@cwi.nl>"
 ]
 SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
 
@@ -236,22 +236,22 @@ SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-macro"
 path = ["m4/pkg.m4"]
 precedence = "closest"
 SPDX-FileCopyrightText = [
-   "© 2004 Scott James Remnant <scott@netsplit.com>",
-   "© 2012-2015 Dan Nicholson <dbn.lists@gmail.com>"
+ "© 2004 Scott James Remnant <scott@netsplit.com>",
+ "© 2012-2015 Dan Nicholson <dbn.lists@gmail.com>"
 ]
 SPDX-License-Identifier = "GPL-2.0-or-later WITH Autoconf-exception-generic"
 
 [[annotations]]
 path = [
-  "AUTHORS",
-  "ChangeLog",
-  "README.md",
-  "src/Output/README.cocoa",
-  "src/README.glew",
-  "src/openGL/README",
-  "src/Output/messages.txt",
-  "src/mimetypes.txt",
-  "src/pkgversion.txt",
+ "AUTHORS",
+ "ChangeLog",
+ "README.md",
+ "src/Output/README.cocoa",
+ "src/README.glew",
+ "src/openGL/README",
+ "src/Output/messages.txt",
+ "src/mimetypes.txt",
+ "src/pkgversion.txt",
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2004, IOhannes m zmölnig and the GEM contributors"
@@ -259,12 +259,12 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
 path = [
-  ".gitattributes",
-  ".gitignore",
-  ".gitmodules",
-  ".git-ci/**", 
-  ".github/**",
-  ".travis.yml"
+ ".gitattributes",
+ ".gitignore",
+ ".gitmodules",
+ ".git-ci/**",
+ ".github/**",
+ ".travis.yml"
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2011, IOhannes m zmölnig and the GEM contributors"
@@ -272,12 +272,9 @@ SPDX-License-Identifier = "GPL-2.0-or-later"
 
 [[annotations]]
 path = [
-  ".editorconfig",
-  ".yamllint",
+ ".editorconfig",
+ ".yamllint",
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "© 2017, IOhannes m zmölnig and the GEM contributors"
 SPDX-License-Identifier = "GPL-2.0-or-later"
-
-
-
