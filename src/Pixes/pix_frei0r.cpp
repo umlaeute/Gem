@@ -42,16 +42,14 @@
 
 #include "Gem/GemGL.h"
 
-
 #ifndef HAVE_STRNLEN
-#define strnlen f0r_strnlen
-static size_t f0r_strnlen(const char* str, size_t maxlen)
-{
-  size_t len=0;
-  if(NULL==str) {
+# define strnlen f0r_strnlen
+static size_t f0r_strnlen(const char *str, size_t maxlen) {
+  size_t len = 0;
+  if (NULL == str) {
     return len;
   }
-  while(*str++ && len<maxlen) {
+  while (*str++ && len < maxlen) {
     len++;
   }
 
@@ -60,66 +58,66 @@ static size_t f0r_strnlen(const char* str, size_t maxlen)
 #endif
 
 namespace {
-  static std::vector<std::string>s_frei0r_paths;
-  void frei0r_paths_initialize(void) {
-    std::vector<std::string>paths;
-    const char*f0path = getenv("FREI0R_PATH");
-    if (f0path) {
-      std::string frei0r_path = f0path;
+static std::vector<std::string> s_frei0r_paths;
+void frei0r_paths_initialize(void) {
+  std::vector<std::string> paths;
+  const char *f0path = getenv("FREI0R_PATH");
+  if (f0path) {
+    std::string frei0r_path = f0path;
 
 #ifdef _WIN32
-      const char *separator = ";";
+    const char *separator = ";";
 #else
-      const char *separator = ":";
+    const char *separator = ":";
 #endif
-      size_t start;
-      size_t end = 0;
-      while ((start = frei0r_path.find_first_not_of(separator, end)) != std::string::npos) {
-        end = frei0r_path.find(separator, start);
-        paths.push_back(frei0r_path.substr(start, end - start));
-      }
-    } else {
-      /* no FREI0R_PATH...fall back to the defaults */
-      static const char *const frei0r_pathlist[] = {
-#ifdef MULTIARCH_TRIPLET
-          /* Debian's multiarch */
-          "/usr/local/lib/" MULTIARCH_TRIPLET "/frei0r-1",
-#endif
-#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
-          /* only valid for 64bit archs */
-          "/usr/local/lib64/frei0r-1",
-#endif
-          "/usr/local/lib/frei0r-1",
-
-#ifdef MULTIARCH_TRIPLET
-          /* Debian's multiarch */
-          "/usr/lib/" MULTIARCH_TRIPLET "/frei0r-1",
-#endif
-#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
-          /* only valid for 64bit archs */
-          "/usr/lib64/frei0r-1",
-#endif
-          "/usr/lib/frei0r-1", 0};
-
-      f0path = getenv("HOME");
-      if (f0path) {
-        std::string p(f0path);
-        paths.push_back(p + "/.frei0r-1/lib");
+    size_t start;
+    size_t end = 0;
+    while ((start = frei0r_path.find_first_not_of(separator, end)) !=
+           std::string::npos) {
+      end = frei0r_path.find(separator, start);
+      paths.push_back(frei0r_path.substr(start, end - start));
+    }
+  } else {
+    /* no FREI0R_PATH...fall back to the defaults */
+    static const char *const frei0r_pathlist[] = {
 #ifdef MULTIARCH_TRIPLET
         /* Debian's multiarch */
-        paths.push_back(p + "/.local/lib/" MULTIARCH_TRIPLET "/frei0r-1");
+        "/usr/local/lib/" MULTIARCH_TRIPLET "/frei0r-1",
 #endif
-        paths.push_back(p + "/.local/lib/frei0r-1");
-      }
-      for (int i = 0; frei0r_pathlist[i]; i++) {
-        paths.push_back(frei0r_pathlist[i]);
-      }
+#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
+        /* only valid for 64bit archs */
+        "/usr/local/lib64/frei0r-1",
+#endif
+        "/usr/local/lib/frei0r-1",
+
+#ifdef MULTIARCH_TRIPLET
+        /* Debian's multiarch */
+        "/usr/lib/" MULTIARCH_TRIPLET "/frei0r-1",
+#endif
+#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
+        /* only valid for 64bit archs */
+        "/usr/lib64/frei0r-1",
+#endif
+        "/usr/lib/frei0r-1", 0};
+
+    f0path = getenv("HOME");
+    if (f0path) {
+      std::string p(f0path);
+      paths.push_back(p + "/.frei0r-1/lib");
+#ifdef MULTIARCH_TRIPLET
+      /* Debian's multiarch */
+      paths.push_back(p + "/.local/lib/" MULTIARCH_TRIPLET "/frei0r-1");
+#endif
+      paths.push_back(p + "/.local/lib/frei0r-1");
     }
-
-    s_frei0r_paths = paths;
+    for (int i = 0; frei0r_pathlist[i]; i++) {
+      paths.push_back(frei0r_pathlist[i]);
+    }
   }
-};
 
+  s_frei0r_paths = paths;
+}
+}; // namespace
 
 class pix_frei0r::F0RPlugin
 {
