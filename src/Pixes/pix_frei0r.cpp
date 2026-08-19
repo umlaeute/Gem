@@ -80,33 +80,38 @@ namespace {
       }
     } else {
       /* no FREI0R_PATH...fall back to the defaults */
-      static const char* const frei0r_pathlist[] = {
-        "/usr/local/lib/frei0r-1/",
-        "/usr/lib/frei0r-1/",
-#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
-        /* these are only valid for 64bit archs */
-        "/usr/local/lib64/frei0r-1/",
-        "/usr/lib64/frei0r-1/",
-#endif
+      static const char *const frei0r_pathlist[] = {
 #ifdef MULTIARCH_TRIPLET
-        /* Debian's multiarch */
-        "/usr/local/lib/" MULTIARCH_TRIPLET "/frei0r-1/",
-        "/usr/lib/" MULTIARCH_TRIPLET "/frei0r-1/",
+          /* Debian's multiarch */
+          "/usr/local/lib/" MULTIARCH_TRIPLET "/frei0r-1",
 #endif
-        0
-      };
+#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
+          /* only valid for 64bit archs */
+          "/usr/local/lib64/frei0r-1",
+#endif
+          "/usr/local/lib/frei0r-1",
+
+#ifdef MULTIARCH_TRIPLET
+          /* Debian's multiarch */
+          "/usr/lib/" MULTIARCH_TRIPLET "/frei0r-1",
+#endif
+#if defined __SIZEOF_POINTER__ && (__SIZEOF_POINTER__ == 8)
+          /* only valid for 64bit archs */
+          "/usr/lib64/frei0r-1",
+#endif
+          "/usr/lib/frei0r-1", 0};
 
       f0path = getenv("HOME");
-      if(f0path) {
+      if (f0path) {
         std::string p(f0path);
-        paths.push_back(p + "/.frei0r-1/lib/");
-        paths.push_back(p + "/.local/lib/frei0r-1/");
+        paths.push_back(p + "/.frei0r-1/lib");
 #ifdef MULTIARCH_TRIPLET
         /* Debian's multiarch */
-        paths.push_back(p + "/.local/lib/" MULTIARCH_TRIPLET "/frei0r-1/");
+        paths.push_back(p + "/.local/lib/" MULTIARCH_TRIPLET "/frei0r-1");
 #endif
+        paths.push_back(p + "/.local/lib/frei0r-1");
       }
-      for(int i=0; frei0r_pathlist[i]; i++) {
+      for (int i = 0; frei0r_pathlist[i]; i++) {
         paths.push_back(frei0r_pathlist[i]);
       }
     }
