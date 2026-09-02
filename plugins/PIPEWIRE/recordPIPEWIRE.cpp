@@ -181,6 +181,9 @@ bool recordPIPEWIRE :: start(const std::string&filename, gem::Properties&props)
     } else if (("PortName" == key) && (props.get(key, s)) && !s.empty()) {
       pw_properties_set(pwprops, PW_KEY_PORT_NAME, s.c_str());
 #endif
+    } else if (("Description" == key) && (props.get(key, s)) && !s.empty()) {
+      /* OBS only accepts streams with descriptions */
+      pw_properties_set(pwprops, PW_KEY_NODE_DESCRIPTION, s.c_str());
     } else if (("autoconnect" == key) && (props.get(key, d))) {
       if((int)d) {
         flags |= PW_STREAM_FLAG_AUTOCONNECT;
@@ -357,6 +360,7 @@ bool recordPIPEWIRE :: enumProperties(gem::Properties&props)
   props.set("MediaRole", std::string("Source"));
   props.set("AppName", std::string("Pd"));
   props.set("NodeName", std::string("Gem"));
+  props.set("Description", std::string(""));
   props.set("autoconnect", 0);
   return true;
 }
