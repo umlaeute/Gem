@@ -432,6 +432,10 @@ void recordPIPEWIRE::on_param_changed(uint32_t id, const struct spa_pod *param)
 {
   //::post("%s:%d@%s", __FILE__, __LINE__, __FUNCTION__);
   if (param == NULL || id != SPA_PARAM_Format) {
+    //  4 SPA_PARAM_Format
+    // 15 SPA_PARAM_Latency
+    // 17 SPA_PARAM_Tag
+    // 20 SPA_PARAM_PeerCapability
     return;
   }
   struct spa_video_info format;
